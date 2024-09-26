@@ -17,6 +17,7 @@ const userSchema = new mongoose.Schema(
       enum: ["superadmin", "admin", "user"],
       default: "user",
     },
+    adminCreatedBy: { type: String },
   },
   { timestamps: true }
 );

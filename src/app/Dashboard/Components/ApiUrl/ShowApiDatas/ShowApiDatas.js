@@ -14,6 +14,7 @@ import {
   API_URL_Supplier,
   API_URL_Vehicle,
   API_URL_VehicleType,
+  API_URL_Title,
 } from "../ApiUrls.js";
 
 export const GetUsers = () => {
@@ -166,6 +167,19 @@ export const GetVehicle = () => {
       console.log(res.data.Result);
       // console.log(res.data.count);
       return { result: res.data.Result, count: res.data.count };
+    })
+    .catch((error) => {
+      console.log(`error : ${error}`);
+      throw error;
+    });
+};
+export const GetTitle = () => {
+  return axios
+    .get(`${API_URL_Title}`)
+    .then((res) => {
+      console.log(res.data.result);
+      // console.log(res.data.count);
+      return { result: res.data.result, count: res.data.count };
     })
     .catch((error) => {
       console.log(`error : ${error}`);

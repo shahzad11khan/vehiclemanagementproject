@@ -8,33 +8,21 @@ import Header from "../../Components/Header";
 import Sidebar from "../../Components/Sidebar";
 import DataTableComponent from "../../Components/CustomDataTable";
 import AddTitleModel from "../AddTitle/AddTitleModel";
+import { GetTitle } from "../../Components/ApiUrl/ShowApiDatas/ShowApiDatas";
 
-// Sample data
-const initialData = [
-  { id: 1, title: "Mr" },
-  { id: 2, title: "Doctor" },
-  { id: 3, title: "Miss" },
-];
-
+// Sample data (can be removed once API data is integrated)
 const columns = [
   {
     name: "Title",
-    selector: (row) => row.title,
+    selector: (row) => row.name,
     sortable: true,
   },
-
   {
     name: "Actions",
-    cell: () => (
+    cell: (row) => (
       <div className="flex gap-2">
-        {/* <button
-          onClick={() => handleEdit(row.id)}
-          className="text-blue-500 hover:text-blue-700"
-        >
-          <FaEdit />
-        </button> */}
         <button
-          // onClick={() => handleDelete(row.id)}
+          // onClick={() => handleEdit(row.id)}
           className="text-red-500 hover:text-red-700"
         >
           <FaTrash />
@@ -49,7 +37,8 @@ const columns = [
 const Page = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isMounted, setIsMounted] = useState(false);
-  const [filteredData, setFilteredData] = useState(initialData);
+  const [data, setData] = useState([]); // State to hold fetched data
+  const [filteredData, setFilteredData] = useState([]);
   const [isOpenTitle, setIsOpenTitle] = useState(false);
 
   useEffect(() => {
@@ -57,19 +46,35 @@ const Page = () => {
   }, []);
 
   useEffect(() => {
-    const filtered = initialData.filter((item) =>
-      item.title.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    // Fetch data from API
+    const fetchData = async () => {
+      try {
+        GetTitle().then(({ result }) => {
+          console.log(result);
+
+          setData(result); // Set the fetched data
+          setFilteredData(result);
+        });
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setData([]); // Reset data to an empty array on error
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    const filtered = data.filter((item) => {
+      // Check if item and item.title are defined before calling toLowerCase
+      return (
+        item &&
+        item.name &&
+        item.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    });
     setFilteredData(filtered);
-  }, [searchTerm]);
-
-  // const handleEdit = (id) => {
-  //   toast.info(`Edit item with ID: ${id}`);
-  // };
-
-  // const handleDelete = (id) => {
-  //   toast.info(`Delete item with ID: ${id}`);
-  // };
+  }, [searchTerm, data]); // Filter when search term or data changes
 
   const toggleTitleModal = () => {
     setIsOpenTitle(!isOpenTitle);

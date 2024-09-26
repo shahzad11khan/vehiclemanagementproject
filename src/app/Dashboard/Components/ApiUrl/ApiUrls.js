@@ -12,8 +12,8 @@
 // export const API_URL_Blog = `/api/Blog`;
 
 // local for gets
-// export const url = "http://localhost:3000";
-export const url = "https://vmsp.netlify.app";
+export const url = "http://localhost:3000";
+// export const url = "https://vmsp.netlify.app";
 export const API_URL_USER = `/api/User`;
 export const API_URL_Driver = `${url}/api/Driver`;
 export const API_URL_Enquiry = `/api/Enquiry`;
@@ -26,3 +26,4 @@ export const API_URL_Signature = `/api/Signature`;
 export const API_URL_Supplier = `/api/Supplier`;
 export const API_URL_Vehicle = `/api/Vehicle`;
 export const API_URL_VehicleType = `/api/VehicleType`;
+export const API_URL_Title = `/api/Title`;

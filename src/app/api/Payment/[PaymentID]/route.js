@@ -1,6 +1,6 @@
-import { connect } from "../../../../../config/db.js";
-import Payment from "../../../../../models/Payment/Payment.Model.js";
-import { catchAsyncErrors } from "../../../../../middlewares/catchAsyncErrors.js";
+import { connect } from "@config/db.js";
+import Payment from "@models/Payment/Payment.Model.js";
+import { catchAsyncErrors } from "@middlewares/catchAsyncErrors.js";
 import { NextResponse } from "next/server";
 
 // PUT function to update a Payment by its VehicleID

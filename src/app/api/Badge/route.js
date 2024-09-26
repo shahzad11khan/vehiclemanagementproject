@@ -1,6 +1,6 @@
-import { connect } from "../../../../config/db.js";
-import Badge from "../../../../models/Badge/Badge.Model.js";
-import { catchAsyncErrors } from "../../../../middlewares/catchAsyncErrors.js";
+import { connect } from "@config/db.js";
+import Badge from "@models/Badge/Badge.Model.js";
+import { catchAsyncErrors } from "@middlewares/catchAsyncErrors.js";
 import { NextResponse } from "next/server";
 
 export const POST = catchAsyncErrors(async (request) => {

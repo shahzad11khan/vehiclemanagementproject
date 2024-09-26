@@ -1,6 +1,6 @@
-import { connect } from "../../../../../config/db.js";
-import Firm from "../../../../../models/Firm/Firm.Model.js";
-import { catchAsyncErrors } from "../../../../../middlewares/catchAsyncErrors.js";
+import { connect } from "@config/db.js";
+import { Firm } from "@models/Firm/Firm.Model";
+import { catchAsyncErrors } from "@middlewares/catchAsyncErrors.js";
 import { NextResponse } from "next/server";
 
 export const PUT = catchAsyncErrors(async (request) => {

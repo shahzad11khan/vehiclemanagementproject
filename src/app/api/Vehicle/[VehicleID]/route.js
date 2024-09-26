@@ -1,6 +1,6 @@
-import { connect } from "../../../../../config/db.js";
-import Vehicle from "../../../../../models/Vehicle/Vehicle.Model.js";
-import { catchAsyncErrors } from "../../../../../middlewares/catchAsyncErrors.js";
+import { connect } from "@config/db.js";
+import Vehicle from "@models/Vehicle/Vehicle.Model.js";
+import { catchAsyncErrors } from "@middlewares/catchAsyncErrors.js";
 import { NextResponse } from "next/server";
 
 export async function PUT(request, { params }) {

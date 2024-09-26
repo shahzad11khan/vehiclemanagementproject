@@ -1,6 +1,6 @@
-import { connect } from "../../../../../config/db.js";
-import Manufecturer from "../../../../../models/Manufecturer/Manufecturer.Model.js";
-import { catchAsyncErrors } from "../../../../../middlewares/catchAsyncErrors.js";
+import { connect } from "@config/db.js";
+import Manufecturer from "@models/Manufecturer/Manufecturer.Model.js";
+import { catchAsyncErrors } from "@middlewares/catchAsyncErrors.js";
 import { NextResponse } from "next/server";
 
 // PUT function to update a Manufecturer by its VehicleID

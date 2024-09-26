@@ -1,7 +1,7 @@
-import { connect } from "../../../../../config/db.js";
-import Signature from "../../../../../models/Signature/Signature.Model.js";
-import { catchAsyncErrors } from "../../../../../middlewares/catchAsyncErrors.js";
-import { cloudinary } from "../../../../../middlewares/cloudinary.js";
+import { connect } from "@config/db.js";
+import Signature from "@models/Signature/Signature.Model.js";
+import { catchAsyncErrors } from "@middlewares/catchAsyncErrors.js";
+import cloudinary from "@middlewares/cloudinary.js";
 
 export const PUT = catchAsyncErrors(async (request) => {
   await connect();

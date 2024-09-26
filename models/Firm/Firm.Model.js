@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const SignatureSchema = new mongoose.Schema({
+const FirmSchema = new mongoose.Schema({
   name: { type: String },
   description: { type: String },
   companyNo: { type: String },
@@ -23,5 +23,4 @@ const SignatureSchema = new mongoose.Schema({
   imagepublicId: { type: String },
 });
 
-export const SignatureModel =
-  mongoose.models.Signature || mongoose.model("Signature", SignatureSchema);
+export const Firm = mongoose.models.Firm || mongoose.model("Firm", FirmSchema);

@@ -1,6 +1,6 @@
-import { connect } from "../../../../config/db.js";
-import VehicleType from "../../../../models/VehicleType/VehicleType.Model.js";
-import { catchAsyncErrors } from "../../../../middlewares/catchAsyncErrors.js";
+import { connect } from "@config/db.js";
+import VehicleType from "@models/VehicleType/VehicleType.Model.js";
+import { catchAsyncErrors } from "@middlewares/catchAsyncErrors.js";
 import { NextResponse } from "next/server";
 
 export const POST = catchAsyncErrors(async (request) => {

@@ -1,7 +1,7 @@
-import { connect } from "../../../../config/db.js";
-import User from "../../../../models/User/User.Model.js";
-import cloudinary from "../../../../middlewares/cloudinary.js";
-import { catchAsyncErrors } from "../../../../middlewares/catchAsyncErrors.js";
+import { connect } from "@config/db.js";
+import User from "@models/User/User.Model.js";
+import cloudinary from "@middlewares/cloudinary.js";
+import { catchAsyncErrors } from "@middlewares/catchAsyncErrors.js";
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 

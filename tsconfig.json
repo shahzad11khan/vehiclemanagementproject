@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+     "baseUrl": ".",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
@@ -18,7 +19,10 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+       "@config/*": ["config/*"], // You can access config folder from anywhere with '@config'
+      "@models/*": ["models/*"], // Access models folder with '@models'
+      "@middlewares/*": ["middlewares/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

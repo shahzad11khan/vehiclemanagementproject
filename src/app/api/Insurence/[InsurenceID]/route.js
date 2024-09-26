@@ -1,6 +1,6 @@
-import { connect } from "../../../../../config/db.js";
-import Insurence from "../../../../../models/Insurence/Insurence.model.js";
-import { catchAsyncErrors } from "../../../../../middlewares/catchAsyncErrors.js";
+import { connect } from "@config/db.js";
+import Insurence from "@models/Insurence/Insurence.model.js";
+import { catchAsyncErrors } from "@middlewares/catchAsyncErrors.js";
 import { NextResponse } from "next/server";
 
 // PUT function to update a Insurence by its VehicleID

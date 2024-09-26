@@ -1,6 +1,6 @@
-import { connect } from "../../../../../config/db.js";
-import User from "../../../../../models/User/User.Model.js";
-import cloudinary from "../../../../../middlewares/cloudinary.js";
+import { connect } from "@config/db.js";
+import User from "@models/User/User.Model.js";
+import cloudinary from "@middlewares/cloudinary.js";
 import { NextResponse } from "next/server";
 
 export async function PUT(request, { params }) {

@@ -1,7 +1,7 @@
 // models/EnquiryModel.js
 import mongoose from "mongoose";
 
-const enquirySchema = new mongoose.Schema(
+const EnquirySchema = new mongoose.Schema(
   {
     firstName: {
       type: String,
@@ -70,5 +70,5 @@ const enquirySchema = new mongoose.Schema(
 );
 
 const Enquiry =
-  mongoose.models.Enquiry || mongoose.model("Enquiry", enquirySchema);
+  mongoose.models.Enquiry || mongoose.model("Enquiry", EnquirySchema);
 export default Enquiry;

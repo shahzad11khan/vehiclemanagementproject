@@ -1,0 +1,8 @@
+# dashboard is now ready
+# backend Post api done and get also but both images cant not upload at the same time . i will resolve it
+# User api
+# Post api And Get Api
+http://localhost:3000/api/User
+# Delete and Update Api
+http://localhost:3000/api/User/66f137ec0d4f234b6ce83816
+# working in Signature api only model is created

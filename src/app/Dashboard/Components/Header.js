@@ -22,7 +22,7 @@ const Header = () => {
     <header className=" text-black flex items-center justify-between opacity-90 w-full shadow-sm shadow-custom-blue">
       {/* Left side: Logo */}
       <div className="flex flex-shrink-0 py-5 px-3 bg-gradient-to-r from-rose-400 to-purple-200">
-        <span className="text-sm font-sm text-white">
+        <span className="text-sm font-sm text-white bg-transparent">
           Vehicle Management System
         </span>
       </div>

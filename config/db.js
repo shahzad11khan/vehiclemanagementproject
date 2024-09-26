@@ -3,7 +3,7 @@ import { DB_NAME } from "../constants/constants";
 
 export async function connect() {
   try {
-    mongoose.connect(`${process.env.MONGO_URI}/${DB_NAME}`);
+    mongoose.connect(`${process.env.MONGO_URI}/VMS`);
     const connection = mongoose.connection;
 
     connection.on("connected", () => {

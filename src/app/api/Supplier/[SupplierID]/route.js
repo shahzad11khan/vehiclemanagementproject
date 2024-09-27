@@ -51,11 +51,11 @@ export const GET = catchAsyncErrors(async (request, { params }) => {
   await connect();
 
   // Extract the Driver ID from the request parameters
-  const id = params.SupplierID;
-  console.log(id);
+  const { SupplierID } = params;
+  console.log(SupplierID);
 
   // Find the driver by ID
-  const Find_Supplier = await Supplier.findById(id);
+  const Find_Supplier = await Supplier.findById(SupplierID);
 
   // Check if the driver exists
   if (!Find_Supplier) {
@@ -69,24 +69,36 @@ export const GET = catchAsyncErrors(async (request, { params }) => {
   return NextResponse.json({ result: Find_Supplier, status: 200 });
 });
 
-export const DELETE = catchAsyncErrors(async (request, { params }) => {
-  await connect();
+// DELETE handler for deleting a manufacturer
+export const DELETE = async (request, { params }) => {
+  try {
+    // Connect to the database
+    await connect();
 
-  const id = params.SupplierID;
-  console.log("Driver ID:", id);
-  const deletedSupplier = await Vehicle.findOneAndDelete({
-    id,
-  });
-  if (!deletedSupplier) {
+    const { SupplierID } = params; // Access the ManufacturerID from params
+
+    console.log("Supplier ID:", SupplierID);
+
+    // Find and delete the manufacturer
+    const deletedSupplier = await Supplier.findByIdAndDelete(SupplierID);
+
+    if (!deletedSupplier) {
+      return NextResponse.json({
+        error: "Supplier not found",
+        status: 404,
+      });
+    }
+
     return NextResponse.json({
-      message: "Supplier not found",
-      status: 404,
+      message: "Supplier deleted successfully",
+      success: true,
+      status: 200,
+    });
+  } catch (error) {
+    console.error("Error deleting Supplier:", error);
+    return NextResponse.json({
+      error: "An error occurred while deleting the Supplier",
+      status: 500,
     });
   }
-
-  return NextResponse.json({
-    message: "Supplier deleted successfully",
-    success: true,
-    status: 200,
-  });
-});
+};

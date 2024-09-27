@@ -4,108 +4,82 @@ import React, { useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
 import Header from "../../Components/Header";
 import Sidebar from "../../Components/Sidebar";
-// import { toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FaEdit, FaTrash, FaEye } from "react-icons/fa";
 import AddVehicleModel from "../AddVehicle/AddVehicleModel";
-
-// Mock data with updated fields
-const data = [
-  {
-    id: 1,
-    vehicleType: "Sedan",
-    model: "Toyota Camry",
-    taxiPlateNumber: "TX1234",
-    registration: "ABC123",
-    driver: "John Doe",
-    active: true,
-  },
-  {
-    id: 2,
-    vehicleType: "SUV",
-    model: "Honda CRV",
-    taxiPlateNumber: "TX5678",
-    registration: "DEF567",
-    driver: "Jane Smith",
-    active: false,
-  },
-  {
-    id: 3,
-    vehicleType: "Van",
-    model: "Ford Transit",
-    taxiPlateNumber: "TX4321",
-    registration: "GHI890",
-    driver: "Bob Johnson",
-    active: true,
-  },
-];
-
-// Updated columns with the required fields
-const columns = [
-  {
-    name: "Vehicle Type",
-    selector: (row) => row.vehicleType,
-    sortable: true,
-  },
-  {
-    name: "Model",
-    selector: (row) => row.model,
-    sortable: true,
-  },
-  {
-    name: "Taxi Plate Number",
-    selector: (row) => row.taxiPlateNumber,
-    sortable: true,
-  },
-  {
-    name: "Registration",
-    selector: (row) => row.registration,
-    sortable: true,
-  },
-  {
-    name: "Driver",
-    selector: (row) => row.driver,
-    sortable: true,
-  },
-  {
-    name: "Active",
-    selector: (row) => (row.active ? "Yes" : "No"),
-    sortable: true,
-  },
-  {
-    name: "Actions",
-    cell: () => (
-      <div className="flex gap-2">
-        {/* Preview button */}
-        <button
-          // onClick={() => handlePreview(row.id)}
-          className="text-green-500 hover:text-green-700"
-        >
-          <FaEye />
-        </button>
-        {/* Edit button */}
-        <button
-          // onClick={() => handleEdit(row.id)}
-          className="text-blue-500 hover:text-blue-700"
-        >
-          <FaEdit />
-        </button>
-        {/* Delete button */}
-        <button
-          // onClick={() => handleDelete(row.id)}
-          className="text-red-500 hover:text-red-700"
-        >
-          <FaTrash />
-        </button>
-      </div>
-    ),
-    allowOverflow: true,
-    button: true,
-  },
-];
+import axios from "axios";
+import { API_URL_Vehicle } from "../../Components/ApiUrl/ApiUrls";
 
 const Page = () => {
+  // Updated columns with the required fields
+  const columns = [
+    {
+      name: "Manufacturer",
+      selector: (row) => row.manufacturer,
+      sortable: true,
+    },
+    {
+      name: "Model",
+      selector: (row) => row.model,
+      sortable: true,
+    },
+    {
+      name: "year",
+      selector: (row) => row.year,
+      sortable: true,
+    },
+    {
+      name: "type",
+      selector: (row) => row.type,
+      sortable: true,
+    },
+    {
+      name: "engineType",
+      selector: (row) => row.engineType,
+      sortable: true,
+    },
+    {
+      name: "Active",
+      selector: (row) => (row.active ? "Yes" : "No"),
+      sortable: true,
+    },
+    {
+      name: "Actions",
+      cell: (row) => (
+        <div className="flex gap-2">
+          {/* Preview button */}
+          <button
+            onClick={() => handlePreview(row._id)}
+            className="text-green-500 hover:text-green-700"
+          >
+            <FaEye />
+          </button>
+          {/* Edit button */}
+          <button
+            onClick={() => handleEdit(row._id)}
+            className="text-blue-500 hover:text-blue-700"
+          >
+            <FaEdit />
+          </button>
+          {/* Delete button */}
+          <button
+            onClick={() => handleDelete(row._id)}
+            className="text-red-500 hover:text-red-700"
+          >
+            <FaTrash />
+          </button>
+        </div>
+      ),
+      allowOverflow: true,
+      button: true,
+    },
+  ];
+
   // State for the search term
+  // State for the search term
+  const [vehicle, setVehicle] = useState([]); // For storing fetched data
+  const [filteredData, setFilteredData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [isMounted, setIsMounted] = useState(false);
   const [isOpenVehicle, setIsOpenVehicle] = useState(false);
@@ -114,28 +88,73 @@ const Page = () => {
   useEffect(() => {
     setIsMounted(true);
   }, []);
+  useEffect(() => {
+    fetchData();
+  }, []);
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(`${API_URL_Vehicle}`);
+      console.log(response.data);
+      setVehicle(response.data.result); // Assuming the API returns an array of users
+      setFilteredData(response.data.result); // Initialize filteredData with full user list
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  // delete
+  const handleDelete = async (id) => {
+    console.log("Deleting ID:", id); // Log the ID to be deleted
+    try {
+      const response = await axios.delete(`${API_URL_Vehicle}/${id}`);
+      const { data } = response; // Destructure data from response
+
+      console.log("Response Data:", data); // Log the response data
+
+      if (data.success) {
+        // Check the status code or adjust based on your API
+        // Remove the deleted item from state
+        setVehicle((prevData) => prevData.filter((item) => item._id !== id));
+        setFilteredData((prevFilteredData) =>
+          prevFilteredData.filter((item) => item._id !== id)
+        );
+        toast.success(data.message); // Show success message
+      } else {
+        // If the success condition is not met
+        toast.warn(data.message || "Failed to delete the driver."); // Show warning message
+      }
+    } catch (error) {
+      console.error("Error deleting driver:", error); // Log the error
+
+      // Show a user-friendly error message
+      toast.error(
+        "An error occurred while deleting the driver. Please try again."
+      );
+    }
+  };
 
   // Filtering the data based on the search term
-  const filteredData = data.filter((item) => {
-    return (
-      item.model && item.model.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-  });
+  useEffect(() => {
+    const filtered = vehicle.filter((item) => {
+      // Check if item and item.title are defined before calling toLowerCase
+      return (
+        item &&
+        item.manufacturer &&
+        item.manufacturer.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    });
+    setFilteredData(filtered);
+  }, [searchTerm, vehicle]); // Filter when search term or data changes
 
-  // const handleEdit = (id) => {
-  //   toast.info(`Edit vehicle with ID: ${id}`);
-  //   // Implement your edit logic here
-  // };
+  const handleEdit = (id) => {
+    toast.info(`Edit vehicle with ID: ${id}`);
+    // Implement your edit logic here
+  };
 
-  // const handleDelete = (id) => {
-  //   toast.info(`Delete vehicle with ID: ${id}`);
-  //   // Implement your delete logic here
-  // };
-
-  // const handlePreview = (id) => {
-  //   toast.info(`Preview vehicle with ID: ${id}`);
-  //   // Implement your preview logic here
-  // };
+  const handlePreview = (id) => {
+    toast.info(`Preview vehicle with ID: ${id}`);
+    // Implement your preview logic here
+  };
 
   if (!isMounted) {
     return null; // Render nothing until the component is mounted

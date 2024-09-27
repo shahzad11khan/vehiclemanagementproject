@@ -3,113 +3,77 @@
 import React, { useState, useEffect } from "react";
 import Header from "../../Components/Header";
 import Sidebar from "../../Components/Sidebar";
-// import { toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FaEdit, FaTrash, FaEye } from "react-icons/fa"; // Added FaEye for the preview button
 import AddDriverModel from "../AddDriver/AddDriverModel";
 import CustomDataTable from "../../Components/CustomDataTable";
-
-const data = [
-  {
-    id: 1,
-    fullName: "John Doe",
-    lastName: "Doe",
-    homeTel: "01234 567890",
-    mobileTel: "07890 123456",
-    rent: "$500",
-    firm: "Alpha Corp",
-  },
-  {
-    id: 2,
-    fullName: "Jane Smith",
-    lastName: "Smith",
-    homeTel: "01234 987654",
-    mobileTel: "07890 654321",
-    rent: "$450",
-    firm: "Beta Inc.",
-  },
-  {
-    id: 3,
-    fullName: "Bob Johnson",
-    lastName: "Johnson",
-    homeTel: "01234 112233",
-    mobileTel: "07890 778899",
-    rent: "$600",
-    firm: "Gamma Ltd.",
-  },
-  {
-    id: 4,
-    fullName: "Alice Brown",
-    lastName: "Brown",
-    homeTel: "01234 223344",
-    mobileTel: "07890 889900",
-    rent: "$550",
-    firm: "Delta Partners",
-  },
-];
-
-const columns = [
-  {
-    name: "Full Name",
-    selector: (row) => row.fullName,
-    sortable: true,
-  },
-  {
-    name: "Last Name",
-    selector: (row) => row.lastName,
-    sortable: true,
-  },
-  {
-    name: "Home Tel",
-    selector: (row) => row.homeTel,
-    sortable: true,
-  },
-  {
-    name: "Mobile Tel",
-    selector: (row) => row.mobileTel,
-    sortable: true,
-  },
-  {
-    name: "Rent",
-    selector: (row) => row.rent,
-    sortable: true,
-  },
-  {
-    name: "Firm",
-    selector: (row) => row.firm,
-    sortable: true,
-  },
-  {
-    name: "Actions",
-    cell: () => (
-      <div className="flex gap-2">
-        <button
-          // onClick={() => handleEdit(row.id)}
-          className="text-blue-500 hover:text-blue-700"
-        >
-          <FaEdit />
-        </button>
-        <button
-          // onClick={() => handlePreview(row.id)}
-          className="text-green-500 hover:text-green-700"
-        >
-          <FaEye />
-        </button>
-        <button
-          // onClick={() => handleDelete(row.id)}
-          className="text-red-500 hover:text-red-700"
-        >
-          <FaTrash />
-        </button>
-      </div>
-    ),
-    allowOverflow: true,
-    button: true,
-  },
-];
+import axios from "axios";
+import { API_URL_Driver } from "../../Components/ApiUrl/ApiUrls";
 
 const Page = () => {
+  const columns = [
+    {
+      name: "Full Name",
+      selector: (row) => row.firstName,
+      sortable: true,
+    },
+    {
+      name: "Last Name",
+      selector: (row) => row.lastName,
+      sortable: true,
+    },
+    {
+      name: "Home Tel",
+      selector: (row) => row.homeTel,
+      sortable: true,
+    },
+    {
+      name: "Mobile Tel",
+      selector: (row) => row.mobileTel,
+      sortable: true,
+    },
+    {
+      name: "Rent",
+      selector: (row) => row.rent,
+      sortable: true,
+    },
+    {
+      name: "Firm",
+      selector: (row) => row.firm,
+      sortable: true,
+    },
+    {
+      name: "Actions",
+      cell: (row) => (
+        <div className="flex gap-2">
+          <button
+            onClick={() => handleEdit(row._id)}
+            className="text-blue-500 hover:text-blue-700"
+          >
+            <FaEdit />
+          </button>
+          <button
+            onClick={() => handlePreview(row._id)}
+            className="text-green-500 hover:text-green-700"
+          >
+            <FaEye />
+          </button>
+          <button
+            onClick={() => handleDelete(row._id)}
+            className="text-red-500 hover:text-red-700"
+          >
+            <FaTrash />
+          </button>
+        </div>
+      ),
+      allowOverflow: true,
+      button: true,
+    },
+  ];
   // State for the search term
+  const [driver, setDriver] = useState([]); // For storing fetched data
+  const [filteredData, setFilteredData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [isMounted, setIsMounted] = useState(false);
   const [isOpenDriver, setIsOpenDriver] = useState(false);
@@ -119,28 +83,72 @@ const Page = () => {
     setIsMounted(true);
   }, []);
 
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(`${API_URL_Driver}`);
+      console.log(response.data);
+      setDriver(response.data.result); // Assuming the API returns an array of users
+      setFilteredData(response.data.result); // Initialize filteredData with full user list
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+  const handleDelete = async (id) => {
+    console.log("Deleting ID:", id); // Log the ID to be deleted
+    try {
+      const response = await axios.delete(`${API_URL_Driver}/${id}`);
+      const { data } = response; // Destructure data from response
+
+      console.log("Response Data:", data); // Log the response data
+
+      if (data.success) {
+        // Check the status code or adjust based on your API
+        // Remove the deleted item from state
+        setDriver((prevData) => prevData.filter((item) => item._id !== id));
+        setFilteredData((prevFilteredData) =>
+          prevFilteredData.filter((item) => item._id !== id)
+        );
+        toast.success(data.message); // Show success message
+      } else {
+        // If the success condition is not met
+        toast.warn(data.message || "Failed to delete the driver."); // Show warning message
+      }
+    } catch (error) {
+      console.error("Error deleting driver:", error); // Log the error
+
+      // Show a user-friendly error message
+      toast.error(
+        "An error occurred while deleting the driver. Please try again."
+      );
+    }
+  };
+
   // Filtering the data based on the search term
-  const filteredData = data.filter((item) => {
-    return (
-      item.fullName &&
-      item.fullName.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-  });
+  useEffect(() => {
+    const filtered = driver.filter((item) => {
+      // Check if item and item.title are defined before calling toLowerCase
+      return (
+        item &&
+        item.firstName &&
+        item.firstName.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    });
+    setFilteredData(filtered);
+  }, [searchTerm, driver]); // Filter when search term or data changes
 
-  // const handleEdit = (id) => {
-  //   toast.info(`Edit driver with ID: ${id}`);
-  //   // Implement your edit logic here
-  // };
+  const handleEdit = (id) => {
+    toast.info(`Edit driver with ID: ${id}`);
+    // Implement your edit logic here
+  };
 
-  // const handlePreview = (id) => {
-  //   toast.info(`Preview driver with ID: ${id}`);
-  //   // Implement your preview logic here
-  // };
-
-  // const handleDelete = (id) => {
-  //   toast.info(`Delete driver with ID: ${id}`);
-  //   // Implement your delete logic here
-  // };
+  const handlePreview = (id) => {
+    toast.info(`Preview driver with ID: ${id}`);
+    // Implement your preview logic here
+  };
 
   if (!isMounted) {
     return null; // Render nothing until the component is mounted

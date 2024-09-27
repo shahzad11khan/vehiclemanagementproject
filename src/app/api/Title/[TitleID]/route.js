@@ -4,10 +4,10 @@ import { catchAsyncErrors } from "@middlewares/catchAsyncErrors.js";
 import { NextResponse } from "next/server";
 
 // PUT function to update a badge by its VehicleID
-export const PUT = catchAsyncErrors(async (request, { params }) => {
+export const PUT = catchAsyncErrors(async (request, context) => {
   await connect(); // Connect to the database
 
-  const id = params.BadgeID; // Extract VehicleID from params
+  const id = context.params.BadgeID; // Extract VehicleID from params
   const data = await request.formData(); // Get the form data
 
   const formDataObject = {};
@@ -41,12 +41,12 @@ export const PUT = catchAsyncErrors(async (request, { params }) => {
 });
 
 // GET handler for retrieving a specific driver by ID
-export const GET = catchAsyncErrors(async (request, { params }) => {
+export const GET = catchAsyncErrors(async (request, context) => {
   // Connect to the database
   await connect();
 
   // Extract the Driver ID from the request parameters
-  const id = params.TitleID;
+  const id = context.params.TitleID;
   console.log(id);
 
   // Find the driver by ID
@@ -61,23 +61,25 @@ export const GET = catchAsyncErrors(async (request, { params }) => {
   return NextResponse.json({ result: Find_Title, status: 200 });
 });
 
-export const DELETE = catchAsyncErrors(async (request, { params }) => {
+export const DELETE = catchAsyncErrors(async (request) => {
   await connect();
 
-  const id = params.TitleID;
-  console.log("Title ID:", id);
-  const deletedtitle = await Title.findOneAndDelete({
-    id,
-  });
+  const { searchParams } = new URL(request.url);
+  const titleID = searchParams.get("titleID");
+
+  console.log("Title ID:", titleID);
+
+  const deletedtitle = await Title.findOneAndDelete({ id: titleID });
+
   if (!deletedtitle) {
     return NextResponse.json({
-      message: "title not found",
+      message: "Title not found",
       status: 404,
     });
   }
 
   return NextResponse.json({
-    message: "titile deleted successfully",
+    message: "Title deleted successfully",
     success: true,
     status: 200,
   });

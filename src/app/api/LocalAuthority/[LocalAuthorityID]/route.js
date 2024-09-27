@@ -8,15 +8,10 @@ export const PUT = catchAsyncErrors(async (request, { params }) => {
   await connect(); // Connect to the database
 
   const id = params.LocalAuthorityID; // Extract VehicleID from params
-  const data = await request.formData(); // Get the form data
-
-  const formDataObject = {};
-  for (const [key, value] of data.entries()) {
-    formDataObject[key] = value;
-  }
+  const data = await request.json(); // Get the form data
 
   // Destructure the necessary fields
-  const { name, description, isActive } = formDataObject;
+  const { name, description, isActive } = data;
 
   // Find the vehicle by ID
   const localAuthority = await LocalAuthority.findById(id);
@@ -69,24 +64,38 @@ export const GET = catchAsyncErrors(async (request, { params }) => {
   return NextResponse.json({ result: Find_LocalAuthority, status: 200 });
 });
 
-export const DELETE = catchAsyncErrors(async (request, { params }) => {
-  await connect();
+// DELETE handler for deleting a manufacturer
+export const DELETE = async (request, { params }) => {
+  try {
+    // Connect to the database
+    await connect();
 
-  const id = params.LocalAuthorityID;
-  console.log("Driver ID:", id);
-  const deletedLocalAuthority = await Vehicle.findOneAndDelete({
-    id,
-  });
-  if (!deletedLocalAuthority) {
+    const { LocalAuthorityID } = params; // Access the ManufacturerID from params
+
+    console.log("LocalAuthority ID:", LocalAuthorityID);
+
+    // Find and delete the manufacturer
+    const deletedLocalAuthorityID = await LocalAuthority.findByIdAndDelete(
+      LocalAuthorityID
+    );
+
+    if (!deletedLocalAuthorityID) {
+      return NextResponse.json({
+        error: "LocalAuthority not found",
+        status: 404,
+      });
+    }
+
     return NextResponse.json({
-      message: "LocalAuthority not found",
-      status: 404,
+      message: "LocalAuthority deleted successfully",
+      success: true,
+      status: 200,
+    });
+  } catch (error) {
+    console.error("Error deleting LocalAuthority:", error);
+    return NextResponse.json({
+      error: "An error occurred while deleting the LocalAuthority",
+      status: 500,
     });
   }
-
-  return NextResponse.json({
-    message: "LocalAuthority deleted successfully",
-    success: true,
-    status: 200,
-  });
-});
+};

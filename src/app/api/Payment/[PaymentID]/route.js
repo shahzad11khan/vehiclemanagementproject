@@ -67,24 +67,36 @@ export const GET = catchAsyncErrors(async (request, { params }) => {
   return NextResponse.json({ result: Find_Payment, status: 200 });
 });
 
-export const DELETE = catchAsyncErrors(async (request, { params }) => {
-  await connect();
+// DELETE handler for deleting a manufacturer
+export const DELETE = async (request, { params }) => {
+  try {
+    // Connect to the database
+    await connect();
 
-  const id = params.PaymentID;
-  console.log("payment ID:", id);
-  const deletedPayment = await Vehicle.findOneAndDelete({
-    id,
-  });
-  if (!deletedPayment) {
+    const { PaymentID } = params; // Access the ManufacturerID from params
+
+    console.log("Payment ID:", PaymentID);
+
+    // Find and delete the manufacturer
+    const deletedPayment = await Payment.findByIdAndDelete(PaymentID);
+
+    if (!deletedPayment) {
+      return NextResponse.json({
+        error: "Payment not found",
+        status: 404,
+      });
+    }
+
     return NextResponse.json({
-      message: "Payment not found",
-      status: 404,
+      message: "Payment deleted successfully",
+      success: true,
+      status: 200,
+    });
+  } catch (error) {
+    console.error("Error deleting Payment:", error);
+    return NextResponse.json({
+      error: "An error occurred while deleting the Payment",
+      status: 500,
     });
   }
-
-  return NextResponse.json({
-    message: "Payment deleted successfully",
-    success: true,
-    status: 200,
-  });
-});
+};

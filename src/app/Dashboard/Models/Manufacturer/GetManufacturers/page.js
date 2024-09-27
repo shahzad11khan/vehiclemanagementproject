@@ -4,77 +4,126 @@ import React, { useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
 import Header from "../../../Components/Header";
 import Sidebar from "../../../Components/Sidebar";
-// import { toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import AddManufacturerModel from "../AddManufacturer/AddManufacturerModel";
-
-const data = [
-  { id: 1, title: "Conan the Barbarian", year: "1982" },
-  { id: 2, title: "Terminator", year: "1984" },
-  { id: 3, title: "Commando", year: "1985" },
-  { id: 4, title: "Predator", year: "1987" },
-];
-
-const columns = [
-  {
-    name: "Title",
-    selector: (row) => row.title,
-    sortable: true,
-  },
-  {
-    name: "Year",
-    selector: (row) => row.year,
-    sortable: true,
-  },
-  {
-    name: "Actions",
-    cell: () => (
-      <div className="flex gap-2">
-        <button
-          // onClick={() => handleEdit(row.id)}
-          className="text-blue-500 hover:text-blue-700"
-        >
-          <FaEdit />
-        </button>
-        <button
-          // onClick={() => handleDelete(row.id)}
-          className="text-red-500 hover:text-red-700"
-        >
-          <FaTrash />
-        </button>
-      </div>
-    ),
-    allowOverflow: true,
-    button: true,
-  },
-];
+import axios from "axios";
+import { API_URL_Manufacturer } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
+import { GetManufacturer } from "@/app/Dashboard/Components/ApiUrl/ShowApiDatas/ShowApiDatas";
 
 const Page = () => {
+  const columns = [
+    {
+      name: "Manufacturer Name",
+      selector: (row) => row.name,
+      sortable: true,
+    },
+    {
+      name: "Manufacturer Discription",
+      selector: (row) => row.description,
+      sortable: true,
+    },
+    {
+      name: "Actions",
+      cell: (row) => (
+        <div className="flex gap-2">
+          <button
+            onClick={() => handleEdit(row._id)}
+            className="text-blue-500 hover:text-blue-700"
+          >
+            <FaEdit />
+          </button>
+          <button
+            onClick={() => handleDelete(row._id)}
+            className="text-red-500 hover:text-red-700"
+          >
+            <FaTrash />
+          </button>
+        </div>
+      ),
+      allowOverflow: true,
+      button: true,
+    },
+  ];
   // State for the search term
+  const [data, setData] = useState([]); // State to hold fetched data
   const [searchTerm, setSearchTerm] = useState("");
   const [isMounted, setIsMounted] = useState(false);
   const [isOpenManufacturer, setIsOpenManufacturer] = useState(false);
+  const [filteredData, setFilteredData] = useState([]);
 
   // Ensure that the component only renders once it is mounted
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
-  // Filtering the data based on the search term
-  const filteredData = data.filter((item) => {
-    return (
-      item.title && item.title.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-  });
-  // const handleEdit = (id) => {
-  //   toast.info(`Edit item with ID: ${id}`);
-  //   // Implement your edit logic here
-  // };
+  // Fetch data from API
+  const fetchData = async () => {
+    try {
+      GetManufacturer().then(({ result }) => {
+        console.log(result);
 
-  // const handleDelete = (id) => {
-  //   toast.info(`Delete item with ID: ${id}`);
-  //   // Implement your delete logic here
+        setData(result); // Set the fetched data
+        setFilteredData(result);
+      });
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setData([]); // Reset data to an empty array on error
+    }
+  };
+  //
+  useEffect(() => {
+    fetchData();
+  }, []);
+  const handleDelete = async (id) => {
+    console.log("Deleting ID:", id); // Log the ID to be deleted
+    try {
+      const response = await axios.delete(`${API_URL_Manufacturer}/${id}`);
+      const { data } = response; // Destructure data from response
+
+      console.log("Response Data:", data); // Log the response data
+
+      if (data.status === 200) {
+        // If the deletion was successful, update the state
+        setData((prevData) => prevData.filter((item) => item._id !== id));
+        setFilteredData((prevFilteredData) =>
+          prevFilteredData.filter((item) => item._id !== id)
+        );
+        toast.success(data.message || "Manufacturer deleted successfully."); // Show success message
+      } else {
+        // If the success condition is not met
+        toast.warn(data.message || "Failed to delete the Manufacturer."); // Show warning message
+      }
+    } catch (error) {
+      console.error("Error deleting Manufacturer:", error); // Log the error
+
+      // Show a user-friendly error message
+      toast.error(
+        error.response?.data?.message ||
+          "An error occurred while deleting the Manufacturer. Please try again."
+      );
+    }
+  };
+
+  // Filtering the data based on the search term
+  useEffect(() => {
+    const filtered = data.filter((item) => {
+      // Check if item and item.title are defined before calling toLowerCase
+      return (
+        item &&
+        item.name &&
+        item.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    });
+    setFilteredData(filtered);
+  }, [searchTerm, data]); // Filter when search term or data changes
+
+  const handleEdit = (id) => {
+    toast.info(`Edit item with ID: ${id}`);
+    // Implement your edit logic here
+  };
+
   // };
   if (!isMounted) {
     return null; // Render nothing until the component is mounted

@@ -63,24 +63,36 @@ export const GET = catchAsyncErrors(async (request, { params }) => {
   return NextResponse.json({ result: Find_VehicleType, status: 200 });
 });
 
-export const DELETE = catchAsyncErrors(async (request, { params }) => {
-  await connect();
+// DELETE handler for deleting a manufacturer
+export const DELETE = async (request, { params }) => {
+  try {
+    // Connect to the database
+    await connect();
 
-  const id = params.VehicleTypeID;
-  console.log("Driver ID:", id);
-  const deletedVehicleType = await Vehicle.findOneAndDelete({
-    id,
-  });
-  if (!deletedVehicleType) {
+    const { VehicleTypeID } = params; // Access the ManufacturerID from params
+
+    console.log("Vehicle ID:", VehicleTypeID);
+
+    // Find and delete the manufacturer
+    const deletedVehicle = await VehicleType.findByIdAndDelete(VehicleTypeID);
+
+    if (!deletedVehicle) {
+      return NextResponse.json({
+        error: "VehicleType not found",
+        status: 404,
+      });
+    }
+
     return NextResponse.json({
-      message: "VehicleType not found",
-      status: 404,
+      message: "VehicleType deleted successfully",
+      success: true,
+      status: 200,
+    });
+  } catch (error) {
+    console.error("Error deleting VehicleType:", error);
+    return NextResponse.json({
+      error: "An error occurred while deleting the VehicleType",
+      status: 500,
     });
   }
-
-  return NextResponse.json({
-    message: "VehicleType deleted successfully",
-    success: true,
-    status: 200,
-  });
-});
+};

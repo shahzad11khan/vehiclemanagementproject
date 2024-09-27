@@ -5,15 +5,9 @@ import { NextResponse } from "next/server";
 
 export const POST = catchAsyncErrors(async (request) => {
   await connect();
-  const data = await request.formData();
+  const data = await request.json();
 
-  // Constructing formDataObject excluding the files
-  const formDataObject = {};
-  for (const [key, value] of data.entries()) {
-    formDataObject[key] = value;
-  }
-
-  const { name, description, isActive } = formDataObject; // Extract the new variables
+  const { name, description, isActive } = data; // Extract the new variables
 
   // Check for existing vehicle by name
   const existingPayment = await Payment.findOne({ name });
@@ -55,7 +49,7 @@ export const GET = catchAsyncErrors(async () => {
     return NextResponse.json({ Result: allPayment });
   } else {
     return NextResponse.json({
-      result: allPayment,
+      Result: allPayment,
       count: PaymentCount,
     });
   }

@@ -116,25 +116,36 @@ export const GET = catchAsyncErrors(async (request, { params }) => {
   return NextResponse.json({ result: Find_Vehicle, status: 200 });
 });
 
-// DELETE handler for deleting a driver and associated image
-export const DELETE = catchAsyncErrors(async (request, { params }) => {
-  // Connect to the database
-  await connect();
+// DELETE handler for deleting a vehicle and associated image
+export const DELETE = async (request, { params }) => {
+  try {
+    // Connect to the database
+    await connect();
 
-  const id = params.VehicleID;
-  console.log("Driver ID:", id);
-  const deletedVehicle = await Vehicle.findOneAndDelete({
-    id,
-  });
-  if (!deletedVehicle) {
+    const { VehicleID } = params; // Access the VehicleID from params
+
+    console.log("Vehicle ID:", VehicleID);
+
+    // Find and delete the vehicle
+    const deletedVehicle = await Vehicle.findOneAndDelete({ _id: VehicleID });
+
+    if (!deletedVehicle) {
+      return NextResponse.json({
+        error: "Vehicle not found",
+        status: 404,
+      });
+    }
+
     return NextResponse.json({
-      error: "Vehicle not found",
-      status: 404,
+      message: "Vehicle deleted successfully",
+      success: true,
+      status: 200,
+    });
+  } catch (error) {
+    console.error("Error deleting vehicle:", error);
+    return NextResponse.json({
+      error: "An error occurred while deleting the vehicle",
+      status: 500,
     });
   }
-  return NextResponse.json({
-    message: "Vehicle deleted successfully",
-    success: true,
-    status: 200,
-  });
-});
+};

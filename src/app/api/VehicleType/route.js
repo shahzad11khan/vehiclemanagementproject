@@ -5,27 +5,21 @@ import { NextResponse } from "next/server";
 
 export const POST = catchAsyncErrors(async (request) => {
   await connect();
-  const data = await request.formData();
+  const data = await request.json();
 
-  // Constructing formDataObject excluding the files
-  const formDataObject = {};
-  for (const [key, value] of data.entries()) {
-    formDataObject[key] = value;
-  }
-
-  const { name, description, isActive } = formDataObject; // Extract the new variables
+  const { name, description, isActive } = data; // Extract the new variables
 
   // Check for existing vehicle by name
   const existingVehicle = await VehicleType.findOne({ name });
   if (existingVehicle) {
     return NextResponse.json({
-      error: "Vehicle with this name already exists",
+      error: "VehicleType with this name already exists",
       status: 400,
     });
   }
 
   // Create and save the new vehicle entry
-  const newVehicle = new Vehicle({
+  const newVehicle = new VehicleType({
     name,
     description,
     isActive,
@@ -35,10 +29,10 @@ export const POST = catchAsyncErrors(async (request) => {
 
   const savedVehicle = await newVehicle.save();
   if (!savedVehicle) {
-    return NextResponse.json({ message: "Vehicle not added", status: 400 });
+    return NextResponse.json({ message: "VehicleType not added", status: 400 });
   } else {
     return NextResponse.json({
-      message: "Vehicle created successfully",
+      message: "VehicleType created successfully",
       success: true,
       status: 200,
     });
@@ -52,7 +46,7 @@ export const GET = catchAsyncErrors(async () => {
     return NextResponse.json({ Result: allVehicleType });
   } else {
     return NextResponse.json({
-      result: allVehicleType,
+      Result: allVehicleType,
       count: VehicleTypeCount,
     });
   }

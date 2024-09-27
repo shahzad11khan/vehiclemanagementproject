@@ -74,6 +74,10 @@ const vehicleSchema = new mongoose.Schema(
     warrantyInfo: {
       type: String,
     },
+    isActive: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );

@@ -15,6 +15,8 @@ import {
   API_URL_Vehicle,
   API_URL_VehicleType,
   API_URL_Title,
+  API_URL_Badge,
+  API_URL_Employee,
 } from "../ApiUrls.js";
 
 export const GetUsers = () => {
@@ -72,6 +74,19 @@ export const GetFirm = () => {
 export const GetInsurence = () => {
   return axios
     .get(`${API_URL_Insurence}`)
+    .then((res) => {
+      console.log(res.data.Result);
+      console.log(res.data.count);
+      return { result: res.data.Result, count: res.data.count };
+    })
+    .catch((error) => {
+      console.log(`error : ${error}`);
+      throw error;
+    });
+};
+export const GetEmployee = () => {
+  return axios
+    .get(`${API_URL_Employee}`)
     .then((res) => {
       console.log(res.data.Result);
       console.log(res.data.count);
@@ -176,6 +191,19 @@ export const GetVehicle = () => {
 export const GetTitle = () => {
   return axios
     .get(`${API_URL_Title}`)
+    .then((res) => {
+      console.log(res.data.result);
+      // console.log(res.data.count);
+      return { result: res.data.result, count: res.data.count };
+    })
+    .catch((error) => {
+      console.log(`error : ${error}`);
+      throw error;
+    });
+};
+export const GetBadge = () => {
+  return axios
+    .get(`${API_URL_Badge}`)
     .then((res) => {
       console.log(res.data.result);
       // console.log(res.data.count);

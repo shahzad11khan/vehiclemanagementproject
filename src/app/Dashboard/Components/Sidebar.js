@@ -293,7 +293,7 @@ const Sidebar = () => {
                         </li>
                         <li>
                           <Link
-                            href="/Dashboard/Models/Employee/GetEmployees"
+                            href="/Dashboard/Models/Employee/GetEmploies"
                             className="px-4 py-2 rounded hover:bg-gray-200"
                           >
                             All Employees

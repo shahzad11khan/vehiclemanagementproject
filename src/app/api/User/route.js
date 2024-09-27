@@ -318,5 +318,9 @@ export const GET = catchAsyncErrors(async () => {
   await connect();
   const allUsers = await User.find();
   const userCount = await User.countDocuments();
-  return NextResponse.json({ result: allUsers, count: userCount });
+  if (!allUsers || allUsers.length === 0) {
+    return NextResponse.json({ result: allUsers });
+  } else {
+    return NextResponse.json({ result: allUsers, count: userCount });
+  }
 });

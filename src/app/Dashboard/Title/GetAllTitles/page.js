@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-// import { toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FaTrash } from "react-icons/fa";
 import Header from "../../Components/Header";
@@ -9,30 +9,8 @@ import Sidebar from "../../Components/Sidebar";
 import DataTableComponent from "../../Components/CustomDataTable";
 import AddTitleModel from "../AddTitle/AddTitleModel";
 import { GetTitle } from "../../Components/ApiUrl/ShowApiDatas/ShowApiDatas";
-
-// Sample data (can be removed once API data is integrated)
-const columns = [
-  {
-    name: "Title",
-    selector: (row) => row.name,
-    sortable: true,
-  },
-  {
-    name: "Actions",
-    cell: (row) => (
-      <div className="flex gap-2">
-        <button
-          // onClick={() => handleEdit(row.id)}
-          className="text-red-500 hover:text-red-700"
-        >
-          <FaTrash />
-        </button>
-      </div>
-    ),
-    allowOverflow: true,
-    button: true,
-  },
-];
+import { API_URL_Title } from "../../Components/ApiUrl/ApiUrls";
+import axios from "axios";
 
 const Page = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -41,26 +19,77 @@ const Page = () => {
   const [filteredData, setFilteredData] = useState([]);
   const [isOpenTitle, setIsOpenTitle] = useState(false);
 
+  //
+
+  // Sample data (can be removed once API data is integrated)
+  const columns = [
+    {
+      name: "Title",
+      selector: (row) => row.name,
+      sortable: true,
+    },
+    {
+      name: "Actions",
+      cell: (row) => (
+        <div className="flex gap-2">
+          <button
+            onClick={() => handleDelete(row._id)}
+            className="text-red-500 hover:text-red-700"
+          >
+            <FaTrash className="text-red-500 hover:text-red-700" />
+          </button>
+        </div>
+      ),
+      allowOverflow: true,
+      button: true,
+    },
+  ];
+  //
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
-  useEffect(() => {
-    // Fetch data from API
-    const fetchData = async () => {
-      try {
-        GetTitle().then(({ result }) => {
-          console.log(result);
+  // Fetch data from API
+  const fetchData = async () => {
+    try {
+      GetTitle().then(({ result }) => {
+        console.log(result);
 
-          setData(result); // Set the fetched data
-          setFilteredData(result);
-        });
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        setData([]); // Reset data to an empty array on error
+        setData(result); // Set the fetched data
+        setFilteredData(result);
+      });
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setData([]); // Reset data to an empty array on error
+    }
+  };
+  //
+
+  // delete data from api
+  const handleDelete = async (id) => {
+    try {
+      const response = await axios.delete(`${API_URL_Title}/${id}`);
+
+      const data = response.data;
+      console.log(data);
+
+      if (data.success) {
+        // Remove the deleted item from state
+        setData((prevData) => prevData.filter((item) => item._id !== id));
+        setFilteredData((prevFilteredData) =>
+          prevFilteredData.filter((item) => item._id !== id)
+        );
+        toast.success(data.message);
+      } else {
+        // console.error(data.message);
+        toast.warn(data.message);
       }
-    };
+    } catch (error) {
+      console.error("Error deleting title:", error);
+    }
+  };
 
+  useEffect(() => {
     fetchData();
   }, []);
 

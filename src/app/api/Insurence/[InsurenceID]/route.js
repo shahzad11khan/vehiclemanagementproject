@@ -69,24 +69,36 @@ export const GET = catchAsyncErrors(async (request, { params }) => {
   return NextResponse.json({ result: Find_Insurence, status: 200 });
 });
 
-export const DELETE = catchAsyncErrors(async (request, { params }) => {
-  await connect();
+// DELETE handler for deleting a manufacturer
+export const DELETE = async (request, { params }) => {
+  try {
+    // Connect to the database
+    await connect();
 
-  const id = params.InsurenceID;
-  console.log("Driver ID:", id);
-  const deletedInsurence = await Vehicle.findOneAndDelete({
-    id,
-  });
-  if (!deletedInsurence) {
+    const { InsurenceID } = params; // Access the ManufacturerID from params
+
+    console.log("Insurence ID:", InsurenceID);
+
+    // Find and delete the manufacturer
+    const deletedInsurence = await Insurence.findByIdAndDelete(InsurenceID);
+
+    if (!deletedInsurence) {
+      return NextResponse.json({
+        error: "Insurence not found",
+        status: 404,
+      });
+    }
+
     return NextResponse.json({
-      message: "Insurence not found",
-      status: 404,
+      message: "Insurence deleted successfully",
+      success: true,
+      status: 200,
+    });
+  } catch (error) {
+    console.error("Error deleting Insurence:", error);
+    return NextResponse.json({
+      error: "An error occurred while deleting the Insurence",
+      status: 500,
     });
   }
-
-  return NextResponse.json({
-    message: "Insurence deleted successfully",
-    success: true,
-    status: 200,
-  });
-});
+};

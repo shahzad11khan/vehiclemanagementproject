@@ -6,14 +6,11 @@ import { NextResponse } from "next/server";
 export async function POST(request) {
   try {
     await connect();
-    const data = await request.formData();
 
-    // Constructing formDataObject excluding the files
-    const formDataObject = {};
-    for (const [key, value] of data.entries()) {
-      formDataObject[key] = value;
-    }
+    // Parse JSON data from the request body
+    const formDataObject = await request.json();
 
+    // Destructure the properties from the parsed JSON
     const {
       manufacturer,
       model,
@@ -40,6 +37,7 @@ export async function POST(request) {
       price,
       registrationNumber,
       warrantyInfo,
+      isActive
     } = formDataObject;
 
     // Check for existing vehicle by registration number
@@ -80,6 +78,7 @@ export async function POST(request) {
       price,
       registrationNumber,
       warrantyInfo,
+      isActive,
     });
 
     console.log(newVehicle);
@@ -95,16 +94,17 @@ export async function POST(request) {
       });
     }
   } catch (error) {
-    console.error(error);
+    console.error("Error occurred:", error);
     return NextResponse.json({ error: error.message, status: 500 });
   }
 }
+
 export const GET = catchAsyncErrors(async () => {
   await connect();
   const allVehicle = await Vehicle.find();
   const VehicleCount = await Vehicle.countDocuments();
   if (!allVehicle || allVehicle.length === 0) {
-    return NextResponse.json({ Result: allVehicle });
+    return NextResponse.json({ result: allVehicle });
   } else {
     return NextResponse.json({ result: allVehicle, count: VehicleCount });
   }

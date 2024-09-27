@@ -1,13 +1,13 @@
 import { connect } from "@config/db.js";
-import Manufecturer from "@models/Manufecturer/Manufecturer.Model.js";
+import Employee from "@models/Employee/Empoyee.Model";
 import { catchAsyncErrors } from "@middlewares/catchAsyncErrors.js";
 import { NextResponse } from "next/server";
 
-// PUT function to update a Manufecturer by its VehicleID
+// PUT function to update a Employee by its VehicleID
 export const PUT = catchAsyncErrors(async (request, { params }) => {
   await connect(); // Connect to the database
 
-  const id = params.ManufecturerID; // Extract VehicleID from params
+  const id = params.EmployeeID; // Extract VehicleID from params
   const data = await request.formData(); // Get the form data
 
   const formDataObject = {};
@@ -19,28 +19,28 @@ export const PUT = catchAsyncErrors(async (request, { params }) => {
   const { name, description, isActive } = formDataObject;
 
   // Find the vehicle by ID
-  const manufecturer = await Manufecturer.findById(id);
+  const Employee = await Employee.findById(id);
 
-  if (!manufecturer) {
+  if (!Employee) {
     return NextResponse.json({
-      error: "Manufecturer not found",
+      error: "Employee not found",
       status: 404,
     });
   }
 
   // Update vehicle properties with values from formDataObject or retain existing values
-  manufecturer.name = name ? name.trim() : manufecturer.name; // Update name or retain existing
-  manufecturer.description = description
+  Employee.name = name ? name.trim() : Employee.name; // Update name or retain existing
+  Employee.description = description
     ? description.trim()
-    : manufecturer.description; // Update description or retain existing
-  manufecturer.isActive = isActive ? isActive : manufecturer.isActive;
+    : Employee.description; // Update description or retain existing
+  Employee.isActive = isActive ? isActive : Employee.isActive;
 
   // Save the updated vehicle
-  await manufecturer.save();
+  await Employee.save();
 
   return NextResponse.json({
-    message: "Manufecturer details updated successfully",
-    Manufecturer,
+    message: "Employee details updated successfully",
+    Employee,
     status: 200,
   });
 });
@@ -51,22 +51,22 @@ export const GET = catchAsyncErrors(async (request, { params }) => {
   await connect();
 
   // Extract the Driver ID from the request parameters
-  const id = params.ManufecturerID;
+  const id = params.EmployeeID;
   console.log(id);
 
   // Find the driver by ID
-  const Find_Manufecturer = await Manufecturer.findById(id);
+  const Find_Employee = await Employee.findById(id);
 
   // Check if the driver exists
-  if (!Find_Manufecturer) {
+  if (!Find_Employee) {
     return NextResponse.json({
-      result: "No Manufecturer Found",
+      result: "No Employee Found",
       status: 404,
     });
   }
 
   // Return the found driver as a JSON response
-  return NextResponse.json({ result: Find_Manufecturer, status: 200 });
+  return NextResponse.json({ result: Find_Employee, status: 200 });
 });
 
 // DELETE handler for deleting a manufacturer
@@ -75,31 +75,29 @@ export const DELETE = async (request, { params }) => {
     // Connect to the database
     await connect();
 
-    const { ManufacturerID } = params; // Access the ManufacturerID from params
+    const { EmployeeID } = params; // Access the ManufacturerID from params
 
-    console.log("Manufacturer ID:", ManufacturerID);
+    console.log("Employee ID:", EmployeeID);
 
     // Find and delete the manufacturer
-    const deletedManufacturer = await Manufecturer.findByIdAndDelete(
-      ManufacturerID
-    );
+    const deletedEmployee = await Employee.findByIdAndDelete(EmployeeID);
 
-    if (!deletedManufacturer) {
+    if (!deletedEmployee) {
       return NextResponse.json({
-        error: "Manufacturer not found",
+        error: "Employee not found",
         status: 404,
       });
     }
 
     return NextResponse.json({
-      message: "Manufacturer deleted successfully",
+      message: "Employee deleted successfully",
       success: true,
       status: 200,
     });
   } catch (error) {
-    console.error("Error deleting Manufacturer:", error);
+    console.error("Error deleting Employee:", error);
     return NextResponse.json({
-      error: "An error occurred while deleting the Manufacturer",
+      error: "An error occurred while deleting the Employee",
       status: 500,
     });
   }

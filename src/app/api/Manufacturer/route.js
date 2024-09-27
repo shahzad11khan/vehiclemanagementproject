@@ -4,49 +4,56 @@ import { catchAsyncErrors } from "@middlewares/catchAsyncErrors.js";
 import { NextResponse } from "next/server";
 
 export const POST = catchAsyncErrors(async (request) => {
-  await connect();
-  const data = await request.formData();
+  try {
+    // Connect to the database
+    await connect();
 
-  // Constructing formDataObject excluding the files
-  const formDataObject = {};
-  for (const [key, value] of data.entries()) {
-    formDataObject[key] = value;
-  }
+    // Parse JSON data from the request body
+    const data = await request.json();
 
-  const { name, description, isActive } = formDataObject; // Extract the new variables
+    const { name, description, isActive } = data; // Destructure the required fields
 
-  // Check for existing vehicle by name
-  const existingVehicle = await Manufecturer.findOne({ name });
-  if (existingVehicle) {
-    return NextResponse.json({
-      error: "Manufecturer with this name already exists",
-      status: 400,
+    // Check if a manufacturer with the same name already exists
+    const existingManufacturer = await Manufecturer.findOne({ name });
+    if (existingManufacturer) {
+      return NextResponse.json({
+        error: "Manufacturer with this name already exists",
+        status: 400,
+      });
+    }
+
+    // Create and save the new manufacturer
+    const newManufacturer = new Manufecturer({
+      name,
+      description,
+      isActive,
     });
-  }
 
-  // Create and save the new vehicle entry
-  const newManufecturer = new Manufecturer({
-    name,
-    description,
-    isActive,
-  });
+    console.log(newManufacturer);
 
-  console.log(newManufecturer);
+    const savedManufacturer = await newManufacturer.save();
+    if (!savedManufacturer) {
+      return NextResponse.json({
+        message: "Manufacturer not added",
+        status: 400,
+      });
+    }
 
-  const savedManufecturer = await newManufecturer.save();
-  if (!savedManufecturer) {
+    // Return a success response
     return NextResponse.json({
-      message: "Manufecturer not added",
-      status: 400,
-    });
-  } else {
-    return NextResponse.json({
-      message: "Manufecturer  created successfully",
+      message: "Manufacturer created successfully",
       success: true,
       status: 200,
     });
+  } catch (error) {
+    console.error("Error creating manufacturer:", error);
+    return NextResponse.json({
+      error: "An error occurred while creating the manufacturer",
+      status: 500,
+    });
   }
 });
+
 export const GET = catchAsyncErrors(async () => {
   await connect();
   const allManufecturer = await Manufecturer.find();
@@ -55,7 +62,7 @@ export const GET = catchAsyncErrors(async () => {
     return NextResponse.json({ Result: allManufecturer });
   } else {
     return NextResponse.json({
-      result: allManufecturer,
+      Result: allManufecturer,
       count: ManufecturerCount,
     });
   }

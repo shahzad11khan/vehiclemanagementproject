@@ -8,15 +8,10 @@ export const PUT = catchAsyncErrors(async (request, { params }) => {
   await connect(); // Connect to the database
 
   const id = params.BadgeID; // Extract VehicleID from params
-  const data = await request.formData(); // Get the form data
-
-  const formDataObject = {};
-  for (const [key, value] of data.entries()) {
-    formDataObject[key] = value;
-  }
+  const data = await request.json(); // Get the form data
 
   // Destructure the necessary fields
-  const { name, description, isActive } = formDataObject;
+  const { name, description, isActive } = data;
 
   // Find the vehicle by ID
   const badge = await Badge.findById(id);
@@ -61,24 +56,36 @@ export const GET = catchAsyncErrors(async (request, { params }) => {
   return NextResponse.json({ result: Find_Badge, status: 200 });
 });
 
-export const DELETE = catchAsyncErrors(async (request, { params }) => {
-  await connect();
+// DELETE handler for deleting a manufacturer
+export const DELETE = async (request, { params }) => {
+  try {
+    // Connect to the database
+    await connect();
 
-  const id = params.BadgeID;
-  console.log("Driver ID:", id);
-  const deletedBadge = await Vehicle.findOneAndDelete({
-    id,
-  });
-  if (!deletedBadge) {
+    const { BadgeID } = params; // Access the ManufacturerID from params
+
+    console.log("Badge ID:", BadgeID);
+
+    // Find and delete the manufacturer
+    const deletedBadge = await Badge.findByIdAndDelete(BadgeID);
+
+    if (!deletedBadge) {
+      return NextResponse.json({
+        error: "Badge not found",
+        status: 404,
+      });
+    }
+
     return NextResponse.json({
-      message: "Badge not found",
-      status: 404,
+      message: "Badge deleted successfully",
+      success: true,
+      status: 200,
+    });
+  } catch (error) {
+    console.error("Error deleting Badge:", error);
+    return NextResponse.json({
+      error: "An error occurred while deleting the Badge",
+      status: 500,
     });
   }
-
-  return NextResponse.json({
-    message: "Badge deleted successfully",
-    success: true,
-    status: 200,
-  });
-});
+};

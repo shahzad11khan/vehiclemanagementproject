@@ -140,7 +140,7 @@ export const GET = catchAsyncErrors(async () => {
   const allDriver = await Driver.find();
   const DriverCount = await Driver.countDocuments();
   if (!allDriver || allDriver.length === 0) {
-    return NextResponse.json({ Result: allDriver });
+    return NextResponse.json({ result: allDriver });
   } else {
     return NextResponse.json({ result: allDriver, count: DriverCount });
   }

@@ -46,7 +46,7 @@ export const GET = catchAsyncErrors(async () => {
   const allTitle = await Title.find();
   const TitleCount = await Title.countDocuments();
   if (!allTitle || allTitle.length === 0) {
-    return NextResponse.json({ Result: allTitle });
+    return NextResponse.json({ result: allTitle });
   } else {
     return NextResponse.json({ result: allTitle, count: TitleCount });
   }

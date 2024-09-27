@@ -1,5 +1,5 @@
 import { connect } from "@config/db.js";
-import Supplier from "@models/Supplier/Supplier.Model.js";
+import Employee from "@models/Employee/Empoyee.Model";
 import { catchAsyncErrors } from "@middlewares/catchAsyncErrors.js";
 import { NextResponse } from "next/server";
 
@@ -10,32 +10,32 @@ export const POST = catchAsyncErrors(async (request) => {
   const { name, description, isActive } = data; // Extract the new variables
 
   // Check for existing vehicle by name
-  const existingSupplier = await Supplier.findOne({ name });
-  if (existingSupplier) {
+  const existingVehicle = await Employee.findOne({ name });
+  if (existingVehicle) {
     return NextResponse.json({
-      error: "Supplier with this name already exists",
+      error: "Employee with this name already exists",
       status: 400,
     });
   }
 
   // Create and save the new vehicle entry
-  const newSupplier = new Supplier({
+  const newInsurence = new Employee({
     name,
     description,
     isActive,
   });
 
-  console.log(newSupplier);
+  console.log(newInsurence);
 
-  const savedSupplier = await newSupplier.save();
-  if (!savedSupplier) {
+  const savedInsurence = await newInsurence.save();
+  if (!savedInsurence) {
     return NextResponse.json({
-      message: "Supplier not added",
+      message: "Employee not added",
       status: 400,
     });
   } else {
     return NextResponse.json({
-      message: "Supplier  created successfully",
+      message: "Employee  created successfully",
       success: true,
       status: 200,
     });
@@ -43,14 +43,11 @@ export const POST = catchAsyncErrors(async (request) => {
 });
 export const GET = catchAsyncErrors(async () => {
   await connect();
-  const allSupplier = await Supplier.find();
-  const SupplierCount = await Supplier.countDocuments();
-  if (!allSupplier || allSupplier.length === 0) {
-    return NextResponse.json({ Result: allSupplier });
+  const allEmployee = await Employee.find();
+  const EmployeeCount = await Employee.countDocuments();
+  if (!allEmployee || allEmployee.length === 0) {
+    return NextResponse.json({ Result: allEmployee });
   } else {
-    return NextResponse.json({
-      Result: allSupplier,
-      count: SupplierCount,
-    });
+    return NextResponse.json({ Result: allEmployee, count: EmployeeCount });
   }
 });

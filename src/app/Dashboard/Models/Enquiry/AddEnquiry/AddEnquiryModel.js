@@ -1,5 +1,8 @@
 "use client";
+import { API_URL_Enquiry } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
+import axios from "axios";
 import React, { useState } from "react";
+import { toast } from "react-toastify";
 
 const AddEnquiryModal = ({ isOpen, onClose }) => {
   const [formData, setFormData] = useState({
@@ -18,33 +21,30 @@ const AddEnquiryModal = ({ isOpen, onClose }) => {
     badgeType: "", // Updated
     localAuthority: "", // New Field
     isActive: false,
+    adminCreatedBy: "",
+    adminCompanyName: "",
   });
 
   const badgeTypeOptions = ["Standard", "Provisional", "Full"]; // Badge Type options
   const localAuthorityOptions = ["Authority 1", "Authority 2", "Authority 3"]; // Local Authority options
 
   const handleChange = (e) => {
-    const { name, value, type, checked, files } = e.target;
+    const { name, value, type, checked } = e.target;
     setFormData({
       ...formData,
-      [name]:
-        type === "checkbox" ? checked : type === "file" ? files[0] : value,
+      [name]: type === "checkbox" ? checked : value,
     });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const formDataToSend = new FormData();
-      Object.keys(formData).forEach((key) => {
-        if (key === "imageFile" && formData[key]) {
-          formDataToSend.append("imageFile", formData[key]);
-        } else {
-          formDataToSend.append(key, formData[key]);
-        }
-      });
+      // Send the form data to the backend using Axios
+      const response = await axios.post(`${API_URL_Enquiry}`, formData); // Replace with your API endpoint
+      console.log("Form submitted successfully:", response.data);
+      toast.success("Form submitted successfully");
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Error submitting form:", error);
     }
   };
   if (!isOpen) return null;

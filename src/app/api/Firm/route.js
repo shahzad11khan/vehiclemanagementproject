@@ -2,6 +2,7 @@ import { connect } from "@config/db.js";
 import { Firm } from "@models/Firm/Firm.Model.js";
 import { catchAsyncErrors } from "@middlewares/catchAsyncErrors.js";
 import { NextResponse } from "next/server";
+import cloudinary from "@middlewares/cloudinary.js";
 
 export async function POST(request) {
   try {

@@ -95,10 +95,10 @@ export const GET = catchAsyncErrors(async () => {
   const allSignature = await Signature.find();
   const SignatureCount = await Signature.countDocuments();
   if (!allSignature || allSignature.length === 0) {
-    return NextResponse.json({ result: allSignature });
+    return NextResponse.json({ Result: allSignature });
   } else {
     return NextResponse.json({
-      result: allSignature,
+      Result: allSignature,
       count: SignatureCount,
     });
   }

@@ -63,6 +63,8 @@ const EnquirySchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    adminCreatedBy: { type: String },
+    adminCompanyName: { type: String },
   },
   {
     timestamps: true,

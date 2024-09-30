@@ -25,6 +25,11 @@ const Page = () => {
       sortable: true,
     },
     {
+      name: "Employee Status",
+      selector: (row) => (row.isActive ? "Active" : "InActive"),
+      sortable: true,
+    },
+    {
       name: "Actions",
       cell: (row) => (
         <div className="flex gap-2">
@@ -123,10 +128,6 @@ const Page = () => {
   //   // Implement your edit logic here
   // };
 
-  // const handleDelete = (id) => {
-  //   toast.info(`Delete item with ID: ${id}`);
-  //   // Implement your delete logic here
-  // };
   if (!isMounted) {
     return null; // Render nothing until the component is mounted
   }
@@ -174,7 +175,11 @@ const Page = () => {
           </div>
         </div>
       </div>
-      <AddEmployeemodel isOpen={isOpenEmployee} onClose={OpenEmployeeModle} />
+      <AddEmployeemodel
+        isOpen={isOpenEmployee}
+        onClose={OpenEmployeeModle}
+        fetchData={fetchData}
+      />
     </>
   );
 };

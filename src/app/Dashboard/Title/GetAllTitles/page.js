@@ -141,7 +141,11 @@ const Page = () => {
           </div>
         </div>
       </div>
-      <AddTitleModel isOpen={isOpenTitle} onClose={toggleTitleModal} />
+      <AddTitleModel
+        isOpen={isOpenTitle}
+        onClose={toggleTitleModal}
+        fetchData={fetchData}
+      />
     </>
   );
 };

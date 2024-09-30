@@ -25,6 +25,11 @@ const Page = () => {
       sortable: true,
     },
     {
+      name: "Badge Active",
+      selector: (row) => (row.isActive ? "Active" : "Inactive"),
+      sortable: true,
+    },
+    {
       name: "Actions",
       cell: (row) => (
         <div className="flex gap-2">
@@ -179,7 +184,11 @@ const Page = () => {
           </div>
         </div>
       </div>
-      <AddBadgemodel isOpen={isOpenBadge} onClose={OpenBadgeModle} />
+      <AddBadgemodel
+        isOpen={isOpenBadge}
+        onClose={OpenBadgeModle}
+        fetchData={fetchData}
+      />
     </>
   );
 };

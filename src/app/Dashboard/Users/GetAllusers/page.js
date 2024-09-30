@@ -16,6 +16,7 @@ import AddUserModel from "../AddUser/AddUserModel";
 import DataTableComponent from "../../Components/CustomDataTable";
 import axios from "axios";
 import { API_URL_USER } from "../../Components/ApiUrl/ApiUrls";
+import Image from "next/image";
 
 const Page = () => {
   // columns
@@ -40,10 +41,12 @@ const Page = () => {
       name: "Company Avatar",
       selector: (row) => row.companyavatar, // This will be used for sorting, but not directly for display
       cell: (row) => (
-        <img
+        <Image
           src={row.companyavatar} // Make sure the URL is valid
           alt="User Avatar"
           className="h-10 w-10 rounded-full" // Add styling as needed
+          width={100}
+          height={100}
         />
       ),
       sortable: true,
@@ -52,10 +55,12 @@ const Page = () => {
       name: "User Avatar",
       selector: (row) => row.useravatar, // This will be used for sorting, but not directly for display
       cell: (row) => (
-        <img
+        <Image
           src={row.useravatar} // Make sure the URL is valid
           alt="User Avatar"
           className="h-10 w-10 rounded-full" // Add styling as needed
+          width={100}
+          height={100}
         />
       ),
       sortable: true,

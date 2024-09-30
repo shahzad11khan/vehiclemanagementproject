@@ -21,6 +21,8 @@ const FirmSchema = new mongoose.Schema({
   imageName: { type: String },
   imageFile: { type: String },
   imagepublicId: { type: String },
+  adminCreatedBy: { type: String },
+  adminCompanyName: { type: String },
 });
 
 export const Firm = mongoose.models.Firm || mongoose.model("Firm", FirmSchema);

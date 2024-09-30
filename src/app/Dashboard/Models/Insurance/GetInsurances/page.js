@@ -25,6 +25,11 @@ const Page = () => {
       sortable: true,
     },
     {
+      name: "Insurence Status",
+      selector: (row) => (row.isActive ? "Active" : "InActive"),
+      sortable: true,
+    },
+    {
       name: "Actions",
       cell: (row) => (
         <div className="flex gap-2">
@@ -178,6 +183,7 @@ const Page = () => {
       <AddInsuranceModel
         isOpen={isOpenInsurance}
         onClose={OpenInsuranceModle}
+        fetchData={fetchData}
       />
     </>
   );

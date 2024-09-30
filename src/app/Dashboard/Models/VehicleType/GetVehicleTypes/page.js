@@ -25,6 +25,11 @@ const Page = () => {
       sortable: true,
     },
     {
+      name: "Description",
+      selector: (row) => (row.isActive ? "Active" : "InActive"),
+      sortable: true,
+    },
+    {
       name: "Actions",
       cell: (row) => (
         <div className="flex gap-2">
@@ -177,6 +182,7 @@ const Page = () => {
       <AddVehicleType
         isOpen={isOpenVehicleType}
         onClose={OpenVehicleTypeModle}
+        fetchData={fetchData}
       />
     </>
   );

@@ -1,7 +1,10 @@
 "use client";
 import React, { useState } from "react";
+import { API_URL_Firm } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
+import { toast } from "react-toastify";
+import axios from "axios";
 
-const AddFirmModal = ({ isOpen, onClose }) => {
+const AddFirmModal = ({ isOpen, onClose, fetchData }) => {
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -23,6 +26,8 @@ const AddFirmModal = ({ isOpen, onClose }) => {
     imageName: "",
     imageFile: null,
     imageNote: "",
+    adminCreatedBy: "",
+    adminCompanyName: "",
   });
 
   const handleChange = (e) => {
@@ -38,17 +43,52 @@ const AddFirmModal = ({ isOpen, onClose }) => {
     e.preventDefault();
     try {
       const formDataToSend = new FormData();
+
+      // Append each form field to the FormData object
       Object.keys(formData).forEach((key) => {
-        if (key === "imageFile" && formData[key]) {
-          formDataToSend.append("imageFile", formData[key]);
-        } else {
-          formDataToSend.append(key, formData[key]);
-        }
+        formDataToSend.append(key, formData[key]);
       });
-      // Submit formDataToSend to your API or server here
-      console.log("Form Data:", formDataToSend);
+
+      // Send the form data to the backend using Axios
+      const response = await axios.post(`${API_URL_Firm}`, formDataToSend, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      // Handle the response after submission
+      console.log("Server response:", response.data);
+      toast.success(response.data.message);
+      onClose();
+      fetchData();
+      // Optionally, reset the form after successful submission
+      setFormData({
+        name: "",
+        description: "",
+        companyNo: "",
+        vatNo: "",
+        insurancePolicyNo: "",
+        website: "",
+        email: "",
+        tel1: "",
+        tel2: "",
+        address: "",
+        city: "",
+        country: "",
+        postcode: "",
+        isActive: false,
+        employmentLetter: false,
+        coverLetter: false,
+        signature: "",
+        imageName: "",
+        imageFile: null,
+        imageNote: "",
+      });
+
+      // Close the modal after submission
+      onClose();
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Error submitting the form:", error);
     }
   };
   if (!isOpen) return null;

@@ -25,6 +25,11 @@ const Page = () => {
       sortable: true,
     },
     {
+      name: "Payment Status",
+      selector: (row) => (row.isActive ? "Active" : "InActive"),
+      sortable: true,
+    },
+    {
       name: "Actions",
       cell: (row) => (
         <div className="flex gap-2">
@@ -175,7 +180,11 @@ const Page = () => {
           </div>
         </div>
       </div>
-      <AddPaymentModel isOpen={isOpenPayment} onClose={OpenPaymentModle} />
+      <AddPaymentModel
+        isOpen={isOpenPayment}
+        onClose={OpenPaymentModle}
+        fetchData={fetchData}
+      />
     </>
   );
 };

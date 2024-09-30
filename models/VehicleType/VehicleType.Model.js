@@ -15,6 +15,8 @@ const VehicleTypeSchema = new mongoose.Schema({
     type: Boolean,
     default: false, // Defaults to false if not specified
   },
+  adminCreatedBy: { type: String },
+  adminCompanyName:{type:String}
 });
 
 // Create the model

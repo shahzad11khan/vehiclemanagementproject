@@ -1,9 +1,8 @@
 import mongoose from "mongoose";
-import { DB_NAME } from "../constants/constants";
 
 export async function connect() {
   try {
-    mongoose.connect(`${process.env.MONGO_URI}/VMS`);
+    mongoose.connect(`${process.env.MONGO_URI}/${process.env.DATABASE_NAME}`);
     const connection = mongoose.connection;
 
     connection.on("connected", () => {

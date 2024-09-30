@@ -26,6 +26,11 @@ const Page = () => {
       sortable: true,
     },
     {
+      name: "Authority Status",
+      selector: (row) => (row.isActive ? "Active" : "InActive"),
+      sortable: true,
+    },
+    {
       name: "Actions",
       cell: (row) => (
         <div className="flex gap-2">
@@ -174,6 +179,7 @@ const Page = () => {
       <AddLocalAuthorityModel
         isOpen={isOpenAuthority}
         onClose={OpenAuthorityModle}
+        fetchData={fetchData}
       />
     </>
   );

@@ -4,8 +4,6 @@ import cloudinary from "@middlewares/cloudinary.js";
 import { catchAsyncErrors } from "@middlewares/catchAsyncErrors.js";
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
-
 export async function POST(request) {
   try {
     await connect();

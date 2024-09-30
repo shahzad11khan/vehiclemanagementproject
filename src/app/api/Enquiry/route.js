@@ -5,13 +5,7 @@ import { NextResponse } from "next/server";
 
 export const POST = catchAsyncErrors(async (request) => {
   await connect();
-  const data = await request.formData();
-
-  // Constructing formDataObject excluding the files
-  const formDataObject = {};
-  for (const [key, value] of data.entries()) {
-    formDataObject[key] = value;
-  }
+  const data = await request.json();
 
   const {
     firstName,
@@ -29,7 +23,9 @@ export const POST = catchAsyncErrors(async (request) => {
     badgeType,
     localAuthority,
     isActive,
-  } = formDataObject; // Extract the new variables
+    adminCreatedB,
+    adminCompanyName,
+  } = data; // Extract the new variables
 
   // Check for existing enquiry by email
   const existingEnquiry = await Enquiry.findOne({ email });
@@ -57,6 +53,8 @@ export const POST = catchAsyncErrors(async (request) => {
     badgeType,
     localAuthority,
     isActive,
+    adminCreatedB,
+    adminCompanyName,
   });
 
   const savedEnquiry = await newEnquiry.save();
@@ -80,6 +78,6 @@ export const GET = catchAsyncErrors(async () => {
   if (!allEnquiry || allEnquiry.length === 0) {
     return NextResponse.json({ Result: allEnquiry });
   } else {
-    return NextResponse.json({ result: allEnquiry, count: EnquiryCount });
+    return NextResponse.json({ Result: allEnquiry, count: EnquiryCount });
   }
 });

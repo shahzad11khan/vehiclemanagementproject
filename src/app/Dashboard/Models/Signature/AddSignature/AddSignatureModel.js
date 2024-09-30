@@ -1,7 +1,10 @@
 "use client";
 import React, { useState } from "react";
+import { API_URL_Signature } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
+import { toast } from "react-toastify";
+import axios from "axios";
 
-const AddSignatureType = ({ isOpen, onClose }) => {
+const AddSignatureType = ({ isOpen, onClose, fetchData }) => {
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -9,6 +12,8 @@ const AddSignatureType = ({ isOpen, onClose }) => {
     imageName: "",
     imageFile: null,
     imageNote: "",
+    adminCreatedBy: "",
+    adminCompanyName: "",
   });
 
   const handleChange = (e) => {
@@ -22,9 +27,45 @@ const AddSignatureType = ({ isOpen, onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    try {
+      const formDataToSend = new FormData();
 
-    // Implement the API call here to submit the form data to the backend
-    // Example: axios.post('/api/vehicleType', formData);
+      // Append each form field to the FormData object
+      Object.keys(formData).forEach((key) => {
+        formDataToSend.append(key, formData[key]);
+      });
+
+      // Send the form data to the backend using Axios
+      const response = await axios.post(
+        `${API_URL_Signature}`,
+        formDataToSend,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      // Handle the response after submission
+      console.log("Server response:", response.data);
+      toast.success(response.data.message);
+      onClose();
+      fetchData();
+      // Optionally, reset the form after successful submission
+      setFormData({
+        name: "",
+        description: "",
+        isActive: false,
+        imageName: "",
+        imageFile: null,
+        imageNote: "",
+      });
+
+      // Close the modal after submission
+      onClose();
+    } catch (error) {
+      console.error("Error submitting the form:", error);
+    }
   };
   if (!isOpen) return null;
 

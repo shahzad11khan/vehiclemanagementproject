@@ -26,6 +26,8 @@ const SignatureSchema = new mongoose.Schema(
       type: String, // Store the path or URL of the image file
       default: "",
     },
+    adminCreatedBy: { type: String },
+    adminCompanyName: { type: String },
   },
   {
     timestamps: true, // Automatically manage createdAt and updatedAt fields

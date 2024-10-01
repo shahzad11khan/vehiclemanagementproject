@@ -7,6 +7,7 @@ import {
   fetchTaxiFirms,
   fetchBadge,
   fetchInsurence,
+  fetchPayment,
 } from "../../Components/DropdownData/taxiFirm/taxiFirmService";
 
 const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
@@ -51,6 +52,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
   const [taxiFirms, setTaxiFirms] = useState([]);
   const [badge, setbadge] = useState([]);
   const [insurence, setinsurence] = useState([]);
+  const [payment, setpayment] = useState([]);
 
   useEffect(() => {
     const loadTaxiFirms = async () => {
@@ -58,10 +60,12 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
         const data = await fetchTaxiFirms(); // Call the service function to fetch data
         const badge = await fetchBadge(); // Call the service function to fetch data
         const insurance = await fetchInsurence(); // Call the service function to fetch data
-        console.log(insurance.Result);
+        const payment = await fetchPayment(); // Call the service function to fetch data
+        // console.log(payment.Result);
         setTaxiFirms(data.result);
         setbadge(badge.result);
         setinsurence(insurance.Result);
+        setpayment(payment.Result);
       } catch (error) {
         console.error("Error loading taxi firms:", error);
       }
@@ -462,10 +466,18 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
                 >
-                  <option value="">Select Payment Cycle</option>
+                  {/* <option value="">Select Payment Cycle</option>
                   <option value="monthly">Monthly</option>
-                  <option value="weekly">Weekly</option>
+                  <option value="weekly">Weekly</option> */}
                   {/* Add more options as needed */}
+
+                  {/* </select> */}
+                  <option value="">Select Taxi Firm</option>
+                  {payment.map((payment) => (
+                    <option key={payment._id} value={payment.name}>
+                      {payment.name}
+                    </option>
+                  ))}
                 </select>
               </div>
               <div>

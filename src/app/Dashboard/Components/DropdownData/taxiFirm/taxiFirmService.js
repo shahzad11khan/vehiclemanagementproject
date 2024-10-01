@@ -4,6 +4,7 @@ import {
   API_URL_Firm,
   API_URL_Badge,
   API_URL_Insurence,
+  API_URL_Payment,
 } from "../../../Components/ApiUrl/ApiUrls";
 // Fetch all taxi firms
 export const fetchTaxiFirms = async () => {
@@ -27,6 +28,15 @@ export const fetchBadge = async () => {
 export const fetchInsurence = async () => {
   try {
     const response = await axios.get(API_URL_Insurence);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching taxi firms:", error);
+    throw error;
+  }
+};
+export const fetchPayment = async () => {
+  try {
+    const response = await axios.get(API_URL_Payment);
     return response.data;
   } catch (error) {
     console.error("Error fetching taxi firms:", error);

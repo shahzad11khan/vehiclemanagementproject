@@ -26,8 +26,6 @@ const AddTitleModel = ({ isOpen, onClose, fetchData }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError(null);
 
     try {
       const response = await axios.post(`${API_URL_Title}`, formData);
@@ -42,6 +40,8 @@ const AddTitleModel = ({ isOpen, onClose, fetchData }) => {
       // console.log(response.data);
       if (response.data.success) {
         toast.success("data successfully saved");
+        setLoading(true);
+
         setSuccess(true);
         fetchData();
         onClose();
@@ -50,7 +50,8 @@ const AddTitleModel = ({ isOpen, onClose, fetchData }) => {
       }
       // Handle success or trigger some UI feedback
     } catch (err) {
-      setError(err.response?.data?.message || "Failed to add badge");
+      setError(err.response?.data?.message || "Failed to add Title");
+      setError(null);
     } finally {
       setLoading(false);
     }

@@ -1,159 +1,26 @@
-// "use client";
-// import React, { useState } from "react";
-
-// const AddCompanyModel = ({ isOpen, onClose }) => {
-//   if (!isOpen) return null;
-
-//   const [formData, setFormData] = useState({
-//     email: "",
-//     password: "",
-//     confirmPassword: "",
-//     isActive: false,
-//   });
-
-//   const handleChange = (e) => {
-//     const { name, value, type, checked } = e.target;
-//     setFormData({
-//       ...formData,
-//       [name]: type === "checkbox" ? checked : value,
-//     });
-//   };
-
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-
-//     if (formData.password !== formData.confirmPassword) {
-//       alert("Passwords do not match!");
-//       return;
-//     }
-
-//     // Axios API call here to send the form data to the backend
-//   };
-
-//   return (
-//     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
-//       <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-4xl">
-//         <h2 className="text-3xl font-semibold text-center mb-8">
-//           Register Company
-//         </h2>
-
-//         <form onSubmit={handleSubmit} className="space-y-6">
-//           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-//             {/* Email */}
-//             <div>
-//               <label
-//                 htmlFor="email"
-//                 className="block text-sm font-medium text-gray-700"
-//               >
-//                 Email
-//               </label>
-//               <input
-//                 type="email"
-//                 id="email"
-//                 name="email"
-//                 value={formData.email}
-//                 onChange={handleChange}
-//                 className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-//                 required
-//               />
-//             </div>
-
-//             {/* Password */}
-//             <div>
-//               <label
-//                 htmlFor="password"
-//                 className="block text-sm font-medium text-gray-700"
-//               >
-//                 Password
-//               </label>
-//               <input
-//                 type="password"
-//                 id="password"
-//                 name="password"
-//                 value={formData.password}
-//                 onChange={handleChange}
-//                 className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-//                 required
-//               />
-//             </div>
-
-//             {/* Confirm Password */}
-//             <div>
-//               <label
-//                 htmlFor="confirmPassword"
-//                 className="block text-sm font-medium text-gray-700"
-//               >
-//                 Confirm Password
-//               </label>
-//               <input
-//                 type="password"
-//                 id="confirmPassword"
-//                 name="confirmPassword"
-//                 value={formData.confirmPassword}
-//                 onChange={handleChange}
-//                 className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-//                 required
-//               />
-//             </div>
-
-//             {/* IsActive Checkbox */}
-//             <div className="flex items-center">
-//               <input
-//                 type="checkbox"
-//                 id="isActive"
-//                 name="isActive"
-//                 checked={formData.isActive}
-//                 onChange={handleChange}
-//                 className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-//               />
-//               <label
-//                 htmlFor="isActive"
-//                 className="ml-2 block text-sm font-medium text-gray-700"
-//               >
-//                 Is Active
-//               </label>
-//             </div>
-//           </div>
-
-//           {/* Button Group */}
-//           <div className="flex justify-end gap-4">
-//             <button
-//               type="submit"
-//               className="px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50"
-//             >
-//               Register
-//             </button>
-//             <button
-//               onClick={onClose}
-//               className="px-6 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
-//             >
-//               Close
-//             </button>
-//           </div>
-//         </form>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default AddCompanyModel;
 "use client";
 import React, { useState } from "react";
+import { API_URL_Company } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
+import axios from "axios";
+import { toast } from "react-toastify";
 
-const AddCompanyModel = ({ isOpen, onClose }) => {
-  // Call the hook unconditionally
+const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
   const [formData, setFormData] = useState({
+    CompanyName: "",
     email: "",
     password: "",
     confirmPassword: "",
     isActive: false,
+    CreatedBy: "",
+    image: null, // Add image to the form data
   });
 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value, type, checked, files } = e.target;
     setFormData({
       ...formData,
-      [name]: type === "checkbox" ? checked : value,
+      [name]:
+        type === "checkbox" ? checked : type === "file" ? files[0] : value, // Handle file input
     });
   };
 
@@ -165,10 +32,35 @@ const AddCompanyModel = ({ isOpen, onClose }) => {
       return;
     }
 
-    // Axios API call here to send the form data to the backend
+    // Create FormData object to send the data as multipart/form-data
+    const data = new FormData();
+    data.append("CompanyName", formData.CompanyName);
+    data.append("email", formData.email);
+    data.append("password", formData.password);
+    data.append("confirmPassword", formData.confirmPassword);
+    data.append("isActive", formData.isActive);
+    data.append("CreatedBy", formData.CreatedBy ? formData.CreatedBy : "");
+    if (formData.image) {
+      data.append("image", formData.image); // Add the image file to FormData
+    }
+
+    try {
+      // Send the data to the backend (replace the URL with your API endpoint)
+      const response = await axios.post(`${API_URL_Company}`, data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      console.log("Response: ", response.data);
+      toast.success("Company Register Successfully");
+      fetchData();
+      onClose();
+    } catch (error) {
+      console.error("Error uploading the data: ", error);
+      toast.warn("Error uploading the data");
+    }
   };
 
-  // Conditional rendering inside the return statement
   if (!isOpen) return null;
 
   return (
@@ -178,8 +70,31 @@ const AddCompanyModel = ({ isOpen, onClose }) => {
           Register Company
         </h2>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form
+          onSubmit={handleSubmit}
+          className="space-y-6"
+          encType="multipart/form-data"
+        >
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            {/* Company Name */}
+            <div>
+              <label
+                htmlFor="CompanyName"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Company Name
+              </label>
+              <input
+                type="text"
+                id="CompanyName"
+                name="CompanyName"
+                value={formData.CompanyName}
+                onChange={handleChange}
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                required
+              />
+            </div>
+
             {/* Email */}
             <div>
               <label
@@ -254,6 +169,24 @@ const AddCompanyModel = ({ isOpen, onClose }) => {
                 Is Active
               </label>
             </div>
+
+            {/* Upload Image */}
+            <div>
+              <label
+                htmlFor="image"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Upload Image
+              </label>
+              <input
+                type="file"
+                id="image"
+                name="image"
+                accept="image/*"
+                onChange={handleChange}
+                className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+              />
+            </div>
           </div>
 
           {/* Button Group */}
@@ -265,6 +198,7 @@ const AddCompanyModel = ({ isOpen, onClose }) => {
               Register
             </button>
             <button
+              type="button"
               onClick={onClose}
               className="px-6 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
             >

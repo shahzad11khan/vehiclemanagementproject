@@ -4,56 +4,66 @@ import React, { useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
 import Header from "../../Components/Header";
 import Sidebar from "../../Components/Sidebar";
-// import { toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import AddCompanymodel from "..//AddCompany/AddCompanyModel";
-
-const data = [
-  { id: 1, title: "Conan the Barbarian", year: "1982" },
-  { id: 2, title: "Terminator", year: "1984" },
-  { id: 3, title: "Commando", year: "1985" },
-  { id: 4, title: "Predator", year: "1987" },
-];
-
-const columns = [
-  {
-    name: "Title",
-    selector: (row) => row.title,
-    sortable: true,
-  },
-  {
-    name: "Year",
-    selector: (row) => row.year,
-    sortable: true,
-  },
-  {
-    name: "Actions",
-    cell: () => (
-      <div className="flex gap-2">
-        <button
-          // onClick={() => handleEdit(row.id)}
-          className="text-blue-500 hover:text-blue-700"
-        >
-          <FaEdit />
-        </button>
-        <button
-          // onClick={() => handleDelete(row.id)}
-          className="text-red-500 hover:text-red-700"
-        >
-          <FaTrash />
-        </button>
-      </div>
-    ),
-    allowOverflow: true,
-    button: true,
-  },
-];
+import { GetCompany } from "../../Components/ApiUrl/ShowApiDatas/ShowApiDatas";
+import { API_URL_Company } from "../../Components/ApiUrl/ApiUrls";
+import axios from "axios";
 
 const Page = () => {
-  // State for the search term
+  const columns = [
+    {
+      name: "Company Name",
+      selector: (row) => row.CompanyName,
+      sortable: true,
+    },
+    {
+      name: "Company Email",
+      selector: (row) => row.email,
+      sortable: true,
+    },
+    {
+      name: "Company Password",
+      selector: (row) => row.confirmPassword,
+      sortable: true,
+    },
+    {
+      name: "Company Image",
+      selector: (row) => row.image,
+      sortable: true,
+    },
+    {
+      name: "Company Active",
+      selector: (row) => (row.isActive ? "Active" : "InActive"),
+      sortable: true,
+    },
+    {
+      name: "CreatedBy",
+      selector: (row) => row.CreatedBy,
+      sortable: true,
+    },
+    {
+      name: "Actions",
+      cell: (row) => (
+        <div className="flex gap-2">
+          <button
+            onClick={() => handleDelete(row._id)}
+            className="text-red-500 hover:text-red-700"
+          >
+            <FaTrash className="text-red-500 hover:text-red-700" />
+          </button>
+        </div>
+      ),
+      allowOverflow: true,
+      button: true,
+    },
+  ];
   const [searchTerm, setSearchTerm] = useState("");
   const [isMounted, setIsMounted] = useState(false);
+  const [data, setData] = useState([]); // State to hold fetched data
+  const [filteredData, setFilteredData] = useState([]);
   const [isOpenCompany, setIsOpenCompany] = useState(false);
 
   // Ensure that the component only renders once it is mounted
@@ -61,12 +71,65 @@ const Page = () => {
     setIsMounted(true);
   }, []);
 
-  // Filtering the data based on the search term
-  const filteredData = data.filter((item) => {
-    return (
-      item.title && item.title.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-  });
+  // Fetch data from API
+  const fetchData = async () => {
+    try {
+      GetCompany().then(({ result }) => {
+        console.log(result);
+
+        setData(result); // Set the fetched data
+        setFilteredData(result);
+      });
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setData([]); // Reset data to an empty array on error
+    }
+  };
+  //
+
+  // delete data from api
+  const handleDelete = async (id) => {
+    try {
+      const response = await axios.delete(`${API_URL_Company}/${id}`);
+
+      const data = response.data;
+      console.log(data);
+
+      if (data.success) {
+        // Remove the deleted item from state
+        setData((prevData) => prevData.filter((item) => item._id !== id));
+        setFilteredData((prevFilteredData) =>
+          prevFilteredData.filter((item) => item._id !== id)
+        );
+        toast.success(data.message);
+      } else {
+        // console.error(data.message);
+        toast.warn(data.message);
+      }
+    } catch (error) {
+      console.error("Error deleting title:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    const filtered = data.filter((item) => {
+      // Check if item and item.title are defined before calling toLowerCase
+      return (
+        item &&
+        item.email &&
+        item.email.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    });
+    setFilteredData(filtered);
+  }, [searchTerm, data]); // Filter when search term or data changes
+
+  const toggleTitleModal = () => {
+    setIsOpenTitle(!isOpenTitle);
+  };
   // const handleEdit = (id) => {
   //   toast.info(`Edit item with ID: ${id}`);
   //   // Implement your edit logic here
@@ -90,7 +153,7 @@ const Page = () => {
       <div className="flex gap-4">
         <Sidebar />
         <div className="container mx-auto p-4 ">
-          <div className="justify-between items-center border-2 mt-3">
+          <div className="justify-between items-center border-2 mt-3  w-full">
             <div className="flex justify-between">
               {/* Search Input */}
               <div className="justify-start">
@@ -123,7 +186,11 @@ const Page = () => {
           </div>
         </div>
       </div>
-      <AddCompanymodel isOpen={isOpenCompany} onClose={OpenCompanyModle} />
+      <AddCompanymodel
+        isOpen={isOpenCompany}
+        onClose={OpenCompanyModle}
+        fetchData={fetchData}
+      />
     </>
   );
 };

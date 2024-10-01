@@ -15,32 +15,42 @@ const Page = () => {
   const columns = [
     {
       name: "Full Name",
-      selector: (row) => row.firstName,
+      selector: (row) => `${row.firstName} ${row.lastName}`,
       sortable: true,
     },
     {
-      name: "Last Name",
-      selector: (row) => row.lastName,
+      name: "Driver email",
+      selector: (row) => row.email,
       sortable: true,
     },
     {
-      name: "Home Tel",
-      selector: (row) => row.homeTel,
+      name: "Home Telephone",
+      selector: (row) => row.tel1,
       sortable: true,
     },
     {
-      name: "Mobile Tel",
-      selector: (row) => row.mobileTel,
+      name: "Mobile Telephone",
+      selector: (row) => row.tel2,
       sortable: true,
     },
     {
-      name: "Rent",
-      selector: (row) => row.rent,
+      name: "Driver licenseNumber",
+      selector: (row) => row.licenseNumber,
       sortable: true,
     },
     {
-      name: "Firm",
-      selector: (row) => row.firm,
+      name: "Driver niNumber",
+      selector: (row) => row.niNumber,
+      sortable: true,
+    },
+    {
+      name: "Driver taxiFirm",
+      selector: (row) => row.taxiFirm,
+      sortable: true,
+    },
+    {
+      name: "Driver badgeType",
+      selector: (row) => row.badgeType,
       sortable: true,
     },
     {
@@ -197,7 +207,11 @@ const Page = () => {
           </div>
         </div>
       </div>
-      <AddDriverModel isOpen={isOpenDriver} onClose={OpenDriverModle} />
+      <AddDriverModel
+        isOpen={isOpenDriver}
+        onClose={OpenDriverModle}
+        fetchData={fetchData}
+      />
     </>
   );
 };

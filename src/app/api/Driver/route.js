@@ -10,7 +10,7 @@ export async function POST(request) {
     const data = await request.formData();
 
     // Handling the uploaded files
-    let file1 = data.get("imageUrl");
+    let file1 = data.get("imageFile");
     console.log("Driver Avatar:", file1);
 
     let Driveravatar = "";
@@ -69,6 +69,7 @@ export async function POST(request) {
       taxiBadgeDate,
       rentPaymentCycle,
       city,
+      pay,
       county,
       postcode,
       postalAddress,
@@ -107,10 +108,11 @@ export async function POST(request) {
       city,
       county,
       postcode,
+      pay,
       postalAddress,
       permanentAddress,
       imageName,
-      imageUrl: Driveravatar,
+      imageFile: Driveravatar,
       imagePublicId: DriveravatarId,
       isActive: isActive || false, // Default to "Driver" if no role is specified
     });

@@ -1,7 +1,10 @@
 "use client";
+import { API_URL_Vehicle } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
+import axios from "axios";
+import { toast } from "react-toastify";
 import React, { useState } from "react";
 
-const AddVehicleModel = ({ isOpen, onClose }) => {
+const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
   const [vehicleData, setVehicleData] = useState({
     manufacturer: "",
     model: "",
@@ -20,6 +23,7 @@ const AddVehicleModel = ({ isOpen, onClose }) => {
       length: "",
     },
     passengerCapacity: "",
+    LocalAuthority: "",
     cargoCapacity: "",
     horsepower: "",
     torque: "",
@@ -32,6 +36,8 @@ const AddVehicleModel = ({ isOpen, onClose }) => {
     price: "",
     registrationNumber: "",
     warrantyInfo: "",
+    adminCreatedBy: "",
+    adminCompanyName: "",
   });
 
   const handleChange = (e) => {
@@ -53,9 +59,52 @@ const AddVehicleModel = ({ isOpen, onClose }) => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(vehicleData);
+    try {
+      const response = await axios.post(`${API_URL_Vehicle}`, vehicleData);
+      console.log("Vehicle data submitted successfully:", response.data);
+      toast.success(response.data.message);
+      fetchData();
+      onClose();
+      setVehicleData({
+        manufacturer: "",
+        model: "",
+        year: "",
+        type: "",
+        engineType: "",
+        fuelType: "",
+        transmission: "",
+        drivetrain: "",
+        exteriorColor: "",
+        interiorColor: "",
+        weight: "",
+        dimensions: {
+          height: "",
+          width: "",
+          length: "",
+        },
+        passengerCapacity: "",
+        LocalAuthority: "",
+        cargoCapacity: "",
+        horsepower: "",
+        torque: "",
+        acceleration: "",
+        topSpeed: "",
+        fuelEfficiency: "",
+        safetyFeatures: "",
+        techFeatures: "",
+        towingCapacity: "",
+        price: "",
+        registrationNumber: "",
+        warrantyInfo: "",
+      });
+      // Handle success (you might want to clear the form, close the modal, etc.)
+    } catch (error) {
+      console.error("Error submitting vehicle data:", error);
+      // Handle error (show an error message to the user, etc.)
+    }
     // Submit logic here
   };
   if (!isOpen) return null;
@@ -341,11 +390,11 @@ const AddVehicleModel = ({ isOpen, onClose }) => {
               <label className="block font-semibold">Fuel Efficiency</label>
               <input
                 type="text"
-                name="FuelEfficiency"
+                name="fuelEfficiency"
                 value={vehicleData.fuelEfficiency}
                 onChange={handleChange}
                 className="w-full p-2 border border-gray-300 rounded"
-                placeholder="e.g., Fuel Efficiency"
+                placeholder="e.g., 25 MPG"
                 required
               />
             </div>
@@ -396,6 +445,24 @@ const AddVehicleModel = ({ isOpen, onClose }) => {
                 className="w-full p-2 border border-gray-300 rounded"
                 required
               />
+            </div>
+            <div className="">
+              <label className="block font-semibold">Local Authority</label>
+              <select
+                name="LocalAuthority"
+                value={vehicleData.LocalAuthority}
+                onChange={handleChange}
+                className="w-full p-2 border border-gray-300 rounded"
+                required
+              >
+                <option value="" disabled>
+                  Select type
+                </option>
+                <option value="Sedan">A</option>
+                <option value="SUV">B</option>
+                <option value="Truck">C</option>
+                <option value="Coupe">D</option>
+              </select>
             </div>
           </div>
 

@@ -17,6 +17,7 @@ import DataTableComponent from "../../Components/CustomDataTable";
 import axios from "axios";
 import { API_URL_USER } from "../../Components/ApiUrl/ApiUrls";
 import Image from "next/image";
+import { ImGooglePlus2 } from "react-icons/im";
 
 const Page = () => {
   // columns
@@ -41,7 +42,7 @@ const Page = () => {
       name: "Company Avatar",
       selector: (row) => row.companyavatar, // This will be used for sorting, but not directly for display
       cell: (row) => (
-        <Image
+        <img
           src={row.companyavatar} // Make sure the URL is valid
           alt="User Avatar"
           className="h-10 w-10 rounded-full" // Add styling as needed
@@ -55,7 +56,7 @@ const Page = () => {
       name: "User Avatar",
       selector: (row) => row.useravatar, // This will be used for sorting, but not directly for display
       cell: (row) => (
-        <Image
+        <img
           src={row.useravatar} // Make sure the URL is valid
           alt="User Avatar"
           className="h-10 w-10 rounded-full" // Add styling as needed
@@ -87,6 +88,14 @@ const Page = () => {
     {
       name: "Created By",
       selector: (row) => row.adminCreatedBy || "By Self", // Fallback to "By Self" if adminCreatedBy is falsy
+      sortable: true,
+      cell: (row) => (
+        <span>{row.adminCreatedBy ? row.adminCreatedBy : "By Self"}</span>
+      ),
+    },
+    {
+      name: "Created Date",
+      selector: (row) => row.adminCreatedBy, // Fallback to "By Self" if adminCreatedBy is falsy
       sortable: true,
       cell: (row) => (
         <span>{row.adminCreatedBy ? row.adminCreatedBy : "By Self"}</span>
@@ -199,8 +208,8 @@ const Page = () => {
       <Header className="min-w-full" />
       <div className="flex gap-4">
         <Sidebar />
-        <div className="container mx-auto p-4 ">
-          <div className="justify-between items-center border-2 mt-3">
+        <div className="container mx-auto p-4 overflow-hidden">
+          <div className="justify-between items-center border-2 mt-3  w-full">
             <div className="flex justify-between">
               <div className="justify-start">
                 <input
@@ -220,12 +229,13 @@ const Page = () => {
                 </button>
               </div>
             </div>
-            <div className="w-[1050px]">
+            <div className="">
               <DataTableComponent
                 title="User List"
                 columns={columns}
                 data={filteredData}
                 pagination
+                className=" "
               />
             </div>
           </div>

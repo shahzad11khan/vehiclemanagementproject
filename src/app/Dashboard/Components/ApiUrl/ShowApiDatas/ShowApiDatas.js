@@ -17,6 +17,7 @@ import {
   API_URL_Title,
   API_URL_Badge,
   API_URL_Employee,
+  API_URL_Company,
 } from "../ApiUrls.js";
 
 export const GetUsers = () => {
@@ -61,6 +62,19 @@ export const GetEnquiry = () => {
 export const GetFirm = () => {
   return axios
     .get(`${API_URL_Firm}`)
+    .then((res) => {
+      console.log(res.data.result);
+      console.log(res.data.count);
+      return { result: res.data.result, count: res.data.count };
+    })
+    .catch((error) => {
+      console.log(`error : ${error}`);
+      throw error;
+    });
+};
+export const GetCompany = () => {
+  return axios
+    .get(`${API_URL_Company}`)
     .then((res) => {
       console.log(res.data.result);
       console.log(res.data.count);

@@ -1,7 +1,15 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { API_URL_Driver } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
+import axios from "axios";
+import { toast } from "react-toastify";
+import {
+  fetchTaxiFirms,
+  fetchBadge,
+  fetchInsurence,
+} from "../../Components/DropdownData/taxiFirm/taxiFirmService";
 
-const AddDriverModal = ({ isOpen, onClose }) => {
+const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
   const [formData, setFormData] = useState({
     title: "",
     firstName: "",
@@ -14,12 +22,8 @@ const AddDriverModal = ({ isOpen, onClose }) => {
     permanentAddress: "",
     city: "",
     county: "",
-    accessLevel: "",
     dateOfBirth: "",
-    position: "",
     reportsTo: "",
-    username: "",
-    password: "",
     passwordExpires: "",
     passwordExpiresEvery: "",
     licenseNumber: "",
@@ -36,8 +40,35 @@ const AddDriverModal = ({ isOpen, onClose }) => {
     isActive: false,
     imageName: "",
     imageFile: null,
-    imageNotes: "",
+    pay: "",
+    adminCreatedBy: "",
+    adminCompanyName: "",
   });
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(false);
+  const [taxiFirms, setTaxiFirms] = useState([]);
+  const [badge, setbadge] = useState([]);
+  const [insurence, setinsurence] = useState([]);
+
+  useEffect(() => {
+    const loadTaxiFirms = async () => {
+      try {
+        const data = await fetchTaxiFirms(); // Call the service function to fetch data
+        const badge = await fetchBadge(); // Call the service function to fetch data
+        const insurance = await fetchInsurence(); // Call the service function to fetch data
+        console.log(insurance.Result);
+        setTaxiFirms(data.result);
+        setbadge(badge.result);
+        setinsurence(insurance.Result);
+      } catch (error) {
+        console.error("Error loading taxi firms:", error);
+      }
+    };
+
+    loadTaxiFirms();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value, type, checked, files } = e.target;
@@ -50,25 +81,64 @@ const AddDriverModal = ({ isOpen, onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const formDataToSend = new FormData();
+    Object.keys(formData).forEach((key) => {
+      formDataToSend.append(key, formData[key]);
+    });
     try {
-      const formDataToSend = new FormData();
-      Object.keys(formData).forEach((key) => {
-        formDataToSend.append(key, formData[key]);
+      // const response = await axios.post(`${API_URL_Driver}`, formData);
+      const response = await axios.post(`${API_URL_Driver}`, formDataToSend, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       });
 
-      const response = await fetch("/api/driver", {
-        method: "POST",
-        body: formDataToSend,
-      });
-
-      if (response.ok) {
-        alert("Driver added successfully!");
-        onClose(); // Close the modal on successful submission
+      // console.log(response.data);
+      if (response.data.success) {
+        toast.success("data successfully saved");
+        setSuccess(true);
+        fetchData();
+        onClose();
+        setFormData({
+          title: "",
+          firstName: "",
+          lastName: "",
+          email: "",
+          tel1: "",
+          tel2: "",
+          postcode: "",
+          postalAddress: "",
+          permanentAddress: "",
+          city: "",
+          county: "",
+          accessLevel: "",
+          dateOfBirth: "",
+          passwordExpires: "",
+          passwordExpiresEvery: "",
+          licenseNumber: "",
+          niNumber: "",
+          driverNumber: "",
+          taxiFirm: "",
+          badgeType: "",
+          insurance: "",
+          startDate: "",
+          driverRent: "",
+          licenseExpiryDate: "",
+          taxiBadgeDate: "",
+          rentPaymentCycle: "",
+          isActive: false,
+          pay: "",
+          imageFile: null,
+          imageNotes: "",
+        });
       } else {
-        alert("Failed to add driver.");
+        toast.warn("Data not saved");
       }
-    } catch (error) {
-      console.error("Error:", error);
+      // Handle success or trigger some UI feedback
+    } catch (err) {
+      setError(err.response?.data?.message || "Failed to add Driver");
+    } finally {
+      setLoading(false);
     }
   };
   if (!isOpen) return null;
@@ -79,7 +149,10 @@ const AddDriverModal = ({ isOpen, onClose }) => {
         <h2 className="text-3xl font-semibold text-center mb-8">
           Add a Driver
         </h2>
-
+        {error && <p className="text-red-600">{error}</p>}
+        {success && (
+          <p className="text-green-600">Driver added successfully!</p>
+        )}
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* User Details */}
           <div>
@@ -247,10 +320,16 @@ const AddDriverModal = ({ isOpen, onClose }) => {
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
                 >
-                  <option value="">Select Taxi Firm</option>
+                  {/* <option value="">Select Taxi Firm</option>
                   <option value="firm1">Firm 1</option>
                   <option value="firm2">Firm 2</option>
-                  {/* Add more options as needed */}
+                  Add more options as needed */}
+                  <option value="">Select Taxi Firm</option>
+                  {taxiFirms.map((firm) => (
+                    <option key={firm._id} value={firm.name}>
+                      {firm.name}
+                    </option>
+                  ))}
                 </select>
               </div>
               <div>
@@ -267,10 +346,16 @@ const AddDriverModal = ({ isOpen, onClose }) => {
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
                 >
-                  <option value="">Select Badge Type</option>
+                  {/* <option value="">Select Badge Type</option>
                   <option value="type1">Type 1</option>
-                  <option value="type2">Type 2</option>
+                  <option value="type2">Type 2</option> */}
                   {/* Add more options as needed */}
+                  <option value="">Select Taxi Firm</option>
+                  {badge.map((badge) => (
+                    <option key={badge._id} value={badge.name}>
+                      {badge.name}
+                    </option>
+                  ))}
                 </select>
               </div>
               <div>
@@ -287,10 +372,16 @@ const AddDriverModal = ({ isOpen, onClose }) => {
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
                 >
-                  <option value="">Select Insurance</option>
+                  {/* <option value="">Select Insurance</option>
                   <option value="insurance1">Insurance 1</option>
-                  <option value="insurance2">Insurance 2</option>
+                  <option value="insurance2">Insurance 2</option> */}
                   {/* Add more options as needed */}
+                  <option value="">Select Taxi Firm</option>
+                  {insurence.map((insurence) => (
+                    <option key={insurence._id} value={insurence.name}>
+                      {insurence.name}
+                    </option>
+                  ))}
                 </select>
               </div>
               <div>
@@ -376,6 +467,22 @@ const AddDriverModal = ({ isOpen, onClose }) => {
                   <option value="weekly">Weekly</option>
                   {/* Add more options as needed */}
                 </select>
+              </div>
+              <div>
+                <label
+                  htmlFor="rentPaymentCycle"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Payment:
+                </label>
+                <input
+                  type="number"
+                  id="pay"
+                  name="pay"
+                  value={formData.pay}
+                  onChange={handleChange}
+                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                />
               </div>
               <div>
                 <label
@@ -479,7 +586,7 @@ const AddDriverModal = ({ isOpen, onClose }) => {
               placeholder="Image Name"
               className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
             />
-            <textarea
+            {/* <textarea
               id="imageNotes"
               name="imageNotes"
               value={formData.imageNotes}
@@ -487,7 +594,7 @@ const AddDriverModal = ({ isOpen, onClose }) => {
               placeholder="Image Notes"
               rows="4"
               className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-            />
+            /> */}
           </div>
 
           {/* Checkbox for Active Status */}
@@ -514,7 +621,7 @@ const AddDriverModal = ({ isOpen, onClose }) => {
               type="submit"
               className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
             >
-              Add Driver
+              {loading ? "Submitting..." : "Submit"}
             </button>
             <button
               type="button"

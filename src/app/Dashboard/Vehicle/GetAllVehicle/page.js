@@ -203,7 +203,11 @@ const Page = () => {
           </div>
         </div>
       </div>
-      <AddVehicleModel isOpen={isOpenVehicle} onClose={OpenVehicleModle} />
+      <AddVehicleModel
+        isOpen={isOpenVehicle}
+        onClose={OpenVehicleModle}
+        fetchData={fetchData}
+      />
     </>
   );
 };

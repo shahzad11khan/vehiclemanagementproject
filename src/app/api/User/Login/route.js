@@ -21,7 +21,7 @@ export async function POST(Request) {
         status: 401,
       });
     }
-    console.log("User Exits");
+    // console.log("User Exits");
 
     // Validate password
     const isPasswordValid = await bcryptjs.compare(password, user.password);

@@ -1,19 +1,5 @@
 // localStorageService.js
 
-export const setAuthData = ({
-  token,
-  Userusername,
-  UserActive,
-  companyName,
-  role,
-}) => {
-  localStorage.setItem("token", token);
-  localStorage.setItem("Userusername", Userusername);
-  localStorage.setItem("UserActive", UserActive);
-  localStorage.setItem("companyName", companyName);
-  localStorage.setItem("role", role);
-};
-
 export const getAuthData = () => {
   return {
     token: localStorage.getItem("token"),

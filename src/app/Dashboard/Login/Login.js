@@ -29,7 +29,7 @@ const Login = () => {
         password: userlogin.password, // Access password from state
       });
 
-      console.log("Login successful", response.data);
+      console.log("Login successful", response);
 
       // Check if the user is verified
       const isVerifiedtoken = response.data.token;
@@ -38,23 +38,31 @@ const Login = () => {
       const UserActive = response.data.isActive;
       const UserRole = response.data.role;
 
-      console.log(isVerifiedtoken);
+      // console.log(isVerifiedtoken);
 
-      if (isVerifiedtoken && companyName && isActive === true) {
+      if (UserActive) {
         // Store token and userId in localStorage
-        localStorage.setItem("token", isVerifiedtoken);
-        localStorage.setItem("Userusername", Userusername);
-        localStorage.setItem("UserActive", UserActive);
-        localStorage.setItem("companyName", companyName);
-        localStorage.setItem("role", companyName);
-        localStorage.setItem("User", UserRole);
+        if (UserRole === "superadmin") {
+          localStorage.setItem("token", isVerifiedtoken);
+          localStorage.setItem("Userusername", Userusername);
+          localStorage.setItem("UserActive", UserActive);
+          localStorage.setItem("companyname", companyName);
+          localStorage.setItem("role", UserRole);
+        } else {
+          localStorage.setItem("token", isVerifiedtoken);
+          localStorage.setItem("Userusername", Userusername);
+          localStorage.setItem("UserActive", UserActive);
+          localStorage.setItem("companyName", companyName);
+          localStorage.setItem("role", UserRole);
+        }
+
         toast.success("Login successful");
 
         // Use a relative path for navigation
         // router.push("Dashboard/Home");
       } else {
         toast.warning("You are not verified for login 😢");
-        router.push("/Dashboard/Login");
+        router.push("/");
       }
     } catch (error) {
       console.error("Login error:", error); // Better error logging

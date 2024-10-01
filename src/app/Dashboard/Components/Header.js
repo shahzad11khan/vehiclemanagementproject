@@ -6,13 +6,18 @@ import React, { useState, useCallback, useEffect } from "react";
 import { CgProfile } from "react-icons/cg";
 import { IoIosLogOut } from "react-icons/io";
 import { getCompanyName } from "../../../../utils/storageUtils";
-// import { useRouter } from "next/navigation";
-// import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import {
+  getAuthData,
+  isAuthenticated,
+  clearAuthData,
+} from "@/utils/verifytoken";
 
 const Header = () => {
   const [companyName, setCompanyName] = useState("");
-  // const router = useRouter();
+  const router = useRouter();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   // const [imagePreview, setImagePreview] = useState("");
   useEffect(() => {
@@ -21,6 +26,27 @@ const Header = () => {
       setCompanyName(companyNameFromStorage);
     }
   }, []);
+  const handleLogout = useCallback(async () => {
+    // try {
+    //   await axios.get("/api/Users/logout", { timeout: 10000 });
+    // } catch (error) {
+    //   console.error(`Error logging out: ${error.message}`);
+    // }
+    if (isAuthenticated()) {
+      clearAuthData();
+      document.cookie =
+        "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      localStorage.removeItem("token");
+      localStorage.removeItem("Userusername");
+      localStorage.removeItem("UserActive");
+      localStorage.removeItem("companyName");
+      localStorage.removeItem("role");
+      router.push("/");
+      toast.success("Logged out successfully");
+    } else {
+      console.log("User is not authenticated");
+    }
+  }, [router]);
   const toggleDropdown = useCallback(() => {
     setIsDropdownOpen((prev) => !prev);
   }, []);
@@ -69,9 +95,7 @@ const Header = () => {
                   </li>
                 </Link>
                 <li className="px-4 py-2 hover:bg-custom-blue cursor-pointer rounded-lg flex items-center">
-                  <button
-                  //   onClick={handleLogout}
-                  >
+                  <button onClick={handleLogout}>
                     <IoIosLogOut className="mr-2" />
                     <span className="hidden md:inline">Logout</span>
                   </button>

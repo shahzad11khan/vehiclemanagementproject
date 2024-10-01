@@ -2,7 +2,7 @@
 import { API_URL_Vehicle } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import axios from "axios";
 import { toast } from "react-toastify";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
   const [vehicleData, setVehicleData] = useState({
@@ -39,6 +39,16 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
     adminCreatedBy: "",
     adminCompanyName: "",
   });
+  // Retrieve company name from local storage
+  useEffect(() => {
+    const storedCompanyName = localStorage.getItem("companyName"); // Replace with the actual key used in localStorage
+    if (storedCompanyName) {
+      setVehicleData((prevData) => ({
+        ...prevData,
+        adminCompanyName: storedCompanyName,
+      }));
+    }
+  }, []); // Run only once when the component mounts
 
   const handleChange = (e) => {
     const { name, value } = e.target;

@@ -2,18 +2,25 @@
 // import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { CgProfile } from "react-icons/cg";
 import { IoIosLogOut } from "react-icons/io";
+import { getCompanyName } from "../../../../utils/storageUtils";
 // import { useRouter } from "next/navigation";
 // import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const Header = () => {
+  const [companyName, setCompanyName] = useState("");
   // const router = useRouter();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   // const [imagePreview, setImagePreview] = useState("");
-
+  useEffect(() => {
+    const companyNameFromStorage = getCompanyName();
+    if (companyNameFromStorage) {
+      setCompanyName(companyNameFromStorage);
+    }
+  }, []);
   const toggleDropdown = useCallback(() => {
     setIsDropdownOpen((prev) => !prev);
   }, []);
@@ -23,7 +30,14 @@ const Header = () => {
       {/* Left side: Logo */}
       <div className="flex flex-shrink-0 py-5 px-3 bg-gradient-to-r from-rose-400 to-purple-200">
         <span className="text-sm font-sm text-white bg-transparent">
-          Vehicle Management System
+          Vehicle Management System{" "}
+          {companyName ? (
+            <div>
+              <p>Company Name: {companyName}</p>
+            </div>
+          ) : (
+            <p>No company selected.</p>
+          )}
         </span>
       </div>
 

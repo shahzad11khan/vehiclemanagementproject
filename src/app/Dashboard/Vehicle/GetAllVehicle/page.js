@@ -10,6 +10,7 @@ import { FaEdit, FaTrash, FaEye } from "react-icons/fa";
 import AddVehicleModel from "../AddVehicle/AddVehicleModel";
 import axios from "axios";
 import { API_URL_Vehicle } from "../../Components/ApiUrl/ApiUrls";
+import { getCompanyName } from "@/utils/storageUtils";
 
 const Page = () => {
   // Updated columns with the required fields
@@ -37,6 +38,11 @@ const Page = () => {
     {
       name: "engineType",
       selector: (row) => row.engineType,
+      sortable: true,
+    },
+    {
+      name: "Company",
+      selector: (row) => row.adminCompanyName,
       sortable: true,
     },
     {
@@ -83,10 +89,15 @@ const Page = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isMounted, setIsMounted] = useState(false);
   const [isOpenVehicle, setIsOpenVehicle] = useState(false);
+  const [selectedCompanyName, setSelectedCompanyName] = useState("");
 
   // Ensure that the component only renders once it is mounted
   useEffect(() => {
     setIsMounted(true);
+    const companyNameFromStorage = getCompanyName(); // Get company name from localStorage
+    if (companyNameFromStorage) {
+      setSelectedCompanyName(companyNameFromStorage); // Set the selected company name
+    }
   }, []);
   useEffect(() => {
     fetchData();
@@ -133,18 +144,24 @@ const Page = () => {
     }
   };
 
-  // Filtering the data based on the search term
+  // Filter data based on search term and selected company
   useEffect(() => {
     const filtered = vehicle.filter((item) => {
-      // Check if item and item.title are defined before calling toLowerCase
-      return (
+      const companyMatch =
+        item.adminCompanyName &&
+        selectedCompanyName &&
+        item.adminCompanyName.toLowerCase() ===
+          selectedCompanyName.toLowerCase();
+
+      const usernameMatch =
         item &&
         item.manufacturer &&
-        item.manufacturer.toLowerCase().includes(searchTerm.toLowerCase())
-      );
+        item.manufacturer.toLowerCase().includes(searchTerm.toLowerCase());
+
+      return companyMatch && usernameMatch;
     });
-    setFilteredData(filtered);
-  }, [searchTerm, vehicle]); // Filter when search term or data changes
+    setFilteredData(filtered); // Update filtered data state
+  }, [searchTerm, vehicle, selectedCompanyName]);
 
   const handleEdit = (id) => {
     toast.info(`Edit vehicle with ID: ${id}`);

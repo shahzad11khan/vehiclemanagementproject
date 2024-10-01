@@ -4,12 +4,14 @@ import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FaTrash } from "react-icons/fa";
+
 import Header from "../../Components/Header";
 import Sidebar from "../../Components/Sidebar";
 import DataTableComponent from "../../Components/CustomDataTable";
 import AddTitleModel from "../AddTitle/AddTitleModel";
 import { GetTitle } from "../../Components/ApiUrl/ShowApiDatas/ShowApiDatas";
 import { API_URL_Title } from "../../Components/ApiUrl/ApiUrls";
+import { getCompanyName } from "@/utils/storageUtils";
 import axios from "axios";
 
 const Page = () => {
@@ -18,14 +20,18 @@ const Page = () => {
   const [data, setData] = useState([]); // State to hold fetched data
   const [filteredData, setFilteredData] = useState([]);
   const [isOpenTitle, setIsOpenTitle] = useState(false);
+  const [selectedCompanyName, setSelectedCompanyName] = useState("");
 
-  //
-
-  // Sample data (can be removed once API data is integrated)
+  // Define the columns for the DataTable
   const columns = [
     {
       name: "Title",
       selector: (row) => row.name,
+      sortable: true,
+    },
+    {
+      name: "Company",
+      selector: (row) => row.adminCompanyName,
       sortable: true,
     },
     {
@@ -44,72 +50,76 @@ const Page = () => {
       button: true,
     },
   ];
-  //
+
   useEffect(() => {
     setIsMounted(true);
+    const companyNameFromStorage = getCompanyName(); // Get company name from localStorage
+    if (companyNameFromStorage) {
+      setSelectedCompanyName(companyNameFromStorage); // Set the selected company name
+    }
   }, []);
 
   // Fetch data from API
   const fetchData = async () => {
     try {
-      GetTitle().then(({ result }) => {
-        console.log(result);
-
-        setData(result); // Set the fetched data
-        setFilteredData(result);
-      });
+      const { result } = await GetTitle(); // Fetch titles
+      setData(result); // Set the fetched data
+      setFilteredData(result); // Initialize filtered data
     } catch (error) {
       console.error("Error fetching data:", error);
       setData([]); // Reset data to an empty array on error
     }
   };
-  //
 
-  // delete data from api
+  // Handle deletion of a title
   const handleDelete = async (id) => {
     try {
       const response = await axios.delete(`${API_URL_Title}/${id}`);
+      const { success, message } = response.data;
 
-      const data = response.data;
-      console.log(data);
-
-      if (data.success) {
+      if (success) {
         // Remove the deleted item from state
         setData((prevData) => prevData.filter((item) => item._id !== id));
         setFilteredData((prevFilteredData) =>
           prevFilteredData.filter((item) => item._id !== id)
         );
-        toast.success(data.message);
+        toast.success(message);
       } else {
-        // console.error(data.message);
-        toast.warn(data.message);
+        toast.warn(message);
       }
     } catch (error) {
       console.error("Error deleting title:", error);
+      toast.error("Failed to delete title");
     }
   };
 
   useEffect(() => {
-    fetchData();
+    fetchData(); // Fetch data on component mount
   }, []);
 
+  // Filter data based on search term and selected company
   useEffect(() => {
     const filtered = data.filter((item) => {
-      // Check if item and item.title are defined before calling toLowerCase
-      return (
-        item &&
-        item.name &&
-        item.name.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    });
-    setFilteredData(filtered);
-  }, [searchTerm, data]); // Filter when search term or data changes
+      const companyMatch =
+        item.adminCompanyName &&
+        selectedCompanyName &&
+        item.adminCompanyName.toLowerCase() ===
+          selectedCompanyName.toLowerCase();
 
+      const usernameMatch =
+        item.name && item.name.toLowerCase().includes(searchTerm.toLowerCase());
+
+      return companyMatch && usernameMatch;
+    });
+    setFilteredData(filtered); // Update filtered data state
+  }, [searchTerm, data, selectedCompanyName]);
+
+  // Toggle the title modal
   const toggleTitleModal = () => {
-    setIsOpenTitle(!isOpenTitle);
+    setIsOpenTitle((prev) => !prev);
   };
 
-  if (!isMounted) return null;
+  if (!isMounted) return null; // Render nothing until mounted
 
   return (
     <>

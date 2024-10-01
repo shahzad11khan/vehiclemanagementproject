@@ -1,7 +1,7 @@
 "use client";
 import { API_URL_Enquiry } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 const AddEnquiryModal = ({ isOpen, onClose }) => {
@@ -24,6 +24,15 @@ const AddEnquiryModal = ({ isOpen, onClose }) => {
     adminCreatedBy: "",
     adminCompanyName: "",
   });
+  useEffect(() => {
+    const storedCompanyName = localStorage.getItem("companyName"); // Replace with the actual key used in localStorage
+    if (storedCompanyName) {
+      setFormData((prevData) => ({
+        ...prevData,
+        adminCompanyName: storedCompanyName,
+      }));
+    }
+  }, []); // Run only once when the component mounts
 
   const badgeTypeOptions = ["Standard", "Provisional", "Full"]; // Badge Type options
   const localAuthorityOptions = ["Authority 1", "Authority 2", "Authority 3"]; // Local Authority options

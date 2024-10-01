@@ -75,6 +75,8 @@ export async function POST(request) {
       postalAddress,
       permanentAddress,
       isActive,
+      adminCreatedBy,
+      adminCompanyName,
       imageName,
     } = formDataObject;
 
@@ -112,6 +114,8 @@ export async function POST(request) {
       postalAddress,
       permanentAddress,
       imageName,
+      adminCreatedBy,
+      adminCompanyName,
       imageFile: Driveravatar,
       imagePublicId: DriveravatarId,
       isActive: isActive || false, // Default to "Driver" if no role is specified

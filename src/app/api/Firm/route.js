@@ -69,6 +69,8 @@ export async function POST(request) {
       coverLetter,
       signature,
       isActive,
+      adminCreatedBy,
+      adminCompanyName,
     } = formDataObject;
 
     const existingUser = await Firm.findOne({ name });
@@ -100,6 +102,8 @@ export async function POST(request) {
       signature,
       imageFile,
       imagepublicId,
+      adminCreatedBy,
+      adminCompanyName,
       isActive: isActive || false,
     });
 

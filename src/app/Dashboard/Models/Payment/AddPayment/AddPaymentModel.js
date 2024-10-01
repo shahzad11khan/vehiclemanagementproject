@@ -1,7 +1,7 @@
 "use client";
 import { API_URL_Payment } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 const AddPaymentModel = ({ isOpen, onClose, fetchData }) => {
   const [formData, setFormData] = useState({
@@ -15,6 +15,16 @@ const AddPaymentModel = ({ isOpen, onClose, fetchData }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
+
+  useEffect(() => {
+    const storedCompanyName = localStorage.getItem("companyName"); // Replace with the actual key used in localStorage
+    if (storedCompanyName) {
+      setFormData((prevData) => ({
+        ...prevData,
+        adminCompanyName: storedCompanyName,
+      }));
+    }
+  }, []); // Run only once when the component mounts
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;

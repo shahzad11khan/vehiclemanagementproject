@@ -11,6 +11,7 @@ import AddBadgemodel from "../AddBadge/AddBadgeModel";
 import axios from "axios";
 import { API_URL_Badge } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import { GetBadge } from "@/app/Dashboard/Components/ApiUrl/ShowApiDatas/ShowApiDatas";
+import { getCompanyName } from "@/utils/storageUtils";
 
 const Page = () => {
   const columns = [
@@ -22,6 +23,11 @@ const Page = () => {
     {
       name: "Badge Description",
       selector: (row) => row.description,
+      sortable: true,
+    },
+    {
+      name: "Company",
+      selector: (row) => row.adminCompanyName,
       sortable: true,
     },
     {
@@ -57,10 +63,15 @@ const Page = () => {
   const [filteredData, setFilteredData] = useState([]);
   const [isMounted, setIsMounted] = useState(false);
   const [isOpenBadge, setIsOpenBadge] = useState(false);
+  const [selectedCompanyName, setSelectedCompanyName] = useState("");
 
   // Ensure that the component only renders once it is mounted
   useEffect(() => {
     setIsMounted(true);
+    const companyNameFromStorage = getCompanyName(); // Get company name from localStorage
+    if (companyNameFromStorage) {
+      setSelectedCompanyName(companyNameFromStorage); // Set the selected company name
+    }
   }, []);
 
   // Ensure that the component only renders once it is mounted
@@ -116,27 +127,27 @@ const Page = () => {
   };
 
   // Filtering the data based on the search term
+  // Filter data based on search term and selected company
   useEffect(() => {
     const filtered = data.filter((item) => {
-      // Check if item and item.title are defined before calling toLowerCase
-      return (
-        item &&
-        item.name &&
-        item.name.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    });
-    setFilteredData(filtered);
-  }, [searchTerm, data]); // Filter when search term or data changes
+      const companyMatch =
+        item.adminCompanyName &&
+        selectedCompanyName &&
+        item.adminCompanyName.toLowerCase() ===
+          selectedCompanyName.toLowerCase();
 
+      const usernameMatch =
+        item.name && item.name.toLowerCase().includes(searchTerm.toLowerCase());
+
+      return companyMatch && usernameMatch;
+    });
+    setFilteredData(filtered); // Update filtered data state
+  }, [searchTerm, data, selectedCompanyName]);
   const handleEdit = (id) => {
     toast.info(`Edit item with ID: ${id}`);
     // Implement your edit logic here
   };
 
-  // const handleDelete = (id) => {
-  //   toast.info(`Delete item with ID: ${id}`);
-  //   // Implement your delete logic here
-  // };
   if (!isMounted) {
     return null; // Render nothing until the component is mounted
   }

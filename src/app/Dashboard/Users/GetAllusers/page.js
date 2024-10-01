@@ -16,8 +16,7 @@ import AddUserModel from "../AddUser/AddUserModel";
 import DataTableComponent from "../../Components/CustomDataTable";
 import axios from "axios";
 import { API_URL_USER } from "../../Components/ApiUrl/ApiUrls";
-import Image from "next/image";
-import { ImGooglePlus2 } from "react-icons/im";
+import { getCompanyName } from "@/utils/storageUtils"; // Assuming you have this utility for getting company name
 
 const Page = () => {
   // columns
@@ -38,20 +37,7 @@ const Page = () => {
       selector: (row) => row.companyname,
       sortable: true,
     },
-    {
-      name: "Company Avatar",
-      selector: (row) => row.companyavatar, // This will be used for sorting, but not directly for display
-      cell: (row) => (
-        <img
-          src={row.companyavatar} // Make sure the URL is valid
-          alt="User Avatar"
-          className="h-10 w-10 rounded-full" // Add styling as needed
-          width={100}
-          height={100}
-        />
-      ),
-      sortable: true,
-    },
+
     {
       name: "User Avatar",
       selector: (row) => row.useravatar, // This will be used for sorting, but not directly for display
@@ -87,19 +73,8 @@ const Page = () => {
     },
     {
       name: "Created By",
-      selector: (row) => row.adminCreatedBy || "By Self", // Fallback to "By Self" if adminCreatedBy is falsy
+      selector: (row) => row.adminCreatedBy || "By Self",
       sortable: true,
-      cell: (row) => (
-        <span>{row.adminCreatedBy ? row.adminCreatedBy : "By Self"}</span>
-      ),
-    },
-    {
-      name: "Created Date",
-      selector: (row) => row.adminCreatedBy, // Fallback to "By Self" if adminCreatedBy is falsy
-      sortable: true,
-      cell: (row) => (
-        <span>{row.adminCreatedBy ? row.adminCreatedBy : "By Self"}</span>
-      ),
     },
     {
       name: "Actions",
@@ -135,10 +110,16 @@ const Page = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isMounted, setIsMounted] = useState(false);
   const [isOpenUser, setIsOpenUser] = useState(false);
+  const [selectedCompanyName, setSelectedCompanyName] = useState("");
 
   useEffect(() => {
     setIsMounted(true);
+    const companyNameFromStorage = getCompanyName(); // Get the selected company name from localStorage
+    if (companyNameFromStorage) {
+      setSelectedCompanyName(companyNameFromStorage); // Set the selected company name
+    }
   }, []);
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -177,28 +158,37 @@ const Page = () => {
         );
         toast.success(data.message);
       } else {
-        // console.error(data.message);
         toast.warn(data.message);
       }
     } catch (error) {
       console.error("Error deleting title:", error);
     }
   };
+
   useEffect(() => {
     const filtered = users.filter((item) => {
-      // Check if item and item.title are defined before calling toLowerCase
-      return (
+      // Filter by company name
+      const companyMatch =
+        item &&
+        item.companyname &&
+        selectedCompanyName &&
+        item.companyname.toLowerCase() === selectedCompanyName.toLowerCase();
+
+      // Filter by search term (username)
+      const usernameMatch =
         item &&
         item.username &&
-        item.username.toLowerCase().includes(searchTerm.toLowerCase())
-      );
+        item.username.toLowerCase().includes(searchTerm.toLowerCase());
+
+      return companyMatch && usernameMatch;
     });
     setFilteredData(filtered);
-  }, [searchTerm, users]); // Filter when search term or data changes
+  }, [searchTerm, users, selectedCompanyName]); // Filter when search term, data, or selected company changes
 
   const OpenUserModle = () => {
     setIsOpenUser(!isOpenUser);
   };
+
   if (!isMounted) {
     return null;
   }
@@ -209,7 +199,7 @@ const Page = () => {
       <div className="flex gap-4">
         <Sidebar />
         <div className="container mx-auto p-4 overflow-hidden">
-          <div className="justify-between items-center border-2 mt-3  w-full">
+          <div className="justify-between items-center border-2 mt-3 w-full">
             <div className="flex justify-between">
               <div className="justify-start">
                 <input
@@ -229,7 +219,7 @@ const Page = () => {
                 </button>
               </div>
             </div>
-            <div className="">
+            <div>
               <DataTableComponent
                 title="User List"
                 columns={columns}

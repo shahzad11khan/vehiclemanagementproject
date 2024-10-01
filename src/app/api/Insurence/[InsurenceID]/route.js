@@ -16,7 +16,8 @@ export const PUT = catchAsyncErrors(async (request, { params }) => {
   }
 
   // Destructure the necessary fields
-  const { name, description, isActive } = formDataObject;
+  const { name, description, isActive, adminCreatedBy, adminCompanyName } =
+    formDataObject;
 
   // Find the vehicle by ID
   const insurence = await Insurence.findById(id);
@@ -34,6 +35,12 @@ export const PUT = catchAsyncErrors(async (request, { params }) => {
     ? description.trim()
     : insurence.description; // Update description or retain existing
   insurence.isActive = isActive ? isActive : insurence.isActive;
+  insurence.adminCreatedBy = adminCreatedBy
+    ? adminCreatedBy
+    : insurence.adminCreatedBy;
+  insurence.adminCompanyName = adminCompanyName
+    ? adminCompanyName
+    : insurence.adminCompanyName;
 
   // Save the updated vehicle
   await insurence.save();

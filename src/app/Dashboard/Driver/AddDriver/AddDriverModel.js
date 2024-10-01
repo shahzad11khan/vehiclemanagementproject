@@ -54,6 +54,17 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
   const [insurence, setinsurence] = useState([]);
   const [payment, setpayment] = useState([]);
 
+  // Retrieve company name from local storage
+  useEffect(() => {
+    const storedCompanyName = localStorage.getItem("companyName"); // Replace with the actual key used in localStorage
+    if (storedCompanyName) {
+      setFormData((prevData) => ({
+        ...prevData,
+        adminCompanyName: storedCompanyName,
+      }));
+    }
+  }, []); // Run only once when the component mounts
+
   useEffect(() => {
     const loadTaxiFirms = async () => {
       try {

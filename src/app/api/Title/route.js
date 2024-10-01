@@ -7,9 +7,10 @@ export const POST = catchAsyncErrors(async (request) => {
   await connect();
 
   // Parse the JSON data from the request body
-  const formDataObject = await request.json();
+  const data = await request.json();
 
-  const { name, description, isActive } = formDataObject; // Extract the new variables
+  const { name, description, isActive, adminCreatedBy, adminCompanyName } =
+    data; // Extract the new variables
 
   // Check for existing title by name
   const existingTitle = await Title.findOne({ name });
@@ -25,6 +26,8 @@ export const POST = catchAsyncErrors(async (request) => {
     name,
     description,
     isActive,
+    adminCreatedBy,
+    adminCompanyName,
   });
 
   console.log(newTitle);

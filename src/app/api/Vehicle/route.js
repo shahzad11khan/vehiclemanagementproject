@@ -37,7 +37,9 @@ export async function POST(request) {
       price,
       registrationNumber,
       warrantyInfo,
-      isActive
+      isActive,
+      adminCreatedBy,
+      adminCompanyName,
     } = formDataObject;
 
     // Check for existing vehicle by registration number
@@ -79,6 +81,8 @@ export async function POST(request) {
       registrationNumber,
       warrantyInfo,
       isActive,
+      adminCreatedBy,
+      adminCompanyName,
     });
 
     console.log(newVehicle);

@@ -11,7 +11,8 @@ export const PUT = catchAsyncErrors(async (request, { params }) => {
   const data = await request.json(); // Get the form data
 
   // Destructure the necessary fields
-  const { name, description, isActive } = data;
+  const { name, description, isActive, adminCreatedBy, adminCompanyName } =
+    data;
 
   // Find the vehicle by ID
   const badge = await Badge.findById(id);
@@ -24,6 +25,10 @@ export const PUT = catchAsyncErrors(async (request, { params }) => {
   badge.name = name ? name.trim() : badge.name; // Update name or retain existing
   badge.description = description ? description.trim() : badge.description; // Update description or retain existing
   badge.isActive = isActive ? isActive : badge.naisActiveme;
+  badge.adminCreatedBy = adminCreatedBy ? adminCreatedBy : badge.adminCreatedBy;
+  badge.adminCompanyName = adminCompanyName
+    ? adminCompanyName
+    : badge.adminCompanyName;
 
   // Save the updated vehicle
   await badge.save();

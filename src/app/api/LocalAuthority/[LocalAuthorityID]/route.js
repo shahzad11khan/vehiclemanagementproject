@@ -11,7 +11,8 @@ export const PUT = catchAsyncErrors(async (request, { params }) => {
   const data = await request.json(); // Get the form data
 
   // Destructure the necessary fields
-  const { name, description, isActive } = data;
+  const { name, description, isActive, adminCreatedBy, adminCompanyName } =
+    data;
 
   // Find the vehicle by ID
   const localAuthority = await LocalAuthority.findById(id);
@@ -29,6 +30,12 @@ export const PUT = catchAsyncErrors(async (request, { params }) => {
     ? description.trim()
     : localAuthority.description; // Update description or retain existing
   localAuthority.isActive = isActive ? isActive : localAuthority.isActive;
+  localAuthority.adminCreatedBy = adminCreatedBy
+    ? adminCreatedBy
+    : localAuthority.adminCreatedBy;
+  localAuthority.adminCompanyName = adminCompanyName
+    ? adminCompanyName
+    : localAuthority.adminCompanyName;
 
   // Save the updated vehicle
   await localAuthority.save();

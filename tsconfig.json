@@ -22,7 +22,8 @@
       "@/*": ["./src/*"],
        "@config/*": ["config/*"], // You can access config folder from anywhere with '@config'
       "@models/*": ["models/*"], // Access models folder with '@models'
-      "@middlewares/*": ["middlewares/*"]
+      "@middlewares/*": ["middlewares/*"],
+      "@/utils/*": ["utils/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

@@ -16,7 +16,8 @@ export const PUT = catchAsyncErrors(async (request, { params }) => {
   }
 
   // Destructure the necessary fields
-  const { name, description, isActive } = formDataObject;
+  const { name, description, isActive, adminCreatedBy, adminCompanyName } =
+    formDataObject;
 
   // Find the vehicle by ID
   const supplier = await Supplier.findById(id);
@@ -34,6 +35,12 @@ export const PUT = catchAsyncErrors(async (request, { params }) => {
     ? description.trim()
     : supplier.description; // Update description or retain existing
   supplier.isActive = isActive ? isActive : supplier.isActive;
+  supplier.adminCompanyName = adminCompanyName
+    ? adminCompanyName
+    : supplier.adminCompanyName;
+  supplier.adminCreatedBy = adminCreatedBy
+    ? adminCreatedBy
+    : supplier.adminCreatedBy;
 
   // Save the updated vehicle
   await supplier.save();

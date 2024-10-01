@@ -31,6 +31,8 @@ export const PUT = catchAsyncErrors(async (request, { params }) => {
     badgeType,
     localAuthority,
     isActive,
+    adminCreatedBy,
+    adminCompanyName,
   } = formDataObject;
 
   // Find the enquiry by ID
@@ -63,6 +65,12 @@ export const PUT = catchAsyncErrors(async (request, { params }) => {
     : enquiry.dateOfBirth; // Update dateOfBirth or retain existing
   enquiry.niNumber = niNumber ? niNumber.trim() : enquiry.niNumber; // Update niNumber or retain existing
   enquiry.badgeType = badgeType ? badgeType.trim() : enquiry.badgeType; // Update badgeType or retain existing
+  enquiry.adminCreatedBy = adminCreatedBy
+    ? adminCreatedBy.trim()
+    : enquiry.adminCreatedBy; // Update badgeType or retain existing
+  enquiry.adminCompanyName = adminCompanyName
+    ? adminCompanyName.trim()
+    : enquiry.adminCompanyName; // Update badgeType or retain existing
   enquiry.localAuthority = localAuthority
     ? localAuthority.trim()
     : enquiry.localAuthority; // Update localAuthority or retain existing

@@ -1,15 +1,16 @@
 "use client";
 import { API_URL_Title } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import axios from "axios";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
+
 const AddTitleModel = ({ isOpen, onClose, fetchData }) => {
   const [formData, setFormData] = useState({
     name: "",
     description: "",
     isActive: false,
     adminCreatedBy: "",
-    adminCompanyName: "",
+    adminCompanyName: "", // Initialize as empty
   });
 
   const [loading, setLoading] = useState(false);
@@ -24,31 +25,45 @@ const AddTitleModel = ({ isOpen, onClose, fetchData }) => {
     });
   };
 
+  // Retrieve company name from local storage
+  useEffect(() => {
+    const storedCompanyName = localStorage.getItem("companyName"); // Replace with the actual key used in localStorage
+    if (storedCompanyName) {
+      setFormData((prevData) => ({
+        ...prevData,
+        adminCompanyName: storedCompanyName,
+      }));
+    }
+  }, []); // Run only once when the component mounts
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true); // Set loading to true at the start
 
     try {
+      // Logging formData to check if adminCompanyName is present
+      console.log("Submitting Form Data: ", { ...formData });
+
       const response = await axios.post(`${API_URL_Title}`, formData);
 
+      // Reset form data after successful submission
       setFormData({
         name: "",
         description: "",
         isActive: false,
         adminCreatedBy: "",
-        adminCompanyName: "",
+        adminCompanyName: "", // Keep the company name for future submissions
       });
-      // console.log(response.data);
-      if (response.data.success) {
-        toast.success("data successfully saved");
-        setLoading(true);
+      console.log(response.data);
 
+      if (response.data.success) {
+        toast.success("Data successfully saved");
         setSuccess(true);
         fetchData();
         onClose();
       } else {
-        toast.warn("Data not saved");
+        toast.warn(response.data.message);
       }
-      // Handle success or trigger some UI feedback
     } catch (err) {
       setError(err.response?.data?.message || "Failed to add Title");
       setError(null);

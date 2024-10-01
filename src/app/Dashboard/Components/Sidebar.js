@@ -4,13 +4,28 @@ import Link from "next/link"; // Import Link from Next.js
 import { FaHome } from "react-icons/fa";
 import { IoPersonAdd } from "react-icons/io5";
 import { FaHouseLaptop } from "react-icons/fa6";
-import { FaCar } from "react-icons/fa";
+import { FaCar, FaIndustry } from "react-icons/fa";
 import { TbReport } from "react-icons/tb";
 import { MdManageSearch, MdFavorite } from "react-icons/md";
 import { GrSystem } from "react-icons/gr";
 import { RiOrganizationChart } from "react-icons/ri";
 import FavouriteModal from "./FavouritesModal.js";
+import {
+  getAuthData,
+  isAuthenticated,
+  clearAuthData,
+} from "@/utils/verifytoken";
 const Sidebar = () => {
+  if (isAuthenticated()) {
+    const authData = getAuthData();
+    console.log("Authenticated user data:", authData);
+
+    // You can access individual pieces like this:
+    console.log("Username:", authData.Userusername);
+    console.log("Company Name:", authData.companyName);
+  } else {
+    console.log("User is not authenticated");
+  }
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isOpenManagement, setIsOpenManagement] = useState(false);
   const [isOpenFavouriteModal, setIsOpenFavouriteModal] = useState(false);
@@ -83,6 +98,7 @@ const Sidebar = () => {
               </li>
             </Link>
 
+            {/* allcompanies list */}
             <Link passHref href="/Dashboard/Company/GetAllCompanies">
               <li
                 onClick={() =>
@@ -104,6 +120,30 @@ const Sidebar = () => {
                   />
                   <span className="hidden sm:block text-sm">
                     Registered Companies
+                  </span>
+                </div>
+              </li>
+            </Link>
+            {/* only for superadmin */}
+            <Link passHref href="/Dashboard/Superadmin">
+              <li
+                onClick={() => handleLinkClick("/Dashboard/Superadmin")}
+                className={`${
+                  activeLink === "/Dashboard/Superadmin"
+                    ? "border-l-4 border-red-400"
+                    : "bg-white text-blue"
+                } flex items-center p-3 cursor-pointer hover:bg-gray-100 rounded-lg`}
+              >
+                <div className="flex items-center gap-3">
+                  <FaIndustry
+                    className={`${
+                      activeLink === "/Dashboard/Superadmin"
+                        ? "text-red-400"
+                        : "text-black text-sm"
+                    }`}
+                  />
+                  <span className="hidden sm:block text-sm">
+                    All Companyies
                   </span>
                 </div>
               </li>

@@ -10,6 +10,7 @@ import AddDriverModel from "../AddDriver/AddDriverModel";
 import CustomDataTable from "../../Components/CustomDataTable";
 import axios from "axios";
 import { API_URL_Driver } from "../../Components/ApiUrl/ApiUrls";
+import { getCompanyName } from "@/utils/storageUtils";
 
 const Page = () => {
   const columns = [
@@ -54,6 +55,11 @@ const Page = () => {
       sortable: true,
     },
     {
+      name: "Company",
+      selector: (row) => row.adminCompanyName,
+      sortable: true,
+    },
+    {
       name: "Actions",
       cell: (row) => (
         <div className="flex gap-2">
@@ -87,10 +93,15 @@ const Page = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isMounted, setIsMounted] = useState(false);
   const [isOpenDriver, setIsOpenDriver] = useState(false);
+  const [selectedCompanyName, setSelectedCompanyName] = useState("");
 
   // Ensure that the component only renders once it is mounted
   useEffect(() => {
     setIsMounted(true);
+    const companyNameFromStorage = getCompanyName(); // Get company name from localStorage
+    if (companyNameFromStorage) {
+      setSelectedCompanyName(companyNameFromStorage); // Set the selected company name
+    }
   }, []);
 
   useEffect(() => {
@@ -137,18 +148,24 @@ const Page = () => {
     }
   };
 
-  // Filtering the data based on the search term
+  // Filter data based on search term and selected company
   useEffect(() => {
     const filtered = driver.filter((item) => {
-      // Check if item and item.title are defined before calling toLowerCase
-      return (
+      const companyMatch =
+        item.adminCompanyName &&
+        selectedCompanyName &&
+        item.adminCompanyName.toLowerCase() ===
+          selectedCompanyName.toLowerCase();
+
+      const usernameMatch =
         item &&
         item.firstName &&
-        item.firstName.toLowerCase().includes(searchTerm.toLowerCase())
-      );
+        item.firstName.toLowerCase().includes(searchTerm.toLowerCase());
+
+      return companyMatch && usernameMatch;
     });
-    setFilteredData(filtered);
-  }, [searchTerm, driver]); // Filter when search term or data changes
+    setFilteredData(filtered); // Update filtered data state
+  }, [searchTerm, driver, selectedCompanyName]);
 
   const handleEdit = (id) => {
     toast.info(`Edit driver with ID: ${id}`);

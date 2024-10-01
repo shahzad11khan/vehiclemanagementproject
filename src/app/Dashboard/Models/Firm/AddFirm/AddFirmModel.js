@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { API_URL_Firm } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import { toast } from "react-toastify";
 import axios from "axios";
@@ -29,6 +29,15 @@ const AddFirmModal = ({ isOpen, onClose, fetchData }) => {
     adminCreatedBy: "",
     adminCompanyName: "",
   });
+  useEffect(() => {
+    const storedCompanyName = localStorage.getItem("companyName"); // Replace with the actual key used in localStorage
+    if (storedCompanyName) {
+      setFormData((prevData) => ({
+        ...prevData,
+        adminCompanyName: storedCompanyName,
+      }));
+    }
+  }, []); // Run only once when the component mounts
 
   const handleChange = (e) => {
     const { name, value, type, checked, files } = e.target;

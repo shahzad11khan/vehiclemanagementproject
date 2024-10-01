@@ -10,6 +10,7 @@ import { FaEdit, FaTrash } from "react-icons/fa";
 import AddSignatureModel from "../AddSignature/AddSignatureModel";
 import { API_URL_Signature } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import { GetSignature } from "@/app/Dashboard/Components/ApiUrl/ShowApiDatas/ShowApiDatas";
+import { getCompanyName } from "@/utils/storageUtils";
 
 const Page = () => {
   const columns = [
@@ -27,6 +28,11 @@ const Page = () => {
     {
       name: "Signature Image",
       selector: (row) => row.imageName,
+      sortable: true,
+    },
+    {
+      name: "Company",
+      selector: (row) => row.adminCompanyName,
       sortable: true,
     },
     {
@@ -62,10 +68,15 @@ const Page = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isMounted, setIsMounted] = useState(false);
   const [isOpenSignature, setIsOpenSignature] = useState(false);
+  const [selectedCompanyName, setSelectedCompanyName] = useState("");
 
   // Ensure that the component only renders once it is mounted
   useEffect(() => {
     setIsMounted(true);
+    const companyNameFromStorage = getCompanyName(); // Get company name from localStorage
+    if (companyNameFromStorage) {
+      setSelectedCompanyName(companyNameFromStorage); // Set the selected company name
+    }
   }, []);
 
   // Fetch data from API
@@ -116,18 +127,22 @@ const Page = () => {
     }
   };
 
-  // Filtering the data based on the search term
+  // Filter data based on search term and selected company
   useEffect(() => {
     const filtered = data.filter((item) => {
-      // Check if item and item.title are defined before calling toLowerCase
-      return (
-        item &&
-        item.name &&
-        item.name.toLowerCase().includes(searchTerm.toLowerCase())
-      );
+      const companyMatch =
+        item.adminCompanyName &&
+        selectedCompanyName &&
+        item.adminCompanyName.toLowerCase() ===
+          selectedCompanyName.toLowerCase();
+
+      const usernameMatch =
+        item.name && item.name.toLowerCase().includes(searchTerm.toLowerCase());
+
+      return companyMatch && usernameMatch;
     });
-    setFilteredData(filtered);
-  }, [searchTerm, data]); // Filter when search term or data changes
+    setFilteredData(filtered); // Update filtered data state
+  }, [searchTerm, data, selectedCompanyName]);
   // const handleEdit = (id) => {
   //   toast.info(`Edit item with ID: ${id}`);
   //   // Implement your edit logic here

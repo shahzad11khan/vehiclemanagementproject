@@ -83,6 +83,8 @@ export const PUT = catchAsyncErrors(async (request) => {
     coverLetter,
     signature,
     isActive,
+    adminCreatedBy,
+    adminCompanyName,
   } = formDataObject;
 
   // Update the existing Firm
@@ -108,6 +110,9 @@ export const PUT = catchAsyncErrors(async (request) => {
   existingFirm.coverLetter = coverLetter || existingFirm.coverLetter;
   existingFirm.signature = signature || existingFirm.signature;
   existingFirm.isActive = isActive || existingFirm.isActive;
+  existingFirm.adminCreatedBy = adminCreatedBy || existingFirm.adminCreatedBy;
+  existingFirm.adminCompanyName =
+    adminCompanyName || existingFirm.adminCompanyName;
 
   const updatedFirm = await existingFirm.save();
 

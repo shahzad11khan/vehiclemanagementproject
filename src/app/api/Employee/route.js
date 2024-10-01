@@ -7,7 +7,8 @@ export const POST = catchAsyncErrors(async (request) => {
   await connect();
   const data = await request.json();
 
-  const { name, description, isActive } = data; // Extract the new variables
+  const { name, description, isActive, adminCreatedBy, adminCompanyName } =
+    data; // Extract the new variables
 
   // Check for existing vehicle by name
   const existingVehicle = await Employee.findOne({ name });
@@ -23,6 +24,8 @@ export const POST = catchAsyncErrors(async (request) => {
     name,
     description,
     isActive,
+    adminCreatedBy,
+    adminCompanyName,
   });
 
   console.log(newInsurence);

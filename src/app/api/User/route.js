@@ -11,23 +11,10 @@ export async function POST(request) {
 
     // Handling the uploaded files
     let file1 = data.get("useravatar");
-    console.log("User Avatar:", file1);
-
-    let file2 = data.get("companyavatar");
-    if (!file1) {
-      console.log(
-        "Company Avatar not provided, using User Avatar as fallback."
-      );
-      file1 = file2; // Use file1 as fallback if file2 is not provided
-    } else {
-      console.log("Company Avatar:", file2);
-      file2 = file1;
-    }
+    // console.log("User Avatar:", file1);
 
     let useravatar = "";
     let useravatarId = "";
-    let companyavatarImage = "";
-    let companyavatarId = "";
 
     // Upload files to Cloudinary
     if (file1) {
@@ -55,45 +42,37 @@ export async function POST(request) {
       useravatarId = uploadResponse1.public_id;
     }
 
-    if (file2) {
-      const buffer2 = Buffer.from(await file2.arrayBuffer());
-      const uploadResponse2 = await new Promise((resolve, reject) => {
-        cloudinary.uploader
-          .upload_stream(
-            {
-              resource_type: "auto",
-            },
-            (error, result) => {
-              if (error) {
-                reject(
-                  new Error("Error uploading authorImage: " + error.message)
-                );
-              } else {
-                resolve(result);
-              }
-            }
-          )
-          .end(buffer2);
-      });
-
-      companyavatarImage = uploadResponse2.secure_url; // Cloudinary URL for author image
-      companyavatarId = uploadResponse2.public_id;
-    }
-
     // Constructing formDataObject excluding the files
     const formDataObject = {};
     for (const [key, value] of data.entries()) {
-      if (key !== "useravatar" && key !== "companyavatar") {
+      if (key !== "useravatar") {
         formDataObject[key] = value;
       }
     }
 
     const {
-      username,
+      title,
+      firstName,
+      lastName,
       email,
+      tel1,
+      tel2,
+      postcode,
+      postalAddress,
+      permanentAddress,
+      city,
+      county,
+      accessLevel,
+      dateOfBirth,
+      position,
+      reportsTo,
+      username,
       password,
-      companyname,
+      passwordExpires,
+      passwordExpiresEvery,
       confirmpassword,
+      companyname,
+      CreatedBy,
       isActive,
       role,
     } = formDataObject;
@@ -116,16 +95,32 @@ export async function POST(request) {
 
     // Create and save the new blog entry
     const newUser = new User({
-      username,
+      title,
+      firstName,
+      lastName,
       email,
+      tel1,
+      tel2,
+      postcode,
+      postalAddress,
+      permanentAddress,
+      city,
+      county,
+      accessLevel,
+      dateOfBirth,
+      position,
+      reportsTo,
+      username,
       password: hashedPassword,
-      companyname,
+      passwordExpires,
+      passwordExpiresEvery,
       confirmpassword,
-      useravatar: useravatar, // Use the uploaded or dummy image
+      companyname,
+      CreatedBy, // Ensure this field matches your schema
+      useravatar, // Use the uploaded or dummy image
       userPublicId: useravatarId,
-      companyavatar: companyavatarImage, // Use the uploaded or dummy image
-      companyPublicId: companyavatarId,
       isActive: isActive || false,
+      adminCreatedBy: CreatedBy,
       role: role || "user", // Default to "user" if no role is specified
     });
 

@@ -1,5 +1,6 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { API_URL_USER } from "../../Components/ApiUrl/ApiUrls";
 
 const AddUserModel = ({ isOpen, onClose }) => {
   const [formData, setFormData] = useState({
@@ -22,35 +23,63 @@ const AddUserModel = ({ isOpen, onClose }) => {
     password: "",
     passwordExpires: "",
     passwordExpiresEvery: "",
+    confirmpassword: "",
+    companyname: "",
+    CreatedBy: "",
+    useravatar: null,
+    isActive: false,
+    role: "user", // Default role set to "user"
   });
 
+  // Retrieve company name from local storage
+  useEffect(() => {
+    const storedCompanyName = localStorage.getItem("companyName"); // Replace with the actual key used in localStorage
+    if (storedCompanyName) {
+      setFormData((prevData) => ({
+        ...prevData,
+        companyname: storedCompanyName,
+      }));
+    }
+  }, []); // Run only once when the component mounts
+
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    const { name, value, type, checked } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: type === "checkbox" ? checked : value, // Handle checkbox for isActive
+    }));
+  };
+
+  const handleFileChange = (e) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      useravatar: e.target.files[0], // Store the selected file
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const formDataToSend = new FormData();
+
+    // Append all form fields to the FormData object
+    for (const key in formData) {
+      formDataToSend.append(key, formData[key]);
+    }
+
     try {
-      const response = await fetch("/api/user", {
+      const response = await fetch(`${API_URL_USER}`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
+        body: formDataToSend,
       });
-      if (response.ok) {
-        alert("User added successfully!");
-      } else {
-        alert("Failed to add user.");
-      }
+
+      // Handle the response as needed
+      const data = await response.json();
+      console.log(data);
     } catch (error) {
       console.error("Error:", error);
     }
   };
+
   if (!isOpen) return null;
 
   return (
@@ -375,6 +404,24 @@ const AddUserModel = ({ isOpen, onClose }) => {
 
               <div>
                 <label
+                  htmlFor="confirmpassword"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Confirm Password:
+                </label>
+                <input
+                  type="password"
+                  id="confirmpassword"
+                  name="confirmpassword"
+                  value={formData.confirmpassword}
+                  onChange={handleChange}
+                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                  required
+                />
+              </div>
+
+              <div>
+                <label
                   htmlFor="passwordExpires"
                   className="text-sm font-medium text-gray-700"
                 >
@@ -395,10 +442,10 @@ const AddUserModel = ({ isOpen, onClose }) => {
                   htmlFor="passwordExpiresEvery"
                   className="text-sm font-medium text-gray-700"
                 >
-                  Password Expires Every (days):
+                  Password Expires Every:
                 </label>
                 <input
-                  type="number"
+                  type="text"
                   id="passwordExpiresEvery"
                   name="passwordExpiresEvery"
                   value={formData.passwordExpiresEvery}
@@ -409,20 +456,57 @@ const AddUserModel = ({ isOpen, onClose }) => {
             </div>
           </div>
 
-          {/* Button Group */}
-          <div className="flex justify-end gap-4">
-            <button
-              type="submit"
-              className="px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50"
+          {/* User Avatar */}
+          <div>
+            <label
+              htmlFor="useravatar"
+              className="text-sm font-medium text-gray-700"
             >
-              Submit
-            </button>
+              User Avatar:
+            </label>
+            <input
+              type="file"
+              id="useravatar"
+              name="useravatar"
+              accept="image/*"
+              onChange={handleFileChange}
+              className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+            />
+          </div>
+          <div>
+            <label>
+              Is Active:
+              <input
+                type="checkbox"
+                name="isActive"
+                checked={formData.isActive}
+                onChange={handleChange}
+              />
+            </label>
+          </div>
+          <div>
+            <label>
+              Role:
+              <select name="role" value={formData.role} onChange={handleChange}>
+                <option value="user">User</option>
+                <option value="admin">Admin</option>
+              </select>
+            </label>
+          </div>
+
+          <div className="flex justify-end">
             <button
               type="button"
+              className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg mr-2"
               onClick={onClose}
-              className="px-6 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
             >
-              Close
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="bg-blue-600 text-white px-4 py-2 rounded-lg"
+            >
+              Add User
             </button>
           </div>
         </form>

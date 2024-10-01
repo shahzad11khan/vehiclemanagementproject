@@ -50,7 +50,14 @@ export async function POST(request) {
       }
     }
 
-    const { name, description, imageName, isActive } = formDataObject;
+    const {
+      name,
+      description,
+      imageName,
+      isActive,
+      adminCreatedBy,
+      adminCompanyName,
+    } = formDataObject;
 
     const existingUser = await Signature.findOne({ name });
     if (existingUser) {
@@ -67,6 +74,8 @@ export async function POST(request) {
       imageName,
       imagepublicId,
       imageFile,
+      adminCreatedBy,
+      adminCompanyName,
       isActive: isActive || false,
     });
 

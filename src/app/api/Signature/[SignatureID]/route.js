@@ -64,7 +64,14 @@ export const PUT = catchAsyncErrors(async (request) => {
     }
   }
 
-  const { name, description, imageName, isActive } = formDataObject;
+  const {
+    name,
+    description,
+    imageName,
+    isActive,
+    adminCreatedBy,
+    adminCompanyName,
+  } = formDataObject;
 
   // Update the existing signature
   existingSignature.name = name || existingSignature.name;
@@ -74,6 +81,12 @@ export const PUT = catchAsyncErrors(async (request) => {
     imagepublicId || existingSignature.imagepublicId;
   existingSignature.imageFile = imageFile || existingSignature.imageFile;
   existingSignature.isActive = isActive ? isActive : existingSignature.isActive;
+  existingSignature.adminCreatedBy = adminCreatedBy
+    ? adminCreatedBy
+    : existingSignature.adminCreatedBy;
+  existingSignature.adminCompanyName = adminCompanyName
+    ? adminCompanyName
+    : existingSignature.adminCompanyName;
 
   const updatedSignature = await existingSignature.save();
 

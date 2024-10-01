@@ -17,6 +17,7 @@ import DataTableComponent from "../../Components/CustomDataTable";
 import axios from "axios";
 import { API_URL_USER } from "../../Components/ApiUrl/ApiUrls";
 import { getCompanyName } from "@/utils/storageUtils"; // Assuming you have this utility for getting company name
+import Image from "next/image";
 
 const Page = () => {
   // columns
@@ -42,7 +43,7 @@ const Page = () => {
       name: "User Avatar",
       selector: (row) => row.useravatar, // This will be used for sorting, but not directly for display
       cell: (row) => (
-        <img
+        <Image
           src={row.useravatar} // Make sure the URL is valid
           alt="User Avatar"
           className="h-10 w-10 rounded-full" // Add styling as needed

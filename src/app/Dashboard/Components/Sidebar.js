@@ -10,11 +10,7 @@ import { MdManageSearch, MdFavorite } from "react-icons/md";
 import { GrSystem } from "react-icons/gr";
 import { RiOrganizationChart } from "react-icons/ri";
 import FavouriteModal from "./FavouritesModal.js";
-import {
-  getAuthData,
-  isAuthenticated,
-  clearAuthData,
-} from "@/utils/verifytoken";
+import { getAuthData, isAuthenticated } from "@/utils/verifytoken";
 const Sidebar = () => {
   const [superadmin, setsuperadmin] = useState(""); // State to track which dropdown is open
 

@@ -6,7 +6,7 @@ import Header from "../../Components/Header";
 import Sidebar from "../../Components/Sidebar";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { FaEdit, FaTrash } from "react-icons/fa";
+import { FaTrash } from "react-icons/fa";
 import AddCompanymodel from "..//AddCompany/AddCompanyModel";
 import { GetCompany } from "../../Components/ApiUrl/ShowApiDatas/ShowApiDatas";
 import { API_URL_Company } from "../../Components/ApiUrl/ApiUrls";
@@ -127,9 +127,9 @@ const Page = () => {
     setFilteredData(filtered);
   }, [searchTerm, data]); // Filter when search term or data changes
 
-  const toggleTitleModal = () => {
-    setIsOpenTitle(!isOpenTitle);
-  };
+  // const toggleTitleModal = () => {
+  //   setIsOpenTitle(!isOpenTitle);
+  // };
   // const handleEdit = (id) => {
   //   toast.info(`Edit item with ID: ${id}`);
   //   // Implement your edit logic here

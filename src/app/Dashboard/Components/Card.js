@@ -2,7 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
-const Card = ({ id, image, company }) => {
+const Card = ({ image, company }) => {
   const handleCardClick = () => {
     // alert(company, id);
     // // Store company name and id in localStorage

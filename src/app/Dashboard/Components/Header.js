@@ -9,11 +9,7 @@ import { getCompanyName } from "../../../../utils/storageUtils";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import {
-  getAuthData,
-  isAuthenticated,
-  clearAuthData,
-} from "@/utils/verifytoken";
+import { isAuthenticated, clearAuthData } from "@/utils/verifytoken";
 
 const Header = () => {
   const [companyName, setCompanyName] = useState("");

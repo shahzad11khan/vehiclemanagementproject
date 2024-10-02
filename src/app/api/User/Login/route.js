@@ -84,17 +84,22 @@ export async function POST(Request) {
 
     // Extract email and password from request body
     const { email, password } = await Request.json();
+    console.log(email, password);
 
     // Validate JSON structure or required fields here (optional)
 
     // Attempt to find user by email in User model
-    let user = "";
-    if (user) {
-      user = await User.findOne({ email }).exec();
-    } else {
-      // If user not found in User model, check Company model
+    let user = null; // Initialize user as null
+
+    // Attempt to find the user in the User model
+    user = await User.findOne({ email }).exec();
+
+    // If not found in User model, check Company model
+    if (!user) {
       user = await Company.findOne({ email }).exec();
     }
+
+    console.log(user);
 
     // Handle missing credentials or invalid email
     if (!user) {
@@ -106,6 +111,8 @@ export async function POST(Request) {
 
     // Validate password using bcrypt
     const isPasswordValid = await bcryptjs.compare(password, user.password);
+    console.log(isPasswordValid);
+
     if (!isPasswordValid) {
       return NextResponse.json({
         error: "Invalid credentials",

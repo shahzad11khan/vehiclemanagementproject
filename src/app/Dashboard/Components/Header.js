@@ -9,7 +9,7 @@ import { getCompanyName } from "../../../../utils/storageUtils";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { API_URL_Company } from "../Components/ApiUrl/ApiUrls";
+import { API_URL_Company, API_URL_USER } from "../Components/ApiUrl/ApiUrls";
 
 import { isAuthenticated, clearAuthData } from "@/utils/verifytoken";
 import axios from "axios";
@@ -42,8 +42,17 @@ const Header = () => {
     try {
       const res = await axios.get(`${API_URL_Company}/${userId}`);
       const adminData = res.data.result;
-      console.log("profile", adminData);
-      setImagePreview(adminData.image);
+      console.log("Company Data", adminData);
+
+      if (adminData._id === userId) {
+        setImagePreview(adminData.image);
+      } else {
+        // Fetch user data from another table (assuming this endpoint exists)
+        const userRes = await axios.get(`${API_URL_USER}/${userId}`); // Fetch user data
+        const userData = userRes.data.result; // Adjust based on your API response structure
+        console.log("User Data", userData);
+        setImagePreview(userData.useravatar);
+      }
     } catch (error) {
       console.error(`Error: ${error}`);
     }
@@ -87,7 +96,7 @@ const Header = () => {
           Vehicle Management System{" "}
           {companyName ? (
             <div>
-              <p>Company Name:{companyName}</p>
+              <p>Company Name:{companyName === undefined ? "" : companyName}</p>
             </div>
           ) : (
             <p>No company selected.</p>
@@ -105,7 +114,7 @@ const Header = () => {
         <h6 className="mr-4 hidden md:block">
           {companyName ? (
             <div>
-              <p> {companyName}</p>
+              <p> {companyName === undefined ? "" : companyName}</p>
             </div>
           ) : (
             <p>No company selected.</p>

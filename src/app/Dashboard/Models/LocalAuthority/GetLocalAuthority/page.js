@@ -6,7 +6,7 @@ import Header from "../../../Components/Header";
 import Sidebar from "../../../Components/Sidebar";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { FaEdit, FaTrash } from "react-icons/fa";
+import { FaTrash } from "react-icons/fa";
 import AddLocalAuthorityModel from "../AddLocalAuthority/AddLocalAuthorityModel";
 import axios from "axios";
 import { API_URL_LocalAuthority } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
@@ -40,12 +40,12 @@ const Page = () => {
       name: "Actions",
       cell: (row) => (
         <div className="flex gap-2">
-          <button
+          {/* <button
             onClick={() => handleEdit(row._id)}
             className="text-blue-500 hover:text-blue-700"
           >
             <FaEdit />
-          </button>
+          </button> */}
           <button
             onClick={() => handleDelete(row._id)}
             className="text-red-500 hover:text-red-700"
@@ -139,10 +139,10 @@ const Page = () => {
     setFilteredData(filtered); // Update filtered data state
   }, [searchTerm, data, selectedCompanyName]);
 
-  const handleEdit = (id) => {
-    toast.info(`Edit item with ID: ${id}`);
-    // Implement your edit logic here
-  };
+  // const handleEdit = (id) => {
+  //   toast.info(`Edit item with ID: ${id}`);
+  //   // Implement your edit logic here
+  // };
 
   if (!isMounted) {
     return null; // Render nothing until the component is mounted

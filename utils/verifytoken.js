@@ -3,6 +3,7 @@
 export const getAuthData = () => {
   return {
     token: localStorage.getItem("token"),
+    userId: localStorage.getItem("userId"),
     Userusername: localStorage.getItem("Userusername"),
     UserActive: localStorage.getItem("UserActive"),
     companyName: localStorage.getItem("companyName"),

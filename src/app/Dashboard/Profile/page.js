@@ -309,12 +309,12 @@ const Page = () => {
                       </button>
                     </div>
                   </div>
-                  <button
+                  {/* <button
                     type="submit"
                     className="bg-blue-500 text-white px-4 py-4 rounded-lg shadow-md hover:bg-blue-600"
                   >
                     Update
-                  </button>
+                  </button> */}
                 </form>
               </div>
             </div>

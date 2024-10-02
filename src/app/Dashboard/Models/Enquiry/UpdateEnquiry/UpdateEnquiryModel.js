@@ -4,7 +4,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
-const AddEnquiryModal = ({ isOpen, onClose, fetchData }) => {
+const UpdateEnquiryModal = ({ isOpen, onClose, fetchData, enquiryId }) => {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -24,18 +24,33 @@ const AddEnquiryModal = ({ isOpen, onClose, fetchData }) => {
     adminCreatedBy: "",
     adminCompanyName: "",
   });
+
   useEffect(() => {
-    const storedCompanyName = localStorage.getItem("companyName"); // Replace with the actual key used in localStorage
+    // Fetch existing enquiry data if enquiryId is provided (for editing)
+    if (enquiryId) {
+      const fetchEnquiry = async () => {
+        try {
+          const { data } = await axios.get(`${API_URL_Enquiry}/${enquiryId}`);
+          console.log("Enquiry data:", data.result);
+          setFormData(data.result);
+        } catch (error) {
+          console.error("Error fetching enquiry data:", error);
+        }
+      };
+      fetchEnquiry();
+    }
+
+    const storedCompanyName = localStorage.getItem("companyName");
     if (storedCompanyName) {
       setFormData((prevData) => ({
         ...prevData,
         adminCompanyName: storedCompanyName,
       }));
     }
-  }, []); // Run only once when the component mounts
+  }, [enquiryId]); // Run when component mounts or enquiryId changes
 
-  const badgeTypeOptions = ["Standard", "Provisional", "Full"]; // Badge Type options
-  const localAuthorityOptions = ["Authority 1", "Authority 2", "Authority 3"]; // Local Authority options
+  const badgeTypeOptions = ["Standard", "Provisional", "Full"];
+  const localAuthorityOptions = ["Authority 1", "Authority 2", "Authority 3"];
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -48,16 +63,23 @@ const AddEnquiryModal = ({ isOpen, onClose, fetchData }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Send the form data to the backend using Axios
-      const response = await axios.post(`${API_URL_Enquiry}`, formData); // Replace with your API endpoint
-      console.log("Form submitted successfully:", response.data);
-      toast.success("Form submitted successfully");
-      fetchData();
-      onClose();
+      if (enquiryId) {
+        // If enquiryId is present, update the record
+        const response = await axios.put(
+          `${API_URL_Enquiry}/${enquiryId}`,
+          formData
+        );
+        console.log("Form submitted successfully:", response.data);
+        toast.success("Record updated successfully");
+        fetchData();
+        onClose();
+      }
     } catch (error) {
       console.error("Error submitting form:", error);
+      toast.error("Error submitting form");
     }
   };
+
   if (!isOpen) return null;
 
   return (
@@ -377,4 +399,4 @@ const AddEnquiryModal = ({ isOpen, onClose, fetchData }) => {
   );
 };
 
-export default AddEnquiryModal;
+export default UpdateEnquiryModal;

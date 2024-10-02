@@ -56,7 +56,11 @@ const Login = () => {
           localStorage.setItem("UserActive", UserActive);
           localStorage.setItem("companyName", companyName);
           localStorage.setItem("role", UserRole);
+          localStorage.setItem("userId", userId);
         }
+        localStorage.setItem("Userusername", Userusername);
+        localStorage.setItem("companyName", companyName);
+        localStorage.setItem("userId", userId);
 
         toast.success("Login successful");
         router.push("/Dashboard/Home");

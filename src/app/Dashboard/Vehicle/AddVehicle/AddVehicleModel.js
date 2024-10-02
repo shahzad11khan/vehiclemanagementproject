@@ -3,10 +3,14 @@ import { API_URL_Vehicle } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import axios from "axios";
 import { toast } from "react-toastify";
 import React, { useEffect, useState } from "react";
-import { fetchLocalAuth } from "../../Components/DropdownData/taxiFirm/taxiFirmService";
+import {
+  fetchLocalAuth,
+  fetchManfacturer,
+} from "../../Components/DropdownData/taxiFirm/taxiFirmService";
 
 const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
   const [local, setlocal] = useState([]);
+  const [manufacturer, setManufacturer] = useState([]);
   const [vehicleData, setVehicleData] = useState({
     manufacturer: "",
     model: "",
@@ -59,8 +63,10 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
     const fetchAuthData = async () => {
       try {
         const locall = await fetchLocalAuth(); // Await the result from fetchLocalAuth
+        const manufacturer = await fetchManfacturer(); // Await the result from fetchLocalAuth
         console.log(locall);
         setlocal(locall.Result); // Set the local state with the result
+        setManufacturer(manufacturer.Result); // Set the local state with the result
       } catch (error) {
         console.error("Error fetching local auth data:", error);
       }
@@ -151,15 +157,24 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
           <div className="grid grid-cols-3 md:grid-cols-3 gap-2">
             <div>
               <label className="block font-semibold">Manufacturer</label>
-              <input
-                type="text"
-                name="manufacturer"
+              <select
+                id="LocalAuth"
+                name="LocalAuth"
                 value={vehicleData.manufacturer}
                 onChange={handleChange}
-                className="w-full p-2 border border-gray-300 rounded"
-                placeholder="e.g., Toyota, Ford"
-                required
-              />
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+              >
+                {/* <option value="">Select Taxi Firm</option>
+                  <option value="firm1">Firm 1</option>
+                  <option value="firm2">Firm 2</option>
+                  Add more options as needed */}
+                <option value="">Select manufacturer</option>
+                {manufacturer.map((manufacturer) => (
+                  <option key={manufacturer._id} value={manufacturer.name}>
+                    {manufacturer.name}
+                  </option>
+                ))}
+              </select>
             </div>
             <div>
               <label className="block font-semibold">Model</label>

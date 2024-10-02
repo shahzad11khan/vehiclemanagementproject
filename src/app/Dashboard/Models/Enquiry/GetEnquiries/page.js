@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import AddEnquiryModel from "../AddEnquiry/AddEnquiryModel";
+import UpdateEnquiryModel from "../UpdateEnquiry/UpdateEnquiryModel";
 import { API_URL_Enquiry } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import { GetEnquiry } from "@/app/Dashboard/Components/ApiUrl/ShowApiDatas/ShowApiDatas";
 import { getCompanyName } from "@/utils/storageUtils";
@@ -64,6 +65,8 @@ const Page = () => {
   const [isMounted, setIsMounted] = useState(false);
   const [isOpenEnquiry, setIsOpenEnquiry] = useState(false);
   const [selectedCompanyName, setSelectedCompanyName] = useState("");
+  const [selectedUserId, setSelectedUserId] = useState(null);
+  const [isOpenVehicleUpdate, setIsOpenVehcleUpdate] = useState(false);
 
   // Ensure that the component only renders once it is mounted
   useEffect(() => {
@@ -132,16 +135,19 @@ const Page = () => {
           selectedCompanyName.toLowerCase();
 
       const usernameMatch =
-        item.name && item.name.toLowerCase().includes(searchTerm.toLowerCase());
+        item.firstName &&
+        item.firstName.toLowerCase().includes(searchTerm.toLowerCase());
 
       return companyMatch && usernameMatch;
     });
     setFilteredData(filtered); // Update filtered data state
   }, [searchTerm, data, selectedCompanyName]);
-  // const handleEdit = (id) => {
-  //   toast.info(`Edit item with ID: ${id}`);
-  //   // Implement your edit logic here
-  // };
+  const handleEdit = (id) => {
+    toast.info(`Edit item with ID: ${id}`);
+    setSelectedUserId(id); // Store the selected user ID
+    setIsOpenVehcleUpdate(true); // Open the modal
+    // Implement your edit logic here
+  };
 
   if (!isMounted) {
     return null; // Render nothing until the component is mounted
@@ -149,6 +155,10 @@ const Page = () => {
 
   const OpenEnquiryModle = () => {
     setIsOpenEnquiry(!isOpenEnquiry);
+  };
+  // Function to toggle modal visibility
+  const OpenVehicleUpdateModle = () => {
+    setIsOpenVehcleUpdate(!isOpenVehicleUpdate); // Close the modal
   };
 
   return (
@@ -191,6 +201,12 @@ const Page = () => {
         </div>
       </div>
       <AddEnquiryModel isOpen={isOpenEnquiry} onClose={OpenEnquiryModle} />
+      <UpdateEnquiryModel
+        isOpen={isOpenVehicleUpdate}
+        onClose={OpenVehicleUpdateModle}
+        fetchData={fetchData}
+        enquiryId={selectedUserId} //
+      />
     </>
   );
 };

@@ -1,16 +1,16 @@
 import { connect } from "@config/db.js";
 import Company from "@models/Company/Company.Model.js";
 import cloudinary from "@middlewares/cloudinary.js";
-import { catchAsyncErrors } from "@middlewares/catchAsyncErrors.js";
+// import { catchAsyncErrors } from "@middlewares/catchAsyncErrors.js";
 import { NextResponse } from "next/server";
 
 // PUT handler for updating driver details
-export async function PUT(request, { params }) {
+export async function PUT(request, context) {
   try {
     await connect(); // Connect to the database
 
-    const id = params.CompID; // Use the correct parameter name
-    const data = await request.formData();
+    const id = context.params.CompID; // Use the correct parameter name
+    const data = await request.formData(); // Get form data
 
     const userAvatar = data.get("imageUrl");
     let Driveravatar = "";
@@ -30,38 +30,47 @@ export async function PUT(request, { params }) {
       });
     };
 
-    // Handle user avatar upload or use existing URL
-    if (userAvatar) {
+    // Find the driver by ID
+    const driver = await Company.findById(id);
+    if (!driver) {
+      return NextResponse.json({ error: "Driver not found", status: 404 });
+    }
+
+    // Handle user avatar upload if a new image is provided, otherwise retain the old image
+    if (userAvatar && userAvatar.size > 0) {
+      // Check if a file is uploaded
       const uploadResponse = await uploadToCloudinary(userAvatar);
       if (uploadResponse) {
         Driveravatar = uploadResponse.secure_url;
         DriveravatarId = uploadResponse.public_id;
       }
+    } else {
+      // Retain existing avatar if no new image is uploaded
+      Driveravatar = driver.Driveravatar;
+      DriveravatarId = driver.DriveravatarId;
     }
 
-    // Convert FormData to a plain object
+    // Convert FormData to a plain object and update driver properties
     const formDataObject = {};
     for (const [key, value] of data.entries()) {
       formDataObject[key] = value;
     }
 
-    // Find the driver by ID
-    const driver = await Company.findById(id);
-    if (!driver) {
-      return NextResponse.json({ error: "User not found", status: 404 });
+    // Update driver properties directly
+    driver.Driveravatar = Driveravatar;
+    driver.DriveravatarId = DriveravatarId;
+
+    // Update other properties
+    for (const key in formDataObject) {
+      if (formDataObject.hasOwnProperty(key)) {
+        driver[key] = formDataObject[key];
+      }
     }
 
-    // Update driver properties with values from formDataObject or retain existing values
-    Object.assign(driver, {
-      ...formDataObject,
-      Driveravatar: Driveravatar || driver.Driveravatar,
-      DriveravatarId: DriveravatarId || driver.DriveravatarId,
-    });
-
-    await driver.save();
+    await driver.save(); // Save updated driver details
 
     return NextResponse.json({
-      message: "Driver details updated successfully",
+      message: "Company details updated successfully",
       driver,
       status: 200,
     });
@@ -75,21 +84,31 @@ export async function PUT(request, { params }) {
 }
 
 // GET handler for retrieving a specific driver by ID
-export const GET = catchAsyncErrors(async (request, { params }) => {
-  await connect(); // Connect to the database
+export async function GET(request, context) {
+  try {
+    // Connect to the database
+    await connect();
 
-  const id = params.CompID; // Ensure you're using the correct parameter name
-  console.log("CompID ID:", id);
+    // Extract the product ID from the request parameters
+    const id = context.params.CompID;
+    console.log(id);
 
-  // Find the driver by ID
-  const Find_Driver = await Company.findById(id);
-  if (!Find_Driver) {
-    return NextResponse.json({ result: "No Driver Found", status: 404 });
+    // Find the product by ID
+    const Find_User = await Company.findById(id);
+
+    // Check if the product exists
+    if (!Find_User) {
+      return NextResponse.json({ result: "No User Found", status: 404 });
+    } else {
+      // Return the found product as a JSON response
+      return NextResponse.json({ result: Find_User, status: 200 });
+    }
+  } catch (error) {
+    console.error("Error retrieving product:", error);
+    // Return an error response
+    return NextResponse.json({ message: "Internal Server Error", status: 500 });
   }
-
-  // Return the found driver as a JSON response
-  return NextResponse.json({ result: Find_Driver, status: 200 });
-});
+}
 
 // DELETE handler for deleting a driver and associated image
 export const DELETE = async (request, { params }) => {

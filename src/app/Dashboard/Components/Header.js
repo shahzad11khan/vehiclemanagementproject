@@ -1,6 +1,6 @@
 "use client";
 // import axios from "axios";
-import Image from "next/image";
+// import Image from "next/image";
 import Link from "next/link";
 import React, { useState, useCallback, useEffect } from "react";
 import { CgProfile } from "react-icons/cg";
@@ -9,13 +9,45 @@ import { getCompanyName } from "../../../../utils/storageUtils";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { API_URL_Company } from "../Components/ApiUrl/ApiUrls";
+
 import { isAuthenticated, clearAuthData } from "@/utils/verifytoken";
+import axios from "axios";
 
 const Header = () => {
   const [companyName, setCompanyName] = useState("");
   const router = useRouter();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  // const [imagePreview, setImagePreview] = useState("");
+  const [imagePreview, setImagePreview] = useState("");
+
+  useEffect(() => {
+    // Check if window is defined (i.e., the code is running on the client-side)
+    if (typeof window !== "undefined") {
+      // Check if user is authenticated
+      if (!isAuthenticated()) {
+        router.push("/"); // Redirect to login page if not authenticated
+        return;
+      }
+
+      const userId = localStorage.getItem("userId");
+      console.log(userId);
+
+      if (userId) {
+        showalladmins(userId);
+      }
+    }
+  }, []);
+
+  const showalladmins = async (userId) => {
+    try {
+      const res = await axios.get(`${API_URL_Company}/${userId}`);
+      const adminData = res.data.result;
+      console.log("profile", adminData);
+      setImagePreview(adminData.image);
+    } catch (error) {
+      console.error(`Error: ${error}`);
+    }
+  };
   useEffect(() => {
     const companyNameFromStorage = getCompanyName();
     if (companyNameFromStorage) {
@@ -55,7 +87,7 @@ const Header = () => {
           Vehicle Management System{" "}
           {companyName ? (
             <div>
-              <p>Company Name: {companyName}</p>
+              <p>Company Name:{companyName}</p>
             </div>
           ) : (
             <p>No company selected.</p>
@@ -73,21 +105,20 @@ const Header = () => {
         <h6 className="mr-4 hidden md:block">
           {companyName ? (
             <div>
-              <p>Company Name: {companyName}</p>
+              <p> {companyName}</p>
             </div>
           ) : (
             <p>No company selected.</p>
           )}
         </h6>
         <div className="relative">
-          <Image
-            src={"/uploads/" + "imagePreview"}
-            alt="Profile"
+          <div
             className="h-8 w-8 rounded-full cursor-pointer"
-            height={40}
-            width={40}
             onClick={toggleDropdown}
-          />
+          >
+            <img src={imagePreview} alt="Profile" height={40} width={40} />
+          </div>
+
           {/* Dropdown */}
           {typeof window !== "undefined" && isDropdownOpen && (
             <div className="absolute right-0 mt-2 flex flex-col bg-white rounded shadow-lg z-10 text-black">

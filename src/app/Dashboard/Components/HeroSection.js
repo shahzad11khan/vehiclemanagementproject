@@ -39,14 +39,14 @@ const HeroSection = () => {
             </span>
           </li>
           <li>
-            <strong className="text-xl"> $3468.95</strong>
+            <strong className="text-xl"> $0.0</strong>
             <span className="ml-1 text-sm block">
               {" "}
               active customers in total amount
             </span>
           </li>
           <li>
-            <strong className="text-xl"> 82</strong>
+            <strong className="text-xl">0</strong>
             <span className="ml-1 text-sm block"> active cars</span>
           </li>
           <button className="mt-4 px-4 py-2  bg-rose-400  text-white rounded-md shadow">

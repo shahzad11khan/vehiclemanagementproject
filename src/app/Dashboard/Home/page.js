@@ -17,9 +17,29 @@ import {
   GetVehicle,
   GetManufacturer,
   GetPayment,
+  GetCompany,
 } from "../Components/ApiUrl/ShowApiDatas/ShowApiDatas.js";
+import { getAuthData, isAuthenticated } from "@/utils/verifytoken";
+
 const Page = () => {
   const router = useRouter();
+  const [superadmin, setsuperadmin] = useState(""); // State to track which dropdown is open
+  const [companyname, setcompanyname] = useState(""); // State to track which dropdown is open
+
+  useEffect(() => {
+    if (isAuthenticated()) {
+      const authData = getAuthData();
+      // console.log("Authenticated user data:", authData);
+      // You can access individual pieces like this:
+      console.log("Username:", authData.Userusername);
+      console.log("Company Name:", authData.companyName);
+      console.log("Role:", authData.role);
+      setsuperadmin(authData.role);
+      setcompanyname(authData.companyName);
+    } else {
+      console.log("User is not authenticated");
+    }
+  }, []);
 
   Chart.register(...registerables);
   const [counts, setCounts] = useState({
@@ -27,6 +47,7 @@ const Page = () => {
     driverCount: 0,
     vehicleCount: 0,
     Manufacturer: 0,
+    Companies: 0,
     Payment: 0,
   });
   const fetchCounts = useCallback(async () => {
@@ -37,12 +58,14 @@ const Page = () => {
         { count: vehicleCount },
         { count: Manufacturer },
         { count: Payment },
+        { count: Companies },
       ] = await Promise.all([
         GetUsers(),
         GetDriver(),
         GetVehicle(),
         GetManufacturer(),
         GetPayment(),
+        GetCompany(),
       ]);
 
       setCounts({
@@ -51,6 +74,7 @@ const Page = () => {
         vehicleCount,
         Manufacturer,
         Payment,
+        Companies,
       });
     } catch (error) {
       console.log(`Failed to fetch data: ${error}`);
@@ -78,8 +102,8 @@ const Page = () => {
                     }}
                   />
                 ),
-                title: "Companies",
-                count: counts.userCount,
+                title: superadmin === "superadmin" ? "Companies" : companyname,
+                count: superadmin === "superadmin" ? counts.Companies : 0, // Count is 0 if not superadmin
                 colorx: {
                   background: "#E64B87",
                   // replace with your desired hex colors

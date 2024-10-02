@@ -70,7 +70,15 @@ const Header = () => {
 
       {/* Right side: Profile and Dropdown */}
       <div className="flex items-center">
-        <h6 className="mr-4 hidden md:block">Shahzad Khan</h6>
+        <h6 className="mr-4 hidden md:block">
+          {companyName ? (
+            <div>
+              <p>Company Name: {companyName}</p>
+            </div>
+          ) : (
+            <p>No company selected.</p>
+          )}
+        </h6>
         <div className="relative">
           <Image
             src={"/uploads/" + "imagePreview"}
@@ -84,7 +92,7 @@ const Header = () => {
           {typeof window !== "undefined" && isDropdownOpen && (
             <div className="absolute right-0 mt-2 flex flex-col bg-white rounded shadow-lg z-10 text-black">
               <ul className="">
-                <Link href="/AdminDashboard/Profile">
+                <Link href="/Dashboard/Profile">
                   <li className="px-4 py-2 hover:bg-custom-blue cursor-pointer rounded-lg flex items-center">
                     <CgProfile className="mr-2" />
                     <span className="hidden md:inline">Profile</span>

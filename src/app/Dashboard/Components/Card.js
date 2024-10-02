@@ -1,5 +1,5 @@
 // components/Card.js
-import Image from "next/image";
+// import Image from "next/image";
 import Link from "next/link";
 
 const Card = ({ image, company }) => {
@@ -14,7 +14,7 @@ const Card = ({ image, company }) => {
     <div className="bg-white shadow-lg rounded-lg overflow-hidden">
       <Link href="/Dashboard/Home">
         <div onClick={handleCardClick}>
-          <Image
+          <img
             src={image}
             alt={company}
             width={500}

@@ -74,6 +74,9 @@ const vehicleSchema = new mongoose.Schema(
     warrantyInfo: {
       type: String,
     },
+    LocalAuthority: {
+      type: String,
+    },
     isActive: {
       type: Boolean,
       default: false,

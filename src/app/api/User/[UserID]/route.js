@@ -2,6 +2,7 @@ import { connect } from "@config/db.js";
 import User from "@models/User/User.Model.js";
 import cloudinary from "@middlewares/cloudinary.js";
 import { NextResponse } from "next/server";
+import bcrypt from "bcryptjs";
 
 export async function PUT(request, context) {
   try {
@@ -11,43 +12,34 @@ export async function PUT(request, context) {
     const data = await request.formData();
 
     const userAvatar = data.get("useravatar");
-    const companyAvatar = data.get("companyavatar");
 
     let userAvatarUrl = "";
     let userPublicId = "";
-    let companyAvatarUrl = "";
-    let companyPublicId = "";
 
-    // Helper function to upload images to Cloudinary
-    const uploadToCloudinary = async (file) => {
-      if (!file) return null; // Return null if no file
-      const buffer = Buffer.from(await file.arrayBuffer());
-      return new Promise((resolve, reject) => {
-        cloudinary.v2.uploader
-          .upload_stream({ resource_type: "auto" }, (error, result) => {
-            if (error) return reject(error); // Reject on error
-            resolve(result); // Resolve with the upload result
-          })
-          .end(buffer);
+    // Check if the user avatar is an object and has a valid name (indicating it's a file)
+    if (typeof userAvatar === "object" && userAvatar.name) {
+      const byteData = await userAvatar.arrayBuffer();
+      const buffer = Buffer.from(byteData);
+
+      // Upload the new image to Cloudinary
+      const uploadResponse = await new Promise((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream(
+          { resource_type: "auto" },
+          (error, result) => {
+            if (error) {
+              reject(error);
+            } else {
+              resolve(result);
+            }
+          }
+        );
+
+        // Write buffer to the upload stream
+        uploadStream.end(buffer);
       });
-    };
 
-    // Handle user avatar upload or use existing URL
-    if (userAvatar) {
-      const uploadResponse = await uploadToCloudinary(userAvatar);
-      if (uploadResponse) {
-        userAvatarUrl = uploadResponse.secure_url;
-        userPublicId = uploadResponse.public_id;
-      }
-    }
-
-    // Handle company avatar upload or use existing URL
-    if (companyAvatar) {
-      const uploadResponse = await uploadToCloudinary(companyAvatar);
-      if (uploadResponse) {
-        companyAvatarUrl = uploadResponse.secure_url;
-        companyPublicId = uploadResponse.public_id;
-      }
+      userAvatarUrl = uploadResponse.secure_url;
+      userPublicId = uploadResponse.public_id;
     }
 
     const formDataObject = {};
@@ -56,38 +48,94 @@ export async function PUT(request, context) {
     }
 
     const {
-      username,
+      title,
+      firstName,
+      lastName,
       email,
+      tel1,
+      tel2,
+      postcode,
+      postalAddress,
+      permanentAddress,
+      city,
+      county,
+      accessLevel,
+      dateOfBirth,
+      position,
+      reportsTo,
+      username,
       password,
+      passwordExpires,
+      passwordExpiresEvery,
       confirmpassword,
       companyname,
-      role,
+      CreatedBy,
       isActive,
+      role,
     } = formDataObject;
+
     const user = await User.findById(id);
 
     if (!user) {
       return NextResponse.json({ error: "User not found", status: 404 });
     }
 
-    user.username = username || user.username;
-    user.email = email || user.email;
-    user.password = password || user.password;
-    user.confirmpassword = confirmpassword || user.confirmpassword;
-    user.companyname = companyname || user.companyname;
-    user.role = role || user.role;
-    user.isActive = isActive || user.isActive;
+    console.log(user.password, user.confirmpassword);
 
-    if (userAvatarUrl) {
+    // Update user fields if provided
+    if (password) {
+      // Hash the new password before updating
+      const salt = await bcrypt.genSalt(10);
+      user.password = await bcrypt.hash(password, salt);
+    } else {
+      // Keep the existing password if no new password is provided
+      user.password = user.password;
+    }
+    user.title = title || user.title;
+    user.firstName = firstName || user.firstName;
+    user.lastName = lastName || user.lastName;
+    user.email = email || user.email;
+    user.tel1 = tel1 || user.tel1;
+    user.tel2 = tel2 || user.tel2;
+    user.postcode = postcode || user.postcode;
+    user.postalAddress = postalAddress || user.postalAddress;
+    user.permanentAddress = permanentAddress || user.permanentAddress;
+    user.city = city || user.city;
+    user.county = county || user.county;
+    user.accessLevel = accessLevel || user.accessLevel;
+    user.dateOfBirth = dateOfBirth || user.dateOfBirth;
+    user.position = position || user.position;
+    user.reportsTo = reportsTo || user.reportsTo;
+    user.username = username || user.username;
+
+    user.confirmpassword = confirmpassword || user.confirmpassword;
+    user.passwordExpires = passwordExpires || user.passwordExpires;
+    user.passwordExpiresEvery =
+      passwordExpiresEvery || user.passwordExpiresEvery;
+    user.companyname = companyname || user.companyname;
+    user.CreatedBy = CreatedBy || user.CreatedBy;
+    user.isActive = isActive || user.isActive;
+    user.role = role || user.role;
+
+    // Handle avatar update: remove old avatar from Cloudinary and update with new one if uploaded
+    if (userAvatarUrl && userPublicId) {
+      if (user.userPublicId) {
+        try {
+          // Delete old avatar from Cloudinary if it exists
+          await cloudinary.uploader.destroy(user.userPublicId);
+          console.log("Old avatar deleted from Cloudinary.");
+        } catch (error) {
+          console.error("Failed to delete old image from Cloudinary:", error);
+        }
+      }
+
+      // Update user with new avatar details
       user.useravatar = userAvatarUrl;
       user.userPublicId = userPublicId;
+      console.log("New avatar uploaded and updated.");
     }
 
-    if (companyAvatarUrl) {
-      user.companyavatar = companyAvatarUrl;
-      user.companyPublicId = companyPublicId;
-    }
-
+    // Save updated user details
     await user.save();
 
     return NextResponse.json({

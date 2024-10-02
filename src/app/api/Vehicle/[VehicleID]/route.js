@@ -1,20 +1,16 @@
 import { connect } from "@config/db.js";
 import Vehicle from "@models/Vehicle/Vehicle.Model.js";
-import { catchAsyncErrors } from "@middlewares/catchAsyncErrors.js";
+// import { catchAsyncErrors } from "@middlewares/catchAsyncErrors.js";
 import { NextResponse } from "next/server";
 
-export async function PUT(request, { params }) {
+export async function PUT(request, context) {
   try {
     await connect(); // Connect to the database
 
-    const id = params.VehicleID;
-    const data = await request.formData();
+    const id = context.params.VehicleID;
+    const formDataObject = await request.json(); // Parse JSON data from the request body
 
-    const formDataObject = {};
-    for (const [key, value] of data.entries()) {
-      formDataObject[key] = value;
-    }
-
+    // Destructure values from formDataObject with defaults
     const {
       manufacturer,
       model,
@@ -26,7 +22,7 @@ export async function PUT(request, { params }) {
       drivetrain,
       exteriorColor,
       interiorColor,
-      dimensions,
+      dimensions = {}, // Default to an empty object if dimensions are not provided
       passengerCapacity,
       cargoCapacity,
       horsepower,
@@ -39,6 +35,9 @@ export async function PUT(request, { params }) {
       price,
       registrationNumber,
       warrantyInfo,
+      isActive,
+      adminCreatedBy,
+      adminCompanyName,
     } = formDataObject;
 
     const vehicle = await Vehicle.findById(id);
@@ -59,6 +58,7 @@ export async function PUT(request, { params }) {
     vehicle.exteriorColor = exteriorColor || vehicle.exteriorColor;
     vehicle.interiorColor = interiorColor || vehicle.interiorColor;
 
+    // Update dimensions only if provided
     vehicle.dimensions = {
       height: dimensions.height || vehicle.dimensions?.height,
       width: dimensions.width || vehicle.dimensions?.width,
@@ -74,11 +74,15 @@ export async function PUT(request, { params }) {
     vehicle.fuelEfficiency = fuelEfficiency || vehicle.fuelEfficiency;
     vehicle.safetyFeatures = safetyFeatures || vehicle.safetyFeatures;
     vehicle.techFeatures = techFeatures || vehicle.techFeatures;
+    vehicle.isActive = isActive || vehicle.isActive;
+    vehicle.adminCreatedBy = adminCreatedBy || vehicle.adminCreatedBy;
+    vehicle.adminCompanyName = adminCompanyName || vehicle.adminCompanyName;
     vehicle.price = price || vehicle.price;
     vehicle.registrationNumber =
       registrationNumber || vehicle.registrationNumber;
     vehicle.warrantyInfo = warrantyInfo || vehicle.warrantyInfo;
 
+    // Save the updated vehicle
     await vehicle.save();
 
     return NextResponse.json({
@@ -89,32 +93,37 @@ export async function PUT(request, { params }) {
   } catch (error) {
     console.error("Error updating vehicle details:", error);
     return NextResponse.json({
-      error: "Failed to update vehicle details",
+      error: error.message || "Failed to update vehicle details",
       status: 500,
     });
   }
 }
+// GET handler for retrieving a specific product by ID
+export async function GET(request, context) {
+  try {
+    // Connect to the database
+    await connect();
 
-// GET handler for retrieving a specific driver by ID
-export const GET = catchAsyncErrors(async (request, { params }) => {
-  // Connect to the database
-  await connect();
+    // Extract the product ID from the request parameters
+    const id = context.params.VehicleID;
+    console.log(id);
 
-  // Extract the Driver ID from the request parameters
-  const id = params.VehicleID;
-  console.log(id);
+    // Find the product by ID
+    const Find_User = await Vehicle.findById(id);
 
-  // Find the driver by ID
-  const Find_Vehicle = await Driver.findById(id);
-
-  // Check if the driver exists
-  if (!Find_Vehicle) {
-    return NextResponse.json({ result: "No Vehicle Found", status: 404 });
+    // Check if the product exists
+    if (!Find_User) {
+      return NextResponse.json({ result: "No User Found", status: 404 });
+    } else {
+      // Return the found product as a JSON response
+      return NextResponse.json({ result: Find_User, status: 200 });
+    }
+  } catch (error) {
+    console.error("Error retrieving product:", error);
+    // Return an error response
+    return NextResponse.json({ message: "Internal Server Error", status: 500 });
   }
-
-  // Return the found driver as a JSON response
-  return NextResponse.json({ result: Find_Vehicle, status: 200 });
-});
+}
 
 // DELETE handler for deleting a vehicle and associated image
 export const DELETE = async (request, { params }) => {

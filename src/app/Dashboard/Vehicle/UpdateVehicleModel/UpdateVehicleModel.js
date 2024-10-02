@@ -3,10 +3,8 @@ import { API_URL_Vehicle } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import axios from "axios";
 import { toast } from "react-toastify";
 import React, { useEffect, useState } from "react";
-import { fetchLocalAuth } from "../../Components/DropdownData/taxiFirm/taxiFirmService";
 
-const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
-  const [local, setlocal] = useState([]);
+const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
   const [vehicleData, setVehicleData] = useState({
     manufacturer: "",
     model: "",
@@ -41,33 +39,32 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
     adminCreatedBy: "",
     adminCompanyName: "",
   });
+
   // Retrieve company name from local storage
-
   useEffect(() => {
-    // Get the company name from localStorage (ensure the key is correct)
     const storedCompanyName = localStorage.getItem("companyName");
-
     if (storedCompanyName) {
-      // Update vehicleData state with the adminCompanyName from localStorage
       setVehicleData((prevData) => ({
         ...prevData,
         adminCompanyName: storedCompanyName,
       }));
     }
 
-    // Fetch local auth data
-    const fetchAuthData = async () => {
-      try {
-        const locall = await fetchLocalAuth(); // Await the result from fetchLocalAuth
-        console.log(locall);
-        setlocal(locall.Result); // Set the local state with the result
-      } catch (error) {
-        console.error("Error fetching local auth data:", error);
+    // Fetch the existing vehicle data if updating
+    const fetchVehicleData = async () => {
+      if (vehicleId) {
+        try {
+          const response = await axios.get(`${API_URL_Vehicle}/${vehicleId}`);
+          setVehicleData(response.data.result);
+        } catch (error) {
+          console.error("Error fetching vehicle data:", error);
+          toast.error("Failed to fetch vehicle data.");
+        }
       }
     };
 
-    fetchAuthData(); // Call the async function to fetch data
-  }, []); // Run only once when the component mounts
+    fetchVehicleData();
+  }, [vehicleId]); // Fetch data when vehicleId changes
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -90,52 +87,21 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(vehicleData);
     try {
-      const response = await axios.post(`${API_URL_Vehicle}`, vehicleData);
-      console.log("Vehicle data submitted successfully:", response.data);
+      const response = await axios.put(
+        `${API_URL_Vehicle}/${vehicleId}`,
+        vehicleData
+      );
+      console.log("Vehicle data updated successfully:", response.data);
       toast.success(response.data.message);
       fetchData();
       onClose();
-      setVehicleData({
-        manufacturer: "",
-        model: "",
-        year: "",
-        type: "",
-        engineType: "",
-        fuelType: "",
-        transmission: "",
-        drivetrain: "",
-        exteriorColor: "",
-        interiorColor: "",
-        weight: "",
-        dimensions: {
-          height: "",
-          width: "",
-          length: "",
-        },
-        passengerCapacity: "",
-        LocalAuthority: "",
-        cargoCapacity: "",
-        horsepower: "",
-        torque: "",
-        acceleration: "",
-        topSpeed: "",
-        fuelEfficiency: "",
-        safetyFeatures: "",
-        techFeatures: "",
-        towingCapacity: "",
-        price: "",
-        registrationNumber: "",
-        warrantyInfo: "",
-      });
-      // Handle success (you might want to clear the form, close the modal, etc.)
     } catch (error) {
-      console.error("Error submitting vehicle data:", error);
-      // Handle error (show an error message to the user, etc.)
+      console.error("Error updating vehicle data:", error);
+      toast.error("Failed to update vehicle data.");
     }
-    // Submit logic here
   };
+
   if (!isOpen) return null;
 
   return (
@@ -146,7 +112,6 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
           className="max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-lg"
         >
           <h2 className="text-2xl font-bold mb-6">Vehicle Form</h2>
-
           {/* Manufacturer and Model */}
           <div className="grid grid-cols-3 md:grid-cols-3 gap-2">
             <div>
@@ -186,7 +151,6 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
               />
             </div>
           </div>
-
           {/* Year and Type/Body Style */}
           <div className="grid grid-cols-3 md:grid-cols-3 gap-2 mt-4">
             <div className="">
@@ -238,7 +202,6 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
               </select>
             </div>
           </div>
-
           {/* Engine Type, Fuel Type, Transmission, Drivetrain */}
           <div className="grid grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-2 mt-4">
             <div>
@@ -296,47 +259,47 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
               />
             </div>
           </div>
-
           {/* Colors */}
           <div className="grid grid-cols-3 md:grid-cols-3 gap-2 mt-4"></div>
-
           {/* Dimensions */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mt-4">
             <div>
-              <label className="block font-semibold">Height</label>
+              <label className="block font-semibold">Height (in cm)</label>
               <input
-                type="text"
+                type="number"
                 name="height"
                 value={vehicleData.dimensions.height}
                 onChange={handleDimensionChange}
                 className="w-full p-2 border border-gray-300 rounded"
                 required
+                min="0" // optional: prevents negative input
               />
             </div>
             <div>
-              <label className="block font-semibold">Width</label>
+              <label className="block font-semibold">Width (in cm)</label>
               <input
-                type="text"
+                type="number"
                 name="width"
                 value={vehicleData.dimensions.width}
                 onChange={handleDimensionChange}
                 className="w-full p-2 border border-gray-300 rounded"
                 required
+                min="0" // optional: prevents negative input
               />
             </div>
             <div>
-              <label className="block font-semibold">Length</label>
+              <label className="block font-semibold">Length (in cm)</label>
               <input
-                type="text"
+                type="number"
                 name="length"
                 value={vehicleData.dimensions.length}
                 onChange={handleDimensionChange}
                 className="w-full p-2 border border-gray-300 rounded"
                 required
+                min="0" // optional: prevents negative input
               />
             </div>
           </div>
-
           {/* Other Fields */}
           <div className="grid grid-cols-3 md:grid-cols-3 gap-2 mt-4">
             <div>
@@ -373,7 +336,6 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
               />
             </div>
           </div>
-
           {/* Horsepower and Performance */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mt-4">
             <div>
@@ -412,7 +374,6 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
               />
             </div>
           </div>
-
           {/* Safety and Tech Features */}
           <div className="grid grid-cols-3 md:grid-cols-3 gap-2 mt-4">
             <div>
@@ -450,7 +411,6 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
               />
             </div>
           </div>
-
           {/* Towing Capacity, Price, Registration Number */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mt-4">
             <div>
@@ -475,35 +435,25 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                 required
               />
             </div>
-
-            <div>
-              <label
-                htmlFor="taxiFirm"
-                className="text-sm font-medium text-gray-700"
-              >
-                Taxi Localauthority:
-              </label>
+            <div className="">
+              <label className="block font-semibold">Local Authority</label>
               <select
-                id="LocalAuth"
-                name="LocalAuth"
+                name="LocalAuthority"
                 value={vehicleData.LocalAuthority}
                 onChange={handleChange}
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                className="w-full p-2 border border-gray-300 rounded"
+                required
               >
-                {/* <option value="">Select Taxi Firm</option>
-                  <option value="firm1">Firm 1</option>
-                  <option value="firm2">Firm 2</option>
-                  Add more options as needed */}
-                <option value="">Select Localauthority Firm</option>
-                {local.map((local) => (
-                  <option key={local._id} value={local.name}>
-                    {local.name}
-                  </option>
-                ))}
+                <option value="" disabled>
+                  Select type
+                </option>
+                <option value="Sedan">A</option>
+                <option value="SUV">B</option>
+                <option value="Truck">C</option>
+                <option value="Coupe">D</option>
               </select>
             </div>
           </div>
-
           {/* Warranty Information */}
           <div className="mt-4">
             <label className="block font-semibold">Warranty Information</label>
@@ -516,7 +466,6 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
               required
             />
           </div>
-
           {/* Submit Button */}
           <div className="mt-6">
             <button
@@ -540,4 +489,4 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
   );
 };
 
-export default AddVehicleModel;
+export default UpdateVehicleModel;

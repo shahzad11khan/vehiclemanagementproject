@@ -8,12 +8,10 @@ import {
   fetchBadge,
   fetchInsurence,
   fetchPayment,
-  fetchLocalAuth,
 } from "../../Components/DropdownData/taxiFirm/taxiFirmService";
 
-const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
+const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, userId }) => {
   const [formData, setFormData] = useState({
-    title: "",
     firstName: "",
     lastName: "",
     email: "",
@@ -42,125 +40,128 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
     isActive: false,
     imageName: "",
     imageFile: null,
-    LocalAuth: "",
     pay: "",
     adminCreatedBy: "",
     adminCompanyName: "",
   });
 
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(false);
+  const [imagePreview, setImagePreview] = useState(null);
   const [taxiFirms, setTaxiFirms] = useState([]);
-  const [badge, setbadge] = useState([]);
-  const [insurence, setinsurence] = useState([]);
-  const [payment, setpayment] = useState([]);
-  const [local, setlocal] = useState([]);
+  const [badge, setBadge] = useState([]);
+  const [insurance, setInsurance] = useState([]);
+  const [payment, setPayment] = useState([]);
 
   // Retrieve company name from local storage
   useEffect(() => {
-    const storedCompanyName = localStorage.getItem("companyName"); // Replace with the actual key used in localStorage
+    const storedCompanyName = localStorage.getItem("companyName");
     if (storedCompanyName) {
       setFormData((prevData) => ({
         ...prevData,
         adminCompanyName: storedCompanyName,
       }));
     }
-  }, []); // Run only once when the component mounts
+  }, []);
+
+  // Fetch driver data
+  const fetchData = async () => {
+    try {
+      const res = await axios.get(`${API_URL_Driver}/${userId}`);
+      const adminData = res.data.result;
+
+      console.log("Fetched admin data:", adminData); // Debugging the API response
+
+      setFormData((prevData) => ({
+        ...prevData,
+        ...adminData, // Merge fetched data into formData
+      }));
+
+      setImagePreview(adminData.imageFile || null); // Show avatar preview
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+      toast.error("Failed to fetch user data."); // Show toast on error
+    }
+  };
 
   useEffect(() => {
+    if (userId) {
+      fetchData();
+    }
+
+    // Load dropdown data
     const loadTaxiFirms = async () => {
       try {
-        const data = await fetchTaxiFirms(); // Call the service function to fetch data
-        const badge = await fetchBadge(); // Call the service function to fetch data
-        const insurance = await fetchInsurence(); // Call the service function to fetch data
-        const payment = await fetchPayment(); // Call the service function to fetch data
-        const locall = await fetchLocalAuth(); // Call the service function to fetch data
-        // console.log(payment.Result);
-        setTaxiFirms(data.result);
-        setbadge(badge.result);
-        setinsurence(insurance.Result);
-        setpayment(payment.Result);
-        setlocal(locall.Result);
+        const [taxiFirmData, badgeData, insuranceData, paymentData] =
+          await Promise.all([
+            fetchTaxiFirms(),
+            fetchBadge(),
+            fetchInsurence(),
+            fetchPayment(),
+          ]);
+
+        setTaxiFirms(taxiFirmData.result);
+        setBadge(badgeData.result);
+        setInsurance(insuranceData.Result);
+        setPayment(paymentData.Result);
       } catch (error) {
         console.error("Error loading taxi firms:", error);
+        toast.error("Failed to load dropdown data."); // Show toast on error
       }
     };
 
     loadTaxiFirms();
-  }, []);
+  }, [userId]);
 
   const handleChange = (e) => {
     const { name, value, type, checked, files } = e.target;
-    setFormData({
-      ...formData,
+    setFormData((prevData) => ({
+      ...prevData,
       [name]:
         type === "checkbox" ? checked : type === "file" ? files[0] : value,
-    });
+    }));
+
+    // If the uploaded file is an image, set the image preview
+    if (type === "file" && files.length) {
+      const file = files[0];
+      setImagePreview(URL.createObjectURL(file)); // Create a preview URL for the uploaded image
+    }
   };
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formDataToSend = new FormData();
-    Object.keys(formData).forEach((key) => {
-      formDataToSend.append(key, formData[key]);
+
+    // Append all form fields to the FormData object
+    Object.entries(formData).forEach(([key, value]) => {
+      formDataToSend.append(key, value);
     });
+
+    // Add the user avatar file to FormData
+    if (formData.imageFile) {
+      formDataToSend.append("useravatar", formData.imageFile);
+    }
+
     try {
-      // const response = await axios.post(`${API_URL_Driver}`, formData);
-      const response = await axios.post(`${API_URL_Driver}`, formDataToSend, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+      const response = await fetch(`${API_URL_Driver}/${userId}`, {
+        method: "PUT", // Use PUT for updates
+        body: formDataToSend,
       });
 
-      // console.log(response.data);
-      if (response.data.success) {
-        toast.success("data successfully saved");
-        setSuccess(true);
-        fetchData();
-        onClose();
-        setFormData({
-          title: "",
-          firstName: "",
-          lastName: "",
-          email: "",
-          tel1: "",
-          tel2: "",
-          postcode: "",
-          postalAddress: "",
-          permanentAddress: "",
-          city: "",
-          county: "",
-          accessLevel: "",
-          dateOfBirth: "",
-          passwordExpires: "",
-          passwordExpiresEvery: "",
-          licenseNumber: "",
-          niNumber: "",
-          driverNumber: "",
-          taxiFirm: "",
-          badgeType: "",
-          insurance: "",
-          startDate: "",
-          driverRent: "",
-          licenseExpiryDate: "",
-          taxiBadgeDate: "",
-          rentPaymentCycle: "",
-          isActive: false,
-          pay: "",
-          imageFile: null,
-          imageNotes: "",
-        });
-      } else {
-        toast.warn("Data not saved");
+      if (!response.ok) {
+        throw new Error("Update failed"); // Handle unsuccessful response
       }
-      // Handle success or trigger some UI feedback
-    } catch (err) {
-      setError(err.response?.data?.message || "Failed to add Driver");
-    } finally {
-      setLoading(false);
+
+      const data = await response.json();
+      onClose(); // Close the modal
+      console.log("Update successful:", data);
+      toast.success("Driver updated successfully!"); // Show success toast
+      fetchDataa(); // Refresh data
+    } catch (error) {
+      console.error("Error updating user:", error);
+      // toast.error("Failed to update driver."); // Show toast on error
     }
   };
+
   if (!isOpen) return null;
 
   return (
@@ -169,10 +170,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
         <h2 className="text-3xl font-semibold text-center mb-8">
           Add a Driver
         </h2>
-        {error && <p className="text-red-600">{error}</p>}
-        {success && (
-          <p className="text-green-600">Driver added successfully!</p>
-        )}
+
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* User Details */}
           <div>
@@ -354,32 +352,6 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
               </div>
               <div>
                 <label
-                  htmlFor="taxiFirm"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Taxi Localauthority:
-                </label>
-                <select
-                  id="LocalAuth"
-                  name="LocalAuth"
-                  value={formData.LocalAuth}
-                  onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                >
-                  {/* <option value="">Select Taxi Firm</option>
-                  <option value="firm1">Firm 1</option>
-                  <option value="firm2">Firm 2</option>
-                  Add more options as needed */}
-                  <option value="">Select Localauthority Firm</option>
-                  {local.map((local) => (
-                    <option key={local._id} value={local.name}>
-                      {local.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label
                   htmlFor="badgeType"
                   className="text-sm font-medium text-gray-700"
                 >
@@ -396,7 +368,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                   <option value="type1">Type 1</option>
                   <option value="type2">Type 2</option> */}
                   {/* Add more options as needed */}
-                  <option value="">Select badgeType Firm</option>
+                  <option value="">Select Taxi Firm</option>
                   {badge.map((badge) => (
                     <option key={badge._id} value={badge.name}>
                       {badge.name}
@@ -422,8 +394,8 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                   <option value="insurance1">Insurance 1</option>
                   <option value="insurance2">Insurance 2</option> */}
                   {/* Add more options as needed */}
-                  <option value="">Select insurance Firm</option>
-                  {insurence.map((insurence) => (
+                  <option value="">Select Taxi Firm</option>
+                  {insurance.map((insurence) => (
                     <option key={insurence._id} value={insurence.name}>
                       {insurence.name}
                     </option>
@@ -640,15 +612,17 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
               placeholder="Image Name"
               className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
             />
-            {/* <textarea
-              id="imageNotes"
-              name="imageNotes"
-              value={formData.imageNotes}
-              onChange={handleChange}
-              placeholder="Image Notes"
-              rows="4"
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-            /> */}
+            <div>
+              {imagePreview && (
+                <div>
+                  <img
+                    src={imagePreview}
+                    alt="Avatar Preview"
+                    className="avatar-preview w-32 h-20"
+                  />
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Checkbox for Active Status */}
@@ -675,7 +649,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
               type="submit"
               className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
             >
-              {loading ? "Submitting..." : "Submit"}
+              Update Record
             </button>
             <button
               type="button"
@@ -691,4 +665,4 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
   );
 };
 
-export default AddDriverModal;
+export default UpdateDriverModel;

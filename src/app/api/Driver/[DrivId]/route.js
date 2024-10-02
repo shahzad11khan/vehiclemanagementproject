@@ -1,63 +1,88 @@
 import { connect } from "@config/db.js";
 import Driver from "@models/Driver/Driver.Model.js";
 import cloudinary from "@middlewares/cloudinary.js";
-import { catchAsyncErrors } from "@middlewares/catchAsyncErrors.js";
+// import { catchAsyncErrors } from "@middlewares/catchAsyncErrors.js";
 import { NextResponse } from "next/server";
 
 // PUT handler for updating driver details
-export async function PUT(request, { params }) {
+export async function PUT(request, context) {
   try {
     await connect(); // Connect to the database
 
-    const id = params.UserID; // Use the correct parameter name
+    const id = context.params.DrivId; // Use the correct parameter name
     const data = await request.formData();
 
-    const userAvatar = data.get("imageUrl");
+    const userAvatar = data.get("imageFile");
     let Driveravatar = "";
     let DriveravatarId = "";
 
-    // Helper function to upload images to Cloudinary
-    const uploadToCloudinary = async (file) => {
-      if (!file) return null; // Return null if no file
-      const buffer = Buffer.from(await file.arrayBuffer());
-      return new Promise((resolve, reject) => {
-        cloudinary.v2.uploader
-          .upload_stream({ resource_type: "auto" }, (error, result) => {
-            if (error) return reject(error); // Reject on error
-            resolve(result); // Resolve with the upload result
-          })
-          .end(buffer);
-      });
-    };
+    // Check if the user avatar is an object and has a valid name (indicating it's a file)
+    if (userAvatar && typeof userAvatar === "object" && userAvatar.name) {
+      const byteData = await userAvatar.arrayBuffer();
+      const buffer = Buffer.from(byteData);
 
-    // Handle user avatar upload or use existing URL
-    if (userAvatar) {
-      const uploadResponse = await uploadToCloudinary(userAvatar);
-      if (uploadResponse) {
-        Driveravatar = uploadResponse.secure_url;
-        DriveravatarId = uploadResponse.public_id;
-      }
+      // Upload the new image to Cloudinary
+      const uploadResponse = await new Promise((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream(
+          { resource_type: "auto" },
+          (error, result) => {
+            if (error) {
+              reject(error);
+            } else {
+              resolve(result);
+            }
+          }
+        );
+
+        // Write buffer to the upload stream
+        uploadStream.end(buffer);
+      });
+
+      // Store the URL and ID of the uploaded image
+      Driveravatar = uploadResponse.secure_url;
+      DriveravatarId = uploadResponse.public_id;
     }
 
     // Convert FormData to a plain object
-    const formDataObject = {};
-    for (const [key, value] of data.entries()) {
-      formDataObject[key] = value;
-    }
+    const formDataObject = Object.fromEntries(data.entries());
 
     // Find the driver by ID
     const driver = await Driver.findById(id);
     if (!driver) {
-      return NextResponse.json({ error: "User not found", status: 404 });
+      return NextResponse.json({ error: "Driver not found", status: 404 });
     }
 
-    // Update driver properties with values from formDataObject or retain existing values
-    Object.assign(driver, {
-      ...formDataObject,
-      Driveravatar: Driveravatar || driver.Driveravatar,
-      DriveravatarId: DriveravatarId || driver.DriveravatarId,
-    });
+    // Handle avatar update: remove old avatar from Cloudinary and update with new one if uploaded
+    if (Driveravatar && DriveravatarId) {
+      // Check if the driver has an existing avatar ID to delete
+      if (driver.DriveravatarId) {
+        try {
+          // Delete old avatar from Cloudinary if it exists
+          await cloudinary.uploader.destroy(driver.DriveravatarId);
+          console.log("Old avatar deleted from Cloudinary.");
+        } catch (error) {
+          console.error("Failed to delete old image from Cloudinary:", error);
+        }
+      }
 
+      // Update driver with new avatar details
+      driver.Driveravatar = Driveravatar;
+      driver.DriveravatarId = DriveravatarId;
+      console.log("New avatar uploaded and updated.");
+    } else {
+      // If no new avatar uploaded, retain the old image
+      Driveravatar = driver.Driveravatar;
+      DriveravatarId = driver.DriveravatarId;
+    }
+
+    // Update driver properties with values from formDataObject
+    for (const key in formDataObject) {
+      if (formDataObject[key] !== undefined) {
+        driver[key] = formDataObject[key];
+      }
+    }
+
+    // Save updated driver details
     await driver.save();
 
     return NextResponse.json({
@@ -74,22 +99,32 @@ export async function PUT(request, { params }) {
   }
 }
 
-// GET handler for retrieving a specific driver by ID
-export const GET = catchAsyncErrors(async (request, { params }) => {
-  await connect(); // Connect to the database
+// GET handler for retrieving a specific product by ID
+export async function GET(request, context) {
+  try {
+    // Connect to the database
+    await connect();
 
-  const id = params.DrivId; // Ensure you're using the correct parameter name
-  console.log("Driver ID:", id);
+    // Extract the product ID from the request parameters
+    const id = context.params.DrivId;
+    console.log(id);
 
-  // Find the driver by ID
-  const Find_Driver = await Driver.findById(id);
-  if (!Find_Driver) {
-    return NextResponse.json({ result: "No Driver Found", status: 404 });
+    // Find the product by ID
+    const Find_User = await Driver.findById(id);
+
+    // Check if the product exists
+    if (!Find_User) {
+      return NextResponse.json({ result: "No User Found", status: 404 });
+    } else {
+      // Return the found product as a JSON response
+      return NextResponse.json({ result: Find_User, status: 200 });
+    }
+  } catch (error) {
+    console.error("Error retrieving product:", error);
+    // Return an error response
+    return NextResponse.json({ message: "Internal Server Error", status: 500 });
   }
-
-  // Return the found driver as a JSON response
-  return NextResponse.json({ result: Find_Driver, status: 200 });
-});
+}
 
 // DELETE handler for deleting a driver and associated image
 export const DELETE = async (request, { params }) => {

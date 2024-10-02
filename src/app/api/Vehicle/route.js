@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
 
 export async function POST(request) {
   try {
-    await connect();
+    await connect(); // Ensure you're properly handling database connection
 
     // Parse JSON data from the request body
     const formDataObject = await request.json();
@@ -22,9 +22,7 @@ export async function POST(request) {
       drivetrain,
       exteriorColor,
       interiorColor,
-      dimensionsHeight,
-      dimensionsWidth,
-      dimensionsLength,
+      dimensions: { height, width, length }, // Nested destructuring for dimensions
       passengerCapacity,
       cargoCapacity,
       horsepower,
@@ -40,7 +38,16 @@ export async function POST(request) {
       isActive,
       adminCreatedBy,
       adminCompanyName,
+      LocalAuthority,
     } = formDataObject;
+
+    // Validate required fields (simple validation)
+    if (!registrationNumber || !manufacturer || !model) {
+      return NextResponse.json({
+        error: "Registration number, manufacturer, and model are required",
+        status: 400,
+      });
+    }
 
     // Check for existing vehicle by registration number
     const existingVehicle = await Vehicle.findOne({ registrationNumber });
@@ -64,9 +71,9 @@ export async function POST(request) {
       exteriorColor,
       interiorColor,
       dimensions: {
-        height: dimensionsHeight,
-        width: dimensionsWidth,
-        length: dimensionsLength,
+        height,
+        width,
+        length,
       },
       passengerCapacity,
       cargoCapacity,
@@ -83,23 +90,24 @@ export async function POST(request) {
       isActive,
       adminCreatedBy,
       adminCompanyName,
+      LocalAuthority,
     });
 
     console.log(newVehicle);
 
     const savedVehicle = await newVehicle.save();
-    if (!savedVehicle) {
-      return NextResponse.json({ message: "Vehicle not added", status: 400 });
-    } else {
-      return NextResponse.json({
-        message: "Vehicle created successfully",
-        success: true,
-        status: 200,
-      });
-    }
+    return NextResponse.json({
+      message: "Vehicle created successfully",
+      success: true,
+      vehicle: savedVehicle, // Optionally include saved vehicle data in the response
+      status: 201, // Use 201 for created resources
+    });
   } catch (error) {
     console.error("Error occurred:", error);
-    return NextResponse.json({ error: error.message, status: 500 });
+    return NextResponse.json({
+      error: error.message || "Internal Server Error",
+      status: 500,
+    });
   }
 }
 

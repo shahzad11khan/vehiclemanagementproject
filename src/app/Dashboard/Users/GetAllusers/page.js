@@ -7,19 +7,22 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import {
   FaEdit,
-  FaEye,
+  // FaEye,
   FaTrash,
   FaCheckCircle,
   FaTimesCircle,
 } from "react-icons/fa";
 import AddUserModel from "../AddUser/AddUserModel";
+import UpdateUserModel from "../UpdateUser/UpdateUserModel";
 import DataTableComponent from "../../Components/CustomDataTable";
 import axios from "axios";
 import { API_URL_USER } from "../../Components/ApiUrl/ApiUrls";
 import { getCompanyName } from "@/utils/storageUtils"; // Assuming you have this utility for getting company name
-import Image from "next/image";
+// import Image from "next/image";
+// import { useRouter } from "next/navigation";
 
 const Page = () => {
+  // const router = useRouter();
   // columns
   const columns = [
     {
@@ -43,7 +46,7 @@ const Page = () => {
       name: "User Avatar",
       selector: (row) => row.useravatar, // This will be used for sorting, but not directly for display
       cell: (row) => (
-        <Image
+        <img
           src={row.useravatar} // Make sure the URL is valid
           alt="User Avatar"
           className="h-10 w-10 rounded-full" // Add styling as needed
@@ -82,17 +85,17 @@ const Page = () => {
       cell: (row) => (
         <div className="flex gap-2">
           <button
-            onClick={() => handleEdit(row._id)}
+            onClick={() => handleEdit(row._id)} // Call handleEdit with ID
             className="text-blue-500 hover:text-blue-700"
           >
             <FaEdit />
           </button>
-          <button
+          {/* <button
             onClick={() => handlePreview(row._id)}
             className="text-green-500 hover:text-green-700"
           >
             <FaEye />
-          </button>
+          </button> */}
           <button
             onClick={() => handleDelete(row._id)}
             className="text-red-500 hover:text-red-700"
@@ -111,7 +114,9 @@ const Page = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isMounted, setIsMounted] = useState(false);
   const [isOpenUser, setIsOpenUser] = useState(false);
+  const [isOpenUserUpdate, setIsOpenUserUpdate] = useState(false);
   const [selectedCompanyName, setSelectedCompanyName] = useState("");
+  const [selectedUserId, setSelectedUserId] = useState(null);
 
   useEffect(() => {
     setIsMounted(true);
@@ -137,12 +142,13 @@ const Page = () => {
   };
 
   const handleEdit = (id) => {
-    toast.info(`Edit item with ID: ${id}`);
+    // toast.info(`Edit item with ID: ${id}`);
+    setSelectedUserId(id); // Store the selected user ID
+    setIsOpenUserUpdate(true); // Open the modal
   };
-
-  const handlePreview = (id) => {
-    toast.info(`Preview item with ID: ${id}`);
-  };
+  // const handlePreview = (id) => {
+  //   toast.info(`Preview item with ID: ${id}`);
+  // };
 
   const handleDelete = async (id) => {
     try {
@@ -189,6 +195,10 @@ const Page = () => {
   const OpenUserModle = () => {
     setIsOpenUser(!isOpenUser);
   };
+  // Function to toggle modal visibility
+  const OpenUserUpdateModle = () => {
+    setIsOpenUserUpdate(!isOpenUserUpdate); // Close the modal
+  };
 
   if (!isMounted) {
     return null;
@@ -200,7 +210,7 @@ const Page = () => {
       <div className="flex gap-4">
         <Sidebar />
         <div className="container mx-auto p-4 overflow-hidden">
-          <div className="justify-between items-center border-2 mt-3 w-full">
+          <div className="justify-between items-center border-2 mt-3 w-[83%]">
             <div className="flex justify-between">
               <div className="justify-start">
                 <input
@@ -233,6 +243,11 @@ const Page = () => {
         </div>
       </div>
       <AddUserModel isOpen={isOpenUser} onClose={OpenUserModle} />
+      <UpdateUserModel
+        isOpen={isOpenUserUpdate}
+        onClose={OpenUserUpdateModle} // Function to close the modal
+        userId={selectedUserId} // Pass the selected ID to the modal
+      />{" "}
     </>
   );
 };

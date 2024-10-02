@@ -6,8 +6,9 @@ import Header from "../../Components/Header";
 import Sidebar from "../../Components/Sidebar";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { FaEdit, FaTrash, FaEye } from "react-icons/fa";
+import { FaEdit, FaTrash } from "react-icons/fa";
 import AddVehicleModel from "../AddVehicle/AddVehicleModel";
+import UpdateVehicleModel from "../UpdateVehicleModel/UpdateVehicleModel";
 import axios from "axios";
 import { API_URL_Vehicle } from "../../Components/ApiUrl/ApiUrls";
 import { getCompanyName } from "@/utils/storageUtils";
@@ -55,12 +56,12 @@ const Page = () => {
       cell: (row) => (
         <div className="flex gap-2">
           {/* Preview button */}
-          <button
+          {/* <button
             onClick={() => handlePreview(row._id)}
             className="text-green-500 hover:text-green-700"
           >
             <FaEye />
-          </button>
+          </button> */}
           {/* Edit button */}
           <button
             onClick={() => handleEdit(row._id)}
@@ -90,6 +91,8 @@ const Page = () => {
   const [isMounted, setIsMounted] = useState(false);
   const [isOpenVehicle, setIsOpenVehicle] = useState(false);
   const [selectedCompanyName, setSelectedCompanyName] = useState("");
+  const [selectedUserId, setSelectedUserId] = useState(null);
+  const [isOpenVehicleUpdate, setIsOpenVehcleUpdate] = useState(false);
 
   // Ensure that the component only renders once it is mounted
   useEffect(() => {
@@ -164,14 +167,16 @@ const Page = () => {
   }, [searchTerm, vehicle, selectedCompanyName]);
 
   const handleEdit = (id) => {
-    toast.info(`Edit vehicle with ID: ${id}`);
     // Implement your edit logic here
+    toast.info(`Edit item with ID: ${id}`);
+    setSelectedUserId(id); // Store the selected user ID
+    setIsOpenVehcleUpdate(true); // Open the modal
   };
 
-  const handlePreview = (id) => {
-    toast.info(`Preview vehicle with ID: ${id}`);
-    // Implement your preview logic here
-  };
+  // const handlePreview = (id) => {
+  //   toast.info(`Preview vehicle with ID: ${id}`);
+  //   // Implement your preview logic here
+  // };
 
   if (!isMounted) {
     return null; // Render nothing until the component is mounted
@@ -181,13 +186,18 @@ const Page = () => {
     setIsOpenVehicle(!isOpenVehicle);
   };
 
+  // Function to toggle modal visibility
+  const OpenVehicleUpdateModle = () => {
+    setIsOpenVehcleUpdate(!isOpenVehicleUpdate); // Close the modal
+  };
+
   return (
     <>
       <Header className="min-w-full" />
       <div className="flex gap-4">
         <Sidebar />
         <div className="container mx-auto p-4 ">
-          <div className="justify-between items-center border-2 mt-3">
+          <div className="justify-between items-center border-2 mt-3 w-[83%]">
             <div className="flex justify-between">
               {/* Search Input */}
               <div className="justify-start">
@@ -224,6 +234,12 @@ const Page = () => {
         isOpen={isOpenVehicle}
         onClose={OpenVehicleModle}
         fetchData={fetchData}
+      />
+      <UpdateVehicleModel
+        isOpen={isOpenVehicleUpdate}
+        onClose={OpenVehicleUpdateModle}
+        fetchData={fetchData}
+        vehicleId={selectedUserId} //
       />
     </>
   );

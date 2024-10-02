@@ -1,10 +1,9 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import axios from "axios"; // Ensure axios is imported
 import { API_URL_USER } from "../../Components/ApiUrl/ApiUrls";
-import { fetchTitle } from "../../Components/DropdownData/taxiFirm/taxiFirmService";
 
-const AddUserModel = ({ isOpen, onClose }) => {
-  const [title, setTitile] = useState([]);
+const UpdateUserModel = ({ isOpen, onClose, userId }) => {
   const [formData, setFormData] = useState({
     title: "",
     firstName: "",
@@ -33,28 +32,47 @@ const AddUserModel = ({ isOpen, onClose }) => {
     role: "user", // Default role set to "user"
   });
 
+  const [imagePreview, setImagePreview] = useState(null); // Preview for the avatar image
+
   // Retrieve company name from local storage
   useEffect(() => {
-    const storedCompanyName = localStorage.getItem("companyName"); // Replace with the actual key used in localStorage
+    const storedCompanyName = localStorage.getItem("companyName");
     if (storedCompanyName) {
       setFormData((prevData) => ({
         ...prevData,
         companyname: storedCompanyName,
       }));
     }
-    const fetchAuthData = async () => {
-      try {
-        const title = await fetchTitle(); // Await the result from fetchLocalAuth
-        console.log(title);
-        setTitile(title.result); // Set the local state with the result
-      } catch (error) {
-        console.error("Error fetching local auth data:", error);
-      }
-    };
+  }, []);
 
-    fetchAuthData(); // Call the async function to fetch data
-  }, []); // Run only once when the component mounts
+  // Fetch user data based on userId when the modal is open
+  useEffect(() => {
+    if (userId) {
+      const fetchData = async () => {
+        try {
+          const res = await axios.get(`${API_URL_USER}/${userId}`);
+          const adminData = res.data.result;
+          console.log("profile", adminData);
+          setFormData({
+            username: adminData.username,
+            email: adminData.email,
+            password: adminData.confirmpassword,
+            confirmpassword: adminData.confirmpassword,
+            useravatar: adminData.useravatar,
+            ...adminData, // Ensure the rest of the data is updated
+          });
 
+          setImagePreview(adminData.useravatar); // Show avatar preview
+        } catch (error) {
+          console.error("Error fetching user data:", error);
+        }
+      };
+
+      fetchData();
+    }
+  }, [userId]);
+
+  // Handle form field changes
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData((prevData) => ({
@@ -63,13 +81,17 @@ const AddUserModel = ({ isOpen, onClose }) => {
     }));
   };
 
+  // Handle file input changes
   const handleFileChange = (e) => {
+    const file = e.target.files[0];
     setFormData((prevData) => ({
       ...prevData,
-      useravatar: e.target.files[0], // Store the selected file
+      useravatar: file, // Store the selected file
     }));
+    setImagePreview(URL.createObjectURL(file)); // Preview the selected image
   };
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formDataToSend = new FormData();
@@ -79,21 +101,29 @@ const AddUserModel = ({ isOpen, onClose }) => {
       formDataToSend.append(key, formData[key]);
     }
 
+    // Add the user avatar file to FormData
+    if (formData.useravatar) {
+      formDataToSend.append("useravatar", formData.useravatar);
+    }
+
     try {
-      const response = await fetch(`${API_URL_USER}`, {
-        method: "POST",
+      const response = await fetch(`${API_URL_USER}/${userId}`, {
+        method: "PUT", // Use PUT or PATCH for updates
         body: formDataToSend,
       });
 
       // Handle the response as needed
       const data = await response.json();
-      console.log(data);
+      console.log("Update successful:", data);
+
+      // Optionally close the modal on successful update
+      onClose();
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Error updating user:", error);
     }
   };
 
-  if (!isOpen) return null;
+  if (!isOpen) return null; // Don't render modal if it's not open
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
@@ -109,29 +139,20 @@ const AddUserModel = ({ isOpen, onClose }) => {
             <div className="grid grid-cols-4 sm:grid-cols-4 gap-3">
               <div>
                 <label
-                  htmlFor="taxiFirm"
+                  htmlFor="title"
                   className="text-sm font-medium text-gray-700"
                 >
                   Title:
                 </label>
-                <select
-                  id="LocalAuth"
-                  name="LocalAuth"
+                <input
+                  type="text"
+                  id="title"
+                  name="title"
                   value={formData.title}
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                >
-                  {/* <option value="">Select Taxi Firm</option>
-                  <option value="firm1">Firm 1</option>
-                  <option value="firm2">Firm 2</option>
-                  Add more options as needed */}
-                  <option value="">Select Title</option>
-                  {title.map((title) => (
-                    <option key={title._id} value={title.name}>
-                      {title.name}
-                    </option>
-                  ))}
-                </select>
+                  required
+                />
               </div>
 
               <div>
@@ -417,7 +438,7 @@ const AddUserModel = ({ isOpen, onClose }) => {
                   type="password"
                   id="password"
                   name="password"
-                  value={formData.password}
+                  value={formData.password} // Maps to formData.password
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
                   required
@@ -496,6 +517,17 @@ const AddUserModel = ({ isOpen, onClose }) => {
             />
           </div>
           <div>
+            {imagePreview && (
+              <div>
+                <img
+                  src={imagePreview}
+                  alt="Avatar Preview"
+                  className="avatar-preview w-32 h-20"
+                />
+              </div>
+            )}
+          </div>
+          <div>
             <label>
               Is Active:
               <input
@@ -528,7 +560,7 @@ const AddUserModel = ({ isOpen, onClose }) => {
               type="submit"
               className="bg-blue-600 text-white px-4 py-2 rounded-lg"
             >
-              Add User
+              Update User
             </button>
           </div>
         </form>
@@ -537,4 +569,4 @@ const AddUserModel = ({ isOpen, onClose }) => {
   );
 };
 
-export default AddUserModel;
+export default UpdateUserModel;

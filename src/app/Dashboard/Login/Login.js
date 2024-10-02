@@ -37,6 +37,7 @@ const Login = () => {
       const companyName = response.data.company;
       const UserActive = response.data.isActive;
       const UserRole = response.data.role;
+      const userId = response.data.userId;
 
       // console.log(isVerifiedtoken);
 
@@ -48,6 +49,7 @@ const Login = () => {
           localStorage.setItem("UserActive", UserActive);
           localStorage.setItem("companyname", companyName);
           localStorage.setItem("role", UserRole);
+          localStorage.setItem("userId", userId);
         } else {
           localStorage.setItem("token", isVerifiedtoken);
           localStorage.setItem("Userusername", Userusername);
@@ -57,6 +59,7 @@ const Login = () => {
         }
 
         toast.success("Login successful");
+        router.push("/Dashboard/Home");
 
         // Use a relative path for navigation
         // router.push("Dashboard/Home");

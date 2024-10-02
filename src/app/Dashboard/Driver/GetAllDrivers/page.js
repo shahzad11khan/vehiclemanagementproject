@@ -5,8 +5,9 @@ import Header from "../../Components/Header";
 import Sidebar from "../../Components/Sidebar";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { FaEdit, FaTrash, FaEye } from "react-icons/fa"; // Added FaEye for the preview button
+import { FaEdit, FaTrash } from "react-icons/fa"; // Added FaEye for the preview button
 import AddDriverModel from "../AddDriver/AddDriverModel";
+import UpdateDriverModel from "../UpdateDriver/UpdateDriverModel";
 import CustomDataTable from "../../Components/CustomDataTable";
 import axios from "axios";
 import { API_URL_Driver } from "../../Components/ApiUrl/ApiUrls";
@@ -69,12 +70,12 @@ const Page = () => {
           >
             <FaEdit />
           </button>
-          <button
+          {/* <button
             onClick={() => handlePreview(row._id)}
             className="text-green-500 hover:text-green-700"
           >
             <FaEye />
-          </button>
+          </button> */}
           <button
             onClick={() => handleDelete(row._id)}
             className="text-red-500 hover:text-red-700"
@@ -93,7 +94,9 @@ const Page = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isMounted, setIsMounted] = useState(false);
   const [isOpenDriver, setIsOpenDriver] = useState(false);
+  const [isOpenDriverUpdate, setIsOpenDriverUpdate] = useState(false);
   const [selectedCompanyName, setSelectedCompanyName] = useState("");
+  const [selectedUserId, setSelectedUserId] = useState(null);
 
   // Ensure that the component only renders once it is mounted
   useEffect(() => {
@@ -168,14 +171,16 @@ const Page = () => {
   }, [searchTerm, driver, selectedCompanyName]);
 
   const handleEdit = (id) => {
-    toast.info(`Edit driver with ID: ${id}`);
-    // Implement your edit logic here
+    toast.info(`Edit item with ID: ${id}`);
+    setSelectedUserId(id); // Store the selected user ID
+    setIsOpenDriverUpdate(true); // Open the modal
+    OpenDriverUpdateModle();
   };
 
-  const handlePreview = (id) => {
-    toast.info(`Preview driver with ID: ${id}`);
-    // Implement your preview logic here
-  };
+  // const handlePreview = (id) => {
+  //   toast.info(`Preview driver with ID: ${id}`);
+  //   // Implement your preview logic here
+  // };
 
   if (!isMounted) {
     return null; // Render nothing until the component is mounted
@@ -184,6 +189,9 @@ const Page = () => {
   const OpenDriverModle = () => {
     setIsOpenDriver(!isOpenDriver);
   };
+  const OpenDriverUpdateModle = () => {
+    setIsOpenDriverUpdate(!isOpenDriverUpdate);
+  };
 
   return (
     <>
@@ -191,7 +199,7 @@ const Page = () => {
       <div className="flex gap-4">
         <Sidebar />
         <div className="container mx-auto p-4">
-          <div className="justify-between items-center border-2 mt-3">
+          <div className="justify-between items-center border-2 mt-3 w-[83%]">
             <div className="flex justify-between">
               {/* Search Input */}
               <div className="justify-start">
@@ -229,6 +237,12 @@ const Page = () => {
         onClose={OpenDriverModle}
         fetchData={fetchData}
       />
+      <UpdateDriverModel
+        isOpen={isOpenDriverUpdate}
+        onClose={OpenDriverUpdateModle} // Function to close the modal
+        userId={selectedUserId} // Pass the selected ID to the modal
+        fetchDataa={fetchData}
+      />{" "}
     </>
   );
 };

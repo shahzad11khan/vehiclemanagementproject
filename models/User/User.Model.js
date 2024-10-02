@@ -26,7 +26,7 @@ const userSchema = new mongoose.Schema(
     passwordExpires: { type: Date, default: null }, // Use Date type for date fields
     passwordExpires: { type: Date, default: null }, // Use Date type for date fields
     passwordExpiresEvery: { type: Number, default: null }, // Assuming this is a numeric value
-    companyname: { type: String, default: "" }, // Set a default or handle appropriately
+    companyname: { type: String, default: "", trim: true }, // Set a default or handle appropriately
     CreatedBy: { type: String, default: "" },
     isActive: { type: Boolean, default: false },
     role: {

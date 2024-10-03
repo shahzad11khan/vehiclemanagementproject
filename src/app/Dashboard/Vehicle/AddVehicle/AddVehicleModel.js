@@ -9,7 +9,7 @@ import {
 } from "../../Components/DropdownData/taxiFirm/taxiFirmService";
 
 const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
-  const [local, setlocal] = useState([]);
+  const [local, setLocal] = useState([]);
   const [manufacturer, setManufacturer] = useState([]);
   const [vehicleData, setVehicleData] = useState({
     manufacturer: "",
@@ -45,36 +45,34 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
     adminCreatedBy: "",
     adminCompanyName: "",
   });
-  // Retrieve company name from local storage
 
+  // Fetch data and company name on component mount
   useEffect(() => {
-    // Get the company name from localStorage (ensure the key is correct)
     const storedCompanyName = localStorage.getItem("companyName");
-
     if (storedCompanyName) {
-      // Update vehicleData state with the adminCompanyName from localStorage
       setVehicleData((prevData) => ({
         ...prevData,
         adminCompanyName: storedCompanyName,
       }));
     }
 
-    // Fetch local auth data
-    const fetchAuthData = async () => {
+    // Fetch local authorities and manufacturers
+    const fetchData = async () => {
       try {
-        const locall = await fetchLocalAuth(); // Await the result from fetchLocalAuth
-        const manufacturer = await fetchManfacturer(); // Await the result from fetchLocalAuth
-        console.log(locall);
-        setlocal(locall.Result); // Set the local state with the result
-        setManufacturer(manufacturer.Result); // Set the local state with the result
+        const localAuthData = await fetchLocalAuth();
+        const manufacturerData = await fetchManfacturer();
+        setLocal(localAuthData.Result);
+        setManufacturer(manufacturerData.Result);
       } catch (error) {
-        console.error("Error fetching local auth data:", error);
+        console.error("Error fetching data:", error);
+        toast.error("Failed to fetch data, please try again.");
       }
     };
 
-    fetchAuthData(); // Call the async function to fetch data
-  }, []); // Run only once when the component mounts
+    fetchData();
+  }, []);
 
+  // Handle input changes for vehicleData
   const handleChange = (e) => {
     const { name, value } = e.target;
     setVehicleData((prevData) => ({
@@ -83,6 +81,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
     }));
   };
 
+  // Handle changes for vehicle dimensions
   const handleDimensionChange = (e) => {
     const { name, value } = e.target;
     setVehicleData((prevData) => ({
@@ -94,15 +93,15 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
     }));
   };
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(vehicleData);
     try {
       const response = await axios.post(`${API_URL_Vehicle}`, vehicleData);
-      console.log("Vehicle data submitted successfully:", response.data);
       toast.success(response.data.message);
-      fetchData();
-      onClose();
+      fetchData(); // Refresh parent component data
+      onClose(); // Close modal
+      // Reset form after successful submission
       setVehicleData({
         manufacturer: "",
         model: "",
@@ -134,14 +133,16 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
         price: "",
         registrationNumber: "",
         warrantyInfo: "",
+        adminCreatedBy: "",
+        adminCompanyName: vehicleData.adminCompanyName, // Preserve company name
       });
-      // Handle success (you might want to clear the form, close the modal, etc.)
     } catch (error) {
       console.error("Error submitting vehicle data:", error);
-      // Handle error (show an error message to the user, etc.)
+      toast.error("Error submitting vehicle data, please try again.");
     }
-    // Submit logic here
   };
+
+  // If the modal is not open, do not render
   if (!isOpen) return null;
 
   return (
@@ -158,16 +159,17 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
             <div>
               <label className="block font-semibold">Manufacturer</label>
               <select
-                id="LocalAuth"
-                name="LocalAuth"
+                id="manufacturer"
+                name="manufacturer"
                 value={vehicleData.manufacturer}
                 onChange={handleChange}
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                className="w-full p-2 border border-gray-300 rounded"
+                required
               >
-                <option value="">Select manufacturer</option>
-                {manufacturer.map((manufacturer) => (
-                  <option key={manufacturer._id} value={manufacturer.name}>
-                    {manufacturer.name}
+                <option value="">Select Manufacturer</option>
+                {manufacturer.map((item) => (
+                  <option key={item.id} value={item.name}>
+                    {item.name}
                   </option>
                 ))}
               </select>
@@ -495,16 +497,17 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                 Taxi Localauthority:
               </label>
               <select
-                id="LocalAuth"
-                name="LocalAuth"
+                id="LocalAuthority"
+                name="LocalAuthority"
                 value={vehicleData.LocalAuthority}
                 onChange={handleChange}
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                className="w-full p-2 border border-gray-300 rounded"
+                required
               >
-                <option value="">Select Localauthority Firm</option>
-                {local.map((local) => (
-                  <option key={local._id} value={local.name}>
-                    {local.name}
+                <option value="">Select Local Authority</option>
+                {local.map((auth) => (
+                  <option key={auth.id} value={auth.name}>
+                    {auth.name}
                   </option>
                 ))}
               </select>

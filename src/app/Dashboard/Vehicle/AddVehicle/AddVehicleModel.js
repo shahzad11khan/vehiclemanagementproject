@@ -11,6 +11,7 @@ import {
 const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
   const [local, setLocal] = useState([]);
   const [manufacturer, setManufacturer] = useState([]);
+  // const [superadmin, setSuperadmin] = useState(null);
   const [vehicleData, setVehicleData] = useState({
     manufacturer: "",
     model: "",
@@ -48,7 +49,17 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
 
   // Fetch data and company name on component mount
   useEffect(() => {
+    // Retrieve company name and superadmin role from local storage
     const storedCompanyName = localStorage.getItem("companyName");
+    const storedSuperadmin = localStorage.getItem("role");
+    // console.log("superadmin", storedSuperadmin);
+
+    // // Set the superadmin state if available
+    // if (storedSuperadmin) {
+    //   setSuperadmin(storedSuperadmin);
+    // }
+
+    // Update vehicle data with the adminCompanyName if available
     if (storedCompanyName) {
       setVehicleData((prevData) => ({
         ...prevData,
@@ -61,8 +72,31 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
       try {
         const localAuthData = await fetchLocalAuth();
         const manufacturerData = await fetchManfacturer();
-        setLocal(localAuthData.Result);
-        setManufacturer(manufacturerData.Result);
+
+        // Use the latest adminCompanyName from vehicleData
+        const currentCompanyName =
+          vehicleData.adminCompanyName || storedCompanyName;
+
+        // Filter local authorities based on the user's role
+        const filteredLocalAuth =
+          storedSuperadmin === "superadmin"
+            ? localAuthData.Result // No filtering for superadmins
+            : localAuthData.Result.filter(
+                (localAuth) => localAuth.adminCompanyName === currentCompanyName
+              );
+
+        // Filter manufacturer data based on the user's role
+        const filteredManufacturer =
+          storedSuperadmin === "superadmin"
+            ? manufacturerData.Result // No filtering for superadmins
+            : manufacturerData.Result.filter(
+                (manufacturer) =>
+                  manufacturer.adminCompanyName === currentCompanyName
+              );
+
+        // Update local and manufacturer states
+        setLocal(filteredLocalAuth);
+        setManufacturer(filteredManufacturer);
       } catch (error) {
         console.error("Error fetching data:", error);
         toast.error("Failed to fetch data, please try again.");
@@ -70,7 +104,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
     };
 
     fetchData();
-  }, []);
+  }, []); // Run only once when the component mounts
 
   // Handle input changes for vehicleData
   const handleChange = (e) => {

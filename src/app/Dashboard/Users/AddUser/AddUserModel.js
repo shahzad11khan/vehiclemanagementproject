@@ -2,8 +2,9 @@
 import React, { useEffect, useState } from "react";
 import { API_URL_USER } from "../../Components/ApiUrl/ApiUrls";
 import { fetchTitle } from "../../Components/DropdownData/taxiFirm/taxiFirmService";
+import { toast } from "react-toastify";
 
-const AddUserModel = ({ isOpen, onClose }) => {
+const AddUserModel = ({ isOpen, onClose, fetchData }) => {
   const [title, setTitile] = useState([]);
   const [formData, setFormData] = useState({
     title: "",
@@ -17,14 +18,14 @@ const AddUserModel = ({ isOpen, onClose }) => {
     permanentAddress: "",
     city: "",
     county: "",
-    accessLevel: "",
+    // accessLevel: "",
     dateOfBirth: "",
     position: "",
     reportsTo: "",
     username: "",
     password: "",
     passwordExpires: "",
-    passwordExpiresEvery: "",
+    // passwordExpiresEvery: "",
     confirmpassword: "",
     companyname: "",
     CreatedBy: "",
@@ -74,6 +75,8 @@ const AddUserModel = ({ isOpen, onClose }) => {
     e.preventDefault();
     const formDataToSend = new FormData();
 
+    console.log(formDataToSend);
+
     // Append all form fields to the FormData object
     for (const key in formData) {
       formDataToSend.append(key, formData[key]);
@@ -87,6 +90,9 @@ const AddUserModel = ({ isOpen, onClose }) => {
 
       // Handle the response as needed
       const data = await response.json();
+      toast.success(data.message);
+      onClose();
+      fetchData();
       console.log(data);
     } catch (error) {
       console.error("Error:", error);
@@ -115,16 +121,12 @@ const AddUserModel = ({ isOpen, onClose }) => {
                   Title:
                 </label>
                 <select
-                  id="LocalAuth"
-                  name="LocalAuth"
+                  id="title"
+                  name="title"
                   value={formData.title}
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
                 >
-                  {/* <option value="">Select Taxi Firm</option>
-                  <option value="firm1">Firm 1</option>
-                  <option value="firm2">Firm 2</option>
-                  Add more options as needed */}
                   <option value="">Select Title</option>
                   {title.map((title) => (
                     <option key={title._id} value={title.name}>
@@ -320,7 +322,7 @@ const AddUserModel = ({ isOpen, onClose }) => {
           <div>
             <h3 className="text-xl font-semibold mb-4">Security</h3>
             <div className="grid grid-cols-4 sm:grid-cols-4 gap-3">
-              <div>
+              {/* <div>
                 <label
                   htmlFor="accessLevel"
                   className="text-sm font-medium text-gray-700"
@@ -335,7 +337,7 @@ const AddUserModel = ({ isOpen, onClose }) => {
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
                 />
-              </div>
+              </div> */}
 
               <div>
                 <label
@@ -459,7 +461,7 @@ const AddUserModel = ({ isOpen, onClose }) => {
                 />
               </div>
 
-              <div>
+              {/* <div>
                 <label
                   htmlFor="passwordExpiresEvery"
                   className="text-sm font-medium text-gray-700"
@@ -474,7 +476,7 @@ const AddUserModel = ({ isOpen, onClose }) => {
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
                 />
-              </div>
+              </div> */}
             </div>
           </div>
 

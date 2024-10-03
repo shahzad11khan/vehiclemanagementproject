@@ -14,7 +14,7 @@ const userSchema = new mongoose.Schema(
     permanentAddress: { type: String, default: "" },
     city: { type: String, default: "" },
     county: { type: String, default: "" },
-    accessLevel: { type: String, default: "" },
+    // accessLevel: { type: String, default: "" },
     dateOfBirth: { type: Date, default: null }, // Use Date type for date fields
     position: { type: String, default: "" },
     reportsTo: { type: String, default: "" },
@@ -25,7 +25,7 @@ const userSchema = new mongoose.Schema(
     userPublicId: { type: String, default: "" },
     passwordExpires: { type: Date, default: null }, // Use Date type for date fields
     passwordExpires: { type: Date, default: null }, // Use Date type for date fields
-    passwordExpiresEvery: { type: Number, default: null }, // Assuming this is a numeric value
+    // passwordExpiresEvery: { type: Number, default: null }, // Assuming this is a numeric value
     companyname: { type: String, default: "", trim: true }, // Set a default or handle appropriately
     CreatedBy: { type: String, default: "" },
     isActive: { type: Boolean, default: false },

@@ -242,11 +242,16 @@ const Page = () => {
           </div>
         </div>
       </div>
-      <AddUserModel isOpen={isOpenUser} onClose={OpenUserModle} />
+      <AddUserModel
+        isOpen={isOpenUser}
+        onClose={OpenUserModle}
+        fetchData={fetchData}
+      />
       <UpdateUserModel
         isOpen={isOpenUserUpdate}
         onClose={OpenUserUpdateModle} // Function to close the modal
         userId={selectedUserId} // Pass the selected ID to the modal
+        fetchData={fetchData}
       />{" "}
     </>
   );

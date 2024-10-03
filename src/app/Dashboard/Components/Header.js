@@ -16,6 +16,7 @@ import axios from "axios";
 
 const Header = () => {
   const [companyName, setCompanyName] = useState("");
+  const [role, setRole] = useState("");
   const router = useRouter();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [imagePreview, setImagePreview] = useState("");
@@ -30,10 +31,13 @@ const Header = () => {
       }
 
       const userId = localStorage.getItem("userId");
+      const role = localStorage.getItem("role");
       console.log(userId);
+      console.log(role);
 
       if (userId) {
         showalladmins(userId);
+        setRole(role);
       }
     }
   }, []);
@@ -132,12 +136,24 @@ const Header = () => {
           {typeof window !== "undefined" && isDropdownOpen && (
             <div className="absolute right-0 mt-2 flex flex-col bg-white rounded shadow-lg z-10 text-black">
               <ul className="">
-                <Link href="/Dashboard/Profile">
-                  <li className="px-4 py-2 hover:bg-custom-blue cursor-pointer rounded-lg flex items-center">
-                    <CgProfile className="mr-2" />
-                    <span className="hidden md:inline">Profile</span>
-                  </li>
-                </Link>
+                {role === "superadmin" ||
+                role === "admin" ||
+                role === "user" ? (
+                  <Link href="/Dashboard/Profile">
+                    <li className="px-4 py-2 hover:bg-custom-blue cursor-pointer rounded-lg flex items-center">
+                      <CgProfile className="mr-2" />
+                      <span className="hidden md:inline">Profile</span>
+                    </li>
+                  </Link>
+                ) : (
+                  <Link href="/Dashboard/CompanyProfile">
+                    <li className="px-4 py-2 hover:bg-custom-blue cursor-pointer rounded-lg flex items-center">
+                      <CgProfile className="mr-2" />
+                      <span className="hidden md:inline">Profile</span>
+                    </li>
+                  </Link>
+                )}
+
                 <li className="px-4 py-2 hover:bg-custom-blue cursor-pointer rounded-lg flex items-center">
                   <button onClick={handleLogout}>
                     <IoIosLogOut className="mr-2" />

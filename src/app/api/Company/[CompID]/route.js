@@ -11,6 +11,8 @@ export async function PUT(request, context) {
     const data = await request.formData();
     const companyId = context.params.CompID;
 
+    console.log(data);
+
     console.log(companyId);
 
     // Extracting the company ID from the request (assumed to be in the request body)
@@ -36,31 +38,31 @@ export async function PUT(request, context) {
     let image = company.image; // Retain existing image by default
     let imagePublicId = company.imagePublicId; // Retain existing public ID by default
 
-    // Upload files to Cloudinary if a new file is provided
-    if (file1) {
-      const buffer1 = Buffer.from(await file1.arrayBuffer());
-      const uploadResponse1 = await new Promise((resolve, reject) => {
-        cloudinary.uploader
-          .upload_stream(
-            {
-              resource_type: "auto",
-            },
-            (error, result) => {
-              if (error) {
-                reject(new Error("Error uploading image: " + error.message));
-              } else {
-                resolve(result);
-              }
+    // Check if the user avatar is an object and has a valid name (indicating it's a file)
+    if (typeof file1 === "object" && file1.name) {
+      const byteData = await userAvatar.arrayBuffer();
+      const buffer = Buffer.from(byteData);
+
+      // Upload the new image to Cloudinary
+      const uploadResponse = await new Promise((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream(
+          { resource_type: "auto" },
+          (error, result) => {
+            if (error) {
+              reject(error);
+            } else {
+              resolve(result);
             }
-          )
-          .end(buffer1);
+          }
+        );
+
+        // Write buffer to the upload stream
+        uploadStream.end(buffer);
       });
 
-      // Update image and public ID with the newly uploaded image
-      image = uploadResponse1.secure_url;
-      imagePublicId = uploadResponse1.public_id;
+      image = uploadResponse.secure_url;
+      imagePublicId = uploadResponse.public_id;
     }
-
     // Constructing formDataObject excluding the files
     const formDataObject = {};
     for (const [key, value] of data.entries()) {
@@ -89,8 +91,8 @@ export async function PUT(request, context) {
 
     // Only hash the password if it's being updated
     if (password) {
-      const salt = await bcrypt.genSalt(10);
-      company.password = await bcrypt.hash(password, salt);
+      const hashedPassword = await bcrypt.hash(password, 10);
+      company.password = hashedPassword;
     }
 
     company.isActive = isActive ? isActive : company.isActive;

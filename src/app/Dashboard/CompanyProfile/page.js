@@ -7,15 +7,14 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { isAuthenticated } from "@/utils/verifytoken";
 import { useRouter } from "next/navigation";
-import { API_URL_USER } from "../Components/ApiUrl/ApiUrls";
+import { API_URL_Company } from "../Components/ApiUrl/ApiUrls";
 
 const Page = () => {
   const [formData, setFormData] = useState({
-    username: "",
     email: "",
     password: "",
-    confirmpassword: "",
-    useravatar: "",
+    confirmPassword: "",
+    image: null, // Change to null for better handling of file uploads
   });
   const [imagePreview, setImagePreview] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -39,16 +38,16 @@ const Page = () => {
   const showAllAdmins = async (userId) => {
     setLoading(true);
     try {
-      const res = await axios.get(`${API_URL_USER}/${userId}`);
+      const res = await axios.get(`${API_URL_Company}/${userId}`);
       const adminData = res.data.result;
+      console.log(adminData);
       setFormData({
-        username: adminData.username,
         email: adminData.email,
-        password: adminData.confirmpassword, // Ensure to not expose sensitive data
-        confirmpassword: adminData.confirmpassword,
-        useravatar: adminData.useravatar,
+        password: adminData.confirmPassword, // Do not set password to avoid exposing sensitive data
+        confirmPassword: adminData.confirmPassword,
+        image: adminData.image,
       });
-      setImagePreview(adminData.useravatar);
+      setImagePreview(adminData.image);
     } catch (error) {
       console.error(`Error: ${error}`);
       toast.error("Failed to load admin data");
@@ -65,7 +64,7 @@ const Page = () => {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file && file.type.startsWith("image/")) {
-      setFormData({ ...formData, useravatar: file });
+      setFormData({ ...formData, image: file });
       setImagePreview(URL.createObjectURL(file));
     } else {
       toast.warn("Please upload a valid image file");
@@ -74,7 +73,7 @@ const Page = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (formData.password !== formData.confirmpassword) {
+    if (formData.password !== formData.confirmPassword) {
       toast.warn("Password and Confirm Password do not match");
       return;
     }
@@ -88,7 +87,7 @@ const Page = () => {
     try {
       const userId = localStorage.getItem("userId");
       const response = await axios.put(
-        `${API_URL_USER}/${userId}`,
+        `${API_URL_Company}/${userId}`,
         formDataToSend,
         {
           headers: {
@@ -98,7 +97,7 @@ const Page = () => {
       );
 
       if (response.status === 200) {
-        toast.success("Admin updated successfully");
+        toast.success("Company Info updated successfully");
       } else {
         throw new Error("Network response was not ok");
       }
@@ -113,7 +112,7 @@ const Page = () => {
   return (
     <>
       <Header className="min-w-full" />
-      <div className="flex gap-4 ">
+      <div className="flex gap-4">
         <Sidebar />
         <main className="w-full mt-5 min-h-screen">
           <section>
@@ -122,7 +121,7 @@ const Page = () => {
                 <h2 className="text-2xl font-semibold mb-6 text-center">
                   Edit User
                 </h2>
-                {loading && <p>Loading...</p>}
+                {loading && <p>Loading...</p>} {/* Show loading state */}
                 <form onSubmit={handleSubmit}>
                   <div className="mb-4 flex flex-col items-center">
                     <div className="w-24 h-24 mb-4">
@@ -157,29 +156,13 @@ const Page = () => {
                         file:border-0 file:text-sm file:font-semibold
                         file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
                         id="useravatar"
-                        name="useravatar"
+                        name="image" // Changed to match the state key
                         accept="image/*"
                         onChange={handleImageChange}
                       />
                     </label>
                   </div>
                   <div className="flex gap-3">
-                    <div className="mb-4">
-                      <label
-                        className="block text-gray-700 text-sm font-bold mb-2"
-                        htmlFor="username"
-                      >
-                        Username
-                      </label>
-                      <input
-                        type="text"
-                        id="username"
-                        name="username"
-                        value={formData.username}
-                        onChange={handleChange}
-                        className="w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring focus:ring-indigo-200"
-                      />
-                    </div>
                     <div className="mb-4">
                       <label
                         className="block text-gray-700 text-sm font-bold mb-2"
@@ -228,9 +211,9 @@ const Page = () => {
                       <input
                         type={showPassword ? "text" : "password"}
                         id="confirmpassword"
-                        name="confirmpassword"
+                        name="confirmPassword" // Corrected to match the state key
                         className="mt-1 px-3 py-1.5 w-full rounded-md border-gray-400 border focus:outline-none focus:border-indigo-500 text-black"
-                        value={formData.confirmpassword}
+                        value={formData.confirmPassword}
                         onChange={handleChange}
                       />
                     </div>
@@ -240,7 +223,7 @@ const Page = () => {
                       type="submit"
                       className="w-full bg-indigo-600 text-white py-2 rounded-md hover:bg-indigo-500"
                     >
-                      Update User
+                      Update Company Info
                     </button>
                   </div>
                 </form>

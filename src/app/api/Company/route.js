@@ -47,6 +47,7 @@ export async function POST(request) {
         formDataObject[key] = value;
       }
     }
+    // Only hash the password if it's being updated
 
     const {
       CompanyName,
@@ -59,6 +60,9 @@ export async function POST(request) {
       vatnumber,
     } = formDataObject;
 
+    if (password) {
+      const hashedPassword = await bcrypt.hash(password, 10);
+    }
     const existingUser = await Company.findOne({ email });
     if (existingUser) {
       return NextResponse.json({
@@ -71,7 +75,7 @@ export async function POST(request) {
     const newCompany = new Company({
       CompanyName,
       email,
-      password,
+      password: hashedPassword,
       confirmPassword,
       isActive,
       CreatedBy,

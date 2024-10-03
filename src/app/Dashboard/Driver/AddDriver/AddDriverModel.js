@@ -14,7 +14,6 @@ import { API_URL_Driver } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 
 const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
   const initialFormData = {
-    title: "",
     firstName: "",
     lastName: "",
     email: "",
@@ -26,9 +25,6 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
     city: "",
     county: "",
     dateOfBirth: "",
-    reportsTo: "",
-    passwordExpires: "",
-    passwordExpiresEvery: "",
     licenseNumber: "",
     niNumber: "",
     driverNumber: "",
@@ -192,6 +188,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
         },
       });
 
+      consolel.log(response);
       if (response.data.success) {
         toast.success("Driver data successfully saved.");
         fetchData(); // Fetch updated data after successful submission
@@ -203,6 +200,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
     } catch (err) {
       const errorMessage =
         err.response?.data?.message || "Failed to add driver.";
+      console.log(errorMessage);
       // setError(errorMessage);
       toast.error(errorMessage);
     } finally {

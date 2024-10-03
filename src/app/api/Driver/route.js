@@ -77,6 +77,7 @@ export async function POST(request) {
       isActive,
       adminCreatedBy,
       adminCompanyName,
+      LocalAuth,
       imageName,
       vehicle,
     } = formDataObject;
@@ -112,6 +113,7 @@ export async function POST(request) {
       county,
       postcode,
       pay,
+      LocalAuth,
       postalAddress,
       permanentAddress,
       imageName,

@@ -1,6 +1,5 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { API_URL_Driver } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import axios from "axios";
 import { toast } from "react-toastify";
 import {
@@ -9,10 +8,12 @@ import {
   fetchInsurence,
   fetchPayment,
   fetchLocalAuth,
+  fetchVehicle,
 } from "../../Components/DropdownData/taxiFirm/taxiFirmService";
+import { API_URL_Driver } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 
 const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
-  const [formData, setFormData] = useState({
+  const initialFormData = {
     title: "",
     firstName: "",
     lastName: "",
@@ -40,55 +41,124 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
     taxiBadgeDate: "",
     rentPaymentCycle: "",
     isActive: false,
-    imageName: "",
     imageFile: null,
     LocalAuth: "",
+    vehicle: "",
     pay: "",
     adminCreatedBy: "",
     adminCompanyName: "",
-  });
+  };
 
+  const [formData, setFormData] = useState(initialFormData);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(false);
   const [taxiFirms, setTaxiFirms] = useState([]);
-  const [badge, setbadge] = useState([]);
-  const [insurence, setinsurence] = useState([]);
-  const [payment, setpayment] = useState([]);
-  const [local, setlocal] = useState([]);
+  const [badge, setBadge] = useState([]);
+  const [insurance, setInsurance] = useState([]);
+  const [payment, setPayment] = useState([]);
+  const [localAuth, setLocalAuth] = useState([]);
+  const [vehicle, setVehicle] = useState([]);
+  const [superadmin, setSuperadmin] = useState(null);
+  const [filteredVehicles, setFilteredVehicles] = useState([]); // Filtered vehicles based on selected LocalAuth
 
-  // Retrieve company name from local storage
+  // Load company name and role from localStorage
   useEffect(() => {
-    const storedCompanyName = localStorage.getItem("companyName"); // Replace with the actual key used in localStorage
+    const storedCompanyName = localStorage.getItem("companyName");
+    const storedSuperadmin = localStorage.getItem("role");
+
+    if (storedSuperadmin) {
+      setSuperadmin(storedSuperadmin);
+    }
+
     if (storedCompanyName) {
       setFormData((prevData) => ({
         ...prevData,
         adminCompanyName: storedCompanyName,
       }));
     }
-  }, []); // Run only once when the component mounts
+  }, []); // Run only once on mount
 
+  // Load dropdown data
   useEffect(() => {
-    const loadTaxiFirms = async () => {
+    const loadDropdownData = async () => {
       try {
-        const data = await fetchTaxiFirms(); // Call the service function to fetch data
-        const badge = await fetchBadge(); // Call the service function to fetch data
-        const insurance = await fetchInsurence(); // Call the service function to fetch data
-        const payment = await fetchPayment(); // Call the service function to fetch data
-        const locall = await fetchLocalAuth(); // Call the service function to fetch data
-        // console.log(payment.Result);
-        setTaxiFirms(data.result);
-        setbadge(badge.result);
-        setinsurence(insurance.Result);
-        setpayment(payment.Result);
-        setlocal(locall.Result);
-      } catch (error) {
-        console.error("Error loading taxi firms:", error);
+        const [
+          taxiFirmsData,
+          badgeData,
+          insuranceData,
+          paymentData,
+          localAuthData,
+          vehicle,
+        ] = await Promise.all([
+          fetchTaxiFirms(),
+          fetchBadge(),
+          fetchInsurence(),
+          fetchPayment(),
+          fetchLocalAuth(),
+          fetchVehicle(),
+        ]);
+
+        const storedCompanyName = formData.adminCompanyName;
+
+        // Filter data based on role and company name
+        const filteredTaxiFirms =
+          superadmin === "superadmin"
+            ? taxiFirmsData.result
+            : taxiFirmsData.result.filter(
+                (firm) => firm.companyName === storedCompanyName
+              );
+
+        const filteredBadges =
+          superadmin === "superadmin"
+            ? badgeData.result
+            : badgeData.result.filter(
+                (badge) => badge.companyName === storedCompanyName
+              );
+
+        const filteredInsurance =
+          superadmin === "superadmin"
+            ? insuranceData.Result
+            : insuranceData.Result.filter(
+                (insurance) => insurance.companyName === storedCompanyName
+              );
+
+        const filteredPayments =
+          superadmin === "superadmin"
+            ? paymentData.Result
+            : paymentData.Result.filter(
+                (payment) => payment.companyName === storedCompanyName
+              );
+
+        const filteredLocalAuth =
+          superadmin === "superadmin"
+            ? localAuthData.Result
+            : localAuthData.Result.filter(
+                (localAuth) => localAuth.companyName === storedCompanyName
+              );
+        const filteredVehicle =
+          superadmin === "superadmin"
+            ? vehicle.result
+            : vehicle.result.filter(
+                (vehicle) => vehicle.companyName === storedCompanyName
+              );
+
+        // Update state with filtered or full data based on role
+        setTaxiFirms(filteredTaxiFirms);
+        setBadge(filteredBadges);
+        setInsurance(filteredInsurance);
+        setPayment(filteredPayments);
+        setLocalAuth(filteredLocalAuth);
+        setVehicle(filteredVehicle);
+        // LocalAuthority in vehicle model
+      } catch (err) {
+        console.error("Error loading dropdown data:", err);
+        toast.error("Failed to load dropdown data.");
       }
     };
 
-    loadTaxiFirms();
-  }, []);
+    if (superadmin !== null && formData.adminCompanyName) {
+      loadDropdownData(); // Ensure dropdown data is only loaded when role and companyName are available
+    }
+  }, [superadmin, formData.adminCompanyName]); // Re-run when superadmin or companyName changes
 
   const handleChange = (e) => {
     const { name, value, type, checked, files } = e.target;
@@ -97,70 +167,49 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
       [name]:
         type === "checkbox" ? checked : type === "file" ? files[0] : value,
     });
+    // Filter vehicles when LocalAuth is selected
+    if (name === "LocalAuth") {
+      const matchedVehicles = vehicle.filter(
+        (vehicle) => vehicle.LocalAuthority === value // Assuming vehicle has a `localAuthName` field matching LocalAuth
+      );
+      setFilteredVehicles(matchedVehicles); // Update filtered vehicles based on selected LocalAuth
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+
     const formDataToSend = new FormData();
     Object.keys(formData).forEach((key) => {
       formDataToSend.append(key, formData[key]);
     });
+
     try {
-      // const response = await axios.post(`${API_URL_Driver}`, formData);
       const response = await axios.post(`${API_URL_Driver}`, formDataToSend, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
 
-      // console.log(response.data);
       if (response.data.success) {
-        toast.success("data successfully saved");
-        setSuccess(true);
-        fetchData();
-        onClose();
-        setFormData({
-          title: "",
-          firstName: "",
-          lastName: "",
-          email: "",
-          tel1: "",
-          tel2: "",
-          postcode: "",
-          postalAddress: "",
-          permanentAddress: "",
-          city: "",
-          county: "",
-          accessLevel: "",
-          dateOfBirth: "",
-          passwordExpires: "",
-          passwordExpiresEvery: "",
-          licenseNumber: "",
-          niNumber: "",
-          driverNumber: "",
-          taxiFirm: "",
-          badgeType: "",
-          insurance: "",
-          startDate: "",
-          driverRent: "",
-          licenseExpiryDate: "",
-          taxiBadgeDate: "",
-          rentPaymentCycle: "",
-          isActive: false,
-          pay: "",
-          imageFile: null,
-          imageNotes: "",
-        });
+        toast.success("Driver data successfully saved.");
+        fetchData(); // Fetch updated data after successful submission
+        onClose(); // Close modal
+        setFormData(initialFormData); // Reset form
       } else {
-        toast.warn("Data not saved");
+        toast.warn("Data was not saved.");
       }
-      // Handle success or trigger some UI feedback
     } catch (err) {
-      setError(err.response?.data?.message || "Failed to add Driver");
+      const errorMessage =
+        err.response?.data?.message || "Failed to add driver.";
+      // setError(errorMessage);
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
   };
+
   if (!isOpen) return null;
 
   return (
@@ -169,10 +218,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
         <h2 className="text-3xl font-semibold text-center mb-8">
           Add a Driver
         </h2>
-        {error && <p className="text-red-600">{error}</p>}
-        {success && (
-          <p className="text-green-600">Driver added successfully!</p>
-        )}
+
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* User Details */}
           <div>
@@ -340,10 +386,6 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
                 >
-                  {/* <option value="">Select Taxi Firm</option>
-                  <option value="firm1">Firm 1</option>
-                  <option value="firm2">Firm 2</option>
-                  Add more options as needed */}
                   <option value="">Select Taxi Firm</option>
                   {taxiFirms.map((firm) => (
                     <option key={firm._id} value={firm.name}>
@@ -370,10 +412,33 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                   <option value="firm1">Firm 1</option>
                   <option value="firm2">Firm 2</option>
                   Add more options as needed */}
-                  <option value="">Select Localauthority Firm</option>
-                  {local.map((local) => (
+                  <option value="">Select Localauthority</option>
+                  {localAuth.map((local) => (
                     <option key={local._id} value={local.name}>
                       {local.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label
+                  htmlFor="taxiFirm"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  vehicle:
+                </label>
+                <select
+                  id="vehicle"
+                  name="vehicle"
+                  value={formData.vehicle}
+                  onChange={handleChange}
+                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                >
+                  <option value="">Select vehicle</option>
+                  {filteredVehicles.map((vehicle) => (
+                    <option key={vehicle._id} value={vehicle.model}>
+                      {vehicle.model}
                     </option>
                   ))}
                 </select>
@@ -392,11 +457,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
                 >
-                  {/* <option value="">Select Badge Type</option>
-                  <option value="type1">Type 1</option>
-                  <option value="type2">Type 2</option> */}
-                  {/* Add more options as needed */}
-                  <option value="">Select badgeType Firm</option>
+                  <option value="">Select badgeType </option>
                   {badge.map((badge) => (
                     <option key={badge._id} value={badge.name}>
                       {badge.name}
@@ -418,12 +479,8 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
                 >
-                  {/* <option value="">Select Insurance</option>
-                  <option value="insurance1">Insurance 1</option>
-                  <option value="insurance2">Insurance 2</option> */}
-                  {/* Add more options as needed */}
-                  <option value="">Select insurance Firm</option>
-                  {insurence.map((insurence) => (
+                  <option value="">Select insurance </option>
+                  {insurance.map((insurence) => (
                     <option key={insurence._id} value={insurence.name}>
                       {insurence.name}
                     </option>
@@ -508,13 +565,8 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
                 >
-                  {/* <option value="">Select Payment Cycle</option>
-                  <option value="monthly">Monthly</option>
-                  <option value="weekly">Weekly</option> */}
-                  {/* Add more options as needed */}
-
                   {/* </select> */}
-                  <option value="">Select Taxi Firm</option>
+                  <option value="">Select Payment</option>
                   {payment.map((payment) => (
                     <option key={payment._id} value={payment.name}>
                       {payment.name}

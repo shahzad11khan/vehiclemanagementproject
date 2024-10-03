@@ -8,11 +8,21 @@ import {
   API_URL_LocalAuthority,
   API_URL_Title,
   API_URL_Manufacturer,
+  API_URL_Vehicle,
 } from "../../../Components/ApiUrl/ApiUrls";
 // Fetch all taxi firms
 export const fetchTitle = async () => {
   try {
     const response = await axios.get(API_URL_Title);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching taxi firms:", error);
+    throw error;
+  }
+};
+export const fetchVehicle = async () => {
+  try {
+    const response = await axios.get(API_URL_Vehicle);
     return response.data;
   } catch (error) {
     console.error("Error fetching taxi firms:", error);

@@ -164,10 +164,6 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
               >
-                {/* <option value="">Select Taxi Firm</option>
-                  <option value="firm1">Firm 1</option>
-                  <option value="firm2">Firm 2</option>
-                  Add more options as needed */}
                 <option value="">Select manufacturer</option>
                 {manufacturer.map((manufacturer) => (
                   <option key={manufacturer._id} value={manufacturer.name}>
@@ -505,10 +501,6 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
               >
-                {/* <option value="">Select Taxi Firm</option>
-                  <option value="firm1">Firm 1</option>
-                  <option value="firm2">Firm 2</option>
-                  Add more options as needed */}
                 <option value="">Select Localauthority Firm</option>
                 {local.map((local) => (
                   <option key={local._id} value={local.name}>

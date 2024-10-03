@@ -17,6 +17,7 @@ const driverSchema = new mongoose.Schema(
     insurance: { type: String, default: null },
     startDate: { type: Date, default: new Date().toISOString() },
     driverRent: { type: Number, default: null },
+    vehicle: { type: String },
     licenseExpiryDate: { type: Date, default: new Date().toISOString() },
     taxiBadgeDate: { type: Date, default: new Date().toISOString() },
     rentPaymentCycle: { type: String, default: null },

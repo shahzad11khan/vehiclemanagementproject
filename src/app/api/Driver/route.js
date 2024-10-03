@@ -78,6 +78,7 @@ export async function POST(request) {
       adminCreatedBy,
       adminCompanyName,
       imageName,
+      vehicle,
     } = formDataObject;
 
     const existingDriver = await Driver.findOne({ email });
@@ -116,6 +117,7 @@ export async function POST(request) {
       imageName,
       adminCreatedBy,
       adminCompanyName,
+      vehicle,
       imageFile: Driveravatar,
       imagePublicId: DriveravatarId,
       isActive: isActive || false, // Default to "Driver" if no role is specified

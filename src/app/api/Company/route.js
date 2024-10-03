@@ -55,8 +55,8 @@ export async function POST(request) {
       confirmPassword,
       isActive,
       CreatedBy,
-      adminCreatedBy,
-      adminCompanyName,
+      CompanyRegistrationNumber,
+      vatnumber,
     } = formDataObject;
 
     const existingUser = await Company.findOne({ email });
@@ -77,8 +77,8 @@ export async function POST(request) {
       CreatedBy,
       image,
       imagePublicId,
-      adminCreatedBy,
-      adminCompanyName,
+      CompanyRegistrationNumber,
+      vatnumber,
       isActive: isActive || false,
     });
 

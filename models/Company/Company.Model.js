@@ -29,6 +29,12 @@ const CompanySchema = new mongoose.Schema(
     CreatedBy: {
       type: String,
     },
+    CompanyRegistrationNumber: {
+      type: String,
+    },
+    vatnumber: {
+      type: String,
+    },
     image: { type: String }, // URL to Cloudinary or local storage
     // Cloudinary public ID
     imagePublicId: { type: String },

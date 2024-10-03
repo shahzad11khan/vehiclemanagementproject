@@ -76,10 +76,15 @@ export async function PUT(request, context) {
       confirmPassword,
       isActive,
       CreatedBy,
+      CompanyRegistrationNumber,
+      vatnumber,
     } = formDataObject;
 
     // Update the company details
     company.CompanyName = CompanyName || company.CompanyName;
+    company.CompanyRegistrationNumber =
+      CompanyRegistrationNumber || company.CompanyRegistrationNumber;
+    company.vatnumber = vatnumber || company.vatnumber;
     company.email = email || company.email;
 
     // Only hash the password if it's being updated

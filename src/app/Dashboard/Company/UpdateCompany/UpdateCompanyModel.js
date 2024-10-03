@@ -17,6 +17,8 @@ const UpdateCompanyModel = ({
     confirmPassword: "",
     isActive: false,
     CreatedBy: "",
+    CompanyRegistrationNumber: "",
+    vatnumber: "",
     image: null,
   });
 
@@ -36,6 +38,8 @@ const UpdateCompanyModel = ({
             email: company.email || "",
             password: company.confirmPassword, // Do not populate password fields for security reasons
             confirmPassword: company.confirmPassword, // Do not populate confirm password
+            CompanyRegistrationNumber: company.CompanyRegistrationNumber, // Do not populate confirm password
+            vatnumber: company.vatnumber, // Do not populate confirm password
             isActive: company.isActive || false,
             CreatedBy: company.CreatedBy || "",
             image: null, // Image should be handled separately if required
@@ -74,6 +78,11 @@ const UpdateCompanyModel = ({
     data.append("email", formData.email);
     if (formData.password) data.append("password", formData.password);
     data.append("confirmPassword", formData.confirmPassword);
+    data.append(
+      "CompanyRegistrationNumber",
+      formData.CompanyRegistrationNumber
+    );
+    data.append("vatnumber", formData.vatnumber);
     data.append("isActive", formData.isActive);
     data.append("CreatedBy", formData.CreatedBy || "");
     if (formData.image) data.append("image", formData.image);
@@ -182,6 +191,43 @@ const UpdateCompanyModel = ({
                 value={formData.confirmPassword}
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+              />
+            </div>
+
+            {/* CompanyRegistrationNumber*/}
+            <div>
+              <label
+                htmlFor="CompanyRegistrationNumber"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Company Registration Number
+              </label>
+              <input
+                type="text"
+                id="CompanyRegistrationNumber"
+                name="CompanyRegistrationNumber"
+                value={formData.CompanyRegistrationNumber}
+                onChange={handleChange}
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                required
+              />
+            </div>
+            {/* vatnumber*/}
+            <div>
+              <label
+                htmlFor="vatnumber"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Vat Number
+              </label>
+              <input
+                type="text"
+                id="vatnumber"
+                name="vatnumber"
+                value={formData.vatnumber}
+                onChange={handleChange}
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                required
               />
             </div>
 

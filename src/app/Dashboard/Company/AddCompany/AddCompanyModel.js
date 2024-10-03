@@ -12,6 +12,8 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
     confirmPassword: "",
     isActive: false,
     CreatedBy: "",
+    CompanyRegistrationNumber: "",
+    vatnumber: "",
     image: null, // Add image to the form data
   });
 
@@ -38,6 +40,11 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
     data.append("email", formData.email);
     data.append("password", formData.password);
     data.append("confirmPassword", formData.confirmPassword);
+    data.append(
+      "CompanyRegistrationNumber",
+      formData.CompanyRegistrationNumber
+    );
+    data.append("vatnumber", formData.vatnumber);
     data.append("isActive", formData.isActive);
     data.append("CreatedBy", formData.CreatedBy ? formData.CreatedBy : "");
     if (formData.image) {
@@ -146,6 +153,42 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
                 id="confirmPassword"
                 name="confirmPassword"
                 value={formData.confirmPassword}
+                onChange={handleChange}
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                required
+              />
+            </div>
+            {/* CompanyRegistrationNumber*/}
+            <div>
+              <label
+                htmlFor="CompanyRegistrationNumber"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Company Registration Number
+              </label>
+              <input
+                type="text"
+                id="CompanyRegistrationNumber"
+                name="CompanyRegistrationNumber"
+                value={formData.CompanyRegistrationNumber}
+                onChange={handleChange}
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                required
+              />
+            </div>
+            {/* vatnumber*/}
+            <div>
+              <label
+                htmlFor="vatnumber"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Vat Number
+              </label>
+              <input
+                type="text"
+                id="vatnumber"
+                name="vatnumber"
+                value={formData.vatnumber}
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
                 required

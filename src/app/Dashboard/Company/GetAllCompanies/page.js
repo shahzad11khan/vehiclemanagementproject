@@ -6,11 +6,12 @@ import Header from "../../Components/Header";
 import Sidebar from "../../Components/Sidebar";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { FaTrash } from "react-icons/fa";
-import AddCompanymodel from "..//AddCompany/AddCompanyModel";
+import { FaEdit, FaTrash } from "react-icons/fa";
+import AddCompanymodel from "../AddCompany/AddCompanyModel";
 import { GetCompany } from "../../Components/ApiUrl/ShowApiDatas/ShowApiDatas";
 import { API_URL_Company } from "../../Components/ApiUrl/ApiUrls";
 import axios from "axios";
+import UpdateCompanyModel from "../UpdateCompany/UpdateCompanyModel";
 
 const Page = () => {
   const columns = [
@@ -31,7 +32,14 @@ const Page = () => {
     },
     {
       name: "Company Image",
-      selector: (row) => row.image,
+      selector: (row) => row.image, // The image URL field
+      cell: (row) => (
+        <img
+          src={row.image}
+          alt="Company Image"
+          style={{ width: "50px", height: "50px", borderRadius: "5px" }}
+        />
+      ), // Display the image
       sortable: true,
     },
     {
@@ -39,15 +47,21 @@ const Page = () => {
       selector: (row) => (row.isActive ? "Active" : "InActive"),
       sortable: true,
     },
-    {
-      name: "CreatedBy",
-      selector: (row) => row.CreatedBy,
-      sortable: true,
-    },
+    // {
+    //   name: "CreatedBy",
+    //   selector: (row) => row.CreatedBy,
+    //   sortable: true,
+    // },
     {
       name: "Actions",
       cell: (row) => (
         <div className="flex gap-2">
+          <button
+            onClick={() => handleEdit(row._id)}
+            className="text-blue-500 hover:text-blue-700"
+          >
+            <FaEdit />
+          </button>
           <button
             onClick={() => handleDelete(row._id)}
             className="text-red-500 hover:text-red-700"
@@ -65,6 +79,8 @@ const Page = () => {
   const [data, setData] = useState([]); // State to hold fetched data
   const [filteredData, setFilteredData] = useState([]);
   const [isOpenCompany, setIsOpenCompany] = useState(false);
+  const [selectedUserId, setSelectedUserId] = useState(null);
+  const [isOpenDriverUpdate, setIsOpenDriverUpdate] = useState(false);
 
   // Ensure that the component only renders once it is mounted
   useEffect(() => {
@@ -130,10 +146,12 @@ const Page = () => {
   // const toggleTitleModal = () => {
   //   setIsOpenTitle(!isOpenTitle);
   // };
-  // const handleEdit = (id) => {
-  //   toast.info(`Edit item with ID: ${id}`);
-  //   // Implement your edit logic here
-  // };
+  const handleEdit = (id) => {
+    toast.info(`Edit item with ID: ${id}`);
+    // Implement your edit logic here
+    setSelectedUserId(id); // Store the selected user ID
+    setIsOpenDriverUpdate(true); // Open the modal
+  };
 
   // const handleDelete = (id) => {
   //   toast.info(`Delete item with ID: ${id}`);
@@ -146,6 +164,9 @@ const Page = () => {
   const OpenCompanyModle = () => {
     setIsOpenCompany(!isOpenCompany);
   };
+  const OpenDriverUpdateModle = () => {
+    setIsOpenDriverUpdate(!isOpenDriverUpdate);
+  };
 
   return (
     <>
@@ -153,7 +174,7 @@ const Page = () => {
       <div className="flex gap-4">
         <Sidebar />
         <div className="container mx-auto p-4 ">
-          <div className="justify-between items-center border-2 mt-3  w-full">
+          <div className="justify-between items-center border-2 mt-3  w-[83%]">
             <div className="flex justify-between">
               {/* Search Input */}
               <div className="justify-start">
@@ -190,6 +211,12 @@ const Page = () => {
         isOpen={isOpenCompany}
         onClose={OpenCompanyModle}
         fetchData={fetchData}
+      />
+      <UpdateCompanyModel
+        isOpen={isOpenDriverUpdate}
+        onClose={OpenDriverUpdateModle}
+        fetchData={fetchData}
+        existingCompanyId={selectedUserId}
       />
     </>
   );

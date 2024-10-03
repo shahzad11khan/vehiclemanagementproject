@@ -196,13 +196,13 @@ const Sidebar = () => {
                         }`}
                       />
                       <span className="hidden sm:block text-sm">
-                        Organization
+                        Superadmin Users
                       </span>
                     </div>
                   </li>
                 </Link>
 
-                <Link passHref href="/Dashboard/Driver/GetAllDrivers">
+                {/* <Link passHref href="/Dashboard/Driver/GetAllDrivers">
                   <li
                     onClick={() =>
                       handleLinkClick("/Dashboard/Driver/GetAllDrivers")
@@ -224,9 +224,9 @@ const Sidebar = () => {
                       <span className="hidden sm:block text-sm ">Driver</span>
                     </div>
                   </li>
-                </Link>
+                </Link> */}
 
-                <Link passHref href="/Dashboard/Vehicle/GetAllVehicle">
+                {/* <Link passHref href="/Dashboard/Vehicle/GetAllVehicle">
                   <li
                     onClick={() =>
                       handleLinkClick("/Dashboard/Vehicle/GetAllVehicle")
@@ -248,7 +248,7 @@ const Sidebar = () => {
                       <span className="hidden sm:block text-sm">Vehicle</span>
                     </div>
                   </li>
-                </Link>
+                </Link> */}
 
                 <div>
                   <li

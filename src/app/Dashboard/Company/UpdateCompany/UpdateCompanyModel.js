@@ -8,31 +8,49 @@ const UpdateCompanyModel = ({
   isOpen,
   onClose,
   fetchData,
-  existingCompany,
+  existingCompanyId,
 }) => {
   const [formData, setFormData] = useState({
-    CompanyName: existingCompany?.CompanyName || "", // Initialize with existing company name
-    email: existingCompany?.email || "",
+    CompanyName: "",
+    email: "",
     password: "",
     confirmPassword: "",
-    isActive: existingCompany?.isActive || false,
-    CreatedBy: existingCompany?.CreatedBy || "",
+    isActive: false,
+    CreatedBy: "",
     image: null,
   });
 
+  // Fetch company details when the modal opens
   useEffect(() => {
-    if (existingCompany) {
-      setFormData({
-        CompanyName: existingCompany.CompanyName,
-        email: existingCompany.email,
-        password: "",
-        confirmPassword: "",
-        isActive: existingCompany.isActive,
-        CreatedBy: existingCompany.CreatedBy,
-        image: null,
-      });
+    const fetchCompanyDetails = async () => {
+      if (existingCompanyId) {
+        try {
+          const response = await axios.get(
+            `${API_URL_Company}/${existingCompanyId}`
+          );
+          const company = response.data.result; // Access the company data from response.data
+          console.log(company);
+
+          setFormData({
+            CompanyName: company.CompanyName || "",
+            email: company.email || "",
+            password: company.confirmPassword, // Do not populate password fields for security reasons
+            confirmPassword: company.confirmPassword, // Do not populate confirm password
+            isActive: company.isActive || false,
+            CreatedBy: company.CreatedBy || "",
+            image: null, // Image should be handled separately if required
+          });
+        } catch (error) {
+          console.error("Error fetching company details:", error);
+          toast.error("Error fetching company details");
+        }
+      }
+    };
+
+    if (isOpen && existingCompanyId) {
+      fetchCompanyDetails();
     }
-  }, [existingCompany]);
+  }, [existingCompanyId, isOpen]);
 
   const handleChange = (e) => {
     const { name, value, type, checked, files } = e.target;
@@ -46,31 +64,23 @@ const UpdateCompanyModel = ({
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (formData.password !== formData.confirmPassword) {
+    if (formData.password && formData.password !== formData.confirmPassword) {
       alert("Passwords do not match!");
       return;
     }
 
-    // Create FormData object to send the data as multipart/form-data
     const data = new FormData();
-
-    // Append CompanyName only if it's changed
-    if (formData.CompanyName !== existingCompany.CompanyName) {
-      data.append("CompanyName", formData.CompanyName);
-    }
-
+    data.append("CompanyName", formData.CompanyName);
     data.append("email", formData.email);
-    data.append("password", formData.password);
+    if (formData.password) data.append("password", formData.password);
     data.append("confirmPassword", formData.confirmPassword);
     data.append("isActive", formData.isActive);
     data.append("CreatedBy", formData.CreatedBy || "");
-    if (formData.image) {
-      data.append("image", formData.image); // Add the image file to FormData
-    }
+    if (formData.image) data.append("image", formData.image);
 
     try {
       const response = await axios.put(
-        `${API_URL_Company}/${existingCompany._id}`,
+        `${API_URL_Company}/${existingCompanyId}`,
         data,
         {
           headers: {
@@ -78,18 +88,17 @@ const UpdateCompanyModel = ({
           },
         }
       );
-      console.log("Response: ", response.data);
+      console.log(response);
       toast.success("Company updated successfully");
       fetchData();
       onClose();
     } catch (error) {
-      console.error("Error updating the data: ", error);
-      toast.warn("Error updating the data");
+      console.error("Error updating company details:", error);
+      toast.error("Error updating company details");
     }
   };
 
   if (!isOpen) return null;
-
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
       <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-4xl">

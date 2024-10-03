@@ -2,84 +2,112 @@ import { connect } from "@config/db.js";
 import Company from "@models/Company/Company.Model.js";
 import cloudinary from "@middlewares/cloudinary.js";
 // import { catchAsyncErrors } from "@middlewares/catchAsyncErrors.js";
+import bcrypt from "bcryptjs";
 import { NextResponse } from "next/server";
 
-// PUT handler for updating driver details
 export async function PUT(request, context) {
   try {
-    await connect(); // Connect to the database
+    await connect();
+    const data = await request.formData();
+    const companyId = context.params.CompID;
 
-    const id = context.params.CompID; // Use the correct parameter name
-    const data = await request.formData(); // Get form data
+    console.log(companyId);
 
-    const userAvatar = data.get("imageUrl");
-    let Driveravatar = "";
-    let DriveravatarId = "";
-
-    // Helper function to upload images to Cloudinary
-    const uploadToCloudinary = async (file) => {
-      if (!file) return null; // Return null if no file
-      const buffer = Buffer.from(await file.arrayBuffer());
-      return new Promise((resolve, reject) => {
-        cloudinary.v2.uploader
-          .upload_stream({ resource_type: "auto" }, (error, result) => {
-            if (error) return reject(error); // Reject on error
-            resolve(result); // Resolve with the upload result
-          })
-          .end(buffer);
+    // Extracting the company ID from the request (assumed to be in the request body)
+    if (!companyId) {
+      return NextResponse.json({
+        error: "Company ID is required",
+        status: 400,
       });
-    };
-
-    // Find the driver by ID
-    const driver = await Company.findById(id);
-    if (!driver) {
-      return NextResponse.json({ error: "Driver not found", status: 404 });
     }
 
-    // Handle user avatar upload if a new image is provided, otherwise retain the old image
-    if (userAvatar && userAvatar.size > 0) {
-      // Check if a file is uploaded
-      const uploadResponse = await uploadToCloudinary(userAvatar);
-      if (uploadResponse) {
-        Driveravatar = uploadResponse.secure_url;
-        DriveravatarId = uploadResponse.public_id;
-      }
-    } else {
-      // Retain existing avatar if no new image is uploaded
-      Driveravatar = driver.Driveravatar;
-      DriveravatarId = driver.DriveravatarId;
+    // Find the existing company by ID
+    const company = await Company.findById({ _id: companyId });
+    // console.log(company);
+
+    if (!company) {
+      return NextResponse.json({ error: "Company not found", status: 404 });
     }
 
-    // Convert FormData to a plain object and update driver properties
+    // Handling the uploaded files
+    let file1 = data.get("image");
+    console.log("image:", file1);
+
+    let image = company.image; // Retain existing image by default
+    let imagePublicId = company.imagePublicId; // Retain existing public ID by default
+
+    // Upload files to Cloudinary if a new file is provided
+    if (file1) {
+      const buffer1 = Buffer.from(await file1.arrayBuffer());
+      const uploadResponse1 = await new Promise((resolve, reject) => {
+        cloudinary.uploader
+          .upload_stream(
+            {
+              resource_type: "auto",
+            },
+            (error, result) => {
+              if (error) {
+                reject(new Error("Error uploading image: " + error.message));
+              } else {
+                resolve(result);
+              }
+            }
+          )
+          .end(buffer1);
+      });
+
+      // Update image and public ID with the newly uploaded image
+      image = uploadResponse1.secure_url;
+      imagePublicId = uploadResponse1.public_id;
+    }
+
+    // Constructing formDataObject excluding the files
     const formDataObject = {};
     for (const [key, value] of data.entries()) {
-      formDataObject[key] = value;
-    }
-
-    // Update driver properties directly
-    driver.Driveravatar = Driveravatar;
-    driver.DriveravatarId = DriveravatarId;
-
-    // Update other properties
-    for (const key in formDataObject) {
-      if (formDataObject.hasOwnProperty(key)) {
-        driver[key] = formDataObject[key];
+      if (key !== "image") {
+        formDataObject[key] = value;
       }
     }
 
-    await driver.save(); // Save updated driver details
+    const {
+      CompanyName,
+      email,
+      password,
+      confirmPassword,
+      isActive,
+      CreatedBy,
+    } = formDataObject;
 
-    return NextResponse.json({
-      message: "Company details updated successfully",
-      driver,
-      status: 200,
-    });
+    // Update the company details
+    company.CompanyName = CompanyName || company.CompanyName;
+    company.email = email || company.email;
+
+    // Only hash the password if it's being updated
+    if (password) {
+      const salt = await bcrypt.genSalt(10);
+      company.password = await bcrypt.hash(password, salt);
+    }
+
+    company.isActive = isActive ? isActive : company.isActive;
+    company.CreatedBy = CreatedBy || company.CreatedBy;
+    company.CompanyName = CompanyName || company.CompanyName;
+    company.confirmPassword = confirmPassword || company.confirmPassword;
+    company.image = image; // Update the image URL
+    company.imagePublicId = imagePublicId; // Update the public ID
+
+    const updatedCompany = await company.save();
+    if (!updatedCompany) {
+      return NextResponse.json({ message: "Company not updated", status: 400 });
+    } else {
+      return NextResponse.json({
+        message: "Company updated successfully",
+        success: true,
+        status: 200,
+      });
+    }
   } catch (error) {
-    console.error("Error updating driver details:", error);
-    return NextResponse.json({
-      error: "Failed to update driver details",
-      status: 500,
-    });
+    console.error(error);
+    return NextResponse.json({ error: error.message, status: 500 });
   }
 }
 

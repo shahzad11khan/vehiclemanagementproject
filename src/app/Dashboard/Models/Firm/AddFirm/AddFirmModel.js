@@ -29,15 +29,16 @@ const AddFirmModal = ({ isOpen, onClose, fetchData }) => {
     adminCreatedBy: "",
     adminCompanyName: "",
   });
+
   useEffect(() => {
-    const storedCompanyName = localStorage.getItem("companyName"); // Replace with the actual key used in localStorage
+    const storedCompanyName = localStorage.getItem("companyName");
     if (storedCompanyName) {
       setFormData((prevData) => ({
         ...prevData,
         adminCompanyName: storedCompanyName,
       }));
     }
-  }, []); // Run only once when the component mounts
+  }, []);
 
   const handleChange = (e) => {
     const { name, value, type, checked, files } = e.target;
@@ -55,7 +56,12 @@ const AddFirmModal = ({ isOpen, onClose, fetchData }) => {
 
       // Append each form field to the FormData object
       Object.keys(formData).forEach((key) => {
-        formDataToSend.append(key, formData[key]);
+        if (key === "imageFile" && formData[key]) {
+          // Append only if the image file is selected
+          formDataToSend.append(key, formData[key]);
+        } else {
+          formDataToSend.append(key, formData[key]);
+        }
       });
 
       // Send the form data to the backend using Axios
@@ -70,6 +76,7 @@ const AddFirmModal = ({ isOpen, onClose, fetchData }) => {
       toast.success(response.data.message);
       onClose();
       fetchData();
+
       // Optionally, reset the form after successful submission
       setFormData({
         name: "",
@@ -92,14 +99,17 @@ const AddFirmModal = ({ isOpen, onClose, fetchData }) => {
         imageName: "",
         imageFile: null,
         imageNote: "",
+        adminCreatedBy: "",
+        adminCompanyName: "",
       });
 
-      // Close the modal after submission
       onClose();
     } catch (error) {
       console.error("Error submitting the form:", error);
+      toast.error("Failed to submit the form, please try again.");
     }
   };
+
   if (!isOpen) return null;
 
   return (

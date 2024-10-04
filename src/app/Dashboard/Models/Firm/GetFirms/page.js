@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import AddFirmModel from "../AddFirm/AddFirmModel";
+import UpdateFirmModel from "../UpdateFirm/UpdateFirmModel";
 import { API_URL_Firm } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import { GetFirm } from "@/app/Dashboard/Components/ApiUrl/ShowApiDatas/ShowApiDatas";
 import { getCompanyName } from "@/utils/storageUtils";
@@ -65,6 +66,8 @@ const Page = () => {
   const [isMounted, setIsMounted] = useState(false);
   const [isOpenFirm, setIsOpenFirm] = useState(false);
   const [selectedCompanyName, setSelectedCompanyName] = useState("");
+  const [selectedUserId, setSelectedUserId] = useState(null);
+  const [isOpenDriverUpdate, setIsOpenDriverUpdate] = useState(false);
 
   // Ensure that the component only renders once it is mounted
   useEffect(() => {
@@ -80,9 +83,8 @@ const Page = () => {
     try {
       GetFirm().then(({ result }) => {
         console.log(result);
-
-        setData(result ? result : []); // Set the fetched data
-        setFilteredData(result ? result : []);
+        setData(result); // Set the fetched data
+        setFilteredData(result);
       });
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -142,6 +144,9 @@ const Page = () => {
   const handleEdit = (id) => {
     toast.info(`Edit item with ID: ${id}`);
     // Implement your edit logic here
+    setSelectedUserId(id); // Store the selected user ID
+    setIsOpenDriverUpdate(true); // Open the modal
+    OpenDriverUpdateModle();
   };
 
   if (!isMounted) {
@@ -150,6 +155,9 @@ const Page = () => {
 
   const OpenFirmModle = () => {
     setIsOpenFirm(!isOpenFirm);
+  };
+  const OpenDriverUpdateModle = () => {
+    setIsOpenDriverUpdate(!isOpenDriverUpdate);
   };
 
   return (
@@ -196,6 +204,12 @@ const Page = () => {
         onClose={OpenFirmModle}
         fetchData={fetchData}
       />
+      <UpdateFirmModel
+        isOpen={isOpenDriverUpdate}
+        onClose={OpenDriverUpdateModle} // Function to close the modal
+        firmId={selectedUserId} // Pass the selected ID to the modal
+        fetchData={fetchData}
+      />{" "}
     </>
   );
 };

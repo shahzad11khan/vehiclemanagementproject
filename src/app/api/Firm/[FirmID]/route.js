@@ -1,6 +1,5 @@
 import { connect } from "@config/db.js";
 import { Firm } from "@models/Firm/Firm.Model";
-import { catchAsyncErrors } from "@middlewares/catchAsyncErrors.js";
 import { NextResponse } from "next/server";
 
 export const PUT = async (request, context) => {
@@ -8,9 +7,11 @@ export const PUT = async (request, context) => {
     await connect();
     const id = context.params.FirmID; // Access FirmID from context.params
     const data = await request.formData();
+    console.log(id);
+    console.log(data);
 
     // Get existing Firm by ID
-    const existingFirm = await Firm.findOne({ id });
+    const existingFirm = await Firm.findOne({ _id: id });
     if (!existingFirm) {
       return NextResponse.json({
         error: "Firm not found",
@@ -23,7 +24,7 @@ export const PUT = async (request, context) => {
     let imageFile = existingFirm.imageFile;
     let imagepublicId = existingFirm.imagepublicId;
 
-    if (file1) {
+    if (file1 && typeof file1 === "object" && file1.name) {
       const buffer1 = Buffer.from(await file1.arrayBuffer());
 
       // Delete the old image from Cloudinary if a new image is uploaded
@@ -84,9 +85,11 @@ export const PUT = async (request, context) => {
       isActive,
       adminCreatedBy,
       adminCompanyName,
+      // imageNote,
     } = formDataObject;
 
     // Update the existing Firm
+    // existingFirm.imageNote = imageNote || existingFirm.imageNote;
     existingFirm.name = name || existingFirm.name;
     existingFirm.description = description || existingFirm.description;
     existingFirm.imageName = imageName || existingFirm.imageName;
@@ -138,7 +141,6 @@ export async function GET(request, context) {
 
     // Extract the product ID from the request parameters
     const id = context.params.FirmID;
-    console.log(id);
 
     // Find the product by ID
     const Find_User = await Firm.findById(id);

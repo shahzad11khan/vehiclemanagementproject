@@ -4,7 +4,7 @@ import { API_URL_Firm } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import { toast } from "react-toastify";
 import axios from "axios";
 
-const AddFirmModal = ({ isOpen, onClose, fetchData }) => {
+const UpdateFirmModel = ({ isOpen, onClose, fetchData, firmId }) => {
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -29,15 +29,25 @@ const AddFirmModal = ({ isOpen, onClose, fetchData }) => {
     adminCompanyName: "",
   });
 
+  // Fetch existing firm data when the modal opens
   useEffect(() => {
-    const storedCompanyName = localStorage.getItem("companyName");
-    if (storedCompanyName) {
-      setFormData((prevData) => ({
-        ...prevData,
-        adminCompanyName: storedCompanyName,
-      }));
+    if (firmId) {
+      console.log(firmId);
+      const fetchFirmData = async () => {
+        try {
+          const response = await axios.get(`${API_URL_Firm}/${firmId}`);
+
+          // console.log(response.data.result);
+          setFormData(response.data.result); // Assuming response.data contains the firm data
+        } catch (error) {
+          console.error("Error fetching firm data:", error);
+          toast.error("Failed to load firm data.");
+        }
+      };
+
+      fetchFirmData();
     }
-  }, []);
+  }, [firmId]);
 
   const handleChange = (e) => {
     const { name, value, type, checked, files } = e.target;
@@ -63,12 +73,16 @@ const AddFirmModal = ({ isOpen, onClose, fetchData }) => {
         }
       });
 
-      // Send the form data to the backend using Axios
-      const response = await axios.post(`${API_URL_Firm}`, formDataToSend, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      // Send the form data to the backend using Axios for update
+      const response = await axios.put(
+        `${API_URL_Firm}/${firmId}`,
+        formDataToSend,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
 
       // Handle the response after submission
       toast.success(response.data.message);
@@ -113,7 +127,7 @@ const AddFirmModal = ({ isOpen, onClose, fetchData }) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
       <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-4xl overflow-y-auto max-h-screen relative">
-        <h2 className="text-3xl font-semibold text-center mb-8">Add Firm</h2>
+        <h2 className="text-3xl font-semibold text-center mb-8">Update Firm</h2>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Basic Information */}
@@ -478,4 +492,4 @@ const AddFirmModal = ({ isOpen, onClose, fetchData }) => {
   );
 };
 
-export default AddFirmModal;
+export default UpdateFirmModel;

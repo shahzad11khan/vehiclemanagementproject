@@ -8,6 +8,7 @@ export async function POST(request) {
   try {
     await connect();
     const data = await request.formData();
+    console.log(data);
 
     // Handling the uploaded files
     let file1 = data.get("imageFile");
@@ -71,9 +72,12 @@ export async function POST(request) {
       isActive,
       adminCreatedBy,
       adminCompanyName,
+      // imageNote,
     } = formDataObject;
 
-    const existingUser = await Firm.findOne({ name });
+    console.log(formDataObject);
+
+    const existingUser = await Firm.findOne({ email });
     if (existingUser) {
       return NextResponse.json({
         error: "Firm Already Exist",
@@ -104,6 +108,7 @@ export async function POST(request) {
       imagepublicId,
       adminCreatedBy,
       adminCompanyName,
+      // imageNote,
       isActive: isActive || false,
     });
 
@@ -132,7 +137,7 @@ export const GET = catchAsyncErrors(async () => {
   const allFirm = await Firm.find();
   const FirmCount = await Firm.countDocuments();
   if (!allFirm || allFirm.length === 0) {
-    return NextResponse.json({ Result: allFirm });
+    return NextResponse.json({ result: allFirm });
   } else {
     return NextResponse.json({ result: allFirm, count: FirmCount });
   }

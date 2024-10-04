@@ -68,7 +68,7 @@ const Login = () => {
         // Use a relative path for navigation
         // router.push("Dashboard/Home");
       } else {
-        toast.warning("You are not verified for login 😢");
+        toast.warning("You are not Active for login 😢");
         router.push("/");
       }
     } catch (error) {

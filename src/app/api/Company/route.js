@@ -3,11 +3,14 @@ import Company from "@models/Company/Company.Model.js";
 import { catchAsyncErrors } from "@middlewares/catchAsyncErrors.js";
 import { NextResponse } from "next/server";
 import cloudinary from "@middlewares/cloudinary.js";
+import bcrypt from "bcryptjs";
 
 export async function POST(request) {
   try {
     await connect();
     const data = await request.formData();
+
+    console.log(data);
 
     // Handling the uploaded files
     let file1 = data.get("image");
@@ -41,6 +44,7 @@ export async function POST(request) {
     }
 
     // Constructing formDataObject excluding the files
+
     const formDataObject = {};
     for (const [key, value] of data.entries()) {
       if (key !== "image") {
@@ -60,9 +64,13 @@ export async function POST(request) {
       vatnumber,
     } = formDataObject;
 
-    if (password) {
-      const hashedPassword = await bcrypt.hash(password, 10);
-    }
+    // let hashedPassword = null;
+    // if (password) {
+    //   hashedPassword = await bcrypt.hash(password, 10);
+    // }
+    // console.log(hashedPassword);
+    const hashedPassword = await bcrypt.hash(password, 10);
+    console.log(hashedPassword);
     const existingUser = await Company.findOne({ email });
     if (existingUser) {
       return NextResponse.json({

@@ -4,13 +4,14 @@ import React, { useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
 import Header from "../../../Components/Header";
 import Sidebar from "../../../Components/Sidebar";
-// import { toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import AddFirmModel from "../AddFirm/AddFirmModel";
 import { API_URL_Firm } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import { GetFirm } from "@/app/Dashboard/Components/ApiUrl/ShowApiDatas/ShowApiDatas";
 import { getCompanyName } from "@/utils/storageUtils";
+import axios from "axios";
 
 const Page = () => {
   const columns = [
@@ -80,8 +81,8 @@ const Page = () => {
       GetFirm().then(({ result }) => {
         console.log(result);
 
-        setData(result); // Set the fetched data
-        setFilteredData(result);
+        setData(result ? result : []); // Set the fetched data
+        setFilteredData(result ? result : []);
       });
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -138,15 +139,11 @@ const Page = () => {
     });
     setFilteredData(filtered); // Update filtered data state
   }, [searchTerm, data, selectedCompanyName]);
-  // const handleEdit = (id) => {
-  //   toast.info(`Edit item with ID: ${id}`);
-  //   // Implement your edit logic here
-  // };
+  const handleEdit = (id) => {
+    toast.info(`Edit item with ID: ${id}`);
+    // Implement your edit logic here
+  };
 
-  // const handleDelete = (id) => {
-  //   toast.info(`Delete item with ID: ${id}`);
-  //   // Implement your delete logic here
-  // };
   if (!isMounted) {
     return null; // Render nothing until the component is mounted
   }

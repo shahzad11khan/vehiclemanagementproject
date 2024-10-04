@@ -52,8 +52,8 @@ const AddEnquiryModal = ({ isOpen, onClose, fetchData }) => {
       const response = await axios.post(`${API_URL_Enquiry}`, formData); // Replace with your API endpoint
       console.log("Form submitted successfully:", response.data);
       toast.success("Form submitted successfully");
-      fetchData();
       onClose();
+      fetchData();
     } catch (error) {
       console.error("Error submitting form:", error);
     }

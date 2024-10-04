@@ -7,6 +7,8 @@ export const POST = catchAsyncErrors(async (request) => {
   await connect();
   const data = await request.json();
 
+  console.log(data);
+
   const {
     firstName,
     lastName,
@@ -23,9 +25,11 @@ export const POST = catchAsyncErrors(async (request) => {
     badgeType,
     localAuthority,
     isActive,
-    adminCreatedB,
+    adminCreatedBy,
     adminCompanyName,
   } = data; // Extract the new variables
+
+  console.log(data);
 
   // Check for existing enquiry by email
   const existingEnquiry = await Enquiry.findOne({ email });
@@ -53,8 +57,9 @@ export const POST = catchAsyncErrors(async (request) => {
     badgeType,
     localAuthority,
     isActive,
-    adminCreatedB,
+    adminCreatedBy,
     adminCompanyName,
+    adminCreatedBy,
   });
 
   const savedEnquiry = await newEnquiry.save();

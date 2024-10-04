@@ -4,10 +4,11 @@ import React, { useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
 import Header from "../../../Components/Header";
 import Sidebar from "../../../Components/Sidebar";
-// import { toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import AddSignatureModel from "../AddSignature/AddSignatureModel";
+import UpdateSignatureModel from "../UpdateSignature/UpdateSignatureModel";
 import { API_URL_Signature } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import { GetSignature } from "@/app/Dashboard/Components/ApiUrl/ShowApiDatas/ShowApiDatas";
 import { getCompanyName } from "@/utils/storageUtils";
@@ -69,7 +70,8 @@ const Page = () => {
   const [isMounted, setIsMounted] = useState(false);
   const [isOpenSignature, setIsOpenSignature] = useState(false);
   const [selectedCompanyName, setSelectedCompanyName] = useState("");
-
+  const [selectedUserId, setSelectedUserId] = useState(null);
+  const [isOpenVehicleUpdate, setIsOpenVehcleUpdate] = useState(false);
   // Ensure that the component only renders once it is mounted
   useEffect(() => {
     setIsMounted(true);
@@ -143,11 +145,17 @@ const Page = () => {
     });
     setFilteredData(filtered); // Update filtered data state
   }, [searchTerm, data, selectedCompanyName]);
-  // const handleEdit = (id) => {
-  //   toast.info(`Edit item with ID: ${id}`);
-  //   // Implement your edit logic here
-  // };
+  const handleEdit = (id) => {
+    toast.info(`Edit item with ID: ${id}`);
+    // Implement your edit logic here
+    setSelectedUserId(id); // Store the selected user ID
+    setIsOpenVehcleUpdate(true); // Open the modal
+  };
 
+  // Function to toggle modal visibility
+  const OpenVehicleUpdateModle = () => {
+    setIsOpenVehcleUpdate(!isOpenVehicleUpdate); // Close the modal
+  };
   // const handleDelete = (id) => {
   //   toast.info(`Delete item with ID: ${id}`);
   //   // Implement your delete logic here
@@ -203,6 +211,12 @@ const Page = () => {
         isOpen={isOpenSignature}
         onClose={OpenSignatureModle}
         fetchData={fetchData}
+      />
+      <UpdateSignatureModel
+        isOpen={isOpenVehicleUpdate}
+        onClose={OpenVehicleUpdateModle}
+        fetchData={fetchData}
+        signatureData={selectedUserId} //
       />
     </>
   );

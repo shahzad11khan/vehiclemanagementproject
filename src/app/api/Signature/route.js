@@ -59,6 +59,8 @@ export async function POST(request) {
       adminCompanyName,
     } = formDataObject;
 
+    console.log(formDataObject);
+
     const existingUser = await Signature.findOne({ name });
     if (existingUser) {
       return NextResponse.json({

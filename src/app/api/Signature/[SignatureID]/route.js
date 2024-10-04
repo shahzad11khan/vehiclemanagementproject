@@ -1,15 +1,16 @@
 import { connect } from "@config/db.js";
 import Signature from "@models/Signature/Signature.Model.js";
-import { catchAsyncErrors } from "@middlewares/catchAsyncErrors.js";
 import cloudinary from "@middlewares/cloudinary.js";
-
-export const PUT = catchAsyncErrors(async (request) => {
+import { NextResponse } from "next/server";
+export const PUT = async (request, context) => {
   await connect();
-  const id = params.SignatureID;
+  const id = context.params.SignatureID; // Ensure this parameter matches your routing setup
   const data = await request.formData();
 
-  // Get existing signature by name or id
-  const existingSignature = await Signature.findOne({ id });
+  console.log(data);
+
+  // Get existing signature by ID
+  const existingSignature = await Signature.findById({ _id: id }); // Use findById to find by ID
   if (!existingSignature) {
     return NextResponse.json({
       error: "Signature not found",
@@ -22,9 +23,8 @@ export const PUT = catchAsyncErrors(async (request) => {
   let imageFile = existingSignature.imageFile;
   let imagepublicId = existingSignature.imagepublicId;
 
-  if (file1) {
+  if (file1 && typeof file1 === "object" && file1.name) {
     const buffer1 = Buffer.from(await file1.arrayBuffer());
-
     // Delete the old image from Cloudinary if a new image is uploaded
     if (imagepublicId) {
       await cloudinary.uploader.destroy(imagepublicId, {
@@ -41,9 +41,7 @@ export const PUT = catchAsyncErrors(async (request) => {
           },
           (error, result) => {
             if (error) {
-              reject(
-                new Error("Error uploading displayImage: " + error.message)
-              );
+              reject(new Error("Error uploading image: " + error.message));
             } else {
               resolve(result);
             }
@@ -77,16 +75,14 @@ export const PUT = catchAsyncErrors(async (request) => {
   existingSignature.name = name || existingSignature.name;
   existingSignature.description = description || existingSignature.description;
   existingSignature.imageName = imageName || existingSignature.imageName;
-  existingSignature.imagepublicId =
-    imagepublicId || existingSignature.imagepublicId;
-  existingSignature.imageFile = imageFile || existingSignature.imageFile;
-  existingSignature.isActive = isActive ? isActive : existingSignature.isActive;
-  existingSignature.adminCreatedBy = adminCreatedBy
-    ? adminCreatedBy
-    : existingSignature.adminCreatedBy;
-  existingSignature.adminCompanyName = adminCompanyName
-    ? adminCompanyName
-    : existingSignature.adminCompanyName;
+  existingSignature.imageFile = imageFile; // Update imageFile
+  existingSignature.imagepublicId = imagepublicId; // Update imagepublicId
+  existingSignature.isActive =
+    isActive !== undefined ? isActive : existingSignature.isActive; // Check for undefined to allow false
+  existingSignature.adminCreatedBy =
+    adminCreatedBy || existingSignature.adminCreatedBy;
+  existingSignature.adminCompanyName =
+    adminCompanyName || existingSignature.adminCompanyName;
 
   const updatedSignature = await existingSignature.save();
 
@@ -96,53 +92,68 @@ export const PUT = catchAsyncErrors(async (request) => {
     status: 200,
     data: updatedSignature,
   });
-});
+};
 
-// GET handler for retrieving a specific driver by ID
-export const GET = catchAsyncErrors(async (request, { params }) => {
-  // Connect to the database
-  await connect();
+// GET handler for retrieving a specific signature by ID
+export const GET = async (request, context) => {
+  try {
+    // Connect to the database
+    await connect();
 
-  // Extract the Driver ID from the request parameters
-  const id = params.SignatureID;
-  console.log(id);
+    // Extract the Signature ID from the request parameters
+    const { SignatureID } = context.params; // Correctly destructuring SignatureID from context.params
+    console.log("Signature ID:", SignatureID);
 
-  // Find the driver by ID
-  const Find_Signature = await Signature.findById(id);
+    // Find the signature by ID
+    const foundSignature = await Signature.findById(SignatureID);
 
-  // Check if the driver exists
-  if (!Find_Signature) {
-    return NextResponse.json({ result: "No Driver Found", status: 404 });
+    // Check if the signature exists
+    if (!foundSignature) {
+      return NextResponse.json({ result: "No Signature Found", status: 404 });
+    }
+
+    // Return the found signature as a JSON response
+    return NextResponse.json({ result: foundSignature, status: 200 });
+  } catch (error) {
+    console.error("Error fetching signature:", error); // Log the error for debugging
+    return NextResponse.json({ error: "Internal Server Error", status: 500 }); // Return an error response
   }
+};
 
-  // Return the found driver as a JSON response
-  return NextResponse.json({ result: Find_Signature, status: 200 });
-});
+// delete
+export const DELETE = async (request, context) => {
+  try {
+    await connect();
 
-export const DELETE = catchAsyncErrors(async (request, { params }) => {
-  await connect();
-  const id = params.SignatureID; // Assuming you're passing the name in the request body
+    // Extract the Signature ID from the request parameters
+    const { SignatureID } = context.params; // Correctly destructuring SignatureID from context.params
+    console.log("Signature ID:", SignatureID);
 
-  const signature = await Signature.findOne({ id });
-  if (!signature) {
+    // Find the signature by ID
+    const signature = await Signature.findById(SignatureID);
+    if (!signature) {
+      return NextResponse.json({
+        error: "Signature not found",
+        status: 404,
+      });
+    }
+
+    // Remove the image from Cloudinary
+    if (signature.imagepublicId) {
+      await cloudinary.uploader.destroy(signature.imagepublicId, {
+        resource_type: "auto",
+      });
+    }
+
+    // Delete the signature entry from the database
+    await Signature.findByIdAndDelete(SignatureID); // Use SignatureID directly
+
     return NextResponse.json({
-      error: "Signature not found",
-      status: 404,
+      message: "Signature deleted successfully",
+      status: 200,
     });
+  } catch (error) {
+    console.error("Error deleting signature:", error); // Log the error for debugging
+    return NextResponse.json({ error: "Internal Server Error", status: 500 }); // Return an error response
   }
-
-  // Remove the image from Cloudinary
-  if (signature.imagepublicId) {
-    await cloudinary.uploader.destroy(signature.imagepublicId, {
-      resource_type: "auto",
-    });
-  }
-
-  // Delete the signature entry from the database
-  await Signature.findByIdAndDelete({ id });
-
-  return NextResponse.json({
-    message: "Signature deleted successfully",
-    status: 200,
-  });
-});
+};

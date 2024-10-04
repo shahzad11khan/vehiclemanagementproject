@@ -11,7 +11,8 @@ export const PUT = async (request, context) => {
     const data = await request.json(); // Get the form data as JSON object
 
     // Find the enquiry by ID
-    const enquiry = await Enquiry.findById(id);
+    const enquiry = await Enquiry.findById({ _id: id });
+    console.log(enquiry);
 
     if (!enquiry) {
       return NextResponse.json({
@@ -38,7 +39,8 @@ export const PUT = async (request, context) => {
     enquiry.niNumber = data.niNumber || enquiry.niNumber;
     enquiry.badgeType = data.badgeType || enquiry.badgeType;
     enquiry.localAuthority = data.localAuthority || enquiry.localAuthority;
-    enquiry.isActive = data.isActive ? data.isActive : enquiry.isActive;
+    enquiry.isActive =
+      data.isActive !== undefined ? data.isActive : enquiry.isActive; // Corrected to handle `false` as a valid value
     enquiry.adminCreatedBy = data.adminCreatedBy || enquiry.adminCreatedBy;
     enquiry.adminCompanyName =
       data.adminCompanyName || enquiry.adminCompanyName;
@@ -88,24 +90,34 @@ export async function GET(request, context) {
     return NextResponse.json({ message: "Internal Server Error", status: 500 });
   }
 }
-export const DELETE = catchAsyncErrors(async (request, { params }) => {
-  await connect();
 
-  const id = params.IEnquiryID;
-  console.log("Driver ID:", id);
-  const deletedEnquiry = await Enquiry.findOneAndDelete({
-    id,
-  });
-  if (!deletedEnquiry) {
+export const DELETE = async (request, context) => {
+  try {
+    await connect();
+
+    const id = context.params.EnquiryID; // Ensure EnquiryID is correctly passed
+    console.log("Enquiry ID:", id);
+
+    const deletedEnquiry = await Enquiry.findOneAndDelete({ _id: id });
+
+    if (!deletedEnquiry) {
+      return NextResponse.json({
+        message: "Enquiry not found",
+        status: 404,
+      });
+    }
+
     return NextResponse.json({
-      message: "Enquiry not found",
-      status: 404,
+      message: "Enquiry deleted successfully",
+      success: true,
+      status: 200,
+    });
+  } catch (error) {
+    console.error("Error deleting enquiry:", error); // Log the error for debugging
+    return NextResponse.json({
+      message: "An error occurred while deleting the enquiry",
+      error: error.message, // Provide error details for easier debugging
+      status: 500,
     });
   }
-
-  return NextResponse.json({
-    message: "Enquiry deleted successfully",
-    success: true,
-    status: 200,
-  });
-});
+};

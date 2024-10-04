@@ -12,6 +12,7 @@ import UpdateEnquiryModel from "../UpdateEnquiry/UpdateEnquiryModel";
 import { API_URL_Enquiry } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import { GetEnquiry } from "@/app/Dashboard/Components/ApiUrl/ShowApiDatas/ShowApiDatas";
 import { getCompanyName } from "@/utils/storageUtils";
+import axios from "axios";
 
 const Page = () => {
   const columns = [
@@ -32,7 +33,7 @@ const Page = () => {
       sortable: true,
     },
     {
-      name: "Employee Status",
+      name: "Enquiry Status",
       selector: (row) => (row.isActive ? "Active" : "InActive"),
       sortable: true,
     },
@@ -200,7 +201,11 @@ const Page = () => {
           </div>
         </div>
       </div>
-      <AddEnquiryModel isOpen={isOpenEnquiry} onClose={OpenEnquiryModle} />
+      <AddEnquiryModel
+        isOpen={isOpenEnquiry}
+        onClose={OpenEnquiryModle}
+        fetchData={fetchData}
+      />
       <UpdateEnquiryModel
         isOpen={isOpenVehicleUpdate}
         onClose={OpenVehicleUpdateModle}

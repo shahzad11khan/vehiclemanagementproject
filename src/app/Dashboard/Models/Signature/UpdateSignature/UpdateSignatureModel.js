@@ -4,26 +4,46 @@ import { API_URL_Signature } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import { toast } from "react-toastify";
 import axios from "axios";
 
-const AddSignatureType = ({ isOpen, onClose, fetchData }) => {
+const UpdateSignatureModel = ({
+  isOpen,
+  onClose,
+  fetchData,
+  signatureData,
+}) => {
+  // Added signatureData prop
   const [formData, setFormData] = useState({
     name: "",
     description: "",
     isActive: false,
     imageName: "",
     imageFile: null,
-    // imageNote: "",
     adminCreatedBy: "",
     adminCompanyName: "",
   });
+
   useEffect(() => {
-    const storedCompanyName = localStorage.getItem("companyName"); // Replace with the actual key used in localStorage
+    if (signatureData) {
+      const fetchEnquiry = async () => {
+        try {
+          const { data } = await axios.get(
+            `${API_URL_Signature}/${signatureData}`
+          );
+          console.log("Enquiry data:", data.result);
+          setFormData(data.result);
+        } catch (error) {
+          console.error("Error fetching enquiry data:", error);
+        }
+      };
+      fetchEnquiry();
+    }
+    const storedCompanyName = localStorage.getItem("companyName");
     if (storedCompanyName) {
       setFormData((prevData) => ({
         ...prevData,
         adminCompanyName: storedCompanyName,
       }));
     }
-  }, []); // Run only once when the component mounts
+  }, [signatureData]); // Run whenever signatureData changes
 
   const handleChange = (e) => {
     const { name, value, type, checked, files } = e.target;
@@ -38,15 +58,13 @@ const AddSignatureType = ({ isOpen, onClose, fetchData }) => {
     e.preventDefault();
     try {
       const formDataToSend = new FormData();
-
-      // Append each form field to the FormData object
       Object.keys(formData).forEach((key) => {
         formDataToSend.append(key, formData[key]);
       });
 
-      // Send the form data to the backend using Axios
-      const response = await axios.post(
-        `${API_URL_Signature}`,
+      // Use PUT for updating an existing signature
+      const response = await axios.put(
+        `${API_URL_Signature}/${signatureData}`, // Assuming signatureData has an _id field
         formDataToSend,
         {
           headers: {
@@ -55,34 +73,35 @@ const AddSignatureType = ({ isOpen, onClose, fetchData }) => {
         }
       );
 
-      // Handle the response after submission
       console.log("Server response:", response.data);
       toast.success(response.data.message);
       onClose();
       fetchData();
-      // Optionally, reset the form after successful submission
+
+      // Reset the form after successful submission
       setFormData({
         name: "",
         description: "",
         isActive: false,
         imageName: "",
         imageFile: null,
-        // imageNote: "",
       });
 
-      // Close the modal after submission
       onClose();
     } catch (error) {
       console.error("Error submitting the form:", error);
+      toast.error("An error occurred while updating the signature."); // Optional: Notify user of the error
     }
   };
+
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
       <div className="bg-white p-6 rounded-lg shadow-lg max-w-xl max-h-screen overflow-y-auto">
         <h2 className="text-3xl font-semibold text-center mb-8">
-          Add Signature
+          {signatureData ? "Update Signature" : "Add Signature"}{" "}
+          {/* Dynamic title */}
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -191,7 +210,7 @@ const AddSignatureType = ({ isOpen, onClose, fetchData }) => {
               type="submit"
               className="px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50"
             >
-              Submit
+              {signatureData ? "Update" : "Submit"} {/* Dynamic button text */}
             </button>
             <button
               type="button"
@@ -207,4 +226,4 @@ const AddSignatureType = ({ isOpen, onClose, fetchData }) => {
   );
 };
 
-export default AddSignatureType;
+export default UpdateSignatureModel;

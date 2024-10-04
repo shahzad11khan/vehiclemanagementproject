@@ -53,11 +53,13 @@ const UpdateUserModel = ({ isOpen, onClose, userId }) => {
           const res = await axios.get(`${API_URL_USER}/${userId}`);
           const adminData = res.data.result;
           console.log("profile", adminData);
+
+          // Set form data, ensuring confirmpassword is shown instead of password
           setFormData({
             username: adminData.username,
             email: adminData.email,
-            password: adminData.confirmpassword,
-            confirmpassword: adminData.confirmpassword,
+            password: "", // Set password to confirmpassword
+            confirmpassword: "", // Ensure confirmpassword is set
             useravatar: adminData.useravatar,
             ...adminData, // Ensure the rest of the data is updated
           });
@@ -68,6 +70,7 @@ const UpdateUserModel = ({ isOpen, onClose, userId }) => {
         }
       };
 
+      // Call fetchData to populate the form
       fetchData();
     }
   }, [userId]);

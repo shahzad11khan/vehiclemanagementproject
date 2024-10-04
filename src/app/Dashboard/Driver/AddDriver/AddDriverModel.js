@@ -223,12 +223,16 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
             <h3 className="text-xl font-semibold mb-2">Driver Details</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               <div>
-                <label
-                  htmlFor="firstName"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  First Name:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="firstName"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    First Name:
+                  </label>
+                  <span className="text-red-600">*</span>
+                </div>
+
                 <input
                   type="text"
                   id="firstName"
@@ -240,12 +244,16 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                 />
               </div>
               <div>
-                <label
-                  htmlFor="lastName"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Last Name:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="lastName"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Last Name:
+                  </label>
+                  <span className="text-red-600">*</span>
+                </div>
+
                 <input
                   type="text"
                   id="lastName"
@@ -273,12 +281,16 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                 />
               </div>
               <div>
-                <label
-                  htmlFor="tel1"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Tel 1:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="tel1"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Tel 1:
+                  </label>
+                  <span className="text-red-600">*</span>
+                </div>
+
                 <input
                   type="tel"
                   id="tel1"
@@ -306,12 +318,16 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                 />
               </div>
               <div>
-                <label
-                  htmlFor="email"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Email Address:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="email"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Email Address:
+                  </label>
+                  <span className="text-red-600">*</span>
+                </div>
+
                 <input
                   type="email"
                   id="email"
@@ -323,12 +339,16 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                 />
               </div>
               <div>
-                <label
-                  htmlFor="licenseNumber"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  License Number:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="licenseNumber"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    License Number:
+                  </label>
+
+                  <span className="text-red-600">*</span>
+                </div>
                 <input
                   type="text"
                   id="licenseNumber"
@@ -336,15 +356,20 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                   value={formData.licenseNumber}
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                  required
                 />
               </div>
               <div>
-                <label
-                  htmlFor="niNumber"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  NI Number:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="niNumber"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    NI Number:
+                  </label>
+
+                  <span className="text-red-600">*</span>
+                </div>
                 <input
                   type="text"
                   id="niNumber"
@@ -352,15 +377,20 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                   value={formData.niNumber}
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                  required
                 />
               </div>
               <div>
-                <label
-                  htmlFor="driverNumber"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Driver Number:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="driverNumber"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Driver Number:
+                  </label>
+
+                  <span className="text-red-600">*</span>
+                </div>
                 <input
                   type="text"
                   id="driverNumber"
@@ -368,6 +398,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                   value={formData.driverNumber}
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                  required
                 />
               </div>
               <div>
@@ -486,12 +517,15 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                 </select>
               </div>
               <div>
-                <label
-                  htmlFor="startDate"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Start Date:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="startDate"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Start Date:
+                  </label>
+                  <span className="text-red-600">*</span>
+                </div>
                 <input
                   type="date"
                   id="startDate"
@@ -499,15 +533,19 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                   value={formData.startDate}
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                  required
                 />
               </div>
               <div>
-                <label
-                  htmlFor="driverRent"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Driver Rent:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="driverRent"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Driver Rent:
+                  </label>
+                  <span className="text-red-600">*</span>
+                </div>
                 <input
                   type="number"
                   id="driverRent"
@@ -515,15 +553,21 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                   value={formData.driverRent}
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                  required
                 />
               </div>
               <div>
-                <label
-                  htmlFor="licenseExpiryDate"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  License Expiry Date:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="licenseExpiryDate"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    License Expiry Date:
+                  </label>
+
+                  <span className="text-red-600">*</span>
+                </div>
+
                 <input
                   type="date"
                   id="licenseExpiryDate"
@@ -531,15 +575,20 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                   value={formData.licenseExpiryDate}
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                  required
                 />
               </div>
               <div>
-                <label
-                  htmlFor="taxiBadgeDate"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Taxi Badge Date:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="taxiBadgeDate"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Taxi Badge Date:
+                  </label>
+
+                  <span className="text-red-600">*</span>
+                </div>
                 <input
                   type="date"
                   id="taxiBadgeDate"
@@ -547,6 +596,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                   value={formData.taxiBadgeDate}
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                  required
                 />
               </div>
               <div>
@@ -556,6 +606,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                 >
                   Rent Payment Cycle:
                 </label>
+
                 <select
                   id="rentPaymentCycle"
                   name="rentPaymentCycle"
@@ -589,12 +640,16 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                 />
               </div>
               <div>
-                <label
-                  htmlFor="city"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  City:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="city"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    City:
+                  </label>
+
+                  <span className="text-red-600">*</span>
+                </div>
                 <input
                   type="text"
                   id="city"
@@ -602,15 +657,20 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                   value={formData.city}
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                  required
                 />
               </div>
               <div>
-                <label
-                  htmlFor="county"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  County:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="county"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    County:
+                  </label>
+
+                  <span className="text-red-600">*</span>
+                </div>
                 <input
                   type="text"
                   id="county"
@@ -618,6 +678,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                   value={formData.county}
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                  required
                 />
               </div>
               <div>
@@ -634,15 +695,20 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                   value={formData.postcode}
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                  required
                 />
               </div>
               <div>
-                <label
-                  htmlFor="postalAddress"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Postal Address:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="postalAddress"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Postal Address:
+                  </label>
+
+                  <span className="text-red-600">*</span>
+                </div>
                 <input
                   type="text"
                   id="postalAddress"
@@ -650,15 +716,20 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                   value={formData.postalAddress}
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                  required
                 />
               </div>
               <div>
-                <label
-                  htmlFor="permanentAddress"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Permanent Address:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="permanentAddress"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Permanent Address:
+                  </label>
+
+                  <span className="text-red-600">*</span>
+                </div>
                 <input
                   type="text"
                   id="permanentAddress"
@@ -673,7 +744,11 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
 
           {/* Image Upload */}
           <div>
-            <h3 className="text-xl font-semibold mb-2">Driver Image</h3>
+            <div className="flex gap-1">
+              <h3 className="text-xl font-semibold mb-2">Driver Image</h3>
+
+              <span className="text-red-600">*</span>
+            </div>
             <input
               type="file"
               id="imageFile"
@@ -689,6 +764,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
               onChange={handleChange}
               placeholder="Image Name"
               className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+              required
             />
             {/* <textarea
               id="imageNotes"

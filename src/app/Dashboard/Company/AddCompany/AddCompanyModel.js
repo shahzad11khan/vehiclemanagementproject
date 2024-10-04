@@ -161,12 +161,16 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 ">
             {/* Company Name */}
             <div>
-              <label
-                htmlFor="CompanyName"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Company Name
-              </label>
+              <div className="flex gap-1">
+                <label
+                  htmlFor="CompanyName"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Company Name
+                </label>
+                <span className="text-red-600">*</span>
+              </div>
+
               <input
                 type="text"
                 id="CompanyName"
@@ -180,12 +184,16 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
 
             {/* Email */}
             <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Email
-              </label>
+              <div className="flex gap-1">
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Email
+                </label>
+                <span className="text-red-600">*</span>
+              </div>
+
               <input
                 type="email"
                 id="email"
@@ -199,12 +207,15 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
 
             {/* Password */}
             <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Password
-              </label>
+              <div className="flex gap-1">
+                <label
+                  htmlFor="password"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Password
+                </label>
+                <span className="text-red-600">*</span>
+              </div>
               <input
                 type="password"
                 id="password"
@@ -218,12 +229,16 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
 
             {/* Confirm Password */}
             <div>
-              <label
-                htmlFor="confirmPassword"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Confirm Password
-              </label>
+              <div className="flex gap-1">
+                <label
+                  htmlFor="confirmPassword"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Confirm Password
+                </label>
+                <span className="text-red-600">*</span>
+              </div>
+
               <input
                 type="password"
                 id="confirmPassword"
@@ -236,12 +251,16 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
             </div>
             {/* CompanyRegistrationNumber*/}
             <div>
-              <label
-                htmlFor="CompanyRegistrationNumber"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Company Registration Number
-              </label>
+              <div className="flex gap-1">
+                <label
+                  htmlFor="CompanyRegistrationNumber"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Company Registration Number
+                </label>
+                <span className="text-red-600">*</span>
+              </div>
+
               <input
                 type="text"
                 id="CompanyRegistrationNumber"
@@ -254,12 +273,16 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
             </div>
             {/* vatnumber*/}
             <div>
-              <label
-                htmlFor="vatnumber"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Vat Number
-              </label>
+              <div className="flex gap-1">
+                <label
+                  htmlFor="vatnumber"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Vat Number
+                </label>
+                <span className="text-red-600">*</span>
+              </div>
+
               <input
                 type="text"
                 id="vatnumber"

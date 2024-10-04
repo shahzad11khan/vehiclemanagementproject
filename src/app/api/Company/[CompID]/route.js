@@ -36,11 +36,14 @@ export async function PUT(request, context) {
     console.log("image:", file1);
 
     let image = company.image; // Retain existing image by default
-    let imagePublicId = company.imagePublicId; // Retain existing public ID by default
+    console.log(image);
 
+    let imagePublicId = company.imagePublicId; // Retain existing public ID by default
+    console.log(imagePublicId);
     // Check if the user avatar is an object and has a valid name (indicating it's a file)
-    if (typeof file1 === "object" && file1.name) {
-      const byteData = await userAvatar.arrayBuffer();
+
+    if (file1 && typeof file1 === "object" && file1.name) {
+      const byteData = await file1.arrayBuffer();
       const buffer = Buffer.from(byteData);
 
       // Upload the new image to Cloudinary
@@ -80,8 +83,68 @@ export async function PUT(request, context) {
       CreatedBy,
       CompanyRegistrationNumber,
       vatnumber,
+      mailingAddress,
+      physical_Address,
+      phoneNumber,
+      fax_Number,
+      generalEmail,
+      accountsPayableEmail,
+      specificContactEmail,
+      accountsPayableContactName,
+      accountsPayableContactPhoneNumberandEmail,
+      billingAddress,
+      paymentTermsAgreedPaymentSchedule,
+      paymentTermsPreferredPaymentMethod,
+      bankingInformationBankName,
+      bankingInformationBankAccountNumber,
+      bankingInformationBankIBANSWIFTCode,
+      bankingInformationBankAddress,
+      specificDepartmentContactInformationBillingFinanceDepartment,
+      specificDepartmentContactInformationProcurementPurchasingContact,
+      specificDepartmentContactInformationPrimaryContactfortheProject,
     } = formDataObject;
-
+    //
+    company.mailingAddress = mailingAddress || company.mailingAddress;
+    company.physical_Address = physical_Address || company.physical_Address;
+    company.phoneNumber = phoneNumber || company.phoneNumber;
+    company.fax_Number = fax_Number || company.fax_Number;
+    company.generalEmail = generalEmail || company.generalEmail;
+    company.accountsPayableEmail =
+      accountsPayableEmail || company.accountsPayableEmail;
+    company.specificContactEmail =
+      specificContactEmail || company.specificContactEmail;
+    company.accountsPayableContactName =
+      accountsPayableContactName || company.accountsPayableContactName;
+    company.accountsPayableContactPhoneNumberandEmail =
+      accountsPayableContactPhoneNumberandEmail ||
+      company.accountsPayableContactPhoneNumberandEmail;
+    company.billingAddress = billingAddress || company.billingAddress;
+    company.paymentTermsAgreedPaymentSchedule =
+      paymentTermsAgreedPaymentSchedule ||
+      company.paymentTermsAgreedPaymentSchedule;
+    company.paymentTermsPreferredPaymentMethod =
+      paymentTermsPreferredPaymentMethod ||
+      company.paymentTermsPreferredPaymentMethod;
+    company.bankingInformationBankName =
+      bankingInformationBankName || company.bankingInformationBankName;
+    company.bankingInformationBankAccountNumber =
+      bankingInformationBankAccountNumber ||
+      company.bankingInformationBankAccountNumber;
+    company.bankingInformationBankIBANSWIFTCode =
+      bankingInformationBankIBANSWIFTCode ||
+      company.bankingInformationBankIBANSWIFTCode;
+    company.bankingInformationBankAddress =
+      bankingInformationBankAddress || company.bankingInformationBankAddress;
+    company.specificDepartmentContactInformationBillingFinanceDepartment =
+      specificDepartmentContactInformationBillingFinanceDepartment ||
+      company.specificDepartmentContactInformationBillingFinanceDepartment;
+    company.specificDepartmentContactInformationProcurementPurchasingContact =
+      specificDepartmentContactInformationProcurementPurchasingContact ||
+      company.specificDepartmentContactInformationProcurementPurchasingContact;
+    company.specificDepartmentContactInformationPrimaryContactfortheProject =
+      specificDepartmentContactInformationPrimaryContactfortheProject ||
+      company.specificDepartmentContactInformationPrimaryContactfortheProject;
+    //
     // Update the company details
     company.CompanyName = CompanyName || company.CompanyName;
     company.CompanyRegistrationNumber =
@@ -92,15 +155,15 @@ export async function PUT(request, context) {
     // Only hash the password if it's being updated
     if (password) {
       const hashedPassword = await bcrypt.hash(password, 10);
-      company.password = hashedPassword;
+      company.password = hashedPassword || company.password;
     }
 
     company.isActive = isActive ? isActive : company.isActive;
     company.CreatedBy = CreatedBy || company.CreatedBy;
     company.CompanyName = CompanyName || company.CompanyName;
     company.confirmPassword = confirmPassword || company.confirmPassword;
-    company.image = image; // Update the image URL
-    company.imagePublicId = imagePublicId; // Update the public ID
+    company.image = image || company.image; // Update the image URL
+    company.imagePublicId = imagePublicId || company.imagePublicId; // Update the public ID
 
     const updatedCompany = await company.save();
     if (!updatedCompany) {

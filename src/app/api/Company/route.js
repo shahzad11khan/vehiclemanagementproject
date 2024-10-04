@@ -62,6 +62,25 @@ export async function POST(request) {
       CreatedBy,
       CompanyRegistrationNumber,
       vatnumber,
+      mailingAddress,
+      physical_Address,
+      phoneNumber,
+      fax_Number,
+      generalEmail,
+      accountsPayableEmail,
+      specificContactEmail,
+      accountsPayableContactName,
+      accountsPayableContactPhoneNumberandEmail,
+      billingAddress,
+      paymentTermsAgreedPaymentSchedule,
+      paymentTermsPreferredPaymentMethod,
+      bankingInformationBankName,
+      bankingInformationBankAccountNumber,
+      bankingInformationBankIBANSWIFTCode,
+      bankingInformationBankAddress,
+      specificDepartmentContactInformationBillingFinanceDepartment,
+      specificDepartmentContactInformationProcurementPurchasingContact,
+      specificDepartmentContactInformationPrimaryContactfortheProject,
     } = formDataObject;
 
     // let hashedPassword = null;
@@ -79,19 +98,37 @@ export async function POST(request) {
       });
     }
 
-    // Create and save the new blog entry
+    // Create and save the new company entry
     const newCompany = new Company({
       CompanyName,
       email,
       password: hashedPassword,
       confirmPassword,
-      isActive,
+      isActive: isActive || false,
       CreatedBy,
       image,
       imagePublicId,
       CompanyRegistrationNumber,
       vatnumber,
-      isActive: isActive || false,
+      mailingAddress,
+      physical_Address,
+      phoneNumber,
+      fax_Number,
+      generalEmail,
+      accountsPayableEmail,
+      specificContactEmail,
+      accountsPayableContactName,
+      accountsPayableContactPhoneNumberandEmail,
+      billingAddress,
+      paymentTermsAgreedPaymentSchedule,
+      paymentTermsPreferredPaymentMethod,
+      bankingInformationBankName,
+      bankingInformationBankAccountNumber,
+      bankingInformationBankIBANSWIFTCode,
+      bankingInformationBankAddress,
+      specificDepartmentContactInformationBillingFinanceDepartment,
+      specificDepartmentContactInformationProcurementPurchasingContact,
+      specificDepartmentContactInformationPrimaryContactfortheProject,
     });
 
     console.log(newCompany);

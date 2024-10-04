@@ -38,6 +38,32 @@ const CompanySchema = new mongoose.Schema(
     image: { type: String }, // URL to Cloudinary or local storage
     // Cloudinary public ID
     imagePublicId: { type: String },
+
+    mailingAddress: { type: String },
+    physical_Address: { type: String },
+    phoneNumber: { type: String },
+    fax_Number: { type: String },
+    generalEmail: { type: String },
+    accountsPayableEmail: { type: String },
+    specificContactEmail: { type: String },
+    accountsPayableContactName: { type: String },
+    accountsPayableContactPhoneNumberandEmail: { type: String },
+    billingAddress: { type: String },
+    paymentTermsAgreedPaymentSchedule: { type: String },
+    paymentTermsPreferredPaymentMethod: { type: String },
+    bankingInformationBankName: { type: String },
+    bankingInformationBankAccountNumber: { type: String },
+    bankingInformationBankIBANSWIFTCode: { type: String },
+    bankingInformationBankAddress: { type: String },
+    specificDepartmentContactInformationBillingFinanceDepartment: {
+      type: String,
+    },
+    specificDepartmentContactInformationProcurementPurchasingContact: {
+      type: String,
+    },
+    specificDepartmentContactInformationPrimaryContactfortheProject: {
+      type: String,
+    },
   },
   { timestamps: true } // Automatically adds createdAt and updatedAt fields
 );

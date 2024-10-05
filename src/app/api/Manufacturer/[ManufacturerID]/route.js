@@ -1,74 +1,87 @@
 import { connect } from "@config/db.js";
 import Manufecturer from "@models/Manufecturer/Manufecturer.Model.js";
-import { catchAsyncErrors } from "@middlewares/catchAsyncErrors.js";
+// import { catchAsyncErrors } from "@middlewares/catchAsyncErrors.js";
 import { NextResponse } from "next/server";
 
-// PUT function to update a Manufecturer by its VehicleID
-export const PUT = catchAsyncErrors(async (request, { params }) => {
-  await connect(); // Connect to the database
+export const PUT = async (request, context) => {
+  try {
+    await connect(); // Connect to the database
 
-  const id = params.ManufecturerID; // Extract VehicleID from params
-  const data = await request.formData(); // Get the form data
+    const id = context.params.ManufacturerID; // Extract ManufacturerID from params
+    const data = await request.json(); // Get the form data
 
-  const formDataObject = {};
-  for (const [key, value] of data.entries()) {
-    formDataObject[key] = value;
-  }
+    console.log(id);
+    console.log(data);
 
-  // Destructure the necessary fields
-  const { name, description, isActive } = formDataObject;
+    // Destructure the necessary fields
+    const { name, description, isActive } = data;
 
-  // Find the vehicle by ID
-  const manufecturer = await Manufecturer.findById(id);
+    // Find the manufacturer by ID
+    const manufacturer = await Manufecturer.findById({ _id: id });
 
-  if (!manufecturer) {
+    if (!manufacturer) {
+      return NextResponse.json({
+        error: "Manufacturer not found",
+        status: 404,
+      });
+    }
+
+    // Update manufacturer properties with values from formDataObject or retain existing values
+    manufacturer.name = name ? name.trim() : manufacturer.name; // Update name or retain existing
+    manufacturer.description = description
+      ? description.trim()
+      : manufacturer.description; // Update description or retain existing
+    manufacturer.isActive =
+      isActive !== undefined ? isActive : manufacturer.isActive; // Ensure isActive is treated correctly
+
+    // Save the updated manufacturer
+    await manufacturer.save();
+
     return NextResponse.json({
-      error: "Manufecturer not found",
-      status: 404,
+      message: "Manufacturer details updated successfully",
+      manufacturer, // Return the updated manufacturer object
+      status: 200,
+    });
+  } catch (error) {
+    console.error("Error updating manufacturer:", error);
+    return NextResponse.json({
+      error: "Failed to update manufacturer",
+      status: 500,
     });
   }
+};
 
-  // Update vehicle properties with values from formDataObject or retain existing values
-  manufecturer.name = name ? name.trim() : manufecturer.name; // Update name or retain existing
-  manufecturer.description = description
-    ? description.trim()
-    : manufecturer.description; // Update description or retain existing
-  manufecturer.isActive = isActive ? isActive : manufecturer.isActive;
+// GET handler for retrieving a specific manufacturer by ID
+export const GET = async (request, context) => {
+  try {
+    // Connect to the database
+    await connect();
 
-  // Save the updated vehicle
-  await manufecturer.save();
+    // Extract the Manufacturer ID from the request parameters
+    const id = context.params.ManufacturerID; // Use context.params for accessing the parameters
+    console.log(id);
 
-  return NextResponse.json({
-    message: "Manufecturer details updated successfully",
-    Manufecturer,
-    status: 200,
-  });
-});
+    // Find the manufacturer by ID
+    const Find_Manufecturer = await Manufecturer.findById({ _id: id });
 
-// GET handler for retrieving a specific driver by ID
-export const GET = catchAsyncErrors(async (request, { params }) => {
-  // Connect to the database
-  await connect();
+    // Check if the manufacturer exists
+    if (!Find_Manufecturer) {
+      return NextResponse.json({
+        result: "No Manufacturer Found",
+        status: 404,
+      });
+    }
 
-  // Extract the Driver ID from the request parameters
-  const id = params.ManufecturerID;
-  console.log(id);
-
-  // Find the driver by ID
-  const Find_Manufecturer = await Manufecturer.findById(id);
-
-  // Check if the driver exists
-  if (!Find_Manufecturer) {
+    // Return the found manufacturer as a JSON response
+    return NextResponse.json({ result: Find_Manufecturer, status: 200 });
+  } catch (error) {
+    console.error("Error fetching manufacturer:", error); // Log the error for debugging
     return NextResponse.json({
-      result: "No Manufecturer Found",
-      status: 404,
+      result: "Failed to fetch manufacturer",
+      status: 500,
     });
   }
-
-  // Return the found driver as a JSON response
-  return NextResponse.json({ result: Find_Manufecturer, status: 200 });
-});
-
+};
 // DELETE handler for deleting a manufacturer
 export const DELETE = async (request, { params }) => {
   try {

@@ -6,8 +6,9 @@ import Header from "../../../Components/Header";
 import Sidebar from "../../../Components/Sidebar";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { FaTrash } from "react-icons/fa";
+import { FaEdit, FaTrash } from "react-icons/fa";
 import AddPaymentModel from "../AddPayment/AddPaymentModel";
+import UpdatePaymentModel from "../UpdatePayment/UpdatePaymentModel";
 import axios from "axios";
 import { API_URL_Payment } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import { GetPayment } from "@/app/Dashboard/Components/ApiUrl/ShowApiDatas/ShowApiDatas";
@@ -39,12 +40,12 @@ const Page = () => {
       name: "Actions",
       cell: (row) => (
         <div className="flex gap-2">
-          {/* <button
+          <button
             onClick={() => handleEdit(row._id)}
             className="text-blue-500 hover:text-blue-700"
           >
             <FaEdit />
-          </button> */}
+          </button>
           <button
             onClick={() => handleDelete(row._id)}
             className="text-red-500 hover:text-red-700"
@@ -64,6 +65,8 @@ const Page = () => {
   const [isMounted, setIsMounted] = useState(false);
   const [isOpenPayment, setIsOpenPayment] = useState(false);
   const [selectedCompanyName, setSelectedCompanyName] = useState("");
+  const [selectedUserId, setSelectedUserId] = useState(null);
+  const [isOpenVehicleUpdate, setIsOpenVehcleUpdate] = useState(false);
 
   // Ensure that the component only renders once it is mounted
   useEffect(() => {
@@ -139,10 +142,13 @@ const Page = () => {
     setFilteredData(filtered); // Update filtered data state
   }, [searchTerm, data, selectedCompanyName]);
 
-  // const handleEdit = (id) => {
-  //   toast.info(`Edit item with ID: ${id}`);
-  //   // Implement your edit logic here
-  // };
+  const handleEdit = (id) => {
+    toast.info(`Edit item with ID: ${id}`);
+    // Implement your edit logic here
+    // Implement your edit logic here
+    setSelectedUserId(id); // Store the selected user ID
+    setIsOpenVehcleUpdate(true); // Open the modal
+  };
 
   // const handleDelete = (id) => {
   //   toast.info(`Delete item with ID: ${id}`);
@@ -154,6 +160,10 @@ const Page = () => {
 
   const OpenPaymentModle = () => {
     setIsOpenPayment(!isOpenPayment);
+  };
+  // Function to toggle modal visibility
+  const OpenVehicleUpdateModle = () => {
+    setIsOpenVehcleUpdate(!isOpenVehicleUpdate); // Close the modal
   };
 
   return (
@@ -199,6 +209,12 @@ const Page = () => {
         isOpen={isOpenPayment}
         onClose={OpenPaymentModle}
         fetchData={fetchData}
+      />
+      <UpdatePaymentModel
+        isOpen={isOpenVehicleUpdate}
+        onClose={OpenVehicleUpdateModle}
+        fetchData={fetchData}
+        paymentid={selectedUserId} //
       />
     </>
   );

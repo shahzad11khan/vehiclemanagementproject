@@ -52,12 +52,6 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
     // Retrieve company name and superadmin role from local storage
     const storedCompanyName = localStorage.getItem("companyName");
     const storedSuperadmin = localStorage.getItem("role");
-    // console.log("superadmin", storedSuperadmin);
-
-    // // Set the superadmin state if available
-    // if (storedSuperadmin) {
-    //   setSuperadmin(storedSuperadmin);
-    // }
 
     // Update vehicle data with the adminCompanyName if available
     if (storedCompanyName) {
@@ -168,7 +162,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
         registrationNumber: "",
         warrantyInfo: "",
         adminCreatedBy: "",
-        adminCompanyName: vehicleData.adminCompanyName, // Preserve company name
+        adminCompanyName: "", // Preserve company name
       });
     } catch (error) {
       console.error("Error submitting vehicle data:", error);
@@ -191,7 +185,10 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
           {/* Manufacturer and Model */}
           <div className="grid grid-cols-3 md:grid-cols-3 gap-2">
             <div>
-              <label className="block font-semibold">Manufacturer</label>
+              <div className="flex gap-1">
+                <label className="block font-semibold">Manufacturer</label>
+                <span className="text-red-600">*</span>
+              </div>
               <select
                 id="manufacturer"
                 name="manufacturer"
@@ -209,7 +206,10 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
               </select>
             </div>
             <div>
-              <label className="block font-semibold">Model</label>
+              <div className="flex gap-1">
+                <label className="block font-semibold">Model</label>
+                <span className="text-red-600">*</span>
+              </div>
               <input
                 type="text"
                 name="model"
@@ -221,7 +221,10 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
               />
             </div>
             <div>
-              <label className="block font-semibold">Year</label>
+              <div className="flex gap-1">
+                <label className="block font-semibold">Year</label>
+                <span className="text-red-600">*</span>
+              </div>
               <input
                 type="number"
                 name="year"
@@ -237,7 +240,11 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
           {/* Year and Type/Body Style */}
           <div className="grid grid-cols-3 md:grid-cols-3 gap-2 mt-4">
             <div className="">
-              <label className="block font-semibold">Type/Body Style</label>
+              <div className="flex gap-1">
+                <label className="block font-semibold">Type/Body Style</label>
+                <span className="text-red-600">*</span>
+              </div>
+
               <select
                 name="type"
                 value={vehicleData.type}
@@ -255,7 +262,10 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
               </select>
             </div>
             <div>
-              <label className="block font-semibold">Engine Type</label>
+              <div className="flex gap-1">
+                <label className="block font-semibold">Engine Type</label>
+                <span className="text-red-600">*</span>
+              </div>
               <input
                 type="text"
                 name="engineType"
@@ -267,7 +277,10 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
               />
             </div>
             <div className="">
-              <label className="block font-semibold">Fuel Type</label>
+              <div className="flex gap-1">
+                <label className="block font-semibold">Fuel Type</label>
+                <span className="text-red-600">*</span>
+              </div>
               <select
                 name="fuelType"
                 value={vehicleData.fuelType}
@@ -289,7 +302,10 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
           {/* Engine Type, Fuel Type, Transmission, Drivetrain */}
           <div className="grid grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-2 mt-4">
             <div>
-              <label className="block font-semibold">Transmission</label>
+              <div className="flex gap-1">
+                <label className="block font-semibold">Transmission</label>
+                <span className="text-red-600">*</span>
+              </div>
               <input
                 type="text"
                 name="transmission"
@@ -301,7 +317,10 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
               />
             </div>
             <div className="">
-              <label className="block font-semibold">Drivetrain</label>
+              <div className="flex gap-1">
+                <label className="block font-semibold">Drivetrain</label>
+                <span className="text-red-600">*</span>
+              </div>
               <select
                 name="drivetrain"
                 value={vehicleData.drivetrain}
@@ -319,7 +338,10 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
               </select>
             </div>
             <div>
-              <label className="block font-semibold">Exterior Color</label>
+              <div className="flex gap-1">
+                <label className="block font-semibold">Exterior Color</label>
+                <span className="text-red-600">*</span>
+              </div>
               <input
                 type="text"
                 name="exteriorColor"
@@ -331,7 +353,10 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
               />
             </div>
             <div>
-              <label className="block font-semibold">Interior Color</label>
+              <div className="flex gap-1">
+                <label className="block font-semibold">Interior Color</label>
+                <span className="text-red-600">*</span>
+              </div>
               <input
                 type="text"
                 name="interiorColor"
@@ -350,7 +375,10 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
           {/* Dimensions */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mt-4">
             <div>
-              <label className="block font-semibold">Height</label>
+              <div className="flex gap-1">
+                <label className="block font-semibold">Height</label>
+                <span className="text-red-600">*</span>
+              </div>
               <input
                 type="text"
                 name="height"
@@ -361,7 +389,10 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
               />
             </div>
             <div>
-              <label className="block font-semibold">Width</label>
+              <div className="flex gap-1">
+                <label className="block font-semibold">Width</label>
+                <span className="text-red-600">*</span>
+              </div>
               <input
                 type="text"
                 name="width"
@@ -372,7 +403,10 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
               />
             </div>
             <div>
-              <label className="block font-semibold">Length</label>
+              <div className="flex gap-1">
+                <label className="block font-semibold">Length</label>
+                <span className="text-red-600">*</span>
+              </div>
               <input
                 type="text"
                 name="length"
@@ -387,7 +421,12 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
           {/* Other Fields */}
           <div className="grid grid-cols-3 md:grid-cols-3 gap-2 mt-4">
             <div>
-              <label className="block font-semibold">Passenger Capacity</label>
+              <div className="flex gap-1">
+                <label className="block font-semibold">
+                  Passenger Capacity
+                </label>
+                <span className="text-red-600">*</span>
+              </div>
               <input
                 type="number"
                 name="passengerCapacity"
@@ -398,7 +437,10 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
               />
             </div>
             <div>
-              <label className="block font-semibold">Cargo Capacity</label>
+              <div className="flex gap-1">
+                <label className="block font-semibold">Cargo Capacity</label>
+                <span className="text-red-600">*</span>
+              </div>
               <input
                 type="text"
                 name="cargoCapacity"
@@ -409,7 +451,10 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
               />
             </div>
             <div>
-              <label className="block font-semibold">Horsepower</label>
+              <div className="flex gap-1">
+                <label className="block font-semibold">Horsepower</label>
+                <span className="text-red-600">*</span>
+              </div>
               <input
                 type="text"
                 name="horsepower"
@@ -424,7 +469,10 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
           {/* Horsepower and Performance */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mt-4">
             <div>
-              <label className="block font-semibold">Torque</label>
+              <div className="flex gap-1">
+                <label className="block font-semibold">Torque</label>
+                <span className="text-red-600">*</span>
+              </div>
               <input
                 type="text"
                 name="torque"
@@ -435,7 +483,10 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
               />
             </div>
             <div>
-              <label className="block font-semibold">Top Speed (mph)</label>
+              <div className="flex gap-1">
+                <label className="block font-semibold">Top Speed (mph)</label>
+                <span className="text-red-600">*</span>
+              </div>
               <input
                 type="text"
                 name="topSpeed"
@@ -446,9 +497,13 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
               />
             </div>
             <div>
-              <label className="block font-semibold">
-                Towing Capacity (lbs)
-              </label>
+              <div className="flex gap-1">
+                <label className="block font-semibold">
+                  Towing Capacity (lbs)
+                </label>{" "}
+                <span className="text-red-600">*</span>
+              </div>
+
               <input
                 type="text"
                 name="towingCapacity"
@@ -463,7 +518,12 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
           {/* Safety and Tech Features */}
           <div className="grid grid-cols-3 md:grid-cols-3 gap-2 mt-4">
             <div>
-              <label className="block font-semibold">Fuel Efficiency</label>
+              <div className="flex gap-1">
+                <label className="block font-semibold">Fuel Efficiency</label>
+
+                <span className="text-red-600">*</span>
+              </div>
+
               <input
                 type="text"
                 name="fuelEfficiency"
@@ -475,7 +535,11 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
               />
             </div>
             <div>
-              <label className="block font-semibold">Safety Features</label>
+              <div className="flex gap-1">
+                <label className="block font-semibold">Safety Features</label>
+
+                <span className="text-red-600">*</span>
+              </div>
               <textarea
                 name="safetyFeatures"
                 value={vehicleData.safetyFeatures}
@@ -486,7 +550,13 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
               />
             </div>
             <div>
-              <label className="block font-semibold">Technology Features</label>
+              <div className="flex gap-1">
+                <label className="block font-semibold">
+                  Technology Features
+                </label>
+
+                <span className="text-red-600">*</span>
+              </div>
               <textarea
                 name="techFeatures"
                 value={vehicleData.techFeatures}
@@ -501,7 +571,11 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
           {/* Towing Capacity, Price, Registration Number */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mt-4">
             <div>
-              <label className="block font-semibold">Price ($)</label>
+              <div className="flex gap-1">
+                <label className="block font-semibold">Price ($)</label>
+
+                <span className="text-red-600">*</span>
+              </div>
               <input
                 type="text"
                 name="price"
@@ -512,7 +586,13 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
               />
             </div>
             <div>
-              <label className="block font-semibold">Registration Number</label>
+              <div className="flex gap-1">
+                <label className="block font-semibold">
+                  Registration Number
+                </label>
+
+                <span className="text-red-600">*</span>
+              </div>
               <input
                 type="text"
                 name="registrationNumber"
@@ -524,12 +604,16 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
             </div>
 
             <div>
-              <label
-                htmlFor="taxiFirm"
-                className="text-sm font-medium text-gray-700"
-              >
-                Taxi Localauthority:
-              </label>
+              <div className="flex gap-1">
+                <label
+                  htmlFor="taxiFirm"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Taxi Localauthority:
+                </label>
+
+                <span className="text-red-600">*</span>
+              </div>
               <select
                 id="LocalAuthority"
                 name="LocalAuthority"
@@ -550,7 +634,13 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
 
           {/* Warranty Information */}
           <div className="mt-4">
-            <label className="block font-semibold">Warranty Information</label>
+            <div className="flex gap-1">
+              <label className="block font-semibold">
+                Warranty Information
+              </label>
+
+              <span className="text-red-600">*</span>
+            </div>
             <textarea
               name="warrantyInfo"
               value={vehicleData.warrantyInfo}

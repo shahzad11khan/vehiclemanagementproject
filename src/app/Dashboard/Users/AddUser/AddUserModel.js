@@ -114,18 +114,23 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
             <h3 className="text-xl font-semibold mb-2">User Details</h3>
             <div className="grid grid-cols-4 sm:grid-cols-4 gap-3">
               <div>
-                <label
-                  htmlFor="taxiFirm"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Title:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="taxiFirm"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Title:
+                  </label>
+                  <span className="text-red-600">*</span>
+                </div>
+
                 <select
                   id="title"
                   name="title"
                   value={formData.title}
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                  required
                 >
                   <option value="">Select Title</option>
                   {title.map((title) => (
@@ -137,12 +142,16 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
               </div>
 
               <div>
-                <label
-                  htmlFor="firstName"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  First Name:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="firstName"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    First Name:
+                  </label>
+                  <span className="text-red-600">*</span>
+                </div>
+
                 <input
                   type="text"
                   id="firstName"
@@ -155,12 +164,16 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
               </div>
 
               <div>
-                <label
-                  htmlFor="lastName"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Last Name:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="lastName"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Last Name:
+                  </label>
+                  <span className="text-red-600">*</span>
+                </div>
+
                 <input
                   type="text"
                   id="lastName"
@@ -179,12 +192,15 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
             <h3 className="text-xl font-semibold mb-4">Contact Information</h3>
             <div className="grid grid-cols-4 sm:grid-cols-4 gap-3">
               <div>
-                <label
-                  htmlFor="email"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Email:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="email"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Email:
+                  </label>
+                  <span className="text-red-600">*</span>
+                </div>
                 <input
                   type="email"
                   id="email"
@@ -197,12 +213,15 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
               </div>
 
               <div>
-                <label
-                  htmlFor="tel1"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Tel 1:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="tel1"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Tel 1:
+                  </label>
+                  <span className="text-red-600">*</span>
+                </div>
                 <input
                   type="tel"
                   id="tel1"
@@ -221,6 +240,7 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                 >
                   Tel 2:
                 </label>
+
                 <input
                   type="tel"
                   id="tel2"
@@ -232,12 +252,15 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
               </div>
 
               <div>
-                <label
-                  htmlFor="postcode"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Postcode:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="postcode"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Postcode:
+                  </label>
+                  <span className="text-red-600">*</span>
+                </div>
                 <input
                   type="text"
                   id="postcode"
@@ -249,12 +272,15 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
               </div>
 
               <div>
-                <label
-                  htmlFor="postalAddress"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Postal Address:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="postalAddress"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Postal Address:
+                  </label>
+                  <span className="text-red-600">*</span>
+                </div>
                 <input
                   type="text"
                   id="postalAddress"
@@ -262,6 +288,7 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                   value={formData.postalAddress}
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                  required
                 />
               </div>
 
@@ -272,6 +299,7 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                 >
                   Permanent Address:
                 </label>
+
                 <input
                   type="text"
                   id="permanentAddress"
@@ -283,12 +311,15 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
               </div>
 
               <div>
-                <label
-                  htmlFor="city"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  City:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="city"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    City:
+                  </label>
+                  <span className="text-red-600">*</span>
+                </div>
                 <input
                   type="text"
                   id="city"
@@ -296,16 +327,20 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                   value={formData.city}
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                  required
                 />
               </div>
 
               <div>
-                <label
-                  htmlFor="county"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  County:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="county"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    County:
+                  </label>
+                  <span className="text-red-600">*</span>
+                </div>
                 <input
                   type="text"
                   id="county"
@@ -313,6 +348,7 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                   value={formData.county}
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                  required
                 />
               </div>
             </div>
@@ -340,12 +376,16 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
               </div> */}
 
               <div>
-                <label
-                  htmlFor="dateOfBirth"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Date of Birth:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="county"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    County:
+                  </label>
+                  <span className="text-red-600">*</span>
+                </div>
+
                 <input
                   type="date"
                   id="dateOfBirth"
@@ -353,16 +393,20 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                   value={formData.dateOfBirth}
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                  required
                 />
               </div>
 
               <div>
-                <label
-                  htmlFor="position"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Position:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="position"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Position:
+                  </label>
+                  <span className="text-red-600">*</span>
+                </div>
                 <input
                   type="text"
                   id="position"
@@ -370,6 +414,7 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                   value={formData.position}
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                  required
                 />
               </div>
 
@@ -391,12 +436,15 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
               </div>
 
               <div>
-                <label
-                  htmlFor="username"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Username:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="username"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Username:
+                  </label>
+                  <span className="text-red-600">*</span>
+                </div>
                 <input
                   type="text"
                   id="username"
@@ -409,12 +457,15 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
               </div>
 
               <div>
-                <label
-                  htmlFor="password"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Password:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="password"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Password:
+                  </label>
+                  <span className="text-red-600">*</span>
+                </div>
                 <input
                   type="password"
                   id="password"
@@ -427,12 +478,15 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
               </div>
 
               <div>
-                <label
-                  htmlFor="confirmpassword"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Confirm Password:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="confirmpassword"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Confirm Password:
+                  </label>
+                  <span className="text-red-600">*</span>
+                </div>
                 <input
                   type="password"
                   id="confirmpassword"

@@ -279,7 +279,7 @@ const Page = () => {
                       style={{ ...item.colorx, backgroundColor: "transparent" }} // Corrected spelling from stong to strong
                       className="text-white" // Added text-white class
                     >
-                      {" $"}
+                      {/* {" $"} */}
                     </strong>{" "}
                     {item.count}
                   </span>

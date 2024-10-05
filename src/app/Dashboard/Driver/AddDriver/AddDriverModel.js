@@ -720,16 +720,13 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                 />
               </div>
               <div>
-                <div className="flex gap-1">
-                  <label
-                    htmlFor="permanentAddress"
-                    className="text-sm font-medium text-gray-700"
-                  >
-                    Permanent Address:
-                  </label>
+                <label
+                  htmlFor="permanentAddress"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Permanent Address:
+                </label>
 
-                  <span className="text-red-600">*</span>
-                </div>
                 <input
                   type="text"
                   id="permanentAddress"
@@ -744,11 +741,11 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
 
           {/* Image Upload */}
           <div>
-            <div className="flex gap-1">
-              <h3 className="text-xl font-semibold mb-2">Driver Image</h3>
+            {/* <div className="flex gap-1"> */}
+            <h3 className="text-xl font-semibold mb-2">Driver Image</h3>
 
-              <span className="text-red-600">*</span>
-            </div>
+            {/* <span className="text-red-600">*</span> */}
+            {/* </div> */}
             <input
               type="file"
               id="imageFile"

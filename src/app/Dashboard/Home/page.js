@@ -159,7 +159,9 @@ const Page = () => {
 
                 title: superadmin === "superadmin" ? "All Users" : "Users",
                 count:
-                  superadmin === "superadmin" ? counts.userCount : countuser,
+                  superadmin === "superadmin"
+                    ? counts.userCount
+                    : countuser || 0,
                 colorx: {
                   background: "#8461BF",
                   // replace with your desired hex colors
@@ -183,7 +185,7 @@ const Page = () => {
                 count:
                   superadmin === "superadmin"
                     ? counts.driverCount
-                    : countDriver,
+                    : countDriver || 0,
                 colorx: {
                   background: "#47C2FF",
                   // replace with your desired hex colors
@@ -209,7 +211,7 @@ const Page = () => {
                 count:
                   superadmin === "superadmin"
                     ? counts.vehicleCount
-                    : countVehicle,
+                    : countVehicle || 0,
                 colorx: {
                   background: "#47C2FF",
                   // replace with your desired hex colors

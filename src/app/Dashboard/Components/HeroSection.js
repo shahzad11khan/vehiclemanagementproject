@@ -39,7 +39,7 @@ const HeroSection = () => {
             </span>
           </li>
           <li>
-            <strong className="text-xl"> $0.0</strong>
+            <strong className="text-xl">£0.0</strong>
             <span className="ml-1 text-sm block">
               {" "}
               active customers in total amount

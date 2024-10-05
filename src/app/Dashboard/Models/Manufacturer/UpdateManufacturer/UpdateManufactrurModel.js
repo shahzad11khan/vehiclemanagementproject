@@ -84,7 +84,7 @@ const UpdateManufacturerModel = ({
         `${API_URL_Manufacturer}/${manufacturerid}`,
         formData
       );
-
+      console.log(response);
       setFormData({
         name: "",
         description: "",

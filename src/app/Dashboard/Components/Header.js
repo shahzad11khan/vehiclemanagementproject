@@ -1,5 +1,5 @@
 "use client";
-// import axios from "axios";
+import axios from "axios";
 // import Image from "next/image";
 import Link from "next/link";
 import React, { useState, useCallback, useEffect } from "react";
@@ -10,9 +10,8 @@ import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { API_URL_Company, API_URL_USER } from "../Components/ApiUrl/ApiUrls";
-
 import { isAuthenticated, clearAuthData } from "@/utils/verifytoken";
-import axios from "axios";
+// import axios from "axios";
 
 const Header = () => {
   const [companyName, setCompanyName] = useState("");
@@ -77,11 +76,6 @@ const Header = () => {
       clearAuthData();
       document.cookie =
         "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-      localStorage.removeItem("token");
-      localStorage.removeItem("Userusername");
-      localStorage.removeItem("UserActive");
-      localStorage.removeItem("companyName");
-      localStorage.removeItem("role");
       router.push("/");
       toast.success("Logged out successfully");
     } else {
@@ -98,13 +92,13 @@ const Header = () => {
       <div className="flex flex-shrink-0 py-5 px-3 bg-gradient-to-r from-rose-400 to-purple-200">
         <span className="text-sm font-sm text-white bg-transparent">
           Vehicle Management System{" "}
-          {companyName ? (
+          {/* {companyName ? (
             <div>
               <p>Company Name:{companyName === undefined ? "" : companyName}</p>
             </div>
           ) : (
             <p>No company selected.</p>
-          )}
+          )} */}
         </span>
       </div>
 
@@ -121,7 +115,7 @@ const Header = () => {
               <p> {companyName === undefined ? "" : companyName}</p>
             </div>
           ) : (
-            <p>No company selected.</p>
+            <p>No Name.</p>
           )}
         </h6>
         <div className="relative">

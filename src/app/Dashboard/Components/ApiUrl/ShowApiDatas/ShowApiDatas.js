@@ -24,8 +24,8 @@ export const GetUsers = () => {
   return axios
     .get(`${API_URL_USER}`)
     .then((res) => {
-      console.log(res.data.result);
-      console.log(res.data.count);
+      // console.log(res.data.result);
+      // console.log(res.data.count);
       return { result: res.data.result, count: res.data.count };
     })
     .catch((error) => {
@@ -37,8 +37,8 @@ export const GetDriver = () => {
   return axios
     .get(`${API_URL_Driver}`)
     .then((res) => {
-      console.log(res.data.Result);
-      console.log(res.data.count);
+      // console.log(res.data.Result);
+      // console.log(res.data.count);
       return { result: res.data.Result, count: res.data.count };
     })
     .catch((error) => {
@@ -50,8 +50,8 @@ export const GetEnquiry = () => {
   return axios
     .get(`${API_URL_Enquiry}`)
     .then((res) => {
-      console.log(res.data.Result);
-      console.log(res.data.count);
+      // console.log(res.data.Result);
+      // console.log(res.data.count);
       return { result: res.data.Result, count: res.data.count };
     })
     .catch((error) => {
@@ -63,8 +63,8 @@ export const GetFirm = () => {
   return axios
     .get(`${API_URL_Firm}`)
     .then((res) => {
-      console.log(res.data.result);
-      console.log(res.data.count);
+      // console.log(res.data.result);
+      // console.log(res.data.count);
       return { result: res.data.result, count: res.data.count };
     })
     .catch((error) => {
@@ -76,8 +76,8 @@ export const GetCompany = () => {
   return axios
     .get(`${API_URL_Company}`)
     .then((res) => {
-      console.log(res.data.result);
-      console.log(res.data.count);
+      // console.log(res.data.result);
+      // console.log(res.data.count);
       return { result: res.data.result, count: res.data.count };
     })
     .catch((error) => {
@@ -89,8 +89,8 @@ export const GetInsurence = () => {
   return axios
     .get(`${API_URL_Insurence}`)
     .then((res) => {
-      console.log(res.data.Result);
-      console.log(res.data.count);
+      // console.log(res.data.Result);
+      // console.log(res.data.count);
       return { result: res.data.Result, count: res.data.count };
     })
     .catch((error) => {
@@ -102,8 +102,8 @@ export const GetEmployee = () => {
   return axios
     .get(`${API_URL_Employee}`)
     .then((res) => {
-      console.log(res.data.Result);
-      console.log(res.data.count);
+      // console.log(res.data.Result);
+      // console.log(res.data.count);
       return { result: res.data.Result, count: res.data.count };
     })
     .catch((error) => {
@@ -115,8 +115,8 @@ export const GetLocalAuthority = () => {
   return axios
     .get(`${API_URL_LocalAuthority}`)
     .then((res) => {
-      console.log(res.data.Result);
-      console.log(res.data.count);
+      // console.log(res.data.Result);
+      // console.log(res.data.count);
       return { result: res.data.Result, count: res.data.count };
     })
     .catch((error) => {
@@ -128,7 +128,7 @@ export const GetManufacturer = () => {
   return axios
     .get(`${API_URL_Manufacturer}`)
     .then((res) => {
-      console.log(res.data.Result);
+      // console.log(res.data.Result);
       // console.log(res.data.count);
       return { result: res.data.Result, count: res.data.count };
     })
@@ -141,7 +141,7 @@ export const GetPayment = () => {
   return axios
     .get(`${API_URL_Payment}`)
     .then((res) => {
-      console.log(res.data.Result);
+      // console.log(res.data.Result);
       // console.log(res.data.count);
       return { result: res.data.Result, count: res.data.count };
     })
@@ -154,7 +154,7 @@ export const GetSignature = () => {
   return axios
     .get(`${API_URL_Signature}`)
     .then((res) => {
-      console.log(res.data.Result);
+      // console.log(res.data.Result);
       // console.log(res.data.count);
       return { result: res.data.Result, count: res.data.count };
     })
@@ -167,7 +167,7 @@ export const GetSupplier = () => {
   return axios
     .get(`${API_URL_Supplier}`)
     .then((res) => {
-      console.log(res.data.Result);
+      // console.log(res.data.Result);
       // console.log(res.data.count);
       return { result: res.data.Result, count: res.data.count };
     })
@@ -180,7 +180,7 @@ export const GetVehicleType = () => {
   return axios
     .get(`${API_URL_VehicleType}`)
     .then((res) => {
-      console.log(res.data.Result);
+      // console.log(res.data.Result);
       // console.log(res.data.count);
       return { result: res.data.Result, count: res.data.count };
     })
@@ -193,7 +193,7 @@ export const GetVehicle = () => {
   return axios
     .get(`${API_URL_Vehicle}`)
     .then((res) => {
-      console.log(res.data.Result);
+      // console.log(res.data.Result);
       // console.log(res.data.count);
       return { result: res.data.Result, count: res.data.count };
     })
@@ -206,7 +206,7 @@ export const GetTitle = () => {
   return axios
     .get(`${API_URL_Title}`)
     .then((res) => {
-      console.log(res.data.result);
+      // console.log(res.data.result);
       // console.log(res.data.count);
       return { result: res.data.result, count: res.data.count };
     })
@@ -219,7 +219,7 @@ export const GetBadge = () => {
   return axios
     .get(`${API_URL_Badge}`)
     .then((res) => {
-      console.log(res.data.result);
+      // console.log(res.data.result);
       // console.log(res.data.count);
       return { result: res.data.result, count: res.data.count };
     })

@@ -46,8 +46,8 @@ const Login = () => {
         if (UserRole === "superadmin") {
           localStorage.setItem("token", isVerifiedtoken);
           localStorage.setItem("Userusername", Userusername);
-          localStorage.setItem("UserActive", UserActive);
           localStorage.setItem("companyname", companyName);
+          localStorage.setItem("UserActive", UserActive);
           localStorage.setItem("role", UserRole);
           localStorage.setItem("userId", userId);
         } else {
@@ -58,6 +58,7 @@ const Login = () => {
           localStorage.setItem("role", UserRole);
           localStorage.setItem("userId", userId);
         }
+        localStorage.setItem("UserActive", UserActive);
         localStorage.setItem("Userusername", Userusername);
         localStorage.setItem("companyName", companyName);
         localStorage.setItem("userId", userId);

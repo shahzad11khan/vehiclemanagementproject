@@ -17,9 +17,11 @@ export const isAuthenticated = () => {
 };
 
 export const clearAuthData = () => {
-  localStorage.removeItem("token");
-  localStorage.removeItem("Userusername");
-  localStorage.removeItem("UserActive");
-  localStorage.removeItem("companyName");
-  localStorage.removeItem("role");
+        localStorage.removeItem("token");
+        localStorage.removeItem("Userusername");
+        localStorage.removeItem("companyname");
+        localStorage.removeItem("userId");
+        localStorage.removeItem("UserActive");
+        localStorage.removeItem("companyName");
+        localStorage.removeItem("role");
 };

@@ -19,12 +19,24 @@ import {
   GetPayment,
   GetCompany,
 } from "../Components/ApiUrl/ShowApiDatas/ShowApiDatas.js";
+import {
+  GetUserscount,
+  GetDrivercount,
+  GetVehiclecount,
+  // GetVehicle,
+  // GetManufacturer,
+  // GetPayment,
+  // GetCompany,
+} from "../Components/ApiUrl/getSpecificCompanyCount/getSpecificCompanyCount.js";
 import { getAuthData, isAuthenticated } from "@/utils/verifytoken";
 
 const Page = () => {
   const router = useRouter();
   const [superadmin, setsuperadmin] = useState(""); // State to track which dropdown is open
   const [companyname, setcompanyname] = useState(""); // State to track which dropdown is open
+  const [countuser, setcountuser] = useState(""); // State to track which dropdown is open
+  const [countDriver, setcountDriver] = useState(""); // State to track which dropdown is open
+  const [countVehicle, setcountVehicle] = useState(""); // State to track which dropdown is open
 
   useEffect(() => {
     if (isAuthenticated()) {
@@ -50,22 +62,23 @@ const Page = () => {
     Companies: 0,
     Payment: 0,
   });
+
   const fetchCounts = useCallback(async () => {
     try {
       const [
-        { count: userCount },
-        { count: driverCount },
+        { count: userCount }, // Filtered user count based on company
+        { count: driverCount }, // Filtered driver count based on company
         { count: vehicleCount },
         { count: Manufacturer },
         { count: Payment },
         { count: Companies },
       ] = await Promise.all([
-        GetUsers(),
-        GetDriver(),
-        GetVehicle(),
-        GetManufacturer(),
-        GetPayment(),
-        GetCompany(),
+        GetUsers(), // Filtered users (by company)
+        GetDriver(), // Filtered drivers (by company)
+        GetVehicle(), // Total vehicles
+        GetManufacturer(), // Total manufacturers
+        GetPayment(), // Total payments
+        GetCompany(), // Total companies
       ]);
 
       setCounts({
@@ -80,9 +93,29 @@ const Page = () => {
       console.log(`Failed to fetch data: ${error}`);
     }
   }, []);
+
   useEffect(() => {
+    fetchUsersCount();
     fetchCounts();
   }, [fetchCounts, router]);
+
+  const fetchUsersCount = async () => {
+    try {
+      const data = await GetUserscount();
+      const dataDriver = await GetDrivercount();
+      const dataVehicle = await GetVehiclecount();
+      // Access the filtered users and their count here
+      console.log("Filtered Users:", data.result); // Array of filtered users
+      console.log("User Count:", data.count); // Number of users in the filtered result
+      setcountuser(data.count);
+      setcountDriver(dataDriver.count);
+      setcountVehicle(dataVehicle.count);
+    } catch (error) {
+      console.error("Error fetching user count:", error);
+    }
+  };
+
+  // Call the function to execute
 
   return (
     <>
@@ -124,8 +157,9 @@ const Page = () => {
                   />
                 ),
 
-                title: "Customers",
-                count: counts.driverCount || 0,
+                title: superadmin === "superadmin" ? "All Users" : "Users",
+                count:
+                  superadmin === "superadmin" ? counts.userCount : countuser,
                 colorx: {
                   background: "#8461BF",
                   // replace with your desired hex colors
@@ -145,8 +179,11 @@ const Page = () => {
                     }}
                   />
                 ),
-                title: "Vehicles",
-                count: counts.vehicleCount || 0,
+                title: superadmin === "superadmin" ? "All Drivers" : "Drivers",
+                count:
+                  superadmin === "superadmin"
+                    ? counts.driverCount
+                    : countDriver,
                 colorx: {
                   background: "#47C2FF",
                   // replace with your desired hex colors
@@ -167,8 +204,12 @@ const Page = () => {
                   />
                 ),
                 color: "text-red-500",
-                title: "Reports",
-                count: counts.Manufacturer || 0,
+                title:
+                  superadmin === "superadmin" ? "All Vehicles" : "Vehicles",
+                count:
+                  superadmin === "superadmin"
+                    ? counts.vehicleCount
+                    : countVehicle,
                 colorx: {
                   background: "#47C2FF",
                   // replace with your desired hex colors

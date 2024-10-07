@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import DataTable from "react-data-table-component";
 import Header from "../../../Components/Header";
 import Sidebar from "../../../Components/Sidebar";
 import { toast } from "react-toastify";
@@ -13,6 +12,7 @@ import axios from "axios";
 import { API_URL_Manufacturer } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import { GetManufacturer } from "@/app/Dashboard/Components/ApiUrl/ShowApiDatas/ShowApiDatas";
 import { getCompanyName } from "@/utils/storageUtils";
+import CustomDataTable from "../../../Components/CustomDataTable";
 
 const Page = () => {
   const columns = [
@@ -26,11 +26,11 @@ const Page = () => {
       selector: (row) => row.description,
       sortable: true,
     },
-    {
-      name: "Company",
-      selector: (row) => row.adminCompanyName,
-      sortable: true,
-    },
+    // {
+    //   name: "Company",
+    //   selector: (row) => row.adminCompanyName,
+    //   sortable: true,
+    // },
     {
       name: "Manufacturer Status",
       selector: (row) => (row.isActive ? "Active" : "InActive"),
@@ -168,7 +168,7 @@ const Page = () => {
       <div className="flex gap-4">
         <Sidebar />
         <div className="container mx-auto p-4 ">
-          <div className="justify-between items-center border-2 mt-3">
+          <div className="justify-between mx-auto items-center border-2 mt-3 w-[78%]">
             <div className="flex justify-between">
               {/* Search Input */}
               <div className="justify-start">
@@ -192,12 +192,14 @@ const Page = () => {
             </div>
 
             {/* Data Table */}
-            <DataTable
-              title="Manufacturers List"
-              columns={columns}
-              data={filteredData} // Use filtered data
-              pagination
-            />
+            <div>
+              <CustomDataTable
+                title="Manufacturers List"
+                columns={columns}
+                data={filteredData} // Use filtered data
+                pagination
+              />
+            </div>
           </div>
         </div>
       </div>

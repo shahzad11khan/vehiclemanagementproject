@@ -158,7 +158,7 @@ const Page = () => {
       <div className="flex gap-4">
         <Sidebar />
         <div className="container mx-auto p-4 ">
-          <div className="justify-between items-center border-2 mt-3">
+          <div className="justify-between mx-auto items-center border-2 mt-3 w-[78%]">
             <div className="flex justify-between">
               {/* Search Input */}
               <div className="justify-start">

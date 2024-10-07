@@ -3,7 +3,7 @@ import DataTable from "react-data-table-component";
 
 const CustomDataTable = ({ title, data, columns, pagination }) => {
   return (
-    <div className="">
+    <div>
       <DataTable
         title={title}
         columns={columns}

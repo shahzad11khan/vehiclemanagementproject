@@ -45,13 +45,21 @@ const Page = () => {
       selector: (row) => row.niNumber,
       sortable: true,
     },
-
+    // {
+    //   name: "Driver taxiFirm",
+    //   selector: (row) => row.taxiFirm,
+    //   sortable: true,
+    // },
     {
       name: "Driver badgeType",
       selector: (row) => row.badgeType,
       sortable: true,
     },
-
+    {
+      name: "Company",
+      selector: (row) => row.adminCompanyName,
+      sortable: true,
+    },
     {
       name: "Actions",
       cell: (row) => (
@@ -191,7 +199,7 @@ const Page = () => {
       <div className="flex gap-4">
         <Sidebar />
         <div className="container mx-auto p-4">
-          <div className="justify-between mx-auto items-center border-2 mt-3 w-[78%]">
+          <div className="justify-between mx-auto items-center border-2 mt-3 w-[70%] bg-red-800">
             <div className="flex justify-between">
               {/* Search Input */}
               <div className="justify-start">
@@ -213,7 +221,8 @@ const Page = () => {
                 </button>
               </div>
             </div>
-            <div className="">
+            {/* Scrollable Table */}
+            <div className="w-6/12 overflow-x-auto mt-4 bg-red-500">
               <DataTableComponent
                 title="Driver List"
                 columns={columns}

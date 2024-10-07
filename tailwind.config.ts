@@ -39,14 +39,10 @@ module.exports = {
   },
   plugins: [
      require('@tailwindcss/typography'),
-    // function ({ addUtilities }) {
+    //  function ({ addUtilities }) {
     //   const newUtilities = {
-    //     ".no-scrollbar::-webkit-scrollbar": {
-    //       display: "none",
-    //     },
-    //     ".no-scrollbar": {
-    //       "-ms-overflow-style": "none",
-    //       "scrollbar-width": "none",
+    //     '.clip-custom': {
+    //       'clip-path': 'polygon(50% 0%, 100% 0, 100% 35%, 100% 70%, 100% 100%, 25% 100%, 25% 64%, 0 53%, 50% 43%, 25% 0)',
     //     },
     //   };
     //   addUtilities(newUtilities);

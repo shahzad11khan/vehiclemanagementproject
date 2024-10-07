@@ -8,7 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { FaEdit, FaTrash } from "react-icons/fa"; // Added FaEye for the preview button
 import AddDriverModel from "../AddDriver/AddDriverModel";
 import UpdateDriverModel from "../UpdateDriver/UpdateDriverModel";
-import CustomDataTable from "../../Components/CustomDataTable";
+import DataTableComponent from "../../Components/CustomDataTable";
 import axios from "axios";
 import { API_URL_Driver } from "../../Components/ApiUrl/ApiUrls";
 import { getCompanyName } from "@/utils/storageUtils";
@@ -45,21 +45,13 @@ const Page = () => {
       selector: (row) => row.niNumber,
       sortable: true,
     },
-    {
-      name: "Driver taxiFirm",
-      selector: (row) => row.taxiFirm,
-      sortable: true,
-    },
+
     {
       name: "Driver badgeType",
       selector: (row) => row.badgeType,
       sortable: true,
     },
-    {
-      name: "Company",
-      selector: (row) => row.adminCompanyName,
-      sortable: true,
-    },
+
     {
       name: "Actions",
       cell: (row) => (
@@ -199,7 +191,7 @@ const Page = () => {
       <div className="flex gap-4">
         <Sidebar />
         <div className="container mx-auto p-4">
-          <div className="justify-between items-center border-2 mt-3 w-[83%]">
+          <div className="justify-between mx-auto items-center border-2 mt-3 w-[78%]">
             <div className="flex justify-between">
               {/* Search Input */}
               <div className="justify-start">
@@ -221,14 +213,14 @@ const Page = () => {
                 </button>
               </div>
             </div>
-
-            {/* Data Table */}
-            <CustomDataTable
-              title="Drivers List"
-              columns={columns}
-              data={filteredData} // Use filtered data
-              pagination
-            />
+            <div className="">
+              <DataTableComponent
+                title="Driver List"
+                columns={columns}
+                data={filteredData}
+                pagination
+              />
+            </div>
           </div>
         </div>
       </div>

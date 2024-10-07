@@ -209,8 +209,10 @@ const Page = () => {
       <Header className="min-w-full" />
       <div className="flex gap-4">
         <Sidebar />
-        <div className="container mx-auto p-4 overflow-hidden">
-          <div className="justify-between items-center border-2 mt-3 w-[83%]">
+        <div className="container mx-auto p-4 ">
+          <div className="justify-between mx-auto items-center border-2 mt-3 w-[83%] ">
+            {" "}
+            {/* Added z-[10] */}
             <div className="flex justify-between">
               <div className="justify-start">
                 <input
@@ -230,13 +232,12 @@ const Page = () => {
                 </button>
               </div>
             </div>
-            <div>
+            <div className="">
               <DataTableComponent
                 title="User List"
                 columns={columns}
                 data={filteredData}
                 pagination
-                className=" "
               />
             </div>
           </div>

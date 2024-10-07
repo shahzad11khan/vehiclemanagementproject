@@ -6,7 +6,7 @@ import {
   fetchTaxiFirms,
   fetchBadge,
   fetchInsurence,
-  fetchPayment,
+  // fetchPayment,
   fetchLocalAuth,
   fetchVehicle,
 } from "../../Components/DropdownData/taxiFirm/taxiFirmService";
@@ -50,7 +50,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
   const [taxiFirms, setTaxiFirms] = useState([]);
   const [badge, setBadge] = useState([]);
   const [insurance, setInsurance] = useState([]);
-  const [payment, setPayment] = useState([]);
+  // const [payment, setPayment] = useState([]);
   const [localAuth, setLocalAuth] = useState([]);
   const [vehicle, setVehicle] = useState([]);
   const [superadmin, setSuperadmin] = useState(null);
@@ -81,14 +81,14 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
           taxiFirmsData,
           badgeData,
           insuranceData,
-          paymentData,
+          // paymentData,
           localAuthData,
           vehicle,
         ] = await Promise.all([
           fetchTaxiFirms(),
           fetchBadge(),
           fetchInsurence(),
-          fetchPayment(),
+          // fetchPayment(),
           fetchLocalAuth(),
           fetchVehicle(),
         ]);
@@ -117,12 +117,12 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                 (insurance) => insurance.companyName === storedCompanyName
               );
 
-        const filteredPayments =
-          superadmin === "superadmin"
-            ? paymentData.Result
-            : paymentData.Result.filter(
-                (payment) => payment.companyName === storedCompanyName
-              );
+        // const filteredPayments =
+        //   superadmin === "superadmin"
+        //     ? paymentData.Result
+        //     : paymentData.Result.filter(
+        //         (payment) => payment.companyName === storedCompanyName
+        //       );
 
         const filteredLocalAuth =
           superadmin === "superadmin"
@@ -141,7 +141,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
         setTaxiFirms(filteredTaxiFirms);
         setBadge(filteredBadges);
         setInsurance(filteredInsurance);
-        setPayment(filteredPayments);
+        // setPayment(filteredPayments);
         setLocalAuth(filteredLocalAuth);
         setVehicle(filteredVehicle);
         // LocalAuthority in vehicle model
@@ -616,11 +616,16 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                 >
                   {/* </select> */}
                   <option value="">Select Payment</option>
-                  {payment.map((payment) => (
+                  <option value="perday">Per Day</option>
+                  <option value="permonth">per Month</option>
+                  <option value="perquarter">Per Quarter</option>
+                  <option value="peryear">per year</option>
+
+                  {/* {payment.map((payment) => (
                     <option key={payment._id} value={payment.name}>
                       {payment.name}
                     </option>
-                  ))}
+                  ))} */}
                 </select>
               </div>
               <div>

@@ -37,8 +37,8 @@ const Page = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(`${API_URL_Driver}`);
-      setDrivers(response.data.result);
       console.log(response.data.result);
+      setDrivers(response.data.result);
       setFilteredDrivers(response.data.result);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -110,12 +110,8 @@ const Page = () => {
   function drivercal(date, pay, value) {
     // Convert 'pay' to a number
     const result = Number(pay);
-    console.log(result);
     // Convert 'date' to a Date object
     const passingDate = new Date(date);
-
-    // Log 'value' for debugging (if needed)
-    // console.log(value);
 
     // Get the current date and subtract one day
     const currentDate = new Date();
@@ -130,18 +126,18 @@ const Page = () => {
     value = value.toLowerCase();
     switch (value) {
       case "perday":
-        // Calculate the differencclse in time between currentDate and passingDate in milliseconds
+        // Calculate the difference in time between currentDate and passingDate in milliseconds
         const timeDiff = currentDate - passingDate;
         // Convert the difference from milliseconds to days
         timePassed = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-        return `${calculateFinalResult(timePassed)}`;
+        break;
 
       case "permonth":
         // Calculate the difference in months between currentDate and passingDate
         timePassed =
           (currentDate.getFullYear() - passingDate.getFullYear()) * 12 +
           (currentDate.getMonth() - passingDate.getMonth());
-        return `${calculateFinalResult(timePassed)}`;
+        break;
 
       case "perquarter":
         // Calculate the difference in months
@@ -150,7 +146,7 @@ const Page = () => {
           (currentDate.getMonth() - passingDate.getMonth());
         // Calculate the number of quarters passed (1 quarter = 3 months)
         timePassed = Math.floor(timePassed / 3);
-        return `${calculateFinalResult(timePassed)}`;
+        break;
 
       case "peryear":
         // Calculate the difference in years between currentDate and passingDate
@@ -163,11 +159,17 @@ const Page = () => {
         ) {
           timePassed--;
         }
-        return `${calculateFinalResult(timePassed)}`;
+        break;
 
       default:
         return "Invalid value type provided.";
     }
+
+    // Calculate the final result
+    const finalResult = calculateFinalResult(timePassed);
+
+    // Return the final result or pay if finalResult is 0
+    return finalResult === 0 ? pay.toString() : finalResult.toString();
   }
 
   return (

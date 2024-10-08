@@ -45,7 +45,7 @@ const Header = () => {
     try {
       const res = await axios.get(`${API_URL_Company}/${userId}`);
       const adminData = res.data.result;
-      console.log("Company Data", adminData);
+      // console.log("Company Data", adminData);
 
       if (adminData._id === userId) {
         setImagePreview(adminData.image);

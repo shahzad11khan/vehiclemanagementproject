@@ -82,6 +82,8 @@ export async function POST(request) {
       vehicle,
     } = formDataObject;
 
+    console.log(formDataObject);
+
     const existingDriver = await Driver.findOne({ email });
     if (existingDriver) {
       return NextResponse.json({

@@ -116,7 +116,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
             : insuranceData.Result.filter(
                 (insurance) => insurance.adminCompanyName === storedCompanyName
               );
-        console.log("insurence", insuranceData.Result);
+        // console.log("insurence", insuranceData.Result);
 
         // const filteredPayments =
         //   superadmin === "superadmin"
@@ -190,7 +190,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
         },
       });
 
-      consolel.log(response);
+      console.log(response);
       if (response.data.success) {
         toast.success("Driver data successfully saved.");
         fetchData(); // Fetch updated data after successful submission
@@ -200,9 +200,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
         toast.warn("Data was not saved.");
       }
     } catch (err) {
-      const errorMessage =
-        err.response?.data?.message || "Failed to add driver.";
-      console.log(errorMessage);
+      console.log(err);
       // setError(errorMessage);
       // toast.error(errorMessage);
     } finally {

@@ -415,7 +415,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
                 >
-                  <option value="">Select Taxi Firm</option>
+                  <option value="null">Select Taxi Firm</option>
                   {taxiFirms.map((firm) => (
                     <option key={firm._id} value={firm.name}>
                       {firm.name}
@@ -441,7 +441,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                   <option value="firm1">Firm 1</option>
                   <option value="firm2">Firm 2</option>
                   Add more options as needed */}
-                  <option value="">Select Localauthority</option>
+                  <option value="null">Select Localauthority</option>
                   {localAuth.map((local) => (
                     <option key={local._id} value={local.name}>
                       {local.name}
@@ -464,7 +464,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
                 >
-                  <option value="">Select vehicle</option>
+                  <option value="null">Select vehicle</option>
                   {filteredVehicles.map((vehicle) => (
                     <option key={vehicle._id} value={vehicle.model}>
                       {vehicle.model}
@@ -486,7 +486,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
                 >
-                  <option value="">Select badgeType </option>
+                  <option value="null">Select badgeType </option>
                   {badge.map((badge) => (
                     <option key={badge._id} value={badge.name}>
                       {badge.name}
@@ -508,7 +508,8 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
                 >
-                  <option value="">Select insurance </option>
+                  <option value="null">Select insurance </option>
+
                   {insurance.map((insurence) => (
                     <option key={insurence._id} value={insurence.name}>
                       {insurence.name}
@@ -615,7 +616,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
                 >
                   {/* </select> */}
-                  <option value="">Select Payment</option>
+                  <option value="null">Select Payment</option>
                   <option value="perday">Per Day</option>
                   <option value="permonth">per Month</option>
                   <option value="perquarter">Per Quarter</option>

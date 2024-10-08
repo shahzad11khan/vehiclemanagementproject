@@ -398,7 +398,7 @@ const Sidebar = () => {
                       </span>
                       {isOpen && (
                         <div className="absolute mt-1 w-auto bg-white border border-gray-300 rounded-md shadow-lg z-50">
-                          <ul className="grid grid-cols-3 w-[200px] ">
+                          <ul className="grid grid-row-3 w-[200px] bg-red-500">
                             <li
                               className="relative hover:bg-gray-100 cursor-pointer"
                               onMouseEnter={() =>
@@ -413,7 +413,7 @@ const Sidebar = () => {
                                 System Reports
                               </Link>
                               {openDropdown === "systemReports" && (
-                                <ul className="absolute left-1 mt-1 w-[200px] bg-white  rounded-md shadow-lg space-y-4 z-50">
+                                <ul className="absolute left-12 mt-1 w-[200px] bg-white  rounded-md shadow-lg space-y-4 z-50">
                                   <li>
                                     <Link
                                       href="#"
@@ -455,7 +455,7 @@ const Sidebar = () => {
                                 Vehicle Reports
                               </Link>
                               {openDropdown === "vehicleReports" && (
-                                <ul className="absolute -ml-10 mt-1 w-[160px] bg-white rounded-md shadow-lg space-y-4  z-50">
+                                <ul className="absolute left-12 mt-1 w-[160px] bg-white rounded-md shadow-lg space-y-4  z-50">
                                   <li>
                                     <Link
                                       href="#"
@@ -515,7 +515,7 @@ const Sidebar = () => {
                               </Link>
 
                               {openDropdown === "driverReports" && (
-                                <ul className="absolute -left-16 mt-2 w-[150px] bg-white rounded-md shadow-lg space-y-4 z-50">
+                                <ul className="absolute left-12 mt-1 w-[160px] bg-white rounded-md shadow-lg space-y-4 z-50">
                                   <li>
                                     <Link
                                       href="#"
@@ -686,7 +686,7 @@ const Sidebar = () => {
                       </span>
 
                       {isOpenManagement && (
-                        <div className="absolute left-0 ml-36 mt-2 w-full sm:w-[200px] bg-white border border-gray-300 rounded-md shadow-lg z-50">
+                        <div className="absolute left-36 mt-2 w-full sm:w-[170px] hover:bg-gray-200   border border-gray-300 rounded-md shadow-lg">
                           <ul className="grid grid-cols-1 space-y-1 p-3">
                             <li>
                               <Link
@@ -803,7 +803,7 @@ const Sidebar = () => {
                       </span>
                       {isOpen && (
                         <div className="absolute mt-1 w-auto bg-white border border-gray-300 rounded-md shadow-lg z-50">
-                          <ul className="grid grid-cols-2 w-[150px] ">
+                          <ul className="grid grid-row-3 w-[200px] bg-red-500">
                             <li
                               className="relative hover:bg-gray-100 cursor-pointer"
                               onMouseEnter={() =>
@@ -818,7 +818,7 @@ const Sidebar = () => {
                                 System Reports
                               </Link>
                               {openDropdown === "systemReports" && (
-                                <ul className="absolute left-5 mt-1 w-[200px] bg-white  rounded-md shadow-lg space-y-4 z-50">
+                                <ul className="absolute left-12 mt-1 w-[200px] bg-white  rounded-md shadow-lg space-y-4 z-50">
                                   <li>
                                     <Link
                                       href="#"
@@ -860,7 +860,7 @@ const Sidebar = () => {
                                 Vehicle Reports
                               </Link>
                               {openDropdown === "vehicleReports" && (
-                                <ul className="absolute mt-1 w-[160px] bg-white rounded-md shadow-lg space-y-4  z-50">
+                                <ul className="absolute left-12 mt-1 w-[160px] bg-white rounded-md shadow-lg space-y-4  z-50">
                                   <li>
                                     <Link
                                       href="#"
@@ -920,7 +920,7 @@ const Sidebar = () => {
                               </Link>
 
                               {openDropdown === "driverReports" && (
-                                <ul className="absolute left-5 mt-1 w-[150px] bg-white rounded-md shadow-lg space-y-4 z-50">
+                                <ul className="absolute left-12 mt-1 w-[160px] bg-white rounded-md shadow-lg space-y-4 z-50">
                                   <li>
                                     <Link
                                       href="#"

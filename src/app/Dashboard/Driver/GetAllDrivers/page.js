@@ -127,10 +127,10 @@ const Page = () => {
     };
 
     let timePassed;
-
+    value = value.toLowerCase();
     switch (value) {
-      case "PerDay":
-        // Calculate the difference in time between currentDate and passingDate in milliseconds
+      case "perday":
+        // Calculate the differencclse in time between currentDate and passingDate in milliseconds
         const timeDiff = currentDate - passingDate;
         // Convert the difference from milliseconds to days
         timePassed = Math.floor(timeDiff / (1000 * 60 * 60 * 24));

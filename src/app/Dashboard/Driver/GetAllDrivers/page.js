@@ -110,7 +110,7 @@ const Page = () => {
   function drivercal(date, pay, value) {
     // Convert 'pay' to a number
     const result = Number(pay);
-
+    console.log(result);
     // Convert 'date' to a Date object
     const passingDate = new Date(date);
 

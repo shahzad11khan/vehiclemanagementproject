@@ -100,22 +100,23 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
           superadmin === "superadmin"
             ? taxiFirmsData.result
             : taxiFirmsData.result.filter(
-                (firm) => firm.companyName === storedCompanyName
+                (firm) => firm.adminCompanyName === storedCompanyName
               );
 
         const filteredBadges =
           superadmin === "superadmin"
             ? badgeData.result
             : badgeData.result.filter(
-                (badge) => badge.companyName === storedCompanyName
+                (badge) => badge.adminCompanyName === storedCompanyName
               );
 
         const filteredInsurance =
           superadmin === "superadmin"
             ? insuranceData.Result
             : insuranceData.Result.filter(
-                (insurance) => insurance.companyName === storedCompanyName
+                (insurance) => insurance.adminCompanyName === storedCompanyName
               );
+        console.log("insurence", insuranceData.Result);
 
         // const filteredPayments =
         //   superadmin === "superadmin"
@@ -128,13 +129,13 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
           superadmin === "superadmin"
             ? localAuthData.Result
             : localAuthData.Result.filter(
-                (localAuth) => localAuth.companyName === storedCompanyName
+                (localAuth) => localAuth.adminCompanyName === storedCompanyName
               );
         const filteredVehicle =
           superadmin === "superadmin"
             ? vehicle.result
             : vehicle.result.filter(
-                (vehicle) => vehicle.companyName === storedCompanyName
+                (vehicle) => vehicle.adminCompanyName === storedCompanyName
               );
 
         // Update state with filtered or full data based on role

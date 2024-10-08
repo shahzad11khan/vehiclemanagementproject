@@ -3,6 +3,7 @@ import { API_URL_Vehicle } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import axios from "axios";
 import { toast } from "react-toastify";
 import React, { useEffect, useState } from "react";
+import { fetchLocalAuth } from "../../Components/DropdownData/taxiFirm/taxiFirmService";
 
 const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
   const [vehicleData, setVehicleData] = useState({
@@ -39,7 +40,8 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
     adminCreatedBy: "",
     adminCompanyName: "",
   });
-
+  // Local authority data
+  const [localAuth, setLocalAuth] = useState([]);
   // Retrieve company name from local storage
   useEffect(() => {
     const storedCompanyName = localStorage.getItem("companyName");
@@ -85,6 +87,21 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
     }));
   };
 
+  useEffect(() => {
+    // Load dropdown data
+    const loadTaxiFirms = async () => {
+      try {
+        const response = await fetchLocalAuth();
+        console.log(response);
+        setLocalAuth(response.Result); // Assuming result is the array of local authorities
+      } catch (error) {
+        console.error("Error loading taxi firms:", error);
+        toast.error("Failed to load dropdown data."); // Show toast on error
+      }
+    };
+
+    loadTaxiFirms();
+  }, []); // Load taxi firms on component mount
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -447,10 +464,15 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                 <option value="" disabled>
                   Select type
                 </option>
-                <option value="Sedan">A</option>
+                {localAuth.map((authority) => (
+                  <option key={authority.id} value={authority.name}>
+                    {authority.name}
+                  </option>
+                ))}
+                {/* <option value="Sedan">A</option>
                 <option value="SUV">B</option>
                 <option value="Truck">C</option>
-                <option value="Coupe">D</option>
+                <option value="Coupe">D</option> */}
               </select>
             </div>
           </div>

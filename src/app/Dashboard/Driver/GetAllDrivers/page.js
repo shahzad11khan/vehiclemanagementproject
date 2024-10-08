@@ -115,7 +115,7 @@ const Page = () => {
     const passingDate = new Date(date);
 
     // Log 'value' for debugging (if needed)
-    console.log(value);
+    // console.log(value);
 
     // Get the current date and subtract one day
     const currentDate = new Date();

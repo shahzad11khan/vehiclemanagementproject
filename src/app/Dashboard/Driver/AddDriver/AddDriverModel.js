@@ -146,6 +146,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
         setLocalAuth(filteredLocalAuth);
         setVehicle(filteredVehicle);
         // LocalAuthority in vehicle model
+        console.log(filteredVehicle);
       } catch (err) {
         console.error("Error loading dropdown data:", err);
         toast.error("Failed to load dropdown data.");
@@ -203,7 +204,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
         err.response?.data?.message || "Failed to add driver.";
       console.log(errorMessage);
       // setError(errorMessage);
-      toast.error(errorMessage);
+      // toast.error(errorMessage);
     } finally {
       setLoading(false);
     }

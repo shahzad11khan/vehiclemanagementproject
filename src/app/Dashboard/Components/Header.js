@@ -53,7 +53,7 @@ const Header = () => {
         // Fetch user data from another table (assuming this endpoint exists)
         const userRes = await axios.get(`${API_URL_USER}/${userId}`); // Fetch user data
         const userData = userRes.data.result; // Adjust based on your API response structure
-        console.log("User Data", userData);
+        // console.log("User Data", userData);
         setImagePreview(userData.useravatar);
       }
     } catch (error) {
@@ -67,11 +67,6 @@ const Header = () => {
     }
   }, []);
   const handleLogout = useCallback(async () => {
-    // try {
-    //   await axios.get("/api/Users/logout", { timeout: 10000 });
-    // } catch (error) {
-    //   console.error(`Error logging out: ${error.message}`);
-    // }
     if (isAuthenticated()) {
       clearAuthData();
       document.cookie =

@@ -6,3 +6,126 @@ http://localhost:3000/api/User
 # Delete and Update Api
 http://localhost:3000/api/User/66f137ec0d4f234b6ce83816
 # working in Signature api only model is created
+
+
+# result after date change
+let result = 12 + 32; // Initial sum
+console.log(`Initial result: ${result}`);
+
+let currentDate = new Date().getDate(); // Get the current day
+
+const intervalId = setInterval(() => {
+    const newDate = new Date().getDate(); // Get the new current day
+    
+    // Check if the date has changed (new day)
+    if (newDate !== currentDate) {
+        result += 12; // Add 12 to the result when the day changes
+        currentDate = newDate; // Update currentDate to the new day
+        console.log(`Updated result on new day: ${result}`);
+    }
+}, 60000); // Check every 1 minute (60000 milliseconds)
+
+#result after month change
+let result = 12 + 32; // Initial sum
+console.log(`Initial result: ${result}`);
+
+let currentMonth = new Date().getMonth(); // Get the current month (0-11)
+
+const intervalId = setInterval(() => {
+    const newMonth = new Date().getMonth(); // Get the new current month
+    
+    // Check if the month has changed (new month)
+    if (newMonth !== currentMonth) {
+        result += 12; // Add 12 to the result when the month changes
+        currentMonth = newMonth; // Update currentMonth to the new month
+        console.log(`Updated result on new month: ${result}`);
+    }
+}, 60000); // Check every 1 minute (60000 milliseconds)
+
+# result after quarter change
+let result = 12 + 32; // Initial sum
+console.log(`Initial result: ${result}`);
+
+// Function to determine the current quarter (1 to 4)
+const getCurrentQuarter = () => {
+    const month = new Date().getMonth(); // Get the current month (0-11)
+    return Math.floor(month / 3) + 1; // Calculate the quarter
+};
+
+let currentQuarter = getCurrentQuarter(); // Get the current quarter
+
+const intervalId = setInterval(() => {
+    const newQuarter = getCurrentQuarter(); // Get the new current quarter
+    
+    // Check if the quarter has changed (new quarter)
+    if (newQuarter !== currentQuarter) {
+        result += 12; // Add 12 to the result when the quarter changes
+        currentQuarter = newQuarter; // Update currentQuarter to the new quarter
+        console.log(`Updated result on new quarter: ${result}`);
+    }
+}, 60000); // Check every 1 minute (60000 milliseconds)
+
+# result after year change
+let result = 12 + 32; // Initial sum
+console.log(`Initial result: ${result}`);
+
+// Get the current year
+let currentYear = new Date().getFullYear(); 
+
+const intervalId = setInterval(() => {
+    const newYear = new Date().getFullYear(); // Get the new current year
+    
+    // Check if the year has changed (new year)
+    if (newYear !== currentYear) {
+        result += 12; // Add 12 to the result when the year changes
+        currentYear = newYear; // Update currentYear to the new year
+        console.log(`Updated result on new year: ${result}`);
+    }
+}, 60000); // Check every 1 minute (60000 milliseconds)
+
+# date change to mm/dd/yyyy formate
+// Given date string in ISO format
+const startDate = "2024-10-03T00:00:00.000Z";
+
+// Create a new Date object from the ISO string
+const dateObject = new Date(startDate);
+
+// Format the date to mm/dd/yyyy
+const formattedDate = `${(dateObject.getMonth() + 1).toString().padStart(2, '0')}/${dateObject.getDate().toString().padStart(2, '0')}/${dateObject.getFullYear()}`;
+
+console.log(`Formatted date: ${formattedDate}`);
+
+#
+  // Calculation function
+  async function calculation(startDateInput, initialValueInput) {
+    // Create a new Date object from the ISO string
+    const dateObject = new Date(startDateInput);
+
+    // Format the date to mm/dd/yyyy (optional, since we don't need this for calculations)
+    const formattedDate = `${(dateObject.getMonth() + 1)
+      .toString()
+      .padStart(2, "0")}/${dateObject
+      .getDate()
+      .toString()
+      .padStart(2, "0")}/${dateObject.getFullYear()}`;
+
+    // Evaluate the initial sum
+    // console.log("value is: ", initialValueInput);
+    let result = eval(initialValueInput); // Initial sum (use cautiously)
+    console.log(`Initial result: ${result}`);
+
+    // Set the starting date
+    let startDate = new Date(formattedDate); // Use the original date input
+    let currentDate = startDate.getTime(); // Use getTime() to compare full date
+
+    const intervalId = setInterval(() => {
+      const newDate = new Date(); // Get the new current date
+
+      // Check if the date has changed (new day)
+      if (newDate.getTime() !== currentDate) {
+        result += 12; // Add 12 to the result when the day changes
+        currentDate = newDate.getTime(); // Update currentDate to the new date
+        console.log(`Updated result on new day: ${result}`);
+      }
+    }, 60000); // Check every 1 minute (60000 milliseconds)
+  }

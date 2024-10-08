@@ -38,6 +38,7 @@ const Page = () => {
     try {
       const response = await axios.get(`${API_URL_Driver}`);
       setDrivers(response.data.result);
+      console.log(response.data.result);
       setFilteredDrivers(response.data.result);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -96,6 +97,79 @@ const Page = () => {
     setSearchTerm(event.target.value);
   };
 
+  function formatDate(dateString) {
+    const dateObject = new Date(dateString);
+    return `${(dateObject.getMonth() + 1)
+      .toString()
+      .padStart(2, "0")}/${dateObject
+      .getDate()
+      .toString()
+      .padStart(2, "0")}/${dateObject.getFullYear()}`;
+  }
+
+  function drivercal(date, pay, value) {
+    // Convert 'pay' to a number
+    const result = Number(pay);
+
+    // Convert 'date' to a Date object
+    const passingDate = new Date(date);
+
+    // Log 'value' for debugging (if needed)
+    console.log(value);
+
+    // Get the current date and subtract one day
+    const currentDate = new Date();
+    currentDate.setDate(currentDate.getDate() - 1); // Subtract one day
+
+    // Function to calculate the final result based on time difference
+    const calculateFinalResult = (timePassed) => {
+      return result * (timePassed + 1);
+    };
+
+    let timePassed;
+
+    switch (value) {
+      case "PerDay":
+        // Calculate the difference in time between currentDate and passingDate in milliseconds
+        const timeDiff = currentDate - passingDate;
+        // Convert the difference from milliseconds to days
+        timePassed = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+        return `${calculateFinalResult(timePassed)}`;
+
+      case "permonth":
+        // Calculate the difference in months between currentDate and passingDate
+        timePassed =
+          (currentDate.getFullYear() - passingDate.getFullYear()) * 12 +
+          (currentDate.getMonth() - passingDate.getMonth());
+        return `${calculateFinalResult(timePassed)}`;
+
+      case "perquarter":
+        // Calculate the difference in months
+        timePassed =
+          (currentDate.getFullYear() - passingDate.getFullYear()) * 12 +
+          (currentDate.getMonth() - passingDate.getMonth());
+        // Calculate the number of quarters passed (1 quarter = 3 months)
+        timePassed = Math.floor(timePassed / 3);
+        return `${calculateFinalResult(timePassed)}`;
+
+      case "peryear":
+        // Calculate the difference in years between currentDate and passingDate
+        timePassed = currentDate.getFullYear() - passingDate.getFullYear();
+        // If the current date is before the anniversary of passingDate in the current year, subtract 1
+        if (
+          currentDate.getMonth() < passingDate.getMonth() ||
+          (currentDate.getMonth() === passingDate.getMonth() &&
+            currentDate.getDate() < passingDate.getDate())
+        ) {
+          timePassed--;
+        }
+        return `${calculateFinalResult(timePassed)}`;
+
+      default:
+        return "Invalid value type provided.";
+    }
+  }
+
   return (
     <>
       <Header className="min-w-full" />
@@ -148,7 +222,19 @@ const Page = () => {
                       Badge Type
                     </th>
                     <th className="border border-gray-200 px-4 py-2">
+                      Payment Cycle
+                    </th>
+                    <th className="border border-gray-200 px-4 py-2">
+                      Payment
+                    </th>
+                    <th className="border border-gray-200 px-4 py-2">
+                      Start Date
+                    </th>
+                    <th className="border border-gray-200 px-4 py-2">
                       Company
+                    </th>
+                    <th className="border border-gray-200 px-4 py-2">
+                      Calculation
                     </th>
                     <th className="border border-gray-200 px-4 py-2">
                       Actions
@@ -167,7 +253,44 @@ const Page = () => {
                       <td className="  p-3">{driver.licenseNumber}</td>
                       <td className="  p-3">{driver.niNumber}</td>
                       <td className="  p-3">{driver.badgeType}</td>
+                      <td className="  p-3">{driver.rentPaymentCycle}</td>
+                      <td className="  p-3">{driver.pay}</td>
+                      <td className="p-3">{formatDate(driver.startDate)}</td>
                       <td className="  p-3">{driver.adminCompanyName}</td>
+                      <td className="  p-3">
+                        {(() => {
+                          const result = drivercal(
+                            formatDate(driver.startDate),
+                            driver.pay,
+                            driver.rentPaymentCycle
+                          );
+                          return result; // Make sure to return the result here
+                        })()}
+                      </td>
+                      {/* <td className="  p-3">
+                        {() => {
+                          let result = Number(driver.pay); // Initialize result
+                          let startDate = new Date(driver.startDate);
+                          let currentDate = startDate.getDate(); // Use getDate() to track the day
+
+                          const intervalId = setInterval(() => {
+                            const newDate = new Date(); // Get the new current date
+                            const newDay = newDate.getDate(); // Get the current day
+
+                            // Check if the date has changed (new day)
+                            if (newDay !== currentDate) {
+                              result *= 2; // Multiply result by 2 when the day changes (you can change this factor)
+                              currentDate = newDay; // Update currentDate to the new day
+                              console.log(
+                                `Updated result on new day: ${result}`
+                              );
+                            }
+                          }, 60000); // Check every 1 minute (60000 milliseconds)
+
+                          // Clear the interval when the component unmounts or when no longer needed
+                          return () => clearInterval(intervalId);
+                        }}
+                      </td> */}
 
                       <td className="  p-3">
                         <div className="flex gap-2">

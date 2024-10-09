@@ -1,66 +1,83 @@
 import { connect } from "@config/db.js";
 import Badge from "@models/Badge/Badge.Model.js";
-import { catchAsyncErrors } from "@middlewares/catchAsyncErrors.js";
 import { NextResponse } from "next/server";
 
-// PUT function to update a badge by its VehicleID
-export const PUT = catchAsyncErrors(async (request, { params }) => {
-  await connect(); // Connect to the database
+export const PUT = async (request, context) => {
+  try {
+    await connect(); // Connect to the database
 
-  const id = params.BadgeID; // Extract VehicleID from params
-  const data = await request.json(); // Get the form data
+    const id = context.params.BadgeID; // Extract ManufacturerID from params
+    const data = await request.json(); // Get the form data
 
-  // Destructure the necessary fields
-  const { name, description, isActive, adminCreatedBy, adminCompanyName } =
-    data;
+    console.log(id);
+    console.log(data);
 
-  // Find the vehicle by ID
-  const badge = await Badge.findById(id);
+    // Destructure the necessary fields
+    const { name, description, isActive } = data;
 
-  if (!badge) {
-    return NextResponse.json({ error: "badge not found", status: 404 });
+    // Find the manufacturer by ID
+    const badge = await Badge.findById({ _id: id });
+
+    if (!badge) {
+      return NextResponse.json({
+        error: "badge not found",
+        status: 404,
+      });
+    }
+
+    // Update manufacturer properties with values from formDataObject or retain existing values
+    badge.name = name ? name.trim() : badge.name; // Update name or retain existing
+    badge.description = description ? description.trim() : badge.description; // Update description or retain existing
+    badge.isActive = isActive !== undefined ? isActive : badge.isActive; // Ensure isActive is treated correctly
+
+    // Save the updated manufacturer
+    await badge.save();
+
+    return NextResponse.json({
+      message: "Badge details updated successfully",
+      badge, // Return the updated manufacturer object
+      status: 200,
+    });
+  } catch (error) {
+    console.error("Error updating Badge:", error);
+    return NextResponse.json({
+      error: "Failed to update Badge",
+      status: 500,
+    });
   }
+};
 
-  // Update vehicle properties with values from formDataObject or retain existing values
-  badge.name = name ? name.trim() : badge.name; // Update name or retain existing
-  badge.description = description ? description.trim() : badge.description; // Update description or retain existing
-  badge.isActive = isActive ? isActive : badge.naisActiveme;
-  badge.adminCreatedBy = adminCreatedBy ? adminCreatedBy : badge.adminCreatedBy;
-  badge.adminCompanyName = adminCompanyName
-    ? adminCompanyName
-    : badge.adminCompanyName;
+// GET handler for retrieving a specific manufacturer by ID
+export const GET = async (request, context) => {
+  try {
+    // Connect to the database
+    await connect();
 
-  // Save the updated vehicle
-  await badge.save();
+    // Extract the Manufacturer ID from the request parameters
+    const id = context.params.BadgeID; // Use context.params for accessing the parameters
+    console.log(id);
 
-  return NextResponse.json({
-    message: "badge details updated successfully",
-    badge,
-    status: 200,
-  });
-});
+    // Find the manufacturer by ID
+    const Find_Badge = await Badge.findById({ _id: id });
 
-// GET handler for retrieving a specific driver by ID
-export const GET = catchAsyncErrors(async (request, { params }) => {
-  // Connect to the database
-  await connect();
+    // Check if the manufacturer exists
+    if (!Find_Badge) {
+      return NextResponse.json({
+        result: "No Badge Found",
+        status: 404,
+      });
+    }
 
-  // Extract the Driver ID from the request parameters
-  const id = params.BadgeID;
-  console.log(id);
-
-  // Find the driver by ID
-  const Find_Badge = await Badge.findById(id);
-
-  // Check if the driver exists
-  if (!Find_Badge) {
-    return NextResponse.json({ result: "No Badge Found", status: 404 });
+    // Return the found manufacturer as a JSON response
+    return NextResponse.json({ result: Find_Badge, status: 200 });
+  } catch (error) {
+    console.error("Error fetching Badge:", error); // Log the error for debugging
+    return NextResponse.json({
+      result: "Failed to fetch Badge",
+      status: 500,
+    });
   }
-
-  // Return the found driver as a JSON response
-  return NextResponse.json({ result: Find_Badge, status: 200 });
-});
-
+};
 // DELETE handler for deleting a manufacturer
 export const DELETE = async (request, { params }) => {
   try {
@@ -69,12 +86,12 @@ export const DELETE = async (request, { params }) => {
 
     const { BadgeID } = params; // Access the ManufacturerID from params
 
-    console.log("Badge ID:", BadgeID);
+    console.log("Manufacturer ID:", BadgeID);
 
     // Find and delete the manufacturer
-    const deletedBadge = await Badge.findByIdAndDelete(BadgeID);
+    const deletedManufacturer = await Badge.findByIdAndDelete(BadgeID);
 
-    if (!deletedBadge) {
+    if (!deletedManufacturer) {
       return NextResponse.json({
         error: "Badge not found",
         status: 404,

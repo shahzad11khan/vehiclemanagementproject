@@ -1,81 +1,85 @@
 import { connect } from "@config/db.js";
 import Insurence from "@models/Insurence/Insurence.model.js";
-import { catchAsyncErrors } from "@middlewares/catchAsyncErrors.js";
 import { NextResponse } from "next/server";
 
-// PUT function to update a Insurence by its VehicleID
-export const PUT = catchAsyncErrors(async (request, { params }) => {
-  await connect(); // Connect to the database
+export const PUT = async (request, context) => {
+  try {
+    await connect(); // Connect to the database
 
-  const id = params.InsurenceID; // Extract VehicleID from params
-  const data = await request.formData(); // Get the form data
+    const id = context.params.InsurenceID; // Extract ManufacturerID from params
+    const data = await request.json(); // Get the form data
 
-  const formDataObject = {};
-  for (const [key, value] of data.entries()) {
-    formDataObject[key] = value;
-  }
+    console.log(id);
+    console.log(data);
 
-  // Destructure the necessary fields
-  const { name, description, isActive, adminCreatedBy, adminCompanyName } =
-    formDataObject;
+    // Destructure the necessary fields
+    const { name, description, isActive } = data;
 
-  // Find the vehicle by ID
-  const insurence = await Insurence.findById(id);
+    // Find the manufacturer by ID
+    const insurence = await Insurence.findById({ _id: id });
 
-  if (!insurence) {
+    if (!insurence) {
+      return NextResponse.json({
+        error: "insurence not found",
+        status: 404,
+      });
+    }
+
+    // Update manufacturer properties with values from formDataObject or retain existing values
+    insurence.name = name ? name.trim() : insurence.name; // Update name or retain existing
+    insurence.description = description
+      ? description.trim()
+      : insurence.description; // Update description or retain existing
+    insurence.isActive = isActive !== undefined ? isActive : insurence.isActive; // Ensure isActive is treated correctly
+
+    // Save the updated manufacturer
+    await insurence.save();
+
     return NextResponse.json({
-      error: "Insurence not found",
-      status: 404,
+      message: "Insurence details updated successfully",
+      insurence, // Return the updated manufacturer object
+      status: 200,
+    });
+  } catch (error) {
+    console.error("Error updating Insurence:", error);
+    return NextResponse.json({
+      error: "Failed to update Insurence",
+      status: 500,
     });
   }
+};
 
-  // Update vehicle properties with values from formDataObject or retain existing values
-  insurence.name = name ? name.trim() : insurence.name; // Update name or retain existing
-  insurence.description = description
-    ? description.trim()
-    : insurence.description; // Update description or retain existing
-  insurence.isActive = isActive ? isActive : insurence.isActive;
-  insurence.adminCreatedBy = adminCreatedBy
-    ? adminCreatedBy
-    : insurence.adminCreatedBy;
-  insurence.adminCompanyName = adminCompanyName
-    ? adminCompanyName
-    : insurence.adminCompanyName;
+// GET handler for retrieving a specific manufacturer by ID
+export const GET = async (request, context) => {
+  try {
+    // Connect to the database
+    await connect();
 
-  // Save the updated vehicle
-  await insurence.save();
+    // Extract the Manufacturer ID from the request parameters
+    const id = context.params.InsurenceID; // Use context.params for accessing the parameters
+    console.log(id);
 
-  return NextResponse.json({
-    message: "Insurence details updated successfully",
-    Insurence,
-    status: 200,
-  });
-});
+    // Find the manufacturer by ID
+    const Find_Insurence = await Insurence.findById({ _id: id });
 
-// GET handler for retrieving a specific driver by ID
-export const GET = catchAsyncErrors(async (request, { params }) => {
-  // Connect to the database
-  await connect();
+    // Check if the manufacturer exists
+    if (!Find_Insurence) {
+      return NextResponse.json({
+        result: "No Insurence Found",
+        status: 404,
+      });
+    }
 
-  // Extract the Driver ID from the request parameters
-  const id = params.InsurenceID;
-  console.log(id);
-
-  // Find the driver by ID
-  const Find_Insurence = await Insurence.findById(id);
-
-  // Check if the driver exists
-  if (!Find_Insurence) {
+    // Return the found manufacturer as a JSON response
+    return NextResponse.json({ result: Find_Insurence, status: 200 });
+  } catch (error) {
+    console.error("Error fetching Insurence:", error); // Log the error for debugging
     return NextResponse.json({
-      result: "No Insurence Found",
-      status: 404,
+      result: "Failed to fetch Insurence",
+      status: 500,
     });
   }
-
-  // Return the found driver as a JSON response
-  return NextResponse.json({ result: Find_Insurence, status: 200 });
-});
-
+};
 // DELETE handler for deleting a manufacturer
 export const DELETE = async (request, { params }) => {
   try {
@@ -84,12 +88,12 @@ export const DELETE = async (request, { params }) => {
 
     const { InsurenceID } = params; // Access the ManufacturerID from params
 
-    console.log("Insurence ID:", InsurenceID);
+    console.log("Manufacturer ID:", InsurenceID);
 
     // Find and delete the manufacturer
-    const deletedInsurence = await Insurence.findByIdAndDelete(InsurenceID);
+    const deletedManufacturer = await Insurence.findByIdAndDelete(InsurenceID);
 
-    if (!deletedInsurence) {
+    if (!deletedManufacturer) {
       return NextResponse.json({
         error: "Insurence not found",
         status: 404,

@@ -1,15 +1,10 @@
 "use client";
-import { API_URL_Manufacturer } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
+import { API_URL_Badge } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
-const UpdateManufacturerModel = ({
-  isOpen,
-  onClose,
-  fetchData,
-  manufacturerid,
-}) => {
+const UpdateBadgeModel = ({ isOpen, onClose, fetchData, updateid }) => {
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -34,14 +29,12 @@ const UpdateManufacturerModel = ({
   }, []); // Update when the manufacturer changes
   // Fetch manufacturer data when the modal opens
   useEffect(() => {
-    console.log(manufacturerid);
+    console.log(updateid);
     const fetchManufacturerData = async () => {
       setLoading(true);
-      if (manufacturerid) {
+      if (updateid) {
         try {
-          const response = await axios.get(
-            `${API_URL_Manufacturer}/${manufacturerid}`
-          );
+          const response = await axios.get(`${API_URL_Badge}/${updateid}`);
           console.log(response.data.result);
           const data = response.data.result;
           if (data) {
@@ -54,7 +47,9 @@ const UpdateManufacturerModel = ({
             toast.warn("Failed to fetch manufacturer data");
           }
         } catch (err) {
-          setError(err.response?.data?.message);
+          setError(
+            err.response?.data?.message || "Failed to fetch manufacturer data"
+          );
         } finally {
           setLoading(false);
         }
@@ -62,7 +57,7 @@ const UpdateManufacturerModel = ({
     };
 
     fetchManufacturerData();
-  }, [manufacturerid]);
+  }, [updateid]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -79,7 +74,7 @@ const UpdateManufacturerModel = ({
     try {
       // Use PUT for updating an existing manufacturer
       const response = await axios.put(
-        `${API_URL_Manufacturer}/${manufacturerid}`,
+        `${API_URL_Badge}/${updateid}`,
         formData
       );
       console.log(response);
@@ -96,7 +91,7 @@ const UpdateManufacturerModel = ({
       onClose();
       fetchData();
     } catch (err) {
-      setError(err.response?.data?.message || "Failed to update manufacturer");
+      setError(err.response?.data?.message || "Failed to update");
     } finally {
       setLoading(false);
     }
@@ -108,12 +103,12 @@ const UpdateManufacturerModel = ({
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
       <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-xl">
         <h2 className="text-3xl font-semibold text-center mb-8">
-          Update Manufacturer
+          Update Badge
         </h2>
 
         {error && <p className="text-red-600">{error}</p>}
         {success && (
-          <p className="text-green-600">Manufacturer updated successfully!</p>
+          <p className="text-green-600">Badge updated successfully!</p>
         )}
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -197,4 +192,4 @@ const UpdateManufacturerModel = ({
   );
 };
 
-export default UpdateManufacturerModel;
+export default UpdateBadgeModel;

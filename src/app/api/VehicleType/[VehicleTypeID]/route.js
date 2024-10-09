@@ -1,68 +1,86 @@
 import { connect } from "@config/db.js";
 import VehicleType from "@models/VehicleType/VehicleType.Model.js";
-import { catchAsyncErrors } from "@middlewares/catchAsyncErrors.js";
 import { NextResponse } from "next/server";
 
-// PUT function to update a VehicleType by its VehicleID
-export const PUT = catchAsyncErrors(async (request, { params }) => {
-  await connect(); // Connect to the database
+export const PUT = async (request, context) => {
+  try {
+    await connect(); // Connect to the database
 
-  const id = params.VehicleTypeID; // Extract VehicleID from params
-  const data = await request.formData(); // Get the form data
+    const id = context.params.VehicleTypeID; // Extract ManufacturerID from params
+    const data = await request.json(); // Get the form data
 
-  const formDataObject = {};
-  for (const [key, value] of data.entries()) {
-    formDataObject[key] = value;
+    console.log(id);
+    console.log(data);
+
+    // Destructure the necessary fields
+    const { name, description, isActive } = data;
+
+    // Find the manufacturer by ID
+    const vehicleType = await VehicleType.findById({ _id: id });
+
+    if (!VehicleType) {
+      return NextResponse.json({
+        error: "VehicleType not found",
+        status: 404,
+      });
+    }
+
+    // Update manufacturer properties with values from formDataObject or retain existing values
+    vehicleType.name = name ? name.trim() : vehicleType.name; // Update name or retain existing
+    vehicleType.description = description
+      ? description.trim()
+      : vehicleType.description; // Update description or retain existing
+    vehicleType.isActive =
+      isActive !== undefined ? isActive : vehicleType.isActive; // Ensure isActive is treated correctly
+
+    // Save the updated manufacturer
+    await vehicleType.save();
+
+    return NextResponse.json({
+      message: "VehicleType details updated successfully",
+      vehicleType, // Return the updated manufacturer object
+      status: 200,
+    });
+  } catch (error) {
+    console.error("Error updating VehicleType:", error);
+    return NextResponse.json({
+      error: "Failed to update VehicleType",
+      status: 500,
+    });
   }
+};
 
-  // Destructure the necessary fields
-  const { name, description, isActive } = formDataObject;
+// GET handler for retrieving a specific manufacturer by ID
+export const GET = async (request, context) => {
+  try {
+    // Connect to the database
+    await connect();
 
-  // Find the vehicle by ID
-  const VehicleType = await VehicleType.findById(id);
+    // Extract the Manufacturer ID from the request parameters
+    const id = context.params.VehicleTypeID; // Use context.params for accessing the parameters
+    console.log(id);
 
-  if (!VehicleType) {
-    return NextResponse.json({ error: "VehicleType not found", status: 404 });
+    // Find the manufacturer by ID
+    const Find_VehicleType = await VehicleType.findById({ _id: id });
+
+    // Check if the manufacturer exists
+    if (!Find_VehicleType) {
+      return NextResponse.json({
+        result: "No VehicleType Found",
+        status: 404,
+      });
+    }
+
+    // Return the found manufacturer as a JSON response
+    return NextResponse.json({ result: Find_VehicleType, status: 200 });
+  } catch (error) {
+    console.error("Error fetching VehicleType:", error); // Log the error for debugging
+    return NextResponse.json({
+      result: "Failed to fetch VehicleType",
+      status: 500,
+    });
   }
-
-  // Update vehicle properties with values from formDataObject or retain existing values
-  VehicleType.name = name ? name.trim() : VehicleType.name; // Update name or retain existing
-  VehicleType.description = description
-    ? description.trim()
-    : VehicleType.description; // Update description or retain existing
-  VehicleType.isActive = isActive ? isActive : VehicleType.isActive;
-
-  // Save the updated vehicle
-  await VehicleType.save();
-
-  return NextResponse.json({
-    message: "VehicleType details updated successfully",
-    VehicleType,
-    status: 200,
-  });
-});
-
-// GET handler for retrieving a specific driver by ID
-export const GET = catchAsyncErrors(async (request, { params }) => {
-  // Connect to the database
-  await connect();
-
-  // Extract the Driver ID from the request parameters
-  const id = params.VehicleTypeID;
-  console.log(id);
-
-  // Find the driver by ID
-  const Find_VehicleType = await VehicleType.findById(id);
-
-  // Check if the driver exists
-  if (!Find_VehicleType) {
-    return NextResponse.json({ result: "No VehicleType Found", status: 404 });
-  }
-
-  // Return the found driver as a JSON response
-  return NextResponse.json({ result: Find_VehicleType, status: 200 });
-});
-
+};
 // DELETE handler for deleting a manufacturer
 export const DELETE = async (request, { params }) => {
   try {
@@ -71,12 +89,14 @@ export const DELETE = async (request, { params }) => {
 
     const { VehicleTypeID } = params; // Access the ManufacturerID from params
 
-    console.log("Vehicle ID:", VehicleTypeID);
+    console.log("Manufacturer ID:", VehicleTypeID);
 
     // Find and delete the manufacturer
-    const deletedVehicle = await VehicleType.findByIdAndDelete(VehicleTypeID);
+    const deletedManufacturer = await VehicleType.findByIdAndDelete(
+      VehicleTypeID
+    );
 
-    if (!deletedVehicle) {
+    if (!deletedManufacturer) {
       return NextResponse.json({
         error: "VehicleType not found",
         status: 404,

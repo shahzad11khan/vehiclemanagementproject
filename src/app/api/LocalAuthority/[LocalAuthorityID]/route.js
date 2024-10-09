@@ -1,76 +1,85 @@
 import { connect } from "@config/db.js";
 import LocalAuthority from "@models/LocalAuthority/LocalAuthority.Model.js";
-import { catchAsyncErrors } from "@middlewares/catchAsyncErrors.js";
 import { NextResponse } from "next/server";
 
-// PUT function to update a LocalAuthority by its VehicleID
-export const PUT = catchAsyncErrors(async (request, { params }) => {
-  await connect(); // Connect to the database
+export const PUT = async (request, context) => {
+  try {
+    await connect(); // Connect to the database
 
-  const id = params.LocalAuthorityID; // Extract VehicleID from params
-  const data = await request.json(); // Get the form data
+    const id = context.params.LocalAuthorityID; // Extract ManufacturerID from params
+    const data = await request.json(); // Get the form data
 
-  // Destructure the necessary fields
-  const { name, description, isActive, adminCreatedBy, adminCompanyName } =
-    data;
+    console.log(id);
+    console.log(data);
 
-  // Find the vehicle by ID
-  const localAuthority = await LocalAuthority.findById(id);
+    // Destructure the necessary fields
+    const { name, description, isActive } = data;
 
-  if (!localAuthority) {
+    // Find the manufacturer by ID
+    const authority = await LocalAuthority.findById({ _id: id });
+
+    if (!authority) {
+      return NextResponse.json({
+        error: "LocalAuthority not found",
+        status: 404,
+      });
+    }
+
+    // Update manufacturer properties with values from formDataObject or retain existing values
+    authority.name = name ? name.trim() : authority.name; // Update name or retain existing
+    authority.description = description
+      ? description.trim()
+      : authority.description; // Update description or retain existing
+    authority.isActive = isActive !== undefined ? isActive : authority.isActive; // Ensure isActive is treated correctly
+
+    // Save the updated manufacturer
+    await authority.save();
+
     return NextResponse.json({
-      error: "LocalAuthority not found",
-      status: 404,
+      message: "LocalAuthority details updated successfully",
+      authority, // Return the updated manufacturer object
+      status: 200,
+    });
+  } catch (error) {
+    console.error("Error updating LocalAuthority:", error);
+    return NextResponse.json({
+      error: "Failed to update LocalAuthority",
+      status: 500,
     });
   }
+};
 
-  // Update vehicle properties with values from formDataObject or retain existing values
-  localAuthority.name = name ? name.trim() : localAuthority.name; // Update name or retain existing
-  localAuthority.description = description
-    ? description.trim()
-    : localAuthority.description; // Update description or retain existing
-  localAuthority.isActive = isActive ? isActive : localAuthority.isActive;
-  localAuthority.adminCreatedBy = adminCreatedBy
-    ? adminCreatedBy
-    : localAuthority.adminCreatedBy;
-  localAuthority.adminCompanyName = adminCompanyName
-    ? adminCompanyName
-    : localAuthority.adminCompanyName;
+// GET handler for retrieving a specific manufacturer by ID
+export const GET = async (request, context) => {
+  try {
+    // Connect to the database
+    await connect();
 
-  // Save the updated vehicle
-  await localAuthority.save();
+    // Extract the Manufacturer ID from the request parameters
+    const id = context.params.LocalAuthorityID; // Use context.params for accessing the parameters
+    console.log(id);
 
-  return NextResponse.json({
-    message: "LocalAuthority details updated successfully",
-    LocalAuthority,
-    status: 200,
-  });
-});
+    // Find the manufacturer by ID
+    const Find_LocalAuthority = await LocalAuthority.findById({ _id: id });
 
-// GET handler for retrieving a specific driver by ID
-export const GET = catchAsyncErrors(async (request, { params }) => {
-  // Connect to the database
-  await connect();
+    // Check if the manufacturer exists
+    if (!Find_LocalAuthority) {
+      return NextResponse.json({
+        result: "No LocalAuthority Found",
+        status: 404,
+      });
+    }
 
-  // Extract the Driver ID from the request parameters
-  const id = params.LocalAuthorityID;
-  console.log(id);
-
-  // Find the driver by ID
-  const Find_LocalAuthority = await LocalAuthority.findById(id);
-
-  // Check if the driver exists
-  if (!Find_LocalAuthority) {
+    // Return the found manufacturer as a JSON response
+    return NextResponse.json({ result: Find_LocalAuthority, status: 200 });
+  } catch (error) {
+    console.error("Error fetching LocalAuthority:", error); // Log the error for debugging
     return NextResponse.json({
-      result: "No LocalAuthority Found",
-      status: 404,
+      result: "Failed to fetch LocalAuthority",
+      status: 500,
     });
   }
-
-  // Return the found driver as a JSON response
-  return NextResponse.json({ result: Find_LocalAuthority, status: 200 });
-});
-
+};
 // DELETE handler for deleting a manufacturer
 export const DELETE = async (request, { params }) => {
   try {
@@ -79,14 +88,14 @@ export const DELETE = async (request, { params }) => {
 
     const { LocalAuthorityID } = params; // Access the ManufacturerID from params
 
-    console.log("LocalAuthority ID:", LocalAuthorityID);
+    console.log("Manufacturer ID:", LocalAuthorityID);
 
     // Find and delete the manufacturer
-    const deletedLocalAuthorityID = await LocalAuthority.findByIdAndDelete(
+    const deletedManufacturer = await LocalAuthority.findByIdAndDelete(
       LocalAuthorityID
     );
 
-    if (!deletedLocalAuthorityID) {
+    if (!deletedManufacturer) {
       return NextResponse.json({
         error: "LocalAuthority not found",
         status: 404,

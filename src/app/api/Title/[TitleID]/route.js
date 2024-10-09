@@ -1,86 +1,113 @@
 import { connect } from "@config/db.js";
 import Title from "@models/Title/Title.Model.js";
-import { catchAsyncErrors } from "@middlewares/catchAsyncErrors.js";
 import { NextResponse } from "next/server";
 
-// PUT function to update a badge by its VehicleID
-export const PUT = catchAsyncErrors(async (request, context) => {
-  await connect(); // Connect to the database
+export const PUT = async (request, context) => {
+  try {
+    await connect(); // Connect to the database
 
-  const id = context.params.BadgeID; // Extract VehicleID from params
-  const data = await request.formData(); // Get the form data
+    const id = context.params.TitleID; // Extract ManufacturerID from params
+    const data = await request.json(); // Get the form data
 
-  const formDataObject = {};
-  for (const [key, value] of data.entries()) {
-    formDataObject[key] = value;
-  }
+    console.log(id);
+    console.log(data);
 
-  // Destructure the necessary fields
-  const { name, description, isActive } = formDataObject;
+    // Destructure the necessary fields
+    const { name, description, isActive } = data;
 
-  // Find the vehicle by ID
-  const title = await Title.findById(id);
+    // Find the manufacturer by ID
+    const title = await Title.findById({ _id: id });
 
-  if (!title) {
-    return NextResponse.json({ error: "title not found", status: 404 });
-  }
+    if (!title) {
+      return NextResponse.json({
+        error: "Title not found",
+        status: 404,
+      });
+    }
 
-  // Update vehicle properties with values from formDataObject or retain existing values
-  title.name = name ? name.trim() : title.name; // Update name or retain existing
-  title.description = description ? description.trim() : title.description; // Update description or retain existing
-  title.isActive = isActive ? isActive : title.naisActiveme;
+    // Update manufacturer properties with values from formDataObject or retain existing values
+    title.name = name ? name.trim() : title.name; // Update name or retain existing
+    title.description = description ? description.trim() : title.description; // Update description or retain existing
+    title.isActive = isActive !== undefined ? isActive : title.isActive; // Ensure isActive is treated correctly
 
-  // Save the updated vehicle
-  await title.save();
+    // Save the updated manufacturer
+    await authority.save();
 
-  return NextResponse.json({
-    message: "title details updated successfully",
-    title,
-    status: 200,
-  });
-});
-
-// GET handler for retrieving a specific driver by ID
-export const GET = catchAsyncErrors(async (request, context) => {
-  // Connect to the database
-  await connect();
-
-  // Extract the Driver ID from the request parameters
-  const id = context.params.TitleID;
-  console.log(id);
-
-  // Find the driver by ID
-  const Find_Title = await Title.findById(id);
-
-  // Check if the driver exists
-  if (!Find_Title) {
-    return NextResponse.json({ result: "No Badge Found", status: 404 });
-  }
-
-  // Return the found driver as a JSON response
-  return NextResponse.json({ result: Find_Title, status: 200 });
-});
-
-export const DELETE = catchAsyncErrors(async (request) => {
-  await connect();
-
-  const { searchParams } = new URL(request.url);
-  const titleID = searchParams.get("titleID");
-
-  console.log("Title ID:", titleID);
-
-  const deletedtitle = await Title.findOneAndDelete({ id: titleID });
-
-  if (!deletedtitle) {
     return NextResponse.json({
-      message: "Title not found",
-      status: 404,
+      message: "Title details updated successfully",
+      manufacturer, // Return the updated manufacturer object
+      status: 200,
+    });
+  } catch (error) {
+    console.error("Error updating Title:", error);
+    return NextResponse.json({
+      error: "Failed to update Title",
+      status: 500,
     });
   }
+};
 
-  return NextResponse.json({
-    message: "Title deleted successfully",
-    success: true,
-    status: 200,
-  });
-});
+// GET handler for retrieving a specific manufacturer by ID
+export const GET = async (request, context) => {
+  try {
+    // Connect to the database
+    await connect();
+
+    // Extract the Manufacturer ID from the request parameters
+    const id = context.params.TitleID; // Use context.params for accessing the parameters
+    console.log(id);
+
+    // Find the manufacturer by ID
+    const Find_Title = await Title.findById({ _id: id });
+
+    // Check if the manufacturer exists
+    if (!Find_Title) {
+      return NextResponse.json({
+        result: "No Title Found",
+        status: 404,
+      });
+    }
+
+    // Return the found manufacturer as a JSON response
+    return NextResponse.json({ result: Find_Title, status: 200 });
+  } catch (error) {
+    console.error("Error fetching Title:", error); // Log the error for debugging
+    return NextResponse.json({
+      result: "Failed to fetch Title",
+      status: 500,
+    });
+  }
+};
+// DELETE handler for deleting a manufacturer
+export const DELETE = async (request, { params }) => {
+  try {
+    // Connect to the database
+    await connect();
+
+    const { TitleID } = params; // Access the ManufacturerID from params
+
+    console.log("Manufacturer ID:", TitleID);
+
+    // Find and delete the manufacturer
+    const deletedManufacturer = await Title.findByIdAndDelete(TitleID);
+
+    if (!deletedManufacturer) {
+      return NextResponse.json({
+        error: "Title not found",
+        status: 404,
+      });
+    }
+
+    return NextResponse.json({
+      message: "Title deleted successfully",
+      success: true,
+      status: 200,
+    });
+  } catch (error) {
+    console.error("Error deleting Title:", error);
+    return NextResponse.json({
+      error: "An error occurred while deleting the Title",
+      status: 500,
+    });
+  }
+};

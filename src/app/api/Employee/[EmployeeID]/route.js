@@ -1,81 +1,85 @@
 import { connect } from "@config/db.js";
 import Employee from "@models/Employee/Empoyee.Model";
-import { catchAsyncErrors } from "@middlewares/catchAsyncErrors.js";
 import { NextResponse } from "next/server";
 
-// PUT function to update a Employee by its VehicleID
-export const PUT = catchAsyncErrors(async (request, { params }) => {
-  await connect(); // Connect to the database
+export const PUT = async (request, context) => {
+  try {
+    await connect(); // Connect to the database
 
-  const id = params.EmployeeID; // Extract VehicleID from params
-  const data = await request.formData(); // Get the form data
+    const id = context.params.EmployeeID; // Extract ManufacturerID from params
+    const data = await request.json(); // Get the form data
 
-  const formDataObject = {};
-  for (const [key, value] of data.entries()) {
-    formDataObject[key] = value;
-  }
+    console.log(id);
+    console.log(data);
 
-  // Destructure the necessary fields
-  const { name, description, isActive, adminCreatedBy, adminCompanyName } =
-    formDataObject;
+    // Destructure the necessary fields
+    const { name, description, isActive } = data;
 
-  // Find the vehicle by ID
-  const Employee = await Employee.findById(id);
+    // Find the manufacturer by ID
+    const employe = await Employee.findById({ _id: id });
 
-  if (!Employee) {
+    if (!employe) {
+      return NextResponse.json({
+        error: "employe not found",
+        status: 404,
+      });
+    }
+
+    // Update manufacturer properties with values from formDataObject or retain existing values
+    employe.name = name ? name.trim() : employe.name; // Update name or retain existing
+    employe.description = description
+      ? description.trim()
+      : employe.description; // Update description or retain existing
+    employe.isActive = isActive !== undefined ? isActive : employe.isActive; // Ensure isActive is treated correctly
+
+    // Save the updated manufacturer
+    await employe.save();
+
     return NextResponse.json({
-      error: "Employee not found",
-      status: 404,
+      message: "Employee details updated successfully",
+      employe, // Return the updated manufacturer object
+      status: 200,
+    });
+  } catch (error) {
+    console.error("Error updating Employee:", error);
+    return NextResponse.json({
+      error: "Failed to update Employee",
+      status: 500,
     });
   }
+};
 
-  // Update vehicle properties with values from formDataObject or retain existing values
-  Employee.adminCreatedBy = adminCreatedBy
-    ? adminCreatedBy.trim()
-    : Employee.adminCreatedBy; // Update name or retain existing
-  Employee.adminCompanyName = adminCompanyName
-    ? adminCompanyName.trim()
-    : Employee.adminCompanyName; // Update name or retain existing
-  Employee.name = name ? name.trim() : Employee.name; // Update name or retain existing
-  Employee.description = description
-    ? description.trim()
-    : Employee.description; // Update description or retain existing
-  Employee.isActive = isActive ? isActive : Employee.isActive;
+// GET handler for retrieving a specific manufacturer by ID
+export const GET = async (request, context) => {
+  try {
+    // Connect to the database
+    await connect();
 
-  // Save the updated vehicle
-  await Employee.save();
+    // Extract the Manufacturer ID from the request parameters
+    const id = context.params.EmployeeID; // Use context.params for accessing the parameters
+    console.log(id);
 
-  return NextResponse.json({
-    message: "Employee details updated successfully",
-    Employee,
-    status: 200,
-  });
-});
+    // Find the manufacturer by ID
+    const Find_Employee = await Employee.findById({ _id: id });
 
-// GET handler for retrieving a specific driver by ID
-export const GET = catchAsyncErrors(async (request, { params }) => {
-  // Connect to the database
-  await connect();
+    // Check if the manufacturer exists
+    if (!Find_Employee) {
+      return NextResponse.json({
+        result: "No Employee Found",
+        status: 404,
+      });
+    }
 
-  // Extract the Driver ID from the request parameters
-  const id = params.EmployeeID;
-  console.log(id);
-
-  // Find the driver by ID
-  const Find_Employee = await Employee.findById(id);
-
-  // Check if the driver exists
-  if (!Find_Employee) {
+    // Return the found manufacturer as a JSON response
+    return NextResponse.json({ result: Find_Employee, status: 200 });
+  } catch (error) {
+    console.error("Error fetching Employee:", error); // Log the error for debugging
     return NextResponse.json({
-      result: "No Employee Found",
-      status: 404,
+      result: "Failed to fetch Employee",
+      status: 500,
     });
   }
-
-  // Return the found driver as a JSON response
-  return NextResponse.json({ result: Find_Employee, status: 200 });
-});
-
+};
 // DELETE handler for deleting a manufacturer
 export const DELETE = async (request, { params }) => {
   try {
@@ -84,12 +88,12 @@ export const DELETE = async (request, { params }) => {
 
     const { EmployeeID } = params; // Access the ManufacturerID from params
 
-    console.log("Employee ID:", EmployeeID);
+    console.log("Manufacturer ID:", EmployeeID);
 
     // Find and delete the manufacturer
-    const deletedEmployee = await Employee.findByIdAndDelete(EmployeeID);
+    const deletedManufacturer = await Employee.findByIdAndDelete(EmployeeID);
 
-    if (!deletedEmployee) {
+    if (!deletedManufacturer) {
       return NextResponse.json({
         error: "Employee not found",
         status: 404,

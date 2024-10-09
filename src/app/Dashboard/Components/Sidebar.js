@@ -362,14 +362,14 @@ const Sidebar = () => {
                                 All Insurances
                               </Link>
                             </li>
-                            <li>
+                            {/* <li>
                               <Link
                                 href="/Dashboard/Models/Payment/GetPayments"
                                 className="  rounded hover:bg-gray-200"
                               >
                                 All Payments
                               </Link>
-                            </li>
+                            </li> */}
                           </ul>
                         </div>
                       )}
@@ -747,14 +747,14 @@ const Sidebar = () => {
                                 All Insurances
                               </Link>
                             </li>
-                            <li>
+                            {/* <li>
                               <Link
                                 href="/Dashboard/Models/Payment/GetPayments"
                                 className=" py-2 rounded hover:bg-gray-200"
                               >
                                 All Payments
                               </Link>
-                            </li>
+                            </li> */}
                           </ul>
                         </div>
                       )}

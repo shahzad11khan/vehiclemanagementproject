@@ -617,6 +617,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                 >
                   {/* </select> */}
                   <option value="null">Select Payment</option>
+                  <option value="permint">Per Mint</option>
                   <option value="perday">Per Day</option>
                   <option value="permonth">per Month</option>
                   <option value="perquarter">Per Quarter</option>

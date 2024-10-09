@@ -2,6 +2,7 @@ import { connect } from "@config/db.js";
 import Signature from "@models/Signature/Signature.Model.js";
 import cloudinary from "@middlewares/cloudinary.js";
 import { NextResponse } from "next/server";
+
 export const PUT = async (request, context) => {
   await connect();
   const id = context.params.SignatureID; // Ensure this parameter matches your routing setup

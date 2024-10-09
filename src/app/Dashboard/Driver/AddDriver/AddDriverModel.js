@@ -41,6 +41,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
     LocalAuth: "",
     vehicle: "",
     pay: "",
+    calculation: "",
     adminCreatedBy: "",
     adminCompanyName: "",
   };
@@ -116,7 +117,6 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
             : insuranceData.Result.filter(
                 (insurance) => insurance.adminCompanyName === storedCompanyName
               );
-        // console.log("insurence", insuranceData.Result);
 
         // const filteredPayments =
         //   superadmin === "superadmin"
@@ -138,15 +138,12 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                 (vehicle) => vehicle.adminCompanyName === storedCompanyName
               );
 
-        // Update state with filtered or full data based on role
         setTaxiFirms(filteredTaxiFirms);
         setBadge(filteredBadges);
         setInsurance(filteredInsurance);
         // setPayment(filteredPayments);
         setLocalAuth(filteredLocalAuth);
         setVehicle(filteredVehicle);
-        // LocalAuthority in vehicle model
-        console.log(filteredVehicle);
       } catch (err) {
         console.error("Error loading dropdown data:", err);
         toast.error("Failed to load dropdown data.");
@@ -617,7 +614,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                 >
                   {/* </select> */}
                   <option value="null">Select Payment</option>
-                  <option value="permint">Per Mint</option>
+                  {/* <option value="permint">Per Mint</option> */}
                   <option value="perday">Per Day</option>
                   <option value="permonth">per Month</option>
                   <option value="perquarter">Per Quarter</option>

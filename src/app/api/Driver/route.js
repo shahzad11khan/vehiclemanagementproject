@@ -80,6 +80,7 @@ export async function POST(request) {
       LocalAuth,
       imageName,
       vehicle,
+      calculation,
     } = formDataObject;
 
     console.log(formDataObject);
@@ -122,6 +123,7 @@ export async function POST(request) {
       adminCreatedBy,
       adminCompanyName,
       vehicle,
+      calculation,
       imageFile: Driveravatar,
       imagePublicId: DriveravatarId,
       isActive: isActive || false, // Default to "Driver" if no role is specified

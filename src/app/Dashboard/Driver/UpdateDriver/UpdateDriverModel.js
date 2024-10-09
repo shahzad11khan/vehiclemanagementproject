@@ -41,6 +41,7 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, userId }) => {
     imageName: "",
     imageFile: null,
     pay: "",
+    calculation: "",
     adminCreatedBy: "",
     adminCompanyName: "",
   });

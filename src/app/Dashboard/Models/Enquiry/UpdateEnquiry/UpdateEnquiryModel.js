@@ -3,6 +3,10 @@ import { API_URL_Enquiry } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import {
+  fetchBadge,
+  fetchLocalAuth,
+} from "../../../Components/DropdownData/taxiFirm/taxiFirmService";
 
 const UpdateEnquiryModal = ({ isOpen, onClose, fetchData, enquiryId }) => {
   const [formData, setFormData] = useState({
@@ -18,12 +22,34 @@ const UpdateEnquiryModal = ({ isOpen, onClose, fetchData, enquiryId }) => {
     county: "",
     dateOfBirth: "",
     niNumber: "",
-    badgeType: "", // Updated
-    localAuthority: "", // New Field
+    badgeType: "",
+    localAuthority: "",
     isActive: false,
     adminCreatedBy: "",
     adminCompanyName: "",
   });
+
+  const [badgeTypeOptions, setBadgeTypeOptions] = useState([]);
+  const [localAuthorityOptions, setLocalAuthorityOptions] = useState([]);
+
+  useEffect(() => {
+    const fetchDataForDropdowns = async () => {
+      try {
+        const badges = await fetchBadge();
+        console.log(badges);
+
+        const authorities = await fetchLocalAuth();
+        console.log(authorities);
+
+        setBadgeTypeOptions(badges.result);
+        setLocalAuthorityOptions(authorities.Result);
+      } catch (error) {
+        console.error("Error fetching dropdown data:", error);
+      }
+    };
+
+    fetchDataForDropdowns();
+  }, []);
 
   useEffect(() => {
     // Fetch existing enquiry data if enquiryId is provided (for editing)
@@ -48,9 +74,6 @@ const UpdateEnquiryModal = ({ isOpen, onClose, fetchData, enquiryId }) => {
       }));
     }
   }, [enquiryId]); // Run when component mounts or enquiryId changes
-
-  const badgeTypeOptions = ["Standard", "Provisional", "Full"];
-  const localAuthorityOptions = ["Authority 1", "Authority 2", "Authority 3"];
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -294,7 +317,7 @@ const UpdateEnquiryModal = ({ isOpen, onClose, fetchData, enquiryId }) => {
                 />
               </div>
 
-              {/* National Insurance Number */}
+              {/* NI Number */}
               <div>
                 <label
                   htmlFor="niNumber"
@@ -329,8 +352,8 @@ const UpdateEnquiryModal = ({ isOpen, onClose, fetchData, enquiryId }) => {
                 >
                   <option value="">Select Badge Type</option>
                   {badgeTypeOptions.map((option) => (
-                    <option key={option} value={option}>
-                      {option}
+                    <option key={option._id} value={option.name}>
+                      {option.name}
                     </option>
                   ))}
                 </select>
@@ -353,19 +376,16 @@ const UpdateEnquiryModal = ({ isOpen, onClose, fetchData, enquiryId }) => {
                 >
                   <option value="">Select Local Authority</option>
                   {localAuthorityOptions.map((option) => (
-                    <option key={option} value={option}>
-                      {option}
+                    <option key={option._id} value={option.name}>
+                      {option.name}
                     </option>
                   ))}
                 </select>
               </div>
 
-              {/* IsActive Checkbox */}
-              <div className="col-span-1">
-                <label
-                  htmlFor="isActive"
-                  className="text-sm font-medium text-gray-700"
-                >
+              {/* Is Active */}
+              <div>
+                <label htmlFor="isActive" className="text-sm font-medium">
                   Is Active:
                 </label>
                 <input
@@ -377,22 +397,26 @@ const UpdateEnquiryModal = ({ isOpen, onClose, fetchData, enquiryId }) => {
                   className="mt-1 block"
                 />
               </div>
+
+              {/* Admin Created By */}
             </div>
           </div>
 
-          <button
-            type="submit"
-            className="bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg"
-          >
-            Submit
-          </button>
-          <button
-            type="button"
-            onClick={onClose}
-            className="px-6 py-2 m-3 bg-gray-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
-          >
-            Close
-          </button>
+          <div className="flex justify-end mt-8">
+            <button
+              type="button"
+              onClick={onClose}
+              className="bg-gray-500 text-white px-4 py-2 rounded-md"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="bg-blue-500 text-white px-4 py-2 rounded-md ml-4"
+            >
+              Submit
+            </button>
+          </div>
         </form>
       </div>
     </div>

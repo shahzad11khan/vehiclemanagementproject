@@ -3,6 +3,10 @@ import { API_URL_Enquiry } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import {
+  fetchBadge,
+  fetchLocalAuth,
+} from "../../../Components/DropdownData/taxiFirm/taxiFirmService";
 
 const AddEnquiryModal = ({ isOpen, onClose, fetchData }) => {
   const [formData, setFormData] = useState({
@@ -24,18 +28,61 @@ const AddEnquiryModal = ({ isOpen, onClose, fetchData }) => {
     adminCreatedBy: "",
     adminCompanyName: "",
   });
+  const [localAuthorityOptions, setLocalAuth] = useState([]);
+  const [superadmin, setSuperadmin] = useState(null);
+  const [badgeTypeOptions, setBadge] = useState([]);
+  // Load company name and role from localStorage
   useEffect(() => {
-    const storedCompanyName = localStorage.getItem("companyName"); // Replace with the actual key used in localStorage
+    const storedCompanyName = localStorage.getItem("companyName");
+    const storedSuperadmin = localStorage.getItem("role");
+
+    if (storedSuperadmin) {
+      setSuperadmin(storedSuperadmin);
+    }
+
     if (storedCompanyName) {
       setFormData((prevData) => ({
         ...prevData,
         adminCompanyName: storedCompanyName,
       }));
     }
-  }, []); // Run only once when the component mounts
+  }, []); // Run only once on mount
+  // Load dropdown data
+  useEffect(() => {
+    const loadDropdownData = async () => {
+      try {
+        const [badgeData, localAuthData] = await Promise.all([
+          fetchBadge(),
+          fetchLocalAuth(),
+        ]);
 
-  const badgeTypeOptions = ["Standard", "Provisional", "Full"]; // Badge Type options
-  const localAuthorityOptions = ["Authority 1", "Authority 2", "Authority 3"]; // Local Authority options
+        const storedCompanyName = formData.adminCompanyName;
+
+        const filteredBadges =
+          superadmin === "superadmin"
+            ? badgeData.result
+            : badgeData.result.filter(
+                (badge) => badge.adminCompanyName === storedCompanyName
+              );
+
+        const filteredLocalAuth =
+          superadmin === "superadmin"
+            ? localAuthData.Result
+            : localAuthData.Result.filter(
+                (localAuth) => localAuth.adminCompanyName === storedCompanyName
+              );
+
+        setBadge(filteredBadges);
+        setLocalAuth(filteredLocalAuth);
+      } catch (err) {
+        console.error("Error loading dropdown data:", err);
+      }
+    };
+
+    if (superadmin !== null && formData.adminCompanyName) {
+      loadDropdownData(); // Ensure dropdown data is only loaded when role and companyName are available
+    }
+  }, [superadmin, formData.adminCompanyName]); // Re-run when superadmin or companyName changes
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -72,12 +119,16 @@ const AddEnquiryModal = ({ isOpen, onClose, fetchData }) => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {/* First Name */}
               <div>
-                <label
-                  htmlFor="firstName"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  First Name:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="firstName"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    First Name:
+                  </label>
+
+                  <span className="text-red-600">*</span>
+                </div>
                 <input
                   type="text"
                   id="firstName"
@@ -91,12 +142,16 @@ const AddEnquiryModal = ({ isOpen, onClose, fetchData }) => {
 
               {/* Last Name */}
               <div>
-                <label
-                  htmlFor="lastName"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Last Name:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="lastName"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Last Name:
+                  </label>
+
+                  <span className="text-red-600">*</span>
+                </div>
                 <input
                   type="text"
                   id="lastName"
@@ -110,12 +165,16 @@ const AddEnquiryModal = ({ isOpen, onClose, fetchData }) => {
 
               {/* Email */}
               <div>
-                <label
-                  htmlFor="email"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Email:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="email"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Email:
+                  </label>
+
+                  <span className="text-red-600">*</span>
+                </div>
                 <input
                   type="email"
                   id="email"
@@ -129,12 +188,16 @@ const AddEnquiryModal = ({ isOpen, onClose, fetchData }) => {
 
               {/* Telephone 1 */}
               <div>
-                <label
-                  htmlFor="tel1"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Telephone 1:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="tel1"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Telephone 1:
+                  </label>
+
+                  <span className="text-red-600">*</span>
+                </div>
                 <input
                   type="tel"
                   id="tel1"
@@ -166,12 +229,16 @@ const AddEnquiryModal = ({ isOpen, onClose, fetchData }) => {
 
               {/* Postcode */}
               <div>
-                <label
-                  htmlFor="postcode"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Postcode:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="postcode"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Postcode:
+                  </label>
+
+                  <span className="text-red-600">*</span>
+                </div>
                 <input
                   type="text"
                   id="postcode"
@@ -179,17 +246,22 @@ const AddEnquiryModal = ({ isOpen, onClose, fetchData }) => {
                   value={formData.postcode}
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                  required
                 />
               </div>
 
               {/* Postal Address */}
               <div>
-                <label
-                  htmlFor="postalAddress"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Postal Address:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="postalAddress"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Postal Address:
+                  </label>
+
+                  <span className="text-red-600">*</span>
+                </div>
                 <input
                   type="text"
                   id="postalAddress"
@@ -197,6 +269,7 @@ const AddEnquiryModal = ({ isOpen, onClose, fetchData }) => {
                   value={formData.postalAddress}
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                  required
                 />
               </div>
 
@@ -220,12 +293,16 @@ const AddEnquiryModal = ({ isOpen, onClose, fetchData }) => {
 
               {/* City */}
               <div>
-                <label
-                  htmlFor="city"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  City:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="city"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    City:
+                  </label>
+
+                  <span className="text-red-600">*</span>
+                </div>
                 <input
                   type="text"
                   id="city"
@@ -233,17 +310,22 @@ const AddEnquiryModal = ({ isOpen, onClose, fetchData }) => {
                   value={formData.city}
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                  required
                 />
               </div>
 
               {/* County */}
               <div>
-                <label
-                  htmlFor="county"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  County:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="county"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    County:
+                  </label>
+
+                  <span className="text-red-600">*</span>
+                </div>
                 <input
                   type="text"
                   id="county"
@@ -251,17 +333,22 @@ const AddEnquiryModal = ({ isOpen, onClose, fetchData }) => {
                   value={formData.county}
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                  required
                 />
               </div>
 
               {/* Date of Birth */}
               <div>
-                <label
-                  htmlFor="dateOfBirth"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Date of Birth:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="dateOfBirth"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Date of Birth:
+                  </label>
+
+                  <span className="text-red-600">*</span>
+                </div>
                 <input
                   type="date"
                   id="dateOfBirth"
@@ -269,17 +356,22 @@ const AddEnquiryModal = ({ isOpen, onClose, fetchData }) => {
                   value={formData.dateOfBirth}
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                  required
                 />
               </div>
 
               {/* National Insurance Number */}
               <div>
-                <label
-                  htmlFor="niNumber"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  NI Number:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="niNumber"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    NI Number:
+                  </label>
+
+                  <span className="text-red-600">*</span>
+                </div>
                 <input
                   type="text"
                   id="niNumber"
@@ -287,6 +379,7 @@ const AddEnquiryModal = ({ isOpen, onClose, fetchData }) => {
                   value={formData.niNumber}
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                  required
                 />
               </div>
 
@@ -307,8 +400,8 @@ const AddEnquiryModal = ({ isOpen, onClose, fetchData }) => {
                 >
                   <option value="">Select Badge Type</option>
                   {badgeTypeOptions.map((option) => (
-                    <option key={option} value={option}>
-                      {option}
+                    <option key={option._id} value={option.name}>
+                      {option.name}
                     </option>
                   ))}
                 </select>
@@ -331,8 +424,8 @@ const AddEnquiryModal = ({ isOpen, onClose, fetchData }) => {
                 >
                   <option value="">Select Local Authority</option>
                   {localAuthorityOptions.map((option) => (
-                    <option key={option} value={option}>
-                      {option}
+                    <option key={option._id} value={option.name}>
+                      {option.name}
                     </option>
                   ))}
                 </select>

@@ -56,12 +56,31 @@ const UpdateUserModel = ({ isOpen, onClose, userId }) => {
 
           // Set form data, ensuring confirmpassword is shown instead of password
           setFormData({
+            title: adminData.title, // Assuming this should be initialized empty
+            firstName: adminData.firstName, // Assuming this should be initialized empty
+            lastName: adminData.lastName, // Assuming this should be initialized empty
+            tel1: adminData.tel1, // Assuming this should be initialized empty
+            tel2: adminData.tel2, // Assuming this should be initialized empty
+            postcode: adminData.postcode, // Assuming this should be initialized empty
+            postalAddress: adminData.postalAddress, // Assuming this should be initialized empty
+            permanentAddress: adminData.permanentAddress, // Assuming this should be initialized empty
+            city: adminData.city, // Assuming this should be initialized empty
+            county: adminData.county, // Assuming this should be initialized empty
+            accessLevel: adminData.accessLevel, // Assuming this should be initialized empty
+            dateOfBirth: adminData.dateOfBirth, // Assuming this should be initialized empty
+            position: adminData.position, // Assuming this should be initialized empty
+            reportsTo: adminData.reportsTo, // Assuming this should be initialized empty
+            passwordExpires: adminData.passwordExpires, // Assuming this should be initialized empty
+            passwordExpiresEvery: adminData.repopasswordExpiresEveryrtsTo, // Assuming this should be initialized empty
+            companyname: "", // Assuming this should be initialized empty
             username: adminData.username,
             email: adminData.email,
-            password: "", // Set password to confirmpassword
-            confirmpassword: "", // Ensure confirmpassword is set
+            password: adminData.lastName, // Set password to confirmpassword
+            confirmpassword: adminData.lastName, // Ensure confirmpassword is set
             useravatar: adminData.useravatar,
-            ...adminData, // Ensure the rest of the data is updated
+            isActive: false, // Default value
+            role: adminData.role, // Default role set to "user"
+            // ...adminData, // Ensure the rest of the data is updated
           });
 
           setImagePreview(adminData.useravatar); // Show avatar preview
@@ -344,7 +363,7 @@ const UpdateUserModel = ({ isOpen, onClose, userId }) => {
           <div>
             <h3 className="text-xl font-semibold mb-4">Security</h3>
             <div className="grid grid-cols-4 sm:grid-cols-4 gap-3">
-              <div>
+              {/* <div>
                 <label
                   htmlFor="accessLevel"
                   className="text-sm font-medium text-gray-700"
@@ -359,7 +378,7 @@ const UpdateUserModel = ({ isOpen, onClose, userId }) => {
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
                 />
-              </div>
+              </div> */}
 
               <div>
                 <label
@@ -483,7 +502,7 @@ const UpdateUserModel = ({ isOpen, onClose, userId }) => {
                 />
               </div>
 
-              <div>
+              {/* <div>
                 <label
                   htmlFor="passwordExpiresEvery"
                   className="text-sm font-medium text-gray-700"
@@ -498,7 +517,7 @@ const UpdateUserModel = ({ isOpen, onClose, userId }) => {
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
                 />
-              </div>
+              </div> */}
             </div>
           </div>
 

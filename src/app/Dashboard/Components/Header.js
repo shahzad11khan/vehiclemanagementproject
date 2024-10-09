@@ -129,24 +129,39 @@ const Header = () => {
                 role === "admin" ||
                 role === "user" ? (
                   <Link href="/Dashboard/Profile">
-                    <li className="px-4 py-2 hover:bg-custom-blue cursor-pointer rounded-lg flex items-center">
+                    <li className="px-4 py-2 hover:bg-cyan-100 cursor-pointer rounded-lg flex items-center">
                       <CgProfile className="mr-2" />
-                      <span className="hidden md:inline">Profile</span>
+                      <span
+                        className="hidden md:inline"
+                        style={{ backgroundColor: "transparent" }}
+                      >
+                        Profile
+                      </span>
                     </li>
                   </Link>
                 ) : (
                   <Link href="/Dashboard/CompanyProfile">
-                    <li className="px-4 py-2 hover:bg-custom-blue cursor-pointer rounded-lg flex items-center">
+                    <li className="px-4 py-2 hover:bg-cyan-100 cursor-pointer rounded-lg flex items-center">
                       <CgProfile className="mr-2" />
-                      <span className="hidden md:inline">Profile</span>
+                      <span
+                        className="hidden md:inline"
+                        style={{ backgroundColor: "transparent" }}
+                      >
+                        Profile
+                      </span>
                     </li>
                   </Link>
                 )}
 
-                <li className="px-4 py-2 hover:bg-custom-blue cursor-pointer rounded-lg flex items-center">
+                <li className="px-4 py-2 hover:bg-cyan-100 cursor-pointer rounded-lg flex items-center">
                   <button onClick={handleLogout}>
                     <IoIosLogOut className="mr-2" />
-                    <span className="hidden md:inline">Logout</span>
+                    <span
+                      className="hidden md:inline"
+                      style={{ backgroundColor: "transparent" }}
+                    >
+                      Logout
+                    </span>
                   </button>
                 </li>
               </ul>

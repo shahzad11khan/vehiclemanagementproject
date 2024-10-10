@@ -1,9 +1,10 @@
 "use client";
-import { API_URL_Badge } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
+import { API_URL_Type } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-const AddBadgeModel = ({ isOpen, onClose, fetchData }) => {
+
+const UpdateTypeModel = ({ isOpen, onClose, fetchData, typeid }) => {
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -15,16 +16,50 @@ const AddBadgeModel = ({ isOpen, onClose, fetchData }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
+
   // Retrieve company name from local storage
   useEffect(() => {
-    const storedCompanyName = localStorage.getItem("companyName"); // Replace with the actual key used in localStorage
+    const storedCompanyName = localStorage.getItem("companyName");
     if (storedCompanyName) {
       setFormData((prevData) => ({
         ...prevData,
         adminCompanyName: storedCompanyName,
       }));
     }
-  }, []); // Run only once when the component mounts
+  }, []); // Update when the manufacturer changes
+  // Fetch manufacturer data when the modal opens
+  useEffect(() => {
+    // console.log(vehicleid);
+    // alert(supplierid);
+    const fetchManufacturerData = async () => {
+      setLoading(true);
+      if (typeid) {
+        try {
+          const response = await axios.get(`${API_URL_Type}/${typeid}`);
+          console.log(response.data.result);
+          const data = response.data.result;
+          if (data) {
+            setFormData({
+              name: data.name,
+              description: data.description,
+              isActive: data.isActive,
+            });
+          } else {
+            toast.warn("Failed to fetch manufacturer data");
+          }
+        } catch (err) {
+          setError(
+            err.response?.data?.message || "Failed to fetch manufacturer data"
+          );
+        } finally {
+          setLoading(false);
+        }
+      }
+    };
+
+    fetchManufacturerData();
+  }, [typeid]);
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData({
@@ -37,12 +72,10 @@ const AddBadgeModel = ({ isOpen, onClose, fetchData }) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
-
     try {
-      const response = await axios.post(`${API_URL_Badge}`, formData);
-
+      // Use PUT for updating an existing manufacturer
+      const response = await axios.put(`${API_URL_Type}/${typeid}`, formData);
       console.log(response);
-
       setFormData({
         name: "",
         description: "",
@@ -50,18 +83,13 @@ const AddBadgeModel = ({ isOpen, onClose, fetchData }) => {
         adminCreatedBy: "",
         adminCompanyName: "",
       });
-      // console.log(response.data);
-      if (response.data.success) {
-        toast.success("data successfully saved");
-        setSuccess(true);
-        fetchData();
-        onClose();
-      } else {
-        toast.warn(response.data.error);
-      }
-      // Handle success or trigger some UI feedback
+
+      toast.success("Data successfully updated");
+      setSuccess(true);
+      onClose();
+      fetchData();
     } catch (err) {
-      setError(err.response?.data?.message || "Failed to add badge");
+      setError(err.response?.data?.message || "Failed to update manufacturer");
     } finally {
       setLoading(false);
     }
@@ -72,25 +100,24 @@ const AddBadgeModel = ({ isOpen, onClose, fetchData }) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
       <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-xl">
-        <h2 className="text-3xl font-semibold text-center mb-8">Add Badge</h2>
+        <h2 className="text-3xl font-semibold text-center mb-8">
+          Update BodyType
+        </h2>
 
         {error && <p className="text-red-600">{error}</p>}
-        {success && <p className="text-green-600">Badge added successfully!</p>}
-
+        {success && (
+          <p className="text-green-600">BodyType updated successfully!</p>
+        )}
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             {/* Name */}
             <div className="col-span-2">
-              <div className="flex gap-1">
-                <label
-                  htmlFor="firstName"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Name:
-                </label>
-                <span className="text-red-600">*</span>
-              </div>
-
+              <label
+                htmlFor="name"
+                className="text-sm font-medium text-gray-700"
+              >
+                Name:
+              </label>
               <input
                 type="text"
                 id="name"
@@ -147,7 +174,7 @@ const AddBadgeModel = ({ isOpen, onClose, fetchData }) => {
               className="px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50"
               disabled={loading}
             >
-              {loading ? "Submitting..." : "Submit"}
+              {loading ? "Submitting..." : "Update"}
             </button>
             <button
               type="button"
@@ -163,4 +190,4 @@ const AddBadgeModel = ({ isOpen, onClose, fetchData }) => {
   );
 };
 
-export default AddBadgeModel;
+export default UpdateTypeModel;

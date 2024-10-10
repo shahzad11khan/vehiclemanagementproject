@@ -3,7 +3,6 @@ import React, { useState, useCallback, useEffect } from "react";
 import { Chart, registerables } from "chart.js";
 import Header from "../Components/Header.js";
 import Sidebar from "../Components/Sidebar.js";
-// import { isAuthenticated } from "@/app/helper/verifytoken";
 import { LuBarChart2 } from "react-icons/lu";
 import { useRouter } from "next/navigation";
 import { CiWavePulse1 } from "react-icons/ci";
@@ -11,6 +10,7 @@ import { FaChartLine } from "react-icons/fa";
 import { RiFolderReceivedFill } from "react-icons/ri";
 import HeroSection from "../Components/HeroSection";
 import Image from "next/image";
+import { getAuthData, isAuthenticated } from "@/utils/verifytoken";
 import {
   GetUsers,
   GetDriver,
@@ -23,12 +23,7 @@ import {
   GetUserscount,
   GetDrivercount,
   GetVehiclecount,
-  // GetVehicle,
-  // GetManufacturer,
-  // GetPayment,
-  // GetCompany,
 } from "../Components/ApiUrl/getSpecificCompanyCount/getSpecificCompanyCount.js";
-import { getAuthData, isAuthenticated } from "@/utils/verifytoken";
 
 const Page = () => {
   const router = useRouter();
@@ -41,15 +36,11 @@ const Page = () => {
   useEffect(() => {
     if (isAuthenticated()) {
       const authData = getAuthData();
-      // console.log("Authenticated user data:", authData);
-      // You can access individual pieces like this:
-      console.log("Username:", authData.Userusername);
-      console.log("Company Name:", authData.companyName);
-      console.log("Role:", authData.role);
       setsuperadmin(authData.role);
       setcompanyname(authData.companyName);
     } else {
-      console.log("User is not authenticated");
+      router.push("/"); // Redirect to login page if not authenticated
+      return;
     }
   }, []);
 
@@ -104,9 +95,6 @@ const Page = () => {
       const data = await GetUserscount();
       const dataDriver = await GetDrivercount();
       const dataVehicle = await GetVehiclecount();
-      // Access the filtered users and their count here
-      console.log("Filtered Users:", data.result); // Array of filtered users
-      console.log("User Count:", data.count); // Number of users in the filtered result
       setcountuser(data.count);
       setcountDriver(dataDriver.count);
       setcountVehicle(dataVehicle.count);

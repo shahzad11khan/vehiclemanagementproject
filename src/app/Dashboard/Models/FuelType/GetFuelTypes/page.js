@@ -1,23 +1,24 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import Header from "../../Components/Header";
-import Sidebar from "../../Components/Sidebar";
+import Header from "../../../Components/Header";
+import Sidebar from "../../../Components/Sidebar";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FaEdit, FaTrash } from "react-icons/fa";
-import AddVehicleModel from "../AddVehicle/AddVehicleModel";
-import UpdateVehicleModel from "../UpdateVehicleModel/UpdateVehicleModel";
+import AddFuelTypeModel from "../AddFuelType/AddFuelTypeModel";
+import UpdateFuelTypeModel from "../UpdateFuelType/UpdateFuelType";
 import axios from "axios";
-import { API_URL_Vehicle } from "../../Components/ApiUrl/ApiUrls";
+import { API_URL_FuelType } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
+import { GetFueltype } from "@/app/Dashboard/Components/ApiUrl/ShowApiDatas/ShowApiDatas";
 import { getCompanyName } from "@/utils/storageUtils";
 
 const Page = () => {
-  const [vehicle, setVehicle] = useState([]); // For storing fetched data
+  const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [isMounted, setIsMounted] = useState(false);
-  const [isOpenVehicle, setIsOpenVehicle] = useState(false);
+  const [isOpenPayment, setIsOpenPayment] = useState(false);
   const [selectedCompanyName, setSelectedCompanyName] = useState("");
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [isOpenVehicleUpdate, setIsOpenVehcleUpdate] = useState(false);
@@ -30,59 +31,59 @@ const Page = () => {
     }
   }, []);
 
+  const fetchData = async () => {
+    try {
+      GetFueltype().then(({ result }) => {
+        console.log(result);
+        setData(result);
+        setFilteredData(result);
+      });
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setData([]);
+    }
+  };
+
   useEffect(() => {
     fetchData();
   }, []);
 
-  const fetchData = async () => {
-    try {
-      const response = await axios.get(`${API_URL_Vehicle}`);
-      setVehicle(response.data.result);
-      setFilteredData(response.data.result);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
-
   const handleDelete = async (id) => {
     try {
-      const response = await axios.delete(`${API_URL_Vehicle}/${id}`);
+      const response = await axios.delete(`${API_URL_FuelType}/${id}`);
       const { data } = response;
 
-      if (data.success) {
-        setVehicle((prevData) => prevData.filter((item) => item._id !== id));
+      if (data.status === 200) {
+        setData((prevData) => prevData.filter((item) => item._id !== id));
         setFilteredData((prevFilteredData) =>
           prevFilteredData.filter((item) => item._id !== id)
         );
-        toast.success(data.message);
+        toast.success(data.message || "Fuel deleted successfully.");
       } else {
-        toast.warn(data.message || "Failed to delete the vehicle.");
+        toast.warn(data.message || "Failed to delete the Fuel.");
       }
     } catch (error) {
-      console.error("Error deleting vehicle:", error);
+      console.error("Error deleting Fuel:", error);
       toast.error(
-        "An error occurred while deleting the vehicle. Please try again."
+        error.response?.data?.message ||
+          "An error occurred while deleting the Fuel. Please try again."
       );
     }
   };
 
   useEffect(() => {
-    const filtered = vehicle.filter((item) => {
+    const filtered = data.filter((item) => {
       const companyMatch =
         item.adminCompanyName &&
         selectedCompanyName &&
         item.adminCompanyName.toLowerCase() ===
           selectedCompanyName.toLowerCase();
-
       const usernameMatch =
-        item &&
-        item.manufacturer &&
-        item.manufacturer.toLowerCase().includes(searchTerm.toLowerCase());
-
+        item.name && item.name.toLowerCase().includes(searchTerm.toLowerCase());
       return companyMatch && usernameMatch;
     });
     setFilteredData(filtered);
-  }, [searchTerm, vehicle, selectedCompanyName]);
+  }, [searchTerm, data, selectedCompanyName]);
 
   const handleEdit = (id) => {
     setSelectedUserId(id);
@@ -93,8 +94,8 @@ const Page = () => {
     return null;
   }
 
-  const OpenVehicleModle = () => {
-    setIsOpenVehicle(!isOpenVehicle);
+  const OpenPaymentModle = () => {
+    setIsOpenPayment(!isOpenPayment);
   };
 
   const OpenVehicleUpdateModle = () => {
@@ -107,12 +108,12 @@ const Page = () => {
       <div className="flex gap-4">
         <Sidebar />
         <div className="container mx-auto p-4">
-          <div className="mx-auto items-center border-2 mt-3 w-full">
+          <div className="justify-between mx-auto items-center border-2 mt-3 w-full">
             <div className="flex justify-between">
               <div className="justify-start">
                 <input
                   type="text"
-                  placeholder="Search by model"
+                  placeholder="Search by title"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="border rounded px-4 py-2 w-64"
@@ -120,62 +121,46 @@ const Page = () => {
               </div>
               <div className="justify-end">
                 <button
-                  onClick={OpenVehicleModle}
+                  onClick={OpenPaymentModle}
                   className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
                 >
-                  Add Vehicle
+                  Add New Fuel
                 </button>
               </div>
             </div>
 
-            {/* Responsive Tailwind CSS Table */}
+            {/* Custom Responsive Table */}
             <div className="overflow-x-auto">
-              <table className="min-w-full border-collapse border border-gray-300">
-                <thead>
-                  <tr className="bg-gray-200">
-                    <th className="border border-gray-300 px-4 py-2">
-                      Manufacturer
+              <table className="min-w-full mt-4 bg-white border border-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-4 py-2 text-left text-gray-600">
+                      Fuel Name
                     </th>
-                    <th className="border border-gray-300 px-4 py-2">Model</th>
-                    <th className="border border-gray-300 px-4 py-2">Year</th>
-                    <th className="border border-gray-300 px-4 py-2">Type</th>
-                    <th className="border border-gray-300 px-4 py-2">
-                      Engine Type
+                    <th className="px-4 py-2 text-left text-gray-600">
+                      Fuel Description
                     </th>
-                    <th className="border border-gray-300 px-4 py-2">
+                    <th className="px-4 py-2 text-left text-gray-600">
                       Company
                     </th>
-                    <th className="border border-gray-300 px-4 py-2">Active</th>
-                    <th className="border border-gray-300 px-4 py-2">
+                    <th className="px-4 py-2 text-left text-gray-600">
+                      Fuel Status
+                    </th>
+                    <th className="px-4 py-2 text-left text-gray-600">
                       Actions
                     </th>
                   </tr>
                 </thead>
                 <tbody>
                   {filteredData.map((row) => (
-                    <tr key={row._id} className="hover:bg-gray-100">
-                      <td className="border border-gray-300 px-4 py-2">
-                        {row.manufacturer}
+                    <tr key={row._id} className="border-t">
+                      <td className="px-4 py-2">{row.name}</td>
+                      <td className="px-4 py-2">{row.description}</td>
+                      <td className="px-4 py-2">{row.adminCompanyName}</td>
+                      <td className="px-4 py-2">
+                        {row.isActive ? "Active" : "Inactive"}
                       </td>
-                      <td className="border border-gray-300 px-4 py-2">
-                        {row.model}
-                      </td>
-                      <td className="border border-gray-300 px-4 py-2">
-                        {row.year}
-                      </td>
-                      <td className="border border-gray-300 px-4 py-2">
-                        {row.type}
-                      </td>
-                      <td className="border border-gray-300 px-4 py-2">
-                        {row.engineType}
-                      </td>
-                      <td className="border border-gray-300 px-4 py-2">
-                        {row.adminCompanyName}
-                      </td>
-                      <td className="border border-gray-300 px-4 py-2">
-                        {row.isActive ? "Yes" : "No"}
-                      </td>
-                      <td className="border border-gray-300 px-4 py-2">
+                      <td className="px-4 py-2">
                         <div className="flex gap-2">
                           <button
                             onClick={() => handleEdit(row._id)}
@@ -199,16 +184,16 @@ const Page = () => {
           </div>
         </div>
       </div>
-      <AddVehicleModel
-        isOpen={isOpenVehicle}
-        onClose={OpenVehicleModle}
+      <AddFuelTypeModel
+        isOpen={isOpenPayment}
+        onClose={OpenPaymentModle}
         fetchData={fetchData}
       />
-      <UpdateVehicleModel
+      <UpdateFuelTypeModel
         isOpen={isOpenVehicleUpdate}
         onClose={OpenVehicleUpdateModle}
         fetchData={fetchData}
-        vehicleId={selectedUserId}
+        fuelid={selectedUserId}
       />
     </>
   );

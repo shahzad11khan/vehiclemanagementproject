@@ -18,6 +18,9 @@ import {
   API_URL_Badge,
   API_URL_Employee,
   API_URL_Company,
+  API_URL_Transmission,
+  API_URL_FuelType,
+  API_URL_Type,
 } from "../ApiUrls.js";
 
 export const GetUsers = () => {
@@ -140,6 +143,45 @@ export const GetManufacturer = () => {
 export const GetPayment = () => {
   return axios
     .get(`${API_URL_Payment}`)
+    .then((res) => {
+      // console.log(res.data.Result);
+      // console.log(res.data.count);
+      return { result: res.data.Result, count: res.data.count };
+    })
+    .catch((error) => {
+      console.log(`error : ${error}`);
+      throw error;
+    });
+};
+export const GetTransmissions = () => {
+  return axios
+    .get(`${API_URL_Transmission}`)
+    .then((res) => {
+      // console.log(res.data.Result);
+      // console.log(res.data.count);
+      return { result: res.data.Result, count: res.data.count };
+    })
+    .catch((error) => {
+      console.log(`error : ${error}`);
+      throw error;
+    });
+};
+export const GetFueltype = () => {
+  return axios
+    .get(`${API_URL_FuelType}`)
+    .then((res) => {
+      // console.log(res.data.Result);
+      // console.log(res.data.count);
+      return { result: res.data.Result, count: res.data.count };
+    })
+    .catch((error) => {
+      console.log(`error : ${error}`);
+      throw error;
+    });
+};
+export const Gettype = () => {
+  return axios
+    .get(`${API_URL_Type}`)
     .then((res) => {
       // console.log(res.data.Result);
       // console.log(res.data.count);

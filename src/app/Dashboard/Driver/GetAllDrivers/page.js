@@ -197,10 +197,9 @@ const Page = () => {
             },
           }
         );
-
         console.log("Update specific field successful:", response.data);
       };
-      setInterval(sendFormData, 5 * 60 * 1000);
+      setInterval(sendFormData, 300000);
       return finalResult; // Return finalResult after the request completes
     } catch (error) {
       console.error("Failed to update driver:", error);

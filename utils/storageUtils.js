@@ -4,6 +4,15 @@
 export const getCompanyName = () => {
   return localStorage.getItem("companyName");
 };
+export const getUserId = () => {
+  return localStorage.getItem("userId");
+};
+export const getUserName = () => {
+  return localStorage.getItem("Userusername");
+};
+export const getUserRole = () => {
+  return localStorage.getItem("role");
+};
 
 // Function to get the company ID from localStorage
 export const getCompanyId = () => {

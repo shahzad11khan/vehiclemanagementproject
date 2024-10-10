@@ -10,77 +10,72 @@ export async function PUT(request, context) {
     const id = context.params.VehicleID;
     const formDataObject = await request.json(); // Parse JSON data from the request body
 
-    // Destructure values from formDataObject with defaults
-    const {
-      manufacturer,
-      model,
-      year,
-      type,
-      engineType,
-      fuelType,
-      transmission,
-      drivetrain,
-      exteriorColor,
-      interiorColor,
-      dimensions = {}, // Default to an empty object if dimensions are not provided
-      passengerCapacity,
-      cargoCapacity,
-      horsepower,
-      torque,
-      topSpeed,
-      towingCapacity,
-      fuelEfficiency,
-      safetyFeatures,
-      techFeatures,
-      price,
-      registrationNumber,
-      warrantyInfo,
-      isActive,
-      adminCreatedBy,
-      adminCompanyName,
-    } = formDataObject;
+    console.log(id); // Log the ID to confirm it's being received
 
-    const vehicle = await Vehicle.findById(id);
-
+    const vehicle = await Vehicle.findById(id); // Fetch vehicle by ID directly
     if (!vehicle) {
       return NextResponse.json({ error: "Vehicle not found", status: 404 });
     }
 
-    // Update vehicle properties with values from formDataObject or retain existing values
-    vehicle.manufacturer = manufacturer || vehicle.manufacturer;
-    vehicle.model = model || vehicle.model;
-    vehicle.year = year || vehicle.year;
-    vehicle.type = type || vehicle.type;
-    vehicle.engineType = engineType || vehicle.engineType;
-    vehicle.fuelType = fuelType || vehicle.fuelType;
-    vehicle.transmission = transmission || vehicle.transmission;
-    vehicle.drivetrain = drivetrain || vehicle.drivetrain;
-    vehicle.exteriorColor = exteriorColor || vehicle.exteriorColor;
-    vehicle.interiorColor = interiorColor || vehicle.interiorColor;
+    // Update vehicle properties only if they exist in formDataObject
+    if (formDataObject.manufacturer !== undefined)
+      vehicle.manufacturer = formDataObject.manufacturer;
+    if (formDataObject.model !== undefined)
+      vehicle.model = formDataObject.model;
+    if (formDataObject.year !== undefined) vehicle.year = formDataObject.year;
+    if (formDataObject.type !== undefined) vehicle.type = formDataObject.type;
+    if (formDataObject.engineType !== undefined)
+      vehicle.engineType = formDataObject.engineType;
+    if (formDataObject.fuelType !== undefined)
+      vehicle.fuelType = formDataObject.fuelType;
+    if (formDataObject.transmission !== undefined)
+      vehicle.transmission = formDataObject.transmission;
+    if (formDataObject.drivetrain !== undefined)
+      vehicle.drivetrain = formDataObject.drivetrain;
+    if (formDataObject.exteriorColor !== undefined)
+      vehicle.exteriorColor = formDataObject.exteriorColor;
+    if (formDataObject.interiorColor !== undefined)
+      vehicle.interiorColor = formDataObject.interiorColor;
 
-    // Update dimensions only if provided
-    vehicle.dimensions = {
-      height: dimensions.height || vehicle.dimensions?.height,
-      width: dimensions.width || vehicle.dimensions?.width,
-      length: dimensions.length || vehicle.dimensions?.length,
-    };
+    // Update dimensions only if provided in formDataObject
+    if (formDataObject.dimensions) {
+      vehicle.dimensions = {
+        height: formDataObject.dimensions.height || vehicle.dimensions?.height,
+        width: formDataObject.dimensions.width || vehicle.dimensions?.width,
+        length: formDataObject.dimensions.length || vehicle.dimensions?.length,
+      };
+    }
 
-    vehicle.passengerCapacity = passengerCapacity || vehicle.passengerCapacity;
-    vehicle.cargoCapacity = cargoCapacity || vehicle.cargoCapacity;
-    vehicle.horsepower = horsepower || vehicle.horsepower;
-    vehicle.torque = torque || vehicle.torque;
-    vehicle.topSpeed = topSpeed || vehicle.topSpeed;
-    vehicle.towingCapacity = towingCapacity || vehicle.towingCapacity;
-    vehicle.fuelEfficiency = fuelEfficiency || vehicle.fuelEfficiency;
-    vehicle.safetyFeatures = safetyFeatures || vehicle.safetyFeatures;
-    vehicle.techFeatures = techFeatures || vehicle.techFeatures;
-    vehicle.isActive = isActive || vehicle.isActive;
-    vehicle.adminCreatedBy = adminCreatedBy || vehicle.adminCreatedBy;
-    vehicle.adminCompanyName = adminCompanyName || vehicle.adminCompanyName;
-    vehicle.price = price || vehicle.price;
-    vehicle.registrationNumber =
-      registrationNumber || vehicle.registrationNumber;
-    vehicle.warrantyInfo = warrantyInfo || vehicle.warrantyInfo;
+    if (formDataObject.passengerCapacity !== undefined)
+      vehicle.passengerCapacity = formDataObject.passengerCapacity;
+    if (formDataObject.cargoCapacity !== undefined)
+      vehicle.cargoCapacity = formDataObject.cargoCapacity;
+    if (formDataObject.horsepower !== undefined)
+      vehicle.horsepower = formDataObject.horsepower;
+    if (formDataObject.torque !== undefined)
+      vehicle.torque = formDataObject.torque;
+    if (formDataObject.topSpeed !== undefined)
+      vehicle.topSpeed = formDataObject.topSpeed;
+    if (formDataObject.towingCapacity !== undefined)
+      vehicle.towingCapacity = formDataObject.towingCapacity;
+    if (formDataObject.fuelEfficiency !== undefined)
+      vehicle.fuelEfficiency = formDataObject.fuelEfficiency;
+    if (formDataObject.safetyFeatures !== undefined)
+      vehicle.safetyFeatures = formDataObject.safetyFeatures;
+    if (formDataObject.techFeatures !== undefined)
+      vehicle.techFeatures = formDataObject.techFeatures;
+    if (formDataObject.price !== undefined)
+      vehicle.price = formDataObject.price;
+    if (formDataObject.registrationNumber !== undefined)
+      vehicle.registrationNumber = formDataObject.registrationNumber;
+    if (formDataObject.warrantyInfo !== undefined)
+      vehicle.warrantyInfo = formDataObject.warrantyInfo;
+    if (formDataObject.isActive !== undefined)
+      vehicle.isActive = formDataObject.isActive;
+    if (formDataObject.adminCreatedBy !== undefined)
+      vehicle.adminCreatedBy = formDataObject.adminCreatedBy;
+    if (formDataObject.adminCompanyName !== undefined)
+      vehicle.adminCompanyName = formDataObject.adminCompanyName;
 
     // Save the updated vehicle
     await vehicle.save();
@@ -98,6 +93,7 @@ export async function PUT(request, context) {
     });
   }
 }
+
 // GET handler for retrieving a specific product by ID
 export async function GET(request, context) {
   try {
@@ -110,6 +106,8 @@ export async function GET(request, context) {
 
     // Find the product by ID
     const Find_User = await Vehicle.findById(id);
+
+    console.log(Find_User);
 
     // Check if the product exists
     if (!Find_User) {

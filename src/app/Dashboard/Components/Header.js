@@ -5,67 +5,74 @@ import Link from "next/link";
 import React, { useState, useCallback, useEffect } from "react";
 import { CgProfile } from "react-icons/cg";
 import { IoIosLogOut } from "react-icons/io";
-import { getCompanyName } from "../../../../utils/storageUtils";
+import {
+  getCompanyName,
+  getUserId,
+  getUserName,
+  getUserRole,
+} from "../../../../utils/storageUtils";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { API_URL_Company, API_URL_USER } from "../Components/ApiUrl/ApiUrls";
 import { isAuthenticated, clearAuthData } from "@/utils/verifytoken";
-// import axios from "axios";
 
 const Header = () => {
   const [companyName, setCompanyName] = useState("");
   const [role, setRole] = useState("");
+  const [username, setusername] = useState("");
   const router = useRouter();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [imagePreview, setImagePreview] = useState("");
 
   useEffect(() => {
-    // Check if window is defined (i.e., the code is running on the client-side)
-    if (typeof window !== "undefined") {
-      // Check if user is authenticated
-      if (!isAuthenticated()) {
-        router.push("/"); // Redirect to login page if not authenticated
-        return;
-      }
-
-      const userId = localStorage.getItem("userId");
-      const role = localStorage.getItem("role");
-      console.log(userId);
-      console.log(role);
-
-      if (userId) {
-        showalladmins(userId);
-        setRole(role);
-      }
+    if (!isAuthenticated()) {
+      router.push("/"); // Redirect to login page if not authenticated
+      return;
     }
-  }, []);
 
-  const showalladmins = async (userId) => {
+    // Get values from localStorage
+    // const userId = localStorage.getItem("userId");
+    // const username = localStorage.getItem("Userusername");
+
+    const userId = getUserId();
+    const username = getUserName();
+    const role = getUserRole();
+    const companyNameFromStorage = getCompanyName();
+
+    // Update state based on retrieved values
+    if (role) setRole(role);
+    if (username) setusername(username);
+    if (companyNameFromStorage) setCompanyName(companyNameFromStorage);
+
+    // Fetch admin or user data if userId exists
+    if (userId) {
+      showAllAdmins(userId);
+    }
+  }, []); // Only run on component mount
+
+  const showAllAdmins = async (userId) => {
     try {
       const res = await axios.get(`${API_URL_Company}/${userId}`);
       const adminData = res.data.result;
-      // console.log("Company Data", adminData);
 
-      if (adminData._id === userId) {
+      if (adminData?._id === userId) {
         setImagePreview(adminData.image);
       } else {
-        // Fetch user data from another table (assuming this endpoint exists)
-        const userRes = await axios.get(`${API_URL_USER}/${userId}`); // Fetch user data
-        const userData = userRes.data.result; // Adjust based on your API response structure
-        // console.log("User Data", userData);
-        setImagePreview(userData.useravatar);
+        // Fetch user data from another table
+        const userRes = await axios.get(`${API_URL_USER}/${userId}`);
+        const userData = userRes.data.result;
+
+        // Update user image if available
+        if (userData?.useravatar) {
+          setImagePreview(userData.useravatar);
+        }
       }
     } catch (error) {
-      console.error(`Error: ${error}`);
+      console.error(`Error fetching data for user ${userId}:`, error);
     }
   };
-  useEffect(() => {
-    const companyNameFromStorage = getCompanyName();
-    if (companyNameFromStorage) {
-      setCompanyName(companyNameFromStorage);
-    }
-  }, []);
+
   const handleLogout = useCallback(async () => {
     if (isAuthenticated()) {
       clearAuthData();
@@ -87,30 +94,20 @@ const Header = () => {
       <div className="flex flex-shrink-0 py-5 px-3 bg-gradient-to-r from-rose-400 to-purple-200">
         <span className="text-sm font-sm text-white bg-transparent">
           Vehicle Management System{" "}
-          {/* {companyName ? (
-            <div>
-              <p>Company Name:{companyName === undefined ? "" : companyName}</p>
-            </div>
-          ) : (
-            <p>No company selected.</p>
-          )} */}
         </span>
       </div>
-
-      {/* Middle: Encoderbytes */}
-      {/* <div className="flex items-start justify-start  flex-grow md:flex ml-3">
-        <span className="text-lg font-bold">Vehicle Management System</span>
-      </div> */}
 
       {/* Right side: Profile and Dropdown */}
       <div className="flex items-center">
         <h6 className="mr-4 hidden md:block">
-          {companyName ? (
+          {companyName === undefined ? (
             <div>
-              <p> {companyName === undefined ? "" : companyName}</p>
+              <p> {companyName}</p>
             </div>
+          ) : role === "superadmin" ? (
+            <p>{username}</p>
           ) : (
-            <p>No Name.</p>
+            <p> {(username, companyName)}</p>
           )}
         </h6>
         <div className="relative">

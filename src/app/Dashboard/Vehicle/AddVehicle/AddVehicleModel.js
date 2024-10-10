@@ -6,12 +6,17 @@ import React, { useEffect, useState } from "react";
 import {
   fetchLocalAuth,
   fetchManfacturer,
+  fetchTransmission,
+  fetchType,
+  fetchFuelType,
 } from "../../Components/DropdownData/taxiFirm/taxiFirmService";
 
 const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
   const [local, setLocal] = useState([]);
   const [manufacturer, setManufacturer] = useState([]);
-  // const [superadmin, setSuperadmin] = useState(null);
+  const [transmission, setTransmission] = useState([]);
+  const [type, setType] = useState([]);
+  const [fueltype, setFuelType] = useState([]);
   const [vehicleData, setVehicleData] = useState({
     manufacturer: "",
     model: "",
@@ -45,6 +50,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
     warrantyInfo: "",
     adminCreatedBy: "",
     adminCompanyName: "",
+    isActive: "",
   });
 
   // Fetch data and company name on component mount
@@ -66,6 +72,9 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
       try {
         const localAuthData = await fetchLocalAuth();
         const manufacturerData = await fetchManfacturer();
+        const transmission = await fetchTransmission();
+        const type = await fetchType();
+        const fueltype = await fetchFuelType();
 
         // Use the latest adminCompanyName from vehicleData
         const currentCompanyName =
@@ -87,13 +96,41 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                 (manufacturer) =>
                   manufacturer.adminCompanyName === currentCompanyName
               );
+        // Filter transmission data based on the user's role
+        const filteredtransmission =
+          storedSuperadmin === "superadmin"
+            ? transmission.Result // No filtering for superadmins
+            : transmission.Result.filter(
+                (transmission) =>
+                  transmission.adminCompanyName === currentCompanyName
+              );
+        // Filter type data based on the user's role
+        const filteredtype =
+          storedSuperadmin === "superadmin"
+            ? type.Result // No filtering for superadmins
+            : type.Result.filter(
+                (type) => type.adminCompanyName === currentCompanyName
+              );
+        // Filter type data based on the user's role
+        const filteredfueltype =
+          storedSuperadmin === "superadmin"
+            ? fueltype.Result // No filtering for superadmins
+            : fueltype.Result.filter(
+                (fueltype) => fueltype.adminCompanyName === currentCompanyName
+              );
 
         // Update local and manufacturer states
         setLocal(filteredLocalAuth);
         setManufacturer(filteredManufacturer);
+        // console.log("transmission", transmission);
+        setTransmission(filteredtransmission);
+        // console.log("bodytype", type);
+        setType(filteredtype);
+        // console.log("fueltype", fueltype);
+        setFuelType(filteredfueltype);
       } catch (error) {
         console.error("Error fetching data:", error);
-        toast.error("Failed to fetch data, please try again.");
+        // toast.error("Failed to fetch data, please try again.");
       }
     };
 
@@ -102,10 +139,12 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
 
   // Handle input changes for vehicleData
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, type, checked } = e.target;
+
+    // Update state based on input type
     setVehicleData((prevData) => ({
       ...prevData,
-      [name]: value,
+      [name]: type === "checkbox" ? checked : value, // Use checked for checkboxes, value for other input types
     }));
   };
 
@@ -163,10 +202,11 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
         warrantyInfo: "",
         adminCreatedBy: "",
         adminCompanyName: "", // Preserve company name
+        isActive: "",
       });
     } catch (error) {
       console.error("Error submitting vehicle data:", error);
-      toast.error("Error submitting vehicle data, please try again.");
+      toast.error(response.data.error);
     }
   };
 
@@ -199,7 +239,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
               >
                 <option value="">Select Manufacturer</option>
                 {manufacturer.map((item) => (
-                  <option key={item.id} value={item.name}>
+                  <option key={item._id} value={item.name}>
                     {item.name}
                   </option>
                 ))}
@@ -255,10 +295,11 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                 <option value="" disabled>
                   Select type
                 </option>
-                <option value="Sedan">Sedan</option>
-                <option value="SUV">SUV</option>
-                <option value="Truck">Truck</option>
-                <option value="Coupe">Coupe</option>
+                {type.map((item) => (
+                  <option key={item._id} value={item.name}>
+                    {item.name}
+                  </option>
+                ))}
               </select>
             </div>
             <div>
@@ -291,10 +332,11 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                 <option value="" disabled>
                   Select fuel type
                 </option>
-                <option value="Gasoline">Gasoline</option>
-                <option value="Diesel">Diesel</option>
-                <option value="Electric">Electric</option>
-                <option value="Hybrid">Hybrid</option>
+                {fueltype.map((item) => (
+                  <option key={item._id} value={item.name}>
+                    {item.name}
+                  </option>
+                ))}
               </select>
             </div>
           </div>
@@ -306,15 +348,23 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                 <label className="block font-semibold">Transmission</label>
                 <span className="text-red-600">*</span>
               </div>
-              <input
-                type="text"
+              <select
                 name="transmission"
                 value={vehicleData.transmission}
                 onChange={handleChange}
                 className="w-full p-2 border border-gray-300 rounded"
                 placeholder="e.g., Automatic"
                 required
-              />
+              >
+                <option value="" disabled>
+                  Select Transmission
+                </option>
+                {transmission.map((item) => (
+                  <option key={item._id} value={item.name}>
+                    {item.name}
+                  </option>
+                ))}
+              </select>
             </div>
             <div className="">
               <div className="flex gap-1">
@@ -649,6 +699,22 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
               placeholder="e.g., 3 years or 36,000 miles"
               required
             />
+          </div>
+          <div className="flex items-center">
+            <input
+              type="checkbox"
+              id="isActive"
+              name="isActive"
+              checked={vehicleData.isActive}
+              onChange={handleChange}
+              className="mr-2"
+            />
+            <label
+              htmlFor="isActive"
+              className="text-sm font-medium text-gray-700"
+            >
+              Active
+            </label>
           </div>
 
           {/* Submit Button */}

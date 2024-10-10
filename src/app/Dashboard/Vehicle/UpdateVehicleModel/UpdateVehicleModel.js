@@ -3,7 +3,13 @@ import { API_URL_Vehicle } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import axios from "axios";
 import { toast } from "react-toastify";
 import React, { useEffect, useState } from "react";
-import { fetchLocalAuth } from "../../Components/DropdownData/taxiFirm/taxiFirmService";
+import {
+  fetchManfacturer,
+  fetchLocalAuth,
+  fetchTransmission,
+  fetchType,
+  fetchFuelType,
+} from "../../Components/DropdownData/taxiFirm/taxiFirmService";
 
 const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
   const [vehicleData, setVehicleData] = useState({
@@ -39,43 +45,124 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
     warrantyInfo: "",
     adminCreatedBy: "",
     adminCompanyName: "",
+    isActive: false, // Should be boolean
   });
-  // Local authority data
-  const [localAuth, setLocalAuth] = useState([]);
+
+  // Local authority and manufacturer state
+  const [superadmin, setSuperadmin] = useState(null);
+  const [LocalAuthority, setLocalAuth] = useState([]);
+  const [manufacturer, setManufacturer] = useState([]);
+
+  const [transmission, setTransmission] = useState([]);
+  const [type, setType] = useState([]);
+  const [fueltype, setFuelType] = useState([]);
+
   // Retrieve company name from local storage
   useEffect(() => {
     const storedCompanyName = localStorage.getItem("companyName");
+    const storedSuperadmin = localStorage.getItem("role");
+    if (storedSuperadmin) {
+      setSuperadmin(storedSuperadmin);
+    }
     if (storedCompanyName) {
       setVehicleData((prevData) => ({
         ...prevData,
         adminCompanyName: storedCompanyName,
       }));
     }
+  }, []);
 
-    // Fetch the existing vehicle data if updating
-    const fetchVehicleData = async () => {
-      if (vehicleId) {
+  // Handle input changes for vehicleData
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+
+    setVehicleData((prevData) => ({
+      ...prevData,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+  };
+
+  // Fetch manufacturer and local authority data
+  useEffect(() => {
+    const fetchDataForDropdowns = async () => {
+      try {
+        const storedCompanyName = vehicleData.adminCompanyName;
+        const manufacturerResponse = await fetchManfacturer();
+        const localauthResponse = await fetchLocalAuth();
+        const transmission = await fetchTransmission();
+        const type = await fetchType();
+        const fueltype = await fetchFuelType();
+
+        const filteredManufacturer =
+          superadmin === "superadmin"
+            ? manufacturerResponse.Result
+            : manufacturerResponse.Result.filter(
+                (manufacturer) =>
+                  manufacturer.adminCompanyName === storedCompanyName
+              );
+        const filteredLocalAuth =
+          superadmin === "superadmin"
+            ? localauthResponse.Result
+            : localauthResponse.Result.filter(
+                (localauth) => localauth.adminCompanyName === storedCompanyName
+              );
+        // Filter transmission data based on the user's role
+        const filteredtransmission =
+          superadmin === "superadmin"
+            ? transmission.Result // No filtering for superadmins
+            : transmission.Result.filter(
+                (transmission) =>
+                  transmission.adminCompanyName === storedCompanyName
+              );
+        // Filter type data based on the user's role
+        const filteredtype =
+          superadmin === "superadmin"
+            ? type.Result // No filtering for superadmins
+            : type.Result.filter(
+                (type) => type.adminCompanyName === storedCompanyName
+              );
+        // Filter type data based on the user's role
+        const filteredfueltype =
+          superadmin === "superadmin"
+            ? fueltype.Result // No filtering for superadmins
+            : fueltype.Result.filter(
+                (fueltype) => fueltype.adminCompanyName === storedCompanyName
+              );
+
+        setManufacturer(filteredManufacturer);
+        setLocalAuth(filteredLocalAuth);
+        console.log("transmission", transmission);
+        setTransmission(filteredtransmission);
+        console.log("bodytype", type);
+        setType(filteredtype);
+        console.log("fueltype", fueltype);
+        setFuelType(filteredfueltype);
+      } catch (error) {
+        console.error("Error fetching dropdown data:", error);
+      }
+    };
+
+    fetchDataForDropdowns();
+  }, [superadmin, vehicleData.adminCompanyName]);
+
+  // Fetch vehicle data for editing
+  useEffect(() => {
+    if (vehicleId) {
+      const fetchVehicleData = async () => {
         try {
           const response = await axios.get(`${API_URL_Vehicle}/${vehicleId}`);
           setVehicleData(response.data.result);
         } catch (error) {
           console.error("Error fetching vehicle data:", error);
-          toast.error("Failed to fetch vehicle data.");
+          toast.error("Failed to load vehicle data.");
         }
-      }
-    };
+      };
 
-    fetchVehicleData();
-  }, [vehicleId]); // Fetch data when vehicleId changes
+      fetchVehicleData();
+    }
+  }, [vehicleId]);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setVehicleData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
-
+  // Handle dimension changes (nested object)
   const handleDimensionChange = (e) => {
     const { name, value } = e.target;
     setVehicleData((prevData) => ({
@@ -87,21 +174,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
     }));
   };
 
-  useEffect(() => {
-    // Load dropdown data
-    const loadTaxiFirms = async () => {
-      try {
-        const response = await fetchLocalAuth();
-        console.log(response);
-        setLocalAuth(response.Result); // Assuming result is the array of local authorities
-      } catch (error) {
-        console.error("Error loading taxi firms:", error);
-        toast.error("Failed to load dropdown data."); // Show toast on error
-      }
-    };
-
-    loadTaxiFirms();
-  }, []); // Load taxi firms on component mount
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -109,13 +182,14 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
         `${API_URL_Vehicle}/${vehicleId}`,
         vehicleData
       );
-      console.log("Vehicle data updated successfully:", response.data);
       toast.success(response.data.message);
       fetchData();
       onClose();
     } catch (error) {
       console.error("Error updating vehicle data:", error);
-      toast.error("Failed to update vehicle data.");
+      toast.error(
+        error.response?.data?.error || "Failed to update vehicle data."
+      );
     }
   };
 
@@ -124,24 +198,30 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50 ">
       <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-4xl overflow-y-auto max-h-screen">
-        <form
-          onSubmit={handleSubmit}
-          className="max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-lg"
-        >
+        <form onSubmit={handleSubmit} className="max-w-4xl mx-auto p-6">
           <h2 className="text-2xl font-bold mb-6">Vehicle Form</h2>
           {/* Manufacturer and Model */}
           <div className="grid grid-cols-3 md:grid-cols-3 gap-2">
             <div>
-              <label className="block font-semibold">Manufacturer</label>
-              <input
-                type="text"
+              <div className="flex gap-1">
+                <label className="block font-semibold">Manufacturer</label>
+                {/* <span className="text-red-600">*</span> */}
+              </div>
+              <select
+                id="manufacturer"
                 name="manufacturer"
                 value={vehicleData.manufacturer}
                 onChange={handleChange}
                 className="w-full p-2 border border-gray-300 rounded"
-                placeholder="e.g., Toyota, Ford"
                 required
-              />
+              >
+                <option value="">Select Manufacturer</option>
+                {manufacturer.map((item) => (
+                  <option key={item.id} value={item.name}>
+                    {item.name}
+                  </option>
+                ))}
+              </select>
             </div>
             <div>
               <label className="block font-semibold">Model</label>
@@ -182,10 +262,11 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                 <option value="" disabled>
                   Select type
                 </option>
-                <option value="Sedan">Sedan</option>
-                <option value="SUV">SUV</option>
-                <option value="Truck">Truck</option>
-                <option value="Coupe">Coupe</option>
+                {type.map((item) => (
+                  <option key={item._id} value={item.name}>
+                    {item.name}
+                  </option>
+                ))}
               </select>
             </div>
             <div>
@@ -212,10 +293,11 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                 <option value="" disabled>
                   Select fuel type
                 </option>
-                <option value="Gasoline">Gasoline</option>
-                <option value="Diesel">Diesel</option>
-                <option value="Electric">Electric</option>
-                <option value="Hybrid">Hybrid</option>
+                {fueltype.map((item) => (
+                  <option key={item._id} value={item.name}>
+                    {item.name}
+                  </option>
+                ))}
               </select>
             </div>
           </div>
@@ -223,15 +305,23 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
           <div className="grid grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-2 mt-4">
             <div>
               <label className="block font-semibold">Transmission</label>
-              <input
-                type="text"
+              <select
                 name="transmission"
                 value={vehicleData.transmission}
                 onChange={handleChange}
                 className="w-full p-2 border border-gray-300 rounded"
                 placeholder="e.g., Automatic"
                 required
-              />
+              >
+                <option value="" disabled>
+                  Select Transmission
+                </option>
+                {transmission.map((item) => (
+                  <option key={item._id} value={item.name}>
+                    {item.name}
+                  </option>
+                ))}
+              </select>
             </div>
             <div className="">
               <label className="block font-semibold">Drivetrain</label>
@@ -464,15 +554,11 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                 <option value="" disabled>
                   Select type
                 </option>
-                {localAuth.map((authority) => (
+                {LocalAuthority.map((authority) => (
                   <option key={authority.id} value={authority.name}>
                     {authority.name}
                   </option>
                 ))}
-                {/* <option value="Sedan">A</option>
-                <option value="SUV">B</option>
-                <option value="Truck">C</option>
-                <option value="Coupe">D</option> */}
               </select>
             </div>
           </div>
@@ -487,6 +573,23 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
               placeholder="e.g., 3 years or 36,000 miles"
               required
             />
+          </div>
+
+          <div className="flex items-center">
+            <input
+              type="checkbox"
+              id="isActive"
+              name="isActive"
+              checked={vehicleData.isActive}
+              onChange={handleChange}
+              className="mr-2"
+            />
+            <label
+              htmlFor="isActive"
+              className="text-sm font-medium text-gray-700"
+            >
+              Active
+            </label>
           </div>
           {/* Submit Button */}
           <div className="mt-6">

@@ -78,7 +78,7 @@ export async function POST(Request) {
       company: user.companyname || user.CompanyName,
       role: user.role,
       isActive: user.isActive,
-      message: "Login successful",
+      message: "Login successfully",
       status: 200,
     });
 

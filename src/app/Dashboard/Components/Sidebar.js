@@ -362,6 +362,31 @@ const Sidebar = () => {
                                 All Insurances
                               </Link>
                             </li>
+                            <li>
+                              <Link
+                                href="/Dashboard/Models/Type_BodyStyle/GetTypes"
+                                className="  rounded hover:bg-gray-200"
+                              >
+                                Type / Body Style
+                              </Link>
+                            </li>
+                            <li>
+                              <Link
+                                href="/Dashboard/Models/FuelType/GetFuelTypes"
+                                className="  rounded hover:bg-gray-200"
+                              >
+                                Fuel Type
+                              </Link>
+                            </li>
+                            <li>
+                              <Link
+                                href="/Dashboard/Models/Transmission/GetTransmissions"
+                                className="  rounded hover:bg-gray-200"
+                              >
+                                Transmission
+                              </Link>
+                            </li>
+
                             {/* <li>
                               <Link
                                 href="/Dashboard/Models/Payment/GetPayments"
@@ -745,6 +770,30 @@ const Sidebar = () => {
                                 className=" py-2 rounded hover:bg-gray-200"
                               >
                                 All Insurances
+                              </Link>
+                            </li>
+                            <li>
+                              <Link
+                                href="/Dashboard/Models/Type_BodyStyle/GetTypes"
+                                className="  rounded hover:bg-gray-200"
+                              >
+                                Type / Body Style
+                              </Link>
+                            </li>
+                            <li>
+                              <Link
+                                href="/Dashboard/Models/FuelType/GetFuelTypes"
+                                className="  rounded hover:bg-gray-200"
+                              >
+                                Fuel Type
+                              </Link>
+                            </li>
+                            <li>
+                              <Link
+                                href="/Dashboard/Models/Transmission/GetTransmissions"
+                                className="  rounded hover:bg-gray-200"
+                              >
+                                Transmission
                               </Link>
                             </li>
                             {/* <li>

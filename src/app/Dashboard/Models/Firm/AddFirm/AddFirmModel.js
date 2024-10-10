@@ -34,6 +34,8 @@ const AddFirmModal = ({ isOpen, onClose, fetchData }) => {
 
   useEffect(() => {
     const storedCompanyName = localStorage.getItem("companyName");
+    // console.log("fetch company:", storedCompanyName);
+    // setcompn(storedCompanyName);
     const storedSuperadmin = localStorage.getItem("role");
     if (storedSuperadmin) {
       setSuperadmin(storedSuperadmin);
@@ -49,17 +51,22 @@ const AddFirmModal = ({ isOpen, onClose, fetchData }) => {
   useEffect(() => {
     const fetchDataForDropdowns = async () => {
       try {
-        const storedCompanyName = formData.adminCompanyName;
+        const comp = localStorage.getItem("companyName");
+        // console.log("again fetch comp name :", comp);
+        // const storedCompanyName = formData.adminCompanyName;
 
         const signature = await fetchSignature();
-        // console.log(signature.Result);
+        // console.log("company :", comp);
 
         const filteredsignature =
           superadmin === "superadmin"
-            ? signature.result
-            : signature.result.filter(
-                (signature) => signature.adminCompanyName === storedCompanyName
+            ? signature.Result
+            : signature.Result.filter(
+                (signature) => signature.adminCompanyName === comp
               );
+        // console.log(filteredsignature);
+        // console.log("filtered array", filteredsignature);
+        // console.log("simple array", signature.Result);
         setSignatureOptions(filteredsignature);
       } catch (error) {
         console.error("Error fetching dropdown data:", error);
@@ -129,7 +136,7 @@ const AddFirmModal = ({ isOpen, onClose, fetchData }) => {
           imageName: "",
           imageFile: null,
           adminCreatedBy: "",
-          adminCompanyName: "",
+          adminCompanyName: formData.adminCompanyName,
         });
       } else {
         toast.warn(response.data.error);

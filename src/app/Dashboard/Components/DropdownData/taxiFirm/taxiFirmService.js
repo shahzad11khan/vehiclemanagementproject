@@ -96,6 +96,7 @@ export const fetchSignature = async () => {
     throw error;
   }
 };
+
 export const fetchTransmission = async () => {
   try {
     const response = await axios.get(API_URL_Transmission);

@@ -119,6 +119,7 @@ const UpdateEnquiryModal = ({ isOpen, onClose, fetchData, enquiryId }) => {
           `${API_URL_Enquiry}/${enquiryId}`,
           formData
         );
+        console.log(response.data);
         toast.success("Record updated successfully");
         fetchData();
         onClose();

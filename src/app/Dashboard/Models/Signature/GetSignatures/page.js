@@ -33,6 +33,7 @@ const Page = () => {
   const fetchData = async () => {
     try {
       GetSignature().then(({ result }) => {
+        console.log("sig", result);
         setData(result);
         setFilteredData(result);
       });

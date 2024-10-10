@@ -171,6 +171,7 @@ const Page = () => {
       // Calculate the final result
       const finalResult = calculateFinalResult(timePassed);
       const sendFormData = async () => {
+        console.log("update done");
         // Prepare form data to send
         const formDataToSend = new FormData();
         const specificFieldKey = "calculation"; // The field you want to update
@@ -199,7 +200,9 @@ const Page = () => {
         );
         console.log("Update specific field successful:", response.data);
       };
-      setInterval(sendFormData, 300000);
+      // setInterval(sendFormData, 300000);
+      const millisecondsIn24Hours = 24 * 60 * 60 * 1000;
+      setInterval(sendFormData, millisecondsIn24Hours);
       return finalResult; // Return finalResult after the request completes
     } catch (error) {
       console.error("Failed to update driver:", error);

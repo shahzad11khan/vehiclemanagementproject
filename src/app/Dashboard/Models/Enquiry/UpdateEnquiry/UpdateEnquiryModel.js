@@ -28,21 +28,49 @@ const UpdateEnquiryModal = ({ isOpen, onClose, fetchData, enquiryId }) => {
     adminCreatedBy: "",
     adminCompanyName: "",
   });
-
+  const [superadmin, setSuperadmin] = useState(null);
   const [badgeTypeOptions, setBadgeTypeOptions] = useState([]);
   const [localAuthorityOptions, setLocalAuthorityOptions] = useState([]);
-
+  useEffect(() => {
+    const storedCompanyName = localStorage.getItem("companyName");
+    const storedSuperadmin = localStorage.getItem("role");
+    if (storedSuperadmin) {
+      setSuperadmin(storedSuperadmin);
+    }
+    if (storedCompanyName) {
+      setFormData((prevData) => ({
+        ...prevData,
+        adminCompanyName: storedCompanyName,
+      }));
+    }
+  }, []);
   useEffect(() => {
     const fetchDataForDropdowns = async () => {
       try {
+        const storedCompanyName = formData.adminCompanyName;
+
         const badges = await fetchBadge();
         console.log(badges);
 
+        const filteredbadges =
+          superadmin === "superadmin"
+            ? badges.result
+            : badges.result.filter(
+                (badges) => badges.adminCompanyName === storedCompanyName
+              );
+
         const authorities = await fetchLocalAuth();
         console.log(authorities);
+        const filtereauthorities =
+          superadmin === "superadmin"
+            ? authorities.result
+            : authorities.result.filter(
+                (authorities) =>
+                  authorities.adminCompanyName === storedCompanyName
+              );
 
-        setBadgeTypeOptions(badges.result);
-        setLocalAuthorityOptions(authorities.Result);
+        setBadgeTypeOptions(filteredbadges);
+        setLocalAuthorityOptions(filtereauthorities);
       } catch (error) {
         console.error("Error fetching dropdown data:", error);
       }
@@ -64,14 +92,6 @@ const UpdateEnquiryModal = ({ isOpen, onClose, fetchData, enquiryId }) => {
         }
       };
       fetchEnquiry();
-    }
-
-    const storedCompanyName = localStorage.getItem("companyName");
-    if (storedCompanyName) {
-      setFormData((prevData) => ({
-        ...prevData,
-        adminCompanyName: storedCompanyName,
-      }));
     }
   }, [enquiryId]); // Run when component mounts or enquiryId changes
 

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { API_URL_Firm } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { fetchSignature } from "../../../Components/DropdownData/taxiFirm/taxiFirmService";
 
 const UpdateFirmModel = ({ isOpen, onClose, fetchData, firmId }) => {
   const [formData, setFormData] = useState({
@@ -30,13 +31,48 @@ const UpdateFirmModel = ({ isOpen, onClose, fetchData, firmId }) => {
   });
 
   // Fetch existing firm data when the modal opens
+  const [superadmin, setSuperadmin] = useState(null);
+  const [signature, setSignatureOptions] = useState([]);
+  useEffect(() => {
+    const storedCompanyName = localStorage.getItem("companyName");
+    const storedSuperadmin = localStorage.getItem("role");
+    if (storedSuperadmin) {
+      setSuperadmin(storedSuperadmin);
+    }
+    if (storedCompanyName) {
+      setFormData((prevData) => ({
+        ...prevData,
+        adminCompanyName: storedCompanyName,
+      }));
+    }
+  }, []);
+  useEffect(() => {
+    const fetchDataForDropdowns = async () => {
+      try {
+        const storedCompanyName = formData.adminCompanyName;
+
+        const signature = await fetchSignature();
+        // console.log(signature.Result);
+        const filteredsignature =
+          superadmin === "superadmin"
+            ? signature.result
+            : signature.result.filter(
+                (signature) => signature.adminCompanyName === storedCompanyName
+              );
+        setSignatureOptions(filteredsignature);
+      } catch (error) {
+        console.error("Error fetching dropdown data:", error);
+      }
+    };
+
+    fetchDataForDropdowns();
+  }, []);
   useEffect(() => {
     if (firmId) {
       console.log(firmId);
       const fetchFirmData = async () => {
         try {
           const response = await axios.get(`${API_URL_Firm}/${firmId}`);
-
           // console.log(response.data.result);
           setFormData(response.data.result); // Assuming response.data contains the firm data
         } catch (error) {
@@ -415,8 +451,13 @@ const UpdateFirmModel = ({ isOpen, onClose, fetchData, firmId }) => {
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
                 >
                   <option value="">Select</option>
-                  <option value="option1">Option 1</option>
-                  <option value="option2">Option 2</option>
+                  {/* <option value="option1">Option 1</option>
+                  <option value="option2">Option 2</option> */}
+                  {signature.map((option) => (
+                    <option key={option._id} value={option.name}>
+                      {option.name}
+                    </option>
+                  ))}
                   {/* Add more options as needed */}
                 </select>
               </div>

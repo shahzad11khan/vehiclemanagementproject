@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { API_URL_Firm } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { fetchSignature } from "../../../Components/DropdownData/taxiFirm/taxiFirmService";
 
 const AddFirmModal = ({ isOpen, onClose, fetchData }) => {
   const [formData, setFormData] = useState({
@@ -28,15 +29,44 @@ const AddFirmModal = ({ isOpen, onClose, fetchData }) => {
     adminCreatedBy: "",
     adminCompanyName: "",
   });
+  const [superadmin, setSuperadmin] = useState(null);
+  const [signature, setSignatureOptions] = useState([]);
 
   useEffect(() => {
     const storedCompanyName = localStorage.getItem("companyName");
+    const storedSuperadmin = localStorage.getItem("role");
+    if (storedSuperadmin) {
+      setSuperadmin(storedSuperadmin);
+    }
     if (storedCompanyName) {
       setFormData((prevData) => ({
         ...prevData,
         adminCompanyName: storedCompanyName,
       }));
     }
+  }, []);
+  // Fetch existing firm data when the modal opens
+  useEffect(() => {
+    const fetchDataForDropdowns = async () => {
+      try {
+        const storedCompanyName = formData.adminCompanyName;
+
+        const signature = await fetchSignature();
+        // console.log(signature.Result);
+
+        const filteredsignature =
+          superadmin === "superadmin"
+            ? signature.result
+            : signature.result.filter(
+                (signature) => signature.adminCompanyName === storedCompanyName
+              );
+        setSignatureOptions(filteredsignature);
+      } catch (error) {
+        console.error("Error fetching dropdown data:", error);
+      }
+    };
+
+    fetchDataForDropdowns();
   }, []);
 
   const handleChange = (e) => {
@@ -401,8 +431,13 @@ const AddFirmModal = ({ isOpen, onClose, fetchData }) => {
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
                 >
                   <option value="">Select</option>
-                  <option value="option1">Option 1</option>
-                  <option value="option2">Option 2</option>
+                  {/* <option value="option1">Option 1</option>
+                  <option value="option2">Option 2</option> */}
+                  {signature.map((option) => (
+                    <option key={option._id} value={option.name}>
+                      {option.name}
+                    </option>
+                  ))}
                   {/* Add more options as needed */}
                 </select>
               </div>

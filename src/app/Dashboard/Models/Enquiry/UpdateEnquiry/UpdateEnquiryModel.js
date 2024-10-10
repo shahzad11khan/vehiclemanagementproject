@@ -28,9 +28,11 @@ const UpdateEnquiryModal = ({ isOpen, onClose, fetchData, enquiryId }) => {
     adminCreatedBy: "",
     adminCompanyName: "",
   });
+
   const [superadmin, setSuperadmin] = useState(null);
-  const [badgeTypeOptions, setBadgeTypeOptions] = useState([]);
-  const [localAuthorityOptions, setLocalAuthorityOptions] = useState([]);
+  const [badgeType, setBadgeTypeOptions] = useState([]);
+  const [localAuthority, setLocalAuthorityOptions] = useState([]);
+
   useEffect(() => {
     const storedCompanyName = localStorage.getItem("companyName");
     const storedSuperadmin = localStorage.getItem("role");
@@ -44,56 +46,61 @@ const UpdateEnquiryModal = ({ isOpen, onClose, fetchData, enquiryId }) => {
       }));
     }
   }, []);
+
   useEffect(() => {
     const fetchDataForDropdowns = async () => {
       try {
         const storedCompanyName = formData.adminCompanyName;
 
-        const badges = await fetchBadge();
-        console.log(badges);
+        const [badgesdata, authoritiesdata] = await Promise.all([
+          fetchBadge(),
+          fetchLocalAuth(),
+        ]);
 
         const filteredbadges =
           superadmin === "superadmin"
-            ? badges.result
-            : badges.result.filter(
-                (badges) => badges.adminCompanyName === storedCompanyName
+            ? badgesdata.result
+            : badgesdata.result.filter(
+                (badge) => badge.adminCompanyName === storedCompanyName
               );
 
-        const authorities = await fetchLocalAuth();
-        console.log(authorities);
-        const filtereauthorities =
+        const filteredAuthorities =
           superadmin === "superadmin"
-            ? authorities.result
-            : authorities.result.filter(
-                (authorities) =>
-                  authorities.adminCompanyName === storedCompanyName
+            ? authoritiesdata.Result
+            : authoritiesdata.Result.filter(
+                (authority) => authority.adminCompanyName === storedCompanyName
               );
 
         setBadgeTypeOptions(filteredbadges);
-        setLocalAuthorityOptions(filtereauthorities);
+        setLocalAuthorityOptions(filteredAuthorities);
       } catch (error) {
         console.error("Error fetching dropdown data:", error);
+        // toast.error("Failed to load dropdown data."); // Show toast on error
       }
     };
 
     fetchDataForDropdowns();
-  }, []);
+  }, [formData.adminCompanyName, superadmin]); // Add dependencies for correct useEffect behavior
 
   useEffect(() => {
     // Fetch existing enquiry data if enquiryId is provided (for editing)
-    if (enquiryId) {
-      const fetchEnquiry = async () => {
+    const fetchEnquiry = async () => {
+      if (enquiryId) {
         try {
           const { data } = await axios.get(`${API_URL_Enquiry}/${enquiryId}`);
-          console.log("Enquiry data:", data.result);
-          setFormData(data.result);
+          if (data.result) {
+            setFormData(data.result);
+          } else {
+            toast.error("No enquiry data found");
+          }
         } catch (error) {
           console.error("Error fetching enquiry data:", error);
+          toast.error("Error fetching enquiry data");
         }
-      };
-      fetchEnquiry();
-    }
-  }, [enquiryId]); // Run when component mounts or enquiryId changes
+      }
+    };
+    fetchEnquiry();
+  }, [enquiryId]); // Run when enquiryId changes
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -112,7 +119,6 @@ const UpdateEnquiryModal = ({ isOpen, onClose, fetchData, enquiryId }) => {
           `${API_URL_Enquiry}/${enquiryId}`,
           formData
         );
-        console.log("Form submitted successfully:", response.data);
         toast.success("Record updated successfully");
         fetchData();
         onClose();
@@ -371,7 +377,7 @@ const UpdateEnquiryModal = ({ isOpen, onClose, fetchData, enquiryId }) => {
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
                 >
                   <option value="">Select Badge Type</option>
-                  {badgeTypeOptions.map((option) => (
+                  {badgeType.map((option) => (
                     <option key={option._id} value={option.name}>
                       {option.name}
                     </option>
@@ -395,7 +401,7 @@ const UpdateEnquiryModal = ({ isOpen, onClose, fetchData, enquiryId }) => {
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
                 >
                   <option value="">Select Local Authority</option>
-                  {localAuthorityOptions.map((option) => (
+                  {localAuthority.map((option) => (
                     <option key={option._id} value={option.name}>
                       {option.name}
                     </option>

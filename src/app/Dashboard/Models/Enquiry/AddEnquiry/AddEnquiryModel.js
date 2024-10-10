@@ -97,10 +97,15 @@ const AddEnquiryModal = ({ isOpen, onClose, fetchData }) => {
     try {
       // Send the form data to the backend using Axios
       const response = await axios.post(`${API_URL_Enquiry}`, formData); // Replace with your API endpoint
-      console.log("Form submitted successfully:", response.data);
-      toast.success("Form submitted successfully");
-      onClose();
-      fetchData();
+
+      if (response.data.success) {
+        console.log("Form submitted successfully:", response.data);
+        toast.success(response.data.message);
+        onClose();
+        fetchData();
+      } else {
+        toast.warn(response.data.error);
+      }
     } catch (error) {
       console.error("Error submitting form:", error);
     }

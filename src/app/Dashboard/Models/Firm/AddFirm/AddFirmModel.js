@@ -100,41 +100,42 @@ const AddFirmModal = ({ isOpen, onClose, fetchData }) => {
         },
       });
 
-      // Handle the response after submission
-      toast.success(response.data.message);
-      console.log("Server response:", response.data);
-      onClose();
-      fetchData();
+      if (response.data.success) {
+        // Handle the response after submission
+        toast.success(response.data.message);
+        onClose();
+        fetchData();
+        console.log("Server response:", response.data);
 
-      // Optionally, reset the form after successful submission
-      setFormData({
-        name: "",
-        description: "",
-        companyNo: "",
-        vatNo: "",
-        insurancePolicyNo: "",
-        website: "",
-        email: "",
-        tel1: "",
-        tel2: "",
-        address: "",
-        city: "",
-        country: "",
-        postcode: "",
-        isActive: false,
-        employmentLetter: false,
-        coverLetter: false,
-        signature: "",
-        imageName: "",
-        imageFile: null,
-        adminCreatedBy: "",
-        adminCompanyName: "",
-      });
-
-      onClose();
+        // Optionally, reset the form after successful submission
+        setFormData({
+          name: "",
+          description: "",
+          companyNo: "",
+          vatNo: "",
+          insurancePolicyNo: "",
+          website: "",
+          email: "",
+          tel1: "",
+          tel2: "",
+          address: "",
+          city: "",
+          country: "",
+          postcode: "",
+          isActive: false,
+          employmentLetter: false,
+          coverLetter: false,
+          signature: "",
+          imageName: "",
+          imageFile: null,
+          adminCreatedBy: "",
+          adminCompanyName: "",
+        });
+      } else {
+        toast.warn(response.data.error);
+      }
     } catch (error) {
       console.error("Error submitting the form:", error);
-      toast.error("Failed to submit the form, please try again.");
     }
   };
 

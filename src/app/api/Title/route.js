@@ -13,16 +13,16 @@ export const POST = catchAsyncErrors(async (request) => {
     data; // Extract the new variables
 
   // Check for existing title by name
-  const existingTitle = await Title.findOne({
-    name: name,
-    adminCompanyName: adminCompanyName,
-  });
-  if (existingTitle) {
-    return NextResponse.json({
-      error: "Title with this name already exists",
-      status: 400,
-    });
-  }
+  // const existingTitle = await Title.findOne({
+  //   name: name,
+  //   adminCompanyName: adminCompanyName,
+  // });
+  // if (existingTitle) {
+  //   return NextResponse.json({
+  //     error: "Title with this name already exists",
+  //     status: 400,
+  //   });
+  // }
 
   // Create and save the new title entry
   const newTitle = new Title({

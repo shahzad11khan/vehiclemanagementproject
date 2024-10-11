@@ -11,16 +11,16 @@ export const POST = catchAsyncErrors(async (request) => {
     data; // Extract the new variables
 
   // Check for existing vehicle by name
-  const existingFuelType = await FuelType.findOne({
-    name: name,
-    adminCompanyName: adminCompanyName,
-  });
-  if (existingFuelType) {
-    return NextResponse.json({
-      error: "FuelType with this name already exists",
-      status: 400,
-    });
-  }
+  // const existingFuelType = await FuelType.findOne({
+  //   name: name,
+  //   adminCompanyName: adminCompanyName,
+  // });
+  // if (existingFuelType) {
+  //   return NextResponse.json({
+  //     error: "FuelType with this name already exists",
+  //     status: 400,
+  //   });
+  // }
 
   // Create and save the new vehicle entry
   const newFuelType = new FuelType({

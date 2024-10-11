@@ -8,13 +8,14 @@ export const POST = catchAsyncErrors(async (request) => {
   const data = await request.json();
 
   const { name, description, isActive, adminCreatedBy, adminCompanyName } =
-    data; // Extract the new variables
+    data;
+  // Extract the new variables
 
   // Check for existing vehicle by name
-  const existingBodyType = await BodyType.findOne({
-    name: name,
-    adminCompanyName: adminCompanyName,
-  });
+  // const existingBodyType = await BodyType.findOne({
+  //   name: name,
+  //   adminCompanyName: adminCompanyName,
+  // });
   if (existingBodyType) {
     return NextResponse.json({
       error: "BodyType with this name already exists",

@@ -123,9 +123,9 @@ const Page = () => {
                       <th className="py-2 px-4 border-b border-gray-200 text-left">
                         Title
                       </th>
-                      <th className="py-2 px-4 border-b border-gray-200 text-left">
+                      {/* <th className="py-2 px-4 border-b border-gray-200 text-left">
                         Company
-                      </th>
+                      </th> */}
                       <th className="py-2 px-4 border-b border-gray-200 text-left">
                         Actions
                       </th>
@@ -137,9 +137,9 @@ const Page = () => {
                         <td className="py-2 px-4 border-b border-gray-200">
                           {row.name}
                         </td>
-                        <td className="py-2 px-4 border-b border-gray-200">
+                        {/* <td className="py-2 px-4 border-b border-gray-200">
                           {row.adminCompanyName}
-                        </td>
+                        </td> */}
                         <td className="py-2 px-4 border-b border-gray-200">
                           <button
                             onClick={() => handleDelete(row._id)}

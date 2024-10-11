@@ -530,12 +530,16 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
               </div>
 
               <div>
-                <label
-                  htmlFor="passwordExpires"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Password Expires:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="passwordExpires"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Password Expires:
+                  </label>
+                  <span className="text-red-600">*</span>
+                </div>
+
                 <input
                   type="date"
                   id="passwordExpires"
@@ -543,6 +547,7 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                   value={formData.passwordExpires}
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                  required
                 />
               </div>
 

@@ -140,9 +140,9 @@ const Page = () => {
                     <th className="px-4 py-2 text-left text-gray-600">
                       Fuel Description
                     </th>
-                    <th className="px-4 py-2 text-left text-gray-600">
+                    {/* <th className="px-4 py-2 text-left text-gray-600">
                       Company
-                    </th>
+                    </th> */}
                     <th className="px-4 py-2 text-left text-gray-600">
                       Fuel Status
                     </th>
@@ -156,7 +156,7 @@ const Page = () => {
                     <tr key={row._id} className="border-t">
                       <td className="px-4 py-2">{row.name}</td>
                       <td className="px-4 py-2">{row.description}</td>
-                      <td className="px-4 py-2">{row.adminCompanyName}</td>
+                      {/* <td className="px-4 py-2">{row.adminCompanyName}</td> */}
                       <td className="px-4 py-2">
                         {row.isActive ? "Active" : "Inactive"}
                       </td>

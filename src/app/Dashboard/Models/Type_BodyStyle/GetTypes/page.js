@@ -148,7 +148,7 @@ const Page = () => {
                   <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
                     <th className="py-3 px-4 text-left border">Type Name</th>
                     <th className="py-3 px-4 text-left border">Description</th>
-                    <th className="py-3 px-4 text-left border">Company</th>
+                    {/* <th className="py-3 px-4 text-left border">Company</th> */}
                     <th className="py-3 px-4 text-left border">Status</th>
                     <th className="py-3 px-4 text-left border">Actions</th>
                   </tr>
@@ -166,9 +166,9 @@ const Page = () => {
                         <td className="py-3 px-4 text-left border">
                           {row.description}
                         </td>
-                        <td className="py-3 px-4 text-left border">
+                        {/* <td className="py-3 px-4 text-left border">
                           {row.adminCompanyName}
-                        </td>
+                        </td> */}
                         <td className="py-3 px-4 text-left border">
                           {row.isActive ? "Active" : "Inactive"}
                         </td>

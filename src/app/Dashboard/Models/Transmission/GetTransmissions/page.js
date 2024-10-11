@@ -135,7 +135,7 @@ const Page = () => {
                   <tr className="bg-gray-200 text-gray-600 text-left">
                     <th className="p-3 border">Transmission</th>
                     <th className="p-3 border">Description</th>
-                    <th className="p-3 border">Company</th>
+                    {/* <th className="p-3 border">Company</th> */}
                     <th className="p-3 border">Status</th>
                     <th className="p-3 border">Actions</th>
                   </tr>
@@ -146,7 +146,7 @@ const Page = () => {
                       <tr key={row._id} className="bg-white hover:bg-gray-100">
                         <td className="p-3 border">{row.name}</td>
                         <td className="p-3 border">{row.description}</td>
-                        <td className="p-3 border">{row.adminCompanyName}</td>
+                        {/* <td className="p-3 border">{row.adminCompanyName}</td> */}
                         <td className="p-3 border">
                           {row.isActive ? "Active" : "Inactive"}
                         </td>

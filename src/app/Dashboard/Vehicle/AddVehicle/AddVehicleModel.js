@@ -97,40 +97,37 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                   manufacturer.adminCompanyName === currentCompanyName
               );
         // Filter transmission data based on the user's role
-        // const filteredtransmission =
-        //   storedSuperadmin === "superadmin"
-        //     ? transmission.Result // No filtering for superadmins
-        //     : transmission.Result.filter(
-        //         (transmission) =>
-        //           transmission.adminCompanyName === currentCompanyName
-        //       );
+        const filteredtransmission =
+          storedSuperadmin === "superadmin"
+            ? transmission.Result // No filtering for superadmins
+            : transmission.Result.filter(
+                (transmission) =>
+                  transmission.adminCompanyName === currentCompanyName
+              );
         // Filter type data based on the user's role
-        // const filteredtype =
-        //   storedSuperadmin === "superadmin"
-        //     ? type.Result // No filtering for superadmins
-        //     : type.Result.filter(
-        //         (type) => type.adminCompanyName === currentCompanyName
-        //       );
+        const filteredtype =
+          storedSuperadmin === "superadmin"
+            ? type.Result // No filtering for superadmins
+            : type.Result.filter(
+                (type) => type.adminCompanyName === currentCompanyName
+              );
         // Filter type data based on the user's role
-        // const filteredfueltype =
-        //   storedSuperadmin === "superadmin"
-        //     ? fueltype.Result // No filtering for superadmins
-        //     : fueltype.Result.filter(
-        //         (fueltype) => fueltype.adminCompanyName === currentCompanyName
-        //       );
+        const filteredfueltype =
+          storedSuperadmin === "superadmin"
+            ? fueltype.Result // No filtering for superadmins
+            : fueltype.Result.filter(
+                (fueltype) => fueltype.adminCompanyName === currentCompanyName
+              );
 
         // Update local and manufacturer states
         setLocal(filteredLocalAuth);
         setManufacturer(filteredManufacturer);
         // console.log("transmission", transmission);
-        // setTransmission(filteredtransmission);
-        setTransmission(transmission.Result);
+        setTransmission(filteredtransmission);
         // console.log("bodytype", type);
-        // setType(filteredtype);
-        setType(type.Result);
+        setType(filteredtype);
         // console.log("fueltype", fueltype);
-        // setFuelType(filteredfueltype);
-        setFuelType(fueltype.Result);
+        setFuelType(filteredfueltype);
       } catch (error) {
         console.error("Error fetching data:", error);
         // toast.error("Failed to fetch data, please try again.");

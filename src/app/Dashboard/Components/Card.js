@@ -2,11 +2,12 @@
 // import Image from "next/image";
 import Link from "next/link";
 
-const Card = ({ image, company }) => {
+const Card = ({ image, company, companyId }) => {
   const handleCardClick = () => {
     // alert(company, id);
     // // Store company name and id in localStorage
     localStorage.setItem("companyName", company);
+    localStorage.setItem("companyID", companyId);
     // localStorage.setItem("companyId", id);
   };
 

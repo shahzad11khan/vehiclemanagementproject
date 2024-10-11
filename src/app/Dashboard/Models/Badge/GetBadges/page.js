@@ -141,9 +141,9 @@ const Page = () => {
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Badge Description
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Company
-                    </th>
+                    </th> */}
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Badge Active
                     </th>
@@ -161,9 +161,9 @@ const Page = () => {
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         {item.description}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {/* <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         {item.adminCompanyName}
-                      </td>
+                      </td> */}
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         {item.isActive ? "Active" : "Inactive"}
                       </td>

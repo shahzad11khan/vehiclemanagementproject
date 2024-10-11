@@ -9,7 +9,7 @@ import { CiWavePulse1 } from "react-icons/ci";
 import { FaChartLine } from "react-icons/fa";
 import { RiFolderReceivedFill } from "react-icons/ri";
 import HeroSection from "../Components/HeroSection";
-import Image from "next/image";
+// import Image from "next/image";
 import { getAuthData, isAuthenticated } from "@/utils/verifytoken";
 import {
   GetUsers,
@@ -286,7 +286,7 @@ const Page = () => {
 
           <section className="flex gap-4 min-w-full justify-between mt-4 ">
             {/* First Container - Customer Data */}
-            <div className="flex flex-col w-3/6  p-4 rounded-md shadow">
+            {/* <div className="flex flex-col w-3/6  p-4 rounded-md shadow">
               <h2 className="text-lg font-semibold mb-2">Drivers</h2>
               <ul className="space-y-4">
                 <li className="flex items-start">
@@ -337,10 +337,10 @@ const Page = () => {
                   </div>
                 </li>
               </ul>
-            </div>
+            </div> */}
 
             {/* Second Container - User Table */}
-            <div className="w-full bg-white p-4 rounded-md shadow">
+            {/* <div className="w-full bg-white p-4 rounded-md shadow">
               <h2 className="text-lg font-semibold mb-2">User Table</h2>
               <h2 className="text-xm text-gray-600 font-semibold mb-2">
                 Register User In Website
@@ -381,7 +381,7 @@ const Page = () => {
                   ))}
                 </tbody>
               </table>
-            </div>
+            </div> */}
           </section>
         </main>
       </div>

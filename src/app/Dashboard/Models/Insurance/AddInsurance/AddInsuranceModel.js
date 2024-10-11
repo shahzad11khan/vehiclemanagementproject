@@ -108,7 +108,6 @@ const AddInsuranceModel = ({ isOpen, onClose, fetchData }) => {
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
                 rows="3"
-                required
               ></textarea>
             </div>
 

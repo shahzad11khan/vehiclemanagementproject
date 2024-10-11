@@ -1,6 +1,5 @@
 "use client";
 import React, { useEffect, useState } from "react";
-// import { isAuthenticated } from "@/app/helper/verifytoken";
 import { GetCompany } from "../Components/ApiUrl/ShowApiDatas/ShowApiDatas";
 import Card from "./Card";
 
@@ -32,6 +31,7 @@ const AllCompnaies = () => {
             key={company._id}
             image={company.image}
             company={company.CompanyName}
+            companyId={company._id}
           />
         ))}
       </div>

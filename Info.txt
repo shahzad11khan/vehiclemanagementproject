@@ -296,3 +296,10 @@ console.log(`Formatted date: ${formattedDate}`);
   //   // Return the final result or pay if finalResult is 0
   //   return finalResult;
   // }
+
+
+  # 
+  when super admin add title  show every where  
+  Desciption remove required  
+  and company remove required
+

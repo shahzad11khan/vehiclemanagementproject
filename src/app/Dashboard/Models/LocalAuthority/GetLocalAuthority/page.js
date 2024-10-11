@@ -17,7 +17,7 @@ const Page = () => {
   const columns = [
     { name: "Authorities Name", selector: "name" },
     { name: "Description", selector: "description" },
-    { name: "Company", selector: "adminCompanyName" },
+    // { name: "Company", selector: "adminCompanyName" },
     { name: "Authority Status", selector: "isActive" },
   ];
 
@@ -175,9 +175,9 @@ const Page = () => {
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                         {item.description}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      {/* <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                         {item.adminCompanyName}
-                      </td>
+                      </td> */}
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                         {item.isActive ? "Active" : "InActive"}
                       </td>

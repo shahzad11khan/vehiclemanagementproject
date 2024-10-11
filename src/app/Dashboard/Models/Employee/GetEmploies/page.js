@@ -23,10 +23,10 @@ const Page = () => {
       name: "Employee Description",
       accessor: "description",
     },
-    {
-      name: "Company",
-      accessor: "adminCompanyName",
-    },
+    // {
+    //   name: "Company",
+    //   accessor: "adminCompanyName",
+    // },
     {
       name: "Employee Status",
       accessor: "isActive",
@@ -178,9 +178,9 @@ const Page = () => {
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                         {row.description}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      {/* <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                         {row.adminCompanyName}
-                      </td>
+                      </td> */}
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                         {row.isActive ? "Active" : "Inactive"}
                       </td>

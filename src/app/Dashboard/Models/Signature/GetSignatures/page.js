@@ -138,9 +138,9 @@ const Page = () => {
                     <th className="px-4 py-2 text-left text-sm font-medium text-gray-500">
                       Signature Image
                     </th>
-                    <th className="px-4 py-2 text-left text-sm font-medium text-gray-500">
+                    {/* <th className="px-4 py-2 text-left text-sm font-medium text-gray-500">
                       Company
-                    </th>
+                    </th> */}
                     <th className="px-4 py-2 text-left text-sm font-medium text-gray-500">
                       Firm Status
                     </th>
@@ -161,9 +161,9 @@ const Page = () => {
                       <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-600">
                         {row.imageName}
                       </td>
-                      <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-600">
+                      {/* <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-600">
                         {row.adminCompanyName}
-                      </td>
+                      </td> */}
                       <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-600">
                         {row.isActive ? "Active" : "InActive"}
                       </td>

@@ -145,9 +145,9 @@ const Page = () => {
                     <th className="border border-gray-300 p-2 text-left">
                       Firm Description
                     </th>
-                    <th className="border border-gray-300 p-2 text-left">
+                    {/* <th className="border border-gray-300 p-2 text-left">
                       Company
-                    </th>
+                    </th> */}
                     <th className="border border-gray-300 p-2 text-left">
                       Firm Status
                     </th>
@@ -163,9 +163,9 @@ const Page = () => {
                       <td className="border border-gray-300 p-2">
                         {row.description}
                       </td>
-                      <td className="border border-gray-300 p-2">
+                      {/* <td className="border border-gray-300 p-2">
                         {row.adminCompanyName}
-                      </td>
+                      </td> */}
                       <td className="border border-gray-300 p-2">
                         {row.isActive ? "Active" : "InActive"}
                       </td>

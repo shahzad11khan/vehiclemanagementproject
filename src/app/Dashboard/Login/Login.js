@@ -74,7 +74,7 @@ const Login = () => {
       }
     } catch (error) {
       console.error("Login error:", error); // Better error logging
-      toast.error("Something went wrong");
+      // toast.error("Something went wrong");
     } finally {
       setloading(false);
     }

@@ -45,16 +45,15 @@ const AddManufacturerModel = ({ isOpen, onClose, fetchData }) => {
         description: "",
         isActive: false,
         adminCreatedBy: "",
-        adminCompanyName: "",
+        adminCompanyName: formData.adminCompanyName,
       });
       // console.log(response.data);
       if (response.data.success) {
         toast.success("data successfully saved");
-
         fetchData();
         onClose();
       } else {
-        toast.warn("Data not saved");
+        toast.warn(response.data.error);
       }
       // Handle success or trigger some UI feedback
     } catch (err) {

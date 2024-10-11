@@ -189,12 +189,12 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
 
       console.log(response);
       if (response.data.success) {
-        toast.success("Driver data successfully saved.");
+        toast.success(response.data.message);
         fetchData(); // Fetch updated data after successful submission
         onClose(); // Close modal
         setFormData(initialFormData); // Reset form
       } else {
-        toast.warn("Data was not saved.");
+        toast.warn(response.data.error);
       }
     } catch (err) {
       console.log(err);

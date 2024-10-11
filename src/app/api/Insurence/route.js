@@ -11,7 +11,10 @@ export const POST = catchAsyncErrors(async (request) => {
     data; // Extract the new variables
 
   // Check for existing vehicle by name
-  const existingVehicle = await Insurence.findOne({ name });
+  const existingVehicle = await Insurence.findOne({
+    name: name,
+    adminCompanyName: adminCompanyName,
+  });
   if (existingVehicle) {
     return NextResponse.json({
       error: "Insurence with this name already exists",

@@ -32,7 +32,10 @@ export const POST = catchAsyncErrors(async (request) => {
   console.log(data);
 
   // Check for existing enquiry by email
-  const existingEnquiry = await Enquiry.findOne({ email });
+  const existingEnquiry = await Enquiry.findOne({
+    email: email,
+    adminCompanyName: adminCompanyName,
+  });
   if (existingEnquiry) {
     return NextResponse.json({
       error: "Enquiry with this email already exists",

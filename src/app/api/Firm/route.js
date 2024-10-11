@@ -77,7 +77,10 @@ export async function POST(request) {
 
     console.log(formDataObject);
 
-    const existingUser = await Firm.findOne({ email });
+    const existingUser = await Firm.findOne({
+      email: email,
+      adminCompanyName: adminCompanyName,
+    });
     if (existingUser) {
       return NextResponse.json({
         error: "Firm Already Exist",

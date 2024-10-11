@@ -11,7 +11,10 @@ export const POST = catchAsyncErrors(async (request) => {
     data; // Extract the new variables
 
   // Check for existing vehicle by name
-  const existingVehicle = await LocalAuthority.findOne({ name });
+  const existingVehicle = await LocalAuthority.findOne({
+    name: name,
+    adminCompanyName: adminCompanyName,
+  });
   if (existingVehicle) {
     return NextResponse.json({
       error: "LocalAuthority with this name already exists",

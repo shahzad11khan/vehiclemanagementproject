@@ -10,8 +10,11 @@ export const POST = catchAsyncErrors(async (request) => {
   const { name, description, isActive, adminCreatedBy, adminCompanyName } =
     data; // Extract the new variables
 
-  // Check for existing vehicle by name
-  const existingBadge = await Badge.findOne({ name });
+  // Check for existing vehicle by name// Check for existing badge by name and adminCompanyName
+  const existingBadge = await Badge.findOne({
+    name: name,
+    adminCompanyName: adminCompanyName,
+  });
   if (existingBadge) {
     return NextResponse.json({
       error: "Badge with this name already exists",

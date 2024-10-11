@@ -11,7 +11,10 @@ export const POST = catchAsyncErrors(async (request) => {
     data; // Extract the new variables
 
   // Check for existing vehicle by name
-  const existingSupplier = await Supplier.findOne({ name });
+  const existingSupplier = await Supplier.findOne({
+    name: name,
+    adminCompanyName: adminCompanyName,
+  });
   if (existingSupplier) {
     return NextResponse.json({
       error: "Supplier with this name already exists",

@@ -15,7 +15,10 @@ export const POST = catchAsyncErrors(async (request) => {
       data; // Destructure the required fields
 
     // Check if a manufacturer with the same name already exists
-    const existingManufacturer = await Manufecturer.findOne({ name });
+    const existingManufacturer = await Manufecturer.findOne({
+      name: name,
+      adminCompanyName: adminCompanyName,
+    });
     if (existingManufacturer) {
       return NextResponse.json({
         error: "Manufacturer with this name already exists",

@@ -68,6 +68,8 @@ const AddSignatureType = ({ isOpen, onClose, fetchData }) => {
         imageName: "",
         imageFile: null,
         // imageNote: "",
+        adminCreatedBy: "",
+        adminCompanyName: formData.adminCompanyName,
       });
 
       // Close the modal after submission

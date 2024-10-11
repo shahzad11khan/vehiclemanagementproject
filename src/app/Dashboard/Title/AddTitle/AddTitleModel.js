@@ -14,8 +14,6 @@ const AddTitleModel = ({ isOpen, onClose, fetchData }) => {
   });
 
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(false);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -52,21 +50,19 @@ const AddTitleModel = ({ isOpen, onClose, fetchData }) => {
         description: "",
         isActive: false,
         adminCreatedBy: "",
-        adminCompanyName: "", // Keep the company name for future submissions
+        adminCompanyName: formData.adminCompanyName, // Keep the company name for future submissions
       });
       console.log(response.data);
 
       if (response.data.success) {
-        toast.success("Data successfully saved");
-        setSuccess(true);
+        toast.success(response.data.message);
         fetchData();
         onClose();
       } else {
-        toast.warn(response.data.message);
+        toast.warn(response.data.error);
       }
     } catch (err) {
-      setError(err.response?.data?.message || "Failed to add Title");
-      setError(null);
+      console.log(err.response?.data?.message || "Failed to add Title");
     } finally {
       setLoading(false);
     }
@@ -78,8 +74,7 @@ const AddTitleModel = ({ isOpen, onClose, fetchData }) => {
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
       <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-xl">
         <h2 className="text-3xl font-semibold text-center mb-8">Add Title</h2>
-        {error && <p className="text-red-600">{error}</p>}
-        {success && <p className="text-green-600">Title added successfully!</p>}
+
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="sm:grid-cols-2 gap-6">
             {/* Name */}

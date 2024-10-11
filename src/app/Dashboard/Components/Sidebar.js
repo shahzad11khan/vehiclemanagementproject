@@ -95,7 +95,7 @@ const Sidebar = () => {
                         : "text-black text-sm "
                     } `}
                   />
-                  <span className="hidden sm:block text-sm ">Dashboard</span>
+                  <span className="hidden sm:block text-sm">Dashboard</span>
                 </div>
               </li>
             </Link>

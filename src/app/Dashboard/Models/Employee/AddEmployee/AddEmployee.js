@@ -13,8 +13,7 @@ const AddEmployeeModel = ({ isOpen, onClose, fetchData }) => {
   });
 
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(false);
+
   useEffect(() => {
     const storedCompanyName = localStorage.getItem("companyName"); // Replace with the actual key used in localStorage
     if (storedCompanyName) {
@@ -36,7 +35,6 @@ const AddEmployeeModel = ({ isOpen, onClose, fetchData }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError(null);
 
     try {
       const response = await axios.post(`${API_URL_Employee}`, formData);
@@ -46,12 +44,12 @@ const AddEmployeeModel = ({ isOpen, onClose, fetchData }) => {
         description: "",
         isActive: false,
         adminCreatedBy: "",
-        adminCompanyName: "",
+        adminCompanyName: formData.adminCompanyName,
       });
       // console.log(response.data);
       if (response.data.success) {
         toast.success("data successfully saved");
-        setSuccess(true);
+
         fetchData();
         onClose();
       } else {
@@ -72,10 +70,6 @@ const AddEmployeeModel = ({ isOpen, onClose, fetchData }) => {
         <h2 className="text-3xl font-semibold text-center mb-8">
           Add Empolyee
         </h2>
-        {error && <p className="text-red-600">{error}</p>}
-        {success && (
-          <p className="text-green-600">Empolyee added successfully!</p>
-        )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">

@@ -14,8 +14,7 @@ const AddInsuranceModel = ({ isOpen, onClose, fetchData }) => {
   });
 
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(false);
+
   useEffect(() => {
     const storedCompanyName = localStorage.getItem("companyName"); // Replace with the actual key used in localStorage
     if (storedCompanyName) {
@@ -37,7 +36,6 @@ const AddInsuranceModel = ({ isOpen, onClose, fetchData }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError(null);
 
     try {
       const response = await axios.post(`${API_URL_Insurence}`, formData);
@@ -47,20 +45,19 @@ const AddInsuranceModel = ({ isOpen, onClose, fetchData }) => {
         description: "",
         isActive: false,
         adminCreatedBy: "",
-        adminCompanyName: "",
+        adminCompanyName: formData.adminCompanyName,
       });
       // console.log(response.data);
       if (response.data.success) {
-        toast.success("data successfully saved");
-        setSuccess(true);
+        toast.success(response.data.message);
         fetchData();
         onClose();
       } else {
-        toast.warn("Data not saved");
+        toast.warn(response.data.error);
       }
       // Handle success or trigger some UI feedback
     } catch (err) {
-      setError(err.response?.data?.message || "Failed to add badge");
+      console.log(err.response?.data?.message || "Failed to add badge");
     } finally {
       setLoading(false);
     }
@@ -74,10 +71,7 @@ const AddInsuranceModel = ({ isOpen, onClose, fetchData }) => {
         <h2 className="text-3xl font-semibold text-center mb-8">
           Add Insurance
         </h2>
-        {error && <p className="text-red-600">{error}</p>}
-        {success && (
-          <p className="text-green-600">Supplier added successfully!</p>
-        )}
+
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             {/* Name */}

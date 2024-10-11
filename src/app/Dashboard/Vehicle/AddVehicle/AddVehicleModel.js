@@ -165,48 +165,51 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
     e.preventDefault();
     try {
       const response = await axios.post(`${API_URL_Vehicle}`, vehicleData);
-      toast.success(response.data.message);
-      fetchData(); // Refresh parent component data
-      onClose(); // Close modal
-      // Reset form after successful submission
-      setVehicleData({
-        manufacturer: "",
-        model: "",
-        year: "",
-        type: "",
-        engineType: "",
-        fuelType: "",
-        transmission: "",
-        drivetrain: "",
-        exteriorColor: "",
-        interiorColor: "",
-        weight: "",
-        dimensions: {
-          height: "",
-          width: "",
-          length: "",
-        },
-        passengerCapacity: "",
-        LocalAuthority: "",
-        cargoCapacity: "",
-        horsepower: "",
-        torque: "",
-        acceleration: "",
-        topSpeed: "",
-        fuelEfficiency: "",
-        safetyFeatures: "",
-        techFeatures: "",
-        towingCapacity: "",
-        price: "",
-        registrationNumber: "",
-        warrantyInfo: "",
-        adminCreatedBy: "",
-        adminCompanyName: "", // Preserve company name
-        isActive: "",
-      });
+
+      if (response.data.success) {
+        toast.success(response.data.message);
+        fetchData(); // Refresh parent component data
+        onClose(); // Close modal
+        setVehicleData({
+          manufacturer: "",
+          model: "",
+          year: "",
+          type: "",
+          engineType: "",
+          fuelType: "",
+          transmission: "",
+          drivetrain: "",
+          exteriorColor: "",
+          interiorColor: "",
+          weight: "",
+          dimensions: {
+            height: "",
+            width: "",
+            length: "",
+          },
+          passengerCapacity: "",
+          LocalAuthority: "",
+          cargoCapacity: "",
+          horsepower: "",
+          torque: "",
+          acceleration: "",
+          topSpeed: "",
+          fuelEfficiency: "",
+          safetyFeatures: "",
+          techFeatures: "",
+          towingCapacity: "",
+          price: "",
+          registrationNumber: "",
+          warrantyInfo: "",
+          adminCreatedBy: "",
+          adminCompanyName: vehicleData.adminCompanyName, // Preserve company name
+          isActive: "",
+        });
+      } else {
+        toast.error(response.data.error);
+      }
     } catch (error) {
       console.error("Error submitting vehicle data:", error);
-      toast.error(response.data.error);
     }
   };
 

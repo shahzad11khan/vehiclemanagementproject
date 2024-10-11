@@ -189,6 +189,38 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
 
       console.log(response);
       if (response.data.success) {
+        const initialFormData = {
+          firstName: "",
+          lastName: "",
+          email: "",
+          tel1: "",
+          tel2: "",
+          postcode: "",
+          postalAddress: "",
+          permanentAddress: "",
+          city: "",
+          county: "",
+          dateOfBirth: "",
+          licenseNumber: "",
+          niNumber: "",
+          driverNumber: "",
+          taxiFirm: "",
+          badgeType: "",
+          insurance: "",
+          startDate: "",
+          driverRent: "",
+          licenseExpiryDate: "",
+          taxiBadgeDate: "",
+          rentPaymentCycle: "",
+          isActive: false,
+          imageFile: null,
+          LocalAuth: "",
+          vehicle: "",
+          pay: "",
+          calculation: "",
+          adminCreatedBy: "",
+          adminCompanyName: formData.adminCompanyName,
+        };
         toast.success(response.data.message);
         fetchData(); // Fetch updated data after successful submission
         onClose(); // Close modal

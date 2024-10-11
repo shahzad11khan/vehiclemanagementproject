@@ -100,6 +100,25 @@ const AddEnquiryModal = ({ isOpen, onClose, fetchData }) => {
 
       if (response.data.success) {
         console.log("Form submitted successfully:", response.data);
+        setFormData({
+          firstName: "",
+          lastName: "",
+          email: "",
+          tel1: "",
+          tel2: "",
+          postcode: "",
+          postalAddress: "",
+          permanentAddress: "",
+          city: "",
+          county: "",
+          dateOfBirth: "",
+          niNumber: "",
+          badgeType: "", // Updated
+          localAuthority: "", // New Field
+          isActive: false,
+          adminCreatedBy: "",
+          adminCompanyName: formData.adminCompanyName,
+        });
         toast.success(response.data.message);
         onClose();
         fetchData();

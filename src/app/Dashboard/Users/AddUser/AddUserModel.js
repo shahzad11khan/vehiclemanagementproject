@@ -90,10 +90,41 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
 
       // Handle the response as needed
       const data = await response.json();
-      toast.success(data.message);
-      onClose();
-      fetchData();
-      console.log(data);
+      if (data.success) {
+        setFormData({
+          title: "",
+          firstName: "",
+          lastName: "",
+          email: "",
+          tel1: "",
+          tel2: "",
+          postcode: "",
+          postalAddress: "",
+          permanentAddress: "",
+          city: "",
+          county: "",
+          // accessLevel: "",
+          dateOfBirth: "",
+          position: "",
+          reportsTo: "",
+          username: "",
+          password: "",
+          passwordExpires: "",
+          // passwordExpiresEvery: "",
+          confirmpassword: "",
+          companyname: formData.companyname,
+          CreatedBy: "",
+          useravatar: null,
+          isActive: false,
+          role: "user", // Default role set to "user"
+        });
+        toast.success(data.message);
+        onClose();
+        fetchData();
+        // console.log(data);
+      } else {
+        toast.success(data.error);
+      }
     } catch (error) {
       console.error("Error:", error);
     }
@@ -337,7 +368,7 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                     htmlFor="county"
                     className="text-sm font-medium text-gray-700"
                   >
-                    County:
+                    Country:
                   </label>
                   <span className="text-red-600">*</span>
                 </div>
@@ -381,7 +412,7 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                     htmlFor="county"
                     className="text-sm font-medium text-gray-700"
                   >
-                    County:
+                    Date Of Birth:
                   </label>
                   <span className="text-red-600">*</span>
                 </div>

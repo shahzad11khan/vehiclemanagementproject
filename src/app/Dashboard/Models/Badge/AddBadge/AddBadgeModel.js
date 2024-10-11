@@ -48,7 +48,7 @@ const AddBadgeModel = ({ isOpen, onClose, fetchData }) => {
         description: "",
         isActive: false,
         adminCreatedBy: "",
-        adminCompanyName: "",
+        adminCompanyName: formData.adminCompanyName,
       });
       // console.log(response.data);
       if (response.data.success) {

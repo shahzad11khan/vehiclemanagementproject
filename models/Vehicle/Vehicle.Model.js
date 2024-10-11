@@ -86,6 +86,7 @@ const vehicleSchema = new mongoose.Schema(
     },
     adminCreatedBy: { type: String },
     adminCompanyName: { type: String },
+    adminCompanyId: { type: String },
   },
   { timestamps: true }
 );

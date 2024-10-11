@@ -13,8 +13,7 @@ const AddManufacturerModel = ({ isOpen, onClose, fetchData }) => {
   });
 
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(false);
+
   // Retrieve company name from local storage
   useEffect(() => {
     const storedCompanyName = localStorage.getItem("companyName"); // Replace with the actual key used in localStorage
@@ -37,7 +36,6 @@ const AddManufacturerModel = ({ isOpen, onClose, fetchData }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError(null);
 
     try {
       const response = await axios.post(`${API_URL_Manufacturer}`, formData);
@@ -52,7 +50,7 @@ const AddManufacturerModel = ({ isOpen, onClose, fetchData }) => {
       // console.log(response.data);
       if (response.data.success) {
         toast.success("data successfully saved");
-        setSuccess(true);
+
         fetchData();
         onClose();
       } else {
@@ -71,12 +69,10 @@ const AddManufacturerModel = ({ isOpen, onClose, fetchData }) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
       <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-xl">
-        <h2 className="text-3xl font-semibold text-center mb-8">Add Title</h2>
+        <h2 className="text-3xl font-semibold text-center mb-8">
+          Add Manufacturer
+        </h2>
 
-        {error && <p className="text-red-600">{error}</p>}
-        {success && (
-          <p className="text-green-600">Manufacturer added successfully!</p>
-        )}
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             {/* Name */}

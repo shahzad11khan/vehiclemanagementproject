@@ -38,7 +38,7 @@ const Page = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(`${API_URL_Driver}`);
-      console.log(response.data.result);
+      // console.log(response.data.result);
       setDrivers(response.data.result);
       setFilteredDrivers(response.data.result);
     } catch (error) {
@@ -200,9 +200,7 @@ const Page = () => {
         );
         console.log("Update specific field successful:", response.data);
       };
-      // setInterval(sendFormData, 300000);
-      const millisecondsIn24Hours = 24 * 60 * 60 * 1000;
-      setInterval(sendFormData, millisecondsIn24Hours);
+      setInterval(sendFormData, 300000);
       return finalResult; // Return finalResult after the request completes
     } catch (error) {
       console.error("Failed to update driver:", error);

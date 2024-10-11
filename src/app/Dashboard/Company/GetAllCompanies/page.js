@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import DataTable from "react-data-table-component";
 import Header from "../../Components/Header";
 import Sidebar from "../../Components/Sidebar";
 import { toast } from "react-toastify";
@@ -14,85 +13,17 @@ import axios from "axios";
 import UpdateCompanyModel from "../UpdateCompany/UpdateCompanyModel";
 
 const Page = () => {
-  const columns = [
-    {
-      name: "Company Name",
-      selector: (row) => row.CompanyName,
-      sortable: true,
-    },
-    {
-      name: "Company Email",
-      selector: (row) => row.email,
-      sortable: true,
-    },
-    {
-      name: "Company Password",
-      selector: (row) => row.confirmPassword,
-      sortable: true,
-    },
-    {
-      name: "Company Image",
-      selector: (row) => row.image, // The image URL field
-      cell: (row) => (
-        <img
-          src={row.image}
-          alt="Company Image"
-          style={{ width: "50px", height: "50px", borderRadius: "5px" }}
-        />
-      ), // Display the image
-      sortable: true,
-    },
-    {
-      name: "Company Active",
-      selector: (row) => (row.isActive ? "Active" : "InActive"),
-      sortable: true,
-    },
-    // {
-    //   name: "CreatedBy",
-    //   selector: (row) => row.CreatedBy,
-    //   sortable: true,
-    // },
-    {
-      name: "Actions",
-      cell: (row) => (
-        <div className="flex gap-2">
-          <button
-            onClick={() => handleEdit(row._id)}
-            className="text-blue-500 hover:text-blue-700"
-          >
-            <FaEdit />
-          </button>
-          <button
-            onClick={() => handleDelete(row._id)}
-            className="text-red-500 hover:text-red-700"
-          >
-            <FaTrash className="text-red-500 hover:text-red-700" />
-          </button>
-        </div>
-      ),
-      allowOverflow: true,
-      button: true,
-    },
-  ];
   const [searchTerm, setSearchTerm] = useState("");
-  const [isMounted, setIsMounted] = useState(false);
   const [data, setData] = useState([]); // State to hold fetched data
   const [filteredData, setFilteredData] = useState([]);
   const [isOpenCompany, setIsOpenCompany] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [isOpenDriverUpdate, setIsOpenDriverUpdate] = useState(false);
 
-  // Ensure that the component only renders once it is mounted
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
   // Fetch data from API
   const fetchData = async () => {
     try {
       GetCompany().then(({ result }) => {
-        console.log(result);
-
         setData(result); // Set the fetched data
         setFilteredData(result);
       });
@@ -101,29 +32,25 @@ const Page = () => {
       setData([]); // Reset data to an empty array on error
     }
   };
-  //
 
-  // delete data from api
+  // Delete data from API
   const handleDelete = async (id) => {
     try {
       const response = await axios.delete(`${API_URL_Company}/${id}`);
 
       const data = response.data;
-      console.log(data);
 
       if (data.success) {
-        // Remove the deleted item from state
         setData((prevData) => prevData.filter((item) => item._id !== id));
         setFilteredData((prevFilteredData) =>
           prevFilteredData.filter((item) => item._id !== id)
         );
         toast.success(data.message);
       } else {
-        // console.error(data.message);
         toast.warn(data.message);
       }
     } catch (error) {
-      console.error("Error deleting title:", error);
+      console.error("Error deleting company:", error);
     }
   };
 
@@ -132,34 +59,16 @@ const Page = () => {
   }, []);
 
   useEffect(() => {
-    const filtered = data.filter((item) => {
-      // Check if item and item.title are defined before calling toLowerCase
-      return (
-        item &&
-        item.email &&
-        item.email.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    });
+    const filtered = data.filter((item) =>
+      item?.email?.toLowerCase().includes(searchTerm.toLowerCase())
+    );
     setFilteredData(filtered);
-  }, [searchTerm, data]); // Filter when search term or data changes
+  }, [searchTerm, data]);
 
-  // const toggleTitleModal = () => {
-  //   setIsOpenTitle(!isOpenTitle);
-  // };
   const handleEdit = (id) => {
-    toast.info(`Edit item with ID: ${id}`);
-    // Implement your edit logic here
-    setSelectedUserId(id); // Store the selected user ID
+    setSelectedUserId(id); // Store the selected company ID
     setIsOpenDriverUpdate(true); // Open the modal
   };
-
-  // const handleDelete = (id) => {
-  //   toast.info(`Delete item with ID: ${id}`);
-  //   // Implement your delete logic here
-  // };
-  if (!isMounted) {
-    return null; // Render nothing until the component is mounted
-  }
 
   const OpenCompanyModle = () => {
     setIsOpenCompany(!isOpenCompany);
@@ -174,20 +83,20 @@ const Page = () => {
       <div className="flex gap-4">
         <Sidebar />
         <div className="container mx-auto p-4 ">
-          <div className="justify-between items-center border-2 mt-3  w-[83%]">
-            <div className="flex justify-between">
+          <div className="border-2 mt-3 w-full">
+            <div className="flex justify-between p-4">
               {/* Search Input */}
-              <div className="justify-start">
+              <div>
                 <input
                   type="text"
-                  placeholder="Search by title"
+                  placeholder="Search by email"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="border rounded px-4 py-2 w-64" // Tailwind CSS classes for input
+                  className="border rounded px-4 py-2 w-64"
                 />
               </div>
-              {/* Add User Button */}
-              <div className="justify-end">
+              {/* Add Company Button */}
+              <div>
                 <button
                   onClick={OpenCompanyModle}
                   className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
@@ -197,13 +106,56 @@ const Page = () => {
               </div>
             </div>
 
-            {/* Data Table */}
-            <DataTable
-              title="Companies List"
-              columns={columns}
-              data={filteredData} // Use filtered data
-              pagination
-            />
+            {/* Responsive Table */}
+            <div className="overflow-x-auto">
+              <table className="min-w-full bg-white border">
+                <thead>
+                  <tr className="bg-gray-200 text-gray-600 text-left text-sm">
+                    <th className="py-3 px-4">Company Name</th>
+                    <th className="py-3 px-4">Email</th>
+                    <th className="py-3 px-4">Password</th>
+                    <th className="py-3 px-4">Image</th>
+                    <th className="py-3 px-4">Status</th>
+                    <th className="py-3 px-4">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredData.map((item) => (
+                    <tr key={item._id} className="border-b">
+                      <td className="py-3 px-4">{item.CompanyName}</td>
+                      <td className="py-3 px-4">{item.email}</td>
+                      <td className="py-3 px-4">{item.confirmPassword}</td>
+                      <td className="py-3 px-4">
+                        <img
+                          src={item.image}
+                          alt="Company"
+                          className="w-12 h-12 rounded"
+                        />
+                      </td>
+                      <td className="py-3 px-4">
+                        {item.isActive ? "Active" : "Inactive"}
+                      </td>
+                      <td className="py-3 px-4">
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => handleEdit(item._id)}
+                            className="text-blue-500 hover:text-blue-700"
+                          >
+                            <FaEdit />
+                          </button>
+                          <button
+                            onClick={() => handleDelete(item._id)}
+                            className="text-red-500 hover:text-red-700"
+                          >
+                            <FaTrash />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>

@@ -28,6 +28,7 @@ const SignatureSchema = new mongoose.Schema(
     },
     adminCreatedBy: { type: String },
     adminCompanyName: { type: String },
+    adminCompanyId: { type: String },
   },
   {
     timestamps: true, // Automatically manage createdAt and updatedAt fields

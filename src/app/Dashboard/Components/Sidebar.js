@@ -92,10 +92,10 @@ const Sidebar = () => {
                     className={`${
                       activeLink === "/Dashboard/Home"
                         ? "text-red-400"
-                        : "text-black text-sm"
-                    }`}
+                        : "text-black text-sm "
+                    } `}
                   />
-                  <span className="hidden sm:block text-sm">Dashboard</span>
+                  <span className="hidden sm:block text-sm ">Dashboard</span>
                 </div>
               </li>
             </Link>
@@ -121,7 +121,12 @@ const Sidebar = () => {
                             : "text-black text-sm"
                         }`}
                       />
-                      <span className="hidden sm:block text-sm">
+                      <span
+                        className="hidden sm:block text-sm"
+                        style={{
+                          backgroundColor: "transparent",
+                        }}
+                      >
                         Registered Companies
                       </span>
                     </div>
@@ -145,7 +150,12 @@ const Sidebar = () => {
                             : "text-black text-sm"
                         }`}
                       />
-                      <span className="hidden sm:block text-sm">
+                      <span
+                        className="hidden sm:block text-sm"
+                        style={{
+                          backgroundColor: "transparent",
+                        }}
+                      >
                         All Companyies
                       </span>
                     </div>

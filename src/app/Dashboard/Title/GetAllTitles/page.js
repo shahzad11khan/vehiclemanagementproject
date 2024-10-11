@@ -7,7 +7,6 @@ import { FaTrash } from "react-icons/fa";
 
 import Header from "../../Components/Header";
 import Sidebar from "../../Components/Sidebar";
-import DataTableComponent from "../../Components/CustomDataTable";
 import AddTitleModel from "../AddTitle/AddTitleModel";
 import { GetTitle } from "../../Components/ApiUrl/ShowApiDatas/ShowApiDatas";
 import { API_URL_Title } from "../../Components/ApiUrl/ApiUrls";
@@ -21,35 +20,6 @@ const Page = () => {
   const [filteredData, setFilteredData] = useState([]);
   const [isOpenTitle, setIsOpenTitle] = useState(false);
   const [selectedCompanyName, setSelectedCompanyName] = useState("");
-
-  // Define the columns for the DataTable
-  const columns = [
-    {
-      name: "Title",
-      selector: (row) => row.name,
-      sortable: true,
-    },
-    {
-      name: "Company",
-      selector: (row) => row.adminCompanyName,
-      sortable: true,
-    },
-    {
-      name: "Actions",
-      cell: (row) => (
-        <div className="flex gap-2">
-          <button
-            onClick={() => handleDelete(row._id)}
-            className="text-red-500 hover:text-red-700"
-          >
-            <FaTrash className="text-red-500 hover:text-red-700" />
-          </button>
-        </div>
-      ),
-      allowOverflow: true,
-      button: true,
-    },
-  ];
 
   useEffect(() => {
     setIsMounted(true);
@@ -143,11 +113,47 @@ const Page = () => {
                 Add Title
               </button>
             </div>
-            <DataTableComponent
-              title="Title List"
-              columns={columns}
-              data={filteredData}
-            />
+
+            {/* Responsive Table */}
+            <div className="mt-4">
+              <div className="overflow-x-auto">
+                <table className="min-w-full bg-white border border-gray-200">
+                  <thead>
+                    <tr>
+                      <th className="py-2 px-4 border-b border-gray-200 text-left">
+                        Title
+                      </th>
+                      <th className="py-2 px-4 border-b border-gray-200 text-left">
+                        Company
+                      </th>
+                      <th className="py-2 px-4 border-b border-gray-200 text-left">
+                        Actions
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredData.map((row) => (
+                      <tr key={row._id} className="hover:bg-gray-100">
+                        <td className="py-2 px-4 border-b border-gray-200">
+                          {row.name}
+                        </td>
+                        <td className="py-2 px-4 border-b border-gray-200">
+                          {row.adminCompanyName}
+                        </td>
+                        <td className="py-2 px-4 border-b border-gray-200">
+                          <button
+                            onClick={() => handleDelete(row._id)}
+                            className="text-red-500 hover:text-red-700"
+                          >
+                            <FaTrash className="text-red-500 hover:text-red-700" />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
         </div>
       </div>

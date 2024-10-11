@@ -34,20 +34,18 @@ const AddLocalAuthorityModel = ({ isOpen, onClose, fetchData }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError(null);
-
     try {
       const response = await axios.post(`${API_URL_LocalAuthority}`, formData);
 
-      setFormData({
-        name: "",
-        description: "",
-        isActive: false,
-        adminCreatedBy: "",
-        adminCompanyName: formData.adminCompanyName,
-      });
       // console.log(response.data);
       if (response.data.success) {
+        setFormData({
+          name: "",
+          description: "",
+          isActive: false,
+          adminCreatedBy: "",
+          adminCompanyName: formData.adminCompanyName,
+        });
         toast.success(response.data.message);
         fetchData();
         onClose();
@@ -56,7 +54,7 @@ const AddLocalAuthorityModel = ({ isOpen, onClose, fetchData }) => {
       }
       // Handle success or trigger some UI feedback
     } catch (err) {
-      setError(err.response?.data?.message || "Failed to add Authority");
+      console.log(err.response?.data?.message || "Failed to add Authority");
     } finally {
       setLoading(false);
     }

@@ -69,7 +69,7 @@ const Login = () => {
         // Use a relative path for navigation
         // router.push("Dashboard/Home");
       } else {
-        toast.warning("You are not Active for login 😢");
+        toast.warning(`😢 ${response.data.error}`);
         router.push("/");
       }
     } catch (error) {

@@ -149,7 +149,9 @@ const Page = () => {
                 count:
                   superadmin === "superadmin"
                     ? counts.userCount
-                    : countuser || 0,
+                    : countuser
+                    ? countuser
+                    : 0,
                 colorx: {
                   background: "#8461BF",
                   // replace with your desired hex colors
@@ -173,7 +175,9 @@ const Page = () => {
                 count:
                   superadmin === "superadmin"
                     ? counts.driverCount
-                    : countDriver || 0,
+                    : countDriver
+                    ? countDriver
+                    : 0,
                 colorx: {
                   background: "#47C2FF",
                   // replace with your desired hex colors
@@ -199,7 +203,9 @@ const Page = () => {
                 count:
                   superadmin === "superadmin"
                     ? counts.vehicleCount
-                    : countVehicle || 0,
+                    : countVehicle
+                    ? countVehicle
+                    : 0,
                 colorx: {
                   background: "#47C2FF",
                   // replace with your desired hex colors
@@ -212,7 +218,7 @@ const Page = () => {
               },
               {
                 title: "Requests",
-                count: counts.Payment || 0,
+                count: counts.Payment ? counts.Payment : 0,
                 gradient: "bg-gradient-to-r",
                 style: {
                   backgroundImage:

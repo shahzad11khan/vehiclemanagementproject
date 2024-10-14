@@ -664,7 +664,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
                 >
                   {/* </select> */}
-                  <option value="null">Select Payment</option>
+                  {/* <option value="null">Select Payment</option> */}
                   <option value="perminute">Per Mint</option>
                   <option value="perday">Per Day</option>
                   <option value="permonth">per Month</option>

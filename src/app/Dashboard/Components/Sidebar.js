@@ -389,7 +389,7 @@ const Sidebar = () => {
                                 href="/Dashboard/Models/Type_BodyStyle/GetTypes"
                                 className="  rounded hover:bg-gray-200"
                               >
-                                Type / Body Style
+                                Body Type
                               </Link>
                             </li>
                             <li>
@@ -594,7 +594,9 @@ const Sidebar = () => {
                       onClick={handleCardClick}
                     >
                       <IoIosArrowBack className="text-black text-sm" />
-                      <span className="hidden sm:block">Go Back</span>
+                      <span className="hidden sm:block">
+                        Go Back Superadmin
+                      </span>
                     </div>
                   </li>
                 </Link>
@@ -878,7 +880,7 @@ const Sidebar = () => {
                                 href="/Dashboard/Models/Type_BodyStyle/GetTypes"
                                 className="  rounded hover:bg-gray-200"
                               >
-                                Type / Body Style
+                                Body Type
                               </Link>
                             </li>
                             <li>
@@ -1288,7 +1290,7 @@ const Sidebar = () => {
                                 href="/Dashboard/Models/Type_BodyStyle/GetTypes"
                                 className="  rounded hover:bg-gray-200"
                               >
-                                Type / Body Style
+                                Body Type
                               </Link>
                             </li>
                             <li>

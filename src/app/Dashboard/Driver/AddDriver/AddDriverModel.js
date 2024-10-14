@@ -101,41 +101,52 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
           superadmin === "superadmin"
             ? taxiFirmsData.result
             : taxiFirmsData.result.filter(
-                (firm) => firm.adminCompanyName === storedCompanyName
+                (firm) =>
+                  firm.adminCompanyName === storedCompanyName &&
+                  firm.adminCompanyName === "superadmin"
               );
 
         const filteredBadges =
           superadmin === "superadmin"
             ? badgeData.result
             : badgeData.result.filter(
-                (badge) => badge.adminCompanyName === storedCompanyName
+                (badge) =>
+                  badge.adminCompanyName === storedCompanyName &&
+                  firm.adminCompanyName === "superadmin"
               );
 
         const filteredInsurance =
           superadmin === "superadmin"
             ? insuranceData.Result
             : insuranceData.Result.filter(
-                (insurance) => insurance.adminCompanyName === storedCompanyName
+                (insurance) =>
+                  insurance.adminCompanyName === storedCompanyName &&
+                  firm.adminCompanyName === "superadmin"
               );
 
         // const filteredPayments =
         //   superadmin === "superadmin"
         //     ? paymentData.Result
         //     : paymentData.Result.filter(
-        //         (payment) => payment.companyName === storedCompanyName
+        //         (payment) => payment.companyName === storedCompanyName &&
+        // firm.adminCompanyName === "superadmin";
         //       );
 
         const filteredLocalAuth =
           superadmin === "superadmin"
             ? localAuthData.Result
             : localAuthData.Result.filter(
-                (localAuth) => localAuth.adminCompanyName === storedCompanyName
+                (localAuth) =>
+                  localAuth.adminCompanyName === storedCompanyName &&
+                  firm.adminCompanyName === "superadmin"
               );
         const filteredVehicle =
           superadmin === "superadmin"
             ? vehicle.result
             : vehicle.result.filter(
-                (vehicle) => vehicle.adminCompanyName === storedCompanyName
+                (vehicle) =>
+                  vehicle.adminCompanyName === storedCompanyName &&
+                  firm.adminCompanyName === "superadmin"
               );
 
         setTaxiFirms(filteredTaxiFirms);

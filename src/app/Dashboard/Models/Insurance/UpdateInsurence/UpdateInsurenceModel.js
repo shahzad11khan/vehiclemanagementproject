@@ -30,7 +30,7 @@ const UpdateInsurenceModel = ({ isOpen, onClose, fetchData, insurenceid }) => {
   // Fetch manufacturer data when the modal opens
   useEffect(() => {
     // console.log(vehicleid);
-    alert(insurenceid);
+    // alert(insurenceid);
     const fetchManufacturerData = async () => {
       setLoading(true);
       if (insurenceid) {
@@ -149,7 +149,6 @@ const UpdateInsurenceModel = ({ isOpen, onClose, fetchData, insurenceid }) => {
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
                 rows="3"
-                required
               ></textarea>
             </div>
 

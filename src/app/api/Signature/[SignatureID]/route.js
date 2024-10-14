@@ -103,10 +103,12 @@ export const GET = async (request, context) => {
 
     // Extract the Signature ID from the request parameters
     const { SignatureID } = context.params; // Correctly destructuring SignatureID from context.params
-    console.log("Signature ID:", SignatureID);
+    // console.log("Signature ID:", SignatureID);
 
     // Find the signature by ID
     const foundSignature = await Signature.findById(SignatureID);
+
+    // console.log(foundSignature);
 
     // Check if the signature exists
     if (!foundSignature) {
@@ -121,40 +123,36 @@ export const GET = async (request, context) => {
   }
 };
 
-// delete
-export const DELETE = async (request, context) => {
+// DELETE handler for deleting a manufacturer
+export const DELETE = async (request, { params }) => {
   try {
+    // Connect to the database
     await connect();
 
-    // Extract the Signature ID from the request parameters
-    const { SignatureID } = context.params; // Correctly destructuring SignatureID from context.params
-    console.log("Signature ID:", SignatureID);
+    const { SignatureID } = params; // Access the ManufacturerID from params
 
-    // Find the signature by ID
-    const signature = await Signature.findById(SignatureID);
-    if (!signature) {
+    console.log("SignatureID ID:", SignatureID);
+
+    // Find and delete the manufacturer
+    const deletedSignatureID = await Signature.findByIdAndDelete(SignatureID);
+
+    if (!deletedSignatureID) {
       return NextResponse.json({
-        error: "Signature not found",
+        error: "Supplier not found",
         status: 404,
       });
     }
 
-    // Remove the image from Cloudinary
-    if (signature.imagepublicId) {
-      await cloudinary.uploader.destroy(signature.imagepublicId, {
-        resource_type: "auto",
-      });
-    }
-
-    // Delete the signature entry from the database
-    await Signature.findByIdAndDelete(SignatureID); // Use SignatureID directly
-
     return NextResponse.json({
       message: "Signature deleted successfully",
+      success: true,
       status: 200,
     });
   } catch (error) {
-    console.error("Error deleting signature:", error); // Log the error for debugging
-    return NextResponse.json({ error: "Internal Server Error", status: 500 }); // Return an error response
+    console.error("Error deleting Singature:", error);
+    return NextResponse.json({
+      error: "An error occurred while deleting the Supplier",
+      status: 500,
+    });
   }
 };

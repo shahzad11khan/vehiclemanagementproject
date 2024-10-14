@@ -11,6 +11,7 @@ import UpdateSignatureModel from "../UpdateSignature/UpdateSignatureModel";
 import { API_URL_Signature } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import { GetSignature } from "@/app/Dashboard/Components/ApiUrl/ShowApiDatas/ShowApiDatas";
 import { getCompanyName } from "@/utils/storageUtils";
+import axios from "axios";
 
 const Page = () => {
   const [data, setData] = useState([]);
@@ -48,19 +49,22 @@ const Page = () => {
   }, []);
 
   const handleDelete = async (id) => {
-    console.log("Deleting ID:", id);
+    // console.log("Deleting ID:", id);
+    // alert(id);
     try {
       const response = await axios.delete(`${API_URL_Signature}/${id}`);
       const { data } = response;
 
-      if (data.status === 200) {
+      console.log(data);
+
+      if (data.success) {
         setData((prevData) => prevData.filter((item) => item._id !== id));
         setFilteredData((prevFilteredData) =>
           prevFilteredData.filter((item) => item._id !== id)
         );
-        toast.success(data.message || "Enquiry deleted successfully.");
+        toast.success(data.message);
       } else {
-        toast.warn(data.message || "Failed to delete the Enquiry.");
+        toast.warn(data.message);
       }
     } catch (error) {
       console.error("Error deleting Enquiry:", error);

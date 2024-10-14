@@ -154,7 +154,7 @@ const Page = () => {
                     <th className="py-2 px-4 border-b text-left">
                       Supplier Description
                     </th>
-                    <th className="py-2 px-4 border-b text-left">Company</th>
+                    {/* <th className="py-2 px-4 border-b text-left">Company</th> */}
                     <th className="py-2 px-4 border-b text-left">
                       Supplier Status
                     </th>
@@ -166,9 +166,9 @@ const Page = () => {
                     <tr key={row._id} className="hover:bg-gray-50">
                       <td className="py-2 px-4 border-b">{row.name}</td>
                       <td className="py-2 px-4 border-b">{row.description}</td>
-                      <td className="py-2 px-4 border-b">
+                      {/* <td className="py-2 px-4 border-b">
                         {row.adminCompanyName}
-                      </td>
+                      </td> */}
                       <td className="py-2 px-4 border-b">
                         {row.isActive ? "Active" : "InActive"}
                       </td>

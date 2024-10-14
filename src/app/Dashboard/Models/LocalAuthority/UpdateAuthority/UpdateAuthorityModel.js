@@ -14,8 +14,6 @@ const UpdateAuthorityModel = ({ isOpen, onClose, fetchData, authorityid }) => {
   });
 
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(false);
 
   // Retrieve company name from local storage
   useEffect(() => {
@@ -73,7 +71,6 @@ const UpdateAuthorityModel = ({ isOpen, onClose, fetchData, authorityid }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError(null);
     try {
       // Use PUT for updating an existing manufacturer
       const response = await axios.put(
@@ -89,8 +86,7 @@ const UpdateAuthorityModel = ({ isOpen, onClose, fetchData, authorityid }) => {
         adminCompanyName: "",
       });
 
-      toast.success("Data successfully updated");
-      setSuccess(true);
+      toast.success(response.data.message);
       onClose();
       fetchData();
     } catch (err) {
@@ -109,10 +105,6 @@ const UpdateAuthorityModel = ({ isOpen, onClose, fetchData, authorityid }) => {
           Update Authority
         </h2>
 
-        {error && <p className="text-red-600">{error}</p>}
-        {success && (
-          <p className="text-green-600">Authority updated successfully!</p>
-        )}
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             {/* Name */}
@@ -149,7 +141,6 @@ const UpdateAuthorityModel = ({ isOpen, onClose, fetchData, authorityid }) => {
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
                 rows="3"
-                required
               ></textarea>
             </div>
 

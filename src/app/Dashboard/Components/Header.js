@@ -114,6 +114,8 @@ const Header = () => {
             </div>
           ) : role === "superadmin" && flag === "true" ? (
             <p>{companyName}</p>
+          ) : companyName ? (
+            <p> {companyName}</p>
           ) : (
             <p> {username}</p>
           )}

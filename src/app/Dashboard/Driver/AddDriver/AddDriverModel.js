@@ -684,6 +684,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                   value={formData.pay}
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                  required
                 />
               </div>
               <div>
@@ -729,12 +730,17 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                 />
               </div>
               <div>
-                <label
-                  htmlFor="postcode"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Postcode:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="postcode"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Postcode:
+                  </label>
+
+                  <span className="text-red-600">*</span>
+                </div>
+
                 <input
                   type="text"
                   id="postcode"
@@ -808,7 +814,6 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
               onChange={handleChange}
               placeholder="Image Name"
               className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-              required
             />
             {/* <textarea
               id="imageNotes"

@@ -50,6 +50,8 @@ const Login = () => {
           localStorage.setItem("UserActive", UserActive);
           localStorage.setItem("role", UserRole);
           localStorage.setItem("userId", userId);
+          localStorage.setItem("flag", "false");
+          localStorage.setItem("Iscompanyselected", "No");
         } else {
           localStorage.setItem("token", isVerifiedtoken);
           localStorage.setItem("Userusername", Userusername);

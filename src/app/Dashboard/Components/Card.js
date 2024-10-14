@@ -8,6 +8,9 @@ const Card = ({ image, company, companyId }) => {
     // // Store company name and id in localStorage
     localStorage.setItem("companyName", company);
     localStorage.setItem("companyID", companyId);
+    localStorage.setItem("flag", "true");
+    localStorage.setItem("Iscompanyselected", "Yes");
+
     // localStorage.setItem("companyId", id);
   };
 

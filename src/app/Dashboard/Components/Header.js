@@ -10,6 +10,8 @@ import {
   getUserId,
   getUserName,
   getUserRole,
+  getflag,
+  getIscompanyselected,
 } from "../../../../utils/storageUtils";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
@@ -20,6 +22,7 @@ import { isAuthenticated, clearAuthData } from "@/utils/verifytoken";
 const Header = () => {
   const [companyName, setCompanyName] = useState("");
   const [role, setRole] = useState("");
+  const [flag, setflag] = useState(false);
   const [username, setusername] = useState("");
   const router = useRouter();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -36,6 +39,11 @@ const Header = () => {
     // const username = localStorage.getItem("Userusername");
 
     const userId = getUserId();
+    const flag = getflag();
+    setflag(flag);
+    // console.log(flag);
+    const Iscompanyselected = getIscompanyselected();
+    console.log(Iscompanyselected);
     const username = getUserName();
     const role = getUserRole();
     const companyNameFromStorage = getCompanyName();
@@ -100,14 +108,14 @@ const Header = () => {
       {/* Right side: Profile and Dropdown */}
       <div className="flex items-center">
         <h6 className="mr-4 hidden md:block">
-          {companyName === undefined ? (
+          {role === "superadmin" && flag === "false" ? (
             <div>
-              <p> {companyName}</p>
+              <p>{username}</p>
             </div>
-          ) : role === "superadmin" ? (
-            <p>{username}</p>
+          ) : role === "superadmin" && flag === "true" ? (
+            <p>{companyName}</p>
           ) : (
-            <p> {(username, companyName)}</p>
+            <p> {username}</p>
           )}
         </h6>
         <div className="relative">

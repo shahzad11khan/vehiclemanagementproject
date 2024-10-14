@@ -13,6 +13,12 @@ export const getUserName = () => {
 export const getUserRole = () => {
   return localStorage.getItem("role");
 };
+export const getflag = () => {
+  return localStorage.getItem("flag");
+};
+export const getIscompanyselected = () => {
+  return localStorage.getItem("Iscompanyselected");
+};
 
 // Function to get the company ID from localStorage
 export const getCompanyId = () => {

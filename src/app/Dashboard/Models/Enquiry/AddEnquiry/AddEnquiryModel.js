@@ -62,14 +62,18 @@ const AddEnquiryModal = ({ isOpen, onClose, fetchData }) => {
           superadmin === "superadmin"
             ? badgeData.result
             : badgeData.result.filter(
-                (badge) => badge.adminCompanyName === storedCompanyName
+                (badge) =>
+                  badge.adminCompanyName === storedCompanyName ||
+                  badge.adminCompanyName === "superadmin"
               );
 
         const filteredLocalAuth =
           superadmin === "superadmin"
             ? localAuthData.Result
             : localAuthData.Result.filter(
-                (localAuth) => localAuth.adminCompanyName === storedCompanyName
+                (localAuth) =>
+                  localAuth.adminCompanyName === storedCompanyName ||
+                  localAuth.adminCompanyName === "superadmin"
               );
 
         setBadge(filteredBadges);

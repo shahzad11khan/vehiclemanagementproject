@@ -98,13 +98,16 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
             ? manufacturerResponse.Result
             : manufacturerResponse.Result.filter(
                 (manufacturer) =>
-                  manufacturer.adminCompanyName === storedCompanyName
+                  manufacturer.adminCompanyName === storedCompanyName ||
+                  manufacturer.adminCompanyName === "superadmin"
               );
         const filteredLocalAuth =
           superadmin === "superadmin"
             ? localauthResponse.Result
             : localauthResponse.Result.filter(
-                (localauth) => localauth.adminCompanyName === storedCompanyName
+                (localauth) =>
+                  localauth.adminCompanyName === storedCompanyName ||
+                  localauth.adminCompanyName === "superadmin"
               );
         // Filter transmission data based on the user's role
         const filteredtransmission =
@@ -112,30 +115,35 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
             ? transmission.Result // No filtering for superadmins
             : transmission.Result.filter(
                 (transmission) =>
-                  transmission.adminCompanyName === storedCompanyName
+                  transmission.adminCompanyName === storedCompanyName ||
+                  transmission.adminCompanyName === "superadmin"
               );
         // Filter type data based on the user's role
         const filteredtype =
           superadmin === "superadmin"
             ? type.Result // No filtering for superadmins
             : type.Result.filter(
-                (type) => type.adminCompanyName === storedCompanyName
+                (type) =>
+                  type.adminCompanyName === storedCompanyName ||
+                  type.adminCompanyName === "superadmin"
               );
         // Filter type data based on the user's role
         const filteredfueltype =
           superadmin === "superadmin"
             ? fueltype.Result // No filtering for superadmins
             : fueltype.Result.filter(
-                (fueltype) => fueltype.adminCompanyName === storedCompanyName
+                (fueltype) =>
+                  fueltype.adminCompanyName === storedCompanyName ||
+                  fueltype.adminCompanyName === "superadmin"
               );
 
         setManufacturer(filteredManufacturer);
         setLocalAuth(filteredLocalAuth);
-        console.log("transmission", transmission);
+        // console.log("transmission", transmission);
         setTransmission(filteredtransmission);
-        console.log("bodytype", type);
+        // console.log("bodytype", type);
         setType(filteredtype);
-        console.log("fueltype", fueltype);
+        // console.log("fueltype", fueltype);
         setFuelType(filteredfueltype);
       } catch (error) {
         console.error("Error fetching dropdown data:", error);
@@ -152,6 +160,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
         try {
           const response = await axios.get(`${API_URL_Vehicle}/${vehicleId}`);
           setVehicleData(response.data.result);
+          console.log("update value", response.data.result.dimensions.height);
         } catch (error) {
           console.error("Error fetching vehicle data:", error);
           toast.error("Failed to load vehicle data.");

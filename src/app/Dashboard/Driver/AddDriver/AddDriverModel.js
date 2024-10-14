@@ -102,7 +102,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
             ? taxiFirmsData.result
             : taxiFirmsData.result.filter(
                 (firm) =>
-                  firm.adminCompanyName === storedCompanyName &&
+                  firm.adminCompanyName === storedCompanyName ||
                   firm.adminCompanyName === "superadmin"
               );
 
@@ -111,8 +111,8 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
             ? badgeData.result
             : badgeData.result.filter(
                 (badge) =>
-                  badge.adminCompanyName === storedCompanyName &&
-                  firm.adminCompanyName === "superadmin"
+                  badge.adminCompanyName === storedCompanyName ||
+                  badge.adminCompanyName === "superadmin"
               );
 
         const filteredInsurance =
@@ -120,8 +120,8 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
             ? insuranceData.Result
             : insuranceData.Result.filter(
                 (insurance) =>
-                  insurance.adminCompanyName === storedCompanyName &&
-                  firm.adminCompanyName === "superadmin"
+                  insurance.adminCompanyName === storedCompanyName ||
+                  insurance.adminCompanyName === "superadmin"
               );
 
         // const filteredPayments =
@@ -137,24 +137,29 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
             ? localAuthData.Result
             : localAuthData.Result.filter(
                 (localAuth) =>
-                  localAuth.adminCompanyName === storedCompanyName &&
-                  firm.adminCompanyName === "superadmin"
+                  localAuth.adminCompanyName === storedCompanyName ||
+                  localAuth.adminCompanyName === "superadmin"
               );
         const filteredVehicle =
           superadmin === "superadmin"
             ? vehicle.result
             : vehicle.result.filter(
                 (vehicle) =>
-                  vehicle.adminCompanyName === storedCompanyName &&
-                  firm.adminCompanyName === "superadmin"
+                  vehicle.adminCompanyName === storedCompanyName ||
+                  vehicle.adminCompanyName === "superadmin"
               );
 
+        console.log(filteredTaxiFirms);
         setTaxiFirms(filteredTaxiFirms);
         setBadge(filteredBadges);
+        console.log(filteredBadges);
         setInsurance(filteredInsurance);
+        console.log(filteredInsurance);
         // setPayment(filteredPayments);
         setLocalAuth(filteredLocalAuth);
+        console.log(filteredLocalAuth);
         setVehicle(filteredVehicle);
+        console.log(filteredVehicle);
       } catch (err) {
         console.error("Error loading dropdown data:", err);
         toast.error("Failed to load dropdown data.");
@@ -641,13 +646,16 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                 />
               </div>
               <div>
-                <label
-                  htmlFor="rentPaymentCycle"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Rent Payment Cycle:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="rentPaymentCycle"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Rent Payment Cycle:
+                  </label>
 
+                  <span className="text-red-600">*</span>
+                </div>
                 <select
                   id="rentPaymentCycle"
                   name="rentPaymentCycle"
@@ -657,7 +665,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                 >
                   {/* </select> */}
                   <option value="null">Select Payment</option>
-                  {/* <option value="permint">Per Mint</option> */}
+                  <option value="perminute">Per Mint</option>
                   <option value="perday">Per Day</option>
                   <option value="permonth">per Month</option>
                   <option value="perquarter">Per Quarter</option>

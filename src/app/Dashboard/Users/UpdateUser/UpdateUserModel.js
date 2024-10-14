@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios"; // Ensure axios is imported
 import { API_URL_USER } from "../../Components/ApiUrl/ApiUrls";
+import { fetchTitle } from "../../Components/DropdownData/taxiFirm/taxiFirmService";
 
 const UpdateUserModel = ({ isOpen, onClose, userId }) => {
   const [formData, setFormData] = useState({
@@ -44,6 +45,7 @@ const UpdateUserModel = ({ isOpen, onClose, userId }) => {
       }));
     }
   }, []);
+  const [title, settitle] = useState([]);
 
   // Fetch user data based on userId when the modal is open
   useEffect(() => {
@@ -89,8 +91,24 @@ const UpdateUserModel = ({ isOpen, onClose, userId }) => {
         }
       };
 
+      const loadTaxiFirms = async () => {
+        try {
+          const [title] = await Promise.all([
+            fetchTitle(),
+            // fetchPayment(),
+          ]);
+
+          settitle(title.result);
+          // setPayment(paymentData.Result);
+        } catch (error) {
+          console.error("Error loading taxi firms:", error);
+          toast.error("Failed to load dropdown data."); // Show toast on error
+        }
+      };
+
       // Call fetchData to populate the form
       fetchData();
+      loadTaxiFirms();
     }
   }, [userId]);
 
@@ -160,21 +178,31 @@ const UpdateUserModel = ({ isOpen, onClose, userId }) => {
             <h3 className="text-xl font-semibold mb-2">User Details</h3>
             <div className="grid grid-cols-4 sm:grid-cols-4 gap-3">
               <div>
-                <label
-                  htmlFor="title"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Title:
-                </label>
-                <input
-                  type="text"
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="taxiFirm"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Title:
+                  </label>
+                  <span className="text-red-600">*</span>
+                </div>
+
+                <select
                   id="title"
                   name="title"
                   value={formData.title}
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
                   required
-                />
+                >
+                  <option value="">Select Title</option>
+                  {title.map((title) => (
+                    <option key={title._id} value={title.name}>
+                      {title.name}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               <div>

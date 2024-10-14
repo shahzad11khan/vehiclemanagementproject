@@ -160,7 +160,14 @@ const Page = () => {
             timePassed--;
           }
           break;
+        case "perminute":
+          // Calculate the difference in milliseconds
+          const timeDifferenceInMillis = currentDate - passingDate;
 
+          // Convert milliseconds to minutes
+          timePassed = Math.floor(timeDifferenceInMillis / 1000 / 60);
+          break;
+          s;
         default:
           return "Invalid value type provided.";
       }

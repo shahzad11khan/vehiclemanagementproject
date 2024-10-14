@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 
 const AddUserModel = ({ isOpen, onClose, fetchData }) => {
   const [title, setTitile] = useState([]);
+  const [role, setrole] = useState(null);
   const [formData, setFormData] = useState({
     title: "",
     firstName: "",
@@ -37,17 +38,40 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
   // Retrieve company name from local storage
   useEffect(() => {
     const storedCompanyName = localStorage.getItem("companyName"); // Replace with the actual key used in localStorage
+    const storedSuperadmin = localStorage.getItem("role");
+    // setSuperadmin(storedCompanyName);
+    // console.log(storedCompanyName);
+    if (storedSuperadmin) {
+      setrole(storedSuperadmin);
+      // console.log(storedCompanyName);
+    }
     if (storedCompanyName) {
       setFormData((prevData) => ({
         ...prevData,
         companyname: storedCompanyName,
       }));
     }
+
     const fetchAuthData = async () => {
       try {
+        const stored = localStorage.getItem("companyName"); // Replace with the actual key used in localStorage
+        // console.log(storedCompanyName);
         const title = await fetchTitle(); // Await the result from fetchLocalAuth
         console.log(title);
-        setTitile(title.result); // Set the local state with the result
+        // console.log(superadmin);
+        // const filteredtitle = title.result;
+
+        const filteredTaxiFirms =
+          role === "superadmin"
+            ? title.result
+            : title.result.filter(
+                (firm) =>
+                  firm.adminCompanyName === stored ||
+                  firm.adminCompanyName === "superadmin"
+              );
+
+        console.log(filteredTaxiFirms);
+        setTitile(filteredTaxiFirms); // Set the local state with the result
       } catch (error) {
         console.error("Error fetching local auth data:", error);
       }

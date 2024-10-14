@@ -62,7 +62,9 @@ const AddFirmModal = ({ isOpen, onClose, fetchData }) => {
           superadmin === "superadmin"
             ? signature.Result
             : signature.Result.filter(
-                (signature) => signature.adminCompanyName === comp
+                (signature) =>
+                  signature.adminCompanyName === comp ||
+                  signature.adminCompanyName === "superadmin"
               );
         // console.log(filteredsignature);
         // console.log("filtered array", filteredsignature);

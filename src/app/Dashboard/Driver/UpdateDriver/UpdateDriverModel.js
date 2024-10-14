@@ -7,7 +7,7 @@ import {
   fetchTaxiFirms,
   fetchBadge,
   fetchInsurence,
-  fetchPayment,
+  // fetchPayment,
 } from "../../Components/DropdownData/taxiFirm/taxiFirmService";
 
 const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, userId }) => {
@@ -50,7 +50,7 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, userId }) => {
   const [taxiFirms, setTaxiFirms] = useState([]);
   const [badge, setBadge] = useState([]);
   const [insurance, setInsurance] = useState([]);
-  const [payment, setPayment] = useState([]);
+  // const [payment, setPayment] = useState([]);
 
   // Retrieve company name from local storage
   useEffect(() => {
@@ -91,18 +91,17 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, userId }) => {
     // Load dropdown data
     const loadTaxiFirms = async () => {
       try {
-        const [taxiFirmData, badgeData, insuranceData, paymentData] =
-          await Promise.all([
-            fetchTaxiFirms(),
-            fetchBadge(),
-            fetchInsurence(),
-            fetchPayment(),
-          ]);
+        const [taxiFirmData, badgeData, insuranceData] = await Promise.all([
+          fetchTaxiFirms(),
+          fetchBadge(),
+          fetchInsurence(),
+          // fetchPayment(),
+        ]);
 
         setTaxiFirms(taxiFirmData.result);
         setBadge(badgeData.result);
         setInsurance(insuranceData.Result);
-        setPayment(paymentData.Result);
+        // setPayment(paymentData.Result);
       } catch (error) {
         console.error("Error loading taxi firms:", error);
         toast.error("Failed to load dropdown data."); // Show toast on error
@@ -395,7 +394,7 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, userId }) => {
                   <option value="insurance1">Insurance 1</option>
                   <option value="insurance2">Insurance 2</option> */}
                   {/* Add more options as needed */}
-                  <option value="">Select Taxi Firm</option>
+                  <option value="">Select Insurance</option>
                   {insurance.map((insurence) => (
                     <option key={insurence._id} value={insurence.name}>
                       {insurence.name}
@@ -468,12 +467,16 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, userId }) => {
                 />
               </div>
               <div>
-                <label
-                  htmlFor="rentPaymentCycle"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Rent Payment Cycle:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="rentPaymentCycle"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Rent Payment Cycle:
+                  </label>
+
+                  <span className="text-red-600">*</span>
+                </div>
                 <select
                   id="rentPaymentCycle"
                   name="rentPaymentCycle"
@@ -481,18 +484,19 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, userId }) => {
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
                 >
-                  {/* <option value="">Select Payment Cycle</option>
-                  <option value="monthly">Monthly</option>
-                  <option value="weekly">Weekly</option> */}
-                  {/* Add more options as needed */}
-
                   {/* </select> */}
-                  <option value="">Select Taxi Firm</option>
-                  {payment.map((payment) => (
+                  <option value="null">Select Payment</option>
+                  <option value="perminute">Per Mint</option>
+                  <option value="perday">Per Day</option>
+                  <option value="permonth">per Month</option>
+                  <option value="perquarter">Per Quarter</option>
+                  <option value="peryear">per year</option>
+
+                  {/* {payment.map((payment) => (
                     <option key={payment._id} value={payment.name}>
                       {payment.name}
                     </option>
-                  ))}
+                  ))} */}
                 </select>
               </div>
               <div>

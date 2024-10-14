@@ -57,7 +57,9 @@ const UpdateFirmModel = ({ isOpen, onClose, fetchData, firmId }) => {
           superadmin === "superadmin"
             ? signature.Result
             : signature.Result.filter(
-                (signature) => signature.adminCompanyName === storedCompanyName
+                (signature) =>
+                  signature.adminCompanyName === storedCompanyName ||
+                  signature.adminCompanyName === "superadmin"
               );
         setSignatureOptions(filteredsignature);
       } catch (error) {

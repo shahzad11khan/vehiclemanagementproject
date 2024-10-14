@@ -85,7 +85,9 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
           storedSuperadmin === "superadmin"
             ? localAuthData.Result // No filtering for superadmins
             : localAuthData.Result.filter(
-                (localAuth) => localAuth.adminCompanyName === currentCompanyName
+                (localAuth) =>
+                  localAuth.adminCompanyName === currentCompanyName ||
+                  localAuth.adminCompanyName === "superadmin"
               );
 
         // Filter manufacturer data based on the user's role
@@ -94,7 +96,8 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
             ? manufacturerData.Result // No filtering for superadmins
             : manufacturerData.Result.filter(
                 (manufacturer) =>
-                  manufacturer.adminCompanyName === currentCompanyName
+                  manufacturer.adminCompanyName === currentCompanyName ||
+                  manufacturer.adminCompanyName === "superadmin"
               );
         // Filter transmission data based on the user's role
         const filteredtransmission =
@@ -102,21 +105,26 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
             ? transmission.Result // No filtering for superadmins
             : transmission.Result.filter(
                 (transmission) =>
-                  transmission.adminCompanyName === currentCompanyName
+                  transmission.adminCompanyName === currentCompanyName ||
+                  transmission.adminCompanyName === "superadmin"
               );
         // Filter type data based on the user's role
         const filteredtype =
           storedSuperadmin === "superadmin"
             ? type.Result // No filtering for superadmins
             : type.Result.filter(
-                (type) => type.adminCompanyName === currentCompanyName
+                (type) =>
+                  type.adminCompanyName === currentCompanyName ||
+                  type.adminCompanyName === "superadmin"
               );
         // Filter type data based on the user's role
         const filteredfueltype =
           storedSuperadmin === "superadmin"
             ? fueltype.Result // No filtering for superadmins
             : fueltype.Result.filter(
-                (fueltype) => fueltype.adminCompanyName === currentCompanyName
+                (fueltype) =>
+                  fueltype.adminCompanyName === currentCompanyName ||
+                  fueltype.adminCompanyName === "superadmin"
               );
 
         // Update local and manufacturer states

@@ -61,14 +61,18 @@ const UpdateEnquiryModal = ({ isOpen, onClose, fetchData, enquiryId }) => {
           superadmin === "superadmin"
             ? badgesdata.result
             : badgesdata.result.filter(
-                (badge) => badge.adminCompanyName === storedCompanyName
+                (badge) =>
+                  badge.adminCompanyName === storedCompanyName ||
+                  badge.adminCompanyName === "superadmin"
               );
 
         const filteredAuthorities =
           superadmin === "superadmin"
             ? authoritiesdata.Result
             : authoritiesdata.Result.filter(
-                (authority) => authority.adminCompanyName === storedCompanyName
+                (authority) =>
+                  authority.adminCompanyName === storedCompanyName ||
+                  authority.adminCompanyName === "superadmin"
               );
 
         setBadgeTypeOptions(filteredbadges);

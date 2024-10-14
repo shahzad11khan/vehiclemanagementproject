@@ -441,7 +441,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                 <span className="text-red-600">*</span>
               </div>
               <input
-                type="text"
+                type="number"
                 name="height"
                 value={vehicleData.dimensions.height}
                 onChange={handleDimensionChange}
@@ -455,7 +455,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                 <span className="text-red-600">*</span>
               </div>
               <input
-                type="text"
+                type="number"
                 name="width"
                 value={vehicleData.dimensions.width}
                 onChange={handleDimensionChange}
@@ -469,7 +469,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                 <span className="text-red-600">*</span>
               </div>
               <input
-                type="text"
+                type="number"
                 name="length"
                 value={vehicleData.dimensions.length}
                 onChange={handleDimensionChange}

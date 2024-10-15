@@ -30,34 +30,25 @@ const Header = () => {
 
   useEffect(() => {
     if (!isAuthenticated()) {
-      router.push("/"); // Redirect to login page if not authenticated
+      router.push("/");
       return;
     }
-
-    // Get values from localStorage
-    // const userId = localStorage.getItem("userId");
-    // const username = localStorage.getItem("Userusername");
 
     const userId = getUserId();
     const flag = getflag();
     setflag(flag);
-    // console.log(flag);
     const Iscompanyselected = getIscompanyselected();
     console.log(Iscompanyselected);
     const username = getUserName();
     const role = getUserRole();
     const companyNameFromStorage = getCompanyName();
-
-    // Update state based on retrieved values
     if (role) setRole(role);
     if (username) setusername(username);
     if (companyNameFromStorage) setCompanyName(companyNameFromStorage);
-
-    // Fetch admin or user data if userId exists
     if (userId) {
       showAllAdmins(userId);
     }
-  }, []); // Only run on component mount
+  }, []);
 
   const showAllAdmins = async (userId) => {
     try {
@@ -98,14 +89,12 @@ const Header = () => {
 
   return (
     <header className=" text-black flex items-center justify-between opacity-90 w-full shadow-sm shadow-custom-blue">
-      {/* Left side: Logo */}
       <div className="flex flex-shrink-0 py-5 px-3 bg-gradient-to-r from-rose-400 to-purple-200">
         <span className="text-sm font-sm text-white bg-transparent">
           Vehicle Management System{" "}
         </span>
       </div>
 
-      {/* Right side: Profile and Dropdown */}
       <div className="flex items-center">
         <h6 className="mr-4 hidden md:block">
           {role === "superadmin" && flag === "false" ? (
@@ -128,7 +117,6 @@ const Header = () => {
             <img src={imagePreview} alt="Profile" height={40} width={40} />
           </div>
 
-          {/* Dropdown */}
           {typeof window !== "undefined" && isDropdownOpen && (
             <div className="absolute right-0 mt-2 flex flex-col bg-white rounded shadow-lg z-10 text-black">
               <ul className="">
@@ -177,7 +165,6 @@ const Header = () => {
         </div>
       </div>
 
-      {/* Mobile menu toggle */}
       <div className="block md:hidden">
         <button onClick={toggleDropdown} className="text-white">
           <svg

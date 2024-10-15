@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import Link from "next/link"; // Import Link from Next.js
+import Link from "next/link";
 import { FaHome } from "react-icons/fa";
 import { IoPersonAdd } from "react-icons/io5";
 import { FaHouseLaptop } from "react-icons/fa6";
@@ -10,19 +10,14 @@ import { MdManageSearch } from "react-icons/md";
 import { GrSystem } from "react-icons/gr";
 import { RiOrganizationChart } from "react-icons/ri";
 import { IoIosArrowBack } from "react-icons/io";
-// import FavouriteModal from "./FavouritesModal.js";
 import { getAuthData, isAuthenticated } from "@/utils/verifytoken";
 const Sidebar = () => {
-  const [role, setrole] = useState(""); // State to track which dropdown is open
-  const [flag, setflag] = useState(""); // State to track which dropdown is open
+  const [role, setrole] = useState("");
+  const [flag, setflag] = useState("");
 
   useEffect(() => {
     if (isAuthenticated()) {
       const authData = getAuthData();
-      // console.log("Authenticated user data:", authData);
-      // console.log("Username:", authData.Userusername);
-      // console.log("Company Name:", authData.companyName);
-      // console.log("Role:", authData.role);
       setrole(authData.role);
       setflag(authData.flag);
     } else {
@@ -31,12 +26,10 @@ const Sidebar = () => {
   }, []);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isOpenManagement, setIsOpenManagement] = useState(false);
-  // const [isOpenFavouriteModal, setIsOpenFavouriteModal] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const [openDropdown, setOpenDropdown] = useState(null); // State to track which dropdown is open
+  const [openDropdown, setOpenDropdown] = useState(null);
   const [activeLink, setActiveLink] = useState("/Dashboard/Home");
   useEffect(() => {
-    // This will run only once after the initial render
     const path = window.location.pathname;
     setActiveLink(path);
   }, []);
@@ -45,7 +38,6 @@ const Sidebar = () => {
     setActiveLink(path);
   };
 
-  // Helper functions to handle hover
   const handleMouseEnter = (dropdown) => {
     setOpenDropdown(dropdown);
   };
@@ -58,28 +50,20 @@ const Sidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
-  // const toggleDropdownFavourite = () => {
-  //   setIsOpenFavouriteModal(!isOpenFavouriteModal);
-  // };
-
   const handleCardClick = () => {
     localStorage.setItem("flag", "false");
     localStorage.setItem("Iscompanyselected", "No");
     localStorage.removeItem("companyName");
-    window.location.reload(); // Reload the current page
-
-    // localStorage.setItem("companyId", id);
+    window.location.reload();
   };
   return (
     <div className="relative ">
-      {/* Hamburger Button */}
       <button
         className="fixed top-3 left-4 z-50 block lg:hidden text-sm"
         onClick={handleToggleSidebar}
       >
         {isSidebarOpen ? "✖" : "☰"}
       </button>
-      {/* Sidebar */}
       <aside
         className={`bg-white text-black  min-h-screen lg:w-52 w-20 transition-transform duration-300 ease-in-out ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
@@ -110,7 +94,6 @@ const Sidebar = () => {
             </Link>
             {role === "superadmin" && flag === "false" ? (
               <>
-                {/* allcompanies list */}
                 <Link passHref href="/Dashboard/Company/GetAllCompanies">
                   <li
                     onClick={() =>
@@ -144,7 +127,6 @@ const Sidebar = () => {
                     </div>
                   </li>
                 </Link>
-                {/* only for superadmin */}
                 <Link passHref href="/Dashboard/Superadmin">
                   <li
                     onClick={() => handleLinkClick("/Dashboard/Superadmin")}
@@ -223,54 +205,6 @@ const Sidebar = () => {
                     </div>
                   </li>
                 </Link>
-
-                {/* <Link passHref href="/Dashboard/Driver/GetAllDrivers">
-                  <li
-                    onClick={() =>
-                      handleLinkClick("/Dashboard/Driver/GetAllDrivers")
-                    }
-                    className={`${
-                      activeLink === "/Dashboard/Driver/GetAllDrivers"
-                        ? "border-l-4 border-red-400"
-                        : "bg-white text-blue"
-                    } flex items-center p-3 cursor-pointer hover:bg-gray-100 rounded-lg`}
-                  >
-                    <div className="flex items-center gap-3">
-                      <IoPersonAdd
-                        className={`${
-                          activeLink === "/Dashboard/Driver/GetAllDrivers"
-                            ? "text-red-400"
-                            : "text-black text-sm"
-                        }`}
-                      />
-                      <span className="hidden sm:block text-sm ">Driver</span>
-                    </div>
-                  </li>
-                </Link> */}
-
-                {/* <Link passHref href="/Dashboard/Vehicle/GetAllVehicle">
-                  <li
-                    onClick={() =>
-                      handleLinkClick("/Dashboard/Vehicle/GetAllVehicle")
-                    }
-                    className={`${
-                      activeLink === "/Dashboard/Vehicle/GetAllVehicle"
-                        ? "border-l-4 border-red-400"
-                        : "bg-white text-blue"
-                    } flex items-center p-3 cursor-pointer hover:bg-gray-100 rounded-lg`}
-                  >
-                    <div className="flex items-center gap-3">
-                      <FaCar
-                        className={`${
-                          activeLink === "/Dashboard/Vehicle/GetAllVehicle"
-                            ? "text-red-400"
-                            : "text-black text-sm"
-                        }`}
-                      />
-                      <span className="hidden sm:block text-sm">Vehicle</span>
-                    </div>
-                  </li>
-                </Link> */}
 
                 <div>
                   <li
@@ -368,14 +302,14 @@ const Sidebar = () => {
                                 All Employees
                               </Link>
                             </li>
-                            <li>
+                            {/* <li>
                               <Link
                                 href="/Dashboard/Models/Badge/GetBadges"
                                 className="  rounded hover:bg-gray-200"
                               >
                                 All Badges
                               </Link>
-                            </li>
+                            </li> */}
                             <li>
                               <Link
                                 href="/Dashboard/Models/Insurance/GetInsurances"
@@ -408,15 +342,6 @@ const Sidebar = () => {
                                 Transmission
                               </Link>
                             </li>
-
-                            {/* <li>
-                              <Link
-                                href="/Dashboard/Models/Payment/GetPayments"
-                                className="  rounded hover:bg-gray-200"
-                              >
-                                All Payments
-                              </Link>
-                            </li> */}
                           </ul>
                         </div>
                       )}
@@ -575,15 +500,6 @@ const Sidebar = () => {
                     </div>
                   )}
                 </div>
-
-                {/* <Link passHref href="#">
-                  <li className="flex items-center p-3 cursor-pointer  rounded-lg">
-                    <div className="flex items-center gap-3">
-                      <MdFavorite className="text-black text-sm" />
-                      <span className="hidden sm:block">Favourites</span>
-                    </div>
-                  </li>
-                </Link> */}
               </>
             ) : role === "superadmin" && flag === "true" ? (
               <>
@@ -601,7 +517,6 @@ const Sidebar = () => {
                   </li>
                 </Link>
 
-                {/* allcompanies list */}
                 <Link passHref href="/Dashboard/Company/GetAllCompanies">
                   <li
                     onClick={() =>
@@ -635,7 +550,6 @@ const Sidebar = () => {
                     </div>
                   </li>
                 </Link>
-                {/* only for superadmin */}
                 <Link passHref href="/Dashboard/Superadmin">
                   <li
                     onClick={() => handleLinkClick("/Dashboard/Superadmin")}
@@ -859,14 +773,14 @@ const Sidebar = () => {
                                 All Employees
                               </Link>
                             </li>
-                            <li>
+                            {/* <li>
                               <Link
                                 href="/Dashboard/Models/Badge/GetBadges"
                                 className="  rounded hover:bg-gray-200"
                               >
                                 All Badges
                               </Link>
-                            </li>
+                            </li> */}
                             <li>
                               <Link
                                 href="/Dashboard/Models/Insurance/GetInsurances"
@@ -899,15 +813,6 @@ const Sidebar = () => {
                                 Transmission
                               </Link>
                             </li>
-
-                            {/* <li>
-                              <Link
-                                href="/Dashboard/Models/Payment/GetPayments"
-                                className="  rounded hover:bg-gray-200"
-                              >
-                                All Payments
-                              </Link>
-                            </li> */}
                           </ul>
                         </div>
                       )}
@@ -1066,15 +971,6 @@ const Sidebar = () => {
                     </div>
                   )}
                 </div>
-
-                {/* <Link passHref href="#">
-                  <li className="flex items-center p-3 cursor-pointer  rounded-lg">
-                    <div className="flex items-center gap-3">
-                      <MdFavorite className="text-black text-sm" />
-                      <span className="hidden sm:block">Favourites</span>
-                    </div>
-                  </li>
-                </Link> */}
               </>
             ) : (
               <>
@@ -1309,14 +1205,6 @@ const Sidebar = () => {
                                 Transmission
                               </Link>
                             </li>
-                            {/* <li>
-                              <Link
-                                href="/Dashboard/Models/Payment/GetPayments"
-                                className=" py-2 rounded hover:bg-gray-200"
-                              >
-                                All Payments
-                              </Link>
-                            </li> */}
                           </ul>
                         </div>
                       )}
@@ -1495,24 +1383,11 @@ const Sidebar = () => {
                     </div>
                   </li>
                 </div>
-                {/* <Link passHref href="#">
-                  <li className="flex items-center p-3 cursor-pointer  rounded-lg">
-                    <div className="flex items-center gap-3">
-                      <MdFavorite className="text-black text-sm" />
-                      <span className="hidden sm:block">Favourites</span>
-                    </div>
-                  </li>
-                </Link> */}
               </>
             )}
           </ul>
         </nav>
       </aside>
-      {/* Modals */}
-      {/* <FavouriteModal
-        isOpen={isOpenFavouriteModal}
-        onClose={toggleDropdownFavourite}
-      /> */}
     </div>
   );
 };

@@ -7,7 +7,6 @@ import {
   fetchTaxiFirms,
   fetchBadge,
   fetchInsurence,
-  // fetchPayment,
 } from "../../Components/DropdownData/taxiFirm/taxiFirmService";
 
 const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, userId }) => {
@@ -50,9 +49,7 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, userId }) => {
   const [taxiFirms, setTaxiFirms] = useState([]);
   const [badge, setBadge] = useState([]);
   const [insurance, setInsurance] = useState([]);
-  // const [payment, setPayment] = useState([]);
 
-  // Retrieve company name from local storage
   useEffect(() => {
     const storedCompanyName = localStorage.getItem("companyName");
     if (storedCompanyName) {
@@ -63,7 +60,6 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, userId }) => {
     }
   }, []);
 
-  // Fetch driver data
   const fetchData = async () => {
     try {
       const res = await axios.get(`${API_URL_Driver}/${userId}`);
@@ -88,7 +84,6 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, userId }) => {
       fetchData();
     }
 
-    // Load dropdown data
     const loadTaxiFirms = async () => {
       try {
         const [taxiFirmData, badgeData, insuranceData] = await Promise.all([
@@ -119,14 +114,12 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, userId }) => {
         type === "checkbox" ? checked : type === "file" ? files[0] : value,
     }));
 
-    // If the uploaded file is an image, set the image preview
     if (type === "file" && files.length) {
       const file = files[0];
-      setImagePreview(URL.createObjectURL(file)); // Create a preview URL for the uploaded image
+      setImagePreview(URL.createObjectURL(file));
     }
   };
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formDataToSend = new FormData();
@@ -136,29 +129,27 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, userId }) => {
       formDataToSend.append(key, value);
     });
 
-    // Add the user avatar file to FormData
     if (formData.imageFile) {
       formDataToSend.append("useravatar", formData.imageFile);
     }
 
     try {
       const response = await fetch(`${API_URL_Driver}/${userId}`, {
-        method: "PUT", // Use PUT for updates
+        method: "PUT",
         body: formDataToSend,
       });
 
       if (!response.ok) {
-        throw new Error("Update failed"); // Handle unsuccessful response
+        throw new Error("Update failed");
       }
 
       const data = await response.json();
-      onClose(); // Close the modal
+      fetchDataa();
+      onClose();
       console.log("Update successful:", data);
-      toast.success("Driver updated successfully!"); // Show success toast
-      fetchDataa(); // Refresh data
+      toast.success("Driver updated successfully!");
     } catch (error) {
       console.error("Error updating user:", error);
-      // toast.error("Failed to update driver."); // Show toast on error
     }
   };
 
@@ -172,7 +163,6 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, userId }) => {
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* User Details */}
           <div>
             <h3 className="text-xl font-semibold mb-2">Driver Details</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -338,10 +328,6 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, userId }) => {
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
                 >
-                  {/* <option value="">Select Taxi Firm</option>
-                  <option value="firm1">Firm 1</option>
-                  <option value="firm2">Firm 2</option>
-                  Add more options as needed */}
                   <option value="">Select Taxi Firm</option>
                   {taxiFirms.map((firm) => (
                     <option key={firm._id} value={firm.name}>
@@ -364,10 +350,6 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, userId }) => {
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
                 >
-                  {/* <option value="">Select Badge Type</option>
-                  <option value="type1">Type 1</option>
-                  <option value="type2">Type 2</option> */}
-                  {/* Add more options as needed */}
                   <option value="">Select Taxi Firm</option>
                   {badge.map((badge) => (
                     <option key={badge._id} value={badge.name}>
@@ -390,10 +372,6 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, userId }) => {
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
                 >
-                  {/* <option value="">Select Insurance</option>
-                  <option value="insurance1">Insurance 1</option>
-                  <option value="insurance2">Insurance 2</option> */}
-                  {/* Add more options as needed */}
                   <option value="">Select Insurance</option>
                   {insurance.map((insurence) => (
                     <option key={insurence._id} value={insurence.name}>
@@ -484,7 +462,6 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, userId }) => {
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
                 >
-                  {/* </select> */}
                   <option value="null">Select Payment</option>
                   <option value="perminute">Per Mint</option>
                   <option value="perday">Per Day</option>

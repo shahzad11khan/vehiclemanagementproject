@@ -45,10 +45,9 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
     warrantyInfo: "",
     adminCreatedBy: "",
     adminCompanyName: "",
-    isActive: false, // Should be boolean
+    isActive: false,
   });
 
-  // Local authority and manufacturer state
   const [superadmin, setSuperadmin] = useState(null);
   const [LocalAuthority, setLocalAuth] = useState([]);
   const [manufacturer, setManufacturer] = useState([]);
@@ -57,7 +56,6 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
   const [type, setType] = useState([]);
   const [fueltype, setFuelType] = useState([]);
 
-  // Retrieve company name from local storage
   useEffect(() => {
     const storedCompanyName = localStorage.getItem("companyName");
     const storedSuperadmin = localStorage.getItem("role");
@@ -72,7 +70,6 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
     }
   }, []);
 
-  // Handle input changes for vehicleData
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
 
@@ -82,7 +79,6 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
     }));
   };
 
-  // Fetch manufacturer and local authority data
   useEffect(() => {
     const fetchDataForDropdowns = async () => {
       try {
@@ -109,28 +105,25 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                   localauth.adminCompanyName === storedCompanyName ||
                   localauth.adminCompanyName === "superadmin"
               );
-        // Filter transmission data based on the user's role
         const filteredtransmission =
           superadmin === "superadmin"
-            ? transmission.Result // No filtering for superadmins
+            ? transmission.Result
             : transmission.Result.filter(
                 (transmission) =>
                   transmission.adminCompanyName === storedCompanyName ||
                   transmission.adminCompanyName === "superadmin"
               );
-        // Filter type data based on the user's role
         const filteredtype =
           superadmin === "superadmin"
-            ? type.Result // No filtering for superadmins
+            ? type.Result
             : type.Result.filter(
                 (type) =>
                   type.adminCompanyName === storedCompanyName ||
                   type.adminCompanyName === "superadmin"
               );
-        // Filter type data based on the user's role
         const filteredfueltype =
           superadmin === "superadmin"
-            ? fueltype.Result // No filtering for superadmins
+            ? fueltype.Result
             : fueltype.Result.filter(
                 (fueltype) =>
                   fueltype.adminCompanyName === storedCompanyName ||
@@ -139,11 +132,8 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
 
         setManufacturer(filteredManufacturer);
         setLocalAuth(filteredLocalAuth);
-        // console.log("transmission", transmission);
         setTransmission(filteredtransmission);
-        // console.log("bodytype", type);
         setType(filteredtype);
-        // console.log("fueltype", fueltype);
         setFuelType(filteredfueltype);
       } catch (error) {
         console.error("Error fetching dropdown data:", error);
@@ -153,7 +143,6 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
     fetchDataForDropdowns();
   }, [superadmin, vehicleData.adminCompanyName]);
 
-  // Fetch vehicle data for editing
   useEffect(() => {
     if (vehicleId) {
       const fetchVehicleData = async () => {
@@ -171,7 +160,6 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
     }
   }, [vehicleId]);
 
-  // Handle dimension changes (nested object)
   const handleDimensionChange = (e) => {
     const { name, value } = e.target;
     setVehicleData((prevData) => ({
@@ -183,7 +171,6 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
     }));
   };
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -214,7 +201,6 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
             <div>
               <div className="flex gap-1">
                 <label className="block font-semibold">Manufacturer</label>
-                {/* <span className="text-red-600">*</span> */}
               </div>
               <select
                 id="manufacturer"
@@ -257,7 +243,6 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
               />
             </div>
           </div>
-          {/* Year and Type/Body Style */}
           <div className="grid grid-cols-3 md:grid-cols-3 gap-2 mt-4">
             <div className="">
               <label className="block font-semibold">Type/Body Style</label>
@@ -310,7 +295,6 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
               </select>
             </div>
           </div>
-          {/* Engine Type, Fuel Type, Transmission, Drivetrain */}
           <div className="grid grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-2 mt-4">
             <div>
               <label className="block font-semibold">Transmission</label>
@@ -375,9 +359,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
               />
             </div>
           </div>
-          {/* Colors */}
           <div className="grid grid-cols-3 md:grid-cols-3 gap-2 mt-4"></div>
-          {/* Dimensions */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mt-4">
             <div>
               <label className="block font-semibold">Height (in cm)</label>
@@ -388,7 +370,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                 onChange={handleDimensionChange}
                 className="w-full p-2 border border-gray-300 rounded"
                 required
-                min="0" // optional: prevents negative input
+                min="0"
               />
             </div>
             <div>
@@ -400,7 +382,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                 onChange={handleDimensionChange}
                 className="w-full p-2 border border-gray-300 rounded"
                 required
-                min="0" // optional: prevents negative input
+                min="0"
               />
             </div>
             <div>
@@ -412,11 +394,10 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                 onChange={handleDimensionChange}
                 className="w-full p-2 border border-gray-300 rounded"
                 required
-                min="0" // optional: prevents negative input
+                min="0"
               />
             </div>
           </div>
-          {/* Other Fields */}
           <div className="grid grid-cols-3 md:grid-cols-3 gap-2 mt-4">
             <div>
               <label className="block font-semibold">Passenger Capacity</label>
@@ -452,7 +433,6 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
               />
             </div>
           </div>
-          {/* Horsepower and Performance */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mt-4">
             <div>
               <label className="block font-semibold">Torque</label>
@@ -490,7 +470,6 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
               />
             </div>
           </div>
-          {/* Safety and Tech Features */}
           <div className="grid grid-cols-3 md:grid-cols-3 gap-2 mt-4">
             <div>
               <label className="block font-semibold">Fuel Efficiency</label>
@@ -527,7 +506,6 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
               />
             </div>
           </div>
-          {/* Towing Capacity, Price, Registration Number */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mt-4">
             <div>
               <label className="block font-semibold">Price ($)</label>
@@ -571,7 +549,6 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
               </select>
             </div>
           </div>
-          {/* Warranty Information */}
           <div className="mt-4">
             <label className="block font-semibold">Warranty Information</label>
             <textarea
@@ -600,11 +577,9 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
               Active
             </label>
           </div>
-          {/* Submit Button */}
           <div className="mt-6">
             <button
               type="submit"
-              // className="px-6 py-3 bg-blue-500 text-white rounded-lg"
               className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
             >
               Submit

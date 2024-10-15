@@ -77,14 +77,17 @@ const AddTitleModel = ({ isOpen, onClose, fetchData }) => {
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="sm:grid-cols-2 gap-6">
-            {/* Name */}
             <div>
-              <label
-                htmlFor="name"
-                className="text-sm font-medium text-gray-700"
-              >
-                Name:
-              </label>
+              <div className="flex gap-1">
+                <label
+                  htmlFor="name"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Name:
+                </label>
+
+                <span className="text-red-600">*</span>
+              </div>
               <input
                 type="text"
                 id="name"

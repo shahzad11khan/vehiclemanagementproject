@@ -7,6 +7,8 @@ import {
   fetchTaxiFirms,
   fetchBadge,
   fetchInsurence,
+  fetchLocalAuth,
+  fetchVehicle,
 } from "../../Components/DropdownData/taxiFirm/taxiFirmService";
 
 const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, userId }) => {
@@ -49,6 +51,9 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, userId }) => {
   const [taxiFirms, setTaxiFirms] = useState([]);
   const [badge, setBadge] = useState([]);
   const [insurance, setInsurance] = useState([]);
+  const [localAuth, setLocalAuth] = useState([]);
+  const [vehicle, setVehicle] = useState([]);
+  const [filteredVehicles, setFilteredVehicles] = useState([]); // Filtered vehicles based on selected LocalAuth
 
   useEffect(() => {
     const storedCompanyName = localStorage.getItem("companyName");
@@ -86,20 +91,68 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, userId }) => {
 
     const loadTaxiFirms = async () => {
       try {
-        const [taxiFirmData, badgeData, insuranceData] = await Promise.all([
-          fetchTaxiFirms(),
-          fetchBadge(),
-          fetchInsurence(),
-          // fetchPayment(),
-        ]);
+        const [taxiFirmData, badgeData, insuranceData, localAuthData, vehicle] =
+          await Promise.all([
+            fetchTaxiFirms(),
+            fetchBadge(),
+            fetchInsurence(),
+            fetchLocalAuth(),
+            fetchVehicle(),
+          ]);
 
-        setTaxiFirms(taxiFirmData.result);
-        setBadge(badgeData.result);
-        setInsurance(insuranceData.Result);
-        // setPayment(paymentData.Result);
+        const storedCompanyName = formData.adminCompanyName;
+
+        const filteredTaxiFirms =
+          superadmin === "superadmin"
+            ? taxiFirmData.result
+            : taxiFirmData.result.filter(
+                (firm) =>
+                  firm.adminCompanyName === storedCompanyName ||
+                  firm.adminCompanyName === "superadmin"
+              );
+
+        const filteredBadges =
+          superadmin === "superadmin"
+            ? badgeData.result
+            : badgeData.result.filter(
+                (badge) =>
+                  badge.adminCompanyName === storedCompanyName ||
+                  badge.adminCompanyName === "superadmin"
+              );
+
+        const filteredInsurance =
+          superadmin === "superadmin"
+            ? insuranceData.Result
+            : insuranceData.Result.filter(
+                (insurance) =>
+                  insurance.adminCompanyName === storedCompanyName ||
+                  insurance.adminCompanyName === "superadmin"
+              );
+
+        const filteredLocalAuth =
+          superadmin === "superadmin"
+            ? localAuthData.Result
+            : localAuthData.Result.filter(
+                (localAuth) =>
+                  localAuth.adminCompanyName === storedCompanyName ||
+                  localAuth.adminCompanyName === "superadmin"
+              );
+        const filteredVehicle =
+          superadmin === "superadmin"
+            ? vehicle.result
+            : vehicle.result.filter(
+                (vehicle) =>
+                  vehicle.adminCompanyName === storedCompanyName ||
+                  vehicle.adminCompanyName === "superadmin"
+              );
+
+        setTaxiFirms(filteredTaxiFirms);
+        setBadge(filteredBadges);
+        setInsurance(filteredInsurance);
+        setLocalAuth(filteredLocalAuth);
+        setVehicle(filteredVehicle);
       } catch (error) {
         console.error("Error loading taxi firms:", error);
-        toast.error("Failed to load dropdown data."); // Show toast on error
       }
     };
 
@@ -117,6 +170,13 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, userId }) => {
     if (type === "file" && files.length) {
       const file = files[0];
       setImagePreview(URL.createObjectURL(file));
+    }
+
+    if (name === "LocalAuth") {
+      const matchedVehicles = vehicle.filter(
+        (vehicle) => vehicle.LocalAuthority === value //
+      );
+      setFilteredVehicles(matchedVehicles); //
     }
   };
 
@@ -167,12 +227,16 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, userId }) => {
             <h3 className="text-xl font-semibold mb-2">Driver Details</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               <div>
-                <label
-                  htmlFor="firstName"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  First Name:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="firstName"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    First Name:
+                  </label>
+
+                  <span className="text-red-600">*</span>
+                </div>
                 <input
                   type="text"
                   id="firstName"
@@ -184,12 +248,16 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, userId }) => {
                 />
               </div>
               <div>
-                <label
-                  htmlFor="lastName"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Last Name:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="lastName"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Last Name:
+                  </label>
+
+                  <span className="text-red-600">*</span>
+                </div>
                 <input
                   type="text"
                   id="lastName"
@@ -217,12 +285,16 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, userId }) => {
                 />
               </div>
               <div>
-                <label
-                  htmlFor="tel1"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Tel 1:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="tel1"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Tel 1:
+                  </label>
+
+                  <span className="text-red-600">*</span>
+                </div>
                 <input
                   type="tel"
                   id="tel1"
@@ -250,12 +322,16 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, userId }) => {
                 />
               </div>
               <div>
-                <label
-                  htmlFor="email"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Email Address:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="email"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Email Address:
+                  </label>
+
+                  <span className="text-red-600">*</span>
+                </div>
                 <input
                   type="email"
                   id="email"
@@ -267,12 +343,16 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, userId }) => {
                 />
               </div>
               <div>
-                <label
-                  htmlFor="licenseNumber"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  License Number:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="licenseNumber"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    License Number:
+                  </label>
+
+                  <span className="text-red-600">*</span>
+                </div>
                 <input
                   type="text"
                   id="licenseNumber"
@@ -280,15 +360,20 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, userId }) => {
                   value={formData.licenseNumber}
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                  required
                 />
               </div>
               <div>
-                <label
-                  htmlFor="niNumber"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  NI Number:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="niNumber"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    NI Number:
+                  </label>
+
+                  <span className="text-red-600">*</span>
+                </div>
                 <input
                   type="text"
                   id="niNumber"
@@ -296,15 +381,20 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, userId }) => {
                   value={formData.niNumber}
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                  required
                 />
               </div>
               <div>
-                <label
-                  htmlFor="driverNumber"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Driver Number:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="driverNumber"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Driver Number:
+                  </label>
+
+                  <span className="text-red-600">*</span>
+                </div>
                 <input
                   type="text"
                   id="driverNumber"
@@ -312,6 +402,7 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, userId }) => {
                   value={formData.driverNumber}
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                  required
                 />
               </div>
               <div>
@@ -332,6 +423,52 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, userId }) => {
                   {taxiFirms.map((firm) => (
                     <option key={firm._id} value={firm.name}>
                       {firm.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label
+                  htmlFor="taxiFirm"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Taxi Localauthority:
+                </label>
+                <select
+                  id="LocalAuth"
+                  name="LocalAuth"
+                  value={formData.LocalAuth}
+                  onChange={handleChange}
+                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                >
+                  <option value="null">Select Localauthority</option>
+                  {localAuth.map((local) => (
+                    <option key={local._id} value={local.name}>
+                      {local.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label
+                  htmlFor="taxiFirm"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Vehicle:
+                </label>
+                <select
+                  id="vehicle"
+                  name="vehicle"
+                  value={formData.vehicle}
+                  onChange={handleChange}
+                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                >
+                  <option value="null">Select vehicle</option>
+                  {filteredVehicles.map((vehicle) => (
+                    <option key={vehicle._id} value={vehicle.model}>
+                      {vehicle.model}
                     </option>
                   ))}
                 </select>
@@ -381,12 +518,15 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, userId }) => {
                 </select>
               </div>
               <div>
-                <label
-                  htmlFor="startDate"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Start Date:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="startDate"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Start Date:
+                  </label>
+                  <span className="text-red-600">*</span>
+                </div>
                 <input
                   type="date"
                   id="startDate"
@@ -394,15 +534,19 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, userId }) => {
                   value={formData.startDate}
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                  required
                 />
               </div>
               <div>
-                <label
-                  htmlFor="driverRent"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Driver Rent:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="driverRent"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Driver Rent:
+                  </label>
+                  <span className="text-red-600">*</span>
+                </div>
                 <input
                   type="number"
                   id="driverRent"
@@ -410,15 +554,19 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, userId }) => {
                   value={formData.driverRent}
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                  required
                 />
               </div>
               <div>
-                <label
-                  htmlFor="licenseExpiryDate"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  License Expiry Date:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="licenseExpiryDate"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    License Expiry Date:
+                  </label>
+                  <span className="text-red-600">*</span>
+                </div>
                 <input
                   type="date"
                   id="licenseExpiryDate"
@@ -429,12 +577,15 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, userId }) => {
                 />
               </div>
               <div>
-                <label
-                  htmlFor="taxiBadgeDate"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Taxi Badge Date:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="taxiBadgeDate"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Taxi Badge Date:
+                  </label>
+                  <span className="text-red-600">*</span>
+                </div>
                 <input
                   type="date"
                   id="taxiBadgeDate"
@@ -477,12 +628,15 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, userId }) => {
                 </select>
               </div>
               <div>
-                <label
-                  htmlFor="rentPaymentCycle"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Payment:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="rentPaymentCycle"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Payment:
+                  </label>
+                  <span className="text-red-600">*</span>
+                </div>
                 <input
                   type="number"
                   id="pay"
@@ -490,15 +644,19 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, userId }) => {
                   value={formData.pay}
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                  required
                 />
               </div>
               <div>
-                <label
-                  htmlFor="city"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  City:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="city"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    City:
+                  </label>
+                  <span className="text-red-600">*</span>
+                </div>
                 <input
                   type="text"
                   id="city"
@@ -506,15 +664,19 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, userId }) => {
                   value={formData.city}
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                  required
                 />
               </div>
               <div>
-                <label
-                  htmlFor="county"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Country:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="county"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Country:
+                  </label>
+                  <span className="text-red-600">*</span>
+                </div>
                 <input
                   type="text"
                   id="county"
@@ -522,15 +684,19 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, userId }) => {
                   value={formData.county}
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                  required
                 />
               </div>
               <div>
-                <label
-                  htmlFor="postcode"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Postcode:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="postcode"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Postcode:
+                  </label>
+                  <span className="text-red-600">*</span>
+                </div>
                 <input
                   type="text"
                   id="postcode"
@@ -538,15 +704,19 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, userId }) => {
                   value={formData.postcode}
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                  required
                 />
               </div>
               <div>
-                <label
-                  htmlFor="postalAddress"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Postal Address:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="postalAddress"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Postal Address:
+                  </label>
+                  <span className="text-red-600">*</span>
+                </div>
                 <input
                   type="text"
                   id="postalAddress"

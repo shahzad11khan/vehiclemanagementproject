@@ -57,7 +57,6 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
           const adminData = res.data.result;
           console.log("profile", adminData);
 
-          // Set form data, ensuring confirmpassword is shown instead of password
           setFormData({
             title: adminData.title, // Assuming this should be initialized empty
             firstName: adminData.firstName, // Assuming this should be initialized empty
@@ -209,12 +208,16 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
               </div>
 
               <div>
-                <label
-                  htmlFor="firstName"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  First Name:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="firstName"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    First Name:
+                  </label>
+
+                  <span className="text-red-600">*</span>
+                </div>
                 <input
                   type="text"
                   id="firstName"
@@ -227,12 +230,16 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
               </div>
 
               <div>
-                <label
-                  htmlFor="lastName"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Last Name:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="lastName"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Last Name:
+                  </label>
+
+                  <span className="text-red-600">*</span>
+                </div>
                 <input
                   type="text"
                   id="lastName"
@@ -251,12 +258,16 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
             <h3 className="text-xl font-semibold mb-4">Contact Information</h3>
             <div className="grid grid-cols-4 sm:grid-cols-4 gap-3">
               <div>
-                <label
-                  htmlFor="email"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Email:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="email"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Email:
+                  </label>
+
+                  <span className="text-red-600">*</span>
+                </div>
                 <input
                   type="email"
                   id="email"
@@ -269,12 +280,16 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
               </div>
 
               <div>
-                <label
-                  htmlFor="tel1"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Tel 1:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="tel1"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Tel 1:
+                  </label>
+
+                  <span className="text-red-600">*</span>
+                </div>
                 <input
                   type="tel"
                   id="tel1"
@@ -304,12 +319,16 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
               </div>
 
               <div>
-                <label
-                  htmlFor="postcode"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Postcode:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="postcode"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Postcode:
+                  </label>
+
+                  <span className="text-red-600">*</span>
+                </div>
                 <input
                   type="text"
                   id="postcode"
@@ -317,16 +336,21 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                   value={formData.postcode}
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                  required
                 />
               </div>
 
               <div>
-                <label
-                  htmlFor="postalAddress"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Postal Address:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="postalAddress"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Postal Address:
+                  </label>
+
+                  <span className="text-red-600">*</span>
+                </div>
                 <input
                   type="text"
                   id="postalAddress"
@@ -355,12 +379,16 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
               </div>
 
               <div>
-                <label
-                  htmlFor="city"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  City:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="city"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    City:
+                  </label>
+
+                  <span className="text-red-600">*</span>
+                </div>
                 <input
                   type="text"
                   id="city"
@@ -368,16 +396,21 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                   value={formData.city}
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                  required
                 />
               </div>
 
               <div>
-                <label
-                  htmlFor="county"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Country:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="county"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Country:
+                  </label>
+
+                  <span className="text-red-600">*</span>
+                </div>
                 <input
                   type="text"
                   id="county"
@@ -385,6 +418,7 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                   value={formData.county}
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                  required
                 />
               </div>
             </div>
@@ -394,30 +428,17 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
           <div>
             <h3 className="text-xl font-semibold mb-4">Security</h3>
             <div className="grid grid-cols-4 sm:grid-cols-4 gap-3">
-              {/* <div>
-                <label
-                  htmlFor="accessLevel"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Access Level:
-                </label>
-                <input
-                  type="text"
-                  id="accessLevel"
-                  name="accessLevel"
-                  value={formData.accessLevel}
-                  onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                />
-              </div> */}
-
               <div>
-                <label
-                  htmlFor="dateOfBirth"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Date of Birth:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="dateOfBirth"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Date of Birth:
+                  </label>
+
+                  <span className="text-red-600">*</span>
+                </div>
                 <input
                   type="date"
                   id="dateOfBirth"
@@ -425,16 +446,21 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                   value={formData.dateOfBirth}
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                  required
                 />
               </div>
 
               <div>
-                <label
-                  htmlFor="position"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Position:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="position"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Position:
+                  </label>
+
+                  <span className="text-red-600">*</span>
+                </div>
                 <input
                   type="text"
                   id="position"
@@ -463,12 +489,16 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
               </div>
 
               <div>
-                <label
-                  htmlFor="username"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Username:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="username"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Username:
+                  </label>
+
+                  <span className="text-red-600">*</span>
+                </div>
                 <input
                   type="text"
                   id="username"
@@ -481,12 +511,16 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
               </div>
 
               <div>
-                <label
-                  htmlFor="password"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Password:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="password"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Password:
+                  </label>
+
+                  <span className="text-red-600">*</span>
+                </div>
                 <input
                   type="password"
                   id="password"
@@ -499,12 +533,16 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
               </div>
 
               <div>
-                <label
-                  htmlFor="confirmpassword"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Confirm Password:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="confirmpassword"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Confirm Password:
+                  </label>
+
+                  <span className="text-red-600">*</span>
+                </div>
                 <input
                   type="password"
                   id="confirmpassword"
@@ -517,12 +555,16 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
               </div>
 
               <div>
-                <label
-                  htmlFor="passwordExpires"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Password Expires:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="passwordExpires"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Password Expires:
+                  </label>
+
+                  <span className="text-red-600">*</span>
+                </div>
                 <input
                   type="date"
                   id="passwordExpires"
@@ -530,29 +572,12 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                   value={formData.passwordExpires}
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                  required
                 />
               </div>
-
-              {/* <div>
-                <label
-                  htmlFor="passwordExpiresEvery"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Password Expires Every:
-                </label>
-                <input
-                  type="text"
-                  id="passwordExpiresEvery"
-                  name="passwordExpiresEvery"
-                  value={formData.passwordExpiresEvery}
-                  onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                />
-              </div> */}
             </div>
           </div>
 
-          {/* User Avatar */}
           <div>
             <label
               htmlFor="useravatar"

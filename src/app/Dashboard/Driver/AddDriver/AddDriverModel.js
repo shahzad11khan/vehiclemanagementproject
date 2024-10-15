@@ -82,14 +82,12 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
           taxiFirmsData,
           badgeData,
           insuranceData,
-          // paymentData,
           localAuthData,
           vehicle,
         ] = await Promise.all([
           fetchTaxiFirms(),
           fetchBadge(),
           fetchInsurence(),
-          // fetchPayment(),
           fetchLocalAuth(),
           fetchVehicle(),
         ]);
@@ -124,14 +122,6 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                   insurance.adminCompanyName === "superadmin"
               );
 
-        // const filteredPayments =
-        //   superadmin === "superadmin"
-        //     ? paymentData.Result
-        //     : paymentData.Result.filter(
-        //         (payment) => payment.companyName === storedCompanyName &&
-        // firm.adminCompanyName === "superadmin";
-        //       );
-
         const filteredLocalAuth =
           superadmin === "superadmin"
             ? localAuthData.Result
@@ -152,17 +142,11 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
         console.log(filteredTaxiFirms);
         setTaxiFirms(filteredTaxiFirms);
         setBadge(filteredBadges);
-        console.log(filteredBadges);
         setInsurance(filteredInsurance);
-        console.log(filteredInsurance);
-        // setPayment(filteredPayments);
         setLocalAuth(filteredLocalAuth);
-        console.log(filteredLocalAuth);
         setVehicle(filteredVehicle);
-        console.log(filteredVehicle);
       } catch (err) {
         console.error("Error loading dropdown data:", err);
-        toast.error("Failed to load dropdown data.");
       }
     };
 
@@ -482,10 +466,6 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
                 >
-                  {/* <option value="">Select Taxi Firm</option>
-                  <option value="firm1">Firm 1</option>
-                  <option value="firm2">Firm 2</option>
-                  Add more options as needed */}
                   <option value="null">Select Localauthority</option>
                   {localAuth.map((local) => (
                     <option key={local._id} value={local.name}>
@@ -500,7 +480,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                   htmlFor="taxiFirm"
                   className="text-sm font-medium text-gray-700"
                 >
-                  vehicle:
+                  Vehicle:
                 </label>
                 <select
                   id="vehicle"

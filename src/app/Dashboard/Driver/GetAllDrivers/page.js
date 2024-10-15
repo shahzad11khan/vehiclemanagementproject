@@ -86,9 +86,6 @@ const Page = () => {
     setSelectedUserId(id);
     setIsOpenDriverUpdate(true);
   };
-  // const handleMore = (id) => {
-  //   alert(id);
-  // };
 
   if (!isMounted) {
     return null;
@@ -291,7 +288,10 @@ const Page = () => {
                       <td className="  p-3">
                         <div className="flex gap-2">
                           <button className="text-blue-500 hover:text-blue-700">
-                            <Link passHref href="/Dashboard/Driver/MoreInfo">
+                            <Link
+                              passHref
+                              href={`/Dashboard/Driver/MoreInfo/${driver._id}`}
+                            >
                               <div className="flex items-center gap-3">
                                 <MdOutlineReadMore />
                               </div>

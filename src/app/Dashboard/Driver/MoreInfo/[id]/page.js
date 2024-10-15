@@ -5,20 +5,21 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FaTrash } from "react-icons/fa";
 
-import Header from "../../Components/Header";
-import Sidebar from "../../Components/Sidebar";
-// import AddTitleModel from "../AddTitle/AddTitleModel";
-import { GetTitle } from "../../Components/ApiUrl/ShowApiDatas/ShowApiDatas";
-import { API_URL_Title } from "../../Components/ApiUrl/ApiUrls";
+import Header from "../../../Components/Header";
+import Sidebar from "../../../Components/Sidebar";
+import { API_URL_Driver } from "../../../Components/ApiUrl/ApiUrls";
+import { API_URL_Title } from "../../../Components/ApiUrl/ApiUrls";
 import { getCompanyName } from "@/utils/storageUtils";
 import axios from "axios";
 
-const Page = () => {
+const Page = ({ params }) => {
+  const id = params.id;
+  console.log(id);
+
   const [searchTerm, setSearchTerm] = useState("");
   const [isMounted, setIsMounted] = useState(false);
   const [data, setData] = useState([]); // State to hold fetched data
   const [filteredData, setFilteredData] = useState([]);
-  // const [isOpenTitle, setIsOpenTitle] = useState(false);
   const [selectedCompanyName, setSelectedCompanyName] = useState("");
 
   useEffect(() => {
@@ -32,9 +33,9 @@ const Page = () => {
   // Fetch data from API
   const fetchData = async () => {
     try {
-      const { result } = await GetTitle(); // Fetch titles
-      setData(result); // Set the fetched data
-      setFilteredData(result); // Initialize filtered data
+      const response = await axios.get(`${API_URL_Driver}/${id}`);
+      const { data } = response;
+      console.log(data);
     } catch (error) {
       console.error("Error fetching data:", error);
       setData([]); // Reset data to an empty array on error
@@ -121,11 +122,17 @@ const Page = () => {
                   <thead>
                     <tr>
                       <th className="py-2 px-4 border-b border-gray-200 text-left">
-                        Title
+                        Driver Name
                       </th>
-                      {/* <th className="py-2 px-4 border-b border-gray-200 text-left">
-                        Company
-                      </th> */}
+                      <th className="py-2 px-4 border-b border-gray-200 text-left">
+                        Pay Date
+                      </th>
+                      <th className="py-2 px-4 border-b border-gray-200 text-left">
+                        Pay From
+                      </th>
+                      <th className="py-2 px-4 border-b border-gray-200 text-left">
+                        Pay To
+                      </th>
                       <th className="py-2 px-4 border-b border-gray-200 text-left">
                         Actions
                       </th>

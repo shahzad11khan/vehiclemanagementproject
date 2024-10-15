@@ -23,11 +23,10 @@ import {
   API_URL_Type,
 } from "../ApiUrls.js";
 
-let companyName = localStorage.getItem("companyName"); // Get the company name from local storage
-let flag = localStorage.getItem("flag");
-let superadmin = localStorage.getItem("role");
-
 export const GetUsers = () => {
+  let companyName = localStorage.getItem("companyName"); // Get the company name from local storage
+  let flag = localStorage.getItem("flag");
+  let superadmin = localStorage.getItem("role");
   return axios
     .get(`${API_URL_USER}`)
     .then((res) => {
@@ -49,6 +48,9 @@ export const GetUsers = () => {
     });
 };
 export const GetDriver = () => {
+  let companyName = localStorage.getItem("companyName"); // Get the company name from local storage
+  let flag = localStorage.getItem("flag");
+  let superadmin = localStorage.getItem("role");
   return axios
     .get(`${API_URL_Driver}`)
     .then((res) => {
@@ -255,6 +257,9 @@ export const GetVehicleType = () => {
     });
 };
 export const GetVehicle = () => {
+  let companyName = localStorage.getItem("companyName"); // Get the company name from local storage
+  let flag = localStorage.getItem("flag");
+  let superadmin = localStorage.getItem("role");
   return axios
     .get(`${API_URL_Vehicle}`)
     .then((res) => {

@@ -205,7 +205,6 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
         >
           <h2 className="text-2xl font-bold mb-6">Vehicle Form</h2>
 
-          {/* Manufacturer and Model */}
           <div className="grid grid-cols-3 md:grid-cols-3 gap-2">
             <div>
               <div className="flex gap-1">
@@ -260,11 +259,10 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
             </div>
           </div>
 
-          {/* Year and Type/Body Style */}
           <div className="grid grid-cols-3 md:grid-cols-3 gap-2 mt-4">
             <div className="">
               <div className="flex gap-1">
-                <label className="block font-semibold">Type/Body Style</label>
+                <label className="block font-semibold">Body Type</label>
                 <span className="text-red-600">*</span>
               </div>
 
@@ -324,7 +322,6 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
             </div>
           </div>
 
-          {/* Engine Type, Fuel Type, Transmission, Drivetrain */}
           <div className="grid grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-2 mt-4">
             <div>
               <div className="flex gap-1">
@@ -402,10 +399,8 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
             </div>
           </div>
 
-          {/* Colors */}
           <div className="grid grid-cols-3 md:grid-cols-3 gap-2 mt-4"></div>
 
-          {/* Dimensions */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mt-4">
             <div>
               <div className="flex gap-1">
@@ -451,7 +446,6 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
             </div>
           </div>
 
-          {/* Other Fields */}
           <div className="grid grid-cols-3 md:grid-cols-3 gap-2 mt-4">
             <div>
               <div className="flex gap-1">
@@ -489,7 +483,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                 <span className="text-red-600">*</span>
               </div>
               <input
-                type="text"
+                type="number"
                 name="horsepower"
                 value={vehicleData.horsepower}
                 onChange={handleChange}
@@ -499,7 +493,6 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
             </div>
           </div>
 
-          {/* Horsepower and Performance */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mt-4">
             <div>
               <div className="flex gap-1">
@@ -507,7 +500,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                 <span className="text-red-600">*</span>
               </div>
               <input
-                type="text"
+                type="number"
                 name="torque"
                 value={vehicleData.torque}
                 onChange={handleChange}
@@ -521,7 +514,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                 <span className="text-red-600">*</span>
               </div>
               <input
-                type="text"
+                type="number"
                 name="topSpeed"
                 value={vehicleData.topSpeed}
                 onChange={handleChange}
@@ -538,7 +531,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
               </div>
 
               <input
-                type="text"
+                type="number"
                 name="towingCapacity"
                 value={vehicleData.towingCapacity}
                 onChange={handleChange}
@@ -548,7 +541,6 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
             </div>
           </div>
 
-          {/* Safety and Tech Features */}
           <div className="grid grid-cols-3 md:grid-cols-3 gap-2 mt-4">
             <div>
               <div className="flex gap-1">
@@ -601,7 +593,6 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
             </div>
           </div>
 
-          {/* Towing Capacity, Price, Registration Number */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mt-4">
             <div>
               <div className="flex gap-1">
@@ -610,7 +601,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                 <span className="text-red-600">*</span>
               </div>
               <input
-                type="text"
+                type="number"
                 name="price"
                 value={vehicleData.price}
                 onChange={handleChange}
@@ -638,10 +629,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
 
             <div>
               <div className="flex gap-1">
-                <label
-                  htmlFor="taxiFirm"
-                  className="text-sm font-medium text-gray-700"
-                >
+                <label htmlFor="taxiFirm" className="block font-semibold">
                   Taxi Localauthority:
                 </label>
 
@@ -665,7 +653,6 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
             </div>
           </div>
 
-          {/* Warranty Information */}
           <div className="mt-4">
             <div className="flex gap-1">
               <label className="block font-semibold">
@@ -700,13 +687,8 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
             </label>
           </div>
 
-          {/* Submit Button */}
           <div className="mt-6">
-            <button
-              type="submit"
-              // className="px-6 py-3 bg-blue-500 text-white rounded-lg"
-              className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
-            >
+            <button className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50">
               Submit
             </button>
             <button

@@ -51,13 +51,11 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
   const [taxiFirms, setTaxiFirms] = useState([]);
   const [badge, setBadge] = useState([]);
   const [insurance, setInsurance] = useState([]);
-  // const [payment, setPayment] = useState([]);
   const [localAuth, setLocalAuth] = useState([]);
   const [vehicle, setVehicle] = useState([]);
   const [superadmin, setSuperadmin] = useState(null);
-  const [filteredVehicles, setFilteredVehicles] = useState([]); // Filtered vehicles based on selected LocalAuth
+  const [filteredVehicles, setFilteredVehicles] = useState([]);
 
-  // Load company name and role from localStorage
   useEffect(() => {
     const storedCompanyName = localStorage.getItem("companyName");
     const storedSuperadmin = localStorage.getItem("role");
@@ -72,9 +70,8 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
         adminCompanyName: storedCompanyName,
       }));
     }
-  }, []); // Run only once on mount
+  }, []);
 
-  // Load dropdown data
   useEffect(() => {
     const loadDropdownData = async () => {
       try {
@@ -93,8 +90,6 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
         ]);
 
         const storedCompanyName = formData.adminCompanyName;
-
-        // Filter data based on role and company name
         const filteredTaxiFirms =
           superadmin === "superadmin"
             ? taxiFirmsData.result
@@ -139,7 +134,6 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                   vehicle.adminCompanyName === "superadmin"
               );
 
-        console.log(filteredTaxiFirms);
         setTaxiFirms(filteredTaxiFirms);
         setBadge(filteredBadges);
         setInsurance(filteredInsurance);
@@ -150,10 +144,8 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
       }
     };
 
-    if (superadmin !== null && formData.adminCompanyName) {
-      loadDropdownData(); // Ensure dropdown data is only loaded when role and companyName are available
-    }
-  }, [superadmin, formData.adminCompanyName]); // Re-run when superadmin or companyName changes
+    loadDropdownData();
+  }, [superadmin, formData.adminCompanyName]);
 
   const handleChange = (e) => {
     const { name, value, type, checked, files } = e.target;
@@ -165,9 +157,9 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
     // Filter vehicles when LocalAuth is selected
     if (name === "LocalAuth") {
       const matchedVehicles = vehicle.filter(
-        (vehicle) => vehicle.LocalAuthority === value // Assuming vehicle has a `localAuthName` field matching LocalAuth
+        (vehicle) => vehicle.LocalAuthority === value
       );
-      setFilteredVehicles(matchedVehicles); // Update filtered vehicles based on selected LocalAuth
+      setFilteredVehicles(matchedVehicles);
     }
   };
 
@@ -222,16 +214,14 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
           adminCompanyName: formData.adminCompanyName,
         };
         toast.success(response.data.message);
-        fetchData(); // Fetch updated data after successful submission
-        onClose(); // Close modal
-        setFormData(initialFormData); // Reset form
+        fetchData();
+        onClose();
+        setFormData(initialFormData);
       } else {
         toast.warn(response.data.error);
       }
     } catch (err) {
       console.log(err);
-      // setError(errorMessage);
-      // toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -247,7 +237,6 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* User Details */}
           <div>
             <h3 className="text-xl font-semibold mb-2">Driver Details</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -643,19 +632,11 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
                 >
-                  {/* </select> */}
-                  {/* <option value="null">Select Payment</option> */}
-                  <option value="perminute">Per Mint</option>
+                  {/* <option value="perminute">Per Mint</option> */}
                   <option value="perday">Per Day</option>
                   <option value="permonth">per Month</option>
                   <option value="perquarter">Per Quarter</option>
                   <option value="peryear">per year</option>
-
-                  {/* {payment.map((payment) => (
-                    <option key={payment._id} value={payment.name}>
-                      {payment.name}
-                    </option>
-                  ))} */}
                 </select>
               </div>
               <div>
@@ -780,13 +761,9 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
             </div>
           </div>
 
-          {/* Image Upload */}
           <div>
-            {/* <div className="flex gap-1"> */}
             <h3 className="text-xl font-semibold mb-2">Driver Image</h3>
 
-            {/* <span className="text-red-600">*</span> */}
-            {/* </div> */}
             <input
               type="file"
               id="imageFile"
@@ -803,18 +780,8 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
               placeholder="Image Name"
               className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
             />
-            {/* <textarea
-              id="imageNotes"
-              name="imageNotes"
-              value={formData.imageNotes}
-              onChange={handleChange}
-              placeholder="Image Notes"
-              rows="4"
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-            /> */}
           </div>
 
-          {/* Checkbox for Active Status */}
           <div className="flex items-center">
             <input
               type="checkbox"
@@ -832,7 +799,6 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
             </label>
           </div>
 
-          {/* Submit Button */}
           <div className="flex justify-end mt-4">
             <button
               type="submit"

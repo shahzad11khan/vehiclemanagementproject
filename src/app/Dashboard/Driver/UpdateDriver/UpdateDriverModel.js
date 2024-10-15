@@ -53,10 +53,15 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, userId }) => {
   const [insurance, setInsurance] = useState([]);
   const [localAuth, setLocalAuth] = useState([]);
   const [vehicle, setVehicle] = useState([]);
+  const [superadmin, setSuperadmin] = useState(null);
   const [filteredVehicles, setFilteredVehicles] = useState([]); // Filtered vehicles based on selected LocalAuth
 
   useEffect(() => {
     const storedCompanyName = localStorage.getItem("companyName");
+    const storedSuperadmin = localStorage.getItem("role");
+    if (storedSuperadmin) {
+      setSuperadmin(storedSuperadmin);
+    }
     if (storedCompanyName) {
       setFormData((prevData) => ({
         ...prevData,
@@ -80,7 +85,6 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, userId }) => {
       setImagePreview(adminData.imageFile || null); // Show avatar preview
     } catch (error) {
       console.error("Error fetching user data:", error);
-      toast.error("Failed to fetch user data."); // Show toast on error
     }
   };
 
@@ -110,7 +114,6 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, userId }) => {
                   firm.adminCompanyName === storedCompanyName ||
                   firm.adminCompanyName === "superadmin"
               );
-
         const filteredBadges =
           superadmin === "superadmin"
             ? badgeData.result
@@ -119,7 +122,6 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, userId }) => {
                   badge.adminCompanyName === storedCompanyName ||
                   badge.adminCompanyName === "superadmin"
               );
-
         const filteredInsurance =
           superadmin === "superadmin"
             ? insuranceData.Result
@@ -137,6 +139,7 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, userId }) => {
                   localAuth.adminCompanyName === storedCompanyName ||
                   localAuth.adminCompanyName === "superadmin"
               );
+
         const filteredVehicle =
           superadmin === "superadmin"
             ? vehicle.result

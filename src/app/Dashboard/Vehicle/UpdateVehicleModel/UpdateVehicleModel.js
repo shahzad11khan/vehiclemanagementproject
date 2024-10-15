@@ -424,7 +424,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
             <div>
               <label className="block font-semibold">Horsepower</label>
               <input
-                type="text"
+                type="number"
                 name="horsepower"
                 value={vehicleData.horsepower}
                 onChange={handleChange}
@@ -448,7 +448,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
             <div>
               <label className="block font-semibold">Top Speed (mph)</label>
               <input
-                type="text"
+                type="number"
                 name="topSpeed"
                 value={vehicleData.topSpeed}
                 onChange={handleChange}
@@ -461,7 +461,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                 Towing Capacity (lbs)
               </label>
               <input
-                type="text"
+                type="number"
                 name="towingCapacity"
                 value={vehicleData.towingCapacity}
                 onChange={handleChange}

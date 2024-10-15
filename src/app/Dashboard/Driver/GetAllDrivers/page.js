@@ -13,6 +13,7 @@ import { API_URL_Drivercalculation } from "@/app/Dashboard/Components/ApiUrl/Api
 import axios from "axios";
 import { API_URL_Driver } from "../../Components/ApiUrl/ApiUrls";
 import { getCompanyName } from "@/utils/storageUtils";
+import Link from "next/link";
 
 const Page = () => {
   const [drivers, setDrivers] = useState([]);
@@ -85,6 +86,9 @@ const Page = () => {
     setSelectedUserId(id);
     setIsOpenDriverUpdate(true);
   };
+  // const handleMore = (id) => {
+  //   alert(id);
+  // };
 
   if (!isMounted) {
     return null;
@@ -286,11 +290,12 @@ const Page = () => {
 
                       <td className="  p-3">
                         <div className="flex gap-2">
-                          <button
-                            onClick={() => handlemore(driver._id)}
-                            className="text-blue-500 hover:text-blue-700"
-                          >
-                            <MdOutlineReadMore />
+                          <button className="text-blue-500 hover:text-blue-700">
+                            <Link passHref href="/Dashboard/Driver/MoreInfo">
+                              <div className="flex items-center gap-3">
+                                <MdOutlineReadMore />
+                              </div>
+                            </Link>
                           </button>
                           <button
                             onClick={() => handleEdit(driver._id)}

@@ -10,23 +10,23 @@ const AreaChart = ({ data }) => {
   useEffect(() => {
     if (chartRef.current && data) {
       if (chartInstance.current) {
-        chartInstance.current.destroy(); // Destroy existing chart instance
+        chartInstance.current.destroy();
       }
 
       const ctx = chartRef.current.getContext("2d");
 
       chartInstance.current = new Chart(ctx, {
-        type: "line", // Set chart type to line
+        type: "line",
         data: {
           labels: data.labels,
           datasets: [
             {
               label: "Clients",
               data: data.values,
-              backgroundColor: "rgba(166, 206, 57, 0.5)", // Adjust color as needed
-              borderColor: "#A6CE39", // Adjust color as needed
+              backgroundColor: "rgba(166, 206, 57, 0.5)",
+              borderColor: "#A6CE39",
               borderWidth: 2,
-              fill: true, // Fill the area under the line
+              fill: true,
             },
           ],
         },

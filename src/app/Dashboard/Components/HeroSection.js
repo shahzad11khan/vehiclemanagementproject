@@ -28,7 +28,6 @@ const HeroSection = () => {
 
   return (
     <div className="flex space-x-4 flex-col sm:flex-row pb-5">
-      {/* Left Div */}
       <div className="flex-1 p-4 rounded-md shadow-sm shadow-custom-blue h-[260px]">
         <h2 className="text-lg font-semibold mb-2">Data</h2>
         <ul className="ml-5 list-none">
@@ -55,18 +54,13 @@ const HeroSection = () => {
         </ul>
       </div>
 
-      {/* Middle Div */}
       <div className="flex-1  p-4 rounded-md shadow-sm shadow-custom-blue h-[260px]">
         <h2 className="text-lg font-semibold mb-2">Graph</h2>
         <Line data={waveData} options={{ responsive: true }} />
       </div>
-
-      {/* Right Div */}
       <div className="flex-1  p-4 rounded-md shadow-sm shadow-custom-blue h-[260px]">
         <h2 className="text-lg font-semibold mb-2">Car Details</h2>
         <div className="h-48">
-          {" "}
-          {/* Set the height here */}
           <Doughnut data={donutData} options={{ responsive: true }} />
         </div>
       </div>

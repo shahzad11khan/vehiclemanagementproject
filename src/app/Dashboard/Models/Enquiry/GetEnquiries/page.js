@@ -128,7 +128,6 @@ const Page = () => {
               </button>
             </div>
 
-            {/* Tailwind CSS Table */}
             <div className="overflow-x-auto">
               <table className="min-w-full border-collapse border border-gray-300">
                 <thead>
@@ -139,9 +138,7 @@ const Page = () => {
                     <th className="border border-gray-300 px-4 py-2">
                       Enquiry Email
                     </th>
-                    {/* <th className="border border-gray-300 px-4 py-2">
-                      Company
-                    </th> */}
+
                     <th className="border border-gray-300 px-4 py-2">
                       Enquiry Status
                     </th>
@@ -159,9 +156,7 @@ const Page = () => {
                       <td className="border border-gray-300 px-4 py-2">
                         {row.email}
                       </td>
-                      {/* <td className="border border-gray-300 px-4 py-2">
-                        {row.adminCompanyName}
-                      </td> */}
+
                       <td className="border border-gray-300 px-4 py-2">
                         {row.isActive ? "Active" : "Inactive"}
                       </td>

@@ -23,10 +23,7 @@ const Page = () => {
       name: "Employee Description",
       accessor: "description",
     },
-    // {
-    //   name: "Company",
-    //   accessor: "adminCompanyName",
-    // },
+
     {
       name: "Employee Status",
       accessor: "isActive",
@@ -141,7 +138,7 @@ const Page = () => {
                   placeholder="Search by title"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="border rounded px-4 py-2 w-64" // Tailwind CSS classes for input
+                  className="border rounded px-4 py-2 w-64"
                 />
               </div>
               <div className="justify-end">
@@ -178,9 +175,7 @@ const Page = () => {
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                         {row.description}
                       </td>
-                      {/* <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        {row.adminCompanyName}
-                      </td> */}
+
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                         {row.isActive ? "Active" : "Inactive"}
                       </td>

@@ -4,14 +4,10 @@ import Link from "next/link";
 
 const Card = ({ image, company, companyId }) => {
   const handleCardClick = () => {
-    // alert(company, id);
-    // // Store company name and id in localStorage
     localStorage.setItem("companyName", company);
     localStorage.setItem("companyID", companyId);
     localStorage.setItem("flag", "true");
     localStorage.setItem("Iscompanyselected", "Yes");
-
-    // localStorage.setItem("companyId", id);
   };
 
   return (

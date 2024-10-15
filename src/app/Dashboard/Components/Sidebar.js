@@ -349,156 +349,177 @@ const Sidebar = () => {
                   </li>
                 </div>
 
-                <div className="relative inline-block text-sm">
-                  <span className="items-center cursor-pointer hover:bg-gray-100 rounded-lg hidden sm:block ml-2">
-                    Reports
-                  </span>
-                  {isOpen && (
-                    <div className="absolute left-36 -mt-12 w-auto bg-white border border-gray-300 rounded-md shadow-lg z-50">
-                      <ul className="grid grid-row-3 w-[200px] bg-red-500">
-                        <li
-                          className="relative hover:bg-gray-100 cursor-pointer"
-                          onMouseEnter={() => handleMouseEnter("systemReports")}
-                          onMouseLeave={handleMouseLeave}
-                        >
-                          <Link
-                            href="#"
-                            className="block px-4 py-2 text-gray-800"
-                          >
-                            System Reports
-                          </Link>
-                          {openDropdown === "systemReports" && (
-                            <ul className="absolute left-32 w-[200px] bg-white  rounded-md shadow-lg space-y-4 z-50">
-                              <li>
-                                <Link
-                                  href="#"
-                                  className="px-4 py-3  rounded hover:bg-gray-200"
-                                >
-                                  Employee Update Reports
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  href="#"
-                                  className="px-4 py-3 rounded hover:bg-gray-200"
-                                >
-                                  Rental Invoice Reports
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  href="#"
-                                  className="px-4 py-3 rounded hover:bg-gray-200"
-                                >
-                                  Overdue Payment Reports
-                                </Link>
-                              </li>
-                            </ul>
-                          )}
-                        </li>
-                        <li
-                          className="relative hover:bg-gray-100 cursor-pointer"
-                          onMouseEnter={() =>
-                            handleMouseEnter("vehicleReports")
-                          }
-                          onMouseLeave={handleMouseLeave}
-                        >
-                          <Link
-                            href="#"
-                            className="block px-4 py-2 text-gray-800"
-                          >
-                            Vehicle Reports
-                          </Link>
-                          {openDropdown === "vehicleReports" && (
-                            <ul className="absolute left-32 -mt-5 w-[160px] bg-white rounded-md shadow-lg space-y-4  z-50">
-                              <li>
-                                <Link
-                                  href="#"
-                                  className="px-4 py-3 rounded hover:bg-gray-200"
-                                >
-                                  Interim Test Expiry
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  href="#"
-                                  className="px-4 py-3 rounded hover:bg-gray-200"
-                                >
-                                  Mot Expiry
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  href="#"
-                                  className="px-4 py-3 rounded hover:bg-gray-200"
-                                >
-                                  Road Tax Expiry
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  href="#"
-                                  className="px-4 py-2 rounded hover:bg-gray-200"
-                                >
-                                  Test Date Expiry
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  href="#"
-                                  className="px-4 py-2 rounded hover:bg-gray-200"
-                                >
-                                  Plate Expiry
-                                </Link>
-                              </li>
-                            </ul>
-                          )}
-                        </li>
+                <div>
+                  <li
+                    onMouseEnter={() => setIsOpen(true)}
+                    onMouseLeave={() => setIsOpen(false)}
+                    className={`${
+                      isOpen === true
+                        ? "border-l-4 border-red-400"
+                        : "bg-white text-blue"
+                    } flex items-center p-3 cursor-pointer hover:bg-gray-100 rounded-lg`}
+                  >
+                    <TbReport
+                      className={`${
+                        isOpen === true ? "text-red-400" : "text-black text-sm"
+                      }`}
+                    />
+                    <div className="relative inline-block text-sm">
+                      <span className="items-center cursor-pointer hover:bg-gray-100 rounded-lg hidden sm:block ml-2">
+                        Reports
+                      </span>
+                      {isOpen && (
+                        <div className="absolute left-36 -mt-12 w-auto bg-white border border-gray-300 rounded-md shadow-lg z-50">
+                          <ul className="grid grid-row-3 w-[200px] bg-red-500">
+                            <li
+                              className="relative hover:bg-gray-100 cursor-pointer"
+                              onMouseEnter={() =>
+                                handleMouseEnter("systemReports")
+                              }
+                              onMouseLeave={handleMouseLeave}
+                            >
+                              <Link
+                                href="#"
+                                className="block px-4 py-2 text-gray-800"
+                              >
+                                System Reports
+                              </Link>
+                              {openDropdown === "systemReports" && (
+                                <ul className="absolute left-32 w-[200px] bg-white  rounded-md shadow-lg space-y-4 z-50">
+                                  <li>
+                                    <Link
+                                      href="#"
+                                      className="px-4 py-3  rounded hover:bg-gray-200"
+                                    >
+                                      Employee Update Reports
+                                    </Link>
+                                  </li>
+                                  <li>
+                                    <Link
+                                      href="#"
+                                      className="px-4 py-3 rounded hover:bg-gray-200"
+                                    >
+                                      Rental Invoice Reports
+                                    </Link>
+                                  </li>
+                                  <li>
+                                    <Link
+                                      href="#"
+                                      className="px-4 py-3 rounded hover:bg-gray-200"
+                                    >
+                                      Overdue Payment Reports
+                                    </Link>
+                                  </li>
+                                </ul>
+                              )}
+                            </li>
+                            <li
+                              className="relative hover:bg-gray-100 cursor-pointer"
+                              onMouseEnter={() =>
+                                handleMouseEnter("vehicleReports")
+                              }
+                              onMouseLeave={handleMouseLeave}
+                            >
+                              <Link
+                                href="#"
+                                className="block px-4 py-2 text-gray-800"
+                              >
+                                Vehicle Reports
+                              </Link>
+                              {openDropdown === "vehicleReports" && (
+                                <ul className="absolute left-32 -mt-5 w-[160px] bg-white rounded-md shadow-lg space-y-4  z-50">
+                                  <li>
+                                    <Link
+                                      href="#"
+                                      className="px-4 py-3 rounded hover:bg-gray-200"
+                                    >
+                                      Interim Test Expiry
+                                    </Link>
+                                  </li>
+                                  <li>
+                                    <Link
+                                      href="#"
+                                      className="px-4 py-3 rounded hover:bg-gray-200"
+                                    >
+                                      Mot Expiry
+                                    </Link>
+                                  </li>
+                                  <li>
+                                    <Link
+                                      href="#"
+                                      className="px-4 py-3 rounded hover:bg-gray-200"
+                                    >
+                                      Road Tax Expiry
+                                    </Link>
+                                  </li>
+                                  <li>
+                                    <Link
+                                      href="#"
+                                      className="px-4 py-2 rounded hover:bg-gray-200"
+                                    >
+                                      Test Date Expiry
+                                    </Link>
+                                  </li>
+                                  <li>
+                                    <Link
+                                      href="#"
+                                      className="px-4 py-2 rounded hover:bg-gray-200"
+                                    >
+                                      Plate Expiry
+                                    </Link>
+                                  </li>
+                                </ul>
+                              )}
+                            </li>
 
-                        <li
-                          className="relative hover:bg-gray-100 cursor-pointer"
-                          onMouseEnter={() => handleMouseEnter("driverReports")}
-                          onMouseLeave={handleMouseLeave}
-                        >
-                          <Link
-                            href="#"
-                            className="block px-4 py-2 text-gray-800"
-                          >
-                            Driver Reports
-                          </Link>
+                            <li
+                              className="relative hover:bg-gray-100 cursor-pointer"
+                              onMouseEnter={() =>
+                                handleMouseEnter("driverReports")
+                              }
+                              onMouseLeave={handleMouseLeave}
+                            >
+                              <Link
+                                href="#"
+                                className="block px-4 py-2 text-gray-800"
+                              >
+                                Driver Reports
+                              </Link>
 
-                          {openDropdown === "driverReports" && (
-                            <ul className="absolute left-32 -mt-5 w-[160px] bg-white rounded-md shadow-lg space-y-4 z-50">
-                              <li>
-                                <Link
-                                  href="#"
-                                  className="px-4 py-3 rounded hover:bg-gray-200"
-                                >
-                                  Drivers Holidays
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  href="#"
-                                  className="px-4 py-3 rounded hover:bg-gray-200"
-                                >
-                                  Licence Expiry
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  href="#"
-                                  className="px-4 py-3 rounded hover:bg-gray-200"
-                                >
-                                  Taxi Badge Expiry
-                                </Link>
-                              </li>
-                            </ul>
-                          )}
-                        </li>
-                      </ul>
+                              {openDropdown === "driverReports" && (
+                                <ul className="absolute left-32 -mt-5 w-[160px] bg-white rounded-md shadow-lg space-y-4 z-50">
+                                  <li>
+                                    <Link
+                                      href="#"
+                                      className="px-4 py-3 rounded hover:bg-gray-200"
+                                    >
+                                      Drivers Holidays
+                                    </Link>
+                                  </li>
+                                  <li>
+                                    <Link
+                                      href="#"
+                                      className="px-4 py-3 rounded hover:bg-gray-200"
+                                    >
+                                      Licence Expiry
+                                    </Link>
+                                  </li>
+                                  <li>
+                                    <Link
+                                      href="#"
+                                      className="px-4 py-3 rounded hover:bg-gray-200"
+                                    >
+                                      Taxi Badge Expiry
+                                    </Link>
+                                  </li>
+                                </ul>
+                              )}
+                            </li>
+                          </ul>
+                        </div>
+                      )}
                     </div>
-                  )}
+                  </li>
                 </div>
               </>
             ) : role === "superadmin" && flag === "true" ? (
@@ -820,156 +841,177 @@ const Sidebar = () => {
                   </li>
                 </div>
 
-                <div className="relative inline-block text-sm">
-                  <span className="items-center cursor-pointer hover:bg-gray-100 rounded-lg hidden sm:block ml-2">
-                    Reports
-                  </span>
-                  {isOpen && (
-                    <div className="absolute left-36 -mt-12 w-auto bg-white border border-gray-300 rounded-md shadow-lg z-50">
-                      <ul className="grid grid-row-3 w-[200px] bg-red-500">
-                        <li
-                          className="relative hover:bg-gray-100 cursor-pointer"
-                          onMouseEnter={() => handleMouseEnter("systemReports")}
-                          onMouseLeave={handleMouseLeave}
-                        >
-                          <Link
-                            href="#"
-                            className="block px-4 py-2 text-gray-800"
-                          >
-                            System Reports
-                          </Link>
-                          {openDropdown === "systemReports" && (
-                            <ul className="absolute left-32 w-[200px] bg-white  rounded-md shadow-lg space-y-4 z-50">
-                              <li>
-                                <Link
-                                  href="#"
-                                  className="px-4 py-3  rounded hover:bg-gray-200"
-                                >
-                                  Employee Update Reports
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  href="#"
-                                  className="px-4 py-3 rounded hover:bg-gray-200"
-                                >
-                                  Rental Invoice Reports
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  href="#"
-                                  className="px-4 py-3 rounded hover:bg-gray-200"
-                                >
-                                  Overdue Payment Reports
-                                </Link>
-                              </li>
-                            </ul>
-                          )}
-                        </li>
-                        <li
-                          className="relative hover:bg-gray-100 cursor-pointer"
-                          onMouseEnter={() =>
-                            handleMouseEnter("vehicleReports")
-                          }
-                          onMouseLeave={handleMouseLeave}
-                        >
-                          <Link
-                            href="#"
-                            className="block px-4 py-2 text-gray-800"
-                          >
-                            Vehicle Reports
-                          </Link>
-                          {openDropdown === "vehicleReports" && (
-                            <ul className="absolute left-32 -mt-5 w-[160px] bg-white rounded-md shadow-lg space-y-4  z-50">
-                              <li>
-                                <Link
-                                  href="#"
-                                  className="px-4 py-3 rounded hover:bg-gray-200"
-                                >
-                                  Interim Test Expiry
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  href="#"
-                                  className="px-4 py-3 rounded hover:bg-gray-200"
-                                >
-                                  Mot Expiry
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  href="#"
-                                  className="px-4 py-3 rounded hover:bg-gray-200"
-                                >
-                                  Road Tax Expiry
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  href="#"
-                                  className="px-4 py-2 rounded hover:bg-gray-200"
-                                >
-                                  Test Date Expiry
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  href="#"
-                                  className="px-4 py-2 rounded hover:bg-gray-200"
-                                >
-                                  Plate Expiry
-                                </Link>
-                              </li>
-                            </ul>
-                          )}
-                        </li>
+                <div>
+                  <li
+                    onMouseEnter={() => setIsOpen(true)}
+                    onMouseLeave={() => setIsOpen(false)}
+                    className={`${
+                      isOpen === true
+                        ? "border-l-4 border-red-400"
+                        : "bg-white text-blue"
+                    } flex items-center p-3 cursor-pointer hover:bg-gray-100 rounded-lg`}
+                  >
+                    <TbReport
+                      className={`${
+                        isOpen === true ? "text-red-400" : "text-black text-sm"
+                      }`}
+                    />
+                    <div className="relative inline-block text-sm">
+                      <span className="items-center cursor-pointer hover:bg-gray-100 rounded-lg hidden sm:block ml-2">
+                        Reports
+                      </span>
+                      {isOpen && (
+                        <div className="absolute left-36 -mt-12 w-auto bg-white border border-gray-300 rounded-md shadow-lg z-50">
+                          <ul className="grid grid-row-3 w-[200px] bg-red-500">
+                            <li
+                              className="relative hover:bg-gray-100 cursor-pointer"
+                              onMouseEnter={() =>
+                                handleMouseEnter("systemReports")
+                              }
+                              onMouseLeave={handleMouseLeave}
+                            >
+                              <Link
+                                href="#"
+                                className="block px-4 py-2 text-gray-800"
+                              >
+                                System Reports
+                              </Link>
+                              {openDropdown === "systemReports" && (
+                                <ul className="absolute left-32 w-[200px] bg-white  rounded-md shadow-lg space-y-4 z-50">
+                                  <li>
+                                    <Link
+                                      href="#"
+                                      className="px-4 py-3  rounded hover:bg-gray-200"
+                                    >
+                                      Employee Update Reports
+                                    </Link>
+                                  </li>
+                                  <li>
+                                    <Link
+                                      href="#"
+                                      className="px-4 py-3 rounded hover:bg-gray-200"
+                                    >
+                                      Rental Invoice Reports
+                                    </Link>
+                                  </li>
+                                  <li>
+                                    <Link
+                                      href="#"
+                                      className="px-4 py-3 rounded hover:bg-gray-200"
+                                    >
+                                      Overdue Payment Reports
+                                    </Link>
+                                  </li>
+                                </ul>
+                              )}
+                            </li>
+                            <li
+                              className="relative hover:bg-gray-100 cursor-pointer"
+                              onMouseEnter={() =>
+                                handleMouseEnter("vehicleReports")
+                              }
+                              onMouseLeave={handleMouseLeave}
+                            >
+                              <Link
+                                href="#"
+                                className="block px-4 py-2 text-gray-800"
+                              >
+                                Vehicle Reports
+                              </Link>
+                              {openDropdown === "vehicleReports" && (
+                                <ul className="absolute left-32 -mt-5 w-[160px] bg-white rounded-md shadow-lg space-y-4  z-50">
+                                  <li>
+                                    <Link
+                                      href="#"
+                                      className="px-4 py-3 rounded hover:bg-gray-200"
+                                    >
+                                      Interim Test Expiry
+                                    </Link>
+                                  </li>
+                                  <li>
+                                    <Link
+                                      href="#"
+                                      className="px-4 py-3 rounded hover:bg-gray-200"
+                                    >
+                                      Mot Expiry
+                                    </Link>
+                                  </li>
+                                  <li>
+                                    <Link
+                                      href="#"
+                                      className="px-4 py-3 rounded hover:bg-gray-200"
+                                    >
+                                      Road Tax Expiry
+                                    </Link>
+                                  </li>
+                                  <li>
+                                    <Link
+                                      href="#"
+                                      className="px-4 py-2 rounded hover:bg-gray-200"
+                                    >
+                                      Test Date Expiry
+                                    </Link>
+                                  </li>
+                                  <li>
+                                    <Link
+                                      href="#"
+                                      className="px-4 py-2 rounded hover:bg-gray-200"
+                                    >
+                                      Plate Expiry
+                                    </Link>
+                                  </li>
+                                </ul>
+                              )}
+                            </li>
 
-                        <li
-                          className="relative hover:bg-gray-100 cursor-pointer"
-                          onMouseEnter={() => handleMouseEnter("driverReports")}
-                          onMouseLeave={handleMouseLeave}
-                        >
-                          <Link
-                            href="#"
-                            className="block px-4 py-2 text-gray-800"
-                          >
-                            Driver Reports
-                          </Link>
+                            <li
+                              className="relative hover:bg-gray-100 cursor-pointer"
+                              onMouseEnter={() =>
+                                handleMouseEnter("driverReports")
+                              }
+                              onMouseLeave={handleMouseLeave}
+                            >
+                              <Link
+                                href="#"
+                                className="block px-4 py-2 text-gray-800"
+                              >
+                                Driver Reports
+                              </Link>
 
-                          {openDropdown === "driverReports" && (
-                            <ul className="absolute left-32 -mt-5 w-[160px] bg-white rounded-md shadow-lg space-y-4 z-50">
-                              <li>
-                                <Link
-                                  href="#"
-                                  className="px-4 py-3 rounded hover:bg-gray-200"
-                                >
-                                  Drivers Holidays
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  href="#"
-                                  className="px-4 py-3 rounded hover:bg-gray-200"
-                                >
-                                  Licence Expiry
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  href="#"
-                                  className="px-4 py-3 rounded hover:bg-gray-200"
-                                >
-                                  Taxi Badge Expiry
-                                </Link>
-                              </li>
-                            </ul>
-                          )}
-                        </li>
-                      </ul>
+                              {openDropdown === "driverReports" && (
+                                <ul className="absolute left-32 -mt-5 w-[160px] bg-white rounded-md shadow-lg space-y-4 z-50">
+                                  <li>
+                                    <Link
+                                      href="#"
+                                      className="px-4 py-3 rounded hover:bg-gray-200"
+                                    >
+                                      Drivers Holidays
+                                    </Link>
+                                  </li>
+                                  <li>
+                                    <Link
+                                      href="#"
+                                      className="px-4 py-3 rounded hover:bg-gray-200"
+                                    >
+                                      Licence Expiry
+                                    </Link>
+                                  </li>
+                                  <li>
+                                    <Link
+                                      href="#"
+                                      className="px-4 py-3 rounded hover:bg-gray-200"
+                                    >
+                                      Taxi Badge Expiry
+                                    </Link>
+                                  </li>
+                                </ul>
+                              )}
+                            </li>
+                          </ul>
+                        </div>
+                      )}
                     </div>
-                  )}
+                  </li>
                 </div>
               </>
             ) : (
@@ -1211,7 +1253,7 @@ const Sidebar = () => {
                     </div>
                   </li>
                 </div>
-                <div className="">
+                <div>
                   <li
                     onMouseEnter={() => setIsOpen(true)}
                     onMouseLeave={() => setIsOpen(false)}

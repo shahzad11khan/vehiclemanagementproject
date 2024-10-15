@@ -14,7 +14,7 @@ import { getCompanyName } from "@/utils/storageUtils";
 import axios from "axios";
 
 const Page = () => {
-  const [data, setData] = useState([]); // State to hold fetched data
+  const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [isMounted, setIsMounted] = useState(false);
@@ -39,7 +39,7 @@ const Page = () => {
       setFilteredData(result);
     } catch (error) {
       console.error("Error fetching data:", error);
-      setData([]); // Reset data to an empty array on error
+      setData([]);
     }
   };
 
@@ -48,7 +48,6 @@ const Page = () => {
   }, []);
 
   const handleDelete = async (id) => {
-    console.log("Deleting ID:", id);
     try {
       const response = await axios.delete(`${API_URL_Firm}/${id}`);
       const { data } = response;
@@ -89,7 +88,6 @@ const Page = () => {
   }, [searchTerm, data, selectedCompanyName]);
 
   const handleEdit = (id) => {
-    // toast.info(`Edit item with ID: ${id}`);
     setSelectedUserId(id);
     setIsOpenDriverUpdate(true);
     OpenDriverUpdateModle();
@@ -134,7 +132,6 @@ const Page = () => {
               </div>
             </div>
 
-            {/* Responsive Table */}
             <div className="overflow-x-auto">
               <table className="min-w-full border-collapse border border-gray-200">
                 <thead>
@@ -145,9 +142,7 @@ const Page = () => {
                     <th className="border border-gray-300 p-2 text-left">
                       Firm Description
                     </th>
-                    {/* <th className="border border-gray-300 p-2 text-left">
-                      Company
-                    </th> */}
+
                     <th className="border border-gray-300 p-2 text-left">
                       Firm Status
                     </th>
@@ -163,9 +158,7 @@ const Page = () => {
                       <td className="border border-gray-300 p-2">
                         {row.description}
                       </td>
-                      {/* <td className="border border-gray-300 p-2">
-                        {row.adminCompanyName}
-                      </td> */}
+
                       <td className="border border-gray-300 p-2">
                         {row.isActive ? "Active" : "InActive"}
                       </td>

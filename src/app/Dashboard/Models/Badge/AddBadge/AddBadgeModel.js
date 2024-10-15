@@ -15,16 +15,15 @@ const AddBadgeModel = ({ isOpen, onClose, fetchData }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
-  // Retrieve company name from local storage
   useEffect(() => {
-    const storedCompanyName = localStorage.getItem("companyName"); // Replace with the actual key used in localStorage
+    const storedCompanyName = localStorage.getItem("companyName");
     if (storedCompanyName) {
       setFormData((prevData) => ({
         ...prevData,
         adminCompanyName: storedCompanyName,
       }));
     }
-  }, []); // Run only once when the component mounts
+  }, []);
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData({
@@ -50,7 +49,6 @@ const AddBadgeModel = ({ isOpen, onClose, fetchData }) => {
         adminCreatedBy: "",
         adminCompanyName: formData.adminCompanyName,
       });
-      // console.log(response.data);
       if (response.data.success) {
         toast.success("data successfully saved");
         setSuccess(true);
@@ -59,7 +57,6 @@ const AddBadgeModel = ({ isOpen, onClose, fetchData }) => {
       } else {
         toast.warn(response.data.error);
       }
-      // Handle success or trigger some UI feedback
     } catch (err) {
       setError(err.response?.data?.message || "Failed to add badge");
     } finally {
@@ -79,7 +76,6 @@ const AddBadgeModel = ({ isOpen, onClose, fetchData }) => {
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            {/* Name */}
             <div className="col-span-2">
               <div className="flex gap-1">
                 <label
@@ -101,8 +97,6 @@ const AddBadgeModel = ({ isOpen, onClose, fetchData }) => {
                 required
               />
             </div>
-
-            {/* Description */}
             <div className="col-span-2">
               <label
                 htmlFor="description"
@@ -117,11 +111,8 @@ const AddBadgeModel = ({ isOpen, onClose, fetchData }) => {
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
                 rows="3"
-                // required
               ></textarea>
             </div>
-
-            {/* IsActive */}
             <div className="col-span-2 flex items-center">
               <input
                 type="checkbox"
@@ -140,7 +131,6 @@ const AddBadgeModel = ({ isOpen, onClose, fetchData }) => {
             </div>
           </div>
 
-          {/* Button Group */}
           <div className="flex gap-4 justify-center">
             <button
               type="submit"

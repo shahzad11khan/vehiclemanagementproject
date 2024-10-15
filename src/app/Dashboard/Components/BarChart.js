@@ -9,7 +9,7 @@ const LineChart = ({ data, data1 }) => {
   useEffect(() => {
     if (chartRef.current && data && data1) {
       if (chartInstance.current) {
-        chartInstance.current.destroy(); // Destroy existing chart instance
+        chartInstance.current.destroy();
       }
 
       const ctx = chartRef.current.getContext("2d");
@@ -17,23 +17,23 @@ const LineChart = ({ data, data1 }) => {
       chartInstance.current = new Chart(ctx, {
         type: "line",
         data: {
-          labels: data.labels, // Assuming both datasets have the same labels
+          labels: data.labels,
           datasets: [
             {
               label: "Vehicles",
               data: data.values,
-              backgroundColor: "rgba(54, 162, 235, 0.5)", // Adjust color as needed
-              borderColor: "#A6CE39", // Adjust color as needed
+              backgroundColor: "rgba(54, 162, 235, 0.5)",
+              borderColor: "#A6CE39",
               borderWidth: 2,
-              fill: false, // Ensure line chart is not filled
+              fill: false,
             },
             {
               label: "Drivers",
               data: data1.values,
-              backgroundColor: "rgba(54, 162, 235, 0.5)", // Adjust color as needed
-              borderColor: "#A6CE39", // Adjust color as needed
+              backgroundColor: "rgba(54, 162, 235, 0.5)",
+              borderColor: "#A6CE39",
               borderWidth: 2,
-              fill: true, // Ensure line chart is not filled
+              fill: true,
             },
           ],
         },

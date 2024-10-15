@@ -1,6 +1,5 @@
 "use client";
 import axios from "axios";
-// import Image from "next/image";
 import Link from "next/link";
 import React, { useState, useCallback, useEffect } from "react";
 import { CgProfile } from "react-icons/cg";
@@ -11,7 +10,6 @@ import {
   getUserName,
   getUserRole,
   getflag,
-  getIscompanyselected,
 } from "../../../../utils/storageUtils";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
@@ -37,8 +35,7 @@ const Header = () => {
     const userId = getUserId();
     const flag = getflag();
     setflag(flag);
-    const Iscompanyselected = getIscompanyselected();
-    console.log(Iscompanyselected);
+
     const username = getUserName();
     const role = getUserRole();
     const companyNameFromStorage = getCompanyName();
@@ -58,11 +55,8 @@ const Header = () => {
       if (adminData?._id === userId) {
         setImagePreview(adminData.image);
       } else {
-        // Fetch user data from another table
         const userRes = await axios.get(`${API_URL_USER}/${userId}`);
         const userData = userRes.data.result;
-
-        // Update user image if available
         if (userData?.useravatar) {
           setImagePreview(userData.useravatar);
         }

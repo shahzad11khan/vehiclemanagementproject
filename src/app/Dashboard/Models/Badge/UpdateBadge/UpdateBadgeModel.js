@@ -16,8 +16,6 @@ const UpdateBadgeModel = ({ isOpen, onClose, fetchData, updateid }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
-
-  // Retrieve company name from local storage
   useEffect(() => {
     const storedCompanyName = localStorage.getItem("companyName");
     if (storedCompanyName) {
@@ -26,8 +24,7 @@ const UpdateBadgeModel = ({ isOpen, onClose, fetchData, updateid }) => {
         adminCompanyName: storedCompanyName,
       }));
     }
-  }, []); // Update when the manufacturer changes
-  // Fetch manufacturer data when the modal opens
+  }, []);
   useEffect(() => {
     console.log(updateid);
     const fetchManufacturerData = async () => {
@@ -72,7 +69,6 @@ const UpdateBadgeModel = ({ isOpen, onClose, fetchData, updateid }) => {
     setLoading(true);
     setError(null);
     try {
-      // Use PUT for updating an existing manufacturer
       const response = await axios.put(
         `${API_URL_Badge}/${updateid}`,
         formData
@@ -112,7 +108,6 @@ const UpdateBadgeModel = ({ isOpen, onClose, fetchData, updateid }) => {
         )}
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            {/* Name */}
             <div className="col-span-2">
               <label
                 htmlFor="name"
@@ -129,8 +124,6 @@ const UpdateBadgeModel = ({ isOpen, onClose, fetchData, updateid }) => {
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
               />
             </div>
-
-            {/* Description */}
             <div className="col-span-2">
               <label
                 htmlFor="description"
@@ -148,8 +141,6 @@ const UpdateBadgeModel = ({ isOpen, onClose, fetchData, updateid }) => {
                 required
               ></textarea>
             </div>
-
-            {/* IsActive */}
             <div className="col-span-2 flex items-center">
               <input
                 type="checkbox"
@@ -167,8 +158,6 @@ const UpdateBadgeModel = ({ isOpen, onClose, fetchData, updateid }) => {
               </label>
             </div>
           </div>
-
-          {/* Button Group */}
           <div className="flex gap-4 justify-center">
             <button
               type="submit"

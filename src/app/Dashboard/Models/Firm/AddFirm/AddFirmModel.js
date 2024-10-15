@@ -34,8 +34,6 @@ const AddFirmModal = ({ isOpen, onClose, fetchData }) => {
 
   useEffect(() => {
     const storedCompanyName = localStorage.getItem("companyName");
-    // console.log("fetch company:", storedCompanyName);
-    // setcompn(storedCompanyName);
     const storedSuperadmin = localStorage.getItem("role");
     if (storedSuperadmin) {
       setSuperadmin(storedSuperadmin);
@@ -47,16 +45,12 @@ const AddFirmModal = ({ isOpen, onClose, fetchData }) => {
       }));
     }
   }, []);
-  // Fetch existing firm data when the modal opens
   useEffect(() => {
     const fetchDataForDropdowns = async () => {
       try {
         const comp = localStorage.getItem("companyName");
-        // console.log("again fetch comp name :", comp);
-        // const storedCompanyName = formData.adminCompanyName;
 
         const signature = await fetchSignature();
-        // console.log("company :", comp);
 
         const filteredsignature =
           superadmin === "superadmin"
@@ -66,9 +60,6 @@ const AddFirmModal = ({ isOpen, onClose, fetchData }) => {
                   signature.adminCompanyName === comp ||
                   signature.adminCompanyName === "superadmin"
               );
-        // console.log(filteredsignature);
-        // console.log("filtered array", filteredsignature);
-        // console.log("simple array", signature.Result);
         setSignatureOptions(filteredsignature);
       } catch (error) {
         console.error("Error fetching dropdown data:", error);
@@ -91,18 +82,13 @@ const AddFirmModal = ({ isOpen, onClose, fetchData }) => {
     e.preventDefault();
     try {
       const formDataToSend = new FormData();
-
-      // Append each form field to the FormData object
       Object.keys(formData).forEach((key) => {
         if (key === "imageFile" && formData[key]) {
-          // Append only if the image file is selected
           formDataToSend.append(key, formData[key]);
         } else {
           formDataToSend.append(key, formData[key]);
         }
       });
-
-      // Send the form data to the backend using Axios
       const response = await axios.post(`${API_URL_Firm}`, formDataToSend, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -110,13 +96,10 @@ const AddFirmModal = ({ isOpen, onClose, fetchData }) => {
       });
 
       if (response.data.success) {
-        // Handle the response after submission
         toast.success(response.data.message);
         onClose();
         fetchData();
         console.log("Server response:", response.data);
-
-        // Optionally, reset the form after successful submission
         setFormData({
           name: "",
           description: "",
@@ -156,15 +139,18 @@ const AddFirmModal = ({ isOpen, onClose, fetchData }) => {
         <h2 className="text-3xl font-semibold text-center mb-8">Add Firm</h2>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Basic Information */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <div>
-              <label
-                htmlFor="name"
-                className="text-sm font-medium text-gray-700"
-              >
-                Name:
-              </label>
+              <div className="flex gap-1">
+                <label
+                  htmlFor="name"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Name:
+                </label>
+
+                <span className="text-red-600">*</span>
+              </div>
               <input
                 type="text"
                 id="name"
@@ -194,12 +180,16 @@ const AddFirmModal = ({ isOpen, onClose, fetchData }) => {
             </div>
 
             <div>
-              <label
-                htmlFor="companyNo"
-                className="text-sm font-medium text-gray-700"
-              >
-                Company No:
-              </label>
+              <div className="flex gap-1">
+                <label
+                  htmlFor="companyNo"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Company No:
+                </label>
+
+                <span className="text-red-600">*</span>
+              </div>
               <input
                 type="text"
                 id="companyNo"
@@ -207,16 +197,21 @@ const AddFirmModal = ({ isOpen, onClose, fetchData }) => {
                 value={formData.companyNo}
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                required
               />
             </div>
 
             <div>
-              <label
-                htmlFor="vatNo"
-                className="text-sm font-medium text-gray-700"
-              >
-                VAT No:
-              </label>
+              <div className="flex gap-1">
+                <label
+                  htmlFor="vatNo"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  VAT No:
+                </label>
+
+                <span className="text-red-600">*</span>
+              </div>
               <input
                 type="text"
                 id="vatNo"
@@ -224,16 +219,21 @@ const AddFirmModal = ({ isOpen, onClose, fetchData }) => {
                 value={formData.vatNo}
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                required
               />
             </div>
 
             <div>
-              <label
-                htmlFor="insurancePolicyNo"
-                className="text-sm font-medium text-gray-700"
-              >
-                Insurance Policy No:
-              </label>
+              <div className="flex gap-1">
+                <label
+                  htmlFor="insurancePolicyNo"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Insurance Policy No:
+                </label>
+
+                <span className="text-red-600">*</span>
+              </div>
               <input
                 type="text"
                 id="insurancePolicyNo"
@@ -241,6 +241,7 @@ const AddFirmModal = ({ isOpen, onClose, fetchData }) => {
                 value={formData.insurancePolicyNo}
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                required
               />
             </div>
 
@@ -262,12 +263,16 @@ const AddFirmModal = ({ isOpen, onClose, fetchData }) => {
             </div>
 
             <div>
-              <label
-                htmlFor="email"
-                className="text-sm font-medium text-gray-700"
-              >
-                Email:
-              </label>
+              <div className="flex gap-1">
+                <label
+                  htmlFor="email"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Email:
+                </label>
+
+                <span className="text-red-600">*</span>
+              </div>
               <input
                 type="email"
                 id="email"
@@ -280,12 +285,15 @@ const AddFirmModal = ({ isOpen, onClose, fetchData }) => {
             </div>
 
             <div>
-              <label
-                htmlFor="tel1"
-                className="text-sm font-medium text-gray-700"
-              >
-                Tel 1:
-              </label>
+              <div className="flex gap-1">
+                <label
+                  htmlFor="tel1"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Tel 1:
+                </label>
+                <span className="text-red-600">*</span>
+              </div>
               <input
                 type="tel"
                 id="tel1"
@@ -315,12 +323,15 @@ const AddFirmModal = ({ isOpen, onClose, fetchData }) => {
             </div>
 
             <div>
-              <label
-                htmlFor="address"
-                className="text-sm font-medium text-gray-700"
-              >
-                Address:
-              </label>
+              <div className="flex gap-1">
+                <label
+                  htmlFor="address"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Address:
+                </label>
+                <span className="text-red-600">*</span>
+              </div>
               <input
                 type="text"
                 id="address"
@@ -328,16 +339,20 @@ const AddFirmModal = ({ isOpen, onClose, fetchData }) => {
                 value={formData.address}
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                required
               />
             </div>
 
             <div>
-              <label
-                htmlFor="city"
-                className="text-sm font-medium text-gray-700"
-              >
-                City:
-              </label>
+              <div className="flex gap-1">
+                <label
+                  htmlFor="city"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  City:
+                </label>
+                <span className="text-red-600">*</span>
+              </div>
               <input
                 type="text"
                 id="city"
@@ -345,16 +360,20 @@ const AddFirmModal = ({ isOpen, onClose, fetchData }) => {
                 value={formData.city}
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                required
               />
             </div>
 
             <div>
-              <label
-                htmlFor="country"
-                className="text-sm font-medium text-gray-700"
-              >
-                Country:
-              </label>
+              <div className="flex gap-1">
+                <label
+                  htmlFor="country"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Country:
+                </label>
+                <span className="text-red-600">*</span>
+              </div>
               <input
                 type="text"
                 id="country"
@@ -362,23 +381,28 @@ const AddFirmModal = ({ isOpen, onClose, fetchData }) => {
                 value={formData.country}
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                required
               />
             </div>
 
             <div>
-              <label
-                htmlFor="postcode"
-                className="text-sm font-medium text-gray-700"
-              >
-                Postcode:
-              </label>
+              <div className="flex gap-1">
+                <label
+                  htmlFor="postcode"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Postcode:
+                </label>
+                <span className="text-red-600">*</span>
+              </div>
               <input
-                type="text"
+                type="number"
                 id="postcode"
                 name="postcode"
                 value={formData.postcode}
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                required
               />
             </div>
 
@@ -396,7 +420,6 @@ const AddFirmModal = ({ isOpen, onClose, fetchData }) => {
             </div>
           </div>
 
-          {/* Letter Configuration */}
           <div className="mt-6">
             <h3 className="text-xl font-semibold mb-2">Letter Configuration</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -441,20 +464,15 @@ const AddFirmModal = ({ isOpen, onClose, fetchData }) => {
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
                 >
                   <option value="">Select</option>
-                  {/* <option value="option1">Option 1</option>
-                  <option value="option2">Option 2</option> */}
                   {signature.map((option) => (
                     <option key={option._id} value={option.name}>
                       {option.name}
                     </option>
                   ))}
-                  {/* Add more options as needed */}
                 </select>
               </div>
             </div>
           </div>
-
-          {/* Image Details */}
           <div className="mt-6">
             <h3 className="text-xl font-semibold mb-2">Image Details</h3>
             <div className="space-y-4">
@@ -499,7 +517,6 @@ const AddFirmModal = ({ isOpen, onClose, fetchData }) => {
             </div>
           </div>
 
-          {/* Submit Button */}
           <div className="mt-8 text-center">
             <button
               type="submit"

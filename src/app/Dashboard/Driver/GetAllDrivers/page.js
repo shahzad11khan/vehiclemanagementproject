@@ -38,7 +38,6 @@ const Page = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(`${API_URL_Driver}`);
-      // console.log(response.data.result);
       setDrivers(response.data.result);
       setFilteredDrivers(response.data.result);
     } catch (error) {
@@ -110,15 +109,9 @@ const Page = () => {
 
   function drivercal(date, pay, value, userId, formData) {
     try {
-      // Convert 'pay' to a number
       const result = Number(pay);
-      // Convert 'date' to a Date object
       const passingDate = new Date(date);
-
-      // Get the current date
       const currentDate = new Date();
-
-      // Function to calculate the final result based on time difference
       const calculateFinalResult = (timePassed) => {
         return result * (timePassed + 1);
       };
@@ -127,21 +120,17 @@ const Page = () => {
       value = value.toLowerCase();
       switch (value) {
         case "perday":
-          // Calculate the difference in time between currentDate and passingDate in milliseconds
           const timeDiffDays = currentDate - passingDate;
-          // Convert the difference from milliseconds to days
           timePassed = Math.floor(timeDiffDays / (1000 * 60 * 60 * 24));
           break;
 
         case "permonth":
-          // Calculate the difference in months
           timePassed =
             (currentDate.getFullYear() - passingDate.getFullYear()) * 12 +
             (currentDate.getMonth() - passingDate.getMonth());
           break;
 
         case "perquarter":
-          // Calculate the difference in months and convert to quarters
           timePassed =
             (currentDate.getFullYear() - passingDate.getFullYear()) * 12 +
             (currentDate.getMonth() - passingDate.getMonth());
@@ -149,9 +138,7 @@ const Page = () => {
           break;
 
         case "peryear":
-          // Calculate the difference in years
           timePassed = currentDate.getFullYear() - passingDate.getFullYear();
-          // Adjust if the current date is before the anniversary of passingDate
           if (
             currentDate.getMonth() < passingDate.getMonth() ||
             (currentDate.getMonth() === passingDate.getMonth() &&
@@ -165,21 +152,13 @@ const Page = () => {
           return "Invalid value type provided.";
       }
 
-      // Ensure timePassed is not negative
       timePassed = Math.max(0, timePassed);
-
-      // Calculate the final result
       const finalResult = calculateFinalResult(timePassed);
       const sendFormData = async () => {
-        console.log("update done");
-        // Prepare form data to send
+        // console.log("update done");
         const formDataToSend = new FormData();
-        const specificFieldKey = "calculation"; // The field you want to update
-
-        // Set the specific field you want to update
+        const specificFieldKey = "calculation";
         formDataToSend.set(specificFieldKey, finalResult);
-
-        // Append other fields from the existing formData if it exists
         if (formData) {
           Object.keys(formData).forEach((key) => {
             if (key !== specificFieldKey) {
@@ -187,25 +166,22 @@ const Page = () => {
             }
           });
         }
-
-        // Sending the PUT request
         const response = await axios.put(
           `${API_URL_Drivercalculation}/${userId}`,
           formDataToSend,
           {
             headers: {
-              "Content-Type": "multipart/form-data", // Set the appropriate headers for form data
+              "Content-Type": "multipart/form-data",
             },
           }
         );
         console.log("Update specific field successful:", response.data);
       };
       setInterval(sendFormData, 300000);
-      return finalResult; // Return finalResult after the request completes
+      return finalResult;
     } catch (error) {
       console.error("Failed to update driver:", error);
-      // You can show a toast notification or perform other error handling
-      throw error; // Rethrow the error if needed
+      throw error;
     }
   }
 
@@ -234,7 +210,6 @@ const Page = () => {
               </button>
             </div>
 
-            {/* Driver Table */}
             <div className="w-full overflow-x-auto mt-4 ">
               <table className="w-11/12 border-collapse border border-gray-200 overflow-x-scroll">
                 <thead>

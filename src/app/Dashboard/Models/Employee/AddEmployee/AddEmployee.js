@@ -15,14 +15,14 @@ const AddEmployeeModel = ({ isOpen, onClose, fetchData }) => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const storedCompanyName = localStorage.getItem("companyName"); // Replace with the actual key used in localStorage
+    const storedCompanyName = localStorage.getItem("companyName");
     if (storedCompanyName) {
       setFormData((prevData) => ({
         ...prevData,
         adminCompanyName: storedCompanyName,
       }));
     }
-  }, []); // Run only once when the component mounts
+  }, []);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -46,7 +46,6 @@ const AddEmployeeModel = ({ isOpen, onClose, fetchData }) => {
         adminCreatedBy: "",
         adminCompanyName: formData.adminCompanyName,
       });
-      // console.log(response.data);
       if (response.data.success) {
         toast.success("data successfully saved");
 
@@ -55,7 +54,6 @@ const AddEmployeeModel = ({ isOpen, onClose, fetchData }) => {
       } else {
         toast.warn("Data not saved");
       }
-      // Handle success or trigger some UI feedback
     } catch (err) {
       setError(err.response?.data?.message || "Failed to add badge");
     } finally {
@@ -94,8 +92,6 @@ const AddEmployeeModel = ({ isOpen, onClose, fetchData }) => {
                 required
               />
             </div>
-
-            {/* Description */}
             <div className="col-span-2">
               <label
                 htmlFor="description"
@@ -112,8 +108,6 @@ const AddEmployeeModel = ({ isOpen, onClose, fetchData }) => {
                 rows="3"
               ></textarea>
             </div>
-
-            {/* IsActive */}
             <div className="col-span-2 flex items-center">
               <input
                 type="checkbox"
@@ -131,8 +125,6 @@ const AddEmployeeModel = ({ isOpen, onClose, fetchData }) => {
               </label>
             </div>
           </div>
-
-          {/* Button Group */}
           <div className="flex gap-4 justify-center">
             <button
               type="submit"

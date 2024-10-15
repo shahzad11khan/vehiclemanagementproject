@@ -11,27 +11,21 @@ const Login = () => {
     email: "",
     password: "",
   });
-  // for button disabled
   const [buttonDisable, setbuttondisable] = useState(true);
-  // for loading
   const [loading, setloading] = useState(false);
-  // navigation
   const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setloading(true); // Assuming `setLoading` is a state setter
+    setloading(true);
 
     try {
-      // Use relative path for the API route
       const response = await axios.post(`${API_URL_Login}`, {
-        email: userlogin.email, // Access email from state
-        password: userlogin.password, // Access password from state
+        email: userlogin.email,
+        password: userlogin.password,
       });
 
       console.log("Login successful", response);
-
-      // Check if the user is verified
       const isVerifiedtoken = response.data.token;
       const Userusername = response.data.username;
       const companyName = response.data.company;
@@ -39,10 +33,7 @@ const Login = () => {
       const UserRole = response.data.role;
       const userId = response.data.userId;
 
-      // console.log(isVerifiedtoken);
-
       if (UserActive) {
-        // Store token and userId in localStorage
         if (UserRole === "superadmin") {
           localStorage.setItem("token", isVerifiedtoken);
           localStorage.setItem("Userusername", Userusername);
@@ -67,16 +58,12 @@ const Login = () => {
 
         toast.success("Login successful");
         router.push("/Dashboard/Home");
-
-        // Use a relative path for navigation
-        // router.push("Dashboard/Home");
       } else {
         toast.warning(`😢 ${response.data.error}`);
         router.push("/");
       }
     } catch (error) {
-      console.error("Login error:", error); // Better error logging
-      // toast.error("Something went wrong");
+      console.error("Login error:", error);
     } finally {
       setloading(false);
     }

@@ -79,15 +79,13 @@ const UpdateEnquiryModal = ({ isOpen, onClose, fetchData, enquiryId }) => {
         setLocalAuthorityOptions(filteredAuthorities);
       } catch (error) {
         console.error("Error fetching dropdown data:", error);
-        // toast.error("Failed to load dropdown data."); // Show toast on error
       }
     };
 
     fetchDataForDropdowns();
-  }, [formData.adminCompanyName, superadmin]); // Add dependencies for correct useEffect behavior
+  }, [formData.adminCompanyName, superadmin]);
 
   useEffect(() => {
-    // Fetch existing enquiry data if enquiryId is provided (for editing)
     const fetchEnquiry = async () => {
       if (enquiryId) {
         try {
@@ -104,7 +102,7 @@ const UpdateEnquiryModal = ({ isOpen, onClose, fetchData, enquiryId }) => {
       }
     };
     fetchEnquiry();
-  }, [enquiryId]); // Run when enquiryId changes
+  }, [enquiryId]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -118,7 +116,6 @@ const UpdateEnquiryModal = ({ isOpen, onClose, fetchData, enquiryId }) => {
     e.preventDefault();
     try {
       if (enquiryId) {
-        // If enquiryId is present, update the record
         const response = await axios.put(
           `${API_URL_Enquiry}/${enquiryId}`,
           formData
@@ -142,18 +139,20 @@ const UpdateEnquiryModal = ({ isOpen, onClose, fetchData, enquiryId }) => {
         <h2 className="text-3xl font-semibold text-center mb-8">Add Enquiry</h2>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Driver Details */}
           <div>
             <h3 className="text-xl font-semibold mb-2">Enquiry</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              {/* First Name */}
               <div>
-                <label
-                  htmlFor="firstName"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  First Name:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="firstName"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    First Name:
+                  </label>
+
+                  <span className="text-red-600">*</span>
+                </div>
                 <input
                   type="text"
                   id="firstName"
@@ -164,15 +163,17 @@ const UpdateEnquiryModal = ({ isOpen, onClose, fetchData, enquiryId }) => {
                   required
                 />
               </div>
-
-              {/* Last Name */}
               <div>
-                <label
-                  htmlFor="lastName"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Last Name:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="lastName"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Last Name:
+                  </label>
+
+                  <span className="text-red-600">*</span>
+                </div>
                 <input
                   type="text"
                   id="lastName"
@@ -183,15 +184,17 @@ const UpdateEnquiryModal = ({ isOpen, onClose, fetchData, enquiryId }) => {
                   required
                 />
               </div>
-
-              {/* Email */}
               <div>
-                <label
-                  htmlFor="email"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Email:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="email"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Email:
+                  </label>
+
+                  <span className="text-red-600">*</span>
+                </div>
                 <input
                   type="email"
                   id="email"
@@ -203,14 +206,17 @@ const UpdateEnquiryModal = ({ isOpen, onClose, fetchData, enquiryId }) => {
                 />
               </div>
 
-              {/* Telephone 1 */}
               <div>
-                <label
-                  htmlFor="tel1"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Telephone 1:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="tel1"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Telephone 1:
+                  </label>
+
+                  <span className="text-red-600">*</span>
+                </div>
                 <input
                   type="tel"
                   id="tel1"
@@ -222,7 +228,6 @@ const UpdateEnquiryModal = ({ isOpen, onClose, fetchData, enquiryId }) => {
                 />
               </div>
 
-              {/* Telephone 2 */}
               <div>
                 <label
                   htmlFor="tel2"
@@ -240,16 +245,19 @@ const UpdateEnquiryModal = ({ isOpen, onClose, fetchData, enquiryId }) => {
                 />
               </div>
 
-              {/* Postcode */}
               <div>
-                <label
-                  htmlFor="postcode"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Postcode:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="postcode"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Postcode:
+                  </label>
+
+                  <span className="text-red-600">*</span>
+                </div>
                 <input
-                  type="text"
+                  type="number"
                   id="postcode"
                   name="postcode"
                   value={formData.postcode}
@@ -258,14 +266,17 @@ const UpdateEnquiryModal = ({ isOpen, onClose, fetchData, enquiryId }) => {
                 />
               </div>
 
-              {/* Postal Address */}
               <div>
-                <label
-                  htmlFor="postalAddress"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Postal Address:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="postalAddress"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Postal Address:
+                  </label>
+
+                  <span className="text-red-600">*</span>
+                </div>
                 <input
                   type="text"
                   id="postalAddress"
@@ -273,10 +284,9 @@ const UpdateEnquiryModal = ({ isOpen, onClose, fetchData, enquiryId }) => {
                   value={formData.postalAddress}
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                  required
                 />
               </div>
-
-              {/* Permanent Address */}
               <div>
                 <label
                   htmlFor="permanentAddress"
@@ -294,14 +304,17 @@ const UpdateEnquiryModal = ({ isOpen, onClose, fetchData, enquiryId }) => {
                 />
               </div>
 
-              {/* City */}
               <div>
-                <label
-                  htmlFor="city"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  City:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="city"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    City:
+                  </label>
+
+                  <span className="text-red-600">*</span>
+                </div>
                 <input
                   type="text"
                   id="city"
@@ -309,17 +322,20 @@ const UpdateEnquiryModal = ({ isOpen, onClose, fetchData, enquiryId }) => {
                   value={formData.city}
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                  required
                 />
               </div>
-
-              {/* County */}
               <div>
-                <label
-                  htmlFor="county"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  County:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="county"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Country:
+                  </label>
+
+                  <span className="text-red-600">*</span>
+                </div>
                 <input
                   type="text"
                   id="county"
@@ -327,17 +343,21 @@ const UpdateEnquiryModal = ({ isOpen, onClose, fetchData, enquiryId }) => {
                   value={formData.county}
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                  required
                 />
               </div>
 
-              {/* Date of Birth */}
               <div>
-                <label
-                  htmlFor="dateOfBirth"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Date of Birth:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="dateOfBirth"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Date of Birth:
+                  </label>
+
+                  <span className="text-red-600">*</span>
+                </div>
                 <input
                   type="date"
                   id="dateOfBirth"
@@ -345,17 +365,20 @@ const UpdateEnquiryModal = ({ isOpen, onClose, fetchData, enquiryId }) => {
                   value={formData.dateOfBirth}
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                  required
                 />
               </div>
-
-              {/* NI Number */}
               <div>
-                <label
-                  htmlFor="niNumber"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  NI Number:
-                </label>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="niNumber"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    NI Number:
+                  </label>
+
+                  <span className="text-red-600">*</span>
+                </div>
                 <input
                   type="text"
                   id="niNumber"
@@ -363,10 +386,9 @@ const UpdateEnquiryModal = ({ isOpen, onClose, fetchData, enquiryId }) => {
                   value={formData.niNumber}
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                  required
                 />
               </div>
-
-              {/* Badge Type Dropdown */}
               <div>
                 <label
                   htmlFor="badgeType"
@@ -389,8 +411,6 @@ const UpdateEnquiryModal = ({ isOpen, onClose, fetchData, enquiryId }) => {
                   ))}
                 </select>
               </div>
-
-              {/* Local Authority Dropdown */}
               <div>
                 <label
                   htmlFor="localAuthority"
@@ -414,7 +434,6 @@ const UpdateEnquiryModal = ({ isOpen, onClose, fetchData, enquiryId }) => {
                 </select>
               </div>
 
-              {/* Is Active */}
               <div>
                 <label htmlFor="isActive" className="text-sm font-medium">
                   Is Active:
@@ -428,8 +447,6 @@ const UpdateEnquiryModal = ({ isOpen, onClose, fetchData, enquiryId }) => {
                   className="mt-1 block"
                 />
               </div>
-
-              {/* Admin Created By */}
             </div>
           </div>
 

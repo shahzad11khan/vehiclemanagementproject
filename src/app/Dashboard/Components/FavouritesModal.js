@@ -9,9 +9,7 @@ const FavouriteModal = ({ isOpen, onClose }) => {
       <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-4xl">
         <h2 className="text-2xl font-semibold mb-6">Favourites</h2>
 
-        {/* Grid layout */}
         <div className="grid grid-cols-4 gap-10">
-          {/* Manufacturer Section */}
           <div>
             <h3 className="text-lg font-semibold mb-3">System Reports</h3>
             <ul className="space-y-2 w-60">
@@ -32,8 +30,6 @@ const FavouriteModal = ({ isOpen, onClose }) => {
               </li>
             </ul>
           </div>
-
-          {/* Add other sections similarly */}
         </div>
 
         <button

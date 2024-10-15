@@ -10,7 +10,8 @@ import AddUserModel from "../AddUser/AddUserModel";
 import UpdateUserModel from "../UpdateUser/UpdateUserModel";
 import axios from "axios";
 import { API_URL_USER } from "../../Components/ApiUrl/ApiUrls";
-import { getCompanyName } from "@/utils/storageUtils"; // Assuming you have this utility for getting company name
+import { getCompanyName } from "@/utils/storageUtils";
+import Image from "next/image";
 
 const Page = () => {
   const columns = [
@@ -165,10 +166,12 @@ const Page = () => {
                       <td className="py-2 px-4 border-b">{user.email}</td>
                       <td className="py-2 px-4 border-b">{user.companyname}</td>
                       <td className="py-2 px-4 border-b">
-                        <img
+                        <Image
                           src={user.useravatar}
                           alt="User Avatar"
                           className="h-10 w-10 rounded-full"
+                          width={100}
+                          height={100}
                         />
                       </td>
                       <td className="py-2 px-4 border-b">

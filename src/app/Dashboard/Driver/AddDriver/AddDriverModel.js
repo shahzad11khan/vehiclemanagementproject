@@ -6,7 +6,6 @@ import {
   fetchTaxiFirms,
   fetchBadge,
   fetchInsurence,
-  // fetchPayment,
   fetchLocalAuth,
   fetchVehicle,
 } from "../../Components/DropdownData/taxiFirm/taxiFirmService";
@@ -154,7 +153,6 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
       [name]:
         type === "checkbox" ? checked : type === "file" ? files[0] : value,
     });
-    // Filter vehicles when LocalAuth is selected
     if (name === "LocalAuth") {
       const matchedVehicles = vehicle.filter(
         (vehicle) => vehicle.LocalAuthority === value
@@ -632,7 +630,6 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
                 >
-                  {/* <option value="perminute">Per Mint</option> */}
                   <option value="perday">Per Day</option>
                   <option value="permonth">per Month</option>
                   <option value="perquarter">Per Quarter</option>

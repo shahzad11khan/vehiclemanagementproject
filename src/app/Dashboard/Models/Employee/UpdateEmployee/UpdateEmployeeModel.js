@@ -14,10 +14,6 @@ const UpdateEmployeeModel = ({ isOpen, onClose, fetchData, employeeid }) => {
   });
 
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(false);
-
-  // Retrieve company name from local storage
   useEffect(() => {
     const storedCompanyName = localStorage.getItem("companyName");
     if (storedCompanyName) {
@@ -26,11 +22,8 @@ const UpdateEmployeeModel = ({ isOpen, onClose, fetchData, employeeid }) => {
         adminCompanyName: storedCompanyName,
       }));
     }
-  }, []); // Update when the manufacturer changes
-  // Fetch manufacturer data when the modal opens
+  }, []);
   useEffect(() => {
-    // console.log(vehicleid);
-    // alert(employeeid);
     const fetchManufacturerData = async () => {
       setLoading(true);
       if (employeeid) {
@@ -48,7 +41,7 @@ const UpdateEmployeeModel = ({ isOpen, onClose, fetchData, employeeid }) => {
             toast.warn("Failed to fetch employeeid data");
           }
         } catch (err) {
-          setError(
+          console.log(
             err.response?.data?.message || "Failed to fetch employeeid data"
           );
         } finally {
@@ -71,9 +64,7 @@ const UpdateEmployeeModel = ({ isOpen, onClose, fetchData, employeeid }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError(null);
     try {
-      // Use PUT for updating an existing manufacturer
       const response = await axios.put(
         `${API_URL_Employee}/${employeeid}`,
         formData
@@ -87,12 +78,11 @@ const UpdateEmployeeModel = ({ isOpen, onClose, fetchData, employeeid }) => {
         adminCompanyName: "",
       });
 
-      toast.success("Data successfully updated");
-      setSuccess(true);
+      toast.success(response.data.message);
       onClose();
       fetchData();
     } catch (err) {
-      setError(err.response?.data?.message);
+      console.log(err.response?.data?.message);
     } finally {
       setLoading(false);
     }
@@ -107,13 +97,8 @@ const UpdateEmployeeModel = ({ isOpen, onClose, fetchData, employeeid }) => {
           Update Employee
         </h2>
 
-        {error && <p className="text-red-600">{error}</p>}
-        {success && (
-          <p className="text-green-600">Employee updated successfully!</p>
-        )}
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            {/* Name */}
             <div className="col-span-2">
               <label
                 htmlFor="name"
@@ -131,8 +116,6 @@ const UpdateEmployeeModel = ({ isOpen, onClose, fetchData, employeeid }) => {
                 required
               />
             </div>
-
-            {/* Description */}
             <div className="col-span-2">
               <label
                 htmlFor="description"
@@ -149,8 +132,6 @@ const UpdateEmployeeModel = ({ isOpen, onClose, fetchData, employeeid }) => {
                 rows="3"
               ></textarea>
             </div>
-
-            {/* IsActive */}
             <div className="col-span-2 flex items-center">
               <input
                 type="checkbox"
@@ -168,8 +149,6 @@ const UpdateEmployeeModel = ({ isOpen, onClose, fetchData, employeeid }) => {
               </label>
             </div>
           </div>
-
-          {/* Button Group */}
           <div className="flex gap-4 justify-center">
             <button
               type="submit"

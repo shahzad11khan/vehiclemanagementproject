@@ -54,7 +54,7 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, userId }) => {
   const [localAuth, setLocalAuth] = useState([]);
   const [vehicle, setVehicle] = useState([]);
   const [superadmin, setSuperadmin] = useState(null);
-  const [filteredVehicles, setFilteredVehicles] = useState([]); // Filtered vehicles based on selected LocalAuth
+  const [filteredVehicles, setFilteredVehicles] = useState([]);
 
   useEffect(() => {
     const storedCompanyName = localStorage.getItem("companyName");
@@ -75,14 +75,14 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, userId }) => {
       const res = await axios.get(`${API_URL_Driver}/${userId}`);
       const adminData = res.data.result;
 
-      console.log("Fetched admin data:", adminData); // Debugging the API response
+      console.log("Fetched admin data:", adminData);
 
       setFormData((prevData) => ({
         ...prevData,
-        ...adminData, // Merge fetched data into formData
+        ...adminData,
       }));
 
-      setImagePreview(adminData.imageFile || null); // Show avatar preview
+      setImagePreview(adminData.imageFile || null);
     } catch (error) {
       console.error("Error fetching user data:", error);
     }
@@ -177,17 +177,15 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, userId }) => {
 
     if (name === "LocalAuth") {
       const matchedVehicles = vehicle.filter(
-        (vehicle) => vehicle.LocalAuthority === value //
+        (vehicle) => vehicle.LocalAuthority === value
       );
-      setFilteredVehicles(matchedVehicles); //
+      setFilteredVehicles(matchedVehicles);
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formDataToSend = new FormData();
-
-    // Append all form fields to the FormData object
     Object.entries(formData).forEach(([key, value]) => {
       formDataToSend.append(key, value);
     });
@@ -622,12 +620,6 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, userId }) => {
                   <option value="permonth">per Month</option>
                   <option value="perquarter">Per Quarter</option>
                   <option value="peryear">per year</option>
-
-                  {/* {payment.map((payment) => (
-                    <option key={payment._id} value={payment.name}>
-                      {payment.name}
-                    </option>
-                  ))} */}
                 </select>
               </div>
               <div>
@@ -747,8 +739,6 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, userId }) => {
               </div>
             </div>
           </div>
-
-          {/* Image Upload */}
           <div>
             <h3 className="text-xl font-semibold mb-2">Driver Image</h3>
             <input
@@ -780,7 +770,6 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, userId }) => {
             </div>
           </div>
 
-          {/* Checkbox for Active Status */}
           <div className="flex items-center">
             <input
               type="checkbox"
@@ -797,8 +786,6 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, userId }) => {
               Active
             </label>
           </div>
-
-          {/* Submit Button */}
           <div className="flex justify-end mt-4">
             <button
               type="submit"

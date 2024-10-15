@@ -30,7 +30,6 @@ const UpdateFirmModel = ({ isOpen, onClose, fetchData, firmId }) => {
     adminCompanyName: "",
   });
 
-  // Fetch existing firm data when the modal opens
   const [superadmin, setSuperadmin] = useState(null);
   const [signature, setSignatureOptions] = useState([]);
   useEffect(() => {
@@ -52,7 +51,6 @@ const UpdateFirmModel = ({ isOpen, onClose, fetchData, firmId }) => {
         const storedCompanyName = formData.adminCompanyName;
 
         const signature = await fetchSignature();
-        // console.log(signature.Result);
         const filteredsignature =
           superadmin === "superadmin"
             ? signature.Result
@@ -75,8 +73,7 @@ const UpdateFirmModel = ({ isOpen, onClose, fetchData, firmId }) => {
       const fetchFirmData = async () => {
         try {
           const response = await axios.get(`${API_URL_Firm}/${firmId}`);
-          // console.log(response.data.result);
-          setFormData(response.data.result); // Assuming response.data contains the firm data
+          setFormData(response.data.result);
         } catch (error) {
           console.error("Error fetching firm data:", error);
           toast.error("Failed to load firm data.");
@@ -100,18 +97,13 @@ const UpdateFirmModel = ({ isOpen, onClose, fetchData, firmId }) => {
     e.preventDefault();
     try {
       const formDataToSend = new FormData();
-
-      // Append each form field to the FormData object
       Object.keys(formData).forEach((key) => {
         if (key === "imageFile" && formData[key]) {
-          // Append only if the image file is selected
           formDataToSend.append(key, formData[key]);
         } else {
           formDataToSend.append(key, formData[key]);
         }
       });
-
-      // Send the form data to the backend using Axios for update
       const response = await axios.put(
         `${API_URL_Firm}/${firmId}`,
         formDataToSend,
@@ -121,14 +113,10 @@ const UpdateFirmModel = ({ isOpen, onClose, fetchData, firmId }) => {
           },
         }
       );
-
-      // Handle the response after submission
       toast.success(response.data.message);
       console.log("Server response:", response.data);
       onClose();
       fetchData();
-
-      // Optionally, reset the form after successful submission
       setFormData({
         name: "",
         description: "",
@@ -150,7 +138,7 @@ const UpdateFirmModel = ({ isOpen, onClose, fetchData, firmId }) => {
         imageName: "",
         imageFile: null,
         adminCreatedBy: "",
-        adminCompanyName: "",
+        adminCompanyName: formData.adminCompanyName,
       });
 
       onClose();
@@ -171,12 +159,16 @@ const UpdateFirmModel = ({ isOpen, onClose, fetchData, firmId }) => {
           {/* Basic Information */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <div>
-              <label
-                htmlFor="name"
-                className="text-sm font-medium text-gray-700"
-              >
-                Name:
-              </label>
+              <div className="flex gap-1">
+                <label
+                  htmlFor="name"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Name:
+                </label>
+
+                <span className="text-red-600">*</span>
+              </div>
               <input
                 type="text"
                 id="name"
@@ -206,12 +198,16 @@ const UpdateFirmModel = ({ isOpen, onClose, fetchData, firmId }) => {
             </div>
 
             <div>
-              <label
-                htmlFor="companyNo"
-                className="text-sm font-medium text-gray-700"
-              >
-                Company No:
-              </label>
+              <div className="flex gap-1">
+                <label
+                  htmlFor="companyNo"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Company No:
+                </label>
+
+                <span className="text-red-600">*</span>
+              </div>
               <input
                 type="text"
                 id="companyNo"
@@ -219,16 +215,21 @@ const UpdateFirmModel = ({ isOpen, onClose, fetchData, firmId }) => {
                 value={formData.companyNo}
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                required
               />
             </div>
 
             <div>
-              <label
-                htmlFor="vatNo"
-                className="text-sm font-medium text-gray-700"
-              >
-                VAT No:
-              </label>
+              <div className="flex gap-1">
+                <label
+                  htmlFor="vatNo"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  VAT No:
+                </label>
+
+                <span className="text-red-600">*</span>
+              </div>
               <input
                 type="text"
                 id="vatNo"
@@ -236,16 +237,21 @@ const UpdateFirmModel = ({ isOpen, onClose, fetchData, firmId }) => {
                 value={formData.vatNo}
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                required
               />
             </div>
 
             <div>
-              <label
-                htmlFor="insurancePolicyNo"
-                className="text-sm font-medium text-gray-700"
-              >
-                Insurance Policy No:
-              </label>
+              <div className="flex gap-1">
+                <label
+                  htmlFor="insurancePolicyNo"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Insurance Policy No:
+                </label>
+
+                <span className="text-red-600">*</span>
+              </div>
               <input
                 type="text"
                 id="insurancePolicyNo"
@@ -253,6 +259,7 @@ const UpdateFirmModel = ({ isOpen, onClose, fetchData, firmId }) => {
                 value={formData.insurancePolicyNo}
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                required
               />
             </div>
 
@@ -274,12 +281,16 @@ const UpdateFirmModel = ({ isOpen, onClose, fetchData, firmId }) => {
             </div>
 
             <div>
-              <label
-                htmlFor="email"
-                className="text-sm font-medium text-gray-700"
-              >
-                Email:
-              </label>
+              <div className="flex gap-1">
+                <label
+                  htmlFor="email"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Email:
+                </label>
+
+                <span className="text-red-600">*</span>
+              </div>
               <input
                 type="email"
                 id="email"
@@ -292,12 +303,15 @@ const UpdateFirmModel = ({ isOpen, onClose, fetchData, firmId }) => {
             </div>
 
             <div>
-              <label
-                htmlFor="tel1"
-                className="text-sm font-medium text-gray-700"
-              >
-                Tel 1:
-              </label>
+              <div className="flex gap-1">
+                <label
+                  htmlFor="tel1"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Tel 1:
+                </label>
+                <span className="text-red-600">*</span>
+              </div>
               <input
                 type="tel"
                 id="tel1"
@@ -327,12 +341,15 @@ const UpdateFirmModel = ({ isOpen, onClose, fetchData, firmId }) => {
             </div>
 
             <div>
-              <label
-                htmlFor="address"
-                className="text-sm font-medium text-gray-700"
-              >
-                Address:
-              </label>
+              <div className="flex gap-1">
+                <label
+                  htmlFor="address"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Address:
+                </label>
+                <span className="text-red-600">*</span>
+              </div>
               <input
                 type="text"
                 id="address"
@@ -340,16 +357,20 @@ const UpdateFirmModel = ({ isOpen, onClose, fetchData, firmId }) => {
                 value={formData.address}
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                required
               />
             </div>
 
             <div>
-              <label
-                htmlFor="city"
-                className="text-sm font-medium text-gray-700"
-              >
-                City:
-              </label>
+              <div className="flex gap-1">
+                <label
+                  htmlFor="city"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  City:
+                </label>
+                <span className="text-red-600">*</span>
+              </div>
               <input
                 type="text"
                 id="city"
@@ -357,16 +378,20 @@ const UpdateFirmModel = ({ isOpen, onClose, fetchData, firmId }) => {
                 value={formData.city}
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                required
               />
             </div>
 
             <div>
-              <label
-                htmlFor="country"
-                className="text-sm font-medium text-gray-700"
-              >
-                Country:
-              </label>
+              <div className="flex gap-1">
+                <label
+                  htmlFor="country"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Country:
+                </label>
+                <span className="text-red-600">*</span>
+              </div>
               <input
                 type="text"
                 id="country"
@@ -374,23 +399,28 @@ const UpdateFirmModel = ({ isOpen, onClose, fetchData, firmId }) => {
                 value={formData.country}
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                required
               />
             </div>
 
             <div>
-              <label
-                htmlFor="postcode"
-                className="text-sm font-medium text-gray-700"
-              >
-                Postcode:
-              </label>
+              <div className="flex gap-1">
+                <label
+                  htmlFor="postcode"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Postcode:
+                </label>
+                <span className="text-red-600">*</span>
+              </div>
               <input
-                type="text"
+                type="number"
                 id="postcode"
                 name="postcode"
                 value={formData.postcode}
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                required
               />
             </div>
 
@@ -408,7 +438,6 @@ const UpdateFirmModel = ({ isOpen, onClose, fetchData, firmId }) => {
             </div>
           </div>
 
-          {/* Letter Configuration */}
           <div className="mt-6">
             <h3 className="text-xl font-semibold mb-2">Letter Configuration</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -453,20 +482,16 @@ const UpdateFirmModel = ({ isOpen, onClose, fetchData, firmId }) => {
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
                 >
                   <option value="">Select</option>
-                  {/* <option value="option1">Option 1</option>
-                  <option value="option2">Option 2</option> */}
                   {signature.map((option) => (
                     <option key={option._id} value={option.name}>
                       {option.name}
                     </option>
                   ))}
-                  {/* Add more options as needed */}
                 </select>
               </div>
             </div>
           </div>
 
-          {/* Image Details */}
           <div className="mt-6">
             <h3 className="text-xl font-semibold mb-2">Image Details</h3>
             <div className="space-y-4">
@@ -511,7 +536,6 @@ const UpdateFirmModel = ({ isOpen, onClose, fetchData, firmId }) => {
             </div>
           </div>
 
-          {/* Submit Button */}
           <div className="mt-8 text-center">
             <button
               type="submit"

@@ -9,7 +9,6 @@ import { CiWavePulse1 } from "react-icons/ci";
 import { FaChartLine } from "react-icons/fa";
 import { RiFolderReceivedFill } from "react-icons/ri";
 import HeroSection from "../Components/HeroSection";
-// import Image from "next/image";
 import { getAuthData, isAuthenticated } from "@/utils/verifytoken";
 import {
   GetUsers,
@@ -27,11 +26,11 @@ import {
 
 const Page = () => {
   const router = useRouter();
-  const [superadmin, setsuperadmin] = useState(""); // State to track which dropdown is open
-  const [companyname, setcompanyname] = useState(""); // State to track which dropdown is open
-  const [countuser, setcountuser] = useState(""); // State to track which dropdown is open
-  const [countDriver, setcountDriver] = useState(""); // State to track which dropdown is open
-  const [countVehicle, setcountVehicle] = useState(""); // State to track which dropdown is open
+  const [superadmin, setsuperadmin] = useState("");
+  const [companyname, setcompanyname] = useState("");
+  const [countuser, setcountuser] = useState("");
+  const [countDriver, setcountDriver] = useState("");
+  const [countVehicle, setcountVehicle] = useState("");
 
   useEffect(() => {
     if (isAuthenticated()) {
@@ -39,7 +38,7 @@ const Page = () => {
       setsuperadmin(authData.role);
       setcompanyname(authData.companyName);
     } else {
-      router.push("/"); // Redirect to login page if not authenticated
+      router.push("/");
       return;
     }
   }, []);
@@ -57,19 +56,19 @@ const Page = () => {
   const fetchCounts = useCallback(async () => {
     try {
       const [
-        { count: userCount }, // Filtered user count based on company
-        { count: driverCount }, // Filtered driver count based on company
+        { count: userCount },
+        { count: driverCount },
         { count: vehicleCount },
         { count: Manufacturer },
         { count: Payment },
         { count: Companies },
       ] = await Promise.all([
-        GetUsers(), // Filtered users (by company)
-        GetDriver(), // Filtered drivers (by company)
-        GetVehicle(), // Total vehicles
-        GetManufacturer(), // Total manufacturers
-        GetPayment(), // Total payments
-        GetCompany(), // Total companies
+        GetUsers(),
+        GetDriver(),
+        GetVehicle(),
+        GetManufacturer(),
+        GetPayment(),
+        GetCompany(),
       ]);
 
       setCounts({
@@ -103,8 +102,6 @@ const Page = () => {
     }
   };
 
-  // Call the function to execute
-
   return (
     <>
       <Header className="min-w-full" />
@@ -124,15 +121,14 @@ const Page = () => {
                   />
                 ),
                 title: superadmin === "superadmin" ? "Companies" : companyname,
-                count: superadmin === "superadmin" ? counts.Companies : 0, // Count is 0 if not superadmin
+                count: superadmin === "superadmin" ? counts.Companies : 0,
                 colorx: {
                   background: "#E64B87",
-                  // replace with your desired hex colors
                 },
                 gradient: "bg-gradient-to-r",
                 style: {
                   backgroundImage:
-                    "linear-gradient(to right, #E64B87, #B35A9E)", // replace with your desired hex colors
+                    "linear-gradient(to right, #E64B87, #B35A9E)",
                 },
               },
               {
@@ -154,12 +150,11 @@ const Page = () => {
                     : 0,
                 colorx: {
                   background: "#8461BF",
-                  // replace with your desired hex colors
                 },
                 gradient: "bg-gradient-to-r",
                 style: {
                   backgroundImage:
-                    "linear-gradient(to right, #8461BF, #4F4699)", // replace with your desired hex colors
+                    "linear-gradient(to right, #8461BF, #4F4699)",
                 },
               },
               {
@@ -180,12 +175,11 @@ const Page = () => {
                     : 0,
                 colorx: {
                   background: "#47C2FF",
-                  // replace with your desired hex colors
                 },
                 gradient: "bg-gradient-to-r",
                 style: {
                   backgroundImage:
-                    "linear-gradient(to right, #47C2FF, #6893D8)", // replace with your desired hex colors
+                    "linear-gradient(to right, #47C2FF, #6893D8)",
                 },
               },
               {
@@ -208,12 +202,11 @@ const Page = () => {
                     : 0,
                 colorx: {
                   background: "#47C2FF",
-                  // replace with your desired hex colors
                 },
                 gradient: "bg-gradient-to-r",
                 style: {
                   backgroundImage:
-                    "linear-gradient(to right, #47C2FF, #6893D8)", // replace with your desired hex colors
+                    "linear-gradient(to right, #47C2FF, #6893D8)",
                 },
               },
               {
@@ -222,11 +215,10 @@ const Page = () => {
                 gradient: "bg-gradient-to-r",
                 style: {
                   backgroundImage:
-                    "linear-gradient(to right, #FFB72D, #F38459)", // replace with your desired hex colors
+                    "linear-gradient(to right, #FFB72D, #F38459)",
                 },
                 colorx: {
                   background: "#FFB72D",
-                  // replace with your desired hex colors
                 },
                 icon: (
                   <RiFolderReceivedFill
@@ -245,7 +237,6 @@ const Page = () => {
                 style={item.style}
               >
                 <div
-                  // key={index}
                   className={`flex items-center flex-col sm:flex-row gap-4 justify-start ml-3 bg-transparent`}
                   style={item.style}
                 >
@@ -254,8 +245,8 @@ const Page = () => {
                     style={{ ...item.colorx, backgroundColor: "transparent" }}
                   >
                     <span
-                      className={`font-medium text-white`} // Removed bg-transparent, not needed with text color
-                      style={{ ...item.colorx, backgroundColor: "transparent" }} // Ensure the background is transparent
+                      className={`font-medium text-white`}
+                      style={{ ...item.colorx, backgroundColor: "transparent" }}
                     >
                       {item.title}
                     </span>
@@ -272,11 +263,9 @@ const Page = () => {
                     style={{ ...item.colorx, backgroundColor: "transparent" }}
                   >
                     <strong
-                      style={{ ...item.colorx, backgroundColor: "transparent" }} // Corrected spelling from stong to strong
-                      className="text-white" // Added text-white class
-                    >
-                      {/* {" $"} */}
-                    </strong>{" "}
+                      style={{ ...item.colorx, backgroundColor: "transparent" }}
+                      className="text-white"
+                    ></strong>{" "}
                     {item.count}
                   </span>
                 </div>

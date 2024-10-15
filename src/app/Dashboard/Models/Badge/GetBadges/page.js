@@ -91,7 +91,6 @@ const Page = () => {
   };
 
   const handleEdit = (id) => {
-    // alert(id);
     setSelectedUserId(id);
     setIsOpenVehcleUpdate(true);
   };
@@ -130,7 +129,6 @@ const Page = () => {
               </div>
             </div>
 
-            {/* Responsive Table */}
             <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
@@ -141,9 +139,7 @@ const Page = () => {
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Badge Description
                     </th>
-                    {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Company
-                    </th> */}
+
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Badge Active
                     </th>
@@ -161,9 +157,7 @@ const Page = () => {
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         {item.description}
                       </td>
-                      {/* <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {item.adminCompanyName}
-                      </td> */}
+
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         {item.isActive ? "Active" : "Inactive"}
                       </td>

@@ -3,8 +3,9 @@ import React, { useEffect, useState } from "react";
 import axios from "axios"; // Ensure axios is imported
 import { API_URL_USER } from "../../Components/ApiUrl/ApiUrls";
 import { fetchTitle } from "../../Components/DropdownData/taxiFirm/taxiFirmService";
+import { toast } from "react-toastify";
 
-const UpdateUserModel = ({ isOpen, onClose, userId }) => {
+const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
   const [formData, setFormData] = useState({
     title: "",
     firstName: "",
@@ -154,10 +155,12 @@ const UpdateUserModel = ({ isOpen, onClose, userId }) => {
 
       // Handle the response as needed
       const data = await response.json();
+      toast.success(data.message);
       console.log("Update successful:", data);
 
       // Optionally close the modal on successful update
       onClose();
+      fetchData();
     } catch (error) {
       console.error("Error updating user:", error);
     }

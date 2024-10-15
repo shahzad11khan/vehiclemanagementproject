@@ -6,11 +6,11 @@ import { IoPersonAdd } from "react-icons/io5";
 import { FaHouseLaptop } from "react-icons/fa6";
 import { FaCar, FaIndustry } from "react-icons/fa";
 import { TbReport } from "react-icons/tb";
-import { MdManageSearch, MdFavorite } from "react-icons/md";
+import { MdManageSearch } from "react-icons/md";
 import { GrSystem } from "react-icons/gr";
 import { RiOrganizationChart } from "react-icons/ri";
 import { IoIosArrowBack } from "react-icons/io";
-import FavouriteModal from "./FavouritesModal.js";
+// import FavouriteModal from "./FavouritesModal.js";
 import { getAuthData, isAuthenticated } from "@/utils/verifytoken";
 const Sidebar = () => {
   const [role, setrole] = useState(""); // State to track which dropdown is open
@@ -31,7 +31,7 @@ const Sidebar = () => {
   }, []);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isOpenManagement, setIsOpenManagement] = useState(false);
-  const [isOpenFavouriteModal, setIsOpenFavouriteModal] = useState(false);
+  // const [isOpenFavouriteModal, setIsOpenFavouriteModal] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState(null); // State to track which dropdown is open
   const [activeLink, setActiveLink] = useState("/Dashboard/Home");
@@ -58,9 +58,9 @@ const Sidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
-  const toggleDropdownFavourite = () => {
-    setIsOpenFavouriteModal(!isOpenFavouriteModal);
-  };
+  // const toggleDropdownFavourite = () => {
+  //   setIsOpenFavouriteModal(!isOpenFavouriteModal);
+  // };
 
   const handleCardClick = () => {
     localStorage.setItem("flag", "false");
@@ -576,14 +576,14 @@ const Sidebar = () => {
                   )}
                 </div>
 
-                <Link passHref href="#">
+                {/* <Link passHref href="#">
                   <li className="flex items-center p-3 cursor-pointer  rounded-lg">
                     <div className="flex items-center gap-3">
                       <MdFavorite className="text-black text-sm" />
                       <span className="hidden sm:block">Favourites</span>
                     </div>
                   </li>
-                </Link>
+                </Link> */}
               </>
             ) : role === "superadmin" && flag === "true" ? (
               <>
@@ -1067,14 +1067,14 @@ const Sidebar = () => {
                   )}
                 </div>
 
-                <Link passHref href="#">
+                {/* <Link passHref href="#">
                   <li className="flex items-center p-3 cursor-pointer  rounded-lg">
                     <div className="flex items-center gap-3">
                       <MdFavorite className="text-black text-sm" />
                       <span className="hidden sm:block">Favourites</span>
                     </div>
                   </li>
-                </Link>
+                </Link> */}
               </>
             ) : (
               <>
@@ -1495,24 +1495,24 @@ const Sidebar = () => {
                     </div>
                   </li>
                 </div>
-                <Link passHref href="#">
+                {/* <Link passHref href="#">
                   <li className="flex items-center p-3 cursor-pointer  rounded-lg">
                     <div className="flex items-center gap-3">
                       <MdFavorite className="text-black text-sm" />
                       <span className="hidden sm:block">Favourites</span>
                     </div>
                   </li>
-                </Link>
+                </Link> */}
               </>
             )}
           </ul>
         </nav>
       </aside>
       {/* Modals */}
-      <FavouriteModal
+      {/* <FavouriteModal
         isOpen={isOpenFavouriteModal}
         onClose={toggleDropdownFavourite}
-      />
+      /> */}
     </div>
   );
 };

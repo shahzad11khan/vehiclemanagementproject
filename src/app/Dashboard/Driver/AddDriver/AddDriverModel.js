@@ -722,7 +722,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                     htmlFor="county"
                     className="text-sm font-medium text-gray-700"
                   >
-                    County:
+                    Country:
                   </label>
 
                   <span className="text-red-600">*</span>

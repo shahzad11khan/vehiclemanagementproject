@@ -53,21 +53,15 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
     isActive: "",
   });
 
-  // Fetch data and company name on component mount
   useEffect(() => {
-    // Retrieve company name and superadmin role from local storage
     const storedCompanyName = localStorage.getItem("companyName");
     const storedSuperadmin = localStorage.getItem("role");
-
-    // Update vehicle data with the adminCompanyName if available
     if (storedCompanyName) {
       setVehicleData((prevData) => ({
         ...prevData,
         adminCompanyName: storedCompanyName,
       }));
     }
-
-    // Fetch local authorities and manufacturers
     const fetchData = async () => {
       try {
         const localAuthData = await fetchLocalAuth();
@@ -75,88 +69,69 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
         const transmission = await fetchTransmission();
         const type = await fetchType();
         const fueltype = await fetchFuelType();
-
-        // Use the latest adminCompanyName from vehicleData
         const currentCompanyName =
           vehicleData.adminCompanyName || storedCompanyName;
-
-        // Filter local authorities based on the user's role
         const filteredLocalAuth =
           storedSuperadmin === "superadmin"
-            ? localAuthData.Result // No filtering for superadmins
+            ? localAuthData.Result
             : localAuthData.Result.filter(
                 (localAuth) =>
                   localAuth.adminCompanyName === currentCompanyName ||
                   localAuth.adminCompanyName === "superadmin"
               );
-
-        // Filter manufacturer data based on the user's role
         const filteredManufacturer =
           storedSuperadmin === "superadmin"
-            ? manufacturerData.Result // No filtering for superadmins
+            ? manufacturerData.Result
             : manufacturerData.Result.filter(
                 (manufacturer) =>
                   manufacturer.adminCompanyName === currentCompanyName ||
                   manufacturer.adminCompanyName === "superadmin"
               );
-        // Filter transmission data based on the user's role
         const filteredtransmission =
           storedSuperadmin === "superadmin"
-            ? transmission.Result // No filtering for superadmins
+            ? transmission.Result
             : transmission.Result.filter(
                 (transmission) =>
                   transmission.adminCompanyName === currentCompanyName ||
                   transmission.adminCompanyName === "superadmin"
               );
-        // Filter type data based on the user's role
         const filteredtype =
           storedSuperadmin === "superadmin"
-            ? type.Result // No filtering for superadmins
+            ? type.Result
             : type.Result.filter(
                 (type) =>
                   type.adminCompanyName === currentCompanyName ||
                   type.adminCompanyName === "superadmin"
               );
-        // Filter type data based on the user's role
         const filteredfueltype =
           storedSuperadmin === "superadmin"
-            ? fueltype.Result // No filtering for superadmins
+            ? fueltype.Result
             : fueltype.Result.filter(
                 (fueltype) =>
                   fueltype.adminCompanyName === currentCompanyName ||
                   fueltype.adminCompanyName === "superadmin"
               );
 
-        // Update local and manufacturer states
         setLocal(filteredLocalAuth);
         setManufacturer(filteredManufacturer);
-        // console.log("transmission", transmission);
         setTransmission(filteredtransmission);
-        // console.log("bodytype", type);
         setType(filteredtype);
-        // console.log("fueltype", fueltype);
         setFuelType(filteredfueltype);
       } catch (error) {
         console.error("Error fetching data:", error);
-        // toast.error("Failed to fetch data, please try again.");
       }
     };
 
     fetchData();
-  }, []); // Run only once when the component mounts
-
-  // Handle input changes for vehicleData
+  }, [vehicleData.adminCompanyName]);
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-
-    // Update state based on input type
     setVehicleData((prevData) => ({
       ...prevData,
-      [name]: type === "checkbox" ? checked : value, // Use checked for checkboxes, value for other input types
+      [name]: type === "checkbox" ? checked : value,
     }));
   };
 
-  // Handle changes for vehicle dimensions
   const handleDimensionChange = (e) => {
     const { name, value } = e.target;
     setVehicleData((prevData) => ({
@@ -168,7 +143,6 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
     }));
   };
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -176,8 +150,8 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
 
       if (response.data.success) {
         toast.success(response.data.message);
-        fetchData(); // Refresh parent component data
-        onClose(); // Close modal
+        fetchData();
+        onClose();
         setVehicleData({
           manufacturer: "",
           model: "",
@@ -210,7 +184,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
           registrationNumber: "",
           warrantyInfo: "",
           adminCreatedBy: "",
-          adminCompanyName: vehicleData.adminCompanyName, // Preserve company name
+          adminCompanyName: vehicleData.adminCompanyName,
           isActive: "",
         });
       } else {
@@ -220,8 +194,6 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
       console.error("Error submitting vehicle data:", error);
     }
   };
-
-  // If the modal is not open, do not render
   if (!isOpen) return null;
 
   return (

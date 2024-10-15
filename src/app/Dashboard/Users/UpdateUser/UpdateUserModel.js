@@ -376,7 +376,7 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                   htmlFor="county"
                   className="text-sm font-medium text-gray-700"
                 >
-                  County:
+                  Country:
                 </label>
                 <input
                   type="text"

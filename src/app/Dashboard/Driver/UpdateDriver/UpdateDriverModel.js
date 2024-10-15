@@ -536,7 +536,7 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, userId }) => {
                   htmlFor="county"
                   className="text-sm font-medium text-gray-700"
                 >
-                  County:
+                  Country:
                 </label>
                 <input
                   type="text"

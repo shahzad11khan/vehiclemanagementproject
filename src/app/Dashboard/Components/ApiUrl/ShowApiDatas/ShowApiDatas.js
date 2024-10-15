@@ -23,16 +23,28 @@ import {
   API_URL_Type,
 } from "../ApiUrls.js";
 
+let companyName = localStorage.getItem("companyName"); // Get the company name from local storage
+let flag = localStorage.getItem("flag");
+let superadmin = localStorage.getItem("role");
+
 export const GetUsers = () => {
   return axios
     .get(`${API_URL_USER}`)
     .then((res) => {
-      // console.log(res.data.result);
-      // console.log(res.data.count);
-      return { result: res.data.result, count: res.data.count };
+      let users = res.data.result;
+
+      // Check if superadmin and flag values are "superadmin" and "false"
+      if (superadmin === "superadmin" && flag === "false") {
+        // Superadmin can view all users, no filtering needed
+        return { result: users, count: users.length };
+      } else {
+        // Filter users by company name for both other cases
+        users = users.filter((user) => user.companyname === companyName);
+        return { result: users, count: users.length };
+      }
     })
     .catch((error) => {
-      console.log(`error : ${error}`);
+      console.log(`Error: ${error}`);
       throw error;
     });
 };
@@ -40,9 +52,20 @@ export const GetDriver = () => {
   return axios
     .get(`${API_URL_Driver}`)
     .then((res) => {
-      // console.log(res.data.Result);
-      // console.log(res.data.count);
-      return { result: res.data.Result, count: res.data.count };
+      let driver = res.data;
+      if (superadmin === "superadmin" && flag === "false") {
+        // If superadmin and flag are set to show all drivers, return full result
+        return { result: driver.result, count: driver.count };
+      } else if (superadmin === "superadmin" && flag === "true") {
+        return { result: driver.result, count: driver.count };
+      } else {
+        // Filter the drivers based on the company name
+        const filteredDrivers = driver.result.filter(
+          (d) => d.companyname === companyName
+        );
+        // Return the filtered result and update the count
+        return { result: filteredDrivers, count: filteredDrivers.length };
+      }
     })
     .catch((error) => {
       console.log(`error : ${error}`);
@@ -235,9 +258,20 @@ export const GetVehicle = () => {
   return axios
     .get(`${API_URL_Vehicle}`)
     .then((res) => {
-      // console.log(res.data.Result);
-      // console.log(res.data.count);
-      return { result: res.data.Result, count: res.data.count };
+      let vehicle = res.data;
+      if (superadmin === "superadmin" && flag === "false") {
+        // If superadmin and flag are set to show all drivers, return full result
+        return { result: vehicle.Result, count: vehicle.count };
+      } else if (superadmin === "superadmin" && flag === "true") {
+        return { result: vehicle.Result, count: vehicle.count };
+      } else {
+        // Filter the drivers based on the company name
+        const filteredDrivers = vehicle.Result.filter(
+          (d) => d.companyname === companyName
+        );
+        // Return the filtered result and update the count
+        return { result: filteredDrivers, count: filteredDrivers.length };
+      }
     })
     .catch((error) => {
       console.log(`error : ${error}`);

@@ -18,24 +18,19 @@ import {
   GetPayment,
   GetCompany,
 } from "../Components/ApiUrl/ShowApiDatas/ShowApiDatas.js";
-import {
-  GetUserscount,
-  GetDrivercount,
-  GetVehiclecount,
-} from "../Components/ApiUrl/getSpecificCompanyCount/getSpecificCompanyCount.js";
 
 const Page = () => {
   const router = useRouter();
   const [superadmin, setsuperadmin] = useState("");
   const [companyname, setcompanyname] = useState("");
-  const [countuser, setcountuser] = useState("");
-  const [countDriver, setcountDriver] = useState("");
-  const [countVehicle, setcountVehicle] = useState("");
+
+  const [flag, setflag] = useState("");
 
   useEffect(() => {
     if (isAuthenticated()) {
       const authData = getAuthData();
       setsuperadmin(authData.role);
+      setflag(authData.flag);
       setcompanyname(authData.companyName);
     } else {
       router.push("/");
@@ -85,22 +80,8 @@ const Page = () => {
   }, []);
 
   useEffect(() => {
-    fetchUsersCount();
     fetchCounts();
   }, [fetchCounts, router]);
-
-  const fetchUsersCount = async () => {
-    try {
-      const data = await GetUserscount();
-      const dataDriver = await GetDrivercount();
-      const dataVehicle = await GetVehiclecount();
-      setcountuser(data.count);
-      setcountDriver(dataDriver.count);
-      setcountVehicle(dataVehicle.count);
-    } catch (error) {
-      console.error("Error fetching user count:", error);
-    }
-  };
 
   return (
     <>
@@ -120,8 +101,18 @@ const Page = () => {
                     }}
                   />
                 ),
-                title: superadmin === "superadmin" ? "Companies" : companyname,
-                count: superadmin === "superadmin" ? counts.Companies : 0,
+                title:
+                  superadmin === "superadmin" && flag === "false"
+                    ? "Companies"
+                    : superadmin === "superadmin" && flag === "true"
+                    ? companyname
+                    : companyname,
+                count:
+                  superadmin === "superadmin" && flag === "false"
+                    ? counts.Companies
+                    : superadmin === "superadmin" && flag === "true"
+                    ? "Self"
+                    : "Self",
                 colorx: {
                   background: "#E64B87",
                 },
@@ -141,13 +132,14 @@ const Page = () => {
                   />
                 ),
 
-                title: superadmin === "superadmin" ? "All Users" : "Users",
-                count:
-                  superadmin === "superadmin"
-                    ? counts.userCount
-                    : countuser
-                    ? countuser
-                    : 0,
+                title:
+                  superadmin === "superadmin" && flag === "false"
+                    ? "All Users"
+                    : superadmin === "superadmin" && flag === "true"
+                    ? "Users"
+                    : "Users",
+                count: counts.userCount || 0,
+
                 colorx: {
                   background: "#8461BF",
                 },
@@ -166,13 +158,13 @@ const Page = () => {
                     }}
                   />
                 ),
-                title: superadmin === "superadmin" ? "All Drivers" : "Drivers",
-                count:
-                  superadmin === "superadmin"
-                    ? counts.driverCount
-                    : countDriver
-                    ? countDriver
-                    : 0,
+                title:
+                  superadmin === "superadmin" && flag === "false"
+                    ? "All Drivers"
+                    : superadmin === "superadmin" && flag === "true"
+                    ? "Drivers"
+                    : "Drivers",
+                count: counts.driverCount || 0,
                 colorx: {
                   background: "#47C2FF",
                 },
@@ -193,13 +185,12 @@ const Page = () => {
                 ),
                 color: "text-red-500",
                 title:
-                  superadmin === "superadmin" ? "All Vehicles" : "Vehicles",
-                count:
-                  superadmin === "superadmin"
-                    ? counts.vehicleCount
-                    : countVehicle
-                    ? countVehicle
-                    : 0,
+                  superadmin === "superadmin" && flag === "false"
+                    ? "All Vehicles"
+                    : superadmin === "superadmin" && flag === "true"
+                    ? "Vehicles"
+                    : "Vehicles",
+                count: counts.vehicleCount || 0,
                 colorx: {
                   background: "#47C2FF",
                 },

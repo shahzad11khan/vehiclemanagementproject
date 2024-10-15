@@ -9,8 +9,6 @@ const AllCompnaies = () => {
   const fetchData = async () => {
     try {
       GetCompany().then(({ result }) => {
-        console.log(result);
-
         setData(result); // Set the fetched data
       });
     } catch (error) {

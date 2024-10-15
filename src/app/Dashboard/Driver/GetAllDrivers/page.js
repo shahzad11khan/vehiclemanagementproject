@@ -6,6 +6,7 @@ import Sidebar from "../../Components/Sidebar";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FaEdit, FaTrash } from "react-icons/fa";
+import { MdOutlineReadMore } from "react-icons/md";
 import AddDriverModel from "../AddDriver/AddDriverModel";
 import UpdateDriverModel from "../UpdateDriver/UpdateDriverModel";
 import { API_URL_Drivercalculation } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
@@ -285,6 +286,12 @@ const Page = () => {
 
                       <td className="  p-3">
                         <div className="flex gap-2">
+                          <button
+                            onClick={() => handlemore(driver._id)}
+                            className="text-blue-500 hover:text-blue-700"
+                          >
+                            <MdOutlineReadMore />
+                          </button>
                           <button
                             onClick={() => handleEdit(driver._id)}
                             className="text-blue-500 hover:text-blue-700"

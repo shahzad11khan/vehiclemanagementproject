@@ -538,68 +538,6 @@ const Sidebar = () => {
                   </li>
                 </Link>
 
-                <Link passHref href="/Dashboard/Company/GetAllCompanies">
-                  <li
-                    onClick={() =>
-                      handleLinkClick("/Dashboard/Company/GetAllCompanies")
-                    }
-                    className={`${
-                      activeLink === "/Dashboard/Company/GetAllCompanies"
-                        ? "border-l-4 border-red-400"
-                        : "bg-white text-blue"
-                    } flex items-center p-3 cursor-pointer hover:bg-gray-100 rounded-lg`}
-                  >
-                    <div className="flex items-center gap-3">
-                      <FaHouseLaptop
-                        className={`${
-                          activeLink === "/Dashboard/Company/GetAllCompanies"
-                            ? "text-red-400"
-                            : "text-black text-sm"
-                        }`}
-                        style={{
-                          backgroundColor: "transparent",
-                        }}
-                      />
-                      <span
-                        className="hidden sm:block text-sm"
-                        style={{
-                          backgroundColor: "transparent",
-                        }}
-                      >
-                        Registered Companies
-                      </span>
-                    </div>
-                  </li>
-                </Link>
-                <Link passHref href="/Dashboard/Superadmin">
-                  <li
-                    onClick={() => handleLinkClick("/Dashboard/Superadmin")}
-                    className={`${
-                      activeLink === "/Dashboard/Superadmin"
-                        ? "border-l-4 border-red-400"
-                        : "bg-white text-blue"
-                    } flex items-center p-3 cursor-pointer hover:bg-gray-100 rounded-lg`}
-                  >
-                    <div className="flex items-center gap-3">
-                      <FaIndustry
-                        className={`${
-                          activeLink === "/Dashboard/Superadmin"
-                            ? "text-red-400"
-                            : "text-black text-sm"
-                        }`}
-                      />
-                      <span
-                        className="hidden sm:block text-sm"
-                        style={{
-                          backgroundColor: "transparent",
-                        }}
-                      >
-                        All Companyies
-                      </span>
-                    </div>
-                  </li>
-                </Link>
-
                 <Link passHref href="/Dashboard/Title/GetAllTitles">
                   <li
                     onClick={() =>

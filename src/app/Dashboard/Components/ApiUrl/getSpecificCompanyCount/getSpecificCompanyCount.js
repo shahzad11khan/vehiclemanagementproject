@@ -14,7 +14,7 @@ export const GetUserscount = () => {
         (user) => user.companyname === companyName
       );
 
-      //   console.log("user count : ", filteredUsers);
+      // console.log("user count : ", filteredUsers.length);
       // Return the filtered users and their count
       return { result: filteredUsers, count: filteredUsers.length };
     })

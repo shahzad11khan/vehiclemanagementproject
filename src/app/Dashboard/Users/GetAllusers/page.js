@@ -11,7 +11,6 @@ import UpdateUserModel from "../UpdateUser/UpdateUserModel";
 import axios from "axios";
 import { API_URL_USER } from "../../Components/ApiUrl/ApiUrls";
 import { getCompanyName } from "@/utils/storageUtils";
-import Image from "next/image";
 
 const Page = () => {
   const columns = [
@@ -37,6 +36,7 @@ const Page = () => {
   useEffect(() => {
     setIsMounted(true);
     const companyNameFromStorage = getCompanyName();
+
     if (companyNameFromStorage) {
       setSelectedCompanyName(companyNameFromStorage);
     }
@@ -81,21 +81,17 @@ const Page = () => {
   };
 
   useEffect(() => {
-    const storedSuperadmin = localStorage.getItem("role");
     const filtered = users.filter((item) => {
       let companyMatch = ""; // Change `const` to `let` to allow reassignment
-      if (storedSuperadmin === "superadmin") {
-        companyMatch = item; // Assign item directly if superadmin
-      } else {
-        // Check if item exists, has companyname, and matches the selectedCompanyName
-        companyMatch =
-          item &&
-          item.companyname &&
-          selectedCompanyName &&
-          item.companyname.toLowerCase() === selectedCompanyName.toLowerCase()
-            ? item // Assign item if it matches
-            : ""; // Otherwise, set it to an empty string
-      }
+
+      // Check if item exists, has companyname, and matches the selectedCompanyName
+      companyMatch =
+        item &&
+        item.companyname &&
+        selectedCompanyName &&
+        item.companyname.toLowerCase() === selectedCompanyName.toLowerCase()
+          ? item // Assign item if it matches
+          : ""; // Otherwise, set it to an empty string
 
       const usernameMatch =
         item &&
@@ -166,12 +162,10 @@ const Page = () => {
                       <td className="py-2 px-4 border-b">{user.email}</td>
                       <td className="py-2 px-4 border-b">{user.companyname}</td>
                       <td className="py-2 px-4 border-b">
-                        <Image
+                        <img
                           src={user.useravatar}
                           alt="User Avatar"
                           className="h-10 w-10 rounded-full"
-                          width={100}
-                          height={100}
                         />
                       </td>
                       <td className="py-2 px-4 border-b">

@@ -9,10 +9,7 @@ import { FaEdit, FaTrash } from "react-icons/fa";
 import { MdOutlineReadMore } from "react-icons/md";
 import AddDriverModel from "../AddDriver/AddDriverModel";
 import UpdateDriverModel from "../UpdateDriver/UpdateDriverModel";
-import {
-  API_URL_Drivercalculation,
-  API_URL_DriverMoreInfo,
-} from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
+import { API_URL_Drivercalculation } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 
 import axios from "axios";
 import { API_URL_Driver } from "../../Components/ApiUrl/ApiUrls";

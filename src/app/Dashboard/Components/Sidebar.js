@@ -150,7 +150,7 @@ const Sidebar = () => {
                           backgroundColor: "transparent",
                         }}
                       >
-                        All Companyies
+                        All Companies
                       </span>
                     </div>
                   </li>

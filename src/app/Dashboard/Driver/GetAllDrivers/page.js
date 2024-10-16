@@ -157,7 +157,7 @@ const Page = () => {
       timePassed = Math.max(0, timePassed);
       const finalResult = calculateFinalResult(timePassed);
       const sendFormData = async () => {
-        // console.log("update done");
+        console.log("update done");
         const formDataToSend = new FormData();
         const specificFieldKey = "calculation";
         formDataToSend.set(specificFieldKey, finalResult);

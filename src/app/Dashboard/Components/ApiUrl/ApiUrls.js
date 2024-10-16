@@ -7,6 +7,7 @@ export const API_URL_Login = `${url}/api/User/Login`;
 export const API_URL_Company = `${url}/api/Company`;
 export const API_URL_USER = `${url}/api/User`;
 export const API_URL_Driver = `${url}/api/Driver`;
+export const API_URL_DriverMoreInfo = `${url}/api/DriverMoreInfo`;
 export const API_URL_Drivercalculation = `${url}/api/Driver/Driverid`;
 export const API_URL_Enquiry = `${url}/api/Enquiry`;
 export const API_URL_Firm = `${url}/api/Firm`;

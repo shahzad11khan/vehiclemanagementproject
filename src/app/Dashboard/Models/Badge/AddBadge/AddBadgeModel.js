@@ -42,14 +42,14 @@ const AddBadgeModel = ({ isOpen, onClose, fetchData }) => {
 
       console.log(response);
 
-      setFormData({
-        name: "",
-        description: "",
-        isActive: false,
-        adminCreatedBy: "",
-        adminCompanyName: formData.adminCompanyName,
-      });
       if (response.data.success) {
+        setFormData({
+          name: "",
+          description: "",
+          isActive: false,
+          adminCreatedBy: "",
+          adminCompanyName: formData.adminCompanyName,
+        });
         toast.success("data successfully saved");
         setSuccess(true);
         fetchData();

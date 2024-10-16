@@ -31,7 +31,7 @@ const driverSchema = new mongoose.Schema(
     imageFile: { type: String, default: null },
     imagePublicId: { type: String, default: null },
     imageName: { type: String, default: null },
-    calculation: { type: Number, default: null },
+    calculation: { type: Number, default: 0 },
     isActive: { type: Boolean, default: false },
     adminCreatedBy: { type: String },
     adminCompanyName: { type: String },

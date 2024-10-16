@@ -23,7 +23,7 @@ const driverSchema = new mongoose.Schema(
     taxiBadgeDate: { type: Date, default: new Date().toISOString() },
     rentPaymentCycle: { type: String, default: null },
     city: { type: String, default: null },
-    pay: { type: String, default: null },
+    pay: { type: Number },
     county: { type: String, default: null },
     postcode: { type: String, default: null },
     postalAddress: { type: String, default: null },

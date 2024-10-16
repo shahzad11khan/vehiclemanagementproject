@@ -246,12 +246,11 @@ const Page = () => {
                     <th className="border border-gray-200 px-4 py-2">
                       Start Date
                     </th>
-                    <th className="border border-gray-200 px-4 py-2">
-                      Company
-                    </th>
+
                     <th className="border border-gray-200 px-4 py-2">
                       Calculation
                     </th>
+
                     <th className="border border-gray-200 px-4 py-2">
                       Actions
                     </th>
@@ -272,8 +271,7 @@ const Page = () => {
                       <td className="  p-3">{driver.rentPaymentCycle}</td>
                       <td className="  p-3">{driver.pay}</td>
                       <td className="p-3">{formatDate(driver.startDate)}</td>
-                      <td className="  p-3">{driver.adminCompanyName}</td>
-                      <td className="  p-3">
+                      <td className="p-3">
                         {(() => {
                           const result = drivercal(
                             formatDate(driver.startDate),

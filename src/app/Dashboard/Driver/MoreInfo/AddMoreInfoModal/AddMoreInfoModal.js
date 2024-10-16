@@ -3,6 +3,7 @@ import {
   API_URL_DriverMoreInfo,
   API_URL_Driver,
 } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
+import { API_URL_Drivercalculation } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
@@ -100,7 +101,7 @@ const AddDriverMoreInfoModal = ({
     e.preventDefault();
     setLoading(true);
     setError(null);
-    console.log(formData);
+    // console.log(formData);
     try {
       const response = await axios.post(`${API_URL_DriverMoreInfo}`, formData);
       console.log(response);
@@ -123,10 +124,38 @@ const AddDriverMoreInfoModal = ({
         setSuccess(true);
         fetchData();
         onClose();
+        // update once again
+        const formDataToSend = new FormData();
+        const specificFieldKeypay = "pay";
+        const specificFieldKeystartDate = "startDate";
+        formDataToSend.set(specificFieldKeypay, formData.remaining);
+        formDataToSend.set(specificFieldKeystartDate, formData.endDate);
+        if (formData) {
+          Object.keys(formData).forEach((key) => {
+            if (
+              key !== specificFieldKeypay &&
+              key !== specificFieldKeystartDate
+            ) {
+              formDataToSend.append(key, formData[key]);
+            }
+          });
+        }
+        const res = await axios.put(
+          `${API_URL_Drivercalculation}/${selectedUserId}`,
+          formDataToSend,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+        console.log("Update specific field successful:", res.data);
+        // End update
       } else {
-        toast.warn(response.data.error);
+        console.log(res.data.error);
       }
     } catch (err) {
+      console.log(err);
       setError(err.response?.data?.message || "Failed to add driver info");
     } finally {
       setLoading(false);

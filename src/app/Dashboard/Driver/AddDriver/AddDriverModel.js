@@ -630,6 +630,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
                 >
+                  <option value="">Select Payment</option>
                   <option value="perday">Per Day</option>
                   <option value="permonth">per Month</option>
                   <option value="perquarter">Per Quarter</option>
@@ -638,7 +639,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
               </div>
               <div>
                 <label
-                  htmlFor="rentPaymentCycle"
+                  htmlFor="pay"
                   className="text-sm font-medium text-gray-700"
                 >
                   Payment:

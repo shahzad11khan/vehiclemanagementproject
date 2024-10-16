@@ -5,9 +5,9 @@ const DriverMoreInfoSchema = new mongoose.Schema(
   {
     driverId: { type: String },
     vehicle: { type: String },
-    startDate: { type: Date },
+    startDate: { type: String, default: new Date().toISOString() },
     calculation: { type: Number },
-    endDate: { type: Date },
+    endDate: { type: String, default: new Date().toISOString() },
     subtractcalculation: { type: Number },
     remaining: { type: Number },
     adminCompanyName: { type: String },

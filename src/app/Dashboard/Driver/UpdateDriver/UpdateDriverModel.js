@@ -614,8 +614,7 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, userId }) => {
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
                 >
-                  <option value="null">Select Payment</option>
-                  <option value="perminute">Per Mint</option>
+                  <option value="">Select Payment</option>
                   <option value="perday">Per Day</option>
                   <option value="permonth">per Month</option>
                   <option value="perquarter">Per Quarter</option>
@@ -625,7 +624,7 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, userId }) => {
               <div>
                 <div className="flex gap-1">
                   <label
-                    htmlFor="rentPaymentCycle"
+                    htmlFor="pay"
                     className="text-sm font-medium text-gray-700"
                   >
                     Payment:

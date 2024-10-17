@@ -108,10 +108,10 @@ const Page = ({ params }) => {
     (total, row) => total + (parseFloat(row.subtractcalculation) || 0),
     0
   );
-  const totalRemaining = filteredData.reduce(
-    (total, row) => total + (parseFloat(row.remaining) || 0),
-    0
-  );
+  // const totalRemaining = filteredData.reduce(
+  //   (total, row) => total + (parseFloat(row.remaining) || 0),
+  //   0
+  // );
   function formatDate(dateString) {
     const dateObject = new Date(dateString);
     return `${(dateObject.getMonth() + 1)
@@ -229,9 +229,7 @@ const Page = ({ params }) => {
                         <td className="py-2 px-4 border-b border-gray-200">
                           {totalSubtractCalculation}
                         </td>
-                        <td className="py-2 px-4 border-b border-gray-200">
-                          {totalRemaining}
-                        </td>
+                        <td className="py-2 px-4 border-b border-gray-200"></td>
                         <td className="py-2 px-4 border-b border-gray-200"></td>
                       </tr>
                     )}

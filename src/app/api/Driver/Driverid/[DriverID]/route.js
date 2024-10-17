@@ -85,7 +85,7 @@ export async function PUT(request, context) {
 
     return NextResponse.json({
       message: "Driver details updated successfully",
-      driver,
+      // driver,
       status: 200,
     });
   } catch (error) {

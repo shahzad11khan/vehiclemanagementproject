@@ -48,7 +48,7 @@ const AddDriverMoreInfoModal = ({
           const response = await axios.get(
             `${API_URL_Driver}/${selectedUserId}`
           );
-          console.log(response.data.result);
+          console.log("get data: ", response.data.result);
           const data = response.data.result;
           if (data) {
             setFormData({
@@ -246,7 +246,7 @@ const AddDriverMoreInfoModal = ({
                 value={formData.calculation}
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                readOnly
+                // readOnly
               />
             </div>
 

@@ -317,7 +317,7 @@ const Page = () => {
                               href={`/Dashboard/Driver/MoreInfo/${driver._id}`}
                             >
                               <div className="flex items-center gap-3">
-                                <MdOutlineReadMore />
+                                <MdOutlineReadMore size={25} />
                               </div>
                             </Link>
                           </button>

@@ -126,14 +126,14 @@ const AddDriverMoreInfoModal = ({
         onClose();
         // update once again
         const formDataToSend = new FormData();
-        const specificFieldKeypay = "pay";
+        const specificFieldKeycalculation = "calculation";
         const specificFieldKeystartDate = "startDate";
-        formDataToSend.set(specificFieldKeypay, formData.remaining);
+        formDataToSend.set(specificFieldKeycalculation, formData.remaining);
         formDataToSend.set(specificFieldKeystartDate, formData.endDate);
         if (formData) {
           Object.keys(formData).forEach((key) => {
             if (
-              key !== specificFieldKeypay &&
+              key !== specificFieldKeycalculation &&
               key !== specificFieldKeystartDate
             ) {
               formDataToSend.append(key, formData[key]);

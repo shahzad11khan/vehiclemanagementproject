@@ -3,11 +3,11 @@ import mongoose from "mongoose";
 
 const DriverMoreInfoSchema = new mongoose.Schema(
   {
-    driverId: { type: String },
+    driverId: { type: mongoose.Schema.Types.ObjectId, ref: "Driver" }, // Reference to the Driver
     vehicle: { type: String },
-    startDate: { type: String, default: new Date().toISOString() },
+    startDate: { type: String },
     calculation: { type: Number },
-    endDate: { type: String, default: new Date().toISOString() },
+    endDate: { type: String },
     subtractcalculation: { type: Number },
     remaining: { type: Number },
     adminCompanyName: { type: String },

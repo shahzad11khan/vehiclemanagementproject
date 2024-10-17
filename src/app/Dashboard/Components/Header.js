@@ -10,6 +10,7 @@ import {
   getUserName,
   getUserRole,
   getflag,
+  getCompanyId,
 } from "../../../../utils/storageUtils";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
@@ -18,11 +19,12 @@ import { API_URL_Company, API_URL_USER } from "../Components/ApiUrl/ApiUrls";
 import { isAuthenticated, clearAuthData } from "@/utils/verifytoken";
 
 const Header = () => {
+  const router = useRouter();
   const [companyName, setCompanyName] = useState("");
+  const [compId, setcompId] = useState("");
   const [role, setRole] = useState("");
   const [flag, setflag] = useState(false);
   const [username, setusername] = useState("");
-  const router = useRouter();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [imagePreview, setImagePreview] = useState("");
 
@@ -35,6 +37,8 @@ const Header = () => {
     const userId = getUserId();
     const flag = getflag();
     setflag(flag);
+    const companyId = getCompanyId();
+    setcompId(companyId);
 
     const username = getUserName();
     const role = getUserRole();
@@ -42,7 +46,9 @@ const Header = () => {
     if (role) setRole(role);
     if (username) setusername(username);
     if (companyNameFromStorage) setCompanyName(companyNameFromStorage);
-    if (userId) {
+    if (flag === "true" && companyId) {
+      showAllAdmins(compId);
+    } else {
       showAllAdmins(userId);
     }
   }, []);

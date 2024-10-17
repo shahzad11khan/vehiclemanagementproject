@@ -316,7 +316,7 @@ const AddDriverMoreInfoModal = ({
                 className="bg-blue-600 text-white px-4 py-2 rounded-lg"
                 disabled={loading}
               >
-                {loading ? "Saving..." : "Save"}
+                {loading ? "Loading...." : "Save"}
               </button>
             </div>
           </div>

@@ -55,12 +55,16 @@ const Page = () => {
     try {
       // console.log(id);
       // console.log(typeof id);
-      await axios.get(`${API_URL_DriverMoreInfo}?driverId=${id}`);
       const response = await axios.delete(`${API_URL_Driver}/${id}`);
       const { data } = response;
       if (data.success) {
         setDrivers((prevData) => prevData.filter((item) => item._id !== id));
         toast.success(data.message);
+        const moreInfoResponse = await axios.delete(
+          `${API_URL_DriverMoreInfo}/${id}`
+        );
+
+        console.log(moreInfoResponse);
       } else {
         toast.warn(data.message || "Failed to delete the driver.");
       }
@@ -187,7 +191,8 @@ const Page = () => {
         );
         console.log("Update specific field successful:", response.data);
       };
-      setInterval(sendFormData, 300000);
+      // setInterval(sendFormData, 300000);
+      setInterval(sendFormData, 180000);
       return finalResult;
     } catch (error) {
       console.error("Failed to update driver:", error);

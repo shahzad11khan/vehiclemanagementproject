@@ -120,18 +120,18 @@ const Page = () => {
       .padStart(2, "0")}/${dateObject.getFullYear()}`;
   }
 
-  function drivercal(date, oraint, pay, value, userId, formData) {
+  function drivercal(date, pay, value, userId, formData) {
     try {
-      const raint = Number(oraint);
       const payy = Number(pay);
       const passingDate = new Date(date);
+      // formatDate(passingDate);
       const currentDate = new Date();
       const calculateFinalResult = (timePassed) => {
         // return payy * raint * (timePassed + 1);
         if (passingDate.getDate() === currentDate.getDate()) {
-          return raint * (timePassed + 1); // If dates are the same, return raint
+          return payy; // If dates are the same, return raint
         } else {
-          return payy * raint * (timePassed + 1); // Otherwise, calculate the result based on timePassed
+          return payy * (timePassed + 1); // Otherwise, calculate the result based on timePassed
         }
       };
 
@@ -174,7 +174,7 @@ const Page = () => {
       timePassed = Math.max(0, timePassed);
       const finalResult = calculateFinalResult(timePassed);
       const sendFormData = async () => {
-        // console.log("update done", userId);
+        console.log("update done");
         const formDataToSend = new FormData();
         const specificFieldKey = "calculation";
         formDataToSend.set(specificFieldKey, finalResult);
@@ -194,10 +194,10 @@ const Page = () => {
             },
           }
         );
-        console.log("Update specific field successful", response.data);
+        console.log("Update specific field successful:", response.data);
       };
       // setInterval(sendFormData, 300000);
-      setInterval(sendFormData, 180000);
+      setInterval(sendFormData, 120000);
       return finalResult;
     } catch (error) {
       console.error("Failed to update driver:", error);
@@ -301,7 +301,6 @@ const Page = () => {
                         {(() => {
                           const result = drivercal(
                             formatDate(driver.startDate),
-                            driver.driverRent,
                             driver.pay,
                             driver.rentPaymentCycle,
                             driver._id

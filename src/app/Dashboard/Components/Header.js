@@ -53,15 +53,17 @@ const Header = () => {
     }
   }, []);
 
-  const showAllAdmins = async (userId) => {
+  const showAllAdmins = async (id) => {
     try {
-      const res = await axios.get(`${API_URL_Company}/${userId}`);
+      const res = await axios.get(`${API_URL_Company}/${id}`);
       const adminData = res.data.result;
 
-      if (adminData?._id === userId) {
+      if (adminData?._id === id) {
+        setImagePreview(adminData.image);
+      } else if (adminData?._id === id && flag === "true") {
         setImagePreview(adminData.image);
       } else {
-        const userRes = await axios.get(`${API_URL_USER}/${userId}`);
+        const userRes = await axios.get(`${API_URL_USER}/${id}`);
         const userData = userRes.data.result;
         if (userData?.useravatar) {
           setImagePreview(userData.useravatar);

@@ -114,10 +114,22 @@ const Header = () => {
           {typeof window !== "undefined" && isDropdownOpen && (
             <div className="absolute right-0 mt-2 flex flex-col bg-white rounded shadow-lg z-10 text-black">
               <ul className="">
-                {role === "superadmin" ||
+                {(role === "superadmin" && flag === "false") ||
                 role === "admin" ||
                 role === "user" ? (
                   <Link href="/Dashboard/Profile">
+                    <li className="px-4 py-2 hover:bg-cyan-100 cursor-pointer rounded-lg flex items-center">
+                      <CgProfile className="mr-2" />
+                      <span
+                        className="hidden md:inline"
+                        style={{ backgroundColor: "transparent" }}
+                      >
+                        Profile
+                      </span>
+                    </li>
+                  </Link>
+                ) : role === "superadmin" && flag === "true" ? (
+                  <Link href="/Dashboard/CompanyProfile">
                     <li className="px-4 py-2 hover:bg-cyan-100 cursor-pointer rounded-lg flex items-center">
                       <CgProfile className="mr-2" />
                       <span

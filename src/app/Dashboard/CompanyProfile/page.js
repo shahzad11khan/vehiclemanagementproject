@@ -28,17 +28,25 @@ const Page = () => {
         router.push("/");
         return;
       }
+
+      const flag = localStorage.getItem("flag");
       const userId = localStorage.getItem("userId");
-      if (userId) {
+      const companyID = localStorage.getItem("companyID");
+
+      if (flag === "true" && companyID) {
+        showAllAdmins(companyID);
+      } else if (userId) {
         showAllAdmins(userId);
+      } else {
+        console.warn("No valid user ID or company ID found in localStorage.");
       }
     }
   }, []);
 
-  const showAllAdmins = async (userId) => {
+  const showAllAdmins = async (id) => {
     setLoading(true);
     try {
-      const res = await axios.get(`${API_URL_Company}/${userId}`);
+      const res = await axios.get(`${API_URL_Company}/${id}`);
       const adminData = res.data.result;
       console.log(adminData);
       setFormData({

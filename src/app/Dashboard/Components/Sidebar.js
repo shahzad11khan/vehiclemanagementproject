@@ -582,7 +582,7 @@ const Sidebar = () => {
                         }`}
                       />
                       <span className="hidden sm:block text-sm">
-                        Superadmin Users
+                        Organization Users
                       </span>
                     </div>
                   </li>
@@ -998,7 +998,7 @@ const Sidebar = () => {
                         }`}
                       />
                       <span className="hidden sm:block text-sm">
-                        Organization
+                        Organization Users
                       </span>
                     </div>
                   </li>

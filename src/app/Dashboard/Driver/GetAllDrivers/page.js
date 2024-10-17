@@ -127,7 +127,12 @@ const Page = () => {
       const passingDate = new Date(date);
       const currentDate = new Date();
       const calculateFinalResult = (timePassed) => {
-        return payy * raint * (timePassed + 1);
+        // return payy * raint * (timePassed + 1);
+        if (passingDate.getDate() === currentDate.getDate()) {
+          return raint * (timePassed + 1); // If dates are the same, return raint
+        } else {
+          return payy * raint * (timePassed + 1); // Otherwise, calculate the result based on timePassed
+        }
       };
 
       let timePassed;
@@ -189,7 +194,7 @@ const Page = () => {
             },
           }
         );
-        console.log("Update specific field successful:", response.data);
+        console.log("Update specific field successful", response.data);
       };
       // setInterval(sendFormData, 300000);
       setInterval(sendFormData, 180000);
@@ -348,7 +353,7 @@ const Page = () => {
         isOpen={isOpenDriverUpdate}
         onClose={() => setIsOpenDriverUpdate(false)}
         userId={selectedUserId}
-        fetchData={fetchData}
+        fetchDataa={fetchData}
       />
     </>
   );

@@ -9,7 +9,10 @@ import { FaEdit, FaTrash } from "react-icons/fa";
 import { MdOutlineReadMore } from "react-icons/md";
 import AddDriverModel from "../AddDriver/AddDriverModel";
 import UpdateDriverModel from "../UpdateDriver/UpdateDriverModel";
-import { API_URL_Drivercalculation } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
+import {
+  API_URL_Drivercalculation,
+  API_URL_DriverMoreInfo,
+} from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 
 import axios from "axios";
 import { API_URL_Driver } from "../../Components/ApiUrl/ApiUrls";
@@ -50,7 +53,9 @@ const Page = () => {
 
   const handleDelete = async (id) => {
     try {
-      // const res = await axios.get(`${API_URL_DriverMoreInfo}?driverId=${id}`);
+      // console.log(id);
+      // console.log(typeof id);
+      await axios.get(`${API_URL_DriverMoreInfo}?driverId=${id}`);
       const response = await axios.delete(`${API_URL_Driver}/${id}`);
       const { data } = response;
       if (data.success) {

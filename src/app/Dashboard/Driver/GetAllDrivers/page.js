@@ -111,13 +111,14 @@ const Page = () => {
       .padStart(2, "0")}/${dateObject.getFullYear()}`;
   }
 
-  function drivercal(date, pay, value, userId, formData) {
+  function drivercal(date, oraint, pay, value, userId, formData) {
     try {
-      const result = Number(pay);
+      const raint = Number(oraint);
+      const payy = Number(pay);
       const passingDate = new Date(date);
       const currentDate = new Date();
       const calculateFinalResult = (timePassed) => {
-        return result * (timePassed + 1);
+        return payy * raint * (timePassed + 1);
       };
 
       let timePassed;
@@ -243,6 +244,9 @@ const Page = () => {
                       Payment Cycle
                     </th>
                     <th className="border border-gray-200 px-4 py-2">
+                      Driver Payment
+                    </th>
+                    <th className="border border-gray-200 px-4 py-2">
                       Payment
                     </th>
                     <th className="border border-gray-200 px-4 py-2">
@@ -274,6 +278,7 @@ const Page = () => {
                       <td className="  p-3">{driver.niNumber}</td>
                       <td className="  p-3">{driver.badgeType}</td>
                       <td className="  p-3">{driver.rentPaymentCycle}</td>
+                      <td className="  p-3">{driver.driverRent}</td>
                       <td className="  p-3">{driver.pay}</td>
                       <td className="p-3">{formatDate(driver.dateOfBirth)}</td>
                       <td className="p-3">{formatDate(driver.startDate)}</td>
@@ -281,6 +286,7 @@ const Page = () => {
                         {(() => {
                           const result = drivercal(
                             formatDate(driver.startDate),
+                            driver.driverRent,
                             driver.pay,
                             driver.rentPaymentCycle,
                             driver._id

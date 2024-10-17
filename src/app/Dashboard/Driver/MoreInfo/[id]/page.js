@@ -157,16 +157,16 @@ const Page = ({ params }) => {
                         Start Date
                       </th>
                       <th className="py-2 px-4 border-b border-gray-200 text-left">
-                        Pay From
+                        Payment From
                       </th>
                       <th className="py-2 px-4 border-b border-gray-200 text-left">
                         Submitted Date
                       </th>
                       <th className="py-2 px-4 border-b border-gray-200 text-left">
-                        Pay To
+                        Payment To
                       </th>
                       <th className="py-2 px-4 border-b border-gray-200 text-left">
-                        Remaining Pay
+                        Remaining Payment
                       </th>
                       <th className="py-2 px-4 border-b border-gray-200 text-left">
                         Actions
@@ -184,16 +184,16 @@ const Page = ({ params }) => {
                             {formatDate(row.startDate)}
                           </td>
                           <td className="py-2 px-4 border-b border-gray-200">
-                            {row.calculation}
+                            £ {row.calculation}
                           </td>
                           <td className="py-2 px-4 border-b border-gray-200">
                             {formatDate(row.endDate)}
                           </td>
                           <td className="py-2 px-4 border-b border-gray-200">
-                            {row.subtractcalculation}
+                            £ {row.subtractcalculation}
                           </td>
                           <td className="py-2 px-4 border-b border-gray-200">
-                            {row.remaining}
+                            £ {row.remaining}
                           </td>
                           <td className="py-2 px-4 border-b border-gray-200">
                             <button
@@ -223,11 +223,11 @@ const Page = ({ params }) => {
                         </td>
                         <td className="py-2 px-4 border-b border-gray-200"></td>
                         <td className="py-2 px-4 border-b border-gray-200">
-                          {totalCalculation}
+                          £ {totalCalculation}
                         </td>
                         <td className="py-2 px-4 border-b border-gray-200"></td>
                         <td className="py-2 px-4 border-b border-gray-200">
-                          {totalSubtractCalculation}
+                          £ {totalSubtractCalculation}
                         </td>
                         <td className="py-2 px-4 border-b border-gray-200"></td>
                         <td className="py-2 px-4 border-b border-gray-200"></td>

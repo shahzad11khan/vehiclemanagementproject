@@ -178,7 +178,7 @@ const AddDriverMoreInfoModal = ({
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="flex flex-wrap -mx-2">
-            <div className="w-full sm:w-1/2 px-2 mb-4">
+            <div className="w-full sm:w-1/2 px-2 mb-4 hidden">
               <label
                 htmlFor="driverId"
                 className="text-sm font-medium text-gray-700"
@@ -192,7 +192,6 @@ const AddDriverMoreInfoModal = ({
                 value={formData.driverId}
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                readOnly
               />
             </div>
 
@@ -228,7 +227,6 @@ const AddDriverMoreInfoModal = ({
                 value={formData.startDate}
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                readOnly
               />
             </div>
 
@@ -237,7 +235,7 @@ const AddDriverMoreInfoModal = ({
                 htmlFor="calculation"
                 className="text-sm font-medium text-gray-700"
               >
-                Calculation:
+                Remaining Payment:
               </label>
               <input
                 type="number"
@@ -246,6 +244,7 @@ const AddDriverMoreInfoModal = ({
                 value={formData.calculation}
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                placeholder="In £"
                 // readOnly
               />
             </div>
@@ -255,7 +254,7 @@ const AddDriverMoreInfoModal = ({
                 htmlFor="endDate"
                 className="text-sm font-medium text-gray-700"
               >
-                End Date:
+                Paid Date:
               </label>
               <input
                 type="date"
@@ -273,7 +272,7 @@ const AddDriverMoreInfoModal = ({
                 htmlFor="subtractcalculation"
                 className="text-sm font-medium text-gray-700"
               >
-                Subtract Calculation:
+                Paid:
               </label>
               <input
                 type="number"
@@ -282,6 +281,7 @@ const AddDriverMoreInfoModal = ({
                 value={formData.subtractcalculation}
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                placeholder="In £"
                 required
               />
             </div>
@@ -298,8 +298,9 @@ const AddDriverMoreInfoModal = ({
                 id="remaining"
                 name="remaining"
                 value={formData.remaining}
-                readOnly
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                placeholder="In £"
+                readOnly
               />
             </div>
 

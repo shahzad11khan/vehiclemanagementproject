@@ -63,7 +63,6 @@ const Page = () => {
         const moreInfoResponse = await axios.delete(
           `${API_URL_DriverMoreInfo}/${id}`
         );
-
         console.log(moreInfoResponse);
       } else {
         toast.warn(data.message || "Failed to delete the driver.");
@@ -123,24 +122,24 @@ const Page = () => {
   function drivercal(date, pay, value, userId, formData) {
     try {
       const payy = Number(pay);
+      // console.log(payy);
       const passingDate = new Date(date);
       // formatDate(passingDate);
       const currentDate = new Date();
       const calculateFinalResult = (timePassed) => {
         // return payy * raint * (timePassed + 1);
-        if (passingDate.getDate() === currentDate.getDate()) {
-          return payy; // If dates are the same, return raint
-        } else {
-          return payy * (timePassed + 1); // Otherwise, calculate the result based on timePassed
-        }
+
+        return payy * (timePassed + 1); // Otherwise, calculate the result based on timePassed
       };
 
-      let timePassed;
+      let timePassed = 0;
       value = value.toLowerCase();
       switch (value) {
         case "perday":
           const timeDiffDays = currentDate - passingDate;
+          // console.log(timeDiffDays);
           timePassed = Math.floor(timeDiffDays / (1000 * 60 * 60 * 24));
+          // console.log(timePassed);
           break;
 
         case "permonth":
@@ -171,6 +170,7 @@ const Page = () => {
           return "Invalid value type provided.";
       }
 
+      // console.log(timePassed);
       timePassed = Math.max(0, timePassed);
       const finalResult = calculateFinalResult(timePassed);
       const sendFormData = async () => {
@@ -197,7 +197,7 @@ const Page = () => {
         console.log("Update specific field successful:", response.data);
       };
       // setInterval(sendFormData, 300000);
-      setInterval(sendFormData, 120000);
+      setInterval(sendFormData, 300000);
       return finalResult;
     } catch (error) {
       console.error("Failed to update driver:", error);
@@ -293,11 +293,12 @@ const Page = () => {
                       <td className="  p-3">{driver.niNumber}</td>
                       <td className="  p-3">{driver.badgeType}</td>
                       <td className="  p-3">{driver.rentPaymentCycle}</td>
-                      <td className="  p-3">{driver.driverRent}</td>
-                      <td className="  p-3">{driver.pay}</td>
+                      <td className="  p-3">£ {driver.driverRent}</td>
+                      <td className="  p-3">£ {driver.pay}</td>
                       <td className="p-3">{formatDate(driver.dateOfBirth)}</td>
                       <td className="p-3">{formatDate(driver.startDate)}</td>
                       <td className="p-3">
+                        {" "}
                         {(() => {
                           const result = drivercal(
                             formatDate(driver.startDate),

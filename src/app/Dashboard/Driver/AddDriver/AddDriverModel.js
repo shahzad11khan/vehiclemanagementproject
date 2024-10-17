@@ -40,7 +40,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
     LocalAuth: "",
     vehicle: "",
     pay: "",
-    calculation: "",
+    calculation: 0,
     adminCreatedBy: "",
     adminCompanyName: "",
   };

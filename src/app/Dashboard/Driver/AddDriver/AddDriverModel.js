@@ -9,7 +9,10 @@ import {
   fetchLocalAuth,
   fetchVehicle,
 } from "../../Components/DropdownData/taxiFirm/taxiFirmService";
-import { API_URL_Driver } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
+import {
+  API_URL_Driver,
+  API_URL_DriverMoreInfo,
+} from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 
 const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
   const initialFormData = {
@@ -179,6 +182,25 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
 
       console.log(response);
       if (response.data.success) {
+        //
+        const newRecordData = {
+          driverId: response.data.savedDriver._id, // Add your specific fields here
+          vehicle: response.data.savedDriver.vehicle, // Add your specific fields here
+          paymentcycle: response.data.savedDriver.rentPaymentCycle, // Add your specific fields here
+          startDate: response.data.savedDriver.startDate, // Add your specific fields here
+          calculation: response.data.savedDriver.pay, // Add your specific fields here
+          endDate: "", // Add your specific fields here
+          subtractcalculation: 0, // Add your specific fields here
+          remaining: 0, // Add your specific fields here
+          adminCreatedBy: "", // Add your specific fields here
+          adminCompanyName: response.data.savedDriver.adminCompanyName, // Keep existing field
+        };
+        const newRecordResponse = await axios.post(
+          `${API_URL_DriverMoreInfo}`,
+          newRecordData
+        );
+        console.log(newRecordResponse);
+        //
         const initialFormData = {
           firstName: "",
           lastName: "",
@@ -215,6 +237,10 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
         fetchData();
         onClose();
         setFormData(initialFormData);
+
+        //
+
+        //
       } else {
         toast.warn(response.data.error);
       }

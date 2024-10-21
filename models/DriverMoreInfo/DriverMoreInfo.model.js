@@ -5,7 +5,8 @@ const DriverMoreInfoSchema = new mongoose.Schema(
   {
     driverId: { type: mongoose.Schema.Types.ObjectId, ref: "Driver" }, // Reference to the Driver
     vehicle: { type: String },
-    startDate: { type: String },
+    paymentcycle: { type: String },
+    startDate: { type: Date },
     calculation: { type: Number },
     endDate: { type: String },
     subtractcalculation: { type: Number },

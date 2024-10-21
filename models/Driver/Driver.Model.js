@@ -15,7 +15,7 @@ const driverSchema = new mongoose.Schema(
     taxiFirm: { type: String, default: null },
     badgeType: { type: String, default: null },
     insurance: { type: String, default: null },
-    startDate: { type: String },
+    startDate: { type: Date },
     driverRent: { type: Number, default: 0 },
     vehicle: { type: String },
     LocalAuth: { type: String },

@@ -12,6 +12,7 @@ export const POST = catchAsyncErrors(async (request) => {
   const {
     driverId,
     vehicle,
+    paymentcycle,
     startDate,
     calculation,
     endDate,
@@ -39,6 +40,7 @@ export const POST = catchAsyncErrors(async (request) => {
   const newDriverMoreInfo = new DriverMoreInfo({
     driverId,
     vehicle,
+    paymentcycle,
     startDate,
     calculation,
     endDate,
@@ -59,6 +61,7 @@ export const POST = catchAsyncErrors(async (request) => {
     return NextResponse.json({
       message: "DriverMoreInfo created successfully",
       success: true,
+      savedDriverMoreInfo,
       status: 200,
     });
   }

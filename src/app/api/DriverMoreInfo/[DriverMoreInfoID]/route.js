@@ -24,6 +24,8 @@ export const PUT = async (request, context) => {
     // Update DriverMoreInfo properties with values from data or retain existing values
     driverMoreInfo.driverId = data.driverId || driverMoreInfo.driverId;
     driverMoreInfo.vehicle = data.vehicle || driverMoreInfo.vehicle;
+    driverMoreInfo.paymentcycle =
+      data.paymentcycle || driverMoreInfo.paymentcycle;
     driverMoreInfo.startDate = data.startDate || driverMoreInfo.startDate;
     driverMoreInfo.calculation = data.calculation || driverMoreInfo.calculation;
     driverMoreInfo.endDate = data.endDate || driverMoreInfo.endDate;
@@ -90,7 +92,7 @@ export const DELETE = async (request, context) => {
     await connect();
 
     const id = context.params.DriverMoreInfoID; // Ensure DriverMoreInfoID is correctly passed
-    // console.log("DriverMoreInfo ID:", id);
+    console.log("DriverMoreInfo ID:", id);
     let deletedDriverMoreInfo;
     if (await DriverMoreInfo.exists({ _id: id })) {
       // If 'id' is a valid MongoDB ObjectId, delete by _id

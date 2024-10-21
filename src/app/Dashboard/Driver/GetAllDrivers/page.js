@@ -9,10 +9,7 @@ import { FaEdit, FaTrash } from "react-icons/fa";
 import { MdOutlineReadMore } from "react-icons/md";
 import AddDriverModel from "../AddDriver/AddDriverModel";
 import UpdateDriverModel from "../UpdateDriver/UpdateDriverModel";
-import {
-  API_URL_Drivercalculation,
-  API_URL_DriverMoreInfo,
-} from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
+import { API_URL_DriverMoreInfo } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 
 import axios from "axios";
 import { API_URL_Driver } from "../../Components/ApiUrl/ApiUrls";
@@ -119,91 +116,84 @@ const Page = () => {
       .padStart(2, "0")}/${dateObject.getFullYear()}`;
   }
 
-  function drivercal(date, pay, value, userId, formData) {
-    try {
-      const payy = Number(pay);
-      // console.log(payy);
-      const passingDate = new Date(date);
-      // formatDate(passingDate);
-      const currentDate = new Date();
-      const calculateFinalResult = (timePassed) => {
-        // return payy * raint * (timePassed + 1);
+  // function drivercal(date, pay, value, userId, formData) {
+  //   try {
+  //     const payy = Number(pay);
+  //     const passingDate = new Date(date);
+  //     const currentDate = new Date();
+  //     const calculateFinalResult = (timePassed) => {
+  //       return payy * (timePassed + 1);
+  //     };
+  //     let timePassed = 0;
+  //     value = value.toLowerCase();
+  //     switch (value) {
+  //       case "perday":
+  //         const timeDiffDays = currentDate - passingDate;
+  //         timePassed = Math.floor(timeDiffDays / (1000 * 60 * 60 * 24));
+  //         break;
 
-        return payy * (timePassed + 1); // Otherwise, calculate the result based on timePassed
-      };
+  //       case "permonth":
+  //         timePassed =
+  //           (currentDate.getFullYear() - passingDate.getFullYear()) * 12 +
+  //           (currentDate.getMonth() - passingDate.getMonth());
+  //         break;
 
-      let timePassed = 0;
-      value = value.toLowerCase();
-      switch (value) {
-        case "perday":
-          const timeDiffDays = currentDate - passingDate;
-          // console.log(timeDiffDays);
-          timePassed = Math.floor(timeDiffDays / (1000 * 60 * 60 * 24));
-          // console.log(timePassed);
-          break;
+  //       case "perquarter":
+  //         timePassed =
+  //           (currentDate.getFullYear() - passingDate.getFullYear()) * 12 +
+  //           (currentDate.getMonth() - passingDate.getMonth());
+  //         timePassed = Math.floor(timePassed / 3);
+  //         break;
 
-        case "permonth":
-          timePassed =
-            (currentDate.getFullYear() - passingDate.getFullYear()) * 12 +
-            (currentDate.getMonth() - passingDate.getMonth());
-          break;
+  //       case "peryear":
+  //         timePassed = currentDate.getFullYear() - passingDate.getFullYear();
+  //         if (
+  //           currentDate.getMonth() < passingDate.getMonth() ||
+  //           (currentDate.getMonth() === passingDate.getMonth() &&
+  //             currentDate.getDate() < passingDate.getDate())
+  //         ) {
+  //           timePassed--;
+  //         }
+  //         break;
 
-        case "perquarter":
-          timePassed =
-            (currentDate.getFullYear() - passingDate.getFullYear()) * 12 +
-            (currentDate.getMonth() - passingDate.getMonth());
-          timePassed = Math.floor(timePassed / 3);
-          break;
+  //       default:
+  //         return "Invalid value type provided.";
+  //     }
 
-        case "peryear":
-          timePassed = currentDate.getFullYear() - passingDate.getFullYear();
-          if (
-            currentDate.getMonth() < passingDate.getMonth() ||
-            (currentDate.getMonth() === passingDate.getMonth() &&
-              currentDate.getDate() < passingDate.getDate())
-          ) {
-            timePassed--;
-          }
-          break;
-
-        default:
-          return "Invalid value type provided.";
-      }
-
-      // console.log(timePassed);
-      timePassed = Math.max(0, timePassed);
-      const finalResult = calculateFinalResult(timePassed);
-      const sendFormData = async () => {
-        console.log("update done");
-        const formDataToSend = new FormData();
-        const specificFieldKey = "calculation";
-        formDataToSend.set(specificFieldKey, finalResult);
-        if (formData) {
-          Object.keys(formData).forEach((key) => {
-            if (key !== specificFieldKey) {
-              formDataToSend.append(key, formData[key]);
-            }
-          });
-        }
-        const response = await axios.put(
-          `${API_URL_Drivercalculation}/${userId}`,
-          formDataToSend,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        );
-        console.log("Update specific field successful:", response.data);
-      };
-      // setInterval(sendFormData, 300000);
-      setInterval(sendFormData, 300000);
-      return finalResult;
-    } catch (error) {
-      console.error("Failed to update driver:", error);
-      throw error;
-    }
-  }
+  //     // console.log(timePassed);
+  //     timePassed = Math.max(0, timePassed);
+  //     const finalResult = calculateFinalResult(timePassed);
+  //     const sendFormData = async () => {
+  //       console.log("update done");
+  //       const formDataToSend = new FormData();
+  //       const specificFieldKey = "calculation";
+  //       formDataToSend.set(specificFieldKey, finalResult);
+  //       if (formData) {
+  //         Object.keys(formData).forEach((key) => {
+  //           if (key !== specificFieldKey) {
+  //             formDataToSend.append(key, formData[key]);
+  //           }
+  //         });
+  //       }
+  //       const response = await axios.put(
+  //         `${API_URL_Drivercalculation}/${userId}`,
+  //         formDataToSend,
+  //         {
+  //           headers: {
+  //             "Content-Type": "multipart/form-data",
+  //           },
+  //         }
+  //       );
+  //       console.log("Update specific field successful:", response.data);
+  //     };
+  //     // setInterval(sendFormData, 300000);
+  //     setInterval(sendFormData, 300000);
+  //     return finalResult;
+  //   } catch (error) {
+  //     console.error("Failed to update driver:", error);
+  //     throw error;
+  //   }
+  // }
 
   return (
     <>
@@ -258,12 +248,13 @@ const Page = () => {
                     <th className="border border-gray-200 px-4 py-2">
                       Payment Cycle
                     </th>
-                    <th className="border border-gray-200 px-4 py-2">
+                    {/* <th className="border border-gray-200 px-4 py-2">
                       Driver Payment
-                    </th>
+                    </th> */}
                     <th className="border border-gray-200 px-4 py-2">
                       Payment
                     </th>
+                    {/* <th className="border border-gray-200 px-4 py-2">calc</th> */}
                     <th className="border border-gray-200 px-4 py-2">
                       Date Of Birth
                     </th>
@@ -271,9 +262,9 @@ const Page = () => {
                       Start Date
                     </th>
 
-                    <th className="border border-gray-200 px-4 py-2">
+                    {/* <th className="border border-gray-200 px-4 py-2">
                       Calculation
-                    </th>
+                    </th> */}
 
                     <th className="border border-gray-200 px-4 py-2">
                       Actions
@@ -293,22 +284,24 @@ const Page = () => {
                       <td className="  p-3">{driver.niNumber}</td>
                       <td className="  p-3">{driver.badgeType}</td>
                       <td className="  p-3">{driver.rentPaymentCycle}</td>
-                      <td className="  p-3">£ {driver.driverRent}</td>
+                      {/* <td className="  p-3">£ {driver.driverRent}</td> */}
                       <td className="  p-3">£ {driver.pay}</td>
+                      {/* <td className="  p-3">£ {driver.calculation}</td> */}
                       <td className="p-3">{formatDate(driver.dateOfBirth)}</td>
                       <td className="p-3">{formatDate(driver.startDate)}</td>
-                      <td className="p-3">
+                      {/* <td className="p-3">
                         {" "}
                         {(() => {
                           const result = drivercal(
                             formatDate(driver.startDate),
                             driver.pay,
                             driver.rentPaymentCycle,
-                            driver._id
+                            driver._id,
+                            driver.calculation
                           );
-                          return result; // Make sure to return the result here
+                          return result; 
                         })()}
-                      </td>
+                      </td> */}
 
                       <td className="  p-3">
                         <div className="flex gap-2">

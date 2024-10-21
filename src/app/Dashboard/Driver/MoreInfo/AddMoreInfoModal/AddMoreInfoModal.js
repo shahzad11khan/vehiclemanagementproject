@@ -18,6 +18,7 @@ const AddDriverMoreInfoModal = ({
     driverId: "",
     vehicle: "",
     startDate: "",
+    paymentcycle: "",
     calculation: "",
     endDate: "",
     subtractcalculation: "",
@@ -56,6 +57,7 @@ const AddDriverMoreInfoModal = ({
               vehicle: data.vehicle,
               startDate: data.startDate,
               calculation: data.calculation,
+              paymentcycle: data.paymentcycle,
               subtractcalculation: "", // Reset this to ensure fresh data
               remaining: "", // Reset remaining too
               adminCreatedBy: "",
@@ -190,6 +192,22 @@ const AddDriverMoreInfoModal = ({
                 id="driverId"
                 name="driverId"
                 value={formData.driverId}
+                onChange={handleChange}
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+              />
+            </div>
+            <div className="w-full sm:w-1/2 px-2 mb-4 hidden">
+              <label
+                htmlFor="driverId"
+                className="text-sm font-medium text-gray-700"
+              >
+                Payment Cycle:
+              </label>
+              <input
+                type="text"
+                id="paymentcycle"
+                name="paymentcycle"
+                value={formData.paymentcycle}
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
               />

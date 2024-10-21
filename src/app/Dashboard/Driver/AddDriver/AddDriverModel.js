@@ -192,6 +192,9 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
           endDate: "", // Add your specific fields here
           subtractcalculation: 0, // Add your specific fields here
           remaining: 0, // Add your specific fields here
+          totalamount: 0,
+          totalsubtractamount: 0,
+          totalremainingamount: 0,
           adminCreatedBy: "", // Add your specific fields here
           adminCompanyName: response.data.savedDriver.adminCompanyName, // Keep existing field
         };

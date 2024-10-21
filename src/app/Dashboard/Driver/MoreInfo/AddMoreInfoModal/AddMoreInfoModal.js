@@ -1,9 +1,8 @@
 "use client";
 import {
   API_URL_DriverMoreInfo,
-  API_URL_Driver,
+  API_URL_DriverMoreupdate,
 } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
-import { API_URL_Drivercalculation } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
@@ -22,6 +21,9 @@ const AddDriverMoreInfoModal = ({
     calculation: "",
     endDate: "",
     subtractcalculation: "",
+    totalamount: 0,
+    totalsubtractamount: 0,
+    totalremainingamount: 0,
     remaining: "",
     adminCreatedBy: "",
     adminCompanyName: "",
@@ -42,14 +44,15 @@ const AddDriverMoreInfoModal = ({
   }, []);
 
   useEffect(() => {
-    const fetchManufacturerData = async () => {
+    const fetchdrivermoreinfoData = async () => {
       setLoading(true);
       if (selectedUserId) {
+        console.log(selectedUserId);
         try {
           const response = await axios.get(
-            `${API_URL_Driver}/${selectedUserId}`
+            `${API_URL_DriverMoreInfo}/${selectedUserId}`
           );
-          console.log("get data: ", response.data.result);
+          console.log("get data: ", response.data);
           const data = response.data.result;
           if (data) {
             setFormData({
@@ -59,6 +62,9 @@ const AddDriverMoreInfoModal = ({
               calculation: data.calculation,
               paymentcycle: data.paymentcycle,
               subtractcalculation: "", // Reset this to ensure fresh data
+              totalamount: data.totalamount,
+              totalsubtractamount: 0,
+              totalremainingamount: 0,
               remaining: "", // Reset remaining too
               adminCreatedBy: "",
               adminCompanyName: formData.adminCompanyName,
@@ -76,12 +82,12 @@ const AddDriverMoreInfoModal = ({
       }
     };
 
-    fetchManufacturerData();
+    fetchdrivermoreinfoData();
   }, [selectedUserId]);
 
   // Calculate remaining when calculation or subtractcalculation changes
   useEffect(() => {
-    const calculationValue = parseFloat(formData.calculation) || 0;
+    const calculationValue = parseFloat(formData.totalamount) || 0;
     const subtractCalculationValue =
       parseFloat(formData.subtractcalculation) || 0;
     const newRemaining = calculationValue - subtractCalculationValue;
@@ -102,60 +108,57 @@ const AddDriverMoreInfoModal = ({
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError(null);
     // console.log(formData);
     try {
-      const response = await axios.post(`${API_URL_DriverMoreInfo}`, formData);
-      console.log(response);
+      // update once again
+      const formDataToSend = new FormData();
+      const specificFieldKeytotalamount = "totalamount";
+      const specificFieldKeytotalsubtractamount = "totalsubtractamount";
+      const specificFieldKeystarttotalremainingamount = "totalremainingamount";
+      const specificFieldKeyendDate = "endDate";
+      const specificFieldKeystarttotalremaining = "remaining";
 
-      // Reset form fields
-      setFormData({
-        driverId: "",
-        vehicle: "",
-        startDate: "",
-        calculation: "",
-        endDate: "",
-        subtractcalculation: "",
-        remaining: "",
-        adminCreatedBy: "",
-        adminCompanyName: formData.adminCompanyName,
-      });
-
-      if (response.data.success) {
-        toast.success(response.data.message);
-        setSuccess(true);
-        fetchData();
-        onClose();
-        // update once again
-        const formDataToSend = new FormData();
-        const specificFieldKeycalculation = "calculation";
-        const specificFieldKeystartDate = "startDate";
-        formDataToSend.set(specificFieldKeycalculation, formData.remaining);
-        formDataToSend.set(specificFieldKeystartDate, formData.endDate);
-        if (formData) {
-          Object.keys(formData).forEach((key) => {
-            if (
-              key !== specificFieldKeycalculation &&
-              key !== specificFieldKeystartDate
-            ) {
-              formDataToSend.append(key, formData[key]);
-            }
-          });
-        }
-        const res = await axios.put(
-          `${API_URL_Drivercalculation}/${selectedUserId}`,
-          formDataToSend,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
+      formDataToSend.set(specificFieldKeytotalamount, formData.remaining);
+      formDataToSend.set(
+        specificFieldKeytotalsubtractamount,
+        formData.subtractcalculation
+      );
+      formDataToSend.set(
+        specificFieldKeystarttotalremainingamount,
+        formData.remaining
+      );
+      formDataToSend.set(specificFieldKeyendDate, formData.endDate);
+      formDataToSend.set(
+        specificFieldKeystarttotalremaining,
+        formData.remaining
+      );
+      if (formData) {
+        Object.keys(formData).forEach((key) => {
+          if (
+            key !== specificFieldKeytotalamount &&
+            key !== specificFieldKeytotalsubtractamount &&
+            key !== specificFieldKeystarttotalremainingamount &&
+            key !== specificFieldKeyendDate &&
+            key !== specificFieldKeystarttotalremaining
+          ) {
+            formDataToSend.append(key, formData[key]);
           }
-        );
-        console.log("Update specific field successful:", res.data);
-        // End update
-      } else {
-        console.log(res.data.error);
+        });
       }
+      const res = await axios.put(
+        `${API_URL_DriverMoreupdate}/${selectedUserId}`,
+        formDataToSend,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      setSuccess(true);
+      fetchData();
+      onClose();
+      console.log("driver more info:", res.data);
+      // End update
     } catch (err) {
       console.log(err);
       setError(err.response?.data?.message || "Failed to add driver info");
@@ -259,7 +262,7 @@ const AddDriverMoreInfoModal = ({
                 type="number"
                 id="calculation"
                 name="calculation"
-                value={formData.calculation}
+                value={formData.totalamount}
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
                 placeholder="In £"
@@ -278,7 +281,7 @@ const AddDriverMoreInfoModal = ({
                 type="date"
                 id="endDate"
                 name="endDate"
-                value={formData.endDate}
+                value={formData.endDate ? formData.endDate : null}
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
                 required
@@ -309,7 +312,7 @@ const AddDriverMoreInfoModal = ({
                 htmlFor="remaining"
                 className="text-sm font-medium text-gray-700"
               >
-                Remaining:
+                Remain Payment:
               </label>
               <input
                 type="number"

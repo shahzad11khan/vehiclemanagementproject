@@ -1,91 +1,53 @@
 import { connect } from "@config/db.js";
-import Driver from "@models/Driver/Driver.Model.js";
+import DriverInfo from "@models/DriverMoreInfo/DriverMoreInfo.model.js";
 import { NextResponse } from "next/server";
+
 // PUT handler for updating driver details
 export async function PUT(request, context) {
   try {
     await connect(); // Connect to the database
 
     const id = context.params.DriverMoreInfoIDD; // Use the correct parameter name
-    const data = await request.formData();
+    const data = await request.formData(); // Retrieve form data
 
-    console.log(id);
-    const userAvatar = data.get("imageFile");
-    let Driveravatar = "";
-    let DriveravatarId = "";
-
-    // Check if the user avatar is an object and has a valid name (indicating it's a file)
-    if (userAvatar && typeof userAvatar === "object" && userAvatar.name) {
-      const byteData = await userAvatar.arrayBuffer();
-      const buffer = Buffer.from(byteData);
-
-      // Upload the new image to Cloudinary
-      const uploadResponse = await new Promise((resolve, reject) => {
-        const uploadStream = cloudinary.uploader.upload_stream(
-          { resource_type: "auto" },
-          (error, result) => {
-            if (error) {
-              reject(error);
-            } else {
-              resolve(result);
-            }
-          }
-        );
-
-        // Write buffer to the upload stream
-        uploadStream.end(buffer);
-      });
-
-      // Store the URL and ID of the uploaded image
-      Driveravatar = uploadResponse.secure_url;
-      DriveravatarId = uploadResponse.public_id;
-    }
+    console.log("Received ID:", id);
 
     // Convert FormData to a plain object
     const formDataObject = Object.fromEntries(data.entries());
+    console.log("Form Data:", formDataObject); // Log incoming form data for debugging
 
-    // Find the driver by ID
-    const driver = await Driver.findById(id);
-    if (!driver) {
+    // Find the drivers by driverId
+    const drivers = await DriverInfo.find({ driverId: id }); // Use find() to get an array of drivers
+    console.log(drivers);
+
+    if (drivers.length === 0) {
       return NextResponse.json({ error: "Driver not found", status: 404 });
     }
 
-    // Handle avatar update: remove old avatar from Cloudinary and update with new one if uploaded
-    if (Driveravatar && DriveravatarId) {
-      // Check if the driver has an existing avatar ID to delete
-      if (driver.DriveravatarId) {
-        try {
-          // Delete old avatar from Cloudinary if it exists
-          await cloudinary.uploader.destroy(driver.DriveravatarId);
-          console.log("Old avatar deleted from Cloudinary.");
-        } catch (error) {
-          console.error("Failed to delete old image from Cloudinary:", error);
-        }
-      }
+    // Define the fields you want to update
+    const fieldsToUpdate = [
+      "totalamount", // Replace with your actual field names
+      "totalsubtractamount", // Replace with your actual field names
+      "totalremainingamount", // Replace with your actual field names
+      // Add more fields as necessary
+    ];
 
-      // Update driver with new avatar details
-      driver.Driveravatar = Driveravatar;
-      driver.DriveravatarId = DriveravatarId;
-      console.log("New avatar uploaded and updated.");
-    } else {
-      // If no new avatar uploaded, retain the old image
-      Driveravatar = driver.Driveravatar;
-      DriveravatarId = driver.DriveravatarId;
-    }
-
+    console.log(fieldsToUpdate);
     // Update driver properties with values from formDataObject
-    for (const key in formDataObject) {
-      if (formDataObject[key] !== undefined) {
-        driver[key] = formDataObject[key];
-      }
-    }
+    for (const driver of drivers) {
+      fieldsToUpdate.forEach((field) => {
+        if (formDataObject[field] !== undefined) {
+          driver[field] = formDataObject[field];
+        }
+      });
 
-    // Save updated driver details
-    await driver.save();
+      // Save updated driver details
+      await driver.save();
+    }
 
     return NextResponse.json({
       message: "Driver details updated successfully",
-      driver,
+      drivers, // Return the updated drivers
       status: 200,
     });
   } catch (error) {

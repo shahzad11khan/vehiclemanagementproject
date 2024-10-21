@@ -7,7 +7,10 @@ import { FaTrash } from "react-icons/fa";
 import Header from "../../../Components/Header";
 import Sidebar from "../../../Components/Sidebar";
 import AddMoreInfoModal from "../AddMoreInfoModal/AddMoreInfoModal";
-import { API_URL_DriverMoreInfo } from "../../../Components/ApiUrl/ApiUrls";
+import {
+  API_URL_DriverMoreInfo,
+  API_URL_DriverMoreupdate,
+} from "../../../Components/ApiUrl/ApiUrls";
 import { getCompanyName } from "@/utils/storageUtils";
 import axios from "axios";
 
@@ -178,6 +181,9 @@ const Page = ({ params }) => {
         calculation: payment,
         endDate: "",
         subtractcalculation: 0,
+        totalamount: 0,
+        totalsubtractamount: 0,
+        totalremainingamount: 0,
         remaining: 0,
         adminCreatedBy: "",
         adminCompanyName: fetchedcompany,
@@ -251,6 +257,7 @@ const Page = ({ params }) => {
   if (!isMounted) return null;
 
   // Calculate totals for calculation, subtractcalculation, and remaining
+
   const totalCalculation = data.reduce(
     (total, row) => total + (parseFloat(row.calculation) || 0),
     0
@@ -263,6 +270,48 @@ const Page = ({ params }) => {
     (total, row) => total + (parseFloat(row.remaining) || 0),
     0
   );
+
+  // Function to update specific fields after a delay
+  const updateFieldsAfterDelay = async () => {
+    // Get the values to be updated
+    const totalCal = totalCalculation;
+    const totalSubtractCal = totalSubtractCalculation;
+    const totalRem = totalRemaining;
+
+    // Create a new FormData object
+    const formDataToSend = new FormData();
+
+    // Set the specific fields you want to update
+    formDataToSend.set("totalamount", totalCal);
+    formDataToSend.set("totalsubtractamount", totalSubtractCal);
+    formDataToSend.set("totalremainingamount", totalRem);
+
+    setTimeout(async () => {
+      console.log("Updating fields after a delay...");
+
+      try {
+        const res = await axios.put(
+          `${API_URL_DriverMoreupdate}/${id}`, // Ensure 'id' is defined in scope
+          formDataToSend,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+        console.log("Update specific fields successful:", res.data);
+      } catch (error) {
+        console.error(
+          "Error updating fields:",
+          error.response ? error.response.data : error.message
+        );
+      }
+    }, 3600000); // 60000 milliseconds = 1 minute
+  };
+
+  // Call the function to initiate the update
+  updateFieldsAfterDelay();
+
   function formatDate(dateString) {
     const dateObject = new Date(dateString);
     return `${(dateObject.getMonth() + 1)
@@ -345,7 +394,7 @@ const Page = ({ params }) => {
                               £ {row.calculation}
                             </td>
                             <td className="py-2 px-4 border-b border-gray-200">
-                              {/* {formatDate(row.endDate)} */}
+                              {formatDate(row.endDate)}
                             </td>
                             <td className="py-2 px-4 border-b border-gray-200">
                               £ {row.subtractcalculation}

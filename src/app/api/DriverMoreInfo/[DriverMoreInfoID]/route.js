@@ -23,6 +23,11 @@ export const PUT = async (request, context) => {
 
     // Update DriverMoreInfo properties with values from data or retain existing values
     driverMoreInfo.driverId = data.driverId || driverMoreInfo.driverId;
+    driverMoreInfo.totalamount = data.totalamount || driverMoreInfo.totalamount;
+    driverMoreInfo.totalsubtractamount =
+      data.totalsubtractamount || driverMoreInfo.totalsubtractamount;
+    driverMoreInfo.totalremainingamount =
+      data.totalremainingamount || driverMoreInfo.totalremainingamount;
     driverMoreInfo.vehicle = data.vehicle || driverMoreInfo.vehicle;
     driverMoreInfo.paymentcycle =
       data.paymentcycle || driverMoreInfo.paymentcycle;
@@ -68,10 +73,10 @@ export async function GET(request, context) {
 
     // Extract the product ID from the request parameters
     const id = context.params.DriverMoreInfoID;
-    // console.log(id);
+    console.log(id);
 
     // Find the product by ID
-    const Find_User = await DriverMoreInfo.findById({ _id: id });
+    const Find_User = await DriverMoreInfo.findOne({ driverId: id });
 
     // Check if the product exists
     if (!Find_User) {

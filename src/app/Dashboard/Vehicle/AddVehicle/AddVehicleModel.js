@@ -28,7 +28,6 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
     drivetrain: "",
     exteriorColor: "",
     interiorColor: "",
-    weight: "",
     dimensions: {
       height: "",
       width: "",
@@ -39,7 +38,6 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
     cargoCapacity: "",
     horsepower: "",
     torque: "",
-    acceleration: "",
     topSpeed: "",
     fuelEfficiency: "",
     safetyFeatures: "",
@@ -51,8 +49,8 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
     warrantyInfo: "",
     adminCreatedBy: "",
     adminCompanyName: "",
-    isActive: "",
-    imageFile: null,
+    isActive: false,
+    imageFiles: [], // Store selected image files
   });
 
   useEffect(() => {
@@ -64,15 +62,17 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
         adminCompanyName: storedCompanyName,
       }));
     }
+
     const fetchData = async () => {
       try {
         const localAuthData = await fetchLocalAuth();
         const manufacturerData = await fetchManfacturer();
-        const transmission = await fetchTransmission();
-        const type = await fetchType();
-        const fueltype = await fetchFuelType();
+        const transmissionData = await fetchTransmission();
+        const typeData = await fetchType();
+        const fueltypeData = await fetchFuelType();
         const currentCompanyName =
           vehicleData.adminCompanyName || storedCompanyName;
+
         const filteredLocalAuth =
           storedSuperadmin === "superadmin"
             ? localAuthData.Result
@@ -89,26 +89,26 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                   manufacturer.adminCompanyName === currentCompanyName ||
                   manufacturer.adminCompanyName === "superadmin"
               );
-        const filteredtransmission =
+        const filteredTransmission =
           storedSuperadmin === "superadmin"
-            ? transmission.Result
-            : transmission.Result.filter(
+            ? transmissionData.Result
+            : transmissionData.Result.filter(
                 (transmission) =>
                   transmission.adminCompanyName === currentCompanyName ||
                   transmission.adminCompanyName === "superadmin"
               );
-        const filteredtype =
+        const filteredType =
           storedSuperadmin === "superadmin"
-            ? type.Result
-            : type.Result.filter(
+            ? typeData.Result
+            : typeData.Result.filter(
                 (type) =>
                   type.adminCompanyName === currentCompanyName ||
                   type.adminCompanyName === "superadmin"
               );
-        const filteredfueltype =
+        const filteredFuelType =
           storedSuperadmin === "superadmin"
-            ? fueltype.Result
-            : fueltype.Result.filter(
+            ? fueltypeData.Result
+            : fueltypeData.Result.filter(
                 (fueltype) =>
                   fueltype.adminCompanyName === currentCompanyName ||
                   fueltype.adminCompanyName === "superadmin"
@@ -116,9 +116,9 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
 
         setLocal(filteredLocalAuth);
         setManufacturer(filteredManufacturer);
-        setTransmission(filteredtransmission);
-        setType(filteredtype);
-        setFuelType(filteredfueltype);
+        setTransmission(filteredTransmission);
+        setType(filteredType);
+        setFuelType(filteredFuelType);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -126,12 +126,17 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
 
     fetchData();
   }, [vehicleData.adminCompanyName]);
+
   const handleChange = (e) => {
     const { name, value, type, checked, files } = e.target;
     setVehicleData((prevData) => ({
       ...prevData,
       [name]:
-        type === "checkbox" ? checked : type === "file" ? files[0] : value,
+        type === "checkbox"
+          ? checked
+          : type === "file"
+          ? Array.from(files)
+          : value,
     }));
   };
 
@@ -147,10 +152,24 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
   };
 
   const handleSubmit = async (e) => {
-    console.log(vehicleData);
     e.preventDefault();
+    const formData = new FormData();
+    for (const key in vehicleData) {
+      if (key === "imageFiles") {
+        vehicleData.imageFiles.forEach((file) => {
+          formData.append("imageFiles", file);
+        });
+      } else if (typeof vehicleData[key] === "object") {
+        for (const subKey in vehicleData[key]) {
+          formData.append(`${key}[${subKey}]`, vehicleData[key][subKey]);
+        }
+      } else {
+        formData.append(key, vehicleData[key]);
+      }
+    }
+
     try {
-      const response = await axios.post(`${API_URL_Vehicle}`, vehicleData, {
+      const response = await axios.post(API_URL_Vehicle, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -160,51 +179,53 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
         toast.success(response.data.message);
         fetchData();
         onClose();
-        setVehicleData({
-          manufacturer: "",
-          model: "",
-          year: "",
-          type: "",
-          engineType: "",
-          fuelType: "",
-          transmission: "",
-          drivetrain: "",
-          exteriorColor: "",
-          interiorColor: "",
-          weight: "",
-          dimensions: {
-            height: "",
-            width: "",
-            length: "",
-          },
-          passengerCapacity: "",
-          LocalAuthority: "",
-          cargoCapacity: "",
-          horsepower: "",
-          torque: "",
-          acceleration: "",
-          topSpeed: "",
-          fuelEfficiency: "",
-          safetyFeatures: "",
-          techFeatures: "",
-          vehicleStatus: "",
-          towingCapacity: "",
-          price: "",
-          registrationNumber: "",
-          warrantyInfo: "",
-          adminCreatedBy: "",
-          adminCompanyName: vehicleData.adminCompanyName,
-          isActive: "",
-          imageFile: null,
-        });
+        resetForm(); // Call reset function
       } else {
-        console.log(response.data);
         toast.error(response.data.error);
       }
     } catch (error) {
       console.error("Error submitting vehicle data:", error);
     }
   };
+
+  const resetForm = () => {
+    setVehicleData({
+      manufacturer: "",
+      model: "",
+      year: "",
+      type: "",
+      engineType: "",
+      fuelType: "",
+      transmission: "",
+      drivetrain: "",
+      exteriorColor: "",
+      interiorColor: "",
+      dimensions: {
+        height: "",
+        width: "",
+        length: "",
+      },
+      passengerCapacity: "",
+      LocalAuthority: "",
+      cargoCapacity: "",
+      horsepower: "",
+      torque: "",
+      topSpeed: "",
+      fuelEfficiency: "",
+      safetyFeatures: "",
+      techFeatures: "",
+      towingCapacity: "",
+      price: "",
+      registrationNumber: "",
+      vehicleStatus: "",
+      warrantyInfo: "",
+      adminCreatedBy: "",
+      adminCompanyName: vehicleData.adminCompanyName,
+      isActive: false,
+      imageFiles: [], // Reset to an empty array
+    });
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -720,14 +741,18 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
 
           <div>
             <h3 className="text-xl font-semibold mb-2">Vehicle Images</h3>
-
-            <input
-              type="file"
-              id="imageFile"
-              name="imageFile"
-              onChange={handleChange}
-              className="block w-full mt-1 mb-2"
-            />
+            <div>
+              <input
+                type="file"
+                id="imageFiles"
+                name="imageFiles"
+                onChange={handleChange}
+                className="block w-full mt-1 mb-2"
+                placeholder="select 10 images"
+                multiple
+              />
+              <span className="text-red-500 mb-3">Maximum 10 images</span>
+            </div>
           </div>
 
           <div className="flex items-center">

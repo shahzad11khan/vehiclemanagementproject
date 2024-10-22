@@ -85,6 +85,18 @@ const vehicleSchema = new mongoose.Schema(
       default: false,
     },
     imageFile: { type: String, default: null },
+    images: [
+      {
+        url: {
+          type: String,
+          required: true,
+        },
+        publicId: {
+          type: String,
+          required: true,
+        },
+      },
+    ],
     imagePublicId: { type: String, default: null },
     authority: {
       type: String,

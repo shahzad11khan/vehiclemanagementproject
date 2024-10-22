@@ -183,7 +183,7 @@ export const DELETE = async (request, { params }) => {
 
     // Find and delete the vehicle by its ID
     const deletedVehicle = await Vehicle.findById({ _id: VehicleID });
-    console.log(deletedVehicle);
+    // console.log(deletedVehicle);
     if (!deletedVehicle) {
       return NextResponse.json({
         error: "Vehicle not found",
@@ -192,6 +192,8 @@ export const DELETE = async (request, { params }) => {
     }
 
     console.log(deletedVehicle); // For debugging
+    const deleted = await Vehicle.findByIdAndDelete({ _id: VehicleID });
+    console.log(deleted);
 
     // Get the image public ID from the deleted vehicle object
     const userPublicIdd = deletedVehicle.imagePublicId;

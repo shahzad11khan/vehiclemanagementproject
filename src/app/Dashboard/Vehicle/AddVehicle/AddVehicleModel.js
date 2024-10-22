@@ -1,6 +1,5 @@
 "use client";
 import { API_URL_Vehicle } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
-import SafetyFeaturesDropdown from "../SafetyFeaturesDropdown";
 import axios from "axios";
 import { toast } from "react-toastify";
 import React, { useEffect, useState } from "react";
@@ -43,11 +42,12 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
     acceleration: "",
     topSpeed: "",
     fuelEfficiency: "",
-    safetyFeatures: [],
+    safetyFeatures: "",
     techFeatures: "",
     towingCapacity: "",
     price: "",
     registrationNumber: "",
+    vehicleStatus: "",
     warrantyInfo: "",
     adminCreatedBy: "",
     adminCompanyName: "",
@@ -147,6 +147,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
   };
 
   const handleSubmit = async (e) => {
+    console.log(vehicleData);
     e.preventDefault();
     try {
       const response = await axios.post(`${API_URL_Vehicle}`, vehicleData, {
@@ -184,8 +185,9 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
           acceleration: "",
           topSpeed: "",
           fuelEfficiency: "",
-          safetyFeatures: [],
+          safetyFeatures: "",
           techFeatures: "",
+          vehicleStatus: "",
           towingCapacity: "",
           price: "",
           registrationNumber: "",
@@ -204,25 +206,6 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
     }
   };
   if (!isOpen) return null;
-
-  const handleCheckboxChange = (option) => {
-    setVehicleData((prevData) => {
-      const currentFeatures = prevData.safetyFeatures;
-      if (currentFeatures.includes(option)) {
-        return {
-          ...prevData,
-          safetyFeatures: currentFeatures.filter(
-            (feature) => feature !== option
-          ),
-        };
-      } else {
-        return {
-          ...prevData,
-          safetyFeatures: [...currentFeatures, option],
-        };
-      }
-    });
-  };
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50 ">
@@ -578,25 +561,8 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
               />
             </div>
             <div>
-              {/* <div className="flex gap-1">
-                <label className="block font-semibold">Safety Features</label>
-
-                <span className="text-red-600">*</span>
-              </div>
-              <textarea
-                name="safetyFeatures"
-                value={vehicleData.safetyFeatures}
-                onChange={handleChange}
-                className="w-full p-2 border border-gray-300 rounded"
-                placeholder="e.g., Airbags, ABS, Stability Control"
-                required
-              /> */}
               <div className="flex gap-1">
                 <label className="block font-semibold">Safety Features</label>
-                <span className="text-red-600">*</span>
-              </div>
-              <div className="flex gap-1">
-                {/* <label className="block font-semibold">Safety Features</label>
                 <span className="text-red-600">*</span>
               </div>
               <select
@@ -604,11 +570,10 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                 value={vehicleData.safetyFeatures}
                 onChange={handleChange}
                 className="w-full p-2 border border-gray-300 rounded"
-                multiple
                 required
               >
                 <option value="" disabled>
-                  Select safety features
+                  Select safety feature
                 </option>
                 <option value="Airbags">Airbags</option>
                 <option value="ABS">ABS (Anti-lock Braking System)</option>
@@ -628,12 +593,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                 <option value="Automatic Emergency Braking">
                   Automatic Emergency Braking
                 </option>
-              </select> */}
-                <SafetyFeaturesDropdown
-                  vehicleData={vehicleData}
-                  handleCheckboxChange={handleCheckboxChange}
-                />
-              </div>
+              </select>
             </div>
             <div>
               <div className="flex gap-1">
@@ -714,23 +674,50 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
             </div>
           </div>
 
-          <div className="mt-4">
-            <div className="flex gap-1">
-              <label className="block font-semibold">
-                Warranty Information
-              </label>
-
-              <span className="text-red-600">*</span>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-4">
+            {/* Warranty Information Section */}
+            <div className="flex flex-col">
+              <div className="flex gap-1 items-center">
+                <label className="block font-semibold">
+                  Warranty Information
+                </label>
+                <span className="text-red-600">*</span>
+              </div>
+              <textarea
+                name="warrantyInfo"
+                value={vehicleData.warrantyInfo}
+                onChange={handleChange}
+                className="w-full p-2 border border-gray-300 rounded resize-none" // Added 'resize-none' for better layout control
+                placeholder="e.g., 3 years or 36,000 miles"
+                required
+              />
             </div>
-            <textarea
-              name="warrantyInfo"
-              value={vehicleData.warrantyInfo}
-              onChange={handleChange}
-              className="w-full p-2 border border-gray-300 rounded"
-              placeholder="e.g., 3 years or 36,000 miles"
-              required
-            />
+
+            {/* Vehicle Status Section */}
+            <div className="flex flex-col mt-4">
+              <div className="flex gap-1 items-center">
+                <label className="block font-semibold">Vehicle Status</label>
+                <span className="text-red-600">*</span>
+              </div>
+              <select
+                name="vehicleStatus" // Change the name to match the new purpose
+                value={vehicleData.vehicleStatus}
+                onChange={handleChange}
+                className="w-full p-2 border border-gray-300 rounded"
+                required
+              >
+                <option value="" disabled>
+                  Select vehicle status
+                </option>
+                <option value="Available">Available</option>
+                <option value="Sell">Sell</option>
+                <option value="Pending">Pending</option>
+                <option value="Rent">Rent</option>
+                <option value="Maintenance">In Maintenance</option>
+              </select>
+            </div>
           </div>
+
           <div>
             <h3 className="text-xl font-semibold mb-2">Vehicle Images</h3>
 
@@ -741,15 +728,6 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
               onChange={handleChange}
               className="block w-full mt-1 mb-2"
             />
-            {/* <input
-              type="text"
-              id="imageName"
-              name="imageName"
-              value={vehicleData.imageName}
-              onChange={handleChange}
-              placeholder="Image Name"
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-            /> */}
           </div>
 
           <div className="flex items-center">

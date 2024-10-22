@@ -2,6 +2,7 @@ import { connect } from "@config/db.js";
 import Vehicle from "@models/Vehicle/Vehicle.Model.js";
 // import { catchAsyncErrors } from "@middlewares/catchAsyncErrors.js";
 import { NextResponse } from "next/server";
+import cloudinary from "@middlewares/cloudinary.js";
 
 export async function PUT(request, context) {
   try {
@@ -64,6 +65,8 @@ export async function PUT(request, context) {
     if (formDataObject.model !== undefined)
       vehicle.model = formDataObject.model;
     if (formDataObject.year !== undefined) vehicle.year = formDataObject.year;
+    if (formDataObject.vehicleStatus !== undefined)
+      vehicle.vehicleStatus = formDataObject.vehicleStatus;
     if (formDataObject.type !== undefined) vehicle.type = formDataObject.type;
     if (formDataObject.engineType !== undefined)
       vehicle.engineType = formDataObject.engineType;
@@ -179,8 +182,8 @@ export const DELETE = async (request, { params }) => {
     console.log("Vehicle ID:", VehicleID);
 
     // Find and delete the vehicle by its ID
-    const deletedVehicle = await Vehicle.findOneAndDelete({ _id: VehicleID });
-
+    const deletedVehicle = await Vehicle.findById({ _id: VehicleID });
+    console.log(deletedVehicle);
     if (!deletedVehicle) {
       return NextResponse.json({
         error: "Vehicle not found",
@@ -188,29 +191,26 @@ export const DELETE = async (request, { params }) => {
       });
     }
 
-    // Get the image public ID from the vehicle object
-    const imagePublicId = deletedVehicle.imageId;
-    console.log("Image Public ID:", imagePublicId);
+    console.log(deletedVehicle); // For debugging
+
+    // Get the image public ID from the deleted vehicle object
+    const userPublicIdd = deletedVehicle.imagePublicId;
+    console.log("Image Public ID:", userPublicIdd);
 
     // If the vehicle has an associated image, delete it from Cloudinary
-    if (imagePublicId) {
+    if (userPublicIdd) {
       try {
-        const cloudinaryResponse = await cloudinary.uploader.destroy(
-          imagePublicId
+        const cloudinaryResponse1 = await cloudinary.uploader.destroy(
+          userPublicIdd
         );
-        console.log(`Cloudinary response: ${cloudinaryResponse.result}`);
-        if (cloudinaryResponse.result !== "ok") {
-          console.error("Failed to delete image from Cloudinary");
-        }
+
+        console.log(`Cloudinary response: ${cloudinaryResponse1.result}`);
       } catch (error) {
-        console.error("Error deleting image from Cloudinary:", error);
-        return NextResponse.json({
-          error: "Failed to delete image from Cloudinary",
-          status: 500,
-        });
+        console.error("Failed to delete image from Cloudinary:", error);
       }
     }
 
+    // Return success response
     return NextResponse.json({
       message: "Vehicle deleted successfully",
       success: true,

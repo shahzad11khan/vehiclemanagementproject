@@ -16,11 +16,11 @@ const Page = () => {
   const columns = [
     "Username",
     "Email",
-    "Company Name",
+    // "Company Name",
     "User Avatar",
     "User Active",
     "Role",
-    "Created By",
+    // "Created By",
     "Actions",
   ];
 
@@ -158,7 +158,7 @@ const Page = () => {
                     <tr key={user._id} className="hover:bg-gray-100">
                       <td className="py-2 px-4 border-b">{user.username}</td>
                       <td className="py-2 px-4 border-b">{user.email}</td>
-                      <td className="py-2 px-4 border-b">{user.companyname}</td>
+                      {/* <td className="py-2 px-4 border-b">{user.companyname}</td> */}
                       <td className="py-2 px-4 border-b">
                         <img
                           src={user.useravatar}
@@ -180,9 +180,9 @@ const Page = () => {
                         )}
                       </td>
                       <td className="py-2 px-4 border-b">{user.role}</td>
-                      <td className="py-2 px-4 border-b">
+                      {/* <td className="py-2 px-4 border-b">
                         {user.adminCreatedBy || "By Self"}
-                      </td>
+                      </td> */}
                       <td className="py-2 px-4 border-b">
                         <div className="flex gap-2">
                           <button

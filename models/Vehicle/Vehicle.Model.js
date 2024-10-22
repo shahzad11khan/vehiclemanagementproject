@@ -71,6 +71,9 @@ const vehicleSchema = new mongoose.Schema(
     registrationNumber: {
       type: String,
     },
+    vehicleStatus: {
+      type: String,
+    },
     warrantyInfo: {
       type: String,
     },

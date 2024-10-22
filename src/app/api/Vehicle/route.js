@@ -6,13 +6,52 @@ import cloudinary from "@middlewares/cloudinary.js";
 
 export async function POST(request) {
   try {
-    await connect(); // Ensure database connection
+    await connect();
 
-    const formData = await request.formData();
-    const formDataObject = Object.fromEntries(formData); // Convert form data to an object
+    // Parse JSON data from the request body
+    const formDataObject = await request.formData();
 
-    console.log(formDataObject);
+    let file1 = formDataObject.get("imageFile");
+    console.log("Vehicle:", file1);
 
+    let Driveravatar = "";
+    let DriveravatarId = "";
+
+    // Upload files to Cloudinary
+    if (file1) {
+      const buffer1 = Buffer.from(await file1.arrayBuffer());
+      const uploadResponse1 = await new Promise((resolve, reject) => {
+        cloudinary.uploader
+          .upload_stream({ resource_type: "auto" }, (error, result) => {
+            if (error) {
+              reject(
+                new Error("Error uploading Driveravatar: " + error.message)
+              );
+            } else {
+              resolve(result);
+            }
+          })
+          .end(buffer1);
+      });
+
+      Driveravatar = uploadResponse1.secure_url; // Cloudinary URL for display image
+      DriveravatarId = uploadResponse1.public_id;
+    } else {
+      Driveravatar =
+        "https://cdn-icons-png.flaticon.com/128/17561/17561717.png";
+      DriveravatarId = "123456789";
+    }
+
+    // Prepare object excluding imageFile
+    const formDataObjectt = {};
+    for (const [key, value] of formDataObject.entries()) {
+      if (key !== "imageFile") {
+        formDataObjectt[key] = value;
+      }
+    }
+
+    console.log(formDataObjectt);
+    // Destructure the properties safely
     const {
       manufacturer,
       model,
@@ -24,6 +63,7 @@ export async function POST(request) {
       drivetrain,
       exteriorColor,
       interiorColor,
+      dimensions = {}, // Provide default empty object
       passengerCapacity,
       cargoCapacity,
       horsepower,
@@ -32,6 +72,7 @@ export async function POST(request) {
       towingCapacity,
       fuelEfficiency,
       safetyFeatures,
+      vehicleStatus,
       techFeatures,
       price,
       registrationNumber,
@@ -40,7 +81,11 @@ export async function POST(request) {
       adminCreatedBy,
       adminCompanyName,
       LocalAuthority,
-    } = formDataObject;
+    } = formDataObjectt;
+
+    const { height = "", width = "", length = "" } = dimensions; // Provide default values
+
+    console.log(height, width, length);
 
     // Validate required fields
     if (!registrationNumber || !manufacturer || !model) {
@@ -50,7 +95,7 @@ export async function POST(request) {
       });
     }
 
-    // Check if the vehicle already exists
+    // Check for existing vehicle
     const existingVehicle = await Vehicle.findOne({ registrationNumber });
     if (existingVehicle) {
       return NextResponse.json({
@@ -59,43 +104,7 @@ export async function POST(request) {
       });
     }
 
-    // Handle image uploads or assign a dummy image
-    const imageFile = formData.get("imageFile");
-    let imageUrl = "";
-    let imageId = "";
-
-    if (imageFile && imageFile.size > 0) {
-      const buffer = Buffer.from(await imageFile.arrayBuffer());
-      try {
-        const uploadResponse = await new Promise((resolve, reject) => {
-          cloudinary.uploader
-            .upload_stream({ resource_type: "auto" }, (error, result) => {
-              if (error) {
-                reject(new Error("Error uploading image: " + error.message));
-              } else {
-                resolve(result);
-              }
-            })
-            .end(buffer);
-        });
-
-        imageUrl = uploadResponse.secure_url; // Cloudinary URL for the image
-        imageId = uploadResponse.public_id; // Cloudinary public ID for future reference
-      } catch (error) {
-        console.error("Cloudinary upload error:", error);
-        return NextResponse.json({
-          error: "Failed to upload image",
-          status: 500,
-        });
-      }
-    } else {
-      // Use a default image if no image is uploaded
-      imageUrl =
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQpshsQpl4Ifd7LXyD4Z9Tqt1p0tBlZOsyzeg&s";
-      imageId = "123435456766";
-    }
-
-    // Create and save the new vehicle entry
+    // Create new vehicle
     const newVehicle = new Vehicle({
       manufacturer,
       model,
@@ -107,11 +116,13 @@ export async function POST(request) {
       drivetrain,
       exteriorColor,
       interiorColor,
+      dimensions: { height, width, length },
       passengerCapacity,
       cargoCapacity,
       horsepower,
       torque,
       topSpeed,
+      vehicleStatus,
       towingCapacity,
       fuelEfficiency,
       safetyFeatures,
@@ -123,12 +134,11 @@ export async function POST(request) {
       adminCreatedBy,
       adminCompanyName,
       LocalAuthority,
-      imageFile: imageUrl, // Store Cloudinary URL
-      imagePublicId: imageId, // Store Cloudinary public ID
+      imageFile: Driveravatar,
+      imagePublicId: DriveravatarId,
     });
 
     const savedVehicle = await newVehicle.save();
-
     return NextResponse.json({
       message: "Vehicle created successfully",
       success: true,

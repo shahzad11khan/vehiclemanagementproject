@@ -1,4 +1,3 @@
-"useclient";
 import { useState } from "react";
 
 const SafetyFeaturesDropdown = ({ vehicleData, handleCheckboxChange }) => {
@@ -22,18 +21,25 @@ const SafetyFeaturesDropdown = ({ vehicleData, handleCheckboxChange }) => {
   };
 
   return (
-    <div className="relative">
+    <div className="relative w-full sm:w-auto">
+      <div className="flex">
+        <label className="block font-semibold">Safety Features</label>
+        <span className="text-red-600">*</span>
+      </div>
+      {/* Button to toggle the dropdown */}
       <button
         type="button"
         onClick={toggleDropdown}
-        className="w-full p-2 border border-gray-300 rounded"
+        className="w-full p-2 border border-gray-300 rounded bg-white text-left md:text-base text-sm"
       >
         {vehicleData.safetyFeatures.length > 0
           ? vehicleData.safetyFeatures.join(", ")
           : "Select safety features"}
       </button>
+
+      {/* Dropdown with checkboxes */}
       {isOpen && (
-        <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded shadow-lg">
+        <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded shadow-lg max-h-60 overflow-y-auto">
           {options.map((option) => (
             <label key={option} className="flex items-center p-2">
               <input
@@ -42,7 +48,7 @@ const SafetyFeaturesDropdown = ({ vehicleData, handleCheckboxChange }) => {
                 onChange={() => handleCheckboxChange(option)}
                 className="mr-2"
               />
-              {option}
+              <span className="text-sm md:text-base">{option}</span>
             </label>
           ))}
         </div>

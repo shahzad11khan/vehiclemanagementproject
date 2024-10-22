@@ -278,7 +278,7 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                   <span className="text-red-600">*</span>
                 </div>
                 <input
-                  type="tel"
+                  type="number"
                   id="tel1"
                   name="tel1"
                   value={formData.tel1}
@@ -297,7 +297,7 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                 </label>
 
                 <input
-                  type="tel"
+                  type="number"
                   id="tel2"
                   name="tel2"
                   value={formData.tel2}

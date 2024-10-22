@@ -6,7 +6,6 @@ import Sidebar from "../../Components/Sidebar";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FaEdit, FaTrash, FaPoundSign } from "react-icons/fa";
-import { MdOutlineReadMore } from "react-icons/md";
 import AddDriverModel from "../AddDriver/AddDriverModel";
 import UpdateDriverModel from "../UpdateDriver/UpdateDriverModel";
 import { API_URL_DriverMoreInfo } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";

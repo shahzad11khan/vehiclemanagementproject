@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Line } from "react-chartjs-2";
 import { Doughnut } from "react-chartjs-2";
-import { getAuthData } from "@/utils/verifytoken";
+// import { getAuthData } from "@/utils/verifytoken";
 
 const HeroSection = () => {
-  const [superadmin, setsuperadmin] = useState("");
-  const [flag, setflag] = useState("");
+  // const [superadmin, setsuperadmin] = useState("");
+  // const [flag, setflag] = useState("");
 
-  useEffect(() => {
-    const authData = getAuthData();
-    setsuperadmin(authData.role);
-    setflag(authData.flag);
-  }, []);
+  // useEffect(() => {
+  //   const authData = getAuthData();
+  //   setsuperadmin(authData.role);
+  //   setflag(authData.flag);
+  // }, []);
 
   const waveData = {
     labels: ["January", "February", "March", "April", "May"],
@@ -44,17 +44,23 @@ const HeroSection = () => {
           <li>
             <strong className="text-xl">Total Number Of Cars</strong>
             <span className="ml-1 text-sm block">
-              {superadmin === "superadmin" && flag === "false"
+              The Total Number of Car Is :
+              {/* {superadmin === "superadmin" && flag === "false"
                 ? "The Total Number of Car Is  :"
-                : "Rented Cars Is  :"}
+                : superadmin === "superadmin" && flag === "true"
+                ? "The Total Number of Car Is  :"
+                : ""} */}
             </span>
           </li>
           <li>
             <strong className="text-xl">0</strong>
             <span className="ml-1 text-sm block">
-              {superadmin === "superadmin" && flag === "true"
+              Rented Cars Is :
+              {/* {superadmin === "superadmin" && flag === "true"
                 ? "Rented Cars Is  :"
-                : "The Total Number of Car Is  :"}
+                : superadmin === "superadmin" && flag === "false"
+                ? "Rented Cars Is  :"
+                : "The Total Number of Car Is  :"} */}
             </span>
           </li>
           <li>

@@ -2,15 +2,17 @@ import { connect } from "@config/db.js";
 import Vehicle from "@models/Vehicle/Vehicle.Model.js";
 import { catchAsyncErrors } from "@middlewares/catchAsyncErrors.js";
 import { NextResponse } from "next/server";
+import cloudinary from "@middlewares/cloudinary.js";
 
 export async function POST(request) {
   try {
-    await connect(); // Ensure you're properly handling database connection
+    await connect(); // Ensure database connection
 
-    // Parse JSON data from the request body
-    const formDataObject = await request.json();
+    const formData = await request.formData();
+    const formDataObject = Object.fromEntries(formData); // Convert form data to an object
 
-    // Destructure the properties from the parsed JSON
+    console.log(formDataObject);
+
     const {
       manufacturer,
       model,
@@ -22,7 +24,6 @@ export async function POST(request) {
       drivetrain,
       exteriorColor,
       interiorColor,
-      dimensions: { height, width, length }, // Nested destructuring for dimensions
       passengerCapacity,
       cargoCapacity,
       horsepower,
@@ -41,7 +42,7 @@ export async function POST(request) {
       LocalAuthority,
     } = formDataObject;
 
-    // Validate required fields (simple validation)
+    // Validate required fields
     if (!registrationNumber || !manufacturer || !model) {
       return NextResponse.json({
         error: "Registration number, manufacturer, and model are required",
@@ -49,13 +50,49 @@ export async function POST(request) {
       });
     }
 
-    // Check for existing vehicle by registration number
+    // Check if the vehicle already exists
     const existingVehicle = await Vehicle.findOne({ registrationNumber });
     if (existingVehicle) {
       return NextResponse.json({
         error: "Vehicle with this registration number already exists",
         status: 400,
       });
+    }
+
+    // Handle image uploads or assign a dummy image
+    const imageFile = formData.get("imageFile");
+    let imageUrl = "";
+    let imageId = "";
+
+    if (imageFile && imageFile.size > 0) {
+      const buffer = Buffer.from(await imageFile.arrayBuffer());
+      try {
+        const uploadResponse = await new Promise((resolve, reject) => {
+          cloudinary.uploader
+            .upload_stream({ resource_type: "auto" }, (error, result) => {
+              if (error) {
+                reject(new Error("Error uploading image: " + error.message));
+              } else {
+                resolve(result);
+              }
+            })
+            .end(buffer);
+        });
+
+        imageUrl = uploadResponse.secure_url; // Cloudinary URL for the image
+        imageId = uploadResponse.public_id; // Cloudinary public ID for future reference
+      } catch (error) {
+        console.error("Cloudinary upload error:", error);
+        return NextResponse.json({
+          error: "Failed to upload image",
+          status: 500,
+        });
+      }
+    } else {
+      // Use a default image if no image is uploaded
+      imageUrl =
+        "https://res.cloudinary.com/your-cloud-name/image/upload/v1234567890/default-vehicle-image.jpg";
+      imageId = "123435456766";
     }
 
     // Create and save the new vehicle entry
@@ -70,11 +107,6 @@ export async function POST(request) {
       drivetrain,
       exteriorColor,
       interiorColor,
-      dimensions: {
-        height,
-        width,
-        length,
-      },
       passengerCapacity,
       cargoCapacity,
       horsepower,
@@ -91,16 +123,17 @@ export async function POST(request) {
       adminCreatedBy,
       adminCompanyName,
       LocalAuthority,
+      imageFile: imageUrl, // Store Cloudinary URL
+      imagePublicId: imageId, // Store Cloudinary public ID
     });
 
-    console.log(newVehicle);
-
     const savedVehicle = await newVehicle.save();
+
     return NextResponse.json({
       message: "Vehicle created successfully",
       success: true,
-      vehicle: savedVehicle, // Optionally include saved vehicle data in the response
-      status: 201, // Use 201 for created resources
+      vehicle: savedVehicle,
+      status: 201,
     });
   } catch (error) {
     console.error("Error occurred:", error);

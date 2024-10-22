@@ -22,7 +22,6 @@ import {
 const Page = () => {
   const router = useRouter();
   const [superadmin, setsuperadmin] = useState("");
-  const [companyname, setcompanyname] = useState("");
 
   const [flag, setflag] = useState("");
 
@@ -31,7 +30,6 @@ const Page = () => {
       const authData = getAuthData();
       setsuperadmin(authData.role);
       setflag(authData.flag);
-      setcompanyname(authData.companyName);
     } else {
       router.push("/");
       return;
@@ -105,14 +103,14 @@ const Page = () => {
                   superadmin === "superadmin" && flag === "false"
                     ? "Companies"
                     : superadmin === "superadmin" && flag === "true"
-                    ? companyname
-                    : companyname,
+                    ? "Total Cars"
+                    : "Total Cars",
                 count:
                   superadmin === "superadmin" && flag === "false"
                     ? counts.Companies
                     : superadmin === "superadmin" && flag === "true"
-                    ? "Self"
-                    : "Self",
+                    ? 0
+                    : 0,
                 colorx: {
                   background: "#E64B87",
                 },
@@ -134,10 +132,10 @@ const Page = () => {
 
                 title:
                   superadmin === "superadmin" && flag === "false"
-                    ? "All Users"
+                    ? "Cars for Rent"
                     : superadmin === "superadmin" && flag === "true"
-                    ? "Users"
-                    : "Users",
+                    ? "Cars for Rent"
+                    : "Cars for Rent",
                 count: counts.userCount || 0,
 
                 colorx: {
@@ -160,10 +158,10 @@ const Page = () => {
                 ),
                 title:
                   superadmin === "superadmin" && flag === "false"
-                    ? "All Drivers"
+                    ? "Cars for sale"
                     : superadmin === "superadmin" && flag === "true"
-                    ? "Drivers"
-                    : "Drivers",
+                    ? "Cars for sale"
+                    : "Cars for sale",
                 count: counts.driverCount || 0,
                 colorx: {
                   background: "#47C2FF",
@@ -186,10 +184,10 @@ const Page = () => {
                 color: "text-red-500",
                 title:
                   superadmin === "superadmin" && flag === "false"
-                    ? "All Vehicles"
+                    ? "Cars on Route"
                     : superadmin === "superadmin" && flag === "true"
-                    ? "Vehicles"
-                    : "Vehicles",
+                    ? "Cars on Route"
+                    : "Cars on Route",
                 count: counts.vehicleCount || 0,
                 colorx: {
                   background: "#47C2FF",
@@ -201,8 +199,13 @@ const Page = () => {
                 },
               },
               {
-                title: "Requests",
-                count: counts.Payment ? counts.Payment : 0,
+                title:
+                  superadmin === "superadmin" && flag === "false"
+                    ? "Cars out for Maintenance"
+                    : superadmin === "superadmin" && flag === "true"
+                    ? "Cars out for Maintenance"
+                    : "Cars out for Maintenance",
+                count: counts.vehicleCount || 0,
                 gradient: "bg-gradient-to-r",
                 style: {
                   backgroundImage:

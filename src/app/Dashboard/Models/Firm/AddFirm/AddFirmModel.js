@@ -187,8 +187,6 @@ const AddFirmModal = ({ isOpen, onClose, fetchData }) => {
                 >
                   Company No:
                 </label>
-
-                <span className="text-red-600">*</span>
               </div>
               <input
                 type="text"
@@ -197,7 +195,6 @@ const AddFirmModal = ({ isOpen, onClose, fetchData }) => {
                 value={formData.companyNo}
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                required
               />
             </div>
 
@@ -209,8 +206,6 @@ const AddFirmModal = ({ isOpen, onClose, fetchData }) => {
                 >
                   VAT No:
                 </label>
-
-                <span className="text-red-600">*</span>
               </div>
               <input
                 type="text"
@@ -219,7 +214,6 @@ const AddFirmModal = ({ isOpen, onClose, fetchData }) => {
                 value={formData.vatNo}
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                required
               />
             </div>
 
@@ -330,7 +324,6 @@ const AddFirmModal = ({ isOpen, onClose, fetchData }) => {
                 >
                   Address:
                 </label>
-                <span className="text-red-600">*</span>
               </div>
               <input
                 type="text"
@@ -339,7 +332,6 @@ const AddFirmModal = ({ isOpen, onClose, fetchData }) => {
                 value={formData.address}
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                required
               />
             </div>
 

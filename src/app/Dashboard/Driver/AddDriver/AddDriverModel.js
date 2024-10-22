@@ -23,7 +23,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
     tel2: "",
     postcode: "",
     postalAddress: "",
-    permanentAddress: "",
+    // permanentAddress: "",
     city: "",
     county: "",
     dateOfBirth: "",
@@ -212,7 +212,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
           tel2: "",
           postcode: "",
           postalAddress: "",
-          permanentAddress: "",
+          // permanentAddress: "",
           city: "",
           county: "",
           dateOfBirth: "",
@@ -433,8 +433,6 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                   >
                     Driver Number:
                   </label>
-
-                  <span className="text-red-600">*</span>
                 </div>
                 <input
                   type="text"
@@ -443,7 +441,6 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                   value={formData.driverNumber}
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                  required
                 />
               </div>
               <div>
@@ -661,6 +658,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                 >
                   <option value="">Select Payment</option>
                   <option value="perday">Per Day</option>
+                  <option value="perweek">Per Week</option>
                   <option value="permonth">per Month</option>
                   <option value="perquarter">Per Quarter</option>
                   <option value="peryear">per year</option>
@@ -768,7 +766,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                   required
                 />
               </div>
-              <div>
+              {/* <div>
                 <label
                   htmlFor="permanentAddress"
                   className="text-sm font-medium text-gray-700"
@@ -784,7 +782,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
                 />
-              </div>
+              </div> */}
             </div>
           </div>
 

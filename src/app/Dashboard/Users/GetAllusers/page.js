@@ -89,9 +89,7 @@ const Page = () => {
         item &&
         item.companyname &&
         selectedCompanyName &&
-        item.companyname.toLowerCase() === selectedCompanyName.toLowerCase()
-          ? item // Assign item if it matches
-          : ""; // Otherwise, set it to an empty string
+        item.companyname.toLowerCase() === selectedCompanyName.toLowerCase();
 
       const usernameMatch =
         item &&

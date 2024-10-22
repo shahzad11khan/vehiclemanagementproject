@@ -23,12 +23,11 @@ export async function connect() {
 
 // local url
 // import mongoose from "mongoose";
-// import { DB_NAME } from "../constants/constants";
 
 // export async function connect() {
 //   try {
 //     // Replace 'localhost' with your actual local MongoDB host if different
-//     const uri = `mongodb://localhost:27017/${DB_NAME}`;
+//     const uri = `mongodb://localhost:27017/${process.env.DATABASE_NAME}`;
 
 //     // Connect to MongoDB
 //     await mongoose.connect(uri);

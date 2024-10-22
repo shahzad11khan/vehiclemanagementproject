@@ -8,13 +8,54 @@ export async function PUT(request, context) {
     await connect(); // Connect to the database
 
     const id = context.params.VehicleID;
-    const formDataObject = await request.json(); // Parse JSON data from the request body
+    const data = await request.formData();
+
+    const formDataObject = Object.fromEntries(data); // Convert form data to object
+    let Driveravatar = "";
+    let DriveravatarId = "";
 
     console.log(id); // Log the ID to confirm it's being received
 
     const vehicle = await Vehicle.findById(id); // Fetch vehicle by ID directly
     if (!vehicle) {
       return NextResponse.json({ error: "Vehicle not found", status: 404 });
+    }
+
+    // Handle image upload if a new file is provided
+    const imageFile = data.get("imageFile"); // Get imageFile from formData
+
+    if (imageFile && imageFile.size > 0) {
+      // If an image file is provided, upload to Cloudinary
+      const buffer = Buffer.from(await imageFile.arrayBuffer());
+      const uploadResponse = await new Promise((resolve, reject) => {
+        cloudinary.uploader
+          .upload_stream(
+            {
+              resource_type: "auto",
+            },
+            (error, result) => {
+              if (error) {
+                reject(new Error("Error uploading image: " + error.message));
+              } else {
+                resolve(result);
+              }
+            }
+          )
+          .end(buffer);
+      });
+
+      // Update Cloudinary image URL and public ID
+      Driveravatar = uploadResponse.secure_url;
+      DriveravatarId = uploadResponse.public_id;
+
+      // Optionally: Delete the old image from Cloudinary
+      if (vehicle.imagePublicId) {
+        await cloudinary.uploader.destroy(vehicle.imagePublicId);
+      }
+    } else {
+      // Keep existing image if no new file is uploaded
+      Driveravatar = vehicle.imageFile;
+      DriveravatarId = vehicle.imagePublicId;
     }
 
     // Update vehicle properties only if they exist in formDataObject
@@ -77,6 +118,10 @@ export async function PUT(request, context) {
     if (formDataObject.adminCompanyName !== undefined)
       vehicle.adminCompanyName = formDataObject.adminCompanyName;
 
+    // Update the imageUrl and imageId in the vehicle object
+    vehicle.imageFile = Driveravatar;
+    vehicle.imagePublicId = DriveravatarId;
+
     // Save the updated vehicle
     await vehicle.save();
 
@@ -133,7 +178,7 @@ export const DELETE = async (request, { params }) => {
 
     console.log("Vehicle ID:", VehicleID);
 
-    // Find and delete the vehicle
+    // Find and delete the vehicle by its ID
     const deletedVehicle = await Vehicle.findOneAndDelete({ _id: VehicleID });
 
     if (!deletedVehicle) {
@@ -141,6 +186,29 @@ export const DELETE = async (request, { params }) => {
         error: "Vehicle not found",
         status: 404,
       });
+    }
+
+    // Get the image public ID from the vehicle object
+    const imagePublicId = deletedVehicle.imageId;
+    console.log("Image Public ID:", imagePublicId);
+
+    // If the vehicle has an associated image, delete it from Cloudinary
+    if (imagePublicId) {
+      try {
+        const cloudinaryResponse = await cloudinary.uploader.destroy(
+          imagePublicId
+        );
+        console.log(`Cloudinary response: ${cloudinaryResponse.result}`);
+        if (cloudinaryResponse.result !== "ok") {
+          console.error("Failed to delete image from Cloudinary");
+        }
+      } catch (error) {
+        console.error("Error deleting image from Cloudinary:", error);
+        return NextResponse.json({
+          error: "Failed to delete image from Cloudinary",
+          status: 500,
+        });
+      }
     }
 
     return NextResponse.json({

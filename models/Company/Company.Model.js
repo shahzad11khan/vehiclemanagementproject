@@ -42,7 +42,6 @@ const CompanySchema = new mongoose.Schema(
     mailingAddress: { type: String },
     physical_Address: { type: String },
     phoneNumber: { type: String },
-    fax_Number: { type: String },
     generalEmail: { type: String },
     accountsPayableEmail: { type: String },
     specificContactEmail: { type: String },

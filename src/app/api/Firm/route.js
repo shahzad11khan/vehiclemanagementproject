@@ -41,8 +41,11 @@ export async function POST(request) {
 
       imageFile = uploadResponse1.secure_url; // Cloudinary URL for display image
       imagepublicId = uploadResponse1.public_id;
+    } else {
+      imageFile =
+        "https://res.cloudinary.com/your-cloud-name/image/upload/v1234567890/default-vehicle-image.jpg";
+      imagepublicId = "123435456766";
     }
-
     // Constructing formDataObject excluding the files
     const formDataObject = {};
     for (const [key, value] of data.entries()) {

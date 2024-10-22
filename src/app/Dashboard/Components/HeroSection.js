@@ -1,8 +1,18 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Line } from "react-chartjs-2";
 import { Doughnut } from "react-chartjs-2";
+import { getAuthData } from "@/utils/verifytoken";
 
 const HeroSection = () => {
+  const [superadmin, setsuperadmin] = useState("");
+  const [flag, setflag] = useState("");
+
+  useEffect(() => {
+    const authData = getAuthData();
+    setsuperadmin(authData.role);
+    setflag(authData.flag);
+  }, []);
+
   const waveData = {
     labels: ["January", "February", "March", "April", "May"],
     datasets: [
@@ -16,7 +26,7 @@ const HeroSection = () => {
   };
 
   const donutData = {
-    labels: [" cars on hire", "cars in repair", "cars waiting to go on hire"],
+    labels: ["Cars on Hire", "Cars in Repair", "Cars Waiting to Go on Hire"],
     datasets: [
       {
         data: [300, 50, 100],
@@ -31,34 +41,43 @@ const HeroSection = () => {
       <div className="flex-1 p-4 rounded-md shadow-sm shadow-custom-blue h-[260px]">
         <h2 className="text-lg font-semibold mb-2">Data</h2>
         <ul className="ml-5 list-none">
-          <li className="">
-            <strong className="text-xl"> All Customers</strong>
-            <span className="ml-1 text-sm block">
-              active customers in total
-            </span>
-          </li>
           <li>
-            <strong className="text-xl">£0.0</strong>
+            <strong className="text-xl">Total Number Of Cars</strong>
             <span className="ml-1 text-sm block">
-              {" "}
-              active customers in total amount
+              {superadmin === "superadmin" && flag === "false"
+                ? "Rented Cars Is  :"
+                : "The Total Number of Car Is  :"}
             </span>
           </li>
           <li>
             <strong className="text-xl">0</strong>
-            <span className="ml-1 text-sm block"> active cars</span>
+            <span className="ml-1 text-sm block">
+              {superadmin === "superadmin" && flag === "true"
+                ? "Rented Cars Is  :"
+                : "The Total Number of Car Is  :"}
+            </span>
           </li>
-          <button className="mt-4 px-4 py-2  bg-rose-400  text-white rounded-md shadow">
+          <li>
+            <strong className="text-xl">0</strong>
+            {/* <span className="ml-1 text-sm block">
+              {(superadmin === "superadmin" && flag === "false") ||
+              flag === "false"
+                ? "Active cars"
+                : "Active cars"}
+            </span> */}
+          </li>
+          <button className="mt-4 px-4 py-2 bg-rose-400 text-white rounded-md shadow">
             View Details
           </button>
         </ul>
       </div>
 
-      <div className="flex-1  p-4 rounded-md shadow-sm shadow-custom-blue h-[260px]">
+      <div className="flex-1 p-4 rounded-md shadow-sm shadow-custom-blue h-[260px]">
         <h2 className="text-lg font-semibold mb-2">Graph</h2>
         <Line data={waveData} options={{ responsive: true }} />
       </div>
-      <div className="flex-1  p-4 rounded-md shadow-sm shadow-custom-blue h-[260px]">
+
+      <div className="flex-1 p-4 rounded-md shadow-sm shadow-custom-blue h-[260px]">
         <h2 className="text-lg font-semibold mb-2">Car Details</h2>
         <div className="h-48">
           <Doughnut data={donutData} options={{ responsive: true }} />

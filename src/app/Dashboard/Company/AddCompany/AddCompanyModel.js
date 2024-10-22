@@ -18,7 +18,6 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
     mailingAddress: "",
     physical_Address: "",
     phoneNumber: "",
-    fax_Number: "",
     generalEmail: "",
     accountsPayableEmail: "",
     specificContactEmail: "",
@@ -72,7 +71,6 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
     data.append("mailingAddress", formData.mailingAddress);
     data.append("physical_Address", formData.physical_Address);
     data.append("phoneNumber", formData.phoneNumber);
-    data.append("fax_Number", formData.fax_Number);
     data.append("generalEmail", formData.generalEmail);
     data.append("accountsPayableEmail", formData.accountsPayableEmail);
     data.append("specificContactEmail", formData.specificContactEmail);
@@ -258,7 +256,6 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
                 >
                   Company Registration Number
                 </label>
-                <span className="text-red-600">*</span>
               </div>
 
               <input
@@ -268,7 +265,6 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
                 value={formData.CompanyRegistrationNumber}
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                required
               />
             </div>
             {/* vatnumber*/}
@@ -280,7 +276,6 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
                 >
                   Vat Number
                 </label>
-                <span className="text-red-600">*</span>
               </div>
 
               <input
@@ -290,7 +285,6 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
                 value={formData.vatnumber}
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                required
               />
             </div>
           </div>
@@ -362,27 +356,7 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
                   required
                 />
               </div>
-              {/*     Fix number:*/}
-              <div>
-                <div className="flex gap-1">
-                  <label
-                    htmlFor="fax_Number"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Fix Number
-                  </label>
-                  <span className="text-red-600">*</span>
-                </div>
-                <input
-                  type="text"
-                  id="fax_Number"
-                  name="fax_Number"
-                  value={formData.fax_Number}
-                  onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                  required
-                />
-              </div>
+
               {/*     generalEmail :*/}
               <div>
                 <div className="flex gap-1">
@@ -392,7 +366,6 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
                   >
                     General Email
                   </label>
-                  <span className="text-red-600">*</span>
                 </div>
                 <input
                   type="email"
@@ -401,7 +374,6 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
                   value={formData.generalEmail}
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                  required
                 />
               </div>
               {/*     accountsPayableEmail :*/}
@@ -413,7 +385,6 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
                   >
                     Accounts Payable Email
                   </label>
-                  <span className="text-red-600">*</span>
                 </div>
                 <input
                   type="email"
@@ -422,7 +393,6 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
                   value={formData.accountsPayableEmail}
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                  required
                 />
               </div>
               {/*     specificContactEmail :*/}
@@ -470,7 +440,6 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
                     >
                       Name
                     </label>
-                    <span className="text-red-600">*</span>
                   </div>
                   <input
                     type="text"
@@ -479,7 +448,6 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
                     value={formData.accountsPayableContactName}
                     onChange={handleChange}
                     className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                    required
                   />
                 </div>
                 {/*     Phone Number and Email */}
@@ -491,7 +459,6 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
                     >
                       Phone Number and Email
                     </label>
-                    <span className="text-red-600">*</span>
                   </div>
                   <input
                     type="text"
@@ -500,7 +467,6 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
                     value={formData.accountsPayableContactPhoneNumberandEmail}
                     onChange={handleChange}
                     className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                    required
                   />
                 </div>
               </div>
@@ -514,7 +480,6 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
                     >
                       Billing Address
                     </label>
-                    <span className="text-red-600">*</span>
                   </div>
                   <input
                     type="text"
@@ -523,7 +488,6 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
                     value={formData.billingAddress}
                     onChange={handleChange}
                     className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                    required
                   />
                 </div>
                 {/*     Agreed Payment Schedule:*/}
@@ -535,17 +499,21 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
                     >
                       Agreed Payment Schedule
                     </label>
-                    <span className="text-red-600">*</span>
                   </div>
-                  <input
-                    type="text"
+                  <select
                     id="paymentTermsAgreedPaymentSchedule"
                     name="paymentTermsAgreedPaymentSchedule"
                     value={formData.paymentTermsAgreedPaymentSchedule}
                     onChange={handleChange}
                     className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                    required
-                  />
+                  >
+                    <option value="">Select Payment Schedule</option>
+                    <option value="30">30 days</option>
+                    <option value="60">60 days</option>
+                    <option value="90">90 days</option>
+                    <option value="120">120 days</option>
+                    <option value="150">150 days</option>
+                  </select>
                 </div>
                 {/*     Preferred Payment Method :*/}
                 <div>
@@ -556,17 +524,22 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
                     >
                       Preferred Payment Method
                     </label>
-                    <span className="text-red-600">*</span>
                   </div>
-                  <input
-                    type="text"
+                  <select
                     id="paymentTermsPreferredPaymentMethod"
                     name="paymentTermsPreferredPaymentMethod"
                     value={formData.paymentTermsPreferredPaymentMethod}
                     onChange={handleChange}
                     className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                    required
-                  />
+                  >
+                    <option value="">Select Payment Method</option>
+                    <option value="Bank A">Bank A</option>
+                    <option value="Bank B">Bank B</option>
+                    <option value="Bank C">Bank C</option>
+                    <option value="Bank D">Bank D</option>
+                    <option value="Bank E">Bank E</option>
+                    {/* Add more banks as needed */}
+                  </select>
                 </div>
               </div>
             </div>
@@ -586,7 +559,6 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
                     >
                       Bank Name
                     </label>
-                    <span className="text-red-600">*</span>
                   </div>
                   <input
                     type="text"
@@ -595,7 +567,6 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
                     value={formData.bankingInformationBankName}
                     onChange={handleChange}
                     className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                    required
                   />
                 </div>
                 {/*     Bank Account Number*/}
@@ -607,7 +578,6 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
                     >
                       Bank Account Number
                     </label>
-                    <span className="text-red-600">*</span>
                   </div>
                   <input
                     type="text"
@@ -616,7 +586,6 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
                     value={formData.bankingInformationBankAccountNumber}
                     onChange={handleChange}
                     className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                    required
                   />
                 </div>
 
@@ -629,7 +598,6 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
                     >
                       IBAN / SWIFT Code
                     </label>
-                    <span className="text-red-600">*</span>
                   </div>
                   <input
                     type="text"
@@ -638,7 +606,6 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
                     value={formData.bankingInformationBankIBANSWIFTCode}
                     onChange={handleChange}
                     className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                    required
                   />
                 </div>
                 {/*     Bank Address*/}
@@ -650,7 +617,6 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
                     >
                       Bank Address
                     </label>
-                    <span className="text-red-600">*</span>
                   </div>
                   <input
                     type="text"
@@ -659,7 +625,6 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
                     value={formData.bankingInformationBankAddress}
                     onChange={handleChange}
                     className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                    required
                   />
                 </div>
               </div>
@@ -680,7 +645,6 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
                     >
                       Billing / Finance Department
                     </label>
-                    <span className="text-red-600">*</span>
                   </div>
                   <input
                     type="text"
@@ -691,7 +655,6 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
                     }
                     onChange={handleChange}
                     className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                    required
                   />
                 </div>
                 {/*     Procurement/Purchasing Contact*/}
@@ -703,7 +666,6 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
                     >
                       Procurement/Purchasing Contact
                     </label>
-                    <span className="text-red-600">*</span>
                   </div>
                   <input
                     type="text"
@@ -714,7 +676,6 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
                     }
                     onChange={handleChange}
                     className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                    required
                   />
                 </div>
 
@@ -727,7 +688,6 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
                     >
                       Primary Contact for the Project
                     </label>
-                    <span className="text-red-600">*</span>
                   </div>
                   <input
                     type="text"
@@ -738,7 +698,6 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
                     }
                     onChange={handleChange}
                     className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                    required
                   />
                 </div>
               </div>

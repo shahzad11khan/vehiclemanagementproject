@@ -5,7 +5,7 @@ import { FaHome } from "react-icons/fa";
 import { IoPersonAdd } from "react-icons/io5";
 import { FaHouseLaptop } from "react-icons/fa6";
 import { FaCar, FaIndustry } from "react-icons/fa";
-import { TbReport } from "react-icons/tb";
+// import { TbReport } from "react-icons/tb";
 import { MdManageSearch } from "react-icons/md";
 import { GrSystem } from "react-icons/gr";
 import { RiOrganizationChart } from "react-icons/ri";
@@ -26,8 +26,8 @@ const Sidebar = () => {
   }, []);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isOpenManagement, setIsOpenManagement] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
-  const [openDropdown, setOpenDropdown] = useState(null);
+  // const [isOpen, setIsOpen] = useState(false);
+  // const [openDropdown, setOpenDropdown] = useState(null);
   const [activeLink, setActiveLink] = useState("/Dashboard/Home");
   useEffect(() => {
     const path = window.location.pathname;
@@ -38,13 +38,13 @@ const Sidebar = () => {
     setActiveLink(path);
   };
 
-  const handleMouseEnter = (dropdown) => {
-    setOpenDropdown(dropdown);
-  };
+  // const handleMouseEnter = (dropdown) => {
+  //   setOpenDropdown(dropdown);
+  // };
 
-  const handleMouseLeave = () => {
-    setOpenDropdown(null);
-  };
+  // const handleMouseLeave = () => {
+  //   setOpenDropdown(null);
+  // };
 
   const handleToggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -156,7 +156,7 @@ const Sidebar = () => {
                   </li>
                 </Link>
 
-                <Link passHref href="/Dashboard/Title/GetAllTitles">
+                {/* <Link passHref href="/Dashboard/Title/GetAllTitles">
                   <li
                     onClick={() =>
                       handleLinkClick("/Dashboard/Title/GetAllTitles")
@@ -178,7 +178,7 @@ const Sidebar = () => {
                       <span className="hidden sm:block text-sm">System</span>
                     </div>
                   </li>
-                </Link>
+                </Link> */}
 
                 <Link passHref href={"/Dashboard/Users/GetAllusers"}>
                   <li
@@ -231,9 +231,7 @@ const Sidebar = () => {
                             : "text-black text-sm"
                         }`}
                       />
-                      <span className="hidden sm:block text-sm">
-                        Vehicle Management
-                      </span>
+                      <span className="hidden sm:block text-sm">Settings</span>
 
                       {isOpenManagement && (
                         <div className="absolute left-36 mt-2 w-full sm:w-[170px] hover:bg-gray-200   border border-gray-300 rounded-md shadow-lg ">
@@ -248,13 +246,21 @@ const Sidebar = () => {
                             </li>
                             <li>
                               <Link
+                                href="/Dashboard/Models/Models/GetModles"
+                                className="rounded hover:bg-gray-200"
+                              >
+                                All Models
+                              </Link>
+                            </li>
+                            {/* <li>
+                              <Link
                                 href="/Dashboard/Models/VehicleType/GetVehicleTypes"
                                 className="  rounded hover:bg-gray-200"
                               >
                                 All Vehicle Types
                               </Link>
-                            </li>
-                            <li>
+                            </li> */}
+                            {/* <li>
                               <Link
                                 href="/Dashboard/Models/Enquiry/GetEnquiries"
                                 className="  rounded hover:bg-gray-200"
@@ -301,7 +307,7 @@ const Sidebar = () => {
                               >
                                 All Employees
                               </Link>
-                            </li>
+                            </li> */}
                             {/* <li>
                               <Link
                                 href="/Dashboard/Models/Badge/GetBadges"
@@ -310,14 +316,14 @@ const Sidebar = () => {
                                 All Badges
                               </Link>
                             </li> */}
-                            <li>
+                            {/* <li>
                               <Link
                                 href="/Dashboard/Models/Insurance/GetInsurances"
                                 className="  rounded hover:bg-gray-200"
                               >
                                 All Insurances
                               </Link>
-                            </li>
+                            </li> */}
                             <li>
                               <Link
                                 href="/Dashboard/Models/Type_BodyStyle/GetTypes"
@@ -341,179 +347,6 @@ const Sidebar = () => {
                               >
                                 Transmission
                               </Link>
-                            </li>
-                          </ul>
-                        </div>
-                      )}
-                    </div>
-                  </li>
-                </div>
-
-                <div>
-                  <li
-                    onMouseEnter={() => setIsOpen(true)}
-                    onMouseLeave={() => setIsOpen(false)}
-                    className={`${
-                      isOpen === true
-                        ? "border-l-4 border-red-400"
-                        : "bg-white text-blue"
-                    } flex items-center p-3 cursor-pointer hover:bg-gray-100 rounded-lg`}
-                  >
-                    <TbReport
-                      className={`${
-                        isOpen === true ? "text-red-400" : "text-black text-sm"
-                      }`}
-                    />
-                    <div className="relative inline-block text-sm">
-                      <span className="items-center cursor-pointer hover:bg-gray-100 rounded-lg hidden sm:block ml-2">
-                        Reports
-                      </span>
-                      {isOpen && (
-                        <div className="absolute left-36 -mt-12 w-auto bg-white border border-gray-300 rounded-md shadow-lg z-50">
-                          <ul className="grid grid-row-3 w-[200px] bg-red-500">
-                            <li
-                              className="relative hover:bg-gray-100 cursor-pointer"
-                              onMouseEnter={() =>
-                                handleMouseEnter("systemReports")
-                              }
-                              onMouseLeave={handleMouseLeave}
-                            >
-                              <Link
-                                href="#"
-                                className="block px-4 py-2 text-gray-800"
-                              >
-                                System Reports
-                              </Link>
-                              {openDropdown === "systemReports" && (
-                                <ul className="absolute left-32 w-[200px] bg-white  rounded-md shadow-lg space-y-4 z-50">
-                                  <li>
-                                    <Link
-                                      href="#"
-                                      className="px-4 py-3  rounded hover:bg-gray-200"
-                                    >
-                                      Employee Update Reports
-                                    </Link>
-                                  </li>
-                                  <li>
-                                    <Link
-                                      href="#"
-                                      className="px-4 py-3 rounded hover:bg-gray-200"
-                                    >
-                                      Rental Invoice Reports
-                                    </Link>
-                                  </li>
-                                  <li>
-                                    <Link
-                                      href="#"
-                                      className="px-4 py-3 rounded hover:bg-gray-200"
-                                    >
-                                      Overdue Payment Reports
-                                    </Link>
-                                  </li>
-                                </ul>
-                              )}
-                            </li>
-                            <li
-                              className="relative hover:bg-gray-100 cursor-pointer"
-                              onMouseEnter={() =>
-                                handleMouseEnter("vehicleReports")
-                              }
-                              onMouseLeave={handleMouseLeave}
-                            >
-                              <Link
-                                href="#"
-                                className="block px-4 py-2 text-gray-800"
-                              >
-                                Vehicle Reports
-                              </Link>
-                              {openDropdown === "vehicleReports" && (
-                                <ul className="absolute left-32 -mt-5 w-[160px] bg-white rounded-md shadow-lg space-y-4  z-50">
-                                  <li>
-                                    <Link
-                                      href="#"
-                                      className="px-4 py-3 rounded hover:bg-gray-200"
-                                    >
-                                      Interim Test Expiry
-                                    </Link>
-                                  </li>
-                                  <li>
-                                    <Link
-                                      href="#"
-                                      className="px-4 py-3 rounded hover:bg-gray-200"
-                                    >
-                                      Mot Expiry
-                                    </Link>
-                                  </li>
-                                  <li>
-                                    <Link
-                                      href="#"
-                                      className="px-4 py-3 rounded hover:bg-gray-200"
-                                    >
-                                      Road Tax Expiry
-                                    </Link>
-                                  </li>
-                                  <li>
-                                    <Link
-                                      href="#"
-                                      className="px-4 py-2 rounded hover:bg-gray-200"
-                                    >
-                                      Test Date Expiry
-                                    </Link>
-                                  </li>
-                                  <li>
-                                    <Link
-                                      href="#"
-                                      className="px-4 py-2 rounded hover:bg-gray-200"
-                                    >
-                                      Plate Expiry
-                                    </Link>
-                                  </li>
-                                </ul>
-                              )}
-                            </li>
-
-                            <li
-                              className="relative hover:bg-gray-100 cursor-pointer"
-                              onMouseEnter={() =>
-                                handleMouseEnter("driverReports")
-                              }
-                              onMouseLeave={handleMouseLeave}
-                            >
-                              <Link
-                                href="#"
-                                className="block px-4 py-2 text-gray-800"
-                              >
-                                Driver Reports
-                              </Link>
-
-                              {openDropdown === "driverReports" && (
-                                <ul className="absolute left-32 -mt-5 w-[160px] bg-white rounded-md shadow-lg space-y-4 z-50">
-                                  <li>
-                                    <Link
-                                      href="#"
-                                      className="px-4 py-3 rounded hover:bg-gray-200"
-                                    >
-                                      Drivers Holidays
-                                    </Link>
-                                  </li>
-                                  <li>
-                                    <Link
-                                      href="#"
-                                      className="px-4 py-3 rounded hover:bg-gray-200"
-                                    >
-                                      Licence Expiry
-                                    </Link>
-                                  </li>
-                                  <li>
-                                    <Link
-                                      href="#"
-                                      className="px-4 py-3 rounded hover:bg-gray-200"
-                                    >
-                                      Taxi Badge Expiry
-                                    </Link>
-                                  </li>
-                                </ul>
-                              )}
                             </li>
                           </ul>
                         </div>
@@ -581,9 +414,7 @@ const Sidebar = () => {
                             : "text-black text-sm"
                         }`}
                       />
-                      <span className="hidden sm:block text-sm">
-                        Organization Users
-                      </span>
+                      <span className="hidden sm:block text-sm">Users</span>
                     </div>
                   </li>
                 </Link>
@@ -661,9 +492,7 @@ const Sidebar = () => {
                             : "text-black text-sm"
                         }`}
                       />
-                      <span className="hidden sm:block text-sm">
-                        Vehicle Management
-                      </span>
+                      <span className="hidden sm:block text-sm">Settings</span>
 
                       {isOpenManagement && (
                         <div className="absolute left-36 mt-2 w-full sm:w-[170px] hover:bg-gray-200   border border-gray-300 rounded-md shadow-lg ">
@@ -724,14 +553,14 @@ const Sidebar = () => {
                                 All Suppliers
                               </Link>
                             </li>
-                            <li>
+                            {/* <li>
                               <Link
                                 href="/Dashboard/Models/Employee/GetEmploies"
                                 className="  rounded hover:bg-gray-200"
                               >
                                 All Employees
                               </Link>
-                            </li>
+                            </li> */}
                             {/* <li>
                               <Link
                                 href="/Dashboard/Models/Badge/GetBadges"
@@ -779,7 +608,7 @@ const Sidebar = () => {
                   </li>
                 </div>
 
-                <div>
+                {/* <div>
                   <li
                     onMouseEnter={() => setIsOpen(true)}
                     onMouseLeave={() => setIsOpen(false)}
@@ -950,7 +779,7 @@ const Sidebar = () => {
                       )}
                     </div>
                   </li>
-                </div>
+                </div> */}
               </>
             ) : (
               <>
@@ -997,9 +826,7 @@ const Sidebar = () => {
                             : "text-black text-sm"
                         }`}
                       />
-                      <span className="hidden sm:block text-sm">
-                        Organization Users
-                      </span>
+                      <span className="hidden sm:block text-sm">Users</span>
                     </div>
                   </li>
                 </Link>
@@ -1137,14 +964,14 @@ const Sidebar = () => {
                                 All Suppliers
                               </Link>
                             </li>
-                            <li>
+                            {/* <li>
                               <Link
                                 href="/Dashboard/Models/Employee/GetEmploies"
                                 className=" py-2 rounded hover:bg-gray-200"
                               >
                                 All Employees
                               </Link>
-                            </li>
+                            </li> */}
                             <li>
                               <Link
                                 href="/Dashboard/Models/Badge/GetBadges"
@@ -1191,7 +1018,7 @@ const Sidebar = () => {
                     </div>
                   </li>
                 </div>
-                <div>
+                {/* <div>
                   <li
                     onMouseEnter={() => setIsOpen(true)}
                     onMouseLeave={() => setIsOpen(false)}
@@ -1362,7 +1189,7 @@ const Sidebar = () => {
                       )}
                     </div>
                   </li>
-                </div>
+                </div> */}
               </>
             )}
           </ul>

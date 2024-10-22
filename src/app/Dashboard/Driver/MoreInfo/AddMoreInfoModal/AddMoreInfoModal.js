@@ -169,6 +169,14 @@ const AddDriverMoreInfoModal = ({
 
   if (!isOpen) return null;
 
+  // Function to format the date
+  const formatDate = (date) => {
+    if (!date) return "";
+    const d = new Date(date);
+    if (isNaN(d.getTime())) return ""; // Invalid date check
+    return d.toISOString().split("T")[0]; // Formats to YYYY-MM-DD
+  };
+
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
       <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-xl">
@@ -281,7 +289,7 @@ const AddDriverMoreInfoModal = ({
                 type="date"
                 id="endDate"
                 name="endDate"
-                value={formData.endDate ? formData.endDate : null}
+                value={formatDate(formData.endDate)}
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
                 required

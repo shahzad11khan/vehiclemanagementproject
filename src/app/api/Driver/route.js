@@ -40,6 +40,11 @@ export async function POST(request) {
 
       Driveravatar = uploadResponse1.secure_url; // Cloudinary URL for display image
       DriveravatarId = uploadResponse1.public_id;
+    } else {
+      // Use a dummy image from Cloudinary (you can upload a default image to Cloudinary and use its URL here)
+      Driveravatar =
+        "https://res.cloudinary.com/your-cloud-name/image/upload/v1234567890/default-vehicle-image.jpg";
+      DriveravatarId = "123456789"; // Set a dummy `imageId` for the default image
     }
 
     // Constructing formDataObject excluding the files
@@ -73,7 +78,7 @@ export async function POST(request) {
       county,
       postcode,
       postalAddress,
-      permanentAddress,
+      // permanentAddress,
       isActive,
       adminCreatedBy,
       adminCompanyName,
@@ -118,7 +123,7 @@ export async function POST(request) {
       pay,
       LocalAuth,
       postalAddress,
-      permanentAddress,
+      // permanentAddress,
       imageName,
       adminCreatedBy,
       adminCompanyName,

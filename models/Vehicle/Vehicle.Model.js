@@ -34,9 +34,9 @@ const vehicleSchema = new mongoose.Schema(
       type: String,
     },
     dimensions: {
-      height: { type: String },
-      width: { type: String },
-      length: { type: String },
+      height: { type: Number, dufault: 0 },
+      width: { type: Number, default: 0 },
+      length: { type: Number, default: 0 },
     },
     passengerCapacity: {
       type: Number,
@@ -45,28 +45,28 @@ const vehicleSchema = new mongoose.Schema(
       type: String,
     },
     horsepower: {
-      type: String,
+      type: Number,
     },
     torque: {
-      type: String,
+      type: Number,
     },
     topSpeed: {
-      type: String,
+      type: Number,
     },
     towingCapacity: {
-      type: String,
+      type: Number,
     },
     fuelEfficiency: {
       type: String,
     },
     safetyFeatures: {
-      type: String,
+      type: [String],
     },
     techFeatures: {
       type: String,
     },
     price: {
-      type: String,
+      type: Number,
     },
     registrationNumber: {
       type: String,
@@ -81,9 +81,12 @@ const vehicleSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    imageFile: { type: String, default: null },
+    imagePublicId: { type: String, default: null },
     authority: {
       type: String,
     },
+
     adminCreatedBy: { type: String },
     adminCompanyName: { type: String },
     adminCompanyId: { type: String },

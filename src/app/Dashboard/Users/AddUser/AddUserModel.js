@@ -438,7 +438,6 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                   >
                     Date Of Birth:
                   </label>
-                  <span className="text-red-600">*</span>
                 </div>
 
                 <input
@@ -448,7 +447,6 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                   value={formData.dateOfBirth}
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                  required
                 />
               </div>
 

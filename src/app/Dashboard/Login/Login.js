@@ -128,11 +128,6 @@ const Login = () => {
         >
           {loading ? "Logging in..." : "Login"}
         </button>
-        <div className="mt-4 flex justify-end">
-          <a href="/Register" className="text-blue-500 hover:underline">
-            Register
-          </a>
-        </div>
       </form>
     </div>
   );

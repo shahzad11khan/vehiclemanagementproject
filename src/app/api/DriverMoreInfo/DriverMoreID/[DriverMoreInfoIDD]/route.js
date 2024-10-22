@@ -29,10 +29,11 @@ export async function PUT(request, context) {
       "totalamount", // Replace with your actual field names
       "totalsubtractamount", // Replace with your actual field names
       "totalremainingamount", // Replace with your actual field names
+      "endDate", // Replace with your actual field names
       // Add more fields as necessary
     ];
 
-    console.log(fieldsToUpdate);
+    // console.log(fieldsToUpdate);
     // Update driver properties with values from formDataObject
     for (const driver of drivers) {
       fieldsToUpdate.forEach((field) => {

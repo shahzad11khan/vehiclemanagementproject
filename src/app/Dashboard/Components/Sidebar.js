@@ -902,9 +902,7 @@ const Sidebar = () => {
                             : "text-black text-sm"
                         }`}
                       />
-                      <span className="hidden sm:block text-sm">
-                        Vehicle Management
-                      </span>
+                      <span className="hidden sm:block text-sm">Settings</span>
 
                       {isOpenManagement && (
                         <div className="absolute left-36 mt-2 w-full sm:w-[170px] hover:bg-gray-200   border border-gray-300 rounded-md shadow-lg">

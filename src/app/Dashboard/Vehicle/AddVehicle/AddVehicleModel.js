@@ -184,7 +184,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
           acceleration: "",
           topSpeed: "",
           fuelEfficiency: "",
-          safetyFeatures: "",
+          safetyFeatures: [],
           techFeatures: "",
           towingCapacity: "",
           price: "",

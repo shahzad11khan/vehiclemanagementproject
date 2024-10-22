@@ -205,8 +205,6 @@ const UpdateFirmModel = ({ isOpen, onClose, fetchData, firmId }) => {
                 >
                   Company No:
                 </label>
-
-                <span className="text-red-600">*</span>
               </div>
               <input
                 type="text"
@@ -215,7 +213,6 @@ const UpdateFirmModel = ({ isOpen, onClose, fetchData, firmId }) => {
                 value={formData.companyNo}
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                required
               />
             </div>
 
@@ -227,8 +224,6 @@ const UpdateFirmModel = ({ isOpen, onClose, fetchData, firmId }) => {
                 >
                   VAT No:
                 </label>
-
-                <span className="text-red-600">*</span>
               </div>
               <input
                 type="text"
@@ -237,7 +232,6 @@ const UpdateFirmModel = ({ isOpen, onClose, fetchData, firmId }) => {
                 value={formData.vatNo}
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                required
               />
             </div>
 
@@ -348,7 +342,6 @@ const UpdateFirmModel = ({ isOpen, onClose, fetchData, firmId }) => {
                 >
                   Address:
                 </label>
-                <span className="text-red-600">*</span>
               </div>
               <input
                 type="text"
@@ -357,7 +350,6 @@ const UpdateFirmModel = ({ isOpen, onClose, fetchData, firmId }) => {
                 value={formData.address}
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                required
               />
             </div>
 

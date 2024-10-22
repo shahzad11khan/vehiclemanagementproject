@@ -393,8 +393,6 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, userId }) => {
                   >
                     Driver Number:
                   </label>
-
-                  <span className="text-red-600">*</span>
                 </div>
                 <input
                   type="text"
@@ -403,7 +401,6 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, userId }) => {
                   value={formData.driverNumber}
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                  required
                 />
               </div>
               <div>
@@ -616,6 +613,7 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, userId }) => {
                 >
                   <option value="">Select Payment</option>
                   <option value="perday">Per Day</option>
+                  <option value="perweek">Per Week</option>
                   <option value="permonth">per Month</option>
                   <option value="perquarter">Per Quarter</option>
                   <option value="peryear">per year</option>

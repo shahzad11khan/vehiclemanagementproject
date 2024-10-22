@@ -1,5 +1,7 @@
 "use client";
 import { API_URL_Vehicle } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
+import SafetyFeaturesDropdown from "../SafetyFeaturesDropdown";
+
 import axios from "axios";
 import { toast } from "react-toastify";
 import React, { useEffect, useState } from "react";
@@ -37,7 +39,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
     acceleration: "",
     topSpeed: "",
     fuelEfficiency: "",
-    safetyFeatures: "",
+    safetyFeatures: [],
     techFeatures: "",
     towingCapacity: "",
     price: "",
@@ -190,6 +192,24 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
   };
 
   if (!isOpen) return null;
+  const handleCheckboxChange = (option) => {
+    setVehicleData((prevData) => {
+      const currentFeatures = prevData.safetyFeatures;
+      if (currentFeatures.includes(option)) {
+        return {
+          ...prevData,
+          safetyFeatures: currentFeatures.filter(
+            (feature) => feature !== option
+          ),
+        };
+      } else {
+        return {
+          ...prevData,
+          safetyFeatures: [...currentFeatures, option],
+        };
+      }
+    });
+  };
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50 ">
@@ -369,7 +389,6 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                 value={vehicleData.dimensions.height}
                 onChange={handleDimensionChange}
                 className="w-full p-2 border border-gray-300 rounded"
-                required
                 min="0"
               />
             </div>
@@ -381,7 +400,6 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                 value={vehicleData.dimensions.width}
                 onChange={handleDimensionChange}
                 className="w-full p-2 border border-gray-300 rounded"
-                required
                 min="0"
               />
             </div>
@@ -393,22 +411,34 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                 value={vehicleData.dimensions.length}
                 onChange={handleDimensionChange}
                 className="w-full p-2 border border-gray-300 rounded"
-                required
                 min="0"
               />
             </div>
           </div>
           <div className="grid grid-cols-3 md:grid-cols-3 gap-2 mt-4">
             <div>
-              <label className="block font-semibold">Passenger Capacity</label>
-              <input
-                type="number"
+              <div className="flex gap-1">
+                <label className="block font-semibold">
+                  Passenger Capacity
+                </label>
+                <span className="text-red-600">*</span>
+              </div>
+              <select
                 name="passengerCapacity"
                 value={vehicleData.passengerCapacity}
                 onChange={handleChange}
                 className="w-full p-2 border border-gray-300 rounded"
                 required
-              />
+              >
+                <option value="" disabled>
+                  Select Capacity
+                </option>
+                {[...Array(10)].map((_, index) => (
+                  <option key={index + 1} value={index + 1}>
+                    {index + 1}
+                  </option>
+                ))}
+              </select>
             </div>
             <div>
               <label className="block font-semibold">Cargo Capacity</label>
@@ -418,7 +448,6 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                 value={vehicleData.cargoCapacity}
                 onChange={handleChange}
                 className="w-full p-2 border border-gray-300 rounded"
-                required
               />
             </div>
             <div>
@@ -429,7 +458,6 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                 value={vehicleData.horsepower}
                 onChange={handleChange}
                 className="w-full p-2 border border-gray-300 rounded"
-                required
               />
             </div>
           </div>
@@ -442,7 +470,6 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                 value={vehicleData.torque}
                 onChange={handleChange}
                 className="w-full p-2 border border-gray-300 rounded"
-                required
               />
             </div>
             <div>
@@ -453,7 +480,6 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                 value={vehicleData.topSpeed}
                 onChange={handleChange}
                 className="w-full p-2 border border-gray-300 rounded"
-                required
               />
             </div>
             <div>
@@ -480,10 +506,52 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                 onChange={handleChange}
                 className="w-full p-2 border border-gray-300 rounded"
                 placeholder="e.g., 25 MPG"
-                required
               />
             </div>
-            <div>
+            <div className="flex gap-1">
+              <label className="block font-semibold">Safety Features</label>
+              <span className="text-red-600">*</span>
+            </div>
+            <div className="flex gap-1">
+              {/* <label className="block font-semibold">Safety Features</label>
+                <span className="text-red-600">*</span>
+              </div>
+              <select
+                name="safetyFeatures"
+                value={vehicleData.safetyFeatures}
+                onChange={handleChange}
+                className="w-full p-2 border border-gray-300 rounded"
+                multiple
+                required
+              >
+                <option value="" disabled>
+                  Select safety features
+                </option>
+                <option value="Airbags">Airbags</option>
+                <option value="ABS">ABS (Anti-lock Braking System)</option>
+                <option value="Stability Control">Stability Control</option>
+                <option value="Traction Control">Traction Control</option>
+                <option value="Blind Spot Monitoring">
+                  Blind Spot Monitoring
+                </option>
+                <option value="Lane Departure Warning">
+                  Lane Departure Warning
+                </option>
+                <option value="Adaptive Cruise Control">
+                  Adaptive Cruise Control
+                </option>
+                <option value="Rearview Camera">Rearview Camera</option>
+                <option value="Parking Sensors">Parking Sensors</option>
+                <option value="Automatic Emergency Braking">
+                  Automatic Emergency Braking
+                </option>
+              </select> */}
+              <SafetyFeaturesDropdown
+                vehicleData={vehicleData}
+                handleCheckboxChange={handleCheckboxChange}
+              />
+            </div>
+            {/* <div>
               <label className="block font-semibold">Safety Features</label>
               <textarea
                 name="safetyFeatures"
@@ -493,7 +561,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                 placeholder="e.g., Airbags, ABS, Stability Control"
                 required
               />
-            </div>
+            </div> */}
             <div>
               <label className="block font-semibold">Technology Features</label>
               <textarea

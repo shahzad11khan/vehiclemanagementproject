@@ -15,7 +15,7 @@ const userSchema = new mongoose.Schema(
     city: { type: String, default: "" },
     county: { type: String, default: "" },
     // accessLevel: { type: String, default: "" },
-    dateOfBirth: { type: Date, default: null }, // Use Date type for date fields
+    dateOfBirth: { type: String, default: null }, // Use Date type for date fields
     position: { type: String, default: "" },
     reportsTo: { type: String, default: "" },
     username: { type: String, default: "" },

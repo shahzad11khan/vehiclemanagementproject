@@ -45,8 +45,8 @@ const HeroSection = () => {
             <strong className="text-xl">Total Number Of Cars</strong>
             <span className="ml-1 text-sm block">
               {superadmin === "superadmin" && flag === "false"
-                ? "Rented Cars Is  :"
-                : "The Total Number of Car Is  :"}
+                ? "The Total Number of Car Is  :"
+                : "Rented Cars Is  :"}
             </span>
           </li>
           <li>

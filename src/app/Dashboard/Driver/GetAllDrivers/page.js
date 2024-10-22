@@ -5,7 +5,7 @@ import Header from "../../Components/Header";
 import Sidebar from "../../Components/Sidebar";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { FaEdit, FaTrash } from "react-icons/fa";
+import { FaEdit, FaTrash, FaPoundSign } from "react-icons/fa";
 import { MdOutlineReadMore } from "react-icons/md";
 import AddDriverModel from "../AddDriver/AddDriverModel";
 import UpdateDriverModel from "../UpdateDriver/UpdateDriverModel";
@@ -311,7 +311,7 @@ const Page = () => {
                               href={`/Dashboard/Driver/MoreInfo/${driver._id}`}
                             >
                               <div className="flex items-center gap-3">
-                                <MdOutlineReadMore size={25} />
+                                <FaPoundSign size={25} />
                               </div>
                             </Link>
                           </button>

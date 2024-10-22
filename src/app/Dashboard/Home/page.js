@@ -101,13 +101,13 @@ const Page = () => {
                 ),
                 title:
                   superadmin === "superadmin" && flag === "false"
-                    ? "Companies"
+                    ? "Total Cars"
                     : superadmin === "superadmin" && flag === "true"
                     ? "Total Cars"
                     : "Total Cars",
                 count:
                   superadmin === "superadmin" && flag === "false"
-                    ? counts.Companies
+                    ? "counts.Companies"
                     : superadmin === "superadmin" && flag === "true"
                     ? 0
                     : 0,
@@ -184,10 +184,10 @@ const Page = () => {
                 color: "text-red-500",
                 title:
                   superadmin === "superadmin" && flag === "false"
-                    ? "Cars on Route"
+                    ? "Cars on Rent"
                     : superadmin === "superadmin" && flag === "true"
-                    ? "Cars on Route"
-                    : "Cars on Route",
+                    ? "Cars on Rent"
+                    : "Cars on Rent",
                 count: counts.vehicleCount || 0,
                 colorx: {
                   background: "#47C2FF",

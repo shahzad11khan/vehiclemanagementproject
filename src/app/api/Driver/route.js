@@ -43,7 +43,7 @@ export async function POST(request) {
     } else {
       // Use a dummy image from Cloudinary (you can upload a default image to Cloudinary and use its URL here)
       Driveravatar =
-        "https://res.cloudinary.com/your-cloud-name/image/upload/v1234567890/default-vehicle-image.jpg";
+        "https://cdn-icons-png.flaticon.com/128/17561/17561717.png";
       DriveravatarId = "123456789"; // Set a dummy `imageId` for the default image
     }
 

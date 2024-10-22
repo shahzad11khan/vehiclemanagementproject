@@ -28,6 +28,7 @@ export const PUT = async (request, context) => {
 
     // Update manufacturer properties with values from formDataObject or retain existing values
     manufacturer.name = name ? name.trim() : manufacturer.name; // Update name or retain existing
+    manufacturer.carmodel = carmodel ? carmodel.trim() : manufacturer.carmodel; // Update name or retain existing
     manufacturer.description = description
       ? description.trim()
       : manufacturer.description; // Update description or retain existing

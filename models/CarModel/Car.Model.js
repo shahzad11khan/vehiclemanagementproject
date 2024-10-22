@@ -2,12 +2,8 @@
 import mongoose from "mongoose";
 
 // Define the schema
-const ManufacturerSchema = new mongoose.Schema({
+const CarModelSchema = new mongoose.Schema({
   name: {
-    type: String,
-    trim: true, // Removes whitespace from the beginning and end
-  },
-  carmodel: {
     type: String,
     trim: true, // Removes whitespace from the beginning and end
   },
@@ -25,5 +21,5 @@ const ManufacturerSchema = new mongoose.Schema({
 });
 
 // Create the model
-export default mongoose.models.Manufacturer ||
-  mongoose.model("Manufacturer", ManufacturerSchema);
+export default mongoose.models.CarModel ||
+  mongoose.model("CarModel", CarModelSchema);

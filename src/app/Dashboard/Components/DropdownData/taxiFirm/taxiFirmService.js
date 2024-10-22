@@ -13,6 +13,7 @@ import {
   API_URL_Transmission,
   API_URL_FuelType,
   API_URL_Type,
+  API_URL_CarModel,
 } from "../../../Components/ApiUrl/ApiUrls";
 // Fetch all taxi firms
 export const fetchTitle = async () => {
@@ -48,6 +49,15 @@ export const fetchTaxiFirms = async () => {
     return response.data;
   } catch (error) {
     console.error("Error fetching taxi firms:", error);
+    throw error;
+  }
+};
+export const fetchCarModel = async () => {
+  try {
+    const response = await axios.get(API_URL_CarModel);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching Badge:", error);
     throw error;
   }
 };

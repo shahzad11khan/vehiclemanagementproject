@@ -1,10 +1,10 @@
 "use client";
-import { API_URL_FuelType } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
+import { API_URL_CarModel } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
-const UpdateFuelTypeModel = ({ isOpen, onClose, fetchData, fuelid }) => {
+const UpdateCarModel = ({ isOpen, onClose, fetchData, updateid }) => {
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -16,8 +16,6 @@ const UpdateFuelTypeModel = ({ isOpen, onClose, fetchData, fuelid }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
-
-  // Retrieve company name from local storage
   useEffect(() => {
     const storedCompanyName =
       localStorage.getItem("companyName") ||
@@ -28,16 +26,14 @@ const UpdateFuelTypeModel = ({ isOpen, onClose, fetchData, fuelid }) => {
         adminCompanyName: storedCompanyName,
       }));
     }
-  }, []); // Update when the manufacturer changes
-  // Fetch manufacturer data when the modal opens
+  }, []);
   useEffect(() => {
-    // console.log(vehicleid);
-    // alert(supplierid);
+    console.log(updateid);
     const fetchManufacturerData = async () => {
       setLoading(true);
-      if (fuelid) {
+      if (updateid) {
         try {
-          const response = await axios.get(`${API_URL_FuelType}/${fuelid}`);
+          const response = await axios.get(`${API_URL_CarModel}/${updateid}`);
           console.log(response.data.result);
           const data = response.data.result;
           if (data) {
@@ -60,7 +56,7 @@ const UpdateFuelTypeModel = ({ isOpen, onClose, fetchData, fuelid }) => {
     };
 
     fetchManufacturerData();
-  }, [fuelid]);
+  }, [updateid]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -75,9 +71,8 @@ const UpdateFuelTypeModel = ({ isOpen, onClose, fetchData, fuelid }) => {
     setLoading(true);
     setError(null);
     try {
-      // Use PUT for updating an existing manufacturer
       const response = await axios.put(
-        `${API_URL_FuelType}/${fuelid}`,
+        `${API_URL_Badge}/${updateid}`,
         formData
       );
       console.log(response);
@@ -94,7 +89,7 @@ const UpdateFuelTypeModel = ({ isOpen, onClose, fetchData, fuelid }) => {
       onClose();
       fetchData();
     } catch (err) {
-      setError(err.response?.data?.message || "Failed to update manufacturer");
+      setError(err.response?.data?.message || "Failed to update");
     } finally {
       setLoading(false);
     }
@@ -106,16 +101,15 @@ const UpdateFuelTypeModel = ({ isOpen, onClose, fetchData, fuelid }) => {
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
       <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-xl">
         <h2 className="text-3xl font-semibold text-center mb-8">
-          Update BodyType
+          Update Badge
         </h2>
 
         {error && <p className="text-red-600">{error}</p>}
         {success && (
-          <p className="text-green-600">BodyType updated successfully!</p>
+          <p className="text-green-600">Badge updated successfully!</p>
         )}
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            {/* Name */}
             <div className="col-span-2">
               <label
                 htmlFor="name"
@@ -132,8 +126,6 @@ const UpdateFuelTypeModel = ({ isOpen, onClose, fetchData, fuelid }) => {
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
               />
             </div>
-
-            {/* Description */}
             <div className="col-span-2">
               <label
                 htmlFor="description"
@@ -148,10 +140,9 @@ const UpdateFuelTypeModel = ({ isOpen, onClose, fetchData, fuelid }) => {
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
                 rows="3"
+                required
               ></textarea>
             </div>
-
-            {/* IsActive */}
             <div className="col-span-2 flex items-center">
               <input
                 type="checkbox"
@@ -169,8 +160,6 @@ const UpdateFuelTypeModel = ({ isOpen, onClose, fetchData, fuelid }) => {
               </label>
             </div>
           </div>
-
-          {/* Button Group */}
           <div className="flex gap-4 justify-center">
             <button
               type="submit"
@@ -193,4 +182,4 @@ const UpdateFuelTypeModel = ({ isOpen, onClose, fetchData, fuelid }) => {
   );
 };
 
-export default UpdateFuelTypeModel;
+export default UpdateCarModel;

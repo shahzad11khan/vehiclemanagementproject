@@ -91,7 +91,7 @@ export async function POST(request) {
     } else {
       // Use a default image if no image is uploaded
       imageUrl =
-        "https://res.cloudinary.com/your-cloud-name/image/upload/v1234567890/default-vehicle-image.jpg";
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQpshsQpl4Ifd7LXyD4Z9Tqt1p0tBlZOsyzeg&s";
       imageId = "123435456766";
     }
 

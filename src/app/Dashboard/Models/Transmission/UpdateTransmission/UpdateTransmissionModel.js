@@ -24,7 +24,9 @@ const UpdateTransmissionModel = ({
 
   // Retrieve company name from local storage
   useEffect(() => {
-    const storedCompanyName = localStorage.getItem("companyName");
+    const storedCompanyName =
+      localStorage.getItem("companyName") ||
+      localStorage.getItem("companyname");
     if (storedCompanyName) {
       setFormData((prevData) => ({
         ...prevData,

@@ -11,8 +11,14 @@ export const POST = catchAsyncErrors(async (request) => {
     // Parse JSON data from the request body
     const data = await request.json();
 
-    const { name, description, isActive, adminCreatedBy, adminCompanyName } =
-      data; // Destructure the required fields
+    const {
+      name,
+      carmodel,
+      description,
+      isActive,
+      adminCreatedBy,
+      adminCompanyName,
+    } = data; // Destructure the required fields
 
     // Check if a manufacturer with the same name already exists
     const existingManufacturer = await Manufecturer.findOne({
@@ -29,6 +35,7 @@ export const POST = catchAsyncErrors(async (request) => {
     // Create and save the new manufacturer
     const newManufacturer = new Manufecturer({
       name,
+      carmodel,
       description,
       isActive,
       adminCreatedBy,

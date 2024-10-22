@@ -22,6 +22,7 @@ export const API_URL_Vehicle = `${url}/api/Vehicle`;
 export const API_URL_VehicleType = `${url}/api/VehicleType`;
 export const API_URL_Title = `${url}/api/Title`;
 export const API_URL_Badge = `${url}/api/Badge`;
+export const API_URL_CarModel = `${url}/api/CarModel`;
 export const API_URL_Employee = `${url}/api/Employee`;
 export const API_URL_Transmission = `${url}/api/Transmission`;
 export const API_URL_FuelType = `${url}/api/FuelType`;

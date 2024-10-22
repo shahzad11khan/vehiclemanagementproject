@@ -25,7 +25,8 @@ const Page = () => {
 
   useEffect(() => {
     setIsMounted(true);
-    const companyNameFromStorage = getCompanyName();
+    const companyNameFromStorage =
+      getCompanyName() || localStorage.getItem("companyname");
     if (companyNameFromStorage) {
       setSelectedCompanyName(companyNameFromStorage);
     }

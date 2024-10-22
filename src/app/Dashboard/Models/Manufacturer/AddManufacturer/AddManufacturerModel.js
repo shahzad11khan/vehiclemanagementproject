@@ -2,10 +2,12 @@
 import { API_URL_Manufacturer } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { fetchCarModel } from "../../../Components/DropdownData/taxiFirm/taxiFirmService";
 import { toast } from "react-toastify";
 const AddManufacturerModel = ({ isOpen, onClose, fetchData }) => {
   const [formData, setFormData] = useState({
     name: "",
+    carmodel: "",
     description: "",
     isActive: false,
     adminCreatedBy: "",
@@ -13,18 +15,46 @@ const AddManufacturerModel = ({ isOpen, onClose, fetchData }) => {
   });
 
   const [loading, setLoading] = useState(false);
-
+  const [data, setData] = useState([]);
   // Retrieve company name from local storage
   useEffect(() => {
-    const storedCompanyName = localStorage.getItem("companyName"); // Replace with the actual key used in localStorage
+    const storedCompanyName =
+      localStorage.getItem("companyName") ||
+      localStorage.getItem("companyname"); // Replace with the actual key used in localStorage
     if (storedCompanyName) {
       setFormData((prevData) => ({
         ...prevData,
         adminCompanyName: storedCompanyName,
       }));
     }
+    fetchDataa();
   }, []); // Run only once when the component mounts
 
+  const fetchDataa = async () => {
+    try {
+      const stored = localStorage.getItem("companyName"); // Replace with the actual key used in localStorage
+      const role = localStorage.getItem("role"); // Replace with the actual key used in localStorage
+      // console.log(storedCompanyName);
+      const title = await fetchCarModel(); // Await the result from fetchLocalAuth
+      console.log(title);
+      // console.log(superadmin);
+      // const filteredtitle = title.result;
+
+      const filteredTaxiFirms =
+        role === "superadmin"
+          ? title.result
+          : title.result.filter(
+              (firm) =>
+                firm.adminCompanyName === stored ||
+                firm.adminCompanyName === "superadmin"
+            );
+
+      console.log(filteredTaxiFirms);
+      setData(filteredTaxiFirms); // Set the local state with the result
+    } catch (error) {
+      console.error("Error fetching local auth data:", error);
+    }
+  };
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData({
@@ -43,6 +73,7 @@ const AddManufacturerModel = ({ isOpen, onClose, fetchData }) => {
       setFormData({
         name: "",
         description: "",
+        carmodel: "",
         isActive: false,
         adminCreatedBy: "",
         adminCompanyName: formData.adminCompanyName,
@@ -73,7 +104,7 @@ const AddManufacturerModel = ({ isOpen, onClose, fetchData }) => {
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-6">
             {/* Name */}
             <div className="col-span-2">
               <div className="flex gap-1">
@@ -96,6 +127,31 @@ const AddManufacturerModel = ({ isOpen, onClose, fetchData }) => {
               />
             </div>
 
+            <div>
+              <div className="flex gap-1">
+                <label
+                  htmlFor="carmodel"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Model:
+                </label>
+              </div>
+
+              <select
+                id="carmodel"
+                name="carmodel"
+                value={formData.carmodel}
+                onChange={handleChange}
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+              >
+                <option value="">Select Model</option>
+                {data.map((title) => (
+                  <option key={title._id} value={title.name}>
+                    {title.name}
+                  </option>
+                ))}
+              </select>
+            </div>
             {/* Description */}
             <div className="col-span-2">
               <label

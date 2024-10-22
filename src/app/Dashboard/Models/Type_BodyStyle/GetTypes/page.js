@@ -27,7 +27,8 @@ const Page = () => {
   // Ensure that the component only renders once it is mounted
   useEffect(() => {
     setIsMounted(true);
-    const companyNameFromStorage = getCompanyName(); // Get company name from localStorage
+    const companyNameFromStorage =
+      getCompanyName() || localStorage.getItem("companyname"); // Get company name from localStorage
     if (companyNameFromStorage) {
       setSelectedCompanyName(companyNameFromStorage); // Set the selected company name
     }

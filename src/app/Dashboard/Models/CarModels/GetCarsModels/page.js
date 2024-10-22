@@ -6,28 +6,19 @@ import Sidebar from "../../../Components/Sidebar";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FaEdit, FaTrash } from "react-icons/fa";
-import AddManufacturerModel from "../AddManufacturer/AddManufacturerModel";
-import UpdateManufacturerModel from "../UpdateManufacturer/UpdateManufactrurModel";
+import AddCarModel from "../AddCarModel/AddCarmodel";
+import UpdateCarModel from "../UpdateCarModel/UpdateCarModel";
 import axios from "axios";
-import { API_URL_Manufacturer } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
-import { GetManufacturer } from "@/app/Dashboard/Components/ApiUrl/ShowApiDatas/ShowApiDatas";
+import { API_URL_CarModel } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
+import { GetCarModel } from "@/app/Dashboard/Components/ApiUrl/ShowApiDatas/ShowApiDatas";
 import { getCompanyName } from "@/utils/storageUtils";
 
 const Page = () => {
-  const columns = [
-    { name: "Manufacturer Name", accessor: "name" },
-    { name: "Manufacturer Description", accessor: "description" },
-    {
-      name: "Manufacturer Status",
-      accessor: (row) => (row.isActive ? "Active" : "Inactive"),
-    },
-  ];
-
   const [data, setData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [isMounted, setIsMounted] = useState(false);
-  const [isOpenManufacturer, setIsOpenManufacturer] = useState(false);
   const [filteredData, setFilteredData] = useState([]);
+  const [isMounted, setIsMounted] = useState(false);
+  const [isOpenBadge, setIsOpenBadge] = useState(false);
   const [selectedCompanyName, setSelectedCompanyName] = useState("");
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [isOpenVehicleUpdate, setIsOpenVehcleUpdate] = useState(false);
@@ -36,6 +27,7 @@ const Page = () => {
     setIsMounted(true);
     const companyNameFromStorage =
       getCompanyName() || localStorage.getItem("companyname");
+    console.log(companyNameFromStorage);
     if (companyNameFromStorage) {
       setSelectedCompanyName(companyNameFromStorage);
     }
@@ -43,9 +35,11 @@ const Page = () => {
 
   const fetchData = async () => {
     try {
-      const { result } = await GetManufacturer();
-      setData(result);
-      setFilteredData(result);
+      GetCarModel().then(({ result }) => {
+        console.log(result);
+        setData(result);
+        setFilteredData(result);
+      });
     } catch (error) {
       console.error("Error fetching data:", error);
       setData([]);
@@ -57,23 +51,25 @@ const Page = () => {
   }, []);
 
   const handleDelete = async (id) => {
+    console.log("Deleting ID:", id);
     try {
-      const response = await axios.delete(`${API_URL_Manufacturer}/${id}`);
+      const response = await axios.delete(`${API_URL_CarModel}/${id}`);
       const { data } = response;
-
+      console.log("Response Data:", data);
       if (data.status === 200) {
         setData((prevData) => prevData.filter((item) => item._id !== id));
         setFilteredData((prevFilteredData) =>
           prevFilteredData.filter((item) => item._id !== id)
         );
-        toast.success(data.message || "Manufacturer deleted successfully.");
+        toast.success(data.message || "Badge deleted successfully.");
       } else {
-        toast.warn(data.message || "Failed to delete the Manufacturer.");
+        toast.warn(data.message || "Failed to delete the Badge.");
       }
     } catch (error) {
+      console.error("Error deleting Badge:", error);
       toast.error(
         error.response?.data?.message ||
-          "An error occurred while deleting the Manufacturer. Please try again."
+          "An error occurred while deleting the Badge. Please try again."
       );
     }
   };
@@ -87,35 +83,33 @@ const Page = () => {
           selectedCompanyName.toLowerCase();
       const usernameMatch =
         item.name && item.name.toLowerCase().includes(searchTerm.toLowerCase());
-
       return companyMatch && usernameMatch;
     });
     setFilteredData(filtered);
   }, [searchTerm, data, selectedCompanyName]);
+
+  const OpenBadgeModle = () => {
+    setIsOpenBadge(!isOpenBadge);
+  };
 
   const handleEdit = (id) => {
     setSelectedUserId(id);
     setIsOpenVehcleUpdate(true);
   };
 
-  if (!isMounted) {
-    return null;
-  }
-
-  const OpenManufacturerModle = () => {
-    setIsOpenManufacturer(!isOpenManufacturer);
-  };
-
   const OpenVehicleUpdateModle = () => {
     setIsOpenVehcleUpdate(!isOpenVehicleUpdate);
   };
+  if (!isMounted) {
+    return null;
+  }
 
   return (
     <>
       <Header className="min-w-full" />
       <div className="flex gap-4">
         <Sidebar />
-        <div className="container mx-auto p-4">
+        <div className="container mx-auto p-4 ">
           <div className="justify-between mx-auto items-center border-2 mt-3 w-full">
             <div className="flex justify-between">
               <div className="justify-start">
@@ -129,60 +123,59 @@ const Page = () => {
               </div>
               <div className="justify-end">
                 <button
-                  onClick={OpenManufacturerModle}
+                  onClick={OpenBadgeModle}
                   className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
                 >
-                  Add New Manufacturer
+                  Add New Car Model
                 </button>
               </div>
             </div>
 
-            {/* Responsive Table */}
-            <div className="overflow-x-auto mt-4">
+            <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
                   <tr>
-                    {columns.map((column) => (
-                      <th
-                        key={column.name}
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        {column.name}
-                      </th>
-                    ))}
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Car Model
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Car Description
+                    </th>
+
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Car Active
+                    </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Actions
                     </th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {filteredData.map((row) => (
-                    <tr key={row._id}>
-                      {columns.map((column) => (
-                        <td
-                          key={column.name}
-                          className="px-6 py-4 whitespace-nowrap text-sm text-gray-900"
+                  {filteredData.map((item) => (
+                    <tr key={item._id}>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                        {item.name}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {item.description}
+                      </td>
+
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {item.isActive ? "Active" : "Inactive"}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <button
+                          onClick={() => handleEdit(item._id)}
+                          className="text-blue-500 hover:text-blue-700"
                         >
-                          {typeof column.accessor === "function"
-                            ? column.accessor(row)
-                            : row[column.accessor]}
-                        </td>
-                      ))}
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        <div className="flex gap-2">
-                          <button
-                            onClick={() => handleEdit(row._id)}
-                            className="text-blue-500 hover:text-blue-700"
-                          >
-                            <FaEdit />
-                          </button>
-                          <button
-                            onClick={() => handleDelete(row._id)}
-                            className="text-red-500 hover:text-red-700"
-                          >
-                            <FaTrash />
-                          </button>
-                        </div>
+                          <FaEdit />
+                        </button>
+                        <button
+                          onClick={() => handleDelete(item._id)}
+                          className="text-red-500 hover:text-red-700"
+                        >
+                          <FaTrash />
+                        </button>
                       </td>
                     </tr>
                   ))}
@@ -192,16 +185,16 @@ const Page = () => {
           </div>
         </div>
       </div>
-      <AddManufacturerModel
-        isOpen={isOpenManufacturer}
-        onClose={OpenManufacturerModle}
+      <AddCarModel
+        isOpen={isOpenBadge}
+        onClose={OpenBadgeModle}
         fetchData={fetchData}
       />
-      <UpdateManufacturerModel
+      <UpdateCarModel
         isOpen={isOpenVehicleUpdate}
         onClose={OpenVehicleUpdateModle}
         fetchData={fetchData}
-        manufacturerid={selectedUserId}
+        updateid={selectedUserId}
       />
     </>
   );

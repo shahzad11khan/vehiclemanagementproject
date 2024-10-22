@@ -16,7 +16,9 @@ const AddFuelTypeModel = ({ isOpen, onClose, fetchData }) => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const storedCompanyName = localStorage.getItem("companyName"); // Replace with the actual key used in localStorage
+    const storedCompanyName =
+      localStorage.getItem("companyName") ||
+      localStorage.getItem("companyname"); // Replace with the actual key used in localStorage
     if (storedCompanyName) {
       setFormData((prevData) => ({
         ...prevData,

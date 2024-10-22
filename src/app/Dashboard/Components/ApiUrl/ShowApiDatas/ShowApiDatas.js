@@ -21,6 +21,7 @@ import {
   API_URL_Transmission,
   API_URL_FuelType,
   API_URL_Type,
+  API_URL_CarModel,
 } from "../ApiUrls.js";
 
 export const GetUsers = () => {
@@ -286,6 +287,19 @@ export const GetVehicle = () => {
 export const GetTitle = () => {
   return axios
     .get(`${API_URL_Title}`)
+    .then((res) => {
+      // console.log(res.data.result);
+      // console.log(res.data.count);
+      return { result: res.data.result, count: res.data.count };
+    })
+    .catch((error) => {
+      console.log(`error : ${error}`);
+      throw error;
+    });
+};
+export const GetCarModel = () => {
+  return axios
+    .get(`${API_URL_CarModel}`)
     .then((res) => {
       // console.log(res.data.result);
       // console.log(res.data.count);

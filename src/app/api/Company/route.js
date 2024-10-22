@@ -41,6 +41,10 @@ export async function POST(request) {
 
       image = uploadResponse1.secure_url; // Cloudinary URL for display image
       imagePublicId = uploadResponse1.public_id;
+    } else {
+      image =
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSLuenhuyfEyo4EI0HUoAjPpmT1rAsSUeYtbA&s";
+      imagePublicId = "123456789"; // Set a dummy `imageId` for the default image
     }
 
     // Constructing formDataObject excluding the files

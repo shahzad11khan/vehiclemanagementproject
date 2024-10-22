@@ -1,10 +1,9 @@
 "use client";
-import { API_URL_FuelType } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
+import { API_URL_CarModel } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-
-const UpdateFuelTypeModel = ({ isOpen, onClose, fetchData, fuelid }) => {
+const AddCarModel = ({ isOpen, onClose, fetchData }) => {
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -16,8 +15,6 @@ const UpdateFuelTypeModel = ({ isOpen, onClose, fetchData, fuelid }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
-
-  // Retrieve company name from local storage
   useEffect(() => {
     const storedCompanyName =
       localStorage.getItem("companyName") ||
@@ -28,40 +25,7 @@ const UpdateFuelTypeModel = ({ isOpen, onClose, fetchData, fuelid }) => {
         adminCompanyName: storedCompanyName,
       }));
     }
-  }, []); // Update when the manufacturer changes
-  // Fetch manufacturer data when the modal opens
-  useEffect(() => {
-    // console.log(vehicleid);
-    // alert(supplierid);
-    const fetchManufacturerData = async () => {
-      setLoading(true);
-      if (fuelid) {
-        try {
-          const response = await axios.get(`${API_URL_FuelType}/${fuelid}`);
-          console.log(response.data.result);
-          const data = response.data.result;
-          if (data) {
-            setFormData({
-              name: data.name,
-              description: data.description,
-              isActive: data.isActive,
-            });
-          } else {
-            toast.warn("Failed to fetch manufacturer data");
-          }
-        } catch (err) {
-          setError(
-            err.response?.data?.message || "Failed to fetch manufacturer data"
-          );
-        } finally {
-          setLoading(false);
-        }
-      }
-    };
-
-    fetchManufacturerData();
-  }, [fuelid]);
-
+  }, []);
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData({
@@ -74,27 +38,29 @@ const UpdateFuelTypeModel = ({ isOpen, onClose, fetchData, fuelid }) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
-    try {
-      // Use PUT for updating an existing manufacturer
-      const response = await axios.put(
-        `${API_URL_FuelType}/${fuelid}`,
-        formData
-      );
-      console.log(response);
-      setFormData({
-        name: "",
-        description: "",
-        isActive: false,
-        adminCreatedBy: "",
-        adminCompanyName: "",
-      });
 
-      toast.success("Data successfully updated");
-      setSuccess(true);
-      onClose();
-      fetchData();
+    try {
+      const response = await axios.post(`${API_URL_CarModel}`, formData);
+
+      console.log(response);
+
+      if (response.data.success) {
+        setFormData({
+          name: "",
+          description: "",
+          isActive: false,
+          adminCreatedBy: "",
+          adminCompanyName: formData.adminCompanyName,
+        });
+        toast.success("data successfully saved");
+        setSuccess(true);
+        fetchData();
+        onClose();
+      } else {
+        toast.warn(response.data.error);
+      }
     } catch (err) {
-      setError(err.response?.data?.message || "Failed to update manufacturer");
+      setError(err.response?.data?.message || "Failed to add badge");
     } finally {
       setLoading(false);
     }
@@ -106,23 +72,25 @@ const UpdateFuelTypeModel = ({ isOpen, onClose, fetchData, fuelid }) => {
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
       <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-xl">
         <h2 className="text-3xl font-semibold text-center mb-8">
-          Update BodyType
+          Add New Car Model
         </h2>
 
         {error && <p className="text-red-600">{error}</p>}
-        {success && (
-          <p className="text-green-600">BodyType updated successfully!</p>
-        )}
+        {success && <p className="text-green-600">Badge added successfully!</p>}
+
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            {/* Name */}
             <div className="col-span-2">
-              <label
-                htmlFor="name"
-                className="text-sm font-medium text-gray-700"
-              >
-                Name:
-              </label>
+              <div className="flex gap-1">
+                <label
+                  htmlFor="firstName"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Name:
+                </label>
+                <span className="text-red-600">*</span>
+              </div>
+
               <input
                 type="text"
                 id="name"
@@ -130,10 +98,9 @@ const UpdateFuelTypeModel = ({ isOpen, onClose, fetchData, fuelid }) => {
                 value={formData.name}
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                required
               />
             </div>
-
-            {/* Description */}
             <div className="col-span-2">
               <label
                 htmlFor="description"
@@ -150,8 +117,6 @@ const UpdateFuelTypeModel = ({ isOpen, onClose, fetchData, fuelid }) => {
                 rows="3"
               ></textarea>
             </div>
-
-            {/* IsActive */}
             <div className="col-span-2 flex items-center">
               <input
                 type="checkbox"
@@ -170,14 +135,13 @@ const UpdateFuelTypeModel = ({ isOpen, onClose, fetchData, fuelid }) => {
             </div>
           </div>
 
-          {/* Button Group */}
           <div className="flex gap-4 justify-center">
             <button
               type="submit"
               className="px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50"
               disabled={loading}
             >
-              {loading ? "Submitting..." : "Update"}
+              {loading ? "Submitting..." : "Submit"}
             </button>
             <button
               type="button"
@@ -193,4 +157,4 @@ const UpdateFuelTypeModel = ({ isOpen, onClose, fetchData, fuelid }) => {
   );
 };
 
-export default UpdateFuelTypeModel;
+export default AddCarModel;

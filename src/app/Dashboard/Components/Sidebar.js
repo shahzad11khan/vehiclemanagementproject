@@ -246,7 +246,7 @@ const Sidebar = () => {
                             </li>
                             <li>
                               <Link
-                                href="/Dashboard/Models/Models/GetModles"
+                                href="/Dashboard/Models/CarModels/GetCarsModels"
                                 className="rounded hover:bg-gray-200"
                               >
                                 All Models

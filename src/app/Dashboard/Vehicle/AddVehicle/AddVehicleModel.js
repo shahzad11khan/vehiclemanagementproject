@@ -138,6 +138,104 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
   //         : value,
   //   }));
   // };
+
+  // const handleChange = (e) => {
+  //   const { name, value, type, checked, files, options } = e.target;
+
+  //   setVehicleData((prevData) => {
+  //     // Handle multi-select dropdown
+  //     if (type === "select-multiple") {
+  //       const selectedValues = Array.from(options)
+  //         .filter((option) => option.selected)
+  //         .map((option) => option.value);
+
+  //       return {
+  //         ...prevData,
+  //         [name]: selectedValues,
+  //       };
+  //     }
+
+  //     // Handle file inputs
+  //     if (type === "file") {
+  //       return {
+  //         ...prevData,
+  //         [name]: Array.from(files), // Convert FileList to an array
+  //       };
+  //     }
+
+  //     // Handle checkbox inputs
+  //     if (type === "checkbox") {
+  //       return {
+  //         ...prevData,
+  //         [name]: checked,
+  //       };
+  //     }
+
+  //     // Handle regular inputs (text, radio, etc.)
+  //     return {
+  //       ...prevData,
+  //       [name]: value,
+  //     };
+  //   });
+  // };
+
+  // const handleChange = (e) => {
+  //   const { name, value, type, checked, files, options } = e.target;
+
+  //   setVehicleData((prevData) => {
+  //     // Handle multi-select dropdown
+  //     if (type === "select-multiple") {
+  //       const selectedValues = Array.from(options)
+  //         .filter((option) => option.selected)
+  //         .map((option) => option.value);
+
+  //       return {
+  //         ...prevData,
+  //         [name]: selectedValues,
+  //       };
+  //     }
+
+  //     // Handle file inputs
+  //     if (type === "file") {
+  //       return {
+  //         ...prevData,
+  //         [name]: Array.from(files), // Convert FileList to an array
+  //       };
+  //     }
+
+  //     // Handle checkbox inputs for safety features
+  //     if (name === "safetyFeatures") {
+  //       const currentSafetyFeatures = prevData[name] || [];
+  //       if (checked) {
+  //         // Add feature if checked
+  //         return {
+  //           ...prevData,
+  //           [name]: [...currentSafetyFeatures, value], // Add selected feature
+  //         };
+  //       } else {
+  //         // Remove feature if unchecked
+  //         return {
+  //           ...prevData,
+  //           [name]: currentSafetyFeatures.filter(
+  //             (feature) => feature !== value
+  //           ), // Remove deselected feature
+  //         };
+  //       }
+  //     }
+  //     if (type === "checkbox") {
+  //       return {
+  //         ...prevData,
+  //         [name]: checked,
+  //       };
+  //     }
+  //     // Handle regular inputs (text, radio, etc.)
+  //     return {
+  //       ...prevData,
+  //       [name]: value,
+  //     };
+  //   });
+  // };
+
   const handleChange = (e) => {
     const { name, value, type, checked, files, options } = e.target;
 
@@ -162,11 +260,32 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
         };
       }
 
-      // Handle checkbox inputs
+      // Handle checkbox inputs for safety features
+      if (name === "safetyFeatures") {
+        const currentSafetyFeatures = prevData[name] || [];
+        if (checked) {
+          // Add feature if checked
+          return {
+            ...prevData,
+            [name]: [...currentSafetyFeatures, value], // Add selected feature
+          };
+        } else {
+          // Remove feature if unchecked
+          return {
+            ...prevData,
+            [name]: currentSafetyFeatures.filter(
+              (feature) => feature !== value
+            ), // Remove deselected feature
+          };
+        }
+      }
+
+      // Handle regular checkbox inputs
       if (type === "checkbox") {
+        // Set isActive specifically as a boolean
         return {
           ...prevData,
-          [name]: checked,
+          [name]: checked, // This will now ensure isActive is a boolean
         };
       }
 
@@ -594,7 +713,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
             </div>
           </div>
 
-          <div className="grid grid-cols-3 md:grid-cols-3 gap-2 mt-4">
+          <div className="grid grid-cols-2 md:grid-cols-2 gap-2 mt-4">
             <div>
               <div className="flex gap-1">
                 <label className="block font-semibold">Fuel Efficiency</label>
@@ -610,7 +729,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
               />
             </div>
             {/* safty  */}
-            <div>
+            {/* <div>
               <div className="flex gap-1">
                 <label className="block font-semibold">Safety Features</label>
                 <span className="text-red-600">*</span>
@@ -645,7 +764,165 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                   Automatic Emergency Braking
                 </option>
               </select>
+            </div> */}
+            {/* <div>
+              <div className="flex gap-1">
+                <label className="block font-semibold">Safety Features</label>
+                <span className="text-red-600">*</span>
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-2 gap-2">
+                <label className="flex items-center">
+                  <input
+                    type="checkbox"
+                    value="Airbags"
+                    checked={vehicleData.safetyFeatures.includes("Airbags")}
+                    onChange={handleChange}
+                    className="mr-2"
+                  />
+                  Airbags
+                </label>
+                <label className="flex items-center">
+                  <input
+                    type="checkbox"
+                    value="ABS"
+                    checked={vehicleData.safetyFeatures.includes("ABS")}
+                    onChange={handleChange}
+                    className="mr-2"
+                  />
+                  ABS (Anti-lock Braking System)
+                </label>
+                <label className="flex items-center">
+                  <input
+                    type="checkbox"
+                    value="Stability Control"
+                    checked={vehicleData.safetyFeatures.includes(
+                      "Stability Control"
+                    )}
+                    onChange={handleChange}
+                    className="mr-2"
+                  />
+                  Stability Control
+                </label>
+                <label className="flex items-center">
+                  <input
+                    type="checkbox"
+                    value="Traction Control"
+                    checked={vehicleData.safetyFeatures.includes(
+                      "Traction Control"
+                    )}
+                    onChange={handleChange}
+                    className="mr-2"
+                  />
+                  Traction Control
+                </label>
+                <label className="flex items-center">
+                  <input
+                    type="checkbox"
+                    value="Blind Spot Monitoring"
+                    checked={vehicleData.safetyFeatures.includes(
+                      "Blind Spot Monitoring"
+                    )}
+                    onChange={handleChange}
+                    className="mr-2"
+                  />
+                  Blind Spot Monitoring
+                </label>
+                <label className="flex items-center">
+                  <input
+                    type="checkbox"
+                    value="Lane Departure Warning"
+                    checked={vehicleData.safetyFeatures.includes(
+                      "Lane Departure Warning"
+                    )}
+                    onChange={handleChange}
+                    className="mr-2"
+                  />
+                  Lane Departure Warning
+                </label>
+                <label className="flex items-center">
+                  <input
+                    type="checkbox"
+                    value="Adaptive Cruise Control"
+                    checked={vehicleData.safetyFeatures.includes(
+                      "Adaptive Cruise Control"
+                    )}
+                    onChange={handleChange}
+                    className="mr-2"
+                  />
+                  Adaptive Cruise Control
+                </label>
+                <label className="flex items-center">
+                  <input
+                    type="checkbox"
+                    value="Rearview Camera"
+                    checked={vehicleData.safetyFeatures.includes(
+                      "Rearview Camera"
+                    )}
+                    onChange={handleChange}
+                    className="mr-2"
+                  />
+                  Rearview Camera
+                </label>
+                <label className="flex items-center">
+                  <input
+                    type="checkbox"
+                    value="Parking Sensors"
+                    checked={vehicleData.safetyFeatures.includes(
+                      "Parking Sensors"
+                    )}
+                    onChange={handleChange}
+                    className="mr-2"
+                  />
+                  Parking Sensors
+                </label>
+                <label className="flex items-center">
+                  <input
+                    type="checkbox"
+                    value="Automatic Emergency Braking"
+                    checked={vehicleData.safetyFeatures.includes(
+                      "Automatic Emergency Braking"
+                    )}
+                    onChange={handleChange}
+                    className="mr-2"
+                  />
+                  Automatic Emergency Braking
+                </label>
+              </div>
+            </div> */}
+            <div>
+              <div className="flex gap-1">
+                <label className="block font-semibold">Safety Features</label>
+                <span className="text-red-600">*</span>
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-2 gap-2">
+                {/* List of safety features as checkboxes */}
+                {[
+                  "Airbags",
+                  "ABS",
+                  "Stability Control",
+                  "Traction Control",
+                  "Blind Spot Monitoring",
+                  "Lane Departure Warning",
+                  "Adaptive Cruise Control",
+                  "Rearview Camera",
+                  "Parking Sensors",
+                  "Automatic Emergency Braking",
+                ].map((feature) => (
+                  <label key={feature} className="flex items-center">
+                    <input
+                      type="checkbox"
+                      name="safetyFeatures"
+                      value={feature}
+                      checked={vehicleData.safetyFeatures.includes(feature)}
+                      onChange={handleChange}
+                      className="mr-2"
+                    />
+                    {feature}
+                  </label>
+                ))}
+              </div>
             </div>
+
             <div>
               <div className="flex gap-1">
                 <label className="block font-semibold">

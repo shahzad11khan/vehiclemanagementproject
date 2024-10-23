@@ -894,10 +894,10 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                   Select vehicle status
                 </option>
                 <option value="Available">Available</option>
-                <option value="Sell">Sell</option>
-                <option value="Pending">Pending</option>
+                <option value="Sale">Sell</option>
+                <option value="Standby">Standby</option>
                 <option value="Rent">Rent</option>
-                <option value="Maintenance">In Maintenance</option>
+                <option value="Maintenance">Maintenance</option>
               </select>
             </div>
           </div>

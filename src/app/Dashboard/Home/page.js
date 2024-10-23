@@ -10,18 +10,17 @@ import { FaChartLine } from "react-icons/fa";
 import { RiFolderReceivedFill } from "react-icons/ri";
 import HeroSection from "../Components/HeroSection";
 import { getAuthData, isAuthenticated } from "@/utils/verifytoken";
-import {
-  GetUsers,
-  GetDriver,
-  GetVehicle,
-  GetManufacturer,
-  GetPayment,
-  GetCompany,
-} from "../Components/ApiUrl/ShowApiDatas/ShowApiDatas.js";
+import { GetVehicle } from "../Components/ApiUrl/ShowApiDatas/ShowApiDatas.js";
 
 const Page = () => {
   const router = useRouter();
   const [superadmin, setsuperadmin] = useState("");
+  const [companyname, setcompnayname] = useState("");
+  const [availableCar, setavailablecar] = useState(0);
+  const [standby, setstandby] = useState(0);
+  const [sellCar, setSellcar] = useState(0);
+  const [rent, setRentcar] = useState(0);
+  const [maintenance, setMaintenance] = useState(0);
 
   const [flag, setflag] = useState("");
 
@@ -29,7 +28,9 @@ const Page = () => {
     if (isAuthenticated()) {
       const authData = getAuthData();
       setsuperadmin(authData.role);
+      setsuperadmin(authData.role);
       setflag(authData.flag);
+      setcompnayname(authData.companyName);
     } else {
       router.push("/");
       return;
@@ -37,41 +38,62 @@ const Page = () => {
   }, []);
 
   Chart.register(...registerables);
-  const [counts, setCounts] = useState({
-    userCount: 0,
-    driverCount: 0,
-    vehicleCount: 0,
-    Manufacturer: 0,
-    Companies: 0,
-    Payment: 0,
-  });
 
   const fetchCounts = useCallback(async () => {
     try {
-      const [
-        { count: userCount },
-        { count: driverCount },
-        { count: vehicleCount },
-        { count: Manufacturer },
-        { count: Payment },
-        { count: Companies },
-      ] = await Promise.all([
-        GetUsers(),
-        GetDriver(),
-        GetVehicle(),
-        GetManufacturer(),
-        GetPayment(),
-        GetCompany(),
-      ]);
+      let vehicleData = await GetVehicle();
 
-      setCounts({
-        userCount,
-        driverCount,
-        vehicleCount,
-        Manufacturer,
-        Payment,
-        Companies,
-      });
+      // Initialize counters
+      let availableCar = 0;
+      let standbyCar = 0;
+      let sellCar = 0;
+      let rentCar = 0;
+      let maintenance = 0;
+
+      // Check if vehicleData is empty
+      if (vehicleData.result.length === 0) {
+        // Set counts to zero if no vehicles are available
+        setavailablecar(0);
+        setstandby(0);
+        setSellcar(0);
+        setRentcar(0);
+        setMaintenance(0);
+        return; // Exit early if there are no vehicles
+      }
+
+      // Iterate through vehicle data
+      for (let i = 0; i < vehicleData.result.length; i++) {
+        const vehicle = vehicleData.result[i];
+
+        // Check for the specific admin company name
+        if (vehicle.adminCompanyName === companyname) {
+          // Update the respective counters
+          if (vehicle.vehicleStatus === "Available") {
+            availableCar++;
+          } else if (vehicle.vehicleStatus === "Standby") {
+            standbyCar++;
+          } else if (vehicle.vehicleStatus === "Sale") {
+            sellCar++;
+          } else if (vehicle.vehicleStatus === "Rent") {
+            rentCar++;
+          } else if (vehicle.vehicleStatus === "Maintenance") {
+            maintenance++;
+          }
+        } else {
+          availableCar++;
+          standbyCar++;
+          sellCar++;
+          rentCar++;
+          maintenance++;
+        }
+      }
+
+      // Update state with the final counts
+      setavailablecar(availableCar);
+      setstandby(standbyCar);
+      setSellcar(sellCar);
+      setRentcar(rentCar);
+      setMaintenance(maintenance);
     } catch (error) {
       console.log(`Failed to fetch data: ${error}`);
     }
@@ -101,16 +123,16 @@ const Page = () => {
                 ),
                 title:
                   superadmin === "superadmin" && flag === "false"
-                    ? "Total Cars"
+                    ? "Companies"
                     : superadmin === "superadmin" && flag === "true"
                     ? "Total Cars"
                     : "Total Cars",
                 count:
                   superadmin === "superadmin" && flag === "false"
-                    ? counts.Companies
+                    ? availableCar
                     : superadmin === "superadmin" && flag === "true"
-                    ? 0
-                    : 0,
+                    ? availableCar
+                    : availableCar,
                 colorx: {
                   background: "#E64B87",
                 },
@@ -136,7 +158,12 @@ const Page = () => {
                     : superadmin === "superadmin" && flag === "true"
                     ? "Cars for Rent"
                     : "Cars for Rent",
-                count: counts.userCount || 0,
+                count:
+                  superadmin === "superadmin" && flag === "false"
+                    ? standby
+                    : superadmin === "superadmin" && flag === "true"
+                    ? standby
+                    : standby,
 
                 colorx: {
                   background: "#8461BF",
@@ -162,7 +189,12 @@ const Page = () => {
                     : superadmin === "superadmin" && flag === "true"
                     ? "Cars for sale"
                     : "Cars for sale",
-                count: counts.driverCount || 0,
+                count:
+                  superadmin === "superadmin" && flag === "false"
+                    ? sellCar
+                    : superadmin === "superadmin" && flag === "true"
+                    ? sellCar
+                    : sellCar,
                 colorx: {
                   background: "#47C2FF",
                 },
@@ -188,7 +220,12 @@ const Page = () => {
                     : superadmin === "superadmin" && flag === "true"
                     ? "Cars on Rent"
                     : "Cars on Rent",
-                count: counts.vehicleCount || 0,
+                count:
+                  superadmin === "superadmin" && flag === "false"
+                    ? rent
+                    : superadmin === "superadmin" && flag === "true"
+                    ? rent
+                    : rent,
                 colorx: {
                   background: "#47C2FF",
                 },
@@ -205,7 +242,12 @@ const Page = () => {
                     : superadmin === "superadmin" && flag === "true"
                     ? "Cars out for Maintenance"
                     : "Cars out for Maintenance",
-                count: counts.vehicleCount || 0,
+                count:
+                  superadmin === "superadmin" && flag === "false"
+                    ? maintenance
+                    : superadmin === "superadmin" && flag === "true"
+                    ? maintenance
+                    : maintenance,
                 gradient: "bg-gradient-to-r",
                 style: {
                   backgroundImage:

@@ -265,11 +265,13 @@ export const GetVehicle = () => {
     .get(`${API_URL_Vehicle}`)
     .then((res) => {
       let vehicle = res.data;
+      // console.log(vehicle);
       if (superadmin === "superadmin" && flag === "false") {
         // If superadmin and flag are set to show all drivers, return full result
-        return { result: vehicle.Result, count: vehicle.count };
+        return { result: vehicle.result, count: vehicle.count };
       } else if (superadmin === "superadmin" && flag === "true") {
-        return { result: vehicle.Result, count: vehicle.count };
+        // console.log(vehicle.result, vehicle.count);
+        return { result: vehicle.result, count: vehicle.count };
       } else {
         // Filter the drivers based on the company name
         const filteredDrivers = vehicle.Result.filter(

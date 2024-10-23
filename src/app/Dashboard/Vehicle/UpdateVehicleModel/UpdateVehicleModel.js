@@ -214,20 +214,18 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
 
     fetchDataForDropdowns();
   }, [superadmin, vehicleData.adminCompanyName]);
-
+  const fetchVehicleData = async () => {
+    try {
+      const response = await axios.get(`${API_URL_Vehicle}/${vehicleId}`);
+      setVehicleData(response.data.result);
+      console.log(response.data.result);
+      setImagePreview(response.data.result.images || null);
+    } catch (error) {
+      console.error("Error fetching vehicle data:", error);
+    }
+  };
   useEffect(() => {
     if (vehicleId) {
-      const fetchVehicleData = async () => {
-        try {
-          const response = await axios.get(`${API_URL_Vehicle}/${vehicleId}`);
-          setVehicleData(response.data.result);
-          console.log(response.data.result);
-          setImagePreview(response.data.result.images || null);
-        } catch (error) {
-          console.error("Error fetching vehicle data:", error);
-        }
-      };
-
       fetchVehicleData();
     }
   }, [vehicleId]);
@@ -309,7 +307,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
           },
         }
       );
-
+      fetchVehicleData();
       console.log("Response:", response.data); // Log the response data
     } catch (error) {
       console.error("Error updating vehicle image:", error);
@@ -321,10 +319,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50 ">
       <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-4xl overflow-y-auto max-h-screen">
-        <form
-          onSubmit={handleSubmit}
-          className="max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-lg"
-        >
+        <form onSubmit={handleSubmit} className="max-w-4xl mx-auto p-6">
           <h2 className="text-2xl font-bold mb-6">Vehicle Form</h2>
 
           <div className="grid grid-cols-3 md:grid-cols-3 gap-2">
@@ -657,167 +652,6 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-2 gap-2 mt-4">
-            {/* safty  */}
-            {/* <div>
-              <div className="flex gap-1">
-                <label className="block font-semibold">Safety Features</label>
-                <span className="text-red-600">*</span>
-              </div>
-              <select
-                name="safetyFeatures"
-                value={vehicleData.safetyFeatures}
-                onChange={handleChange}
-                className="w-full p-2 border border-gray-300 rounded"
-                required
-                multiple // Enable multiple selection
-              >
-                <option value="" disabled>
-                  Select safety feature
-                </option>
-                <option value="Airbags">Airbags</option>
-                <option value="ABS">ABS (Anti-lock Braking System)</option>
-                <option value="Stability Control">Stability Control</option>
-                <option value="Traction Control">Traction Control</option>
-                <option value="Blind Spot Monitoring">
-                  Blind Spot Monitoring
-                </option>
-                <option value="Lane Departure Warning">
-                  Lane Departure Warning
-                </option>
-                <option value="Adaptive Cruise Control">
-                  Adaptive Cruise Control
-                </option>
-                <option value="Rearview Camera">Rearview Camera</option>
-                <option value="Parking Sensors">Parking Sensors</option>
-                <option value="Automatic Emergency Braking">
-                  Automatic Emergency Braking
-                </option>
-              </select>
-            </div> */}
-            {/* <div>
-              <div className="flex gap-1">
-                <label className="block font-semibold">Safety Features</label>
-                <span className="text-red-600">*</span>
-              </div>
-              <div className="grid grid-cols-2 md:grid-cols-2 gap-2">
-                <label className="flex items-center">
-                  <input
-                    type="checkbox"
-                    value="Airbags"
-                    checked={vehicleData.safetyFeatures.includes("Airbags")}
-                    onChange={handleChange}
-                    className="mr-2"
-                  />
-                  Airbags
-                </label>
-                <label className="flex items-center">
-                  <input
-                    type="checkbox"
-                    value="ABS"
-                    checked={vehicleData.safetyFeatures.includes("ABS")}
-                    onChange={handleChange}
-                    className="mr-2"
-                  />
-                  ABS (Anti-lock Braking System)
-                </label>
-                <label className="flex items-center">
-                  <input
-                    type="checkbox"
-                    value="Stability Control"
-                    checked={vehicleData.safetyFeatures.includes(
-                      "Stability Control"
-                    )}
-                    onChange={handleChange}
-                    className="mr-2"
-                  />
-                  Stability Control
-                </label>
-                <label className="flex items-center">
-                  <input
-                    type="checkbox"
-                    value="Traction Control"
-                    checked={vehicleData.safetyFeatures.includes(
-                      "Traction Control"
-                    )}
-                    onChange={handleChange}
-                    className="mr-2"
-                  />
-                  Traction Control
-                </label>
-                <label className="flex items-center">
-                  <input
-                    type="checkbox"
-                    value="Blind Spot Monitoring"
-                    checked={vehicleData.safetyFeatures.includes(
-                      "Blind Spot Monitoring"
-                    )}
-                    onChange={handleChange}
-                    className="mr-2"
-                  />
-                  Blind Spot Monitoring
-                </label>
-                <label className="flex items-center">
-                  <input
-                    type="checkbox"
-                    value="Lane Departure Warning"
-                    checked={vehicleData.safetyFeatures.includes(
-                      "Lane Departure Warning"
-                    )}
-                    onChange={handleChange}
-                    className="mr-2"
-                  />
-                  Lane Departure Warning
-                </label>
-                <label className="flex items-center">
-                  <input
-                    type="checkbox"
-                    value="Adaptive Cruise Control"
-                    checked={vehicleData.safetyFeatures.includes(
-                      "Adaptive Cruise Control"
-                    )}
-                    onChange={handleChange}
-                    className="mr-2"
-                  />
-                  Adaptive Cruise Control
-                </label>
-                <label className="flex items-center">
-                  <input
-                    type="checkbox"
-                    value="Rearview Camera"
-                    checked={vehicleData.safetyFeatures.includes(
-                      "Rearview Camera"
-                    )}
-                    onChange={handleChange}
-                    className="mr-2"
-                  />
-                  Rearview Camera
-                </label>
-                <label className="flex items-center">
-                  <input
-                    type="checkbox"
-                    value="Parking Sensors"
-                    checked={vehicleData.safetyFeatures.includes(
-                      "Parking Sensors"
-                    )}
-                    onChange={handleChange}
-                    className="mr-2"
-                  />
-                  Parking Sensors
-                </label>
-                <label className="flex items-center">
-                  <input
-                    type="checkbox"
-                    value="Automatic Emergency Braking"
-                    checked={vehicleData.safetyFeatures.includes(
-                      "Automatic Emergency Braking"
-                    )}
-                    onChange={handleChange}
-                    className="mr-2"
-                  />
-                  Automatic Emergency Braking
-                </label>
-              </div>
-            </div> */}
             <div>
               <div className="flex gap-1">
                 <label className="block font-semibold">Safety Features</label>
@@ -1007,7 +841,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-4">
+          <div className="grid grid-cols-1 md:grid-cols-1 gap-2 mt-4">
             {/* Warranty Information Section */}
             <div className="flex flex-col">
               <div className="flex gap-1 items-center">
@@ -1027,7 +861,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
             </div>
           </div>
 
-          <div className="hidden">
+          <div className="">
             <h3 className="text-xl font-semibold mb-2">Vehicle Images</h3>
             <div>
               <input
@@ -1039,26 +873,9 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                 placeholder="select 10 images"
                 multiple
               />
-              <span className="text-red-500 mb-3">Maximum 10 images</span>
             </div>
           </div>
-          {/* <div className="flex gap-2">
-            {imagePreview.map((img, index) => (
-              <div
-                key={index}
-                className="cursor-pointer"
-                onClick={(event) => handleImageClick(event, img)}
-              >
-                <img
-                  src={img.url}
-                  alt="Avatar Preview"
-                  className="avatar-preview w-32 h-20"
-                />
-              </div>
-            ))}
-          </div> */}
-
-          <div>
+          <div className="mt-3">
             {/* File input for selecting an image */}
 
             <div>

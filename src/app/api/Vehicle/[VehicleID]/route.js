@@ -154,50 +154,84 @@ export async function PUT(request, context) {
     const safetyFeatures = formDataObject.getAll("safetyFeatures[]"); // Get all safety features
     const techFeatures = formDataObject.getAll("techFeatures[]"); // Get all tech features
 
-    // console.log(imageFiles);
+    // console.log(id, imageFiles);
     // console.log(safetyFeatures);
     // console.log(techFeatures);
 
     const images = []; // To store Cloudinary URLs and IDs
 
     const vehicle = await Vehicle.findById(id); // Fetch vehicle by ID directly
-    console.log(vehicle);
+    // console.log(vehicle);
     if (!vehicle) {
       return NextResponse.json({ error: "Vehicle not found", status: 404 });
     }
 
     // Handle image uploads to Cloudinary
     for (const file of imageFiles) {
+      console.log("Processing file line 204:", file.name); // Log the name of each file
+
       if (file.size > 0) {
         const buffer = Buffer.from(await file.arrayBuffer());
+        console.log("Buffer created for file line 208:", file.name); // Log when buffer is created
+
         const uploadResponse = await new Promise((resolve, reject) => {
           cloudinary.uploader
             .upload_stream({ resource_type: "auto" }, (error, result) => {
               if (error) {
+                console.error("Error uploading image: line 214", error.message); // Log the error if upload fails
                 reject(new Error("Error uploading image: " + error.message));
               } else {
+                console.log(
+                  "Successfully uploaded image: line 217",
+                  result.secure_url
+                ); // Log the successful upload
                 resolve(result);
               }
             })
             .end(buffer);
         });
+
         images.push({
           url: uploadResponse.secure_url,
           publicId: uploadResponse.public_id,
         });
+
+        console.log("Image added to list line 229:", {
+          url: uploadResponse.secure_url,
+          publicId: uploadResponse.public_id,
+        }); // Log each image data added to the array
       }
     }
-    console.log(images);
-    // If images were uploaded, update vehicle image fields
+
+    // Log the list of images before proceeding
+    console.log("All images uploaded: line 237", images);
     if (images.length > 0) {
+      console.log("Images present, starting update process", vehicle.images);
+
       // Optionally: Delete old images from Cloudinary
-      if (vehicle.images.publicId) {
-        console.log(vehicle.images.publicId);
-        await cloudinary.uploader.destroy(vehicle.images.publicId);
+      for (let i = 0; i < vehicle.images.length; i++) {
+        if (vehicle.images[i].publicId) {
+          console.log(
+            "Old image publicId to delete: line 243",
+            vehicle.images[i].publicId
+          ); // Log the publicId of the old image
+
+          // Delete the image from Cloudinary
+          const deleteResponse = await cloudinary.uploader.destroy(
+            vehicle.images[i].publicId
+          );
+          console.log("Delete response: line 256", deleteResponse);
+
+          console.log(
+            "Old image deleted from Cloudinary: line 246",
+            vehicle.images[i].publicId
+          ); // Log the deletion confirmation
+        }
       }
+
       // Update the vehicle with new images
-      vehicle.images.url = images.map((image) => image.url); // Store URLs as an array
-      vehicle.images.publicId = images.map((image) => image.publicId); // Store public IDs as an array
+      vehicle.images = images; // Directly assign the new images array
+      console.log("Vehicle updated with new images: line 255", vehicle.images); // Log the updated vehicle images
     }
 
     // Update vehicle properties

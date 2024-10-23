@@ -42,6 +42,7 @@ const Page = () => {
   const fetchCounts = useCallback(async () => {
     try {
       let vehicleData = await GetVehicle();
+      console.log(vehicleData); // Log the fetched vehicle data
 
       // Initialize counters
       let availableCar = 0;
@@ -64,10 +65,12 @@ const Page = () => {
       // Iterate through vehicle data
       for (let i = 0; i < vehicleData.result.length; i++) {
         const vehicle = vehicleData.result[i];
+        console.log(vehicle); // Log each vehicle
+        console.log(companyname); // Log the company name for comparison
 
         // Check for the specific admin company name
         if (vehicle.adminCompanyName === companyname) {
-          // Update the respective counters
+          // Update the respective counters based on vehicle status
           if (vehicle.vehicleStatus === "Available") {
             availableCar++;
           } else if (vehicle.vehicleStatus === "Standby") {
@@ -79,12 +82,6 @@ const Page = () => {
           } else if (vehicle.vehicleStatus === "Maintenance") {
             maintenance++;
           }
-        } else {
-          availableCar++;
-          standbyCar++;
-          sellCar++;
-          rentCar++;
-          maintenance++;
         }
       }
 
@@ -97,7 +94,7 @@ const Page = () => {
     } catch (error) {
       console.log(`Failed to fetch data: ${error}`);
     }
-  }, []);
+  }, [companyname]);
 
   useEffect(() => {
     fetchCounts();
@@ -123,7 +120,7 @@ const Page = () => {
                 ),
                 title:
                   superadmin === "superadmin" && flag === "false"
-                    ? "Companies"
+                    ? "Total Cars"
                     : superadmin === "superadmin" && flag === "true"
                     ? "Total Cars"
                     : "Total Cars",

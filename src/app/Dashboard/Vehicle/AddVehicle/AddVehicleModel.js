@@ -39,7 +39,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
     torque: "",
     topSpeed: "",
     fuelEfficiency: "",
-    safetyFeatures: "",
+    safetyFeatures: [],
     techFeatures: "",
     towingCapacity: "",
     price: "",
@@ -126,17 +126,56 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
     fetchData();
   }, [vehicleData.adminCompanyName]);
 
+  // const handleChange = (e) => {
+  //   const { name, value, type, checked, files } = e.target;
+  //   setVehicleData((prevData) => ({
+  //     ...prevData,
+  //     [name]:
+  //       type === "checkbox"
+  //         ? checked
+  //         : type === "file"
+  //         ? Array.from(files)
+  //         : value,
+  //   }));
+  // };
   const handleChange = (e) => {
-    const { name, value, type, checked, files } = e.target;
-    setVehicleData((prevData) => ({
-      ...prevData,
-      [name]:
-        type === "checkbox"
-          ? checked
-          : type === "file"
-          ? Array.from(files)
-          : value,
-    }));
+    const { name, value, type, checked, files, options } = e.target;
+
+    setVehicleData((prevData) => {
+      // Handle multi-select dropdown
+      if (type === "select-multiple") {
+        const selectedValues = Array.from(options)
+          .filter((option) => option.selected)
+          .map((option) => option.value);
+
+        return {
+          ...prevData,
+          [name]: selectedValues,
+        };
+      }
+
+      // Handle file inputs
+      if (type === "file") {
+        return {
+          ...prevData,
+          [name]: Array.from(files), // Convert FileList to an array
+        };
+      }
+
+      // Handle checkbox inputs
+      if (type === "checkbox") {
+        return {
+          ...prevData,
+          [name]: checked,
+        };
+      }
+
+      // Handle regular inputs (text, radio, etc.)
+      return {
+        ...prevData,
+        [name]: value,
+      };
+    });
   };
 
   const handleSubmit = async (e) => {
@@ -156,7 +195,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
       }
     }
 
-    // console.log(vehicleData);
+    console.log(vehicleData);
 
     try {
       const response = await axios.post(API_URL_Vehicle, vehicleData, {
@@ -201,7 +240,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
       torque: "",
       topSpeed: "",
       fuelEfficiency: "",
-      safetyFeatures: "",
+      safetyFeatures: [],
       techFeatures: "",
       towingCapacity: "",
       price: "",
@@ -570,6 +609,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                 placeholder="e.g., 25 MPG"
               />
             </div>
+            {/* safty  */}
             <div>
               <div className="flex gap-1">
                 <label className="block font-semibold">Safety Features</label>
@@ -581,6 +621,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                 onChange={handleChange}
                 className="w-full p-2 border border-gray-300 rounded"
                 required
+                multiple // Enable multiple selection
               >
                 <option value="" disabled>
                   Select safety feature

@@ -4,169 +4,22 @@ import { catchAsyncErrors } from "@middlewares/catchAsyncErrors.js";
 import { NextResponse } from "next/server";
 import cloudinary from "@middlewares/cloudinary.js";
 
-// export async function POST(request) {
-//   try {
-//     await connect();
-
-//     // Parse JSON data from the request body
-//     const formDataObject = await request.formData();
-
-//     let file1 = formDataObject.get("imageFile");
-//     console.log("Vehicle:", file1);
-
-//     let Driveravatar = "";
-//     let DriveravatarId = "";
-
-//     // Upload files to Cloudinary
-//     if (file1) {
-//       const buffer1 = Buffer.from(await file1.arrayBuffer());
-//       const uploadResponse1 = await new Promise((resolve, reject) => {
-//         cloudinary.uploader
-//           .upload_stream({ resource_type: "auto" }, (error, result) => {
-//             if (error) {
-//               reject(
-//                 new Error("Error uploading Driveravatar: " + error.message)
-//               );
-//             } else {
-//               resolve(result);
-//             }
-//           })
-//           .end(buffer1);
-//       });
-
-//       Driveravatar = uploadResponse1.secure_url; // Cloudinary URL for display image
-//       DriveravatarId = uploadResponse1.public_id;
-//     } else {
-//       Driveravatar =
-//         "https://cdn-icons-png.flaticon.com/128/17561/17561717.png";
-//       DriveravatarId = "123456789";
-//     }
-
-//     // Prepare object excluding imageFile
-//     const formDataObjectt = {};
-//     for (const [key, value] of formDataObject.entries()) {
-//       if (key !== "imageFile") {
-//         formDataObjectt[key] = value;
-//       }
-//     }
-
-//     console.log(formDataObjectt);
-//     // Destructure the properties safely
-//     const {
-//       manufacturer,
-//       model,
-//       year,
-//       type,
-//       engineType,
-//       fuelType,
-//       transmission,
-//       drivetrain,
-//       exteriorColor,
-//       interiorColor,
-//       dimensions = {}, // Provide default empty object
-//       passengerCapacity,
-//       cargoCapacity,
-//       horsepower,
-//       torque,
-//       topSpeed,
-//       towingCapacity,
-//       fuelEfficiency,
-//       safetyFeatures,
-//       vehicleStatus,
-//       techFeatures,
-//       price,
-//       registrationNumber,
-//       warrantyInfo,
-//       isActive,
-//       adminCreatedBy,
-//       adminCompanyName,
-//       LocalAuthority,
-//     } = formDataObjectt;
-
-//     const { height = "", width = "", length = "" } = dimensions; // Provide default values
-
-//     console.log(height, width, length);
-
-//     // Validate required fields
-//     if (!registrationNumber || !manufacturer || !model) {
-//       return NextResponse.json({
-//         error: "Registration number, manufacturer, and model are required",
-//         status: 400,
-//       });
-//     }
-
-//     // Check for existing vehicle
-//     const existingVehicle = await Vehicle.findOne({ registrationNumber });
-//     if (existingVehicle) {
-//       return NextResponse.json({
-//         error: "Vehicle with this registration number already exists",
-//         status: 400,
-//       });
-//     }
-
-//     // Create new vehicle
-//     const newVehicle = new Vehicle({
-//       manufacturer,
-//       model,
-//       year,
-//       type,
-//       engineType,
-//       fuelType,
-//       transmission,
-//       drivetrain,
-//       exteriorColor,
-//       interiorColor,
-//       dimensions: { height, width, length },
-//       passengerCapacity,
-//       cargoCapacity,
-//       horsepower,
-//       torque,
-//       topSpeed,
-//       vehicleStatus,
-//       towingCapacity,
-//       fuelEfficiency,
-//       safetyFeatures,
-//       techFeatures,
-//       price,
-//       registrationNumber,
-//       warrantyInfo,
-//       isActive,
-//       adminCreatedBy,
-//       adminCompanyName,
-//       LocalAuthority,
-//       imageFile: Driveravatar,
-//       imagePublicId: DriveravatarId,
-//     });
-
-//     const savedVehicle = await newVehicle.save();
-//     return NextResponse.json({
-//       message: "Vehicle created successfully",
-//       success: true,
-//       vehicle: savedVehicle,
-//       status: 201,
-//     });
-//   } catch (error) {
-//     console.error("Error occurred:", error);
-//     return NextResponse.json({
-//       error: error.message || "Internal Server Error",
-//       status: 500,
-//     });
-//   }
-// }
 export async function POST(request) {
   try {
     await connect(); // Connect to the database
 
     // Parse the form data from the request
     const formDataObject = await request.formData();
-    // console.log(formDataObject);
+    console.log(formDataObject);
     const files = formDataObject.getAll("imageFiles[]"); // Get all files
+    const safetyFeature = formDataObject.getAll("safetyFeatures[]"); // Get all files
     console.log(files);
+    console.log(safetyFeature);
     const images = []; // To store Cloudinary URLs and IDs
     if (files.length === 0) {
       // No files found in form data
       images.push({
-        url: "https://res.cloudinary.com/your-cloud-name/image/upload/v1234567890/default-vehicle-image.jpg",
+        url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQVU1ne0ThYY7sT5PkP_HJ0dRIJ4lGOTnqQXQ&s",
         publicId: "123456789",
       });
       // return NextResponse.json({
@@ -241,7 +94,6 @@ export async function POST(request) {
       topSpeed,
       towingCapacity,
       fuelEfficiency,
-      safetyFeatures,
       vehicleStatus,
       techFeatures,
       price,
@@ -291,8 +143,8 @@ export async function POST(request) {
       torque,
       topSpeed,
       towingCapacity,
+      safetyFeatures: safetyFeature,
       fuelEfficiency,
-      safetyFeatures,
       techFeatures,
       vehicleStatus,
       price,

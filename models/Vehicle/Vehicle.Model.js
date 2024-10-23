@@ -33,11 +33,11 @@ const vehicleSchema = new mongoose.Schema(
     interiorColor: {
       type: String,
     },
-    dimensions: {
-      height: { type: Number, dufault: 0 },
-      width: { type: Number, default: 0 },
-      length: { type: Number, default: 0 },
-    },
+
+    height: { type: Number, dufault: 0 },
+    width: { type: Number, default: 0 },
+    length: { type: Number, default: 0 },
+
     passengerCapacity: {
       type: Number,
     },

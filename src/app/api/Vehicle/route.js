@@ -155,58 +155,71 @@ import cloudinary from "@middlewares/cloudinary.js";
 // }
 export async function POST(request) {
   try {
-    await connect();
+    await connect(); // Connect to the database
 
-    // Parse JSON data from the request body
+    // Parse the form data from the request
     const formDataObject = await request.formData();
-
-    // Retrieve up to 10 images
-    const files = [];
-    for (let i = 0; i < 10; i++) {
-      const file = formDataObject.get(`imageFiles${i + 1}`);
-      console.log(file);
-      if (file) {
-        files.push(file);
-      }
-    }
-
-    console.log("Vehicle Images:", files);
-
+    // console.log(formDataObject);
+    const files = formDataObject.getAll("imageFiles[]"); // Get all files
+    console.log(files);
     const images = []; // To store Cloudinary URLs and IDs
+    if (files.length === 0) {
+      // No files found in form data
+      images.push({
+        url: "https://res.cloudinary.com/your-cloud-name/image/upload/v1234567890/default-vehicle-image.jpg",
+        publicId: "123456789",
+      });
+      // return NextResponse.json({
+      //   error: "No files found in form data.",
+      //   status: 400, // Bad Request
+      // });
+    } else if (files.length > 10) {
+      // More than 10 files uploaded
+      return NextResponse.json({
+        error: "You can upload a maximum of 10 images.",
+        status: 400, // Bad Request
+      });
+    } else {
+      console.log(`Found ${files.length} file(s).`);
+    }
 
     // Upload files to Cloudinary
     for (const file of files) {
-      const buffer = Buffer.from(await file.arrayBuffer());
-      const uploadResponse = await new Promise((resolve, reject) => {
-        cloudinary.uploader
-          .upload_stream({ resource_type: "auto" }, (error, result) => {
-            if (error) {
-              reject(new Error("Error uploading image: " + error.message));
-            } else {
-              resolve(result);
-            }
-          })
-          .end(buffer);
-      });
+      // Ensure the file is valid
+      if (file instanceof File) {
+        const buffer = Buffer.from(await file.arrayBuffer()); // Convert file to buffer
+        // Upload to Cloudinary
+        const uploadResponse = await new Promise((resolve, reject) => {
+          cloudinary.uploader
+            .upload_stream({ resource_type: "auto" }, (error, result) => {
+              if (error) {
+                reject(new Error("Error uploading image: " + error.message));
+              } else {
+                resolve(result);
+              }
+            })
+            .end(buffer); // Send buffer to Cloudinary
+        });
 
-      images.push({
-        url: uploadResponse.secure_url, // Cloudinary URL for display image
-        publicId: uploadResponse.public_id,
-      });
-    }
-
-    // Prepare object excluding image files
-    const formDataObjectt = {};
-    for (const [key, value] of formDataObject.entries()) {
-      if (!key.startsWith("imageFiles")) {
-        // Exclude image files
-        formDataObjectt[key] = value;
+        // Store Cloudinary response (URL and public ID)
+        images.push({
+          url: uploadResponse.secure_url,
+          publicId: uploadResponse.public_id,
+        });
+      } else {
+        console.log("Invalid file detected:", file); // Debug if the file is invalid
       }
     }
 
-    console.log(formDataObjectt);
+    // Collect non-image fields from the form data
+    const formDataObjectt = {};
+    for (const [key, value] of formDataObject.entries()) {
+      if (!key.startsWith("imageFiles[]")) {
+        formDataObjectt[key] = value; // Exclude image files from regular form fields
+      }
+    }
 
-    // Destructure the properties safely
+    // Destructure the properties safely (ensure all fields are present)
     const {
       manufacturer,
       model,
@@ -218,7 +231,9 @@ export async function POST(request) {
       drivetrain,
       exteriorColor,
       interiorColor,
-      dimensions = {}, // Provide default empty object
+      height,
+      width,
+      length,
       passengerCapacity,
       cargoCapacity,
       horsepower,
@@ -238,10 +253,6 @@ export async function POST(request) {
       LocalAuthority,
     } = formDataObjectt;
 
-    const { height = "", width = "", length = "" } = dimensions; // Provide default values
-
-    console.log(height, width, length);
-
     // Validate required fields
     if (!registrationNumber || !manufacturer || !model) {
       return NextResponse.json({
@@ -250,7 +261,7 @@ export async function POST(request) {
       });
     }
 
-    // Check for existing vehicle
+    // Check for existing vehicle with the same registration number
     const existingVehicle = await Vehicle.findOne({ registrationNumber });
     if (existingVehicle) {
       return NextResponse.json({
@@ -259,7 +270,7 @@ export async function POST(request) {
       });
     }
 
-    // Create new vehicle
+    // Create a new vehicle entry in the database
     const newVehicle = new Vehicle({
       manufacturer,
       model,
@@ -271,17 +282,19 @@ export async function POST(request) {
       drivetrain,
       exteriorColor,
       interiorColor,
-      dimensions: { height, width, length },
+      height,
+      width,
+      length,
       passengerCapacity,
       cargoCapacity,
       horsepower,
       torque,
       topSpeed,
-      vehicleStatus,
       towingCapacity,
       fuelEfficiency,
       safetyFeatures,
       techFeatures,
+      vehicleStatus,
       price,
       registrationNumber,
       warrantyInfo,
@@ -289,10 +302,12 @@ export async function POST(request) {
       adminCreatedBy,
       adminCompanyName,
       LocalAuthority,
-      images, // Store all image URLs and IDs
+      images, // Include image URLs and Cloudinary public IDs
     });
 
+    // Save the vehicle in the database
     const savedVehicle = await newVehicle.save();
+
     return NextResponse.json({
       message: "Vehicle created successfully",
       success: true,
@@ -307,7 +322,6 @@ export async function POST(request) {
     });
   }
 }
-
 export const GET = catchAsyncErrors(async () => {
   await connect();
   const allVehicle = await Vehicle.find();

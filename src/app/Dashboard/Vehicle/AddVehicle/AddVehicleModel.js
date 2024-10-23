@@ -28,11 +28,10 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
     drivetrain: "",
     exteriorColor: "",
     interiorColor: "",
-    dimensions: {
-      height: "",
-      width: "",
-      length: "",
-    },
+
+    height: "",
+    width: "",
+    length: "",
     passengerCapacity: "",
     LocalAuthority: "",
     cargoCapacity: "",
@@ -140,17 +139,6 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
     }));
   };
 
-  const handleDimensionChange = (e) => {
-    const { name, value } = e.target;
-    setVehicleData((prevData) => ({
-      ...prevData,
-      dimensions: {
-        ...prevData.dimensions,
-        [name]: value,
-      },
-    }));
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData();
@@ -168,13 +156,16 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
       }
     }
 
+    // console.log(vehicleData);
+
     try {
-      const response = await axios.post(API_URL_Vehicle, formData, {
+      const response = await axios.post(API_URL_Vehicle, vehicleData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
 
+      console.log(response.data);
       if (response.data.success) {
         toast.success(response.data.message);
         fetchData();
@@ -200,11 +191,9 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
       drivetrain: "",
       exteriorColor: "",
       interiorColor: "",
-      dimensions: {
-        height: "",
-        width: "",
-        length: "",
-      },
+      height: "",
+      width: "",
+      length: "",
       passengerCapacity: "",
       LocalAuthority: "",
       cargoCapacity: "",
@@ -441,8 +430,8 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
               <input
                 type="number"
                 name="height"
-                value={vehicleData.dimensions.height}
-                onChange={handleDimensionChange}
+                value={vehicleData.height}
+                onChange={handleChange}
                 className="w-full p-2 border border-gray-300 rounded"
               />
             </div>
@@ -453,8 +442,8 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
               <input
                 type="number"
                 name="width"
-                value={vehicleData.dimensions.width}
-                onChange={handleDimensionChange}
+                value={vehicleData.width}
+                onChange={handleChange}
                 className="w-full p-2 border border-gray-300 rounded"
               />
             </div>
@@ -465,8 +454,8 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
               <input
                 type="number"
                 name="length"
-                value={vehicleData.dimensions.length}
-                onChange={handleDimensionChange}
+                value={vehicleData.length}
+                onChange={handleChange}
                 className="w-full p-2 border border-gray-300 rounded"
               />
             </div>

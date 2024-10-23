@@ -80,16 +80,12 @@ export async function PUT(request, context) {
       vehicle.exteriorColor = formDataObject.exteriorColor;
     if (formDataObject.interiorColor !== undefined)
       vehicle.interiorColor = formDataObject.interiorColor;
-
-    // Update dimensions only if provided in formDataObject
-    if (formDataObject.dimensions) {
-      vehicle.dimensions = {
-        height: formDataObject.dimensions.height || vehicle.dimensions?.height,
-        width: formDataObject.dimensions.width || vehicle.dimensions?.width,
-        length: formDataObject.dimensions.length || vehicle.dimensions?.length,
-      };
-    }
-
+    if (formDataObject.height !== undefined)
+      vehicle.height = formDataObject.height;
+    if (formDataObject.width !== undefined)
+      vehicle.width = formDataObject.width;
+    if (formDataObject.length !== undefined)
+      vehicle.length = formDataObject.length;
     if (formDataObject.passengerCapacity !== undefined)
       vehicle.passengerCapacity = formDataObject.passengerCapacity;
     if (formDataObject.cargoCapacity !== undefined)

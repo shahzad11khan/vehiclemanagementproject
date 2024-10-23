@@ -24,11 +24,10 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
     exteriorColor: "",
     interiorColor: "",
     weight: "",
-    dimensions: {
-      height: "",
-      width: "",
-      length: "",
-    },
+    height: "",
+    width: "",
+    length: "",
+
     passengerCapacity: "",
     LocalAuthority: "",
     cargoCapacity: "",
@@ -160,17 +159,6 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
       fetchVehicleData();
     }
   }, [vehicleId]);
-
-  const handleDimensionChange = (e) => {
-    const { name, value } = e.target;
-    setVehicleData((prevData) => ({
-      ...prevData,
-      dimensions: {
-        ...prevData.dimensions,
-        [name]: value,
-      },
-    }));
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -367,8 +355,8 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
               <input
                 type="number"
                 name="height"
-                value={vehicleData.dimensions.height}
-                onChange={handleDimensionChange}
+                value={vehicleData.height}
+                onChange={handleChange}
                 className="w-full p-2 border border-gray-300 rounded"
                 min="0"
               />
@@ -378,8 +366,8 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
               <input
                 type="number"
                 name="width"
-                value={vehicleData.dimensions.width}
-                onChange={handleDimensionChange}
+                value={vehicleData.width}
+                onChange={handleChange}
                 className="w-full p-2 border border-gray-300 rounded"
                 min="0"
               />
@@ -389,8 +377,8 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
               <input
                 type="number"
                 name="length"
-                value={vehicleData.dimensions.length}
-                onChange={handleDimensionChange}
+                value={vehicleData.length}
+                onChange={handleChange}
                 className="w-full p-2 border border-gray-300 rounded"
                 min="0"
               />

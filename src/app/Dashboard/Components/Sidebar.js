@@ -6,7 +6,7 @@ import { IoPersonAdd } from "react-icons/io5";
 import { FaHouseLaptop } from "react-icons/fa6";
 import { FaCar, FaIndustry } from "react-icons/fa";
 // import { TbReport } from "react-icons/tb";
-import { MdManageSearch } from "react-icons/md";
+// import { MdManageSearch } from "react-icons/md";
 import { CiSettings } from "react-icons/ci";
 import { GrSystem } from "react-icons/gr";
 import { RiOrganizationChart } from "react-icons/ri";
@@ -486,7 +486,7 @@ const Sidebar = () => {
                             : "text-black text-sm"
                         }`}
                       />
-                      <MdManageSearch
+                      <CiSettings
                         className={`${
                           isOpenManagement === true
                             ? "text-red-400"
@@ -895,7 +895,7 @@ const Sidebar = () => {
                             : "text-black text-sm"
                         }`}
                       />
-                      <MdManageSearch
+                      <CiSettings
                         className={`${
                           isOpenManagement === true
                             ? "text-red-400"

@@ -27,3 +27,4 @@ export const API_URL_Employee = `${url}/api/Employee`;
 export const API_URL_Transmission = `${url}/api/Transmission`;
 export const API_URL_FuelType = `${url}/api/FuelType`;
 export const API_URL_Type = `${url}/api/BodyType`;
+export const API_URL_Vehicle_For_Image = `${url}/api/Vehicle/specificImage`;

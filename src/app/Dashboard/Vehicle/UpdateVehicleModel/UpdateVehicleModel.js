@@ -1,8 +1,11 @@
 "use client";
-import { API_URL_Vehicle } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
+import {
+  API_URL_Vehicle,
+  API_URL_Vehicle_For_Image,
+} from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import axios from "axios";
 import { toast } from "react-toastify";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   fetchManfacturer,
   fetchLocalAuth,
@@ -10,7 +13,6 @@ import {
   fetchType,
   fetchFuelType,
 } from "../../Components/DropdownData/taxiFirm/taxiFirmService";
-
 const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
   const [vehicleData, setVehicleData] = useState({
     manufacturer: "",
@@ -50,10 +52,11 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
   const [superadmin, setSuperadmin] = useState(null);
   const [localAuthority, setLocalAuth] = useState([]);
   const [manufacturer, setManufacturer] = useState([]);
-
+  const [imagePreview, setImagePreview] = useState([]);
   const [transmission, setTransmission] = useState([]);
   const [type, setType] = useState([]);
   const [fueltype, setFuelType] = useState([]);
+  const fileInputRef = useRef(null); // Create a ref for the file input
 
   useEffect(() => {
     const storedCompanyName = localStorage.getItem("companyName");
@@ -218,6 +221,8 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
         try {
           const response = await axios.get(`${API_URL_Vehicle}/${vehicleId}`);
           setVehicleData(response.data.result);
+          console.log(response.data.result);
+          setImagePreview(response.data.result.images || null);
         } catch (error) {
           console.error("Error fetching vehicle data:", error);
         }
@@ -263,6 +268,51 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
       toast.error(
         error.response?.data?.error || "Failed to update vehicle data."
       );
+    }
+  };
+
+  const [sele, setselect] = useState("");
+  const handleImageClick = (img) => {
+    // Open the file input dialog when an image preview is clicked
+    setselect(img);
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
+  const handleFileSelect = async (event) => {
+    event.preventDefault();
+    const file = event.target.files[0];
+    console.log(file);
+
+    // Extracting necessary properties from the img object
+    const { _id, url, publicId } = sele;
+    console.log("Image _id:", _id);
+    console.log("Image URL:", url);
+    console.log("Image Public ID:", publicId);
+    // Check if the selected file exists
+    if (!file) {
+      console.error("No image file found for upload.");
+      return;
+    }
+    const formData = new FormData();
+    formData.append("imageId", _id);
+    formData.append("imageFile", file);
+
+    try {
+      const response = await axios.put(
+        `${API_URL_Vehicle_For_Image}/${_id}`, // Ensure you're using the correct endpoint
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      console.log("Response:", response.data); // Log the response data
+    } catch (error) {
+      console.error("Error updating vehicle image:", error);
     }
   };
 
@@ -977,7 +1027,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
             </div>
           </div>
 
-          <div>
+          <div className="hidden">
             <h3 className="text-xl font-semibold mb-2">Vehicle Images</h3>
             <div>
               <input
@@ -990,6 +1040,52 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                 multiple
               />
               <span className="text-red-500 mb-3">Maximum 10 images</span>
+            </div>
+          </div>
+          {/* <div className="flex gap-2">
+            {imagePreview.map((img, index) => (
+              <div
+                key={index}
+                className="cursor-pointer"
+                onClick={(event) => handleImageClick(event, img)}
+              >
+                <img
+                  src={img.url}
+                  alt="Avatar Preview"
+                  className="avatar-preview w-32 h-20"
+                />
+              </div>
+            ))}
+          </div> */}
+
+          <div>
+            {/* File input for selecting an image */}
+
+            <div>
+              {/* Hidden file input for selecting an image */}
+              <input
+                type="file"
+                onChange={handleFileSelect}
+                accept="image/*"
+                ref={fileInputRef} // Assign ref to the file input
+                style={{ display: "none" }} // Hide the input element
+              />
+
+              <div className="flex gap-2">
+                {imagePreview.map((img, index) => (
+                  <div
+                    key={index}
+                    className="cursor-pointer"
+                    onClick={() => handleImageClick(img)} // Call handleImageClick with img
+                  >
+                    <img
+                      src={img.url}
+                      alt="Avatar Preview"
+                      className="avatar-preview w-32 h-20"
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
 

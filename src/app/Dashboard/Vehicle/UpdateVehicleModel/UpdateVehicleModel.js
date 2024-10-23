@@ -296,7 +296,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
       return;
     }
     const formData = new FormData();
-    formData.append("imageId", _id);
+    formData.append("imagepublicId", publicId);
     formData.append("imageFile", file);
 
     try {

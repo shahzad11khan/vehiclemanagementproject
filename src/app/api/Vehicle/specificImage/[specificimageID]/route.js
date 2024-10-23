@@ -5,23 +5,41 @@ import cloudinary from "@middlewares/cloudinary.js";
 
 export async function PUT(request, context) {
   try {
-    await connect(); // Connect to the database
+    await connect();
 
-    const id = context.params.specificimageID; // Use the correct parameter name
+    const id = context.params.specificimageID;
     const data = await request.formData();
 
-    console.log(id);
+    // console.log(id);
     const userAvatar = data.get("imageFile");
-    console.log(userAvatar);
+    const imagepublicId = data.get("imagepublicId");
     let Vehicleavatar = "";
     let VehicleavatarId = "";
+    const vehicle = await Vehicle.findOne({ "images._id": id });
+    if (!vehicle) {
+      return NextResponse.json({ error: "Vehicle not found", status: 404 });
+    }
 
-    // Check if the user avatar is an object and has a valid name (indicating it's a file)
+    const imageToDelete = vehicle.images.find(
+      (image) => image.publicId.toString() === imagepublicId
+    );
+    if (!imageToDelete) {
+      console.error("Image not found with the given ID:", imageToDelete);
+      return;
+    }
+    if (imageToDelete.publicId) {
+      try {
+        await cloudinary.uploader.destroy(imageToDelete.publicId);
+        console.log("Image deleted from Cloudinary:", imageToDelete.publicId);
+      } catch (error) {
+        console.error("Failed to delete image from Cloudinary:", error);
+      }
+    }
+
     if (userAvatar && typeof userAvatar === "object" && userAvatar.name) {
       const byteData = await userAvatar.arrayBuffer();
       const buffer = Buffer.from(byteData);
 
-      // Upload the new image to Cloudinary
       const uploadResponse = await new Promise((resolve, reject) => {
         const uploadStream = cloudinary.uploader.upload_stream(
           { resource_type: "auto" },
@@ -34,45 +52,26 @@ export async function PUT(request, context) {
           }
         );
 
-        // Write buffer to the upload stream
         uploadStream.end(buffer);
       });
 
-      // Store the URL and ID of the uploaded image
       Vehicleavatar = uploadResponse.secure_url;
       VehicleavatarId = uploadResponse.public_id;
-    }
 
-    // Assuming 'id' is the image ID you want to search for
-    const vehicle = await Vehicle.findOne({ "images._id": id });
-    console.log(vehicle);
-    if (!vehicle) {
-      return NextResponse.json({ error: "Vehicle not found", status: 404 });
-    }
+      //   console.log(Vehicleavatar, VehicleavatarId);
+      const imageIndex = vehicle.images.findIndex(
+        (image) => image._id.toString() === id
+      );
 
-    // Handle avatar update: remove old avatar from Cloudinary and update with new one if uploaded
-    if (Vehicleavatar && VehicleavatarId) {
-      // Check if the Vehicle has an existing avatar ID to delete
-      if (vehicle.images.publicId) {
-        try {
-          // Delete old avatar from Cloudinary if it exists
-          await cloudinary.uploader.destroy(vehicle.images.publicId);
-          console.log("Old avatar deleted from Cloudinary.");
-        } catch (error) {
-          console.error("Failed to delete old image from Cloudinary:", error);
-        }
+      //   console.log(imageIndex);
+      if (imageIndex !== -1) {
+        vehicle.images[imageIndex].url = Vehicleavatar;
+        vehicle.images[imageIndex].publicId = VehicleavatarId;
       }
-
-      // Update Vehicle with new avatar details
-      vehicle.images.url = Vehicleavatar;
-      vehicle.images.publicId = VehicleavatarId; // Fix: Ensure this is updated correctly
-      console.log("New avatar uploaded and updated.");
-    } else {
-      console.log("No new image uploaded, keeping the old image.");
+      console.log("Image is Updated Successfully");
     }
 
-    // Save updated Vehicle details
-    await vehicle.save(); // Save the vehicle instance to apply changes
+    await vehicle.save();
 
     return NextResponse.json({
       message: "Vehicle image updated successfully",

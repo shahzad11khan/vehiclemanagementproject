@@ -27,7 +27,6 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
     height: "",
     width: "",
     length: "",
-
     passengerCapacity: "",
     LocalAuthority: "",
     cargoCapacity: "",
@@ -37,8 +36,8 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
     acceleration: "",
     topSpeed: "",
     fuelEfficiency: "",
-    safetyFeatures: "",
-    techFeatures: "",
+    safetyFeatures: [],
+    techFeatures: [],
     towingCapacity: "",
     price: "",
     registrationNumber: "",
@@ -49,7 +48,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
   });
 
   const [superadmin, setSuperadmin] = useState(null);
-  const [LocalAuthority, setLocalAuth] = useState([]);
+  const [localAuthority, setLocalAuth] = useState([]);
   const [manufacturer, setManufacturer] = useState([]);
 
   const [transmission, setTransmission] = useState([]);
@@ -71,12 +70,82 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
   }, []);
 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value, type, checked, files, options } = e.target;
 
-    setVehicleData((prevData) => ({
-      ...prevData,
-      [name]: type === "checkbox" ? checked : value,
-    }));
+    setVehicleData((prevData) => {
+      // Handle multi-select dropdown
+      if (type === "select-multiple") {
+        const selectedValues = Array.from(options)
+          .filter((option) => option.selected)
+          .map((option) => option.value);
+
+        return {
+          ...prevData,
+          [name]: selectedValues,
+        };
+      }
+
+      // Handle file inputs
+      if (type === "file") {
+        return {
+          ...prevData,
+          [name]: Array.from(files), // Convert FileList to an array
+        };
+      }
+
+      // Handle checkbox inputs for safety features
+      if (name === "safetyFeatures") {
+        const currentSafetyFeatures = prevData[name] || [];
+        if (checked) {
+          // Add feature if checked
+          return {
+            ...prevData,
+            [name]: [...currentSafetyFeatures, value], // Add selected feature
+          };
+        } else {
+          // Remove feature if unchecked
+          return {
+            ...prevData,
+            [name]: currentSafetyFeatures.filter(
+              (feature) => feature !== value
+            ), // Remove deselected feature
+          };
+        }
+      }
+
+      // Handle checkbox inputs for technology features
+      if (name === "techFeatures") {
+        const currentTechFeatures = prevData.techFeatures || [];
+        if (checked) {
+          // Add feature if checked
+          return {
+            ...prevData,
+            [name]: [...currentTechFeatures, value], // Add selected feature
+          };
+        } else {
+          // Remove feature if unchecked
+          return {
+            ...prevData,
+            [name]: currentTechFeatures.filter((feature) => feature !== value), // Remove deselected feature
+          };
+        }
+      }
+
+      // Handle regular checkbox inputs
+      if (type === "checkbox") {
+        // Set isActive specifically as a boolean
+        return {
+          ...prevData,
+          [name]: checked, // This will now ensure isActive is a boolean
+        };
+      }
+
+      // Handle regular inputs (text, radio, etc.)
+      return {
+        ...prevData,
+        [name]: value,
+      };
+    });
   };
 
   useEffect(() => {
@@ -149,10 +218,8 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
         try {
           const response = await axios.get(`${API_URL_Vehicle}/${vehicleId}`);
           setVehicleData(response.data.result);
-          console.log("update value", response.data.result.dimensions.height);
         } catch (error) {
           console.error("Error fetching vehicle data:", error);
-          toast.error("Failed to load vehicle data.");
         }
       };
 
@@ -162,10 +229,31 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const formData = new FormData();
+    for (const key in vehicleData) {
+      if (key === "imageFiles") {
+        vehicleData.imageFiles.forEach((file) => {
+          formData.append("imageFiles", file);
+        });
+      } else if (typeof vehicleData[key] === "object") {
+        for (const subKey in vehicleData[key]) {
+          formData.append(`${key}[${subKey}]`, vehicleData[key][subKey]);
+        }
+      } else {
+        formData.append(key, vehicleData[key]);
+      }
+    }
+
+    console.log(vehicleData);
     try {
       const response = await axios.put(
         `${API_URL_Vehicle}/${vehicleId}`,
-        vehicleData
+        vehicleData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
       );
       toast.success(response.data.message);
       fetchData();
@@ -183,13 +271,17 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50 ">
       <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-4xl overflow-y-auto max-h-screen">
-        <form onSubmit={handleSubmit} className="max-w-4xl mx-auto p-6">
+        <form
+          onSubmit={handleSubmit}
+          className="max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-lg"
+        >
           <h2 className="text-2xl font-bold mb-6">Vehicle Form</h2>
-          {/* Manufacturer and Model */}
+
           <div className="grid grid-cols-3 md:grid-cols-3 gap-2">
             <div>
               <div className="flex gap-1">
                 <label className="block font-semibold">Manufacturer</label>
+                <span className="text-red-600">*</span>
               </div>
               <select
                 id="manufacturer"
@@ -201,14 +293,17 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
               >
                 <option value="">Select Manufacturer</option>
                 {manufacturer.map((item) => (
-                  <option key={item.id} value={item.name}>
+                  <option key={item._id} value={item.name}>
                     {item.name}
                   </option>
                 ))}
               </select>
             </div>
             <div>
-              <label className="block font-semibold">Model</label>
+              <div className="flex gap-1">
+                <label className="block font-semibold">Model</label>
+                <span className="text-red-600">*</span>
+              </div>
               <input
                 type="text"
                 name="model"
@@ -220,7 +315,10 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
               />
             </div>
             <div>
-              <label className="block font-semibold">Year</label>
+              <div className="flex gap-1">
+                <label className="block font-semibold">Year</label>
+                <span className="text-red-600">*</span>
+              </div>
               <input
                 type="number"
                 name="year"
@@ -232,9 +330,14 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
               />
             </div>
           </div>
+
           <div className="grid grid-cols-3 md:grid-cols-3 gap-2 mt-4">
             <div className="">
-              <label className="block font-semibold">Type/Body Style</label>
+              <div className="flex gap-1">
+                <label className="block font-semibold">Body Type</label>
+                <span className="text-red-600">*</span>
+              </div>
+
               <select
                 name="type"
                 value={vehicleData.type}
@@ -253,7 +356,10 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
               </select>
             </div>
             <div>
-              <label className="block font-semibold">Engine Type</label>
+              <div className="flex gap-1">
+                <label className="block font-semibold">Engine Type</label>
+                <span className="text-red-600">*</span>
+              </div>
               <input
                 type="text"
                 name="engineType"
@@ -265,7 +371,10 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
               />
             </div>
             <div className="">
-              <label className="block font-semibold">Fuel Type</label>
+              <div className="flex gap-1">
+                <label className="block font-semibold">Fuel Type</label>
+                <span className="text-red-600">*</span>
+              </div>
               <select
                 name="fuelType"
                 value={vehicleData.fuelType}
@@ -284,9 +393,13 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
               </select>
             </div>
           </div>
+
           <div className="grid grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-2 mt-4">
             <div>
-              <label className="block font-semibold">Transmission</label>
+              <div className="flex gap-1">
+                <label className="block font-semibold">Transmission</label>
+                <span className="text-red-600">*</span>
+              </div>
               <select
                 name="transmission"
                 value={vehicleData.transmission}
@@ -306,7 +419,10 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
               </select>
             </div>
             <div className="">
-              <label className="block font-semibold">Drivetrain</label>
+              <div className="flex gap-1">
+                <label className="block font-semibold">Drivetrain</label>
+                <span className="text-red-600">*</span>
+              </div>
               <select
                 name="drivetrain"
                 value={vehicleData.drivetrain}
@@ -324,7 +440,10 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
               </select>
             </div>
             <div>
-              <label className="block font-semibold">Exterior Color</label>
+              <div className="flex gap-1">
+                <label className="block font-semibold">Exterior Color</label>
+                <span className="text-red-600">*</span>
+              </div>
               <input
                 type="text"
                 name="exteriorColor"
@@ -336,7 +455,10 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
               />
             </div>
             <div>
-              <label className="block font-semibold">Interior Color</label>
+              <div className="flex gap-1">
+                <label className="block font-semibold">Interior Color</label>
+                <span className="text-red-600">*</span>
+              </div>
               <input
                 type="text"
                 name="interiorColor"
@@ -348,42 +470,48 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
               />
             </div>
           </div>
+
           <div className="grid grid-cols-3 md:grid-cols-3 gap-2 mt-4"></div>
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mt-4">
             <div>
-              <label className="block font-semibold">Height (in cm)</label>
+              <div className="flex gap-1">
+                <label className="block font-semibold">Height</label>
+              </div>
               <input
                 type="number"
                 name="height"
                 value={vehicleData.height}
                 onChange={handleChange}
                 className="w-full p-2 border border-gray-300 rounded"
-                min="0"
               />
             </div>
             <div>
-              <label className="block font-semibold">Width (in cm)</label>
+              <div className="flex gap-1">
+                <label className="block font-semibold">Width</label>
+              </div>
               <input
                 type="number"
                 name="width"
                 value={vehicleData.width}
                 onChange={handleChange}
                 className="w-full p-2 border border-gray-300 rounded"
-                min="0"
               />
             </div>
             <div>
-              <label className="block font-semibold">Length (in cm)</label>
+              <div className="flex gap-1">
+                <label className="block font-semibold">Length</label>
+              </div>
               <input
                 type="number"
                 name="length"
                 value={vehicleData.length}
                 onChange={handleChange}
                 className="w-full p-2 border border-gray-300 rounded"
-                min="0"
               />
             </div>
           </div>
+
           <div className="grid grid-cols-3 md:grid-cols-3 gap-2 mt-4">
             <div>
               <div className="flex gap-1">
@@ -409,8 +537,11 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                 ))}
               </select>
             </div>
+
             <div>
-              <label className="block font-semibold">Cargo Capacity</label>
+              <div className="flex gap-1">
+                <label className="block font-semibold">Cargo Capacity</label>
+              </div>
               <input
                 type="text"
                 name="cargoCapacity"
@@ -420,7 +551,9 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
               />
             </div>
             <div>
-              <label className="block font-semibold">Horsepower</label>
+              <div className="flex gap-1">
+                <label className="block font-semibold">Horsepower</label>
+              </div>
               <input
                 type="number"
                 name="horsepower"
@@ -430,11 +563,14 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
               />
             </div>
           </div>
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mt-4">
             <div>
-              <label className="block font-semibold">Torque</label>
+              <div className="flex gap-1">
+                <label className="block font-semibold">Torque</label>
+              </div>
               <input
-                type="text"
+                type="number"
                 name="torque"
                 value={vehicleData.torque}
                 onChange={handleChange}
@@ -442,7 +578,9 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
               />
             </div>
             <div>
-              <label className="block font-semibold">Top Speed (mph)</label>
+              <div className="flex gap-1">
+                <label className="block font-semibold">Top Speed (mph)</label>
+              </div>
               <input
                 type="number"
                 name="topSpeed"
@@ -452,32 +590,25 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
               />
             </div>
             <div>
-              <label className="block font-semibold">
-                Towing Capacity (lbs)
-              </label>
+              <div className="flex gap-1">
+                <label className="block font-semibold">
+                  Towing Capacity (lbs)
+                </label>{" "}
+              </div>
+
               <input
                 type="number"
                 name="towingCapacity"
                 value={vehicleData.towingCapacity}
                 onChange={handleChange}
                 className="w-full p-2 border border-gray-300 rounded"
-                required
               />
             </div>
           </div>
-          <div className="grid grid-cols-3 md:grid-cols-3 gap-2 mt-4">
-            <div>
-              <label className="block font-semibold">Fuel Efficiency</label>
-              <input
-                type="text"
-                name="fuelEfficiency"
-                value={vehicleData.fuelEfficiency}
-                onChange={handleChange}
-                className="w-full p-2 border border-gray-300 rounded"
-                placeholder="e.g., 25 MPG"
-              />
-            </div>
-            <div>
+
+          <div className="grid grid-cols-2 md:grid-cols-2 gap-2 mt-4">
+            {/* safty  */}
+            {/* <div>
               <div className="flex gap-1">
                 <label className="block font-semibold">Safety Features</label>
                 <span className="text-red-600">*</span>
@@ -488,6 +619,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                 onChange={handleChange}
                 className="w-full p-2 border border-gray-300 rounded"
                 required
+                multiple // Enable multiple selection
               >
                 <option value="" disabled>
                   Select safety feature
@@ -511,9 +643,173 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                   Automatic Emergency Braking
                 </option>
               </select>
-            </div>
+            </div> */}
+            {/* <div>
+              <div className="flex gap-1">
+                <label className="block font-semibold">Safety Features</label>
+                <span className="text-red-600">*</span>
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-2 gap-2">
+                <label className="flex items-center">
+                  <input
+                    type="checkbox"
+                    value="Airbags"
+                    checked={vehicleData.safetyFeatures.includes("Airbags")}
+                    onChange={handleChange}
+                    className="mr-2"
+                  />
+                  Airbags
+                </label>
+                <label className="flex items-center">
+                  <input
+                    type="checkbox"
+                    value="ABS"
+                    checked={vehicleData.safetyFeatures.includes("ABS")}
+                    onChange={handleChange}
+                    className="mr-2"
+                  />
+                  ABS (Anti-lock Braking System)
+                </label>
+                <label className="flex items-center">
+                  <input
+                    type="checkbox"
+                    value="Stability Control"
+                    checked={vehicleData.safetyFeatures.includes(
+                      "Stability Control"
+                    )}
+                    onChange={handleChange}
+                    className="mr-2"
+                  />
+                  Stability Control
+                </label>
+                <label className="flex items-center">
+                  <input
+                    type="checkbox"
+                    value="Traction Control"
+                    checked={vehicleData.safetyFeatures.includes(
+                      "Traction Control"
+                    )}
+                    onChange={handleChange}
+                    className="mr-2"
+                  />
+                  Traction Control
+                </label>
+                <label className="flex items-center">
+                  <input
+                    type="checkbox"
+                    value="Blind Spot Monitoring"
+                    checked={vehicleData.safetyFeatures.includes(
+                      "Blind Spot Monitoring"
+                    )}
+                    onChange={handleChange}
+                    className="mr-2"
+                  />
+                  Blind Spot Monitoring
+                </label>
+                <label className="flex items-center">
+                  <input
+                    type="checkbox"
+                    value="Lane Departure Warning"
+                    checked={vehicleData.safetyFeatures.includes(
+                      "Lane Departure Warning"
+                    )}
+                    onChange={handleChange}
+                    className="mr-2"
+                  />
+                  Lane Departure Warning
+                </label>
+                <label className="flex items-center">
+                  <input
+                    type="checkbox"
+                    value="Adaptive Cruise Control"
+                    checked={vehicleData.safetyFeatures.includes(
+                      "Adaptive Cruise Control"
+                    )}
+                    onChange={handleChange}
+                    className="mr-2"
+                  />
+                  Adaptive Cruise Control
+                </label>
+                <label className="flex items-center">
+                  <input
+                    type="checkbox"
+                    value="Rearview Camera"
+                    checked={vehicleData.safetyFeatures.includes(
+                      "Rearview Camera"
+                    )}
+                    onChange={handleChange}
+                    className="mr-2"
+                  />
+                  Rearview Camera
+                </label>
+                <label className="flex items-center">
+                  <input
+                    type="checkbox"
+                    value="Parking Sensors"
+                    checked={vehicleData.safetyFeatures.includes(
+                      "Parking Sensors"
+                    )}
+                    onChange={handleChange}
+                    className="mr-2"
+                  />
+                  Parking Sensors
+                </label>
+                <label className="flex items-center">
+                  <input
+                    type="checkbox"
+                    value="Automatic Emergency Braking"
+                    checked={vehicleData.safetyFeatures.includes(
+                      "Automatic Emergency Braking"
+                    )}
+                    onChange={handleChange}
+                    className="mr-2"
+                  />
+                  Automatic Emergency Braking
+                </label>
+              </div>
+            </div> */}
             <div>
-              <label className="block font-semibold">Technology Features</label>
+              <div className="flex gap-1">
+                <label className="block font-semibold">Safety Features</label>
+                <span className="text-red-600">*</span>
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-2 gap-1  border border-gray-300 pl-1">
+                {/* List of safety features as checkboxes */}
+                {[
+                  "Airbags",
+                  "ABS",
+                  "Stability Control",
+                  "Traction Control",
+                  "Blind Spot Monitoring",
+                  "Lane Departure Warning",
+                  "Adaptive Cruise Control",
+                  "Rearview Camera",
+                  "Parking Sensors",
+                  "Automatic Emergency Braking",
+                ].map((feature) => (
+                  <label key={feature} className="flex items-center">
+                    <input
+                      type="checkbox"
+                      name="safetyFeatures"
+                      value={feature}
+                      checked={vehicleData.safetyFeatures.includes(feature)}
+                      onChange={handleChange}
+                      className="mr-1"
+                    />
+                    {feature}
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            {/* <div>
+              <div className="flex gap-1">
+                <label className="block font-semibold">
+                  Technology Features
+                </label>
+
+                <span className="text-red-600">*</span>
+              </div>
               <textarea
                 name="techFeatures"
                 value={vehicleData.techFeatures}
@@ -522,13 +818,67 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                 placeholder="e.g., Navigation, Bluetooth, Backup Camera"
                 required
               />
+            </div> */}
+
+            <div className="">
+              <div className="flex gap-1 ">
+                <label className="block font-semibold">
+                  Technology Features
+                </label>
+                <span className="text-red-600">*</span>
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-2 gap-1.5 border border-gray-300 pl-1">
+                {/* List of technology features as checkboxes */}
+                {[
+                  "Navigation",
+                  "Bluetooth",
+                  "Backup Camera",
+                  "Adaptive Headlights",
+                  "Lane Keep Assist",
+                  "Parking Assist",
+                  "Smartphone Integration",
+                  "Voice Recognition",
+                  "Keyless Entry",
+                  "Rear Seat Entertainment",
+                ].map((feature) => (
+                  <label key={feature} className="flex items-center">
+                    <input
+                      type="checkbox"
+                      name="techFeatures"
+                      value={feature}
+                      checked={vehicleData.techFeatures.includes(feature)}
+                      onChange={handleChange}
+                      className="mr-1"
+                    />
+                    {feature}
+                  </label>
+                ))}
+              </div>
             </div>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mt-4">
+          <div className="grid grid-cols-2 md:grid-cols-2 gap-2 mt-4">
             <div>
-              <label className="block font-semibold">Price ($)</label>
+              <div className="flex gap-1">
+                <label className="block font-semibold">Fuel Efficiency</label>
+              </div>
+
               <input
                 type="text"
+                name="fuelEfficiency"
+                value={vehicleData.fuelEfficiency}
+                onChange={handleChange}
+                className="w-full p-2 border border-gray-300 rounded"
+                placeholder="e.g., 25 MPG"
+              />
+            </div>
+            <div>
+              <div className="flex gap-1">
+                <label className="block font-semibold">Price (£)</label>
+
+                <span className="text-red-600">*</span>
+              </div>
+              <input
+                type="number"
                 name="price"
                 value={vehicleData.price}
                 onChange={handleChange}
@@ -536,8 +886,17 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                 required
               />
             </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mt-4">
             <div>
-              <label className="block font-semibold">Registration Number</label>
+              <div className="flex gap-1">
+                <label className="block font-semibold">
+                  Registration Number
+                </label>
+
+                <span className="text-red-600">*</span>
+              </div>
               <input
                 type="text"
                 name="registrationNumber"
@@ -547,48 +906,35 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                 required
               />
             </div>
-            <div className="">
-              <label className="block font-semibold">Local Authority</label>
+
+            <div>
+              <div className="flex gap-1">
+                <label htmlFor="taxiFirm" className="block font-semibold">
+                  Taxi Local Authority:
+                </label>
+
+                <span className="text-red-600">*</span>
+              </div>
               <select
+                id="LocalAuthority"
                 name="LocalAuthority"
                 value={vehicleData.LocalAuthority}
                 onChange={handleChange}
                 className="w-full p-2 border border-gray-300 rounded"
                 required
               >
-                <option value="" disabled>
-                  Select type
-                </option>
-                {LocalAuthority.map((authority) => (
-                  <option key={authority.id} value={authority.name}>
-                    {authority.name}
+                <option value="">Select Local Authority</option>
+                {localAuthority.map((auth) => (
+                  <option key={auth.id} value={auth.name}>
+                    {auth.name}
                   </option>
                 ))}
               </select>
             </div>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-4">
-            {/* Warranty Information Section */}
-            <div className="flex flex-col">
-              <div className="flex gap-1 items-center">
-                <label className="block font-semibold">
-                  Warranty Information
-                </label>
-                <span className="text-red-600">*</span>
-              </div>
-              <textarea
-                name="warrantyInfo"
-                value={vehicleData.warrantyInfo}
-                onChange={handleChange}
-                className="w-full p-2 border border-gray-300 rounded resize-none" // Added 'resize-none' for better layout control
-                placeholder="e.g., 3 years or 36,000 miles"
-                required
-              />
-            </div>
 
             {/* Vehicle Status Section */}
-            <div className="flex flex-col mt-4">
-              <div className="flex gap-1 items-center">
+            <div className="">
+              <div className="flex gap-1">
                 <label className="block font-semibold">Vehicle Status</label>
                 <span className="text-red-600">*</span>
               </div>
@@ -610,6 +956,43 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
               </select>
             </div>
           </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-4">
+            {/* Warranty Information Section */}
+            <div className="flex flex-col">
+              <div className="flex gap-1 items-center">
+                <label className="block font-semibold">
+                  Warranty Information
+                </label>
+                <span className="text-red-600">*</span>
+              </div>
+              <textarea
+                name="warrantyInfo"
+                value={vehicleData.warrantyInfo}
+                onChange={handleChange}
+                className="w-full p-2 border border-gray-300 rounded resize-none" // Added 'resize-none' for better layout control
+                placeholder="e.g., 3 years or 36,000 miles"
+                required
+              />
+            </div>
+          </div>
+
+          <div>
+            <h3 className="text-xl font-semibold mb-2">Vehicle Images</h3>
+            <div>
+              <input
+                type="file"
+                id="imageFiles"
+                name="imageFiles"
+                onChange={handleChange}
+                className="block w-full mt-1 mb-2"
+                placeholder="select 10 images"
+                multiple
+              />
+              <span className="text-red-500 mb-3">Maximum 10 images</span>
+            </div>
+          </div>
+
           <div className="flex items-center">
             <input
               type="checkbox"
@@ -626,11 +1009,9 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
               Active
             </label>
           </div>
+
           <div className="mt-6">
-            <button
-              type="submit"
-              className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
-            >
+            <button className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50">
               Submit
             </button>
             <button

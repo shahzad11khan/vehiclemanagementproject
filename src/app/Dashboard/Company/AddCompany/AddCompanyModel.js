@@ -14,7 +14,6 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
     CreatedBy: "",
     CompanyRegistrationNumber: "",
     vatnumber: "",
-
     mailingAddress: "",
     physical_Address: "",
     phoneNumber: "",
@@ -36,6 +35,7 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
 
     image: null, // Add image to the form data
   });
+  const [autoFillAll, setAutoFillAll] = useState(false);
 
   const handleChange = (e) => {
     const { name, value, type, checked, files } = e.target;
@@ -44,7 +44,44 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
       [name]:
         type === "checkbox" ? checked : type === "file" ? files[0] : value, // Handle file input
     });
+
+    // Auto-fill all other addresses if the checkbox is checked
+    if (name === "mailingAddress" && autoFillAll) {
+      setFormData((prevData) => ({
+        ...prevData,
+        billingAddress: value,
+        bankingInformationBankAddress: value,
+        physical_Address: value,
+      }));
+    }
   };
+
+  // Handle the checkbox for auto-filling all addresses
+  const handleCheckboxChange = (e) => {
+    const { checked } = e.target;
+
+    setAutoFillAll(checked);
+
+    // If checked, immediately set all addresses to mailingAddress
+    if (checked) {
+      setFormData((prevData) => ({
+        ...prevData,
+        billingAddress: prevData.mailingAddress,
+        bankingInformationBankAddress: prevData.mailingAddress,
+        physical_Address: prevData.mailingAddress,
+      }));
+    } else {
+      // If unchecked, clear all other addresses
+      setFormData((prevData) => ({
+        ...prevData,
+        billingAddress: "",
+        bankingInformationBankAddress: "",
+        physical_Address: "",
+      }));
+    }
+  };
+
+  //
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -293,26 +330,39 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
             <h2 className="text-xl font-semibold mb-8">Contact Information</h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 ">
-              {/* millinf info */}
-              <div>
-                <div className="flex gap-1">
-                  <label
-                    htmlFor="CompanyName"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Mailing Address
-                  </label>
-                  <span className="text-red-600">*</span>
+              <div className="flex flex-col">
+                {/* millinf info */}
+                <div>
+                  <div className="flex gap-1">
+                    <label
+                      htmlFor="CompanyName"
+                      className="block text-sm font-medium text-gray-700"
+                    >
+                      Mailing Address
+                    </label>
+                    <span className="text-red-600">*</span>
+                  </div>
+                  <input
+                    type="text"
+                    id="mailingAddress"
+                    name="mailingAddress"
+                    value={formData.mailingAddress}
+                    onChange={handleChange}
+                    className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                    required
+                  />
                 </div>
-                <input
-                  type="text"
-                  id="mailingAddress"
-                  name="mailingAddress"
-                  value={formData.mailingAddress}
-                  onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                  required
-                />
+                <label className="inline-flex items-center mt-4">
+                  <input
+                    type="checkbox"
+                    checked={autoFillAll}
+                    onChange={handleCheckboxChange}
+                    className="form-checkbox"
+                  />
+                  <span className="ml-2 text-sm text-gray-700">
+                    Same as Mailing Address for all addresses
+                  </span>
+                </label>
               </div>
               {/*     physical_Address: "", info */}
               <div>

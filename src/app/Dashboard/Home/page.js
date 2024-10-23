@@ -107,7 +107,7 @@ const Page = () => {
                     : "Total Cars",
                 count:
                   superadmin === "superadmin" && flag === "false"
-                    ? "counts.Companies"
+                    ? counts.Companies
                     : superadmin === "superadmin" && flag === "true"
                     ? 0
                     : 0,

@@ -40,7 +40,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
     topSpeed: "",
     fuelEfficiency: "",
     safetyFeatures: [],
-    techFeatures: "",
+    techFeatures: [],
     towingCapacity: "",
     price: "",
     registrationNumber: "",
@@ -280,6 +280,24 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
         }
       }
 
+      // Handle checkbox inputs for technology features
+      if (name === "techFeatures") {
+        const currentTechFeatures = prevData.techFeatures || [];
+        if (checked) {
+          // Add feature if checked
+          return {
+            ...prevData,
+            [name]: [...currentTechFeatures, value], // Add selected feature
+          };
+        } else {
+          // Remove feature if unchecked
+          return {
+            ...prevData,
+            [name]: currentTechFeatures.filter((feature) => feature !== value), // Remove deselected feature
+          };
+        }
+      }
+
       // Handle regular checkbox inputs
       if (type === "checkbox") {
         // Set isActive specifically as a boolean
@@ -360,7 +378,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
       topSpeed: "",
       fuelEfficiency: "",
       safetyFeatures: [],
-      techFeatures: "",
+      techFeatures: [],
       towingCapacity: "",
       price: "",
       registrationNumber: "",
@@ -714,20 +732,6 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-2 gap-2 mt-4">
-            <div>
-              <div className="flex gap-1">
-                <label className="block font-semibold">Fuel Efficiency</label>
-              </div>
-
-              <input
-                type="text"
-                name="fuelEfficiency"
-                value={vehicleData.fuelEfficiency}
-                onChange={handleChange}
-                className="w-full p-2 border border-gray-300 rounded"
-                placeholder="e.g., 25 MPG"
-              />
-            </div>
             {/* safty  */}
             {/* <div>
               <div className="flex gap-1">
@@ -894,7 +898,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                 <label className="block font-semibold">Safety Features</label>
                 <span className="text-red-600">*</span>
               </div>
-              <div className="grid grid-cols-2 md:grid-cols-2 gap-2">
+              <div className="grid grid-cols-2 md:grid-cols-2 gap-1  border border-gray-300 pl-1">
                 {/* List of safety features as checkboxes */}
                 {[
                   "Airbags",
@@ -915,7 +919,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                       value={feature}
                       checked={vehicleData.safetyFeatures.includes(feature)}
                       onChange={handleChange}
-                      className="mr-2"
+                      className="mr-1"
                     />
                     {feature}
                   </label>
@@ -923,7 +927,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
               </div>
             </div>
 
-            <div>
+            {/* <div>
               <div className="flex gap-1">
                 <label className="block font-semibold">
                   Technology Features
@@ -939,10 +943,59 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                 placeholder="e.g., Navigation, Bluetooth, Backup Camera"
                 required
               />
+            </div> */}
+
+            <div className="">
+              <div className="flex gap-1 ">
+                <label className="block font-semibold">
+                  Technology Features
+                </label>
+                <span className="text-red-600">*</span>
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-2 gap-1.5 border border-gray-300 pl-1">
+                {/* List of technology features as checkboxes */}
+                {[
+                  "Navigation",
+                  "Bluetooth",
+                  "Backup Camera",
+                  "Adaptive Headlights",
+                  "Lane Keep Assist",
+                  "Parking Assist",
+                  "Smartphone Integration",
+                  "Voice Recognition",
+                  "Keyless Entry",
+                  "Rear Seat Entertainment",
+                ].map((feature) => (
+                  <label key={feature} className="flex items-center">
+                    <input
+                      type="checkbox"
+                      name="techFeatures"
+                      value={feature}
+                      checked={vehicleData.techFeatures.includes(feature)}
+                      onChange={handleChange}
+                      className="mr-1"
+                    />
+                    {feature}
+                  </label>
+                ))}
+              </div>
             </div>
           </div>
+          <div className="grid grid-cols-2 md:grid-cols-2 gap-2 mt-4">
+            <div>
+              <div className="flex gap-1">
+                <label className="block font-semibold">Fuel Efficiency</label>
+              </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mt-4">
+              <input
+                type="text"
+                name="fuelEfficiency"
+                value={vehicleData.fuelEfficiency}
+                onChange={handleChange}
+                className="w-full p-2 border border-gray-300 rounded"
+                placeholder="e.g., 25 MPG"
+              />
+            </div>
             <div>
               <div className="flex gap-1">
                 <label className="block font-semibold">Price (£)</label>
@@ -958,6 +1011,9 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                 required
               />
             </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mt-4">
             <div>
               <div className="flex gap-1">
                 <label className="block font-semibold">
@@ -1000,30 +1056,10 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                 ))}
               </select>
             </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-4">
-            {/* Warranty Information Section */}
-            <div className="flex flex-col">
-              <div className="flex gap-1 items-center">
-                <label className="block font-semibold">
-                  Warranty Information
-                </label>
-                <span className="text-red-600">*</span>
-              </div>
-              <textarea
-                name="warrantyInfo"
-                value={vehicleData.warrantyInfo}
-                onChange={handleChange}
-                className="w-full p-2 border border-gray-300 rounded resize-none" // Added 'resize-none' for better layout control
-                placeholder="e.g., 3 years or 36,000 miles"
-                required
-              />
-            </div>
 
             {/* Vehicle Status Section */}
-            <div className="flex flex-col mt-4">
-              <div className="flex gap-1 items-center">
+            <div className="">
+              <div className="flex gap-1">
                 <label className="block font-semibold">Vehicle Status</label>
                 <span className="text-red-600">*</span>
               </div>
@@ -1043,6 +1079,26 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                 <option value="Rent">Rent</option>
                 <option value="Maintenance">In Maintenance</option>
               </select>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-4">
+            {/* Warranty Information Section */}
+            <div className="flex flex-col">
+              <div className="flex gap-1 items-center">
+                <label className="block font-semibold">
+                  Warranty Information
+                </label>
+                <span className="text-red-600">*</span>
+              </div>
+              <textarea
+                name="warrantyInfo"
+                value={vehicleData.warrantyInfo}
+                onChange={handleChange}
+                className="w-full p-2 border border-gray-300 rounded resize-none" // Added 'resize-none' for better layout control
+                placeholder="e.g., 3 years or 36,000 miles"
+                required
+              />
             </div>
           </div>
 

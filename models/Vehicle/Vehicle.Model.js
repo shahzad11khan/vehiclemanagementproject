@@ -63,7 +63,7 @@ const vehicleSchema = new mongoose.Schema(
       type: [String],
     },
     techFeatures: {
-      type: String,
+      type: [String],
     },
     price: {
       type: Number,

@@ -13,8 +13,10 @@ export async function POST(request) {
     console.log(formDataObject);
     const files = formDataObject.getAll("imageFiles[]"); // Get all files
     const safetyFeature = formDataObject.getAll("safetyFeatures[]"); // Get all files
+    const techFeature = formDataObject.getAll("techFeatures[]"); // Get all files
     console.log(files);
     console.log(safetyFeature);
+    console.log(techFeature);
     const images = []; // To store Cloudinary URLs and IDs
     if (files.length === 0) {
       // No files found in form data
@@ -95,7 +97,6 @@ export async function POST(request) {
       towingCapacity,
       fuelEfficiency,
       vehicleStatus,
-      techFeatures,
       price,
       registrationNumber,
       warrantyInfo,
@@ -145,7 +146,7 @@ export async function POST(request) {
       towingCapacity,
       safetyFeatures: safetyFeature,
       fuelEfficiency,
-      techFeatures,
+      techFeatures: techFeature,
       vehicleStatus,
       price,
       registrationNumber,

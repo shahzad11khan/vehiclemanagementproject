@@ -1,5 +1,6 @@
 import { connect } from "@config/db.js";
 import Driver from "@models/Driver/Driver.Model.js";
+import DriverMoreInfo from "@models/DriverMoreInfo/DriverMoreInfo.model.js";
 import cloudinary from "@middlewares/cloudinary.js";
 import { NextResponse } from "next/server";
 
@@ -146,6 +147,12 @@ export const DELETE = async (request, { params }) => {
 
     // Delete the driver from the database
     const deletedDriver = await Driver.findByIdAndDelete({ _id: DrivId });
+    // const deletedDriverInfo = await DriverMoreInfo.find({ driverId: DrivId });
+    // console.log(deletedDriverInfo);
+    const deletallinfo = await DriverMoreInfo.deleteMany({
+      driverId: DrivId,
+    });
+    console.log(deletallinfo);
     if (!deletedDriver) {
       return NextResponse.json({ error: "Driver not found", status: 404 });
     }

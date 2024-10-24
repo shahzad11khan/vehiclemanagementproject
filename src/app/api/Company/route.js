@@ -20,31 +20,38 @@ export async function POST(request) {
     let imagePublicId = "";
 
     // Upload files to Cloudinary
-    if (file1) {
-      const buffer1 = Buffer.from(await file1.arrayBuffer());
-      const uploadResponse1 = await new Promise((resolve, reject) => {
-        cloudinary.uploader
-          .upload_stream(
-            {
-              resource_type: "auto",
-            },
-            (error, result) => {
-              if (error) {
-                reject(new Error("Error uploading image: " + error.message));
-              } else {
-                resolve(result);
-              }
-            }
-          )
-          .end(buffer1);
-      });
-
-      image = uploadResponse1.secure_url; // Cloudinary URL for display image
-      imagePublicId = uploadResponse1.public_id;
-    } else {
+    if (!file1) {
       image =
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSLuenhuyfEyo4EI0HUoAjPpmT1rAsSUeYtbA&s";
       imagePublicId = "123456789"; // Set a dummy `imageId` for the default image
+    } else {
+      try {
+        const buffer1 = Buffer.from(await file1.arrayBuffer());
+        const uploadResponse1 = await new Promise((resolve, reject) => {
+          cloudinary.uploader
+            .upload_stream(
+              {
+                resource_type: "auto",
+              },
+              (error, result) => {
+                if (error) {
+                  reject(new Error("Error uploading image: " + error.message));
+                } else {
+                  resolve(result);
+                }
+              }
+            )
+            .end(buffer1);
+        });
+
+        image = uploadResponse1.secure_url; // Cloudinary URL for display image
+        imagePublicId = uploadResponse1.public_id;
+      } catch (error) {
+        console.log(error);
+        image =
+          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSLuenhuyfEyo4EI0HUoAjPpmT1rAsSUeYtbA&s";
+        imagePublicId = "123456789"; // Set a dummy `imageId` for the default image
+      }
     }
 
     // Constructing formDataObject excluding the files

@@ -9,7 +9,7 @@ import Sidebar from "../../../Components/Sidebar";
 import AddMoreInfoModal from "../AddMoreInfoModal/AddMoreInfoModal";
 import {
   API_URL_DriverMoreInfo,
-  API_URL_DriverMoreupdate,
+  // API_URL_DriverMoreupdate,
 } from "../../../Components/ApiUrl/ApiUrls";
 import { getCompanyName } from "@/utils/storageUtils";
 import axios from "axios";
@@ -45,7 +45,7 @@ const Page = ({ params }) => {
           await drivercal(
             record.driverId,
             record.vehicle,
-            new Date(record.startDate),
+            record.startDate,
             record.paymentcycle,
             record.calculation,
             record.adminCompanyName
@@ -76,68 +76,72 @@ const Page = ({ params }) => {
     fetchedcompany
   ) => {
     try {
-      const payment = Number(pay); // Payment amount
-
-      // Ensure lastStartDate is a valid date string
-      const passingDate = new Date(lastStartDate); // Last recorded start date
-      const currentDate = new Date(); // Current date
-
-      // Format the dates for logging/displaying purpose
-      const formattedPassingDate = formatDatee(passingDate); // Format as mm/dd/yyyy
-      const formattedCurrentDate = formatDatee(currentDate); // Format as mm/dd/yyyy
-
-      console.log(
-        "Passing Date:",
-        formattedPassingDate,
-        "Current Date:",
-        formattedCurrentDate
-      );
+      const payment = Number(pay);
+      const passingDate = new Date(lastStartDate);
+      const currentDate = new Date();
 
       // Check if passingDate is valid
       if (isNaN(passingDate.getTime())) {
         console.error("Invalid lastStartDate provided:", lastStartDate);
-        return; // Exit if the date is invalid
+        return;
       }
 
+      console.log(passingDate, currentDate);
       // Loop through each relevant period based on cycle
-      while (passingDate < currentDate) {
+      while (formatDatee(passingDate) < formatDatee(currentDate)) {
         let shouldPostNewRecord = false;
-        const value = cycle.toLowerCase(); // Convert cycle to lowercase for comparison
+
+        const value = cycle.toLowerCase();
 
         // Check for changes based on payment cycle
         switch (value) {
           case "perday":
-            shouldPostNewRecord = true; // Always post for every day
-            passingDate.setDate(passingDate.getDate() + 1); // Move to next day
+            shouldPostNewRecord = true;
+            passingDate.setDate(passingDate.getDate() + 1);
+            break;
+
+          case "perweek":
+            // Only post if the week has changed
+            if (
+              Math.floor(
+                (currentDate - passingDate) / (1000 * 60 * 60 * 24 * 7)
+              ) > 0
+            ) {
+              shouldPostNewRecord = true;
+            }
+            passingDate.setDate(passingDate.getDate() + 7);
             break;
 
           case "permonth":
+            // Only post if the month has changed
             if (
               passingDate.getMonth() !== currentDate.getMonth() ||
               passingDate.getFullYear() !== currentDate.getFullYear()
             ) {
-              shouldPostNewRecord = true; // Post for every month
+              shouldPostNewRecord = true;
             }
-            passingDate.setMonth(passingDate.getMonth() + 1); // Move to next month
+            passingDate.setMonth(passingDate.getMonth() + 1);
             break;
 
           case "perquarter":
+            // Only post if the quarter has changed
             const currentQuarter = Math.floor(currentDate.getMonth() / 3);
             const lastQuarter = Math.floor(passingDate.getMonth() / 3);
             if (
               currentQuarter !== lastQuarter ||
               passingDate.getFullYear() !== currentDate.getFullYear()
             ) {
-              shouldPostNewRecord = true; // Post for every quarter
+              shouldPostNewRecord = true;
             }
-            passingDate.setMonth(passingDate.getMonth() + 3); // Move to next quarter
+            passingDate.setMonth(passingDate.getMonth() + 3);
             break;
 
           case "peryear":
+            // Only post if the year has changed
             if (passingDate.getFullYear() !== currentDate.getFullYear()) {
-              shouldPostNewRecord = true; // Post for every year
+              shouldPostNewRecord = true;
             }
-            passingDate.setFullYear(passingDate.getFullYear() + 1); // Move to next year
+            passingDate.setFullYear(passingDate.getFullYear() + 1);
             break;
 
           default:
@@ -145,12 +149,12 @@ const Page = ({ params }) => {
             return;
         }
 
-        // If a change in date/month/quarter/year is detected, post the new record
+        // Post the new record if needed
         if (shouldPostNewRecord) {
           await postDataToDatabase(
             IDD,
             vehicle,
-            formattedCurrentDate, // Pass the formatted date
+            formatDatee(passingDate), // Pass the new formatted date
             cycle,
             payment,
             fetchedcompany
@@ -172,6 +176,7 @@ const Page = ({ params }) => {
     payment,
     fetchedcompany
   ) => {
+    console.log(IDD, vehicle, startDate, paymentCycle, payment, fetchedcompany);
     try {
       const payload = {
         driverId: IDD,
@@ -189,15 +194,15 @@ const Page = ({ params }) => {
         adminCompanyName: fetchedcompany,
       };
 
+      // Uncomment this line to post the data
       const newRecordResponse = await axios.post(
         `${API_URL_DriverMoreInfo}`,
         payload
       );
-
       console.log("New record posted successfully:", newRecordResponse.data);
     } catch (error) {
       console.error("Error posting new record:", error);
-      toast.error("Failed to post new record");
+      // Handle error notification
     }
   };
 
@@ -258,59 +263,71 @@ const Page = ({ params }) => {
 
   // Calculate totals for calculation, subtractcalculation, and remaining
 
-  const totalCalculation = data.reduce(
-    (total, row) => total + (parseFloat(row.calculation) || 0),
-    0
-  );
-  const totalSubtractCalculation = data.reduce(
-    (total, row) => total + (parseFloat(row.subtractcalculation) || 0),
-    0
-  );
-  const totalRemaining = data.reduce(
-    (total, row) => total + (parseFloat(row.remaining) || 0),
-    0
-  );
+  const totalCalculation = data
+    .filter(
+      (row) =>
+        row.adminCompanyName &&
+        row.adminCompanyName.toLowerCase() === selectedCompanyName.toLowerCase()
+    )
+    .reduce((acc, row) => acc + row.calculation, 0)
+    .toFixed(2);
+  const totalSubtractCalculation = data
+    .filter(
+      (row) =>
+        row.adminCompanyName &&
+        row.adminCompanyName.toLowerCase() === selectedCompanyName.toLowerCase()
+    )
+    .reduce((acc, row) => acc + row.subtractcalculation, 0)
+    .toFixed(2);
+  const totalRemaining = data
+    .filter(
+      (row) =>
+        row.adminCompanyName &&
+        row.adminCompanyName.toLowerCase() === selectedCompanyName.toLowerCase()
+    )
+    .reduce((acc, row) => acc + row.remaining, 0)
+    .toFixed(2);
 
   // Function to update specific fields after a delay
-  const updateFieldsAfterDelay = async () => {
-    // Get the values to be updated
-    const totalCal = totalCalculation;
-    const totalSubtractCal = totalSubtractCalculation;
-    const totalRem = totalRemaining;
+  // const updateFieldsAfterDelay = async () => {
+  //   // Get the values to be updated
+  //   const totalCal = totalCalculation;
+  //   const totalSubtractCal = totalSubtractCalculation;
+  //   const totalRem = totalRemaining;
 
-    // Create a new FormData object
-    const formDataToSend = new FormData();
+  //   // Create a new FormData object
+  //   const formDataToSend = new FormData();
 
-    // Set the specific fields you want to update
-    formDataToSend.set("totalamount", totalCal);
-    formDataToSend.set("totalsubtractamount", totalSubtractCal);
-    formDataToSend.set("totalremainingamount", totalRem);
+  //   // Set the specific fields you want to update
+  //   formDataToSend.set("totalamount", totalCal);
+  //   formDataToSend.set("totalsubtractamount", totalSubtractCal);
+  //   formDataToSend.set("totalremainingamount", totalRem);
 
-    setTimeout(async () => {
-      console.log("Updating fields after a delay...");
+  //   setTimeout(async () => {
+  //     console.log("Updating fields after a delay...");
 
-      try {
-        const res = await axios.put(
-          `${API_URL_DriverMoreupdate}/${id}`, // Ensure 'id' is defined in scope
-          formDataToSend,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        );
-        console.log("Update specific fields successful:", res.data);
-      } catch (error) {
-        console.error(
-          "Error updating fields:",
-          error.response ? error.response.data : error.message
-        );
-      }
-    }, 3600000); // 60000 milliseconds = 1 minute
-  };
+  //     try {
+  //       const res = await axios.put(
+  //         `${API_URL_DriverMoreupdate}/${id}`, // Ensure 'id' is defined in scope
+  //         formDataToSend,
+  //         {
+  //           headers: {
+  //             "Content-Type": "multipart/form-data",
+  //           },
+  //         }
+  //       );
+  //       console.log("Update specific fields successful:", res.data);
+  //     } catch (error) {
+  //       console.error(
+  //         "Error updating fields:",
+  //         error.response ? error.response.data : error.message
+  //       );
+  //     }
+  //   }, 3600000); // 60000 milliseconds = 1 minute
+  // };
 
   // Call the function to initiate the update
-  updateFieldsAfterDelay();
+  // updateFieldsAfterDelay();
 
   function formatDate(dateString) {
     const dateObject = new Date(dateString);
@@ -394,7 +411,9 @@ const Page = ({ params }) => {
                               £ {row.calculation}
                             </td>
                             <td className="py-2 px-4 border-b border-gray-200">
-                              {formatDate(row.endDate)}
+                              {row.endDate === ""
+                                ? ""
+                                : formatDate(row.endDate)}
                             </td>
                             <td className="py-2 px-4 border-b border-gray-200">
                               £ {row.subtractcalculation}

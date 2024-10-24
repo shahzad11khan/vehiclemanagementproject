@@ -13,38 +13,48 @@ export async function POST(request) {
     let file1 = data.get("imageFile");
     console.log("Driver Avatar:", file1);
 
-    let Driveravatar = "";
-    let DriveravatarId = "";
+    let Driveravatar;
+    let DriveravatarId;
 
-    // Upload files to Cloudinary
-    if (file1) {
-      const buffer1 = Buffer.from(await file1.arrayBuffer());
-      const uploadResponse1 = await new Promise((resolve, reject) => {
-        cloudinary.uploader
-          .upload_stream(
-            {
-              resource_type: "auto",
-            },
-            (error, result) => {
-              if (error) {
-                reject(
-                  new Error("Error uploading Driveravatar: " + error.message)
-                );
-              } else {
-                resolve(result);
-              }
-            }
-          )
-          .end(buffer1);
-      });
-
-      Driveravatar = uploadResponse1.secure_url; // Cloudinary URL for display image
-      DriveravatarId = uploadResponse1.public_id;
-    } else {
-      // Use a dummy image from Cloudinary (you can upload a default image to Cloudinary and use its URL here)
+    // Check if the file is provided or not
+    if (!file1) {
+      // If no file is provided, set a default image and a dummy image ID
       Driveravatar =
         "https://cdn-icons-png.flaticon.com/128/17561/17561717.png";
-      DriveravatarId = "123456789"; // Set a dummy `imageId` for the default image
+      DriveravatarId = "123456789"; // Dummy image ID
+    } else {
+      try {
+        // Upload files to Cloudinary
+        const buffer1 = Buffer.from(await file1.arrayBuffer());
+        const uploadResponse1 = await new Promise((resolve, reject) => {
+          cloudinary.uploader
+            .upload_stream(
+              {
+                resource_type: "auto",
+              },
+              (error, result) => {
+                if (error) {
+                  reject(
+                    new Error("Error uploading Driveravatar: " + error.message)
+                  );
+                } else {
+                  resolve(result);
+                }
+              }
+            )
+            .end(buffer1);
+        });
+
+        // Set the Driveravatar and DriveravatarId if upload is successful
+        Driveravatar = uploadResponse1.secure_url; // Cloudinary URL for display image
+        DriveravatarId = uploadResponse1.public_id;
+      } catch (error) {
+        console.error("Upload failed, using default avatar:", error);
+        // Use default image in case of any error during upload
+        Driveravatar =
+          "https://cdn-icons-png.flaticon.com/128/17561/17561717.png";
+        DriveravatarId = "123456789"; // Dummy image ID
+      }
     }
 
     // Constructing formDataObject excluding the files

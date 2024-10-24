@@ -98,18 +98,10 @@ export const DELETE = async (request, context) => {
 
     const id = context.params.DriverMoreInfoID; // Ensure DriverMoreInfoID is correctly passed
     console.log("DriverMoreInfo ID:", id);
-    let deletedDriverMoreInfo;
-    if (await DriverMoreInfo.exists({ _id: id })) {
-      // If 'id' is a valid MongoDB ObjectId, delete by _id
-      deletedDriverMoreInfo = await DriverMoreInfo.findOneAndDelete({
-        _id: id,
-      });
-    } else {
-      // Otherwise, delete by driverId
-      deletedDriverMoreInfo = await DriverMoreInfo.findOneAndDelete({
-        driverId: id,
-      });
-    }
+
+    let deletedDriverMoreInfo = await DriverMoreInfo.findOneAndDelete({
+      _id: id,
+    });
 
     // console.log(deletedDriverMoreInfo);
     if (!deletedDriverMoreInfo) {

@@ -5,10 +5,11 @@ import Header from "../../Components/Header";
 import Sidebar from "../../Components/Sidebar";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { FaEdit, FaTrash, FaPoundSign } from "react-icons/fa";
+import { FaEdit, FaTrash } from "react-icons/fa";
+import { MdCurrencyPound } from "react-icons/md";
 import AddDriverModel from "../AddDriver/AddDriverModel";
 import UpdateDriverModel from "../UpdateDriver/UpdateDriverModel";
-import { API_URL_DriverMoreInfo } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
+// import { API_URL_DriverMoreInfo } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 
 import axios from "axios";
 import { API_URL_Driver } from "../../Components/ApiUrl/ApiUrls";
@@ -56,10 +57,10 @@ const Page = () => {
       if (data.success) {
         setDrivers((prevData) => prevData.filter((item) => item._id !== id));
         toast.success(data.message);
-        const moreInfoResponse = await axios.delete(
-          `${API_URL_DriverMoreInfo}/${id}`
-        );
-        console.log(moreInfoResponse);
+        // const moreInfoResponse = await axios.delete(
+        //   `${API_URL_DriverMoreInfo}/${id}`
+        // );
+        // console.log(moreInfoResponse);
       } else {
         toast.warn(data.message || "Failed to delete the driver.");
       }
@@ -114,85 +115,6 @@ const Page = () => {
       .toString()
       .padStart(2, "0")}/${dateObject.getFullYear()}`;
   }
-
-  // function drivercal(date, pay, value, userId, formData) {
-  //   try {
-  //     const payy = Number(pay);
-  //     const passingDate = new Date(date);
-  //     const currentDate = new Date();
-  //     const calculateFinalResult = (timePassed) => {
-  //       return payy * (timePassed + 1);
-  //     };
-  //     let timePassed = 0;
-  //     value = value.toLowerCase();
-  //     switch (value) {
-  //       case "perday":
-  //         const timeDiffDays = currentDate - passingDate;
-  //         timePassed = Math.floor(timeDiffDays / (1000 * 60 * 60 * 24));
-  //         break;
-
-  //       case "permonth":
-  //         timePassed =
-  //           (currentDate.getFullYear() - passingDate.getFullYear()) * 12 +
-  //           (currentDate.getMonth() - passingDate.getMonth());
-  //         break;
-
-  //       case "perquarter":
-  //         timePassed =
-  //           (currentDate.getFullYear() - passingDate.getFullYear()) * 12 +
-  //           (currentDate.getMonth() - passingDate.getMonth());
-  //         timePassed = Math.floor(timePassed / 3);
-  //         break;
-
-  //       case "peryear":
-  //         timePassed = currentDate.getFullYear() - passingDate.getFullYear();
-  //         if (
-  //           currentDate.getMonth() < passingDate.getMonth() ||
-  //           (currentDate.getMonth() === passingDate.getMonth() &&
-  //             currentDate.getDate() < passingDate.getDate())
-  //         ) {
-  //           timePassed--;
-  //         }
-  //         break;
-
-  //       default:
-  //         return "Invalid value type provided.";
-  //     }
-
-  //     // console.log(timePassed);
-  //     timePassed = Math.max(0, timePassed);
-  //     const finalResult = calculateFinalResult(timePassed);
-  //     const sendFormData = async () => {
-  //       console.log("update done");
-  //       const formDataToSend = new FormData();
-  //       const specificFieldKey = "calculation";
-  //       formDataToSend.set(specificFieldKey, finalResult);
-  //       if (formData) {
-  //         Object.keys(formData).forEach((key) => {
-  //           if (key !== specificFieldKey) {
-  //             formDataToSend.append(key, formData[key]);
-  //           }
-  //         });
-  //       }
-  //       const response = await axios.put(
-  //         `${API_URL_Drivercalculation}/${userId}`,
-  //         formDataToSend,
-  //         {
-  //           headers: {
-  //             "Content-Type": "multipart/form-data",
-  //           },
-  //         }
-  //       );
-  //       console.log("Update specific field successful:", response.data);
-  //     };
-  //     // setInterval(sendFormData, 300000);
-  //     setInterval(sendFormData, 300000);
-  //     return finalResult;
-  //   } catch (error) {
-  //     console.error("Failed to update driver:", error);
-  //     throw error;
-  //   }
-  // }
 
   return (
     <>
@@ -283,24 +205,9 @@ const Page = () => {
                       <td className="  p-3">{driver.niNumber}</td>
                       <td className="  p-3">{driver.badgeType}</td>
                       <td className="  p-3">{driver.rentPaymentCycle}</td>
-                      {/* <td className="  p-3">£ {driver.driverRent}</td> */}
                       <td className="  p-3">£ {driver.pay}</td>
-                      {/* <td className="  p-3">£ {driver.calculation}</td> */}
                       <td className="p-3">{formatDate(driver.dateOfBirth)}</td>
                       <td className="p-3">{formatDate(driver.startDate)}</td>
-                      {/* <td className="p-3">
-                        {" "}
-                        {(() => {
-                          const result = drivercal(
-                            formatDate(driver.startDate),
-                            driver.pay,
-                            driver.rentPaymentCycle,
-                            driver._id,
-                            driver.calculation
-                          );
-                          return result; 
-                        })()}
-                      </td> */}
 
                       <td className="  p-3">
                         <div className="flex gap-2">
@@ -310,7 +217,7 @@ const Page = () => {
                               href={`/Dashboard/Driver/MoreInfo/${driver._id}`}
                             >
                               <div className="flex items-center gap-3">
-                                <FaPoundSign size={25} />
+                                <MdCurrencyPound size={20} />
                               </div>
                             </Link>
                           </button>
@@ -318,13 +225,13 @@ const Page = () => {
                             onClick={() => handleEdit(driver._id)}
                             className="text-blue-500 hover:text-blue-700"
                           >
-                            <FaEdit />
+                            <FaEdit size={20} />
                           </button>
                           <button
                             onClick={() => handleDelete(driver._id)}
                             className="text-red-500 hover:text-red-700"
                           >
-                            <FaTrash />
+                            <FaTrash size={20} />
                           </button>
                         </div>
                       </td>

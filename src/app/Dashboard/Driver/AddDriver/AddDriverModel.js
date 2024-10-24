@@ -11,7 +11,7 @@ import {
 } from "../../Components/DropdownData/taxiFirm/taxiFirmService";
 import {
   API_URL_Driver,
-  API_URL_DriverMoreInfo,
+  // API_URL_DriverMoreInfo,
 } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 
 const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
@@ -183,26 +183,26 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
       console.log(response);
       if (response.data.success) {
         //
-        const newRecordData = {
-          driverId: response.data.savedDriver._id, // Add your specific fields here
-          vehicle: response.data.savedDriver.vehicle, // Add your specific fields here
-          paymentcycle: response.data.savedDriver.rentPaymentCycle, // Add your specific fields here
-          startDate: response.data.savedDriver.startDate, // Add your specific fields here
-          calculation: response.data.savedDriver.pay, // Add your specific fields here
-          endDate: "", // Add your specific fields here
-          subtractcalculation: 0, // Add your specific fields here
-          remaining: 0, // Add your specific fields here
-          totalamount: 0,
-          totalsubtractamount: 0,
-          totalremainingamount: 0,
-          adminCreatedBy: "", // Add your specific fields here
-          adminCompanyName: response.data.savedDriver.adminCompanyName, // Keep existing field
-        };
-        const newRecordResponse = await axios.post(
-          `${API_URL_DriverMoreInfo}`,
-          newRecordData
-        );
-        console.log(newRecordResponse);
+        // const newRecordData = {
+        //   driverId: response.data.savedDriver._id, // Add your specific fields here
+        //   vehicle: response.data.savedDriver.vehicle, // Add your specific fields here
+        //   paymentcycle: response.data.savedDriver.rentPaymentCycle, // Add your specific fields here
+        //   startDate: response.data.savedDriver.startDate, // Add your specific fields here
+        //   calculation: response.data.savedDriver.pay, // Add your specific fields here
+        //   endDate: "", // Add your specific fields here
+        //   subtractcalculation: 0, // Add your specific fields here
+        //   remaining: 0, // Add your specific fields here
+        //   totalamount: 0,
+        //   totalsubtractamount: 0,
+        //   totalremainingamount: 0,
+        //   adminCreatedBy: "", // Add your specific fields here
+        //   adminCompanyName: response.data.savedDriver.adminCompanyName, // Keep existing field
+        // };
+        // const newRecordResponse = await axios.post(
+        //   `${API_URL_DriverMoreInfo}`,
+        //   newRecordData
+        // );
+        // console.log(newRecordResponse);
         //
         const initialFormData = {
           firstName: "",

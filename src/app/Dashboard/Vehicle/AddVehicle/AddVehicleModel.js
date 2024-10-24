@@ -346,7 +346,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
         toast.success(response.data.message);
         fetchData();
         onClose();
-        resetForm(); // Call reset function
+        resetForm();
       } else {
         toast.error(response.data.error);
       }

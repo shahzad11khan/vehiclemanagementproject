@@ -260,12 +260,11 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
       );
       toast.success(response.data.message);
       fetchData();
+      resetForm();
       onClose();
     } catch (error) {
       console.error("Error updating vehicle data:", error);
-      toast.error(
-        error.response?.data?.error || "Failed to update vehicle data."
-      );
+      toast.error(response.data.error);
     }
   };
 
@@ -315,6 +314,42 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
   };
 
   if (!isOpen) return null;
+
+  const resetForm = () => {
+    setVehicleData({
+      manufacturer: "",
+      model: "",
+      year: "",
+      type: "",
+      engineType: "",
+      fuelType: "",
+      transmission: "",
+      drivetrain: "",
+      exteriorColor: "",
+      interiorColor: "",
+      height: "",
+      width: "",
+      length: "",
+      passengerCapacity: "",
+      LocalAuthority: "",
+      cargoCapacity: "",
+      horsepower: "",
+      torque: "",
+      topSpeed: "",
+      fuelEfficiency: "",
+      safetyFeatures: [],
+      techFeatures: [],
+      towingCapacity: "",
+      price: "",
+      registrationNumber: "",
+      vehicleStatus: "",
+      warrantyInfo: "",
+      adminCreatedBy: "",
+      adminCompanyName: vehicleData.adminCompanyName,
+      isActive: false,
+      imageFiles: [], // Reset to an empty array
+    });
+  };
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50 ">

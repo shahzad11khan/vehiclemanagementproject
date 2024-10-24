@@ -1,6 +1,4 @@
 // apiUrls.js
-
-// // local for gets
 // export const url = "http://localhost:3000";
 export const url = "https://vmsp.netlify.app";
 export const API_URL_Login = `${url}/api/User/Login`;

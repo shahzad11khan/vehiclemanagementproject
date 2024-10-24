@@ -16,7 +16,7 @@ const Page = () => {
   const router = useRouter();
   const [superadmin, setsuperadmin] = useState("");
   const [companyname, setcompnayname] = useState("");
-  const [availableCar, setavailablecar] = useState(0);
+  const [TotalCar, setTotalcar] = useState(0);
   const [standby, setstandby] = useState(0);
   const [sellCar, setSellcar] = useState(0);
   const [rent, setRentcar] = useState(0);
@@ -39,41 +39,38 @@ const Page = () => {
 
   const fetchCounts = useCallback(async () => {
     try {
-      let vehicleData = await GetVehicle();
-      console.log(vehicleData); // Log the fetched vehicle data
+      const vehicleData = await GetVehicle();
 
-      // Initialize counters
-      let availableCar = 0;
+      // Destructure count and result from vehicleData
+      const { count, result } = vehicleData;
+
+      // Set total car count only if it changes
+      setTotalcar((prev) => (prev !== count ? count : prev));
+
+      // Early return if no vehicles are available
+      if (!result || result.length === 0) {
+        // Reset all counts only if they aren't already zero
+        setstandby((prev) => (prev !== 0 ? 0 : prev));
+        setSellcar((prev) => (prev !== 0 ? 0 : prev));
+        setRentcar((prev) => (prev !== 0 ? 0 : prev));
+        setMaintenance((prev) => (prev !== 0 ? 0 : prev));
+        return;
+      }
+
+      // Initialize counters for vehicle statuses
       let standbyCar = 0;
       let sellCar = 0;
       let rentCar = 0;
       let maintenance = 0;
 
-      // Check if vehicleData is empty
-      if (!vehicleData.result || vehicleData.result.length === 0) {
-        // Set counts to zero if no vehicles are available
-        setavailablecar(0);
-        setstandby(0);
-        setSellcar(0);
-        setRentcar(0);
-        setMaintenance(0);
-        return; // Exit early if there are no vehicles
-      }
-
-      // Iterate through vehicle data
-      vehicleData.result.forEach((vehicle) => {
-        console.log(vehicle); // Log each vehicle
-
-        // If super admin, count all vehicles; if regular admin, check company name
+      // Iterate over the vehicles
+      result.forEach((vehicle) => {
+        // Count vehicles if superadmin or matching company name
         if (
           superadmin === "superadmin" ||
           vehicle.adminCompanyName === companyname
         ) {
-          // Update the respective counters based on vehicle status
           switch (vehicle.vehicleStatus) {
-            case "Available":
-              availableCar++;
-              break;
             case "Standby":
               standbyCar++;
               break;
@@ -87,22 +84,22 @@ const Page = () => {
               maintenance++;
               break;
             default:
-              break; // Handle unknown status, if any
+              break; // Ignore unrecognized statuses
           }
         }
       });
 
-      // Update state with the final counts
-      setavailablecar(availableCar);
-      setstandby(standbyCar);
-      setSellcar(sellCar);
-      setRentcar(rentCar);
-      setMaintenance(maintenance);
+      // Update states only if the count has changed
+      setstandby((prev) => (prev !== standbyCar ? standbyCar : prev));
+      setSellcar((prev) => (prev !== sellCar ? sellCar : prev));
+      setRentcar((prev) => (prev !== rentCar ? rentCar : prev));
+      setMaintenance((prev) => (prev !== maintenance ? maintenance : prev));
     } catch (error) {
-      console.log(`Failed to fetch data: ${error}`);
+      console.error(`Failed to fetch data: ${error}`);
     }
   }, [companyname, superadmin]);
 
+  // Only re-fetch when necessary
   useEffect(() => {
     fetchCounts();
   }, [fetchCounts, router]);
@@ -133,10 +130,10 @@ const Page = () => {
                     : "Total Cars",
                 count:
                   superadmin === "superadmin" && flag === "false"
-                    ? availableCar
+                    ? TotalCar
                     : superadmin === "superadmin" && flag === "true"
-                    ? availableCar
-                    : availableCar,
+                    ? TotalCar
+                    : TotalCar,
                 colorx: {
                   background: "#E64B87",
                 },

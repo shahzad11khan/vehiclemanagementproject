@@ -8,7 +8,7 @@ import { GetVehicle } from "../Components/ApiUrl/ShowApiDatas/ShowApiDatas.js";
 const HeroSection = () => {
   const [superadmin, setsuperadmin] = useState("");
   const [companyname, setcompnayname] = useState("");
-  const [availableCar, setavailablecar] = useState(0);
+  const [totalCar, setTotalcar] = useState(0);
   const [rent, setRentcar] = useState(0);
   const [flag, setflag] = useState("");
 
@@ -27,53 +27,46 @@ const HeroSection = () => {
   const fetchCounts = useCallback(async () => {
     try {
       let vehicleData = await GetVehicle();
-      console.log(vehicleData); // Log the fetched vehicle data
 
       // Initialize counters
-      let availableCar = 0;
       let rentCar = 0;
 
-      // Check if vehicleData is empty
-      if (!vehicleData.result || vehicleData.result.length === 0) {
-        // Set counts to zero if no vehicles are available
-        setavailablecar(0);
+      // Set total car count if available
+      if (vehicleData.count) {
+        setTotalcar(vehicleData.count);
+      }
+
+      // If no vehicles are available, reset counts and return early
+      if (!vehicleData.result?.length) {
         setRentcar(0);
-        return; // Exit early if there are no vehicles
+        return;
       }
 
       // Iterate through vehicle data
       vehicleData.result.forEach((vehicle) => {
-        console.log(vehicle); // Log each vehicle
-
-        // If super admin, count all vehicles; if regular admin, check company name
+        // Check if super admin or adminCompanyName matches
         if (
           superadmin === "superadmin" ||
           vehicle.adminCompanyName === companyname
         ) {
-          // Update the respective counters based on vehicle status
-          switch (vehicle.vehicleStatus) {
-            case "Available":
-              availableCar++;
-              break;
-            case "Rent":
-              rentCar++;
-              break;
-            default:
-              break; // Handle unknown status, if any
+          if (vehicle.vehicleStatus === "Rent") {
+            rentCar++;
           }
         }
       });
 
-      // Update state with the final counts
-      setavailablecar(availableCar);
+      // Update the Rent car count
       setRentcar(rentCar);
     } catch (error) {
-      console.log(`Failed to fetch data: ${error}`);
+      console.error(`Failed to fetch data: ${error}`);
     }
   }, [companyname, superadmin]);
+
+  // Automatically fetch counts on component mount or dependency change
   useEffect(() => {
     fetchCounts();
   }, [fetchCounts]);
+
   const waveData = {
     labels: ["January", "February", "March", "April", "May"],
     datasets: [
@@ -111,10 +104,10 @@ const HeroSection = () => {
           <li>
             <strong className="text-xl">
               {superadmin === "superadmin" && flag === "false"
-                ? availableCar
+                ? totalCar
                 : superadmin === "superadmin" && flag === "true"
-                ? availableCar
-                : availableCar}
+                ? totalCar
+                : totalCar}
             </strong>
             <span className="ml-1 text-sm block">Rented Cars Is :</span>
           </li>

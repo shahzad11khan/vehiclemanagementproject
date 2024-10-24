@@ -1,18 +1,20 @@
+// not conneted
 import { connect } from "@config/db.js";
-import Driver from "@models/Driver/Driver.Model.js";
+import Vehicle from "@models/Vehicle/Vehicle.Model.js";
 import { NextResponse } from "next/server";
-// PUT handler for updating driver details
+import cloudinary from "@middlewares/cloudinary.js";
+// PUT handler for updating Vehicle details
 export async function PUT(request, context) {
   try {
     await connect(); // Connect to the database
 
-    const id = context.params.DriverID; // Use the correct parameter name
+    const id = context.params.updatevehiclestatusID; // Use the correct parameter name
     const data = await request.formData();
 
-    // console.log(id);
+    console.log(id);
     const userAvatar = data.get("imageFile");
-    let Driveravatar = "";
-    let DriveravatarId = "";
+    let Vehicleavatar = "";
+    let VehicleavatarId = "";
 
     // Check if the user avatar is an object and has a valid name (indicating it's a file)
     if (userAvatar && typeof userAvatar === "object" && userAvatar.name) {
@@ -37,61 +39,61 @@ export async function PUT(request, context) {
       });
 
       // Store the URL and ID of the uploaded image
-      Driveravatar = uploadResponse.secure_url;
-      DriveravatarId = uploadResponse.public_id;
+      Vehicleavatar = uploadResponse.secure_url;
+      VehicleavatarId = uploadResponse.public_id;
     }
 
     // Convert FormData to a plain object
     const formDataObject = Object.fromEntries(data.entries());
 
-    // Find the driver by ID
-    const driver = await Driver.findById(id);
-    if (!driver) {
-      return NextResponse.json({ error: "Driver not found", status: 404 });
+    // Find the Vehicle by ID
+    const vehicle = await Vehicle.findById(id);
+    if (!vehicle) {
+      return NextResponse.json({ error: "Vehicle not found", status: 404 });
     }
 
     // Handle avatar update: remove old avatar from Cloudinary and update with new one if uploaded
-    if (Driveravatar && DriveravatarId) {
-      // Check if the driver has an existing avatar ID to delete
-      if (driver.DriveravatarId) {
+    if (Vehicleavatar && VehicleavatarId) {
+      // Check if the Vehicle has an existing avatar ID to delete
+      if (vehicle.VehicleavatarId) {
         try {
           // Delete old avatar from Cloudinary if it exists
-          await cloudinary.uploader.destroy(driver.DriveravatarId);
+          await cloudinary.uploader.destroy(vehicle.VehicleavatarId);
           console.log("Old avatar deleted from Cloudinary.");
         } catch (error) {
           console.error("Failed to delete old image from Cloudinary:", error);
         }
       }
 
-      // Update driver with new avatar details
-      driver.Driveravatar = Driveravatar;
-      driver.DriveravatarId = DriveravatarId;
+      // Update Vehicle with new avatar details
+      Vehicle.Vehicleavatar = Vehicleavatar;
+      Vehicle.VehicleavatarId = VehicleavatarId;
       console.log("New avatar uploaded and updated.");
     } else {
       // If no new avatar uploaded, retain the old image
-      Driveravatar = driver.Driveravatar;
-      DriveravatarId = driver.DriveravatarId;
+      Vehicleavatar = Vehicle.Vehicleavatar;
+      VehicleavatarId = Vehicle.VehicleavatarId;
     }
 
-    // Update driver properties with values from formDataObject
+    // Update Vehicle properties with values from formDataObject
     for (const key in formDataObject) {
       if (formDataObject[key] !== undefined) {
-        driver[key] = formDataObject[key];
+        Vehicle[key] = formDataObject[key];
       }
     }
 
-    // Save updated driver details
-    await driver.save();
+    // Save updated Vehicle details
+    await Vehicle.save();
 
     return NextResponse.json({
-      message: "Driver details updated successfully",
-      // driver,
+      message: "Vehicle details updated successfully",
+      // Vehicle,
       status: 200,
     });
   } catch (error) {
-    console.error("Error updating driver details:", error);
+    console.error("Error updating Vehicle details:", error);
     return NextResponse.json({
-      error: "Failed to update driver details",
+      error: "Failed to update Vehicle details",
       status: 500,
     });
   }

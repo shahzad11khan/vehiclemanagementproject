@@ -57,10 +57,7 @@ const Page = () => {
       if (data.success) {
         setDrivers((prevData) => prevData.filter((item) => item._id !== id));
         toast.success(data.message);
-        // const moreInfoResponse = await axios.delete(
-        //   `${API_URL_DriverMoreInfo}/${id}`
-        // );
-        // console.log(moreInfoResponse);
+        console.lg(res);
       } else {
         toast.warn(data.message || "Failed to delete the driver.");
       }

@@ -2,6 +2,7 @@ import { connect } from "@config/db.js";
 import DriverInfo from "@models/DriverMoreInfo/DriverMoreInfo.model.js";
 import { NextResponse } from "next/server";
 
+// for update total substract and remainig payment
 // PUT handler for updating driver details
 export async function PUT(request, context) {
   try {
@@ -30,7 +31,6 @@ export async function PUT(request, context) {
       "totalsubtractamount", // Replace with your actual field names
       "totalremainingamount", // Replace with your actual field names
       "endDate", // Replace with your actual field names
-      // Add more fields as necessary
     ];
 
     // console.log(fieldsToUpdate);

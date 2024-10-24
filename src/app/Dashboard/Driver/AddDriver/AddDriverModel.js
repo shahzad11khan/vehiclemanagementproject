@@ -57,6 +57,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
   const [vehicle, setVehicle] = useState([]);
   const [superadmin, setSuperadmin] = useState(null);
   const [filteredVehicles, setFilteredVehicles] = useState([]);
+  const [selectedvehicle, setselectedvehicle] = useState("");
 
   useEffect(() => {
     const storedCompanyName = localStorage.getItem("companyName");
@@ -182,28 +183,55 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
 
       console.log(response);
       if (response.data.success) {
+        try {
+          console.log(selectedvehicle);
+          // const formDataToSend = new FormData();
+          // const specificFieldKeyvehicleStatus = "vehicleStatus";
+          // formDataToSend.set(specificFieldKeyvehicleStatus, "Rend");
+          // if (formData) {
+          //   Object.keys(formData).forEach((key) => {
+          //     if (key !== specificFieldKeyvehicleStatus) {
+          //       formDataToSend.append(key, formData[key]);
+          //     }
+          //   });
+          // }
+
+          // const res = await axios.put(
+          //   `${API_URL_DriverMoreupdate}/${selectedUserId}`,
+          //   formDataToSend,
+          //   {
+          //     headers: {
+          //       "Content-Type": "multipart/form-data",
+          //     },
+          //   }
+          // );
+          // console.log(res);
+
+          const newRecordData = {
+            driverId: response.data.savedDriver._id, // Add your specific fields here
+            vehicle: response.data.savedDriver.vehicle, // Add your specific fields here
+            paymentcycle: response.data.savedDriver.rentPaymentCycle, // Add your specific fields here
+            startDate: response.data.savedDriver.startDate, // Add your specific fields here
+            calculation: response.data.savedDriver.pay, // Add your specific fields here
+            endDate: "", // Add your specific fields here
+            subtractcalculation: 0, // Add your specific fields here
+            remaining: 0, // Add your specific fields here
+            totalamount: 0,
+            totalsubtractamount: 0,
+            totalremainingamount: 0,
+            adminCreatedBy: "", // Add your specific fields here
+            adminCompanyName: response.data.savedDriver.adminCompanyName, // Keep existing field
+          };
+          const newRecordResponse = await axios.post(
+            `${API_URL_DriverMoreInfo}`,
+            newRecordData
+          );
+          console.log(newRecordResponse);
+        } catch (error) {
+          console.log(error);
+        }
         //
 
-        const newRecordData = {
-          driverId: response.data.savedDriver._id, // Add your specific fields here
-          vehicle: response.data.savedDriver.vehicle, // Add your specific fields here
-          paymentcycle: response.data.savedDriver.rentPaymentCycle, // Add your specific fields here
-          startDate: response.data.savedDriver.startDate, // Add your specific fields here
-          calculation: response.data.savedDriver.pay, // Add your specific fields here
-          endDate: "", // Add your specific fields here
-          subtractcalculation: 0, // Add your specific fields here
-          remaining: 0, // Add your specific fields here
-          totalamount: 0,
-          totalsubtractamount: 0,
-          totalremainingamount: 0,
-          adminCreatedBy: "", // Add your specific fields here
-          adminCompanyName: response.data.savedDriver.adminCompanyName, // Keep existing field
-        };
-        const newRecordResponse = await axios.post(
-          `${API_URL_DriverMoreInfo}`,
-          newRecordData
-        );
-        console.log(newRecordResponse);
         //
         const initialFormData = {
           firstName: "",
@@ -500,7 +528,23 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                   id="vehicle"
                   name="vehicle"
                   value={formData.vehicle}
-                  onChange={handleChange}
+                  onChange={(e) => {
+                    // Get the selected vehicle's model and pass it to formData
+                    const selectedModel = e.target.value;
+
+                    // Find the selected vehicle's ID based on the selected model
+                    const selectedVehicle = filteredVehicles.find(
+                      (vehicle) => vehicle.model === selectedModel
+                    );
+
+                    // Update the formData with the selected vehicle's model
+                    handleChange(e);
+
+                    // Call selectedvehicle with the vehicle's _id
+                    if (selectedVehicle) {
+                      setselectedvehicle(selectedVehicle._id);
+                    }
+                  }}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
                 >
                   <option value="null">Select vehicle</option>

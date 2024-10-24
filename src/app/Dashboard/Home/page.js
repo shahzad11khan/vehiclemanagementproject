@@ -21,13 +21,11 @@ const Page = () => {
   const [sellCar, setSellcar] = useState(0);
   const [rent, setRentcar] = useState(0);
   const [maintenance, setMaintenance] = useState(0);
-
   const [flag, setflag] = useState("");
 
   useEffect(() => {
     if (isAuthenticated()) {
       const authData = getAuthData();
-      setsuperadmin(authData.role);
       setsuperadmin(authData.role);
       setflag(authData.flag);
       setcompnayname(authData.companyName);
@@ -52,7 +50,7 @@ const Page = () => {
       let maintenance = 0;
 
       // Check if vehicleData is empty
-      if (vehicleData.result.length === 0) {
+      if (!vehicleData.result || vehicleData.result.length === 0) {
         // Set counts to zero if no vehicles are available
         setavailablecar(0);
         setstandby(0);
@@ -63,27 +61,36 @@ const Page = () => {
       }
 
       // Iterate through vehicle data
-      for (let i = 0; i < vehicleData.result.length; i++) {
-        const vehicle = vehicleData.result[i];
+      vehicleData.result.forEach((vehicle) => {
         console.log(vehicle); // Log each vehicle
-        console.log(companyname); // Log the company name for comparison
 
-        // Check for the specific admin company name
-        if (vehicle.adminCompanyName === companyname) {
+        // If super admin, count all vehicles; if regular admin, check company name
+        if (
+          superadmin === "superadmin" ||
+          vehicle.adminCompanyName === companyname
+        ) {
           // Update the respective counters based on vehicle status
-          if (vehicle.vehicleStatus === "Available") {
-            availableCar++;
-          } else if (vehicle.vehicleStatus === "Standby") {
-            standbyCar++;
-          } else if (vehicle.vehicleStatus === "Sale") {
-            sellCar++;
-          } else if (vehicle.vehicleStatus === "Rent") {
-            rentCar++;
-          } else if (vehicle.vehicleStatus === "Maintenance") {
-            maintenance++;
+          switch (vehicle.vehicleStatus) {
+            case "Available":
+              availableCar++;
+              break;
+            case "Standby":
+              standbyCar++;
+              break;
+            case "Sale":
+              sellCar++;
+              break;
+            case "Rent":
+              rentCar++;
+              break;
+            case "Maintenance":
+              maintenance++;
+              break;
+            default:
+              break; // Handle unknown status, if any
           }
         }
-      }
+      });
 
       // Update state with the final counts
       setavailablecar(availableCar);
@@ -94,7 +101,7 @@ const Page = () => {
     } catch (error) {
       console.log(`Failed to fetch data: ${error}`);
     }
-  }, [companyname]);
+  }, [companyname, superadmin]);
 
   useEffect(() => {
     fetchCounts();

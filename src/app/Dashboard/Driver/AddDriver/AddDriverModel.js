@@ -49,9 +49,9 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
 
   const [formData, setFormData] = useState(initialFormData);
   const [loading, setLoading] = useState(false);
-  // const [taxiFirms, setTaxiFirms] = useState([]);
   const [badge, setBadge] = useState([]);
   const [insurance, setInsurance] = useState([]);
+  // const [taxiFirms, setTaxiFirms] = useState([]);
   // const [localAuth, setLocalAuth] = useState([]);
   // const [vehicle, setVehicle] = useState([]);
   const [superadmin, setSuperadmin] = useState(null);

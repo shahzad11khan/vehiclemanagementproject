@@ -14,8 +14,9 @@ import AddDriverAndVehicleModel from "../AddDriverAndVehicleModel/AddDriverAndVe
 // import { getCompanyName } from "@/utils/storageUtils";
 
 const Page = ({ params }) => {
-  const id = params.DriverVehicleID;
-  console.log(id);
+  //   console.log(params);
+  const id = params.DriverVechicleID;
+  //   console.log(id);
   //   const [data, setData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   //   const [filteredData, setFilteredData] = useState([]);
@@ -189,8 +190,8 @@ const Page = ({ params }) => {
       <AddDriverAndVehicleModel
         isOpen={isOpenBadge}
         onClose={OpenBadgeModle}
-        fetchData={fetchData}
-        updateid={selectedUserId}
+        // fetchData={fetchData}
+        selectedUserId={selectedUserId}
       />
       {/* <UpdateBadgemodel
         isOpen={isOpenVehicleUpdate}

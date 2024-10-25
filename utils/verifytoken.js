@@ -3,13 +3,13 @@
 export const getAuthData = () => {
   return {
     token: localStorage.getItem("token"),
-    userId: localStorage.getItem("userId"),
     Userusername: localStorage.getItem("Userusername"),
-    UserActive: localStorage.getItem("UserActive"),
     companyName: localStorage.getItem("companyName"),
+    userId: localStorage.getItem("userId"),
+    UserActive: localStorage.getItem("UserActive"),
     role: localStorage.getItem("role"),
-    flag: localStorage.getItem("flag"),
     companyID: localStorage.getItem("companyID"),
+    flag: localStorage.getItem("flag"),
     Iscompanyselected: localStorage.getItem("Iscompanyselecteds"),
   };
 };
@@ -29,4 +29,5 @@ export const clearAuthData = () => {
   localStorage.removeItem("role");
   localStorage.removeItem("companyID");
   localStorage.removeItem("flag");
+  localStorage.removeItem("Iscompanyselecteds");
 };

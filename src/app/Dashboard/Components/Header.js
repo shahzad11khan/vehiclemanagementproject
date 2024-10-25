@@ -21,7 +21,6 @@ import { isAuthenticated, clearAuthData } from "@/utils/verifytoken";
 const Header = () => {
   const router = useRouter();
   const [companyName, setCompanyName] = useState("");
-  const [compId, setcompId] = useState("");
   const [role, setRole] = useState("");
   const [flag, setflag] = useState(false);
   const [username, setusername] = useState("");
@@ -35,32 +34,30 @@ const Header = () => {
     }
 
     const userId = getUserId();
-    const flag = getflag();
-    setflag(flag);
     const companyId = getCompanyId();
-    setcompId(companyId);
-
+    const flag = getflag();
     const username = getUserName();
     const role = getUserRole();
     const companyNameFromStorage = getCompanyName();
-    if (role) setRole(role);
-    if (username) setusername(username);
-    if (companyNameFromStorage) setCompanyName(companyNameFromStorage);
-    if (flag === "true" && companyId) {
-      showAllAdmins(compId);
-    } else {
-      showAllAdmins(userId);
-    }
+
+    setflag(flag);
+    setusername(username);
+    setRole(role);
+    setCompanyName(companyNameFromStorage);
+
+    // Fetch admin data based on user role
+    const idToFetch =
+      flag === "true" && companyNameFromStorage ? companyId : userId;
+    showAllAdmins(idToFetch);
   }, []);
 
   const showAllAdmins = async (id) => {
     try {
+      console.log(id);
       const res = await axios.get(`${API_URL_Company}/${id}`);
       const adminData = res.data.result;
-
+      // console.log(adminData);
       if (adminData?._id === id) {
-        setImagePreview(adminData.image);
-      } else if (adminData?._id === id && flag === "true") {
         setImagePreview(adminData.image);
       } else {
         const userRes = await axios.get(`${API_URL_USER}/${id}`);
@@ -70,7 +67,7 @@ const Header = () => {
         }
       }
     } catch (error) {
-      console.error(`Error fetching data for user ${userId}:`, error);
+      console.error(`Error fetching data for user ${id}:`, error);
     }
   };
 
@@ -113,7 +110,7 @@ const Header = () => {
         </h6>
         <div className="relative">
           <div
-            className="h-8 w-8 rounded-full cursor-pointer"
+            className="h-8 w-8 rounded-lg cursor-pointer"
             onClick={toggleDropdown}
           >
             <img src={imagePreview} alt="Profile" height={40} width={40} />

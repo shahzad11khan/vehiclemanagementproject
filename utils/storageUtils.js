@@ -25,7 +25,7 @@ export const getIscompanyselected = () => {
 
 // Function to get the company ID from localStorage
 export const getCompanyId = () => {
-  return localStorage.getItem("companyId");
+  return localStorage.getItem("companyID");
 };
 
 // Function to set company details (if needed)

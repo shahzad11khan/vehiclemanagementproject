@@ -264,8 +264,8 @@ import Header from "../../Components/Header";
 import Sidebar from "../../Components/Sidebar";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { FaEdit, FaTrash } from "react-icons/fa";
-import { MdCurrencyPound } from "react-icons/md";
+import { FaEdit, FaTrash, FaCarAlt } from "react-icons/fa";
+// import { MdCurrencyPound } from "react-icons/md";
 import AddDriverModel from "../AddDriver/AddDriverModel";
 import UpdateDriverModel from "../UpdateDriver/UpdateDriverModel";
 import axios from "axios";
@@ -432,12 +432,12 @@ const Page = () => {
                     <th className="border border-gray-200 px-4 py-2">
                       Badge Type
                     </th>
-                    <th className="border border-gray-200 px-4 py-2">
+                    {/* <th className="border border-gray-200 px-4 py-2">
                       Payment Cycle
-                    </th>
-                    <th className="border border-gray-200 px-4 py-2">
+                    </th> */}
+                    {/* <th className="border border-gray-200 px-4 py-2">
                       Payment
-                    </th>
+                    </th> */}
                     <th className="border border-gray-200 px-4 py-2">
                       Date Of Birth
                     </th>
@@ -461,13 +461,13 @@ const Page = () => {
                       <td className="p-3">{driver.licenseNumber}</td>
                       <td className="p-3">{driver.niNumber}</td>
                       <td className="p-3">{driver.badgeType}</td>
-                      <td className="p-3">{driver.rentPaymentCycle}</td>
-                      <td className="p-3">£ {driver.pay}</td>
+                      {/* <td className="p-3">{driver.rentPaymentCycle}</td> */}
+                      {/* <td className="p-3">£ {driver.pay}</td> */}
                       <td className="p-3">{formatDate(driver.dateOfBirth)}</td>
                       <td className="p-3">{formatDate(driver.startDate)}</td>
                       <td className="p-3">
                         <div className="flex gap-2">
-                          <button className="text-blue-500 hover:text-blue-700">
+                          {/* <button className="text-blue-500 hover:text-blue-700">
                             <Link
                               passHref
                               href={`/Dashboard/Driver/MoreInfo/${driver._id}`}
@@ -476,7 +476,7 @@ const Page = () => {
                                 <MdCurrencyPound size={20} />
                               </div>
                             </Link>
-                          </button>
+                          </button> */}
                           <button
                             onClick={() => handleEdit(driver._id)}
                             className="text-blue-500 hover:text-blue-700"
@@ -488,6 +488,22 @@ const Page = () => {
                             className="text-red-500 hover:text-red-700"
                           >
                             <FaTrash size={20} />
+                          </button>
+                          {/* <button
+                            onClick={() => handleDelete(driver._id)}
+                            className="text-red-500 hover:text-red-700"
+                          >
+                            <FaCarAlt size={20} />
+                          </button> */}
+                          <button className="text-blue-500 hover:text-blue-700">
+                            <Link
+                              passHref
+                              href={`/Dashboard/Driver/CombineDriverAndVehicle/${driver._id}`}
+                            >
+                              <div className="flex items-center gap-3">
+                                <FaCarAlt size={20} />
+                              </div>
+                            </Link>
                           </button>
                         </div>
                       </td>

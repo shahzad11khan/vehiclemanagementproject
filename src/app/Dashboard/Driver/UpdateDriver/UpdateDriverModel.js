@@ -77,7 +77,7 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, selectedUserId }) => {
       const res = await axios.get(`${API_URL_Driver}/${selectedUserId}`);
       const adminData = res.data.result;
 
-      console.log("Fetched admin data:", adminData);
+      // console.log("Fetched admin data:", adminData);
 
       setFormData((prevData) => ({
         ...prevData,
@@ -1374,7 +1374,7 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, selectedUserId }) => {
                 />
               </div>
             </div>
-            <div>
+            {/* <div>
               <h3 className="text-sm font-medium text-gray-700">
                 Document Name
               </h3>
@@ -1388,7 +1388,7 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, selectedUserId }) => {
                 placeholder="Image Name"
                 className="border-2 border-dashed border-gray-300 rounded-lg p-2 h-14 w-full mt-2"
               />
-            </div>
+            </div> */}
             <div className="flex items-center">
               <input
                 type="checkbox"

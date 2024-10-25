@@ -180,7 +180,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
         },
       });
 
-      console.log(response);
+      // console.log(response);
       if (response.data.success) {
         try {
           // console.log(selectedvehicle);
@@ -842,7 +842,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                 />
               </div>
             </div>
-            <div>
+            {/* <div>
               <h3 className="text-sm font-medium text-gray-700">
                 Document Name
               </h3>
@@ -856,7 +856,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                 placeholder="Image Name"
                 className="border-2 border-dashed border-gray-300 rounded-lg p-2 h-14 w-full mt-2"
               />
-            </div>
+            </div> */}
             <div className="flex items-center">
               <input
                 type="checkbox"

@@ -1703,3 +1703,28 @@ console.log(`Formatted date: ${formattedDate}`);
                 </Link>
               </>
             )}
+
+
+
+            #
+            from adding driver
+                    const newRecordData = {
+            driverId: response.data.savedDriver._id, // Add your specific fields here
+            vehicle: response.data.savedDriver.vehicle, // Add your specific fields here
+            paymentcycle: response.data.savedDriver.rentPaymentCycle, // Add your specific fields here
+            startDate: response.data.savedDriver.startDate, // Add your specific fields here
+            calculation: response.data.savedDriver.pay, // Add your specific fields here
+            endDate: "", // Add your specific fields here
+            subtractcalculation: 0, // Add your specific fields here
+            remaining: 0, // Add your specific fields here
+            totalamount: 0,
+            totalsubtractamount: 0,
+            totalremainingamount: 0,
+            adminCreatedBy: "", // Add your specific fields here
+            adminCompanyName: response.data.savedDriver.adminCompanyName, // Keep existing field
+          };
+          const newRecordResponse = await axios.post(
+            `${API_URL_DriverMoreInfo}`,
+            newRecordData
+          );
+          console.log(newRecordResponse);

@@ -53,7 +53,7 @@ const Header = () => {
 
   const showAllAdmins = async (id) => {
     try {
-      console.log(id);
+      // console.log(id);
       const res = await axios.get(`${API_URL_Company}/${id}`);
       const adminData = res.data.result;
       // console.log(adminData);

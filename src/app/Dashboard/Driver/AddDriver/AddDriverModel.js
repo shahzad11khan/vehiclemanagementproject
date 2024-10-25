@@ -3,15 +3,15 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import {
-  fetchTaxiFirms,
+  // fetchTaxiFirms,
   fetchBadge,
   fetchInsurence,
-  fetchLocalAuth,
-  fetchVehicle,
+  // fetchLocalAuth,
+  // fetchVehicle,
 } from "../../Components/DropdownData/taxiFirm/taxiFirmService";
 import {
   API_URL_Driver,
-  API_URL_DriverMoreInfo,
+  // API_URL_DriverMoreInfo,
 } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 
 const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
@@ -49,14 +49,14 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
 
   const [formData, setFormData] = useState(initialFormData);
   const [loading, setLoading] = useState(false);
-  const [taxiFirms, setTaxiFirms] = useState([]);
+  // const [taxiFirms, setTaxiFirms] = useState([]);
   const [badge, setBadge] = useState([]);
   const [insurance, setInsurance] = useState([]);
-  const [localAuth, setLocalAuth] = useState([]);
-  const [vehicle, setVehicle] = useState([]);
+  // const [localAuth, setLocalAuth] = useState([]);
+  // const [vehicle, setVehicle] = useState([]);
   const [superadmin, setSuperadmin] = useState(null);
-  const [filteredVehicles, setFilteredVehicles] = useState([]);
-  const [selectedvehicle, setselectedvehicle] = useState("");
+  // const [filteredVehicles, setFilteredVehicles] = useState([]);
+  // const [selectedvehicle, setselectedvehicle] = useState("");
 
   useEffect(() => {
     const storedCompanyName = localStorage.getItem("companyName");
@@ -78,28 +78,28 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
     const loadDropdownData = async () => {
       try {
         const [
-          taxiFirmsData,
+          // taxiFirmsData,
           badgeData,
           insuranceData,
-          localAuthData,
-          vehicle,
+          // localAuthData,
+          // vehicle,
         ] = await Promise.all([
-          fetchTaxiFirms(),
+          // fetchTaxiFirms(),
           fetchBadge(),
           fetchInsurence(),
-          fetchLocalAuth(),
-          fetchVehicle(),
+          // fetchLocalAuth(),
+          // fetchVehicle(),
         ]);
 
         const storedCompanyName = formData.adminCompanyName;
-        const filteredTaxiFirms =
-          superadmin === "superadmin"
-            ? taxiFirmsData.result
-            : taxiFirmsData.result.filter(
-                (firm) =>
-                  firm.adminCompanyName === storedCompanyName ||
-                  firm.adminCompanyName === "superadmin"
-              );
+        // const filteredTaxiFirms =
+        //   superadmin === "superadmin"
+        //     ? taxiFirmsData.result
+        //     : taxiFirmsData.result.filter(
+        //         (firm) =>
+        //           firm.adminCompanyName === storedCompanyName ||
+        //           firm.adminCompanyName === "superadmin"
+        //       );
 
         const filteredBadges =
           superadmin === "superadmin"
@@ -119,28 +119,28 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                   insurance.adminCompanyName === "superadmin"
               );
 
-        const filteredLocalAuth =
-          superadmin === "superadmin"
-            ? localAuthData.Result
-            : localAuthData.Result.filter(
-                (localAuth) =>
-                  localAuth.adminCompanyName === storedCompanyName ||
-                  localAuth.adminCompanyName === "superadmin"
-              );
-        const filteredVehicle =
-          superadmin === "superadmin"
-            ? vehicle.result
-            : vehicle.result.filter(
-                (vehicle) =>
-                  vehicle.adminCompanyName === storedCompanyName ||
-                  vehicle.adminCompanyName === "superadmin"
-              );
+        // const filteredLocalAuth =
+        //   superadmin === "superadmin"
+        //     ? localAuthData.Result
+        //     : localAuthData.Result.filter(
+        //         (localAuth) =>
+        //           localAuth.adminCompanyName === storedCompanyName ||
+        //           localAuth.adminCompanyName === "superadmin"
+        //       );
+        // const filteredVehicle =
+        //   superadmin === "superadmin"
+        //     ? vehicle.result
+        //     : vehicle.result.filter(
+        //         (vehicle) =>
+        //           vehicle.adminCompanyName === storedCompanyName ||
+        //           vehicle.adminCompanyName === "superadmin"
+        //       );
 
-        setTaxiFirms(filteredTaxiFirms);
+        // setTaxiFirms(filteredTaxiFirms);
         setBadge(filteredBadges);
         setInsurance(filteredInsurance);
-        setLocalAuth(filteredLocalAuth);
-        setVehicle(filteredVehicle);
+        // setLocalAuth(filteredLocalAuth);
+        // setVehicle(filteredVehicle);
       } catch (err) {
         console.error("Error loading dropdown data:", err);
       }
@@ -156,12 +156,12 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
       [name]:
         type === "checkbox" ? checked : type === "file" ? files[0] : value,
     });
-    if (name === "LocalAuth") {
-      const matchedVehicles = vehicle.filter(
-        (vehicle) => vehicle.LocalAuthority === value
-      );
-      setFilteredVehicles(matchedVehicles);
-    }
+    // if (name === "LocalAuth") {
+    //   const matchedVehicles = vehicle.filter(
+    //     (vehicle) => vehicle.LocalAuthority === value
+    //   );
+    //   setFilteredVehicles(matchedVehicles);
+    // }
   };
 
   const handleSubmit = async (e) => {
@@ -183,7 +183,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
       console.log(response);
       if (response.data.success) {
         try {
-          console.log(selectedvehicle);
+          // console.log(selectedvehicle);
           // const formDataToSend = new FormData();
           // const specificFieldKeyvehicleStatus = "vehicleStatus";
           // formDataToSend.set(specificFieldKeyvehicleStatus, "Rend");
@@ -194,7 +194,6 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
           //     }
           //   });
           // }
-
           // const res = await axios.put(
           //   `${API_URL_DriverMoreupdate}/${selectedUserId}`,
           //   formDataToSend,
@@ -205,27 +204,26 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
           //   }
           // );
           // console.log(res);
-
-          const newRecordData = {
-            driverId: response.data.savedDriver._id, // Add your specific fields here
-            vehicle: response.data.savedDriver.vehicle, // Add your specific fields here
-            paymentcycle: response.data.savedDriver.rentPaymentCycle, // Add your specific fields here
-            startDate: response.data.savedDriver.startDate, // Add your specific fields here
-            calculation: response.data.savedDriver.pay, // Add your specific fields here
-            endDate: "", // Add your specific fields here
-            subtractcalculation: 0, // Add your specific fields here
-            remaining: 0, // Add your specific fields here
-            totalamount: 0,
-            totalsubtractamount: 0,
-            totalremainingamount: 0,
-            adminCreatedBy: "", // Add your specific fields here
-            adminCompanyName: response.data.savedDriver.adminCompanyName, // Keep existing field
-          };
-          const newRecordResponse = await axios.post(
-            `${API_URL_DriverMoreInfo}`,
-            newRecordData
-          );
-          console.log(newRecordResponse);
+          // const newRecordData = {
+          //   driverId: response.data.savedDriver._id, // Add your specific fields here
+          //   vehicle: response.data.savedDriver.vehicle, // Add your specific fields here
+          //   paymentcycle: response.data.savedDriver.rentPaymentCycle, // Add your specific fields here
+          //   startDate: response.data.savedDriver.startDate, // Add your specific fields here
+          //   calculation: response.data.savedDriver.pay, // Add your specific fields here
+          //   endDate: "", // Add your specific fields here
+          //   subtractcalculation: 0, // Add your specific fields here
+          //   remaining: 0, // Add your specific fields here
+          //   totalamount: 0,
+          //   totalsubtractamount: 0,
+          //   totalremainingamount: 0,
+          //   adminCreatedBy: "", // Add your specific fields here
+          //   adminCompanyName: response.data.savedDriver.adminCompanyName, // Keep existing field
+          // };
+          // const newRecordResponse = await axios.post(
+          //   `${API_URL_DriverMoreInfo}`,
+          //   newRecordData
+          // );
+          // console.log(newRecordResponse);
         } catch (error) {
           console.log(error);
         }
@@ -471,7 +469,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
                 />
               </div>
-              <div>
+              {/* <div>
                 <label
                   htmlFor="taxiFirm"
                   className="text-sm font-medium text-gray-700"
@@ -492,8 +490,8 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                     </option>
                   ))}
                 </select>
-              </div>
-              <div>
+              </div> */}
+              {/* <div>
                 <label
                   htmlFor="taxiFirm"
                   className="text-sm font-medium text-gray-700"
@@ -514,9 +512,9 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                     </option>
                   ))}
                 </select>
-              </div>
+              </div> */}
 
-              <div>
+              {/* <div>
                 <label
                   htmlFor="taxiFirm"
                   className="text-sm font-medium text-gray-700"
@@ -547,13 +545,13 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
                 >
                   <option value="null">Select vehicle</option>
-                  {filteredVehicles.map((vehicle) => (
+                  {vehicle.map((vehicle) => (
                     <option key={vehicle._id} value={vehicle.model}>
                       {vehicle.model}
                     </option>
                   ))}
                 </select>
-              </div>
+              </div> */}
               <div>
                 <label
                   htmlFor="badgeType"
@@ -599,7 +597,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                   ))}
                 </select>
               </div>
-              <div>
+              {/* <div>
                 <div className="flex gap-1">
                   <label
                     htmlFor="startDate"
@@ -638,7 +636,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
                   required
                 />
-              </div>
+              </div> */}
               <div>
                 <div className="flex gap-1">
                   <label
@@ -661,7 +659,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                   required
                 />
               </div>
-              <div>
+              {/* <div>
                 <div className="flex gap-1">
                   <label
                     htmlFor="taxiBadgeDate"
@@ -681,8 +679,8 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
                   required
                 />
-              </div>
-              <div>
+              </div> */}
+              {/* <div>
                 <div className="flex gap-1">
                   <label
                     htmlFor="rentPaymentCycle"
@@ -707,8 +705,8 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                   <option value="perquarter">Per Quarter</option>
                   <option value="peryear">per year</option>
                 </select>
-              </div>
-              <div>
+              </div> */}
+              {/* <div>
                 <label
                   htmlFor="pay"
                   className="text-sm font-medium text-gray-700"
@@ -724,7 +722,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
                   required
                 />
-              </div>
+              </div> */}
               <div>
                 <div className="flex gap-1">
                   <label
@@ -829,45 +827,53 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
               </div> */}
             </div>
           </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="">
+              <h3 className="text-sm font-medium text-gray-700">
+                Upload Document
+              </h3>
+              <div className="border-2 border-dashed border-gray-300 rounded-lg p-2 mt-2">
+                <input
+                  type="file"
+                  id="imageFile"
+                  name="imageFile"
+                  onChange={handleChange}
+                  className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border file:border-gray-300 file:background-gray-100 hover:file:bg-gray-200 file:text-sm"
+                />
+              </div>
+            </div>
+            <div>
+              <h3 className="text-sm font-medium text-gray-700">
+                Document Name
+              </h3>
 
-          <div>
-            <h3 className="text-xl font-semibold mb-2">Driver Image</h3>
-
-            <input
-              type="file"
-              id="imageFile"
-              name="imageFile"
-              onChange={handleChange}
-              className="block w-full mt-1 mb-2"
-            />
-            <input
-              type="text"
-              id="imageName"
-              name="imageName"
-              value={formData.imageName}
-              onChange={handleChange}
-              placeholder="Image Name"
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-            />
+              <input
+                type="text"
+                id="imageName"
+                name="imageName"
+                value={formData.imageName}
+                onChange={handleChange}
+                placeholder="Image Name"
+                className="border-2 border-dashed border-gray-300 rounded-lg p-2 h-14 w-full mt-2"
+              />
+            </div>
+            <div className="flex items-center">
+              <input
+                type="checkbox"
+                id="isActive"
+                name="isActive"
+                checked={formData.isActive}
+                onChange={handleChange}
+                className="mr-2"
+              />
+              <label
+                htmlFor="isActive"
+                className="text-sm font-medium text-gray-700"
+              >
+                Active
+              </label>
+            </div>
           </div>
-
-          <div className="flex items-center">
-            <input
-              type="checkbox"
-              id="isActive"
-              name="isActive"
-              checked={formData.isActive}
-              onChange={handleChange}
-              className="mr-2"
-            />
-            <label
-              htmlFor="isActive"
-              className="text-sm font-medium text-gray-700"
-            >
-              Active
-            </label>
-          </div>
-
           <div className="flex justify-end mt-4">
             <button
               type="submit"

@@ -218,13 +218,6 @@ const Sidebar = () => {
                     } flex items-center p-3 cursor-pointer hover:bg-gray-100 rounded-lg relative`}
                   >
                     <div className="flex items-center gap-3 relative">
-                      <FaCar
-                        className={`${
-                          isOpenManagement === true
-                            ? "text-red-400"
-                            : "text-black text-sm"
-                        }`}
-                      />
                       <CiSettings
                         className={`${
                           isOpenManagement === true
@@ -479,13 +472,6 @@ const Sidebar = () => {
                     } flex items-center p-3 cursor-pointer hover:bg-gray-100 rounded-lg relative`}
                   >
                     <div className="flex items-center gap-3 relative">
-                      <FaCar
-                        className={`${
-                          isOpenManagement === true
-                            ? "text-red-400"
-                            : "text-black text-sm"
-                        }`}
-                      />
                       <CiSettings
                         className={`${
                           isOpenManagement === true
@@ -888,13 +874,6 @@ const Sidebar = () => {
                     } flex items-center p-3 cursor-pointer hover:bg-gray-100 rounded-lg relative`}
                   >
                     <div className="flex items-center gap-3 relative">
-                      <FaCar
-                        className={`${
-                          isOpenManagement === true
-                            ? "text-red-400"
-                            : "text-black text-sm"
-                        }`}
-                      />
                       <CiSettings
                         className={`${
                           isOpenManagement === true

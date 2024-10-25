@@ -396,10 +396,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50 ">
       <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-4xl overflow-y-auto max-h-screen">
-        <form
-          onSubmit={handleSubmit}
-          className="max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-lg"
-        >
+        <form onSubmit={handleSubmit} className="max-w-4xl mx-auto p-6 ">
           <h2 className="text-2xl font-bold mb-6">Vehicle Form</h2>
 
           <div className="grid grid-cols-3 md:grid-cols-3 gap-2">
@@ -833,7 +830,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mt-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-4">
             <div>
               <div className="flex gap-1">
                 <label className="block font-semibold">
@@ -878,7 +875,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
             </div>
 
             {/* Vehicle Status Section */}
-            <div className="">
+            {/* <div className="">
               <div className="flex gap-1">
                 <label className="block font-semibold">Vehicle Status</label>
                 <span className="text-red-600">*</span>
@@ -899,10 +896,10 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                 <option value="Rent">Rent</option>
                 <option value="Maintenance">Maintenance</option>
               </select>
-            </div>
+            </div> */}
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-4 mb-2">
             {/* Warranty Information Section */}
             <div className="flex flex-col">
               <div className="flex gap-1 items-center">
@@ -915,26 +912,27 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                 name="warrantyInfo"
                 value={vehicleData.warrantyInfo}
                 onChange={handleChange}
-                className="w-full p-2 border border-gray-300 rounded resize-none" // Added 'resize-none' for better layout control
+                className="border-2 border-dashed border-gray-300 rounded-lg p-5 resize-none" // Added 'resize-none' for better layout control
                 placeholder="e.g., 3 years or 36,000 miles"
                 required
               />
             </div>
-          </div>
-
-          <div>
-            <h3 className="text-xl font-semibold mb-2">Vehicle Images</h3>
-            <div>
-              <input
-                type="file"
-                id="imageFiles"
-                name="imageFiles"
-                onChange={handleChange}
-                className="block w-full mt-1 mb-2"
-                placeholder="select 10 images"
-                multiple
-              />
-              <span className="text-red-500 mb-3">Maximum 10 images</span>
+            <div className="">
+              <label className="block font-semibold">Vehicle Images</label>
+              <div className="border-2 border-dashed border-gray-300 rounded-lg p-2">
+                <input
+                  type="file"
+                  id="imageFiles"
+                  name="imageFiles"
+                  onChange={handleChange}
+                  className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border file:border-gray-300 file:background-gray-100 hover:file:bg-gray-200 file:text-sm"
+                  placeholder="Select up to 10 images"
+                  multiple
+                />
+                <span className="block text-red-500 mt-2 text-sm">
+                  Maximum 10 images
+                </span>
+              </div>
             </div>
           </div>
 

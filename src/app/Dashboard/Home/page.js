@@ -31,25 +31,19 @@ const Page = () => {
       setcompnayname(authData.companyName);
     } else {
       router.push("/");
-      return;
     }
-  }, []);
+  }, [router]);
 
   Chart.register(...registerables);
 
   const fetchCounts = useCallback(async () => {
     try {
       const vehicleData = await GetVehicle();
-
-      // Destructure count and result from vehicleData
       const { count, result } = vehicleData;
 
-      // Set total car count only if it changes
       setTotalcar((prev) => (prev !== count ? count : prev));
 
-      // Early return if no vehicles are available
       if (!result || result.length === 0) {
-        // Reset all counts only if they aren't already zero
         setstandby((prev) => (prev !== 0 ? 0 : prev));
         setSellcar((prev) => (prev !== 0 ? 0 : prev));
         setRentcar((prev) => (prev !== 0 ? 0 : prev));
@@ -57,15 +51,12 @@ const Page = () => {
         return;
       }
 
-      // Initialize counters for vehicle statuses
       let standbyCar = 0;
       let sellCar = 0;
       let rentCar = 0;
       let maintenance = 0;
 
-      // Iterate over the vehicles
       result.forEach((vehicle) => {
-        // Count vehicles if superadmin or matching company name
         if (
           superadmin === "superadmin" ||
           vehicle.adminCompanyName === companyname
@@ -83,13 +74,10 @@ const Page = () => {
             case "Maintenance":
               maintenance++;
               break;
-            default:
-              break; // Ignore unrecognized statuses
           }
         }
       });
 
-      // Update states only if the count has changed
       setstandby((prev) => (prev !== standbyCar ? standbyCar : prev));
       setSellcar((prev) => (prev !== sellCar ? sellCar : prev));
       setRentcar((prev) => (prev !== rentCar ? rentCar : prev));
@@ -99,7 +87,6 @@ const Page = () => {
     }
   }, [companyname, superadmin]);
 
-  // Only re-fetch when necessary
   useEffect(() => {
     fetchCounts();
   }, [fetchCounts, router]);

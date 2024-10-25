@@ -11,7 +11,7 @@ const Card = ({ image, company, companyId }) => {
   };
 
   return (
-    <div className="bg-white shadow-lg rounded-lg overflow-hidden">
+    <div className="bg-white shadow-lg rounded-lg overflow-hidden border-2 border-gray-400">
       <Link href="/Dashboard/Home">
         <div onClick={handleCardClick}>
           <img

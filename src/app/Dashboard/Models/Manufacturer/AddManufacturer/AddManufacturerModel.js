@@ -4,6 +4,12 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { fetchCarModel } from "../../../Components/DropdownData/taxiFirm/taxiFirmService";
 import { toast } from "react-toastify";
+import {
+  getCompanyName,
+  getsuperadmincompanyname,
+  getUserRole,
+} from "@/utils/storageUtils";
+
 const AddManufacturerModel = ({ isOpen, onClose, fetchData }) => {
   const [formData, setFormData] = useState({
     name: "",
@@ -16,11 +22,9 @@ const AddManufacturerModel = ({ isOpen, onClose, fetchData }) => {
 
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
-  // Retrieve company name from local storage
+
   useEffect(() => {
-    const storedCompanyName =
-      localStorage.getItem("companyName") ||
-      localStorage.getItem("companyname"); // Replace with the actual key used in localStorage
+    const storedCompanyName = getCompanyName() || getsuperadmincompanyname();
     if (storedCompanyName) {
       setFormData((prevData) => ({
         ...prevData,
@@ -28,33 +32,24 @@ const AddManufacturerModel = ({ isOpen, onClose, fetchData }) => {
       }));
     }
     fetchDataa();
-  }, []); // Run only once when the component mounts
+  }, []);
 
   const fetchDataa = async () => {
     try {
-      const stored = localStorage.getItem("companyName"); // Replace with the actual key used in localStorage
-      const role = localStorage.getItem("role"); // Replace with the actual key used in localStorage
-      // console.log(storedCompanyName);
-      const title = await fetchCarModel(); // Await the result from fetchLocalAuth
-      console.log(title);
-      // console.log(superadmin);
-      // const filteredtitle = title.result;
-
+      const stored = getCompanyName() || getsuperadmincompanyname();
+      const role = getUserRole();
+      const title = await fetchCarModel();
       const filteredTaxiFirms =
         role === "superadmin"
           ? title.result
-          : title.result.filter(
-              (firm) =>
-                firm.adminCompanyName === stored ||
-                firm.adminCompanyName === "superadmin"
-            );
+          : title.result.filter((firm) => firm.adminCompanyName === stored);
 
-      console.log(filteredTaxiFirms);
-      setData(filteredTaxiFirms); // Set the local state with the result
+      setData(filteredTaxiFirms);
     } catch (error) {
       console.error("Error fetching local auth data:", error);
     }
   };
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData({
@@ -69,7 +64,6 @@ const AddManufacturerModel = ({ isOpen, onClose, fetchData }) => {
 
     try {
       const response = await axios.post(`${API_URL_Manufacturer}`, formData);
-
       setFormData({
         name: "",
         description: "",
@@ -78,7 +72,7 @@ const AddManufacturerModel = ({ isOpen, onClose, fetchData }) => {
         adminCreatedBy: "",
         adminCompanyName: formData.adminCompanyName,
       });
-      // console.log(response.data);
+
       if (response.data.success) {
         toast.success("data successfully saved");
         fetchData();
@@ -86,9 +80,8 @@ const AddManufacturerModel = ({ isOpen, onClose, fetchData }) => {
       } else {
         toast.warn(response.data.error);
       }
-      // Handle success or trigger some UI feedback
     } catch (err) {
-      setError(err.response?.data?.message || "Failed to add badge");
+      toast.error(err.response?.data?.message || "Failed to add badge");
     } finally {
       setLoading(false);
     }
@@ -102,10 +95,8 @@ const AddManufacturerModel = ({ isOpen, onClose, fetchData }) => {
         <h2 className="text-3xl font-semibold text-center mb-8">
           Add Manufacturer
         </h2>
-
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-6">
-            {/* Name */}
             <div className="col-span-2">
               <div className="flex gap-1">
                 <label
@@ -136,7 +127,6 @@ const AddManufacturerModel = ({ isOpen, onClose, fetchData }) => {
                   Model:
                 </label>
               </div>
-
               <select
                 id="carmodel"
                 name="carmodel"
@@ -152,44 +142,40 @@ const AddManufacturerModel = ({ isOpen, onClose, fetchData }) => {
                 ))}
               </select>
             </div>
-            {/* Description */}
-            <div className="col-span-2">
-              <label
-                htmlFor="description"
-                className="text-sm font-medium text-gray-700"
-              >
-                Description:
-              </label>
-              <textarea
-                id="description"
-                name="description"
-                value={formData.description}
-                onChange={handleChange}
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                rows="3"
-              ></textarea>
-            </div>
-
-            {/* IsActive */}
-            <div className="col-span-2 flex items-center">
-              <input
-                type="checkbox"
-                id="isActive"
-                name="isActive"
-                checked={formData.isActive}
-                onChange={handleChange}
-                className="mr-2 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-              />
-              <label
-                htmlFor="isActive"
-                className="text-sm font-medium text-gray-700"
-              >
-                IsActive
-              </label>
-            </div>
+          </div>
+          <div className=" w-full">
+            <label
+              htmlFor="description"
+              className="text-sm font-medium text-gray-700"
+            >
+              Description:
+            </label>
+            <textarea
+              id="description"
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+              className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+              rows="3"
+            ></textarea>
+          </div>
+          <div className="col-span-2 flex items-center">
+            <input
+              type="checkbox"
+              id="isActive"
+              name="isActive"
+              checked={formData.isActive}
+              onChange={handleChange}
+              className="mr-2 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+            />
+            <label
+              htmlFor="isActive"
+              className="text-sm font-medium text-gray-700"
+            >
+              IsActive
+            </label>
           </div>
 
-          {/* Button Group */}
           <div className="flex gap-4 justify-center">
             <button
               type="submit"

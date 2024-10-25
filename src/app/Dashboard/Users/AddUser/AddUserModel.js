@@ -3,6 +3,11 @@ import React, { useEffect, useState } from "react";
 import { API_URL_USER } from "../../Components/ApiUrl/ApiUrls";
 import { fetchTitle } from "../../Components/DropdownData/taxiFirm/taxiFirmService";
 import { toast } from "react-toastify";
+import {
+  getCompanyName,
+  getsuperadmincompanyname,
+  getUserRole,
+} from "@/utils/storageUtils";
 
 const AddUserModel = ({ isOpen, onClose, fetchData }) => {
   const [title, setTitile] = useState([]);
@@ -37,8 +42,8 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
 
   // Retrieve company name from local storage
   useEffect(() => {
-    const storedCompanyName = localStorage.getItem("companyName"); // Replace with the actual key used in localStorage
-    const storedSuperadmin = localStorage.getItem("role");
+    const storedCompanyName = getCompanyName() || getsuperadmincompanyname(); // Replace with the actual key used in localStorage
+    const storedSuperadmin = getUserRole();
     // setSuperadmin(storedCompanyName);
     // console.log(storedCompanyName);
     if (storedSuperadmin) {

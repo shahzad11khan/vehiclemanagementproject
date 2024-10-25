@@ -10,59 +10,45 @@ const AddTitleModel = ({ isOpen, onClose, fetchData }) => {
     description: "",
     isActive: false,
     adminCreatedBy: "",
-    adminCompanyName: "", // Initialize as empty
+    adminCompanyName: "",
   });
 
   const [loading, setLoading] = useState(false);
 
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData({
-      ...formData,
-      [name]: type === "checkbox" ? checked : value,
-    });
-  };
-
-  // Retrieve company name from local storage
   useEffect(() => {
-    const storedCompanyName = localStorage.getItem("companyName"); // Replace with the actual key used in localStorage
-    if (storedCompanyName) {
+    const companyName = localStorage.getItem("companyName");
+    if (companyName) {
       setFormData((prevData) => ({
         ...prevData,
-        adminCompanyName: storedCompanyName,
+        adminCompanyName: companyName,
       }));
     }
-  }, []); // Run only once when the component mounts
+  }, []);
+
+  const handleChange = ({ target: { name, value, type, checked } }) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true); // Set loading to true at the start
-
+    setLoading(true);
     try {
-      // Logging formData to check if adminCompanyName is present
-      console.log("Submitting Form Data: ", { ...formData });
-
-      const response = await axios.post(`${API_URL_Title}`, formData);
-
-      // Reset form data after successful submission
+      const response = await axios.post(API_URL_Title, formData);
       setFormData({
         name: "",
         description: "",
         isActive: false,
         adminCreatedBy: "",
-        adminCompanyName: formData.adminCompanyName, // Keep the company name for future submissions
+        adminCompanyName: formData.adminCompanyName,
       });
-      console.log(response.data);
-
-      if (response.data.success) {
-        toast.success(response.data.message);
-        fetchData();
-        onClose();
-      } else {
-        toast.warn(response.data.error);
-      }
+      response.data.success
+        ? (toast.success(response.data.message), fetchData(), onClose())
+        : toast.warn(response.data.error);
     } catch (err) {
-      console.log(err.response?.data?.message || "Failed to add Title");
+      console.error(err.response?.data?.message || "Failed to add Title");
     } finally {
       setLoading(false);
     }
@@ -74,20 +60,15 @@ const AddTitleModel = ({ isOpen, onClose, fetchData }) => {
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
       <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-xl">
         <h2 className="text-3xl font-semibold text-center mb-8">Add Title</h2>
-
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="sm:grid-cols-2 gap-6">
             <div>
-              <div className="flex gap-1">
-                <label
-                  htmlFor="name"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Name:
-                </label>
-
-                <span className="text-red-600">*</span>
-              </div>
+              <label
+                htmlFor="name"
+                className="flex gap-1 text-sm font-medium text-gray-700"
+              >
+                Name: <span className="text-red-600">*</span>
+              </label>
               <input
                 type="text"
                 id="name"
@@ -99,8 +80,6 @@ const AddTitleModel = ({ isOpen, onClose, fetchData }) => {
               />
             </div>
           </div>
-
-          {/* Button Group */}
           <div className="flex gap-4">
             <button
               type="submit"

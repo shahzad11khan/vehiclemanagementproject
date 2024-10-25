@@ -23,7 +23,6 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
     tel2: "",
     postcode: "",
     postalAddress: "",
-    // permanentAddress: "",
     city: "",
     county: "",
     dateOfBirth: "",

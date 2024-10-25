@@ -124,7 +124,7 @@ const UpdateCompanyModel = ({
     e.preventDefault();
 
     if (formData.password && formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match!");
+      toast.warn("Passwords do not match!");
       return;
     }
 
@@ -206,13 +206,15 @@ const UpdateCompanyModel = ({
           },
         }
       );
-      console.log(response);
-      toast.success("Company updated successfully");
-      fetchData();
-      onClose();
+      if (response.data.success) {
+        toast.success(response.data.message);
+        fetchData();
+        onClose();
+      } else {
+        toast.success(response.data.error);
+      }
     } catch (error) {
       console.error("Error updating company details:", error);
-      toast.error("Error updating company details");
     }
   };
 
@@ -221,7 +223,7 @@ const UpdateCompanyModel = ({
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
       <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-4xl  overflow-y-auto h-screen">
         <h2 className="text-3xl font-semibold text-center mb-8">
-          Update Company
+          Register Company
         </h2>
 
         <form
@@ -229,15 +231,19 @@ const UpdateCompanyModel = ({
           className="space-y-6"
           encType="multipart/form-data"
         >
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 ">
             {/* Company Name */}
             <div>
-              <label
-                htmlFor="CompanyName"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Company Name
-              </label>
+              <div className="flex gap-1">
+                <label
+                  htmlFor="CompanyName"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Company Name
+                </label>
+                <span className="text-red-600">*</span>
+              </div>
+
               <input
                 type="text"
                 id="CompanyName"
@@ -245,17 +251,22 @@ const UpdateCompanyModel = ({
                 value={formData.CompanyName}
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                required
               />
             </div>
 
             {/* Email */}
             <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Email
-              </label>
+              <div className="flex gap-1">
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Email
+                </label>
+                <span className="text-red-600">*</span>
+              </div>
+
               <input
                 type="email"
                 id="email"
@@ -269,12 +280,15 @@ const UpdateCompanyModel = ({
 
             {/* Password */}
             <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Password
-              </label>
+              <div className="flex gap-1">
+                <label
+                  htmlFor="password"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Password
+                </label>
+                <span className="text-red-600">*</span>
+              </div>
               <input
                 type="password"
                 id="password"
@@ -282,17 +296,22 @@ const UpdateCompanyModel = ({
                 value={formData.password}
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                required
               />
             </div>
 
             {/* Confirm Password */}
             <div>
-              <label
-                htmlFor="confirmPassword"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Confirm Password
-              </label>
+              <div className="flex gap-1">
+                <label
+                  htmlFor="confirmPassword"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Confirm Password
+                </label>
+                <span className="text-red-600">*</span>
+              </div>
+
               <input
                 type="password"
                 id="confirmPassword"
@@ -300,17 +319,20 @@ const UpdateCompanyModel = ({
                 value={formData.confirmPassword}
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                required
               />
             </div>
-
             {/* CompanyRegistrationNumber*/}
             <div>
-              <label
-                htmlFor="CompanyRegistrationNumber"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Company Registration Number
-              </label>
+              <div className="flex gap-1">
+                <label
+                  htmlFor="CompanyRegistrationNumber"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Company Registration Number
+                </label>
+              </div>
+
               <input
                 type="text"
                 id="CompanyRegistrationNumber"
@@ -318,17 +340,19 @@ const UpdateCompanyModel = ({
                 value={formData.CompanyRegistrationNumber}
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                required
               />
             </div>
             {/* vatnumber*/}
             <div>
-              <label
-                htmlFor="vatnumber"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Vat Number
-              </label>
+              <div className="flex gap-1">
+                <label
+                  htmlFor="vatnumber"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Vat Number
+                </label>
+              </div>
+
               <input
                 type="text"
                 id="vatnumber"
@@ -336,7 +360,6 @@ const UpdateCompanyModel = ({
                 value={formData.vatnumber}
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                required
               />
             </div>
           </div>
@@ -345,26 +368,28 @@ const UpdateCompanyModel = ({
             <h2 className="text-xl font-semibold mb-8">Contact Information</h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 ">
-              {/* millinf info */}
-              <div>
-                <div className="flex gap-1">
-                  <label
-                    htmlFor="CompanyName"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Mailing Address
-                  </label>
-                  <span className="text-red-600">*</span>
+              <div className="flex flex-col">
+                {/* millinf info */}
+                <div>
+                  <div className="flex gap-1">
+                    <label
+                      htmlFor="CompanyName"
+                      className="block text-sm font-medium text-gray-700"
+                    >
+                      Mailing Address
+                    </label>
+                    <span className="text-red-600">*</span>
+                  </div>
+                  <input
+                    type="text"
+                    id="mailingAddress"
+                    name="mailingAddress"
+                    value={formData.mailingAddress}
+                    onChange={handleChange}
+                    className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                    required
+                  />
                 </div>
-                <input
-                  type="text"
-                  id="mailingAddress"
-                  name="mailingAddress"
-                  value={formData.mailingAddress}
-                  onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                  required
-                />
               </div>
               {/*     physical_Address: "", info */}
               <div>
@@ -408,27 +433,7 @@ const UpdateCompanyModel = ({
                   required
                 />
               </div>
-              {/*     Fix number:*/}
-              <div>
-                <div className="flex gap-1">
-                  <label
-                    htmlFor="fax_Number"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Fix Number
-                  </label>
-                  <span className="text-red-600">*</span>
-                </div>
-                <input
-                  type="text"
-                  id="fax_Number"
-                  name="fax_Number"
-                  value={formData.fax_Number}
-                  onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                  required
-                />
-              </div>
+
               {/*     generalEmail :*/}
               <div>
                 <div className="flex gap-1">
@@ -438,7 +443,6 @@ const UpdateCompanyModel = ({
                   >
                     General Email
                   </label>
-                  <span className="text-red-600">*</span>
                 </div>
                 <input
                   type="email"
@@ -447,7 +451,6 @@ const UpdateCompanyModel = ({
                   value={formData.generalEmail}
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                  required
                 />
               </div>
               {/*     accountsPayableEmail :*/}
@@ -459,7 +462,6 @@ const UpdateCompanyModel = ({
                   >
                     Accounts Payable Email
                   </label>
-                  <span className="text-red-600">*</span>
                 </div>
                 <input
                   type="email"
@@ -468,7 +470,6 @@ const UpdateCompanyModel = ({
                   value={formData.accountsPayableEmail}
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                  required
                 />
               </div>
               {/*     specificContactEmail :*/}
@@ -516,7 +517,6 @@ const UpdateCompanyModel = ({
                     >
                       Name
                     </label>
-                    <span className="text-red-600">*</span>
                   </div>
                   <input
                     type="text"
@@ -525,7 +525,6 @@ const UpdateCompanyModel = ({
                     value={formData.accountsPayableContactName}
                     onChange={handleChange}
                     className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                    required
                   />
                 </div>
                 {/*     Phone Number and Email */}
@@ -537,7 +536,6 @@ const UpdateCompanyModel = ({
                     >
                       Phone Number and Email
                     </label>
-                    <span className="text-red-600">*</span>
                   </div>
                   <input
                     type="text"
@@ -546,7 +544,6 @@ const UpdateCompanyModel = ({
                     value={formData.accountsPayableContactPhoneNumberandEmail}
                     onChange={handleChange}
                     className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                    required
                   />
                 </div>
               </div>
@@ -560,7 +557,6 @@ const UpdateCompanyModel = ({
                     >
                       Billing Address
                     </label>
-                    <span className="text-red-600">*</span>
                   </div>
                   <input
                     type="text"
@@ -569,7 +565,6 @@ const UpdateCompanyModel = ({
                     value={formData.billingAddress}
                     onChange={handleChange}
                     className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                    required
                   />
                 </div>
                 {/*     Agreed Payment Schedule:*/}
@@ -581,17 +576,21 @@ const UpdateCompanyModel = ({
                     >
                       Agreed Payment Schedule
                     </label>
-                    <span className="text-red-600">*</span>
                   </div>
-                  <input
-                    type="text"
+                  <select
                     id="paymentTermsAgreedPaymentSchedule"
                     name="paymentTermsAgreedPaymentSchedule"
                     value={formData.paymentTermsAgreedPaymentSchedule}
                     onChange={handleChange}
                     className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                    required
-                  />
+                  >
+                    <option value="">Select Payment Schedule</option>
+                    <option value="30">30 days</option>
+                    <option value="60">60 days</option>
+                    <option value="90">90 days</option>
+                    <option value="120">120 days</option>
+                    <option value="150">150 days</option>
+                  </select>
                 </div>
                 {/*     Preferred Payment Method :*/}
                 <div>
@@ -602,17 +601,22 @@ const UpdateCompanyModel = ({
                     >
                       Preferred Payment Method
                     </label>
-                    <span className="text-red-600">*</span>
                   </div>
-                  <input
-                    type="text"
+                  <select
                     id="paymentTermsPreferredPaymentMethod"
                     name="paymentTermsPreferredPaymentMethod"
                     value={formData.paymentTermsPreferredPaymentMethod}
                     onChange={handleChange}
                     className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                    required
-                  />
+                  >
+                    <option value="">Select Payment Method</option>
+                    <option value="Bank A">Bank A</option>
+                    <option value="Bank B">Bank B</option>
+                    <option value="Bank C">Bank C</option>
+                    <option value="Bank D">Bank D</option>
+                    <option value="Bank E">Bank E</option>
+                    {/* Add more banks as needed */}
+                  </select>
                 </div>
               </div>
             </div>
@@ -632,7 +636,6 @@ const UpdateCompanyModel = ({
                     >
                       Bank Name
                     </label>
-                    <span className="text-red-600">*</span>
                   </div>
                   <input
                     type="text"
@@ -641,7 +644,6 @@ const UpdateCompanyModel = ({
                     value={formData.bankingInformationBankName}
                     onChange={handleChange}
                     className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                    required
                   />
                 </div>
                 {/*     Bank Account Number*/}
@@ -653,7 +655,6 @@ const UpdateCompanyModel = ({
                     >
                       Bank Account Number
                     </label>
-                    <span className="text-red-600">*</span>
                   </div>
                   <input
                     type="text"
@@ -662,7 +663,6 @@ const UpdateCompanyModel = ({
                     value={formData.bankingInformationBankAccountNumber}
                     onChange={handleChange}
                     className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                    required
                   />
                 </div>
 
@@ -675,7 +675,6 @@ const UpdateCompanyModel = ({
                     >
                       IBAN / SWIFT Code
                     </label>
-                    <span className="text-red-600">*</span>
                   </div>
                   <input
                     type="text"
@@ -684,7 +683,6 @@ const UpdateCompanyModel = ({
                     value={formData.bankingInformationBankIBANSWIFTCode}
                     onChange={handleChange}
                     className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                    required
                   />
                 </div>
                 {/*     Bank Address*/}
@@ -696,7 +694,6 @@ const UpdateCompanyModel = ({
                     >
                       Bank Address
                     </label>
-                    <span className="text-red-600">*</span>
                   </div>
                   <input
                     type="text"
@@ -705,7 +702,6 @@ const UpdateCompanyModel = ({
                     value={formData.bankingInformationBankAddress}
                     onChange={handleChange}
                     className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                    required
                   />
                 </div>
               </div>
@@ -726,7 +722,6 @@ const UpdateCompanyModel = ({
                     >
                       Billing / Finance Department
                     </label>
-                    <span className="text-red-600">*</span>
                   </div>
                   <input
                     type="text"
@@ -737,7 +732,6 @@ const UpdateCompanyModel = ({
                     }
                     onChange={handleChange}
                     className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                    required
                   />
                 </div>
                 {/*     Procurement/Purchasing Contact*/}
@@ -749,7 +743,6 @@ const UpdateCompanyModel = ({
                     >
                       Procurement/Purchasing Contact
                     </label>
-                    <span className="text-red-600">*</span>
                   </div>
                   <input
                     type="text"
@@ -760,7 +753,6 @@ const UpdateCompanyModel = ({
                     }
                     onChange={handleChange}
                     className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                    required
                   />
                 </div>
 
@@ -773,7 +765,6 @@ const UpdateCompanyModel = ({
                     >
                       Primary Contact for the Project
                     </label>
-                    <span className="text-red-600">*</span>
                   </div>
                   <input
                     type="text"
@@ -784,7 +775,6 @@ const UpdateCompanyModel = ({
                     }
                     onChange={handleChange}
                     className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                    required
                   />
                 </div>
               </div>

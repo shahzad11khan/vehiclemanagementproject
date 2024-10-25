@@ -23,8 +23,7 @@ const userSchema = new mongoose.Schema(
     confirmpassword: { type: String, default: "" },
     useravatar: { type: String, default: "" },
     userPublicId: { type: String, default: "" },
-    passwordExpires: { type: Date, default: null }, // Use Date type for date fields
-    passwordExpires: { type: Date, default: null }, // Use Date type for date fields
+    passwordExpires: { type: String, default: "" }, // Use Date type for date fields
     // passwordExpiresEvery: { type: Number, default: null }, // Assuming this is a numeric value
     companyname: { type: String, default: "", trim: true }, // Set a default or handle appropriately
     CreatedBy: { type: String, default: "" },

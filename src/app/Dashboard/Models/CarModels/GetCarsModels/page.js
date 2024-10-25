@@ -11,7 +11,7 @@ import UpdateCarModel from "../UpdateCarModel/UpdateCarModel";
 import axios from "axios";
 import { API_URL_CarModel } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import { GetCarModel } from "@/app/Dashboard/Components/ApiUrl/ShowApiDatas/ShowApiDatas";
-import { getCompanyName } from "@/utils/storageUtils";
+import { getCompanyName, getsuperadmincompanyname } from "@/utils/storageUtils";
 
 const Page = () => {
   const [data, setData] = useState([]);
@@ -21,13 +21,14 @@ const Page = () => {
   const [isOpenBadge, setIsOpenBadge] = useState(false);
   const [selectedCompanyName, setSelectedCompanyName] = useState("");
   const [selectedUserId, setSelectedUserId] = useState(null);
-  const [isOpenVehicleUpdate, setIsOpenVehcleUpdate] = useState(false);
+  const [isOpenVehicleUpdate, setIsOpenVehicleUpdate] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const recordsPerPage = 10;
 
   useEffect(() => {
     setIsMounted(true);
     const companyNameFromStorage =
-      getCompanyName() || localStorage.getItem("companyname");
-    console.log(companyNameFromStorage);
+      getCompanyName() || getsuperadmincompanyname();
     if (companyNameFromStorage) {
       setSelectedCompanyName(companyNameFromStorage);
     }
@@ -35,11 +36,9 @@ const Page = () => {
 
   const fetchData = async () => {
     try {
-      GetCarModel().then(({ result }) => {
-        console.log(result);
-        setData(result);
-        setFilteredData(result);
-      });
+      const { result } = await GetCarModel();
+      setData(result);
+      setFilteredData(result);
     } catch (error) {
       console.error("Error fetching data:", error);
       setData([]);
@@ -51,17 +50,12 @@ const Page = () => {
   }, []);
 
   const handleDelete = async (id) => {
-    console.log("Deleting ID:", id);
     try {
       const response = await axios.delete(`${API_URL_CarModel}/${id}`);
       const { data } = response;
-      console.log("Response Data:", data);
       if (data.status === 200) {
         setData((prevData) => prevData.filter((item) => item._id !== id));
-        setFilteredData((prevFilteredData) =>
-          prevFilteredData.filter((item) => item._id !== id)
-        );
-        toast.success(data.message || "Badge deleted successfully.");
+        toast.success(data.message || "CarModel deleted successfully.");
       } else {
         toast.warn(data.message || "Failed to delete the Badge.");
       }
@@ -94,12 +88,20 @@ const Page = () => {
 
   const handleEdit = (id) => {
     setSelectedUserId(id);
-    setIsOpenVehcleUpdate(true);
+    setIsOpenVehicleUpdate(true);
   };
 
   const OpenVehicleUpdateModle = () => {
-    setIsOpenVehcleUpdate(!isOpenVehicleUpdate);
+    setIsOpenVehicleUpdate(!isOpenVehicleUpdate);
   };
+
+  const totalPages = Math.ceil(filteredData.length / recordsPerPage);
+  const startIndex = (currentPage - 1) * recordsPerPage;
+  const currentRecords = filteredData.slice(
+    startIndex,
+    startIndex + recordsPerPage
+  );
+
   if (!isMounted) {
     return null;
   }
@@ -109,26 +111,22 @@ const Page = () => {
       <Header className="min-w-full" />
       <div className="flex gap-4">
         <Sidebar />
-        <div className="container mx-auto p-4 ">
+        <div className="container mx-auto p-4">
           <div className="justify-between mx-auto items-center border-2 mt-3 w-full">
             <div className="flex justify-between">
-              <div className="justify-start">
-                <input
-                  type="text"
-                  placeholder="Search by title"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="border rounded px-4 py-2 w-64"
-                />
-              </div>
-              <div className="justify-end">
-                <button
-                  onClick={OpenBadgeModle}
-                  className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-                >
-                  Add New Car Model
-                </button>
-              </div>
+              <input
+                type="text"
+                placeholder="Search"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="border rounded px-4 py-2 w-64"
+              />
+              <button
+                onClick={OpenBadgeModle}
+                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+              >
+                Add New Car Model
+              </button>
             </div>
 
             <div className="overflow-x-auto">
@@ -137,9 +135,6 @@ const Page = () => {
                   <tr>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Car Model
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Car Description
                     </th>
 
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -151,13 +146,10 @@ const Page = () => {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {filteredData.map((item) => (
+                  {currentRecords.map((item) => (
                     <tr key={item._id}>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                         {item.name}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {item.description}
                       </td>
 
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
@@ -181,6 +173,34 @@ const Page = () => {
                   ))}
                 </tbody>
               </table>
+            </div>
+
+            <div className="flex justify-center text-center mt-4">
+              <button
+                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+                className="px-3 py-1 mx-1 rounded bg-gray-200 hover:bg-gray-300 disabled:opacity-50"
+              >
+                Previous
+              </button>
+              <span
+                className={`px-3 py-1 mx-1 rounded ${
+                  currentPage
+                    ? "bg-blue-300 text-white"
+                    : "bg-gray-100 hover:bg-gray-300"
+                }`}
+              >
+                {currentPage} of {totalPages}
+              </span>
+              <button
+                onClick={() =>
+                  setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                }
+                disabled={currentPage === totalPages}
+                className="px-3 py-1 mx-1 rounded bg-gray-200 hover:bg-gray-300 disabled:opacity-50"
+              >
+                Next
+              </button>
             </div>
           </div>
         </div>

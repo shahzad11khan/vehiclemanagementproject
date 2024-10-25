@@ -14,37 +14,32 @@ import UpdateCompanyModel from "../UpdateCompany/UpdateCompanyModel";
 
 const Page = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [data, setData] = useState([]); // State to hold fetched data
+  const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [isOpenCompany, setIsOpenCompany] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [isOpenDriverUpdate, setIsOpenDriverUpdate] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
-  // Fetch data from API
   const fetchData = async () => {
     try {
-      GetCompany().then(({ result }) => {
-        setData(result); // Set the fetched data
-        setFilteredData(result);
-      });
+      const { result } = await GetCompany();
+      setData(result);
+      setFilteredData(result);
     } catch (error) {
       console.error("Error fetching data:", error);
-      setData([]); // Reset data to an empty array on error
+      setData([]);
     }
   };
 
-  // Delete data from API
   const handleDelete = async (id) => {
     try {
-      const response = await axios.delete(`${API_URL_Company}/${id}`);
-
-      const data = response.data;
-
+      const { data } = await axios.delete(`${API_URL_Company}/${id}`);
       if (data.success) {
-        setData((prevData) => prevData.filter((item) => item._id !== id));
-        setFilteredData((prevFilteredData) =>
-          prevFilteredData.filter((item) => item._id !== id)
-        );
+        const updatedData = data.filter((item) => item._id !== id);
+        setData(updatedData);
+        setFilteredData(updatedData);
         toast.success(data.message);
       } else {
         toast.warn(data.message);
@@ -59,33 +54,39 @@ const Page = () => {
   }, []);
 
   useEffect(() => {
-    const filtered = data.filter((item) =>
-      item?.email?.toLowerCase().includes(searchTerm.toLowerCase())
+    setFilteredData(
+      data.filter((item) =>
+        item?.email?.toLowerCase().includes(searchTerm.toLowerCase())
+      )
     );
-    setFilteredData(filtered);
+    setCurrentPage(1); // Reset to first page on new search
   }, [searchTerm, data]);
 
   const handleEdit = (id) => {
-    setSelectedUserId(id); // Store the selected company ID
-    setIsOpenDriverUpdate(true); // Open the modal
+    setSelectedUserId(id);
+    setIsOpenDriverUpdate(true);
   };
 
-  const OpenCompanyModle = () => {
-    setIsOpenCompany(!isOpenCompany);
-  };
-  const OpenDriverUpdateModle = () => {
+  const OpenCompanyModle = () => setIsOpenCompany(!isOpenCompany);
+  const OpenDriverUpdateModle = () =>
     setIsOpenDriverUpdate(!isOpenDriverUpdate);
-  };
+
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+  const paginatedData = filteredData.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  const handlePageChange = (newPage) => setCurrentPage(newPage);
 
   return (
     <>
       <Header className="min-w-full" />
       <div className="flex gap-4">
         <Sidebar />
-        <div className="container mx-auto p-4 ">
+        <div className="container mx-auto p-4">
           <div className="border-2 mt-3 w-full">
             <div className="flex justify-between p-4">
-              {/* Search Input */}
               <div>
                 <input
                   type="text"
@@ -95,7 +96,6 @@ const Page = () => {
                   className="border rounded px-4 py-2 w-64"
                 />
               </div>
-              {/* Add Company Button */}
               <div>
                 <button
                   onClick={OpenCompanyModle}
@@ -106,7 +106,6 @@ const Page = () => {
               </div>
             </div>
 
-            {/* Responsive Table */}
             <div className="overflow-x-auto">
               <table className="min-w-full bg-white border">
                 <thead>
@@ -120,7 +119,7 @@ const Page = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredData.map((item) => (
+                  {paginatedData.map((item) => (
                     <tr key={item._id} className="border-b">
                       <td className="py-3 px-4">{item.CompanyName}</td>
                       <td className="py-3 px-4">{item.email}</td>
@@ -155,6 +154,37 @@ const Page = () => {
                   ))}
                 </tbody>
               </table>
+            </div>
+
+            {/* Pagination Controls */}
+            <div className="flex justify-center mt-4">
+              <button
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+                className="px-3 py-1 mx-1 rounded bg-gray-200 hover:bg-gray-300 disabled:opacity-50"
+              >
+                Prev
+              </button>
+              {Array.from({ length: totalPages }, (_, i) => (
+                <button
+                  key={i + 1}
+                  onClick={() => handlePageChange(i + 1)}
+                  className={`px-3 py-1 mx-1 rounded ${
+                    currentPage === i + 1
+                      ? "bg-blue-300 text-white"
+                      : "bg-gray-100 hover:bg-gray-300"
+                  }`}
+                >
+                  {i + 1}
+                </button>
+              ))}
+              <button
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPages}
+                className="px-3 py-1 mx-1 rounded bg-gray-200 hover:bg-gray-300 disabled:opacity-50"
+              >
+                Next
+              </button>
             </div>
           </div>
         </div>

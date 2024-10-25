@@ -3,6 +3,8 @@ import { API_URL_CarModel } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import { getCompanyName, getsuperadmincompanyname } from "@/utils/storageUtils";
+
 const AddCarModel = ({ isOpen, onClose, fetchData }) => {
   const [formData, setFormData] = useState({
     name: "",
@@ -13,12 +15,9 @@ const AddCarModel = ({ isOpen, onClose, fetchData }) => {
   });
 
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(false);
+
   useEffect(() => {
-    const storedCompanyName =
-      localStorage.getItem("companyName") ||
-      localStorage.getItem("companyname");
+    const storedCompanyName = getCompanyName() || getsuperadmincompanyname();
     if (storedCompanyName) {
       setFormData((prevData) => ({
         ...prevData,
@@ -26,6 +25,7 @@ const AddCarModel = ({ isOpen, onClose, fetchData }) => {
       }));
     }
   }, []);
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData({
@@ -37,13 +37,9 @@ const AddCarModel = ({ isOpen, onClose, fetchData }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError(null);
 
     try {
       const response = await axios.post(`${API_URL_CarModel}`, formData);
-
-      console.log(response);
-
       if (response.data.success) {
         setFormData({
           name: "",
@@ -52,15 +48,14 @@ const AddCarModel = ({ isOpen, onClose, fetchData }) => {
           adminCreatedBy: "",
           adminCompanyName: formData.adminCompanyName,
         });
-        toast.success("data successfully saved");
-        setSuccess(true);
+        toast.success(response.data.message);
         fetchData();
         onClose();
       } else {
         toast.warn(response.data.error);
       }
     } catch (err) {
-      setError(err.response?.data?.message || "Failed to add badge");
+      console.log(err.response?.data?.message || "Failed to add CarModel");
     } finally {
       setLoading(false);
     }
@@ -74,9 +69,6 @@ const AddCarModel = ({ isOpen, onClose, fetchData }) => {
         <h2 className="text-3xl font-semibold text-center mb-8">
           Add New Car Model
         </h2>
-
-        {error && <p className="text-red-600">{error}</p>}
-        {success && <p className="text-green-600">Badge added successfully!</p>}
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -141,7 +133,13 @@ const AddCarModel = ({ isOpen, onClose, fetchData }) => {
               className="px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50"
               disabled={loading}
             >
-              {loading ? "Submitting..." : "Submit"}
+              {loading ? (
+                <div className="flex items-center">
+                  <div className="spinner-border animate-spin inline-block w-4 h-4 border-4 border-current rounded-full border-t-transparent mr-2"></div>
+                </div>
+              ) : (
+                "Submit"
+              )}
             </button>
             <button
               type="button"

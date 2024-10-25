@@ -4,6 +4,9 @@
 export const getCompanyName = () => {
   return localStorage.getItem("companyName");
 };
+export const getsuperadmincompanyname = () => {
+  return localStorage.getItem("companyname");
+};
 export const getUserId = () => {
   return localStorage.getItem("userId");
 };

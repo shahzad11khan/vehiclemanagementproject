@@ -52,10 +52,10 @@ const Sidebar = () => {
   };
 
   const handleCardClick = () => {
+    window.location.reload();
     localStorage.setItem("flag", "false");
     localStorage.setItem("Iscompanyselected", "No");
     localStorage.removeItem("companyName");
-    window.location.reload();
   };
   return (
     <div className="relative ">
@@ -157,7 +157,7 @@ const Sidebar = () => {
                   </li>
                 </Link>
 
-                {/* <Link passHref href="/Dashboard/Title/GetAllTitles">
+                <Link passHref href="/Dashboard/Title/GetAllTitles">
                   <li
                     onClick={() =>
                       handleLinkClick("/Dashboard/Title/GetAllTitles")
@@ -179,7 +179,7 @@ const Sidebar = () => {
                       <span className="hidden sm:block text-sm">System</span>
                     </div>
                   </li>
-                </Link> */}
+                </Link>
 
                 <Link passHref href={"/Dashboard/Users/GetAllusers"}>
                   <li
@@ -372,7 +372,7 @@ const Sidebar = () => {
                   </li>
                 </Link>
 
-                <Link passHref href="/Dashboard/Title/GetAllTitles">
+                {/* <Link passHref href="/Dashboard/Title/GetAllTitles">
                   <li
                     onClick={() =>
                       handleLinkClick("/Dashboard/Title/GetAllTitles")
@@ -394,7 +394,7 @@ const Sidebar = () => {
                       <span className="hidden sm:block text-sm">System</span>
                     </div>
                   </li>
-                </Link>
+                </Link> */}
 
                 <Link passHref href={"/Dashboard/Users/GetAllusers"}>
                   <li
@@ -785,7 +785,7 @@ const Sidebar = () => {
             ) : (
               <>
                 {" "}
-                <Link passHref href="/Dashboard/Title/GetAllTitles">
+                {/* <Link passHref href="/Dashboard/Title/GetAllTitles">
                   <li
                     onClick={() =>
                       handleLinkClick("/Dashboard/Title/GetAllTitles")
@@ -807,7 +807,7 @@ const Sidebar = () => {
                       <span className="hidden sm:block text-sm">System</span>
                     </div>
                   </li>
-                </Link>
+                </Link> */}
                 <Link passHref href={"/Dashboard/Users/GetAllusers"}>
                   <li
                     onClick={() =>

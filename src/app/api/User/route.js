@@ -18,9 +18,9 @@ export async function POST(request) {
 
     // Upload files to Cloudinary
     if (!file1) {
-      Driveravatar =
-        "https://res.cloudinary.com/your-cloud-name/image/upload/v1234567890/default-vehicle-image.jpg";
-      DriveravatarId = "123456789";
+      useravatar =
+        "https://static.vecteezy.com/system/resources/thumbnails/000/439/863/small/Basic_Ui__28186_29.jpg";
+      useravatarId = "123456789";
     } else {
       // Set a dummy `imageId` for the default image}else{
       try {
@@ -47,9 +47,9 @@ export async function POST(request) {
         useravatar = uploadResponse1.secure_url; // Cloudinary URL for display image
         useravatarId = uploadResponse1.public_id;
       } catch (error) {
-        Driveravatar =
-          "https://res.cloudinary.com/your-cloud-name/image/upload/v1234567890/default-vehicle-image.jpg";
-        DriveravatarId = "123456789"; // Set a dummy `imageId` for the default image
+        useravatar =
+          "https://static.vecteezy.com/system/resources/thumbnails/000/439/863/small/Basic_Ui__28186_29.jpg";
+        useravatarId = "123456789";
       }
     }
     // Constructing formDataObject excluding the files

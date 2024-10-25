@@ -10,17 +10,15 @@ import AddUserModel from "../AddUser/AddUserModel";
 import UpdateUserModel from "../UpdateUser/UpdateUserModel";
 import axios from "axios";
 import { API_URL_USER } from "../../Components/ApiUrl/ApiUrls";
-import { getCompanyName } from "@/utils/storageUtils";
+import { getCompanyName, getsuperadmincompanyname } from "@/utils/storageUtils";
 
 const Page = () => {
   const columns = [
     "Username",
     "Email",
-    // "Company Name",
     "User Avatar",
     "User Active",
     "Role",
-    // "Created By",
     "Actions",
   ];
 
@@ -32,11 +30,13 @@ const Page = () => {
   const [isOpenUserUpdate, setIsOpenUserUpdate] = useState(false);
   const [selectedCompanyName, setSelectedCompanyName] = useState("");
   const [selectedUserId, setSelectedUserId] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(10);
 
   useEffect(() => {
     setIsMounted(true);
-    const companyNameFromStorage = getCompanyName();
-
+    const companyNameFromStorage =
+      getCompanyName() || getsuperadmincompanyname();
     if (companyNameFromStorage) {
       setSelectedCompanyName(companyNameFromStorage);
     }
@@ -65,7 +65,6 @@ const Page = () => {
     try {
       const response = await axios.delete(`${API_URL_USER}/${id}`);
       const data = response.data;
-
       if (data.success) {
         setUsers((prevData) => prevData.filter((item) => item._id !== id));
         setFilteredData((prevFilteredData) =>
@@ -82,20 +81,15 @@ const Page = () => {
 
   useEffect(() => {
     const filtered = users.filter((item) => {
-      let companyMatch = ""; // Change `const` to `let` to allow reassignment
-
-      // Check if item exists, has companyname, and matches the selectedCompanyName
-      companyMatch =
+      let companyMatch =
         item &&
         item.companyname &&
         selectedCompanyName &&
         item.companyname.toLowerCase() === selectedCompanyName.toLowerCase();
-
       const usernameMatch =
         item &&
         item.username &&
         item.username.toLowerCase().includes(searchTerm.toLowerCase());
-
       return companyMatch && usernameMatch;
     });
     setFilteredData(filtered);
@@ -108,6 +102,11 @@ const Page = () => {
   const OpenUserUpdateModle = () => {
     setIsOpenUserUpdate(!isOpenUserUpdate);
   };
+
+  const indexOfLastUser = currentPage * itemsPerPage;
+  const indexOfFirstUser = indexOfLastUser - itemsPerPage;
+  const currentUsers = filteredData.slice(indexOfFirstUser, indexOfLastUser);
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
   if (!isMounted) {
     return null;
@@ -140,7 +139,7 @@ const Page = () => {
               </div>
             </div>
             <div className="w-full overflow-x-auto mt-4 ">
-              <table className="w-11/12 border-collapse border border-gray-200 overflow-x-scroll">
+              <table className="w-full border-collapse border border-gray-200 overflow-x-scroll">
                 <thead>
                   <tr className="bg-gray-200">
                     {columns.map((column, index) => (
@@ -154,11 +153,10 @@ const Page = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredData.map((user) => (
+                  {currentUsers.map((user) => (
                     <tr key={user._id} className="hover:bg-gray-100">
                       <td className="py-2 px-4 border-b">{user.username}</td>
                       <td className="py-2 px-4 border-b">{user.email}</td>
-                      {/* <td className="py-2 px-4 border-b">{user.companyname}</td> */}
                       <td className="py-2 px-4 border-b">
                         <img
                           src={user.useravatar}
@@ -180,9 +178,6 @@ const Page = () => {
                         )}
                       </td>
                       <td className="py-2 px-4 border-b">{user.role}</td>
-                      {/* <td className="py-2 px-4 border-b">
-                        {user.adminCreatedBy || "By Self"}
-                      </td> */}
                       <td className="py-2 px-4 border-b">
                         <div className="flex gap-2">
                           <button
@@ -203,6 +198,33 @@ const Page = () => {
                   ))}
                 </tbody>
               </table>
+            </div>
+            <div className="flex justify-center mt-4">
+              <button
+                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+                className="bg-gray-200 text-gray-600 px-4 py-2 rounded-l hover:bg-gray-300"
+              >
+                Previous
+              </button>
+              <span
+                className={`px-3 py-1 mx-1 rounded ${
+                  currentPage
+                    ? "bg-blue-300 text-white"
+                    : "bg-gray-100 hover:bg-gray-300"
+                }`}
+              >
+                {currentPage} of {totalPages}
+              </span>
+              <button
+                onClick={() =>
+                  setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                }
+                disabled={currentPage === totalPages}
+                className="bg-gray-200 text-gray-600 px-4 py-2 rounded-r hover:bg-gray-300"
+              >
+                Next
+              </button>
             </div>
           </div>
         </div>

@@ -2,9 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { FaTrash } from "react-icons/fa";
-
 import Header from "../../Components/Header";
 import Sidebar from "../../Components/Sidebar";
 import AddTitleModel from "../AddTitle/AddTitleModel";
@@ -15,47 +13,39 @@ import axios from "axios";
 
 const Page = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [isMounted, setIsMounted] = useState(false);
-  const [data, setData] = useState([]); // State to hold fetched data
+  const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [isOpenTitle, setIsOpenTitle] = useState(false);
   const [selectedCompanyName, setSelectedCompanyName] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const recordsPerPage = 10;
 
   useEffect(() => {
-    setIsMounted(true);
-    const companyNameFromStorage = getCompanyName(); // Get company name from localStorage
+    const companyNameFromStorage = getCompanyName() || "superadmin";
     if (companyNameFromStorage) {
-      setSelectedCompanyName(companyNameFromStorage); // Set the selected company name
+      setSelectedCompanyName(companyNameFromStorage);
     }
   }, []);
 
-  // Fetch data from API
   const fetchData = async () => {
     try {
-      const { result } = await GetTitle(); // Fetch titles
-      setData(result); // Set the fetched data
-      setFilteredData(result); // Initialize filtered data
+      const { result } = await GetTitle();
+      setData(result);
+      setFilteredData(result);
     } catch (error) {
       console.error("Error fetching data:", error);
-      setData([]); // Reset data to an empty array on error
+      setData([]);
     }
   };
 
-  // Handle deletion of a title
   const handleDelete = async (id) => {
     try {
       const response = await axios.delete(`${API_URL_Title}/${id}`);
-      const { success, message } = response.data;
-
-      if (success) {
-        // Remove the deleted item from state
-        setData((prevData) => prevData.filter((item) => item._id !== id));
-        setFilteredData((prevFilteredData) =>
-          prevFilteredData.filter((item) => item._id !== id)
-        );
-        toast.success(message);
+      if (response.data.success) {
+        setData((prev) => prev.filter((item) => item._id !== id));
+        toast.success(response.data.message);
       } else {
-        toast.warn(message);
+        toast.warn(response.data.message);
       }
     } catch (error) {
       console.error("Error deleting title:", error);
@@ -64,40 +54,36 @@ const Page = () => {
   };
 
   useEffect(() => {
-    fetchData(); // Fetch data on component mount
+    fetchData();
   }, []);
 
-  // Filter data based on search term and selected company
   useEffect(() => {
-    const filtered = data.filter((item) => {
-      const companyMatch =
-        item.adminCompanyName &&
-        selectedCompanyName &&
-        item.adminCompanyName.toLowerCase() ===
-          selectedCompanyName.toLowerCase();
-
-      const usernameMatch =
-        item.name && item.name.toLowerCase().includes(searchTerm.toLowerCase());
-
-      return companyMatch && usernameMatch;
-    });
-    setFilteredData(filtered); // Update filtered data state
+    const filtered = data.filter(
+      (item) =>
+        item.adminCompanyName?.toLowerCase() ===
+          selectedCompanyName.toLowerCase() &&
+        item.name?.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredData(filtered);
+    setCurrentPage(1);
   }, [searchTerm, data, selectedCompanyName]);
 
-  // Toggle the title modal
-  const toggleTitleModal = () => {
-    setIsOpenTitle((prev) => !prev);
-  };
+  const toggleTitleModal = () => setIsOpenTitle((prev) => !prev);
 
-  if (!isMounted) return null; // Render nothing until mounted
+  const totalPages = Math.ceil(filteredData.length / recordsPerPage);
+  const startIndex = (currentPage - 1) * recordsPerPage;
+  const currentRecords = filteredData.slice(
+    startIndex,
+    startIndex + recordsPerPage
+  );
 
   return (
     <>
-      <Header className="min-w-full" />
+      <Header />
       <div className="flex gap-4">
         <Sidebar />
         <div className="container mx-auto p-4">
-          <div className="justify-between items-center border-2 mt-3">
+          <div className="border-2 mt-3">
             <div className="flex justify-between">
               <input
                 type="text"
@@ -114,45 +100,64 @@ const Page = () => {
               </button>
             </div>
 
-            {/* Responsive Table */}
-            <div className="mt-4">
-              <div className="overflow-x-auto">
-                <table className="min-w-full bg-white border border-gray-200">
-                  <thead>
-                    <tr>
-                      <th className="py-2 px-4 border-b border-gray-200 text-left">
-                        Title
-                      </th>
-                      {/* <th className="py-2 px-4 border-b border-gray-200 text-left">
-                        Company
-                      </th> */}
-                      <th className="py-2 px-4 border-b border-gray-200 text-left">
-                        Actions
-                      </th>
+            <div className="mt-4 overflow-x-auto">
+              <table className="min-w-full bg-white border border-gray-200">
+                <thead>
+                  <tr>
+                    <th className="py-2 px-4 border-b border-gray-200 text-left">
+                      Title
+                    </th>
+                    <th className="py-2 px-4 border-b border-gray-200 text-left">
+                      Actions
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {currentRecords.map((row) => (
+                    <tr key={row._id} className="hover:bg-gray-100">
+                      <td className="py-2 px-4 border-b border-gray-200">
+                        {row.name}
+                      </td>
+                      <td className="py-2 px-4 border-b border-gray-200">
+                        <button
+                          onClick={() => handleDelete(row._id)}
+                          className="text-red-500 hover:text-red-700"
+                        >
+                          <FaTrash />
+                        </button>
+                      </td>
                     </tr>
-                  </thead>
-                  <tbody>
-                    {filteredData.map((row) => (
-                      <tr key={row._id} className="hover:bg-gray-100">
-                        <td className="py-2 px-4 border-b border-gray-200">
-                          {row.name}
-                        </td>
-                        {/* <td className="py-2 px-4 border-b border-gray-200">
-                          {row.adminCompanyName}
-                        </td> */}
-                        <td className="py-2 px-4 border-b border-gray-200">
-                          <button
-                            onClick={() => handleDelete(row._id)}
-                            className="text-red-500 hover:text-red-700"
-                          >
-                            <FaTrash className="text-red-500 hover:text-red-700" />
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <div className="flex justify-center text-center mt-4">
+              <button
+                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+                className="px-3 py-1 mx-1 rounded bg-gray-200 hover:bg-gray-300 disabled:opacity-50"
+              >
+                Previous
+              </button>
+              <span
+                className={`px-3 py-1 mx-1 rounded ${
+                  currentPage
+                    ? "bg-blue-300 text-white"
+                    : "bg-gray-100 hover:bg-gray-300"
+                }`}
+              >
+                {currentPage} of {totalPages}
+              </span>
+              <button
+                onClick={() =>
+                  setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                }
+                disabled={currentPage === totalPages}
+                className="px-3 py-1 mx-1 rounded bg-gray-200 hover:bg-gray-300 disabled:opacity-50"
+              >
+                Next
+              </button>
             </div>
           </div>
         </div>

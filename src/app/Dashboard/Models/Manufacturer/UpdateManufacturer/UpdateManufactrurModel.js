@@ -3,6 +3,12 @@ import { API_URL_Manufacturer } from "@/app/Dashboard/Components/ApiUrl/ApiUrls"
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import {
+  getCompanyName,
+  getsuperadmincompanyname,
+  getUserRole,
+} from "@/utils/storageUtils";
+import { fetchCarModel } from "../../../Components/DropdownData/taxiFirm/taxiFirmService";
 
 const UpdateManufacturerModel = ({
   isOpen,
@@ -13,92 +19,97 @@ const UpdateManufacturerModel = ({
   const [formData, setFormData] = useState({
     name: "",
     description: "",
+    carmodel: "",
     isActive: false,
-    adminCreatedBy: "",
     adminCompanyName: "",
   });
 
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(false);
+  const [data, setData] = useState([]);
 
-  // Retrieve company name from local storage
   useEffect(() => {
-    const storedCompanyName =
-      localStorage.getItem("companyName") ||
-      localStorage.getItem("companyname");
+    const storedCompanyName = getCompanyName() || getsuperadmincompanyname();
+
     if (storedCompanyName) {
       setFormData((prevData) => ({
         ...prevData,
         adminCompanyName: storedCompanyName,
       }));
     }
-  }, []); // Update when the manufacturer changes
-  // Fetch manufacturer data when the modal opens
-  useEffect(() => {
-    console.log(manufacturerid);
-    const fetchManufacturerData = async () => {
-      setLoading(true);
-      if (manufacturerid) {
-        try {
-          const response = await axios.get(
-            `${API_URL_Manufacturer}/${manufacturerid}`
-          );
-          console.log(response.data.result);
-          const data = response.data.result;
-          if (data) {
-            setFormData({
-              name: data.name,
-              description: data.description,
-              isActive: data.isActive,
-            });
-          } else {
-            toast.warn("Failed to fetch manufacturer data");
-          }
-        } catch (err) {
-          setError(err.response?.data?.message);
-        } finally {
-          setLoading(false);
-        }
-      }
-    };
+  }, []);
 
+  const fetchManufacturerData = async () => {
+    if (!manufacturerid) return;
+    setLoading(true);
+    try {
+      const response = await axios.get(
+        `${API_URL_Manufacturer}/${manufacturerid}`
+      );
+      const data = response.data.result;
+      if (data) {
+        setFormData({
+          name: data.name,
+          carmodel: data.carmodel,
+          description: data.description,
+          isActive: data.isActive,
+        });
+      } else {
+        toast.warn("Failed to fetch manufacturer data");
+      }
+
+      const title = await fetchCarModel();
+      const role = getUserRole();
+      console.log(title);
+      const filteredTaxiFirms =
+        role === "superadmin"
+          ? title.result
+          : title.result.filter((firm) => firm.adminCompanyName === stored);
+
+      setData(filteredTaxiFirms);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
     fetchManufacturerData();
   }, [manufacturerid]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData({
-      ...formData,
+    setFormData((prevData) => ({
+      ...prevData,
       [name]: type === "checkbox" ? checked : value,
-    });
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError(null);
     try {
-      // Use PUT for updating an existing manufacturer
       const response = await axios.put(
         `${API_URL_Manufacturer}/${manufacturerid}`,
         formData
       );
-      console.log(response);
-      setFormData({
-        name: "",
-        description: "",
-        isActive: false,
-        adminCreatedBy: "",
-        adminCompanyName: "",
-      });
-
-      toast.success("Data successfully updated");
-      setSuccess(true);
-      onClose();
-      fetchData();
+      // console.log(response.data);
+      if (response.data.success) {
+        toast.success(response.data.message);
+        setFormData({
+          name: "",
+          description: "",
+          isActive: false,
+          adminCompanyName: "",
+        });
+        onClose();
+        fetchData();
+      } else {
+        toast.success(response.data.error);
+      }
     } catch (err) {
-      setError(err.response?.data?.message || "Failed to update manufacturer");
+      console.log(
+        err.response?.data?.message || "Failed to update manufacturer"
+      );
     } finally {
       setLoading(false);
     }
@@ -110,23 +121,20 @@ const UpdateManufacturerModel = ({
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
       <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-xl">
         <h2 className="text-3xl font-semibold text-center mb-8">
-          Update Manufacturer
+          Add Manufacturer
         </h2>
-
-        {error && <p className="text-red-600">{error}</p>}
-        {success && (
-          <p className="text-green-600">Manufacturer updated successfully!</p>
-        )}
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            {/* Name */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-6">
             <div className="col-span-2">
-              <label
-                htmlFor="name"
-                className="text-sm font-medium text-gray-700"
-              >
-                Name:
-              </label>
+              <div className="flex gap-1">
+                <label
+                  htmlFor="name"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Name:
+                </label>
+                <span className="text-red-600">*</span>
+              </div>
               <input
                 type="text"
                 id="name"
@@ -137,52 +145,70 @@ const UpdateManufacturerModel = ({
                 required
               />
             </div>
-
-            {/* Description */}
-            <div className="col-span-2">
-              <label
-                htmlFor="description"
-                className="text-sm font-medium text-gray-700"
-              >
-                Description:
-              </label>
-              <textarea
-                id="description"
-                name="description"
-                value={formData.description}
+            <div>
+              <div className="flex gap-1">
+                <label
+                  htmlFor="carmodel"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Model:
+                </label>
+              </div>
+              <select
+                id="carmodel"
+                name="carmodel"
+                value={formData.carmodel}
                 onChange={handleChange}
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                rows="3"
-              ></textarea>
-            </div>
-
-            {/* IsActive */}
-            <div className="col-span-2 flex items-center">
-              <input
-                type="checkbox"
-                id="isActive"
-                name="isActive"
-                checked={formData.isActive}
-                onChange={handleChange}
-                className="mr-2 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-              />
-              <label
-                htmlFor="isActive"
-                className="text-sm font-medium text-gray-700"
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
               >
-                IsActive
-              </label>
+                <option value="">Select Model</option>
+                {data.map((title) => (
+                  <option key={title._id} value={title.name}>
+                    {title.name}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
-
-          {/* Button Group */}
+          <div className="w-full">
+            <label
+              htmlFor="description"
+              className="text-sm font-medium text-gray-700"
+            >
+              Description:
+            </label>
+            <textarea
+              id="description"
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+              className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+              rows="3"
+            ></textarea>
+          </div>
+          <div className="col-span-2 flex items-center">
+            <input
+              type="checkbox"
+              id="isActive"
+              name="isActive"
+              checked={formData.isActive}
+              onChange={handleChange}
+              className="mr-2 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+            />
+            <label
+              htmlFor="isActive"
+              className="text-sm font-medium text-gray-700"
+            >
+              IsActive
+            </label>
+          </div>
           <div className="flex gap-4 justify-center">
             <button
               type="submit"
               className="px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50"
               disabled={loading}
             >
-              {loading ? "Submitting..." : "Update"}
+              {loading ? "Submitting..." : "Submit"}
             </button>
             <button
               type="button"

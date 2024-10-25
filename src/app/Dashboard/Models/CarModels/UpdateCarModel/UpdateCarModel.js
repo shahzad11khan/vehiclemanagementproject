@@ -3,6 +3,7 @@ import { API_URL_CarModel } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import { getCompanyName, getsuperadmincompanyname } from "@/utils/storageUtils";
 
 const UpdateCarModel = ({ isOpen, onClose, fetchData, updateid }) => {
   const [formData, setFormData] = useState({
@@ -14,12 +15,9 @@ const UpdateCarModel = ({ isOpen, onClose, fetchData, updateid }) => {
   });
 
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(false);
+
   useEffect(() => {
-    const storedCompanyName =
-      localStorage.getItem("companyName") ||
-      localStorage.getItem("companyname");
+    const storedCompanyName = getCompanyName() || getsuperadmincompanyname();
     if (storedCompanyName) {
       setFormData((prevData) => ({
         ...prevData,
@@ -27,14 +25,13 @@ const UpdateCarModel = ({ isOpen, onClose, fetchData, updateid }) => {
       }));
     }
   }, []);
+
   useEffect(() => {
-    console.log(updateid);
     const fetchManufacturerData = async () => {
-      setLoading(true);
       if (updateid) {
+        setLoading(true);
         try {
           const response = await axios.get(`${API_URL_CarModel}/${updateid}`);
-          console.log(response.data.result);
           const data = response.data.result;
           if (data) {
             setFormData({
@@ -43,11 +40,11 @@ const UpdateCarModel = ({ isOpen, onClose, fetchData, updateid }) => {
               isActive: data.isActive,
             });
           } else {
-            toast.warn("Failed to fetch manufacturer data");
+            toast.warn("Failed to fetch CarModel data");
           }
         } catch (err) {
-          setError(
-            err.response?.data?.message || "Failed to fetch manufacturer data"
+          console.log(
+            err.response?.data?.message || "Failed to fetch CarModel data"
           );
         } finally {
           setLoading(false);
@@ -69,27 +66,27 @@ const UpdateCarModel = ({ isOpen, onClose, fetchData, updateid }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError(null);
     try {
       const response = await axios.put(
-        `${API_URL_Badge}/${updateid}`,
+        `${API_URL_CarModel}/${updateid}`,
         formData
       );
-      console.log(response);
-      setFormData({
-        name: "",
-        description: "",
-        isActive: false,
-        adminCreatedBy: "",
-        adminCompanyName: "",
-      });
-
-      toast.success("Data successfully updated");
-      setSuccess(true);
-      onClose();
-      fetchData();
+      if (response.data.message) {
+        setFormData({
+          name: "",
+          description: "",
+          isActive: false,
+          adminCreatedBy: "",
+          adminCompanyName: "",
+        });
+        toast.success(response.data.message);
+        onClose();
+        fetchData();
+      } else {
+        toast.warn(response.data.warn);
+      }
     } catch (err) {
-      setError(err.response?.data?.message || "Failed to update");
+      console.log(err.response?.data?.message || "Failed to update");
     } finally {
       setLoading(false);
     }
@@ -101,13 +98,8 @@ const UpdateCarModel = ({ isOpen, onClose, fetchData, updateid }) => {
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
       <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-xl">
         <h2 className="text-3xl font-semibold text-center mb-8">
-          Update Badge
+          Update Car Model
         </h2>
-
-        {error && <p className="text-red-600">{error}</p>}
-        {success && (
-          <p className="text-green-600">Badge updated successfully!</p>
-        )}
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div className="col-span-2">
@@ -140,7 +132,6 @@ const UpdateCarModel = ({ isOpen, onClose, fetchData, updateid }) => {
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
                 rows="3"
-                required
               ></textarea>
             </div>
             <div className="col-span-2 flex items-center">

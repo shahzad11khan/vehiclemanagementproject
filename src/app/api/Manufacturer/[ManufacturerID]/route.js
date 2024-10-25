@@ -14,7 +14,7 @@ export const PUT = async (request, context) => {
     console.log(data);
 
     // Destructure the necessary fields
-    const { name, description, isActive } = data;
+    const { name, description, isActive, carmodel } = data;
 
     // Find the manufacturer by ID
     const manufacturer = await Manufecturer.findById({ _id: id });
@@ -42,6 +42,7 @@ export const PUT = async (request, context) => {
       message: "Manufacturer details updated successfully",
       manufacturer, // Return the updated manufacturer object
       status: 200,
+      success: true,
     });
   } catch (error) {
     console.error("Error updating manufacturer:", error);

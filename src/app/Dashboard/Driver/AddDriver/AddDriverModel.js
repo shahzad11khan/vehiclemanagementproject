@@ -659,7 +659,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                   required
                 />
               </div>
-              {/* <div>
+              <div>
                 <div className="flex gap-1">
                   <label
                     htmlFor="taxiBadgeDate"
@@ -679,7 +679,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
                   required
                 />
-              </div> */}
+              </div>
               {/* <div>
                 <div className="flex gap-1">
                   <label

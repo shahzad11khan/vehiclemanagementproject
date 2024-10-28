@@ -441,9 +441,9 @@ const Page = () => {
                     <th className="border border-gray-200 px-4 py-2">
                       Date Of Birth
                     </th>
-                    <th className="border border-gray-200 px-4 py-2">
+                    {/* <th className="border border-gray-200 px-4 py-2">
                       Start Date
-                    </th>
+                    </th> */}
                     <th className="border border-gray-200 px-4 py-2">
                       Actions
                     </th>
@@ -464,7 +464,7 @@ const Page = () => {
                       {/* <td className="p-3">{driver.rentPaymentCycle}</td> */}
                       {/* <td className="p-3">£ {driver.pay}</td> */}
                       <td className="p-3">{formatDate(driver.dateOfBirth)}</td>
-                      <td className="p-3">{formatDate(driver.startDate)}</td>
+                      {/* <td className="p-3">{formatDate(driver.startDate)}</td> */}
                       <td className="p-3">
                         <div className="flex gap-2">
                           {/* <button className="text-blue-500 hover:text-blue-700">

@@ -21,7 +21,6 @@ const AddDriverMoreInfoModal = ({
   const [formData, setFormData] = useState({
     driverId: "",
     driverName: "",
-    taxibadgedate: "",
     startDate: "",
     taxifirm: "",
     taxilocalauthority: "",
@@ -39,6 +38,7 @@ const AddDriverMoreInfoModal = ({
   const [vehicle, setVehicle] = useState([]);
   const [filteredVehicles, setFilteredVehicles] = useState([]);
   const [superadmin, setSuperadmin] = useState(null);
+  const [selectedvehicle, setselectedvehicle] = useState(null);
 
   useEffect(() => {
     const storedCompanyName = localStorage.getItem("companyName");
@@ -155,7 +155,8 @@ const AddDriverMoreInfoModal = ({
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    // console.log(formData);
+    console.log(selectedvehicle);
+    console.log(formData);
     // try {
     //   // update once again
     //   const formDataToSend = new FormData();
@@ -403,7 +404,6 @@ const AddDriverMoreInfoModal = ({
                 value={formData.payment}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
                 placeholder="In £"
-                readOnly
               />
             </div>
           </div>

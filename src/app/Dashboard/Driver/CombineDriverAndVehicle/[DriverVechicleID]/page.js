@@ -5,11 +5,13 @@ import Header from "../../../Components/Header";
 import Sidebar from "../../../Components/Sidebar";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { IoIosInformationCircle } from "react-icons/io";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import AddDriverAndVehicleModel from "../AddDriverAndVehicleModel/AddDriverAndVehicleModel";
 import UpdateCombineDriverAndVehicle from "../UpdateCombineDriverAndVehicle/UpdateCombineDriverAndVehicle";
 import { API_URL_Driver_Vehicle_Allotment } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import { getCompanyName } from "@/utils/storageUtils";
+import Link from "next/link";
 
 const Page = ({ params }) => {
   const id = params.DriverVechicleID;
@@ -184,19 +186,29 @@ const Page = ({ params }) => {
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         {item.isActive ? "Active" : "Inactive"}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <button
-                          onClick={() => handleEdit(item._id)}
-                          className="text-blue-500 hover:text-blue-700"
-                        >
-                          <FaEdit />
-                        </button>
-                        <button
-                          onClick={() => handleDelete(item._id)}
-                          className="text-red-500 hover:text-red-700"
-                        >
-                          <FaTrash />
-                        </button>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium mx-auto">
+                        <div className="flex justify-center space-x-4">
+                          <button
+                            onClick={() => handleEdit(item._id)}
+                            className="text-blue-500 hover:text-blue-700"
+                          >
+                            <FaEdit />
+                          </button>
+                          <button
+                            onClick={() => handleDelete(item._id)}
+                            className="text-red-500 hover:text-red-700"
+                          >
+                            <FaTrash />
+                          </button>
+                          <Link
+                            passHref
+                            href={`/Dashboard/Driver/MoreInfo/${item._id}`}
+                          >
+                            <button className="text-blue-500 hover:text-blue-700">
+                              <IoIosInformationCircle size={20} />
+                            </button>
+                          </Link>
+                        </div>
                       </td>
                     </tr>
                   ))}

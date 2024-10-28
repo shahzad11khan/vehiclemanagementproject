@@ -72,7 +72,7 @@ const UpdateCombineDriverAndVehicle = ({
           startDate: data.result.startDate || "", // Ensure this is set if available
           taxifirm: data.result.taxifirm || "",
           taxilocalauthority: data.result.taxilocalauthority || "",
-          vehicle: data.result.vehicle || "",
+          vehicle: data.result.vehicle,
           paymentcycle: data.result.paymentcycle || "",
           payment: data.result.payment || 0,
         }));
@@ -109,7 +109,6 @@ const UpdateCombineDriverAndVehicle = ({
 
         setTaxiFirms(filterByCompany(taxiFirmsData.result));
         setLocalAuth(filterByCompany(localAuthData.Result));
-        console.log(vehicleData.result);
         setVehicle(filterByCompany(vehicleData.result));
       } catch (err) {
         console.error("Error loading dropdown data:", err);
@@ -308,21 +307,8 @@ const UpdateCombineDriverAndVehicle = ({
                 name="vehicle"
                 value={formData.vehicle}
                 onChange={(e) => {
-                  // Get the selected vehicle's model and pass it to formData
-                  //   const selectedModel = e.target.value;
-
-                  //   // Find the selected vehicle's ID based on the selected model
-                  //   const selectedVehicle = filteredVehicles.find(
-                  //     (vehicle) => vehicle.model === selectedModel
-                  //   );
-
                   // Update the formData with the selected vehicle's model
                   handleChange(e);
-
-                  // Call selectedvehicle with the vehicle's _id
-                  //   if (selectedVehicle) {
-                  //     setselectedvehicle(selectedVehicle._id);
-                  //   }
                 }}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
               >

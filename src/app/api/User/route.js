@@ -88,7 +88,7 @@ export async function POST(request) {
     } = formDataObject;
     if (password !== confirmpassword) {
       return NextResponse.json({
-        error: "Passwords do not match",
+        error: "Passwords does not match",
         status: 400,
       });
     }
@@ -101,7 +101,7 @@ export async function POST(request) {
     });
     if (existingUser) {
       return NextResponse.json({
-        error: "User with this email already exists",
+        error: "User Email and Company is already exists",
         status: 400,
       });
     }

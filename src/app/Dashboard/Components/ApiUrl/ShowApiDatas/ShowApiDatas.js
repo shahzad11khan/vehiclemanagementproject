@@ -22,6 +22,7 @@ import {
   API_URL_FuelType,
   API_URL_Type,
   API_URL_CarModel,
+  API_URL_Driver_Vehicle_Allotment,
 } from "../ApiUrls.js";
 
 export const GetUsers = () => {
@@ -319,6 +320,37 @@ export const GetBadge = () => {
       // console.log(res.data.result);
       // console.log(res.data.count);
       return { result: res.data.result, count: res.data.count };
+    })
+    .catch((error) => {
+      console.log(`error : ${error}`);
+      throw error;
+    });
+};
+export const GetDriverVehicleAllotment = () => {
+  let companyName = localStorage.getItem("companyName"); // Get the company name from local storage
+  let flag = localStorage.getItem("flag");
+  let superadmin = localStorage.getItem("role");
+  return axios
+    .get(`${API_URL_Driver_Vehicle_Allotment}`)
+    .then((res) => {
+      let drivervehicle = res.data;
+      // console.log(res.data.Result);
+      // console.log(res.data.count);
+
+      if (superadmin === "superadmin" && flag === "false") {
+        // If superadmin and flag are set to show all drivers, return full result
+        return { result: drivervehicle.Result, count: drivervehicle.count };
+      } else if (superadmin === "superadmin" && flag === "true") {
+        // console.log(vehicle.result, vehicle.count);
+        return { result: drivervehicle.Result, count: drivervehicle.count };
+      } else {
+        // Filter the drivers based on the company name
+        const filteredDrivers = drivervehicle.Result.filter(
+          (d) => d.companyname === companyName
+        );
+        // Return the filtered result and update the count
+        return { result: filteredDrivers, count: filteredDrivers.length };
+      }
     })
     .catch((error) => {
       console.log(`error : ${error}`);

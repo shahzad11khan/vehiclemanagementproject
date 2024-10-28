@@ -12,7 +12,7 @@ export async function POST(Request) {
 
     // Extract email and password from request body
     const { email, password } = await Request.json();
-    console.log(email, password);
+    // console.log(email, password);
 
     // Attempt to find user by email in User model
     let user = null; // Initialize user as null
@@ -30,7 +30,7 @@ export async function POST(Request) {
     // If user not found in either User or Company models
     if (!user) {
       return NextResponse.json({
-        error: "Invalid credentials",
+        error: "Email is InCorrect",
         status: 401,
       });
     }
@@ -49,11 +49,11 @@ export async function POST(Request) {
 
     if (!isPasswordValid) {
       return NextResponse.json({
-        error: "Invalid credentials",
+        error: "Password Incorrect",
         status: 401,
       });
     }
-    console.log(user);
+    // console.log(user);
     // Generate JWT token with appropriate user data
     const token = jwt.sign(
       {

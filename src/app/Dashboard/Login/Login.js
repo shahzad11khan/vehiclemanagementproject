@@ -56,10 +56,10 @@ const Login = () => {
         localStorage.setItem("companyName", companyName);
         localStorage.setItem("userId", userId);
 
-        toast.success("Login successful");
         router.push("/Dashboard/Home");
+        toast.success(response.data.message);
       } else {
-        toast.warning(`😢 ${response.data.error}`);
+        toast.warning(`${response.data.error}`);
         router.push("/");
       }
     } catch (error) {

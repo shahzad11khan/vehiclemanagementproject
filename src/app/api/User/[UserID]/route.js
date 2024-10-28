@@ -160,7 +160,7 @@ export async function GET(request, context) {
 
     // Extract the product ID from the request parameters
     const id = context.params.UserID;
-    console.log(id);
+    // console.log(id);
 
     // Find the product by ID
     const Find_User = await User.findById(id);

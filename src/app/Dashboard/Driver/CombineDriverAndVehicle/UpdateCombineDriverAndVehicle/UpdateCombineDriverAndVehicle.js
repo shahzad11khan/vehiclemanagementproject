@@ -1,8 +1,5 @@
 "use client";
-import {
-  API_URL_Driver,
-  API_URL_Driver_Vehicle_Allotment,
-} from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
+import { API_URL_Driver_Vehicle_Allotment } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
@@ -17,7 +14,7 @@ import {
   getUserRole,
 } from "@/utils/storageUtils";
 
-const AddDriverMoreInfoModal = ({
+const UpdateCombineDriverAndVehicle = ({
   isOpen,
   onClose,
   fetchData,
@@ -32,7 +29,6 @@ const AddDriverMoreInfoModal = ({
     vehicle: "",
     paymentcycle: "",
     payment: "",
-    adminCreatedBy: "",
     adminCompanyName: "",
     adminCompanyId: "",
   });
@@ -65,11 +61,20 @@ const AddDriverMoreInfoModal = ({
       if (!selectedUserId) return;
       setLoading(true);
       try {
-        const { data } = await axios.get(`${API_URL_Driver}/${selectedUserId}`);
+        const { data } = await axios.get(
+          `${API_URL_Driver_Vehicle_Allotment}/${selectedUserId}`
+        );
+        console.log(data);
         setFormData((prevData) => ({
           ...prevData,
-          driverId: data.result._id,
-          driverName: `${data.result.firstName} ${data.result.lastName}`,
+          driverId: data.result.driverId,
+          driverName: data.result.driverName,
+          startDate: data.result.startDate || "", // Ensure this is set if available
+          taxifirm: data.result.taxifirm || "",
+          taxilocalauthority: data.result.taxilocalauthority || "",
+          vehicle: data.result.vehicle || "",
+          paymentcycle: data.result.paymentcycle || "",
+          payment: data.result.payment || 0,
         }));
       } catch (err) {
         console.error(
@@ -104,6 +109,7 @@ const AddDriverMoreInfoModal = ({
 
         setTaxiFirms(filterByCompany(taxiFirmsData.result));
         setLocalAuth(filterByCompany(localAuthData.Result));
+        console.log(vehicleData.result);
         setVehicle(filterByCompany(vehicleData.result));
       } catch (err) {
         console.error("Error loading dropdown data:", err);
@@ -133,8 +139,9 @@ const AddDriverMoreInfoModal = ({
     setLoading(true);
 
     try {
-      const { data } = await axios.post(
-        API_URL_Driver_Vehicle_Allotment,
+      // Ensure you're using the right endpoint for updating records
+      const { data } = await axios.put(
+        `${API_URL_Driver_Vehicle_Allotment}/${selectedUserId}`, // Update endpoint
         formData
       );
       if (data.success) {
@@ -146,6 +153,7 @@ const AddDriverMoreInfoModal = ({
       }
     } catch (error) {
       console.error("Error submitting form:", error);
+      toast.error("Failed to update record.");
     } finally {
       setLoading(false);
     }
@@ -157,7 +165,7 @@ const AddDriverMoreInfoModal = ({
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
       <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-4xl">
         <h2 className="text-3xl font-semibold text-center mb-8">
-          Add Car Allotment
+          Update Car Allotment
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -234,7 +242,7 @@ const AddDriverMoreInfoModal = ({
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
               >
-                <option value="null">Select Taxi Firm</option>
+                <option value="">Select Taxi Firm</option>
                 {taxiFirms.map((firm) => (
                   <option key={firm._id} value={firm.name}>
                     {firm.name}
@@ -257,16 +265,16 @@ const AddDriverMoreInfoModal = ({
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
               >
-                <option value="null">Select Local Authority</option>
-                {localAuth.map((local) => (
-                  <option key={local._id} value={local.name}>
-                    {local.name}
+                <option value="">Select Local Authority</option>
+                {localAuth.map((auth) => (
+                  <option key={auth._id} value={auth.name}>
+                    {auth.name}
                   </option>
                 ))}
               </select>
             </div>
 
-            <div className="w-full md:w-1/3 px-2 mb-4">
+            {/* <div className="w-full md:w-1/3 px-2 mb-4">
               <label
                 htmlFor="vehicle"
                 className="text-sm font-medium text-gray-700"
@@ -280,7 +288,45 @@ const AddDriverMoreInfoModal = ({
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
               >
-                <option value="null">Select Vehicle</option>
+                <option value="">Select Vehicle</option>
+                {filteredVehicles.map((veh) => (
+                  <option key={veh._id} value={veh.model}>
+                    {veh.model}
+                  </option>
+                ))}
+              </select>
+            </div> */}
+            <div>
+              <label
+                htmlFor="taxiFirm"
+                className="text-sm font-medium text-gray-700"
+              >
+                Vehicle:
+              </label>
+              <select
+                id="vehicle"
+                name="vehicle"
+                value={formData.vehicle}
+                onChange={(e) => {
+                  // Get the selected vehicle's model and pass it to formData
+                  //   const selectedModel = e.target.value;
+
+                  //   // Find the selected vehicle's ID based on the selected model
+                  //   const selectedVehicle = filteredVehicles.find(
+                  //     (vehicle) => vehicle.model === selectedModel
+                  //   );
+
+                  // Update the formData with the selected vehicle's model
+                  handleChange(e);
+
+                  // Call selectedvehicle with the vehicle's _id
+                  //   if (selectedVehicle) {
+                  //     setselectedvehicle(selectedVehicle._id);
+                  //   }
+                }}
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+              >
+                <option value="null">Select vehicle</option>
                 {filteredVehicles.map((vehicle) => (
                   <option key={vehicle._id} value={vehicle.model}>
                     {vehicle.model}
@@ -294,10 +340,10 @@ const AddDriverMoreInfoModal = ({
                 htmlFor="payment"
                 className="text-sm font-medium text-gray-700"
               >
-                Rent Payment Amount:
+                Payment:
               </label>
               <input
-                type="number"
+                type="text"
                 id="payment"
                 name="payment"
                 value={formData.payment}
@@ -307,20 +353,22 @@ const AddDriverMoreInfoModal = ({
             </div>
           </div>
 
-          <div className="flex justify-end space-x-4">
+          <div className="flex justify-end">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 bg-gray-400 text-white rounded-lg hover:bg-gray-500"
+              className="mr-4 px-4 py-2 bg-gray-300 text-gray-800 rounded-lg"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+              className={`px-4 py-2 text-white rounded-lg ${
+                loading ? "bg-gray-400" : "bg-blue-600"
+              }`}
               disabled={loading}
             >
-              {loading ? "Saving..." : "Save"}
+              {loading ? "Updating..." : "Update"}
             </button>
           </div>
         </form>
@@ -329,4 +377,4 @@ const AddDriverMoreInfoModal = ({
   );
 };
 
-export default AddDriverMoreInfoModal;
+export default UpdateCombineDriverAndVehicle;

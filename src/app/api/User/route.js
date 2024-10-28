@@ -95,7 +95,10 @@ export async function POST(request) {
 
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
-    const existingUser = await User.findOne({ email });
+    // Check if a user with the same email or company name already exists
+    const existingUser = await User.findOne({
+      $or: [{ email: email }, { companyname: companyname }],
+    });
     if (existingUser) {
       return NextResponse.json({
         error: "User with this email already exists",

@@ -90,6 +90,7 @@ const Page = ({ params }) => {
   }, [searchTerm, data, selectedCompanyName]);
 
   const OpenAddDriverModal = () => {
+    setSelectedUserId(id);
     setIsOpenAddDriverModal(!isOpenAddDriverModal);
   };
 

@@ -2,6 +2,7 @@
 import {
   API_URL_Driver,
   API_URL_Driver_Vehicle_Allotment,
+  API_URL_DriverMoreInfo,
 } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -62,10 +63,12 @@ const AddDriverMoreInfoModal = ({
 
   useEffect(() => {
     const fetchDriverData = async () => {
+      console.log(selectedUserId);
       if (!selectedUserId) return;
       setLoading(true);
       try {
         const { data } = await axios.get(`${API_URL_Driver}/${selectedUserId}`);
+        console.log(data);
         setFormData((prevData) => ({
           ...prevData,
           driverId: data.result._id,
@@ -141,6 +144,25 @@ const AddDriverMoreInfoModal = ({
         toast.success(data.message);
         fetchData();
         onClose();
+        // console.log(data.savedDriverVehicleAllotment);
+        const getdata = data.savedDriverVehicleAllotment;
+        const newRecordData = {
+          driverId: getdata._id, // Add your specific fields here
+          driverName: getdata.driverName, // Add your specific fields here
+          vehicle: getdata.vehicle, // Add your specific fields here
+          paymentcycle: getdata.paymentcycle, // Add your specific fields here
+          startDate: getdata.startDate, // Add your specific fields here
+          endDate: "", // Add your specific fields here
+          payment: getdata.payment, // Add your specific fields here
+          adminCreatedBy: "", // Add your specific fields here
+          adminCompanyName: getdata.adminCompanyName, // Keep existing field
+        };
+        console.log(newRecordData);
+        const newRecordResponse = await axios.post(
+          `${API_URL_DriverMoreInfo}`,
+          newRecordData
+        );
+        console.log(newRecordResponse);
       } else {
         toast.warn(data.error);
       }

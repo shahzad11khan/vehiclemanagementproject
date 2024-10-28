@@ -75,15 +75,24 @@ export async function GET(request, context) {
     const id = context.params.DriverMoreInfoID;
     console.log(id);
 
-    // Find the product by ID
-    const Find_User = await DriverMoreInfo.findOne({ driverId: id });
+    // Find all records related to the driverId
+    const Find_User_All = await DriverMoreInfo.find({ driverId: id });
 
-    // Check if the product exists
-    if (!Find_User) {
-      return NextResponse.json({ result: "no user Found", status: 404 });
+    // If there are records associated with driverId
+    if (Find_User_All.length > 0) {
+      // Return all records as a JSON response
+      return NextResponse.json({ result: Find_User_All, status: 200 });
     } else {
-      // Return the found product as a JSON response
-      return NextResponse.json({ result: Find_User, status: 200 });
+      // If no records found for driverId, try to find by _id
+      const Find_User = await DriverMoreInfo.findById(id);
+
+      // Check if the product exists
+      if (!Find_User) {
+        return NextResponse.json({ result: [], status: 404 });
+      } else {
+        // Return the found product as a JSON response
+        return NextResponse.json({ result: Find_User, status: 200 });
+      }
     }
   } catch (error) {
     console.error("Error retrieving product:", error);

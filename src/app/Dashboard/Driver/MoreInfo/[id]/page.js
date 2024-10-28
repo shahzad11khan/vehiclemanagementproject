@@ -33,14 +33,13 @@ const Page = ({ params }) => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(`${API_URL_DriverMoreInfo}?id=${id}`);
+      const response = await axios.get(`${API_URL_DriverMoreInfo}/${id}`);
       const { data } = response;
 
       if (data.Result && data.Result.length > 0) {
-        setData(data.Result); // Store all records in state
-        console.log("Fetched records:", data.Result); // Log all records
+        setData(data.Result);
+        console.log("Fetched records:", data.Result);
 
-        // Perform calculations for each record instead of just the first one
         for (const record of data.Result) {
           await drivercal(
             record.driverId,
@@ -61,7 +60,7 @@ const Page = ({ params }) => {
   };
 
   const formatDatee = (date) => {
-    const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are zero-based
+    const month = String(date.getMonth() + 1).padStart(2, "0");
     const day = String(date.getDate()).padStart(2, "0");
     const year = date.getFullYear();
     return `${month}/${day}/${year}`;
@@ -72,36 +71,31 @@ const Page = ({ params }) => {
     vehicle,
     lastStartDate,
     cycle,
-    pay,
+    initialPayment,
     fetchedcompany
   ) => {
     try {
-      const payment = Number(pay);
+      let payment = Number(initialPayment);
       const passingDate = new Date(lastStartDate);
       const currentDate = new Date();
 
-      // Check if passingDate is valid
       if (isNaN(passingDate.getTime())) {
         console.error("Invalid lastStartDate provided:", lastStartDate);
         return;
       }
 
-      console.log(passingDate, currentDate);
-      // Loop through each relevant period based on cycle
       while (formatDatee(passingDate) < formatDatee(currentDate)) {
         let shouldPostNewRecord = false;
 
         const value = cycle.toLowerCase();
-
-        // Check for changes based on payment cycle
         switch (value) {
           case "perday":
             shouldPostNewRecord = true;
+            payment += initialPayment;
             passingDate.setDate(passingDate.getDate() + 1);
             break;
 
           case "perweek":
-            // Only post if the week has changed
             if (
               Math.floor(
                 (currentDate - passingDate) / (1000 * 60 * 60 * 24 * 7)
@@ -109,22 +103,22 @@ const Page = ({ params }) => {
             ) {
               shouldPostNewRecord = true;
             }
+            payment += initialPayment;
             passingDate.setDate(passingDate.getDate() + 7);
             break;
 
           case "permonth":
-            // Only post if the month has changed
             if (
               passingDate.getMonth() !== currentDate.getMonth() ||
               passingDate.getFullYear() !== currentDate.getFullYear()
             ) {
               shouldPostNewRecord = true;
             }
+            payment += initialPayment;
             passingDate.setMonth(passingDate.getMonth() + 1);
             break;
 
           case "perquarter":
-            // Only post if the quarter has changed
             const currentQuarter = Math.floor(currentDate.getMonth() / 3);
             const lastQuarter = Math.floor(passingDate.getMonth() / 3);
             if (
@@ -133,14 +127,15 @@ const Page = ({ params }) => {
             ) {
               shouldPostNewRecord = true;
             }
+            payment += initialPayment;
             passingDate.setMonth(passingDate.getMonth() + 3);
             break;
 
           case "peryear":
-            // Only post if the year has changed
             if (passingDate.getFullYear() !== currentDate.getFullYear()) {
               shouldPostNewRecord = true;
             }
+            payment += initialPayment;
             passingDate.setFullYear(passingDate.getFullYear() + 1);
             break;
 
@@ -149,12 +144,11 @@ const Page = ({ params }) => {
             return;
         }
 
-        // Post the new record if needed
         if (shouldPostNewRecord) {
-          await postDataToDatabase(
+          await updateDatabaseDate(
             IDD,
             vehicle,
-            formatDatee(passingDate), // Pass the new formatted date
+            formatDatee(passingDate),
             cycle,
             payment,
             fetchedcompany
@@ -167,26 +161,34 @@ const Page = ({ params }) => {
     }
   };
 
-  // Function to post new data to the database
-  const postDataToDatabase = async (
+  // Function to update the date and payment in the database
+  const updateDatabaseDate = async (
     IDD,
     vehicle,
-    startDate,
+    newStartDate,
     paymentCycle,
     payment,
     fetchedcompany
   ) => {
-    console.log(IDD, vehicle, startDate, paymentCycle, payment, fetchedcompany);
+    console.log(
+      "Updating record:",
+      IDD,
+      vehicle,
+      newStartDate,
+      paymentCycle,
+      payment,
+      fetchedcompany
+    );
     try {
       const payload = {
         driverId: IDD,
         vehicle: vehicle,
-        startDate: startDate,
+        startDate: newStartDate, // Update with the new date
         paymentcycle: paymentCycle,
         calculation: payment,
         endDate: "",
         subtractcalculation: 0,
-        totalamount: 0,
+        totalamount: payment,
         totalsubtractamount: 0,
         totalremainingamount: 0,
         remaining: 0,
@@ -194,15 +196,13 @@ const Page = ({ params }) => {
         adminCompanyName: fetchedcompany,
       };
 
-      // Uncomment this line to post the data
-      const newRecordResponse = await axios.post(
-        `${API_URL_DriverMoreInfo}`,
+      const response = await axios.put(
+        `${API_URL_DriverMoreInfo}/${IDD}`,
         payload
       );
-      console.log("New record posted successfully:", newRecordResponse.data);
+      console.log("Record updated successfully:", response.data);
     } catch (error) {
-      console.error("Error posting new record:", error);
-      // Handle error notification
+      console.error("Error updating record:", error);
     }
   };
 

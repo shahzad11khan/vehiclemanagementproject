@@ -7,20 +7,16 @@ export const POST = catchAsyncErrors(async (request) => {
   await connect();
   const data = await request.json();
 
-  console.log(data);
+  // console.log(data);
 
   const {
     driverId,
     vehicle,
     paymentcycle,
     startDate,
-    calculation,
+    payment,
     endDate,
-    subtractcalculation,
-    totalamount,
-    totalsubtractamount,
-    totalremainingamount,
-    remaining,
+    driverName,
     adminCreatedBy,
     adminCompanyName,
     adminCompanyId,
@@ -45,13 +41,9 @@ export const POST = catchAsyncErrors(async (request) => {
     vehicle,
     paymentcycle,
     startDate,
-    calculation,
+    payment,
     endDate,
-    subtractcalculation,
-    totalamount,
-    totalsubtractamount,
-    totalremainingamount,
-    remaining,
+    driverName,
     adminCreatedBy,
     adminCompanyName,
     adminCompanyId,

@@ -34,23 +34,28 @@ const Page = ({ params }) => {
 
   const fetchData = async () => {
     try {
+      // Fetch the driver information from the API
       const response = await axios.get(`${API_URL_DriverMoreInfo}/${id}`);
       const { data } = response;
 
       console.log(data);
-      if (data.result && data.result.length > 0) {
-        setData(data.result);
-        console.log("Fetched records:", data.result);
 
+      // Check if there are results to process
+      if (data.result && data.result.length > 0) {
+        console.log("Fetched records:", data.result);
+        setData(data.result);
+
+        // Iterate over each record in the result
         for (const record of data.result) {
+          // Call drivercal for each record
           await drivercal(
-            record.driverId,
-            record.driverName,
-            record.vehicle,
-            record.startDate,
-            record.paymentcycle,
-            record.payment,
-            record.adminCompanyName
+            record.driverId, // Pass the driverId
+            record.driverName, // Pass the driverName
+            record.vehicle, // Pass the vehicle
+            record.startDate, // Pass the original startDate
+            record.paymentcycle, // Pass the payment cycle
+            record.payment, // Pass the payment amount
+            record.adminCompanyName // Pass the admin company name
           );
         }
       } else {
@@ -63,41 +68,36 @@ const Page = ({ params }) => {
   };
 
   const formatDatee = (date) => {
+    // Format the date to MM-DD-YYYY
     const month = String(date.getMonth() + 1).padStart(2, "0");
     const day = String(date.getDate()).padStart(2, "0");
     const year = date.getFullYear();
-    return `${month}/${day}/${year}`;
+    return `${month}-${day}-${year}`;
   };
 
   const drivercal = async (
-    IDD,
+    driverId,
     driverName,
     vehicle,
-    lastStartDate,
-    cycle,
-    initialPayment,
-    fetchedcompany
+    startDate,
+    paymentcycle,
+    payment,
+    adminCompanyName
   ) => {
     try {
-      let payment = Number(initialPayment);
-      const passingDate = new Date(lastStartDate);
-      const currentDate = new Date();
-      // console.log(passingDate, currentDate);
+      const passingDate = new Date(startDate); // Initialize passingDate to startDate
+      const currentDate = new Date(); // Get the current date
+      console.log(passingDate, currentDate);
 
-      if (isNaN(passingDate.getTime())) {
-        console.error("Invalid lastStartDate provided:", lastStartDate);
-        return;
-      }
-
+      // Loop until passingDate is greater than or equal to currentDate
       while (formatDatee(passingDate) < formatDatee(currentDate)) {
-        let shouldPostNewRecord = false;
+        let shouldPostNewRecord = false; // Flag to check if a new record should be posted
 
-        const value = cycle.toLowerCase();
+        const value = paymentcycle.toLowerCase(); // Normalize the payment cycle value
         switch (value) {
           case "perday":
-            shouldPostNewRecord = true;
-            payment += initialPayment;
-            passingDate.setDate(passingDate.getDate() + 1);
+            shouldPostNewRecord = true; // Always post for daily cycle
+            passingDate.setDate(passingDate.getDate() + 1); // Increment by 1 day
             break;
 
           case "perweek":
@@ -106,10 +106,9 @@ const Page = ({ params }) => {
                 (currentDate - passingDate) / (1000 * 60 * 60 * 24 * 7)
               ) > 0
             ) {
-              shouldPostNewRecord = true;
+              shouldPostNewRecord = true; // Post if a week has passed
             }
-            payment += initialPayment;
-            passingDate.setDate(passingDate.getDate() + 7);
+            passingDate.setDate(passingDate.getDate() + 7); // Increment by 7 days
             break;
 
           case "permonth":
@@ -117,10 +116,9 @@ const Page = ({ params }) => {
               passingDate.getMonth() !== currentDate.getMonth() ||
               passingDate.getFullYear() !== currentDate.getFullYear()
             ) {
-              shouldPostNewRecord = true;
+              shouldPostNewRecord = true; // Post if a month has passed
             }
-            payment += initialPayment;
-            passingDate.setMonth(passingDate.getMonth() + 1);
+            passingDate.setMonth(passingDate.getMonth() + 1); // Increment by 1 month
             break;
 
           case "perquarter":
@@ -130,18 +128,16 @@ const Page = ({ params }) => {
               currentQuarter !== lastQuarter ||
               passingDate.getFullYear() !== currentDate.getFullYear()
             ) {
-              shouldPostNewRecord = true;
+              shouldPostNewRecord = true; // Post if a quarter has passed
             }
-            payment += initialPayment;
-            passingDate.setMonth(passingDate.getMonth() + 3);
+            passingDate.setMonth(passingDate.getMonth() + 3); // Increment by 3 months
             break;
 
           case "peryear":
             if (passingDate.getFullYear() !== currentDate.getFullYear()) {
-              shouldPostNewRecord = true;
+              shouldPostNewRecord = true; // Post if a year has passed
             }
-            payment += initialPayment;
-            passingDate.setFullYear(passingDate.getFullYear() + 1);
+            passingDate.setFullYear(passingDate.getFullYear() + 1); // Increment by 1 year
             break;
 
           default:
@@ -149,15 +145,16 @@ const Page = ({ params }) => {
             return;
         }
 
+        // If a new record needs to be posted, update the database
         if (shouldPostNewRecord) {
           await updateDatabaseDate(
-            IDD,
+            driverId,
             driverName,
             vehicle,
-            passingDate,
-            cycle,
+            passingDate, // Use the newly calculated date
+            paymentcycle,
             payment,
-            fetchedcompany
+            adminCompanyName
           );
         }
       }
@@ -171,7 +168,7 @@ const Page = ({ params }) => {
     IDD,
     driverName,
     vehicle,
-    newStartDate,
+    newStartDate, // This will be the new calculated date
     paymentCycle,
     payment,
     fetchedcompany
@@ -194,6 +191,7 @@ const Page = ({ params }) => {
 
       console.log(payload);
 
+      // Make the POST request to update the database
       const response = await axios.post(`${API_URL_DriverMoreInfo}`, payload);
       console.log("Record Added successfully:", response.data);
     } catch (error) {

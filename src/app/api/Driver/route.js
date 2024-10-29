@@ -100,10 +100,12 @@ export async function POST(request) {
 
     console.log(formDataObject);
 
-    const existingDriver = await Driver.findOne({ email });
+    const existingDriver = await Driver.findOne({
+      $or: [{ email: email }, { companyname: companyname }],
+    });
     if (existingDriver) {
       return NextResponse.json({
-        error: "Driver with this email already exists",
+        error: "Driver with this email and company is already exists",
         status: 400,
       });
     }

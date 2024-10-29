@@ -147,17 +147,21 @@ const AddDriverMoreInfoModal = ({
         // console.log(data.savedDriverVehicleAllotment);
         const getdata = data.savedDriverVehicleAllotment;
         const newRecordData = {
-          driverId: getdata._id, // Add your specific fields here
+          driverId: getdata.driverId, // Add your specific fields here
           driverName: getdata.driverName, // Add your specific fields here
           vehicle: getdata.vehicle, // Add your specific fields here
-          paymentcycle: getdata.paymentcycle, // Add your specific fields here
           startDate: getdata.startDate, // Add your specific fields here
-          endDate: "", // Add your specific fields here
+          paymentcycle: getdata.paymentcycle, // Add your specific fields here
           payment: getdata.payment, // Add your specific fields here
+          endDate: "", // Add your specific fields here
+          totalamount: 0,
+          totalToremain: 0,
+          remaining: 0,
           adminCreatedBy: "", // Add your specific fields here
+          adminCompanyId: "",
           adminCompanyName: getdata.adminCompanyName, // Keep existing field
         };
-        console.log(newRecordData);
+        // console.log(newRecordData);
         const newRecordResponse = await axios.post(
           `${API_URL_DriverMoreInfo}`,
           newRecordData
@@ -215,6 +219,7 @@ const AddDriverMoreInfoModal = ({
                 value={formData.paymentcycle}
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                required
               >
                 <option value="">Select Payment</option>
                 <option value="perday">Per Day</option>
@@ -239,6 +244,7 @@ const AddDriverMoreInfoModal = ({
                 value={formData.startDate}
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                required
               />
             </div>
 
@@ -278,6 +284,7 @@ const AddDriverMoreInfoModal = ({
                 value={formData.taxilocalauthority}
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                required
               >
                 <option value="null">Select Local Authority</option>
                 {localAuth.map((local) => (
@@ -301,6 +308,7 @@ const AddDriverMoreInfoModal = ({
                 value={formData.vehicle}
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                required
               >
                 <option value="null">Select Vehicle</option>
                 {filteredVehicles.map((vehicle) => (

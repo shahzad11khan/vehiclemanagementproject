@@ -4,12 +4,14 @@ import mongoose from "mongoose";
 const DriverMoreInfoSchema = new mongoose.Schema(
   {
     driverId: { type: mongoose.Schema.Types.ObjectId, ref: "Driver" }, // Reference to the Driver
-    vehicle: { type: String },
-    paymentcycle: { type: String },
-    startDate: { type: String },
     driverName: { type: String },
+    vehicle: { type: String },
+    startDate: { type: Date },
+    paymentcycle: { type: String },
     payment: { type: Number },
-    endDate: { type: String, defult: null },
+    endDate: { type: String },
+    totalamount: { type: Number },
+    totalToremain: { type: Number },
     remaining: { type: Number },
     adminCompanyName: { type: String },
     adminCreatedBy: { type: String },

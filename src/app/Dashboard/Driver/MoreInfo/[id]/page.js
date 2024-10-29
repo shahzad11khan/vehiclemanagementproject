@@ -16,6 +16,7 @@ import axios from "axios";
 
 const Page = ({ params }) => {
   const id = params.id;
+  console.log(id);
 
   const [isMounted, setIsMounted] = useState(false);
   const [data, setData] = useState([]);
@@ -36,17 +37,19 @@ const Page = ({ params }) => {
       const response = await axios.get(`${API_URL_DriverMoreInfo}/${id}`);
       const { data } = response;
 
-      if (data.Result && data.Result.length > 0) {
-        setData(data.Result);
-        console.log("Fetched records:", data.Result);
+      console.log(data);
+      if (data.result && data.result.length > 0) {
+        setData(data.result);
+        console.log("Fetched records:", data.result);
 
-        for (const record of data.Result) {
+        for (const record of data.result) {
           await drivercal(
             record.driverId,
+            record.driverName,
             record.vehicle,
             record.startDate,
             record.paymentcycle,
-            record.calculation,
+            record.payment,
             record.adminCompanyName
           );
         }
@@ -68,6 +71,7 @@ const Page = ({ params }) => {
 
   const drivercal = async (
     IDD,
+    driverName,
     vehicle,
     lastStartDate,
     cycle,
@@ -78,6 +82,7 @@ const Page = ({ params }) => {
       let payment = Number(initialPayment);
       const passingDate = new Date(lastStartDate);
       const currentDate = new Date();
+      // console.log(passingDate, currentDate);
 
       if (isNaN(passingDate.getTime())) {
         console.error("Invalid lastStartDate provided:", lastStartDate);
@@ -147,8 +152,9 @@ const Page = ({ params }) => {
         if (shouldPostNewRecord) {
           await updateDatabaseDate(
             IDD,
+            driverName,
             vehicle,
-            formatDatee(passingDate),
+            passingDate,
             cycle,
             payment,
             fetchedcompany
@@ -161,46 +167,35 @@ const Page = ({ params }) => {
     }
   };
 
-  // Function to update the date and payment in the database
   const updateDatabaseDate = async (
     IDD,
+    driverName,
     vehicle,
     newStartDate,
     paymentCycle,
     payment,
     fetchedcompany
   ) => {
-    console.log(
-      "Updating record:",
-      IDD,
-      vehicle,
-      newStartDate,
-      paymentCycle,
-      payment,
-      fetchedcompany
-    );
     try {
       const payload = {
         driverId: IDD,
+        driverName: driverName,
         vehicle: vehicle,
         startDate: newStartDate, // Update with the new date
         paymentcycle: paymentCycle,
-        calculation: payment,
+        payment: payment,
         endDate: "",
-        subtractcalculation: 0,
-        totalamount: payment,
-        totalsubtractamount: 0,
-        totalremainingamount: 0,
+        totalamount: 0,
+        totalToremain: 0,
         remaining: 0,
         adminCreatedBy: "",
         adminCompanyName: fetchedcompany,
       };
 
-      const response = await axios.put(
-        `${API_URL_DriverMoreInfo}/${IDD}`,
-        payload
-      );
-      console.log("Record updated successfully:", response.data);
+      console.log(payload);
+
+      const response = await axios.post(`${API_URL_DriverMoreInfo}`, payload);
+      console.log("Record Added successfully:", response.data);
     } catch (error) {
       console.error("Error updating record:", error);
     }
@@ -263,23 +258,23 @@ const Page = ({ params }) => {
 
   // Calculate totals for calculation, subtractcalculation, and remaining
 
-  const totalCalculation = data
+  const totalamount = data
     .filter(
       (row) =>
         row.adminCompanyName &&
         row.adminCompanyName.toLowerCase() === selectedCompanyName.toLowerCase()
     )
-    .reduce((acc, row) => acc + row.calculation, 0)
+    .reduce((acc, row) => acc + row.payment, 0)
     .toFixed(2);
-  const totalSubtractCalculation = data
+  const totalToremain = data
     .filter(
       (row) =>
         row.adminCompanyName &&
         row.adminCompanyName.toLowerCase() === selectedCompanyName.toLowerCase()
     )
-    .reduce((acc, row) => acc + row.subtractcalculation, 0)
+    .reduce((acc, row) => acc + row.totalToremain, 0)
     .toFixed(2);
-  const totalRemaining = data
+  const remaining = data
     .filter(
       (row) =>
         row.adminCompanyName &&
@@ -408,7 +403,7 @@ const Page = ({ params }) => {
                               {formatDate(row.startDate)}
                             </td>
                             <td className="py-2 px-4 border-b border-gray-200">
-                              £ {row.calculation}
+                              £ {row.payment}
                             </td>
                             <td className="py-2 px-4 border-b border-gray-200">
                               {row.endDate === ""
@@ -416,7 +411,7 @@ const Page = ({ params }) => {
                                 : formatDate(row.endDate)}
                             </td>
                             <td className="py-2 px-4 border-b border-gray-200">
-                              £ {row.subtractcalculation}
+                              £ {row.totalToremain}
                             </td>
                             <td className="py-2 px-4 border-b border-gray-200">
                               £ {row.remaining}
@@ -450,14 +445,14 @@ const Page = ({ params }) => {
                         <td className="py-2 px-4 border-b border-gray-200"></td>
                         <td className="py-2 px-4 border-b border-gray-200"></td>
                         <td className="py-2 px-4 border-b border-gray-200">
-                          £ {totalCalculation}
+                          £ {totalamount}
                         </td>
                         <td className="py-2 px-4 border-b border-gray-200"></td>
                         <td className="py-2 px-4 border-b border-gray-200">
-                          £ {totalSubtractCalculation}
+                          £ {totalToremain}
                         </td>
                         <td className="py-2 px-4 border-b border-gray-200">
-                          £ {totalRemaining}
+                          £ {remaining}
                         </td>
                         <td className="py-2 px-4 border-b border-gray-200"></td>
                         <td className="py-2 px-4 border-b border-gray-200"></td>

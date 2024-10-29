@@ -11,12 +11,15 @@ export const POST = catchAsyncErrors(async (request) => {
 
   const {
     driverId,
+    driverName,
     vehicle,
-    paymentcycle,
     startDate,
+    paymentcycle,
     payment,
     endDate,
-    driverName,
+    totalamount,
+    totalToremain,
+    remaining,
     adminCreatedBy,
     adminCompanyName,
     adminCompanyId,
@@ -38,12 +41,15 @@ export const POST = catchAsyncErrors(async (request) => {
   // Create and save the new DriverMoreInfo entry
   const newDriverMoreInfo = new DriverMoreInfo({
     driverId,
+    driverName,
     vehicle,
-    paymentcycle,
     startDate,
+    paymentcycle,
     payment,
     endDate,
-    driverName,
+    totalamount,
+    totalToremain,
+    remaining,
     adminCreatedBy,
     adminCompanyName,
     adminCompanyId,
@@ -52,7 +58,7 @@ export const POST = catchAsyncErrors(async (request) => {
   const savedDriverMoreInfo = await newDriverMoreInfo.save();
   if (!savedDriverMoreInfo) {
     return NextResponse.json({
-      message: "DriverMoreInfo not added",
+      error: "DriverMoreInfo not added",
       status: 400,
     });
   } else {

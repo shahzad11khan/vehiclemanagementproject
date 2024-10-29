@@ -203,7 +203,7 @@ const Page = ({ params }) => {
                           </button>
                           <Link
                             passHref
-                            href={`/Dashboard/Driver/MoreInfo/${item._id}`}
+                            href={`/Dashboard/Driver/MoreInfo/${item.driverId}`}
                           >
                             <button className="text-blue-500 hover:text-blue-700">
                               <IoIosInformationCircle size={20} />

@@ -73,7 +73,7 @@ export async function GET(request, context) {
 
     // Extract the product ID from the request parameters
     const id = context.params.DriverMoreInfoID;
-    console.log(id);
+    console.log("driver payment id is:", id);
 
     // Find all records related to the driverId
     const Find_User_All = await DriverMoreInfo.find({ driverId: id });

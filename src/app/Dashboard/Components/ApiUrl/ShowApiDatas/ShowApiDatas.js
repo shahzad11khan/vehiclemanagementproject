@@ -266,7 +266,7 @@ export const GetVehicle = () => {
     .get(`${API_URL_Vehicle}`)
     .then((res) => {
       let vehicle = res.data;
-      // console.log(vehicle);
+      // console.log(vehicle, companyName);
       if (superadmin === "superadmin" && flag === "false") {
         // If superadmin and flag are set to show all drivers, return full result
         return { result: vehicle.result, count: vehicle.count };
@@ -275,8 +275,8 @@ export const GetVehicle = () => {
         return { result: vehicle.result, count: vehicle.count };
       } else {
         // Filter the drivers based on the company name
-        const filteredDrivers = vehicle.Result.filter(
-          (d) => d.companyname === companyName
+        const filteredDrivers = vehicle.result.filter(
+          (d) => d.adminCompanyName === companyName
         );
         // Return the filtered result and update the count
         return { result: filteredDrivers, count: filteredDrivers.length };

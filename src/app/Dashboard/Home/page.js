@@ -39,7 +39,10 @@ const Page = () => {
   const fetchCounts = useCallback(async () => {
     try {
       const vehicleData = await GetVehicle();
+
       const { count, result } = vehicleData;
+
+      // console.log(count, result);
 
       setTotalcar((prev) => (prev !== count ? count : prev));
 
@@ -50,13 +53,14 @@ const Page = () => {
         setMaintenance((prev) => (prev !== 0 ? 0 : prev));
         return;
       }
-
+      // Encoderbytes1! shahzad@t@26offf
       let standbyCar = 0;
       let sellCar = 0;
       let rentCar = 0;
       let maintenance = 0;
 
       result.forEach((vehicle) => {
+        // console.log(vehicle);
         if (
           superadmin === "superadmin" ||
           vehicle.adminCompanyName === companyname

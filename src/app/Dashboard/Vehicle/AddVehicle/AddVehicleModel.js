@@ -552,7 +552,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
           {step === 2 && (
             <>
               {" "}
-              <div className="grid grid-cols-3 md:grid-cols-3 gap-2 mt-4">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mt-4">
                 <div>
                   <div className="flex gap-1">
                     <label className="block font-semibold">
@@ -605,7 +605,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                   />
                 </div>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mt-4">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mt-4">
                 <div>
                   <div className="flex gap-1">
                     <label className="block font-semibold">Torque</label>
@@ -840,7 +840,36 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
 
           {step === 3 && (
             <>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-4">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mt-4">
+                <div>
+                  <div className="flex gap-1">
+                    <label className="block font-semibold">Engine Size</label>
+                  </div>
+                  <input
+                    type="text"
+                    name="enginesize"
+                    // value={customColor}
+                    // onChange={handleCustomColorChange}
+                    placeholder="Enter Engine Size"
+                    className="w-full p-2 border border-gray-300 rounded"
+                  />
+                </div>
+
+                <div>
+                  <div className="flex gap-1">
+                    <label className="block font-semibold">
+                      Vin / Chasis Number
+                    </label>
+                  </div>
+                  <input
+                    type="text"
+                    name="chasisnumber"
+                    // value={customColor}
+                    // onChange={handleCustomColorChange}
+                    placeholder="Enter Engine Size"
+                    className="w-full p-2 border border-gray-300 rounded"
+                  />
+                </div>
                 <div className="">
                   <div className="flex gap-1">
                     <label className="block font-semibold">Vehicle Site</label>
@@ -942,7 +971,20 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                   </div>
                 )}
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-4">
+              <div className="grid grid-cols-3 md:grid-cols-3 gap-2 mt-4">
+                <div>
+                  <div className="flex gap-1">
+                    <label className="block font-semibold">Doors</label>
+                  </div>
+                  <input
+                    type="number"
+                    name="doors"
+                    // value={customColor}
+                    // onChange={handleCustomColorChange}
+                    placeholder="Enter Engine Size"
+                    className="w-full p-2 border border-gray-300 rounded"
+                  />
+                </div>
                 <div>
                   <div className="flex gap-1">
                     <label className="block font-semibold">Colour</label>

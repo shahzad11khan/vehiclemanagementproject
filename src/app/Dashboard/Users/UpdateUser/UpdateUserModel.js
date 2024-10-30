@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios"; // Ensure axios is imported
 import { API_URL_USER } from "../../Components/ApiUrl/ApiUrls";
-import { fetchTitle } from "../../Components/DropdownData/taxiFirm/taxiFirmService";
+// import { fetchTitle } from "../../Components/DropdownData/taxiFirm/taxiFirmService";
 import { toast } from "react-toastify";
 
 const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
@@ -46,7 +46,7 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
       }));
     }
   }, []);
-  const [title, settitle] = useState([]);
+  // const [title, settitle] = useState([]);
 
   // Fetch user data based on userId when the modal is open
   useEffect(() => {
@@ -91,24 +91,24 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
         }
       };
 
-      const loadTaxiFirms = async () => {
-        try {
-          const [title] = await Promise.all([
-            fetchTitle(),
-            // fetchPayment(),
-          ]);
+      // const loadTaxiFirms = async () => {
+      //   try {
+      //     const [title] = await Promise.all([
+      //       fetchTitle(),
+      //       // fetchPayment(),
+      //     ]);
 
-          settitle(title.result);
-          // setPayment(paymentData.Result);
-        } catch (error) {
-          console.error("Error loading taxi firms:", error);
-          toast.error("Failed to load dropdown data."); // Show toast on error
-        }
-      };
+      //     settitle(title.result);
+      //     // setPayment(paymentData.Result);
+      //   } catch (error) {
+      //     console.error("Error loading taxi firms:", error);
+      //     toast.error("Failed to load dropdown data."); // Show toast on error
+      //   }
+      // };
 
       // Call fetchData to populate the form
       fetchData();
-      loadTaxiFirms();
+      // loadTaxiFirms();
     }
   }, [userId]);
 
@@ -199,11 +199,16 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                   required
                 >
                   <option value="">Select Title</option>
-                  {title.map((title) => (
+                  <option value="">Select Title</option>
+                  <option value="Mr">Mr</option>
+                  <option value="Miss">Miss</option>
+                  <option value="Miss">Miss</option>
+                  <option value="Mrs">Mrs</option>
+                  {/* {title.map((title) => (
                     <option key={title._id} value={title.name}>
                       {title.name}
                     </option>
-                  ))}
+                  ))} */}
                 </select>
               </div>
 

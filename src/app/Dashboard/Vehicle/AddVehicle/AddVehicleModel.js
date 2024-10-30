@@ -17,6 +17,8 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
   const [transmission, setTransmission] = useState([]);
   const [type, setType] = useState([]);
   const [fueltype, setFuelType] = useState([]);
+  const [step, setStep] = useState(1);
+  const [selectedSite, setSelectedSite] = useState("");
   const [vehicleData, setVehicleData] = useState({
     manufacturer: "",
     model: "",
@@ -125,116 +127,6 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
 
     fetchData();
   }, [vehicleData.adminCompanyName]);
-
-  // const handleChange = (e) => {
-  //   const { name, value, type, checked, files } = e.target;
-  //   setVehicleData((prevData) => ({
-  //     ...prevData,
-  //     [name]:
-  //       type === "checkbox"
-  //         ? checked
-  //         : type === "file"
-  //         ? Array.from(files)
-  //         : value,
-  //   }));
-  // };
-
-  // const handleChange = (e) => {
-  //   const { name, value, type, checked, files, options } = e.target;
-
-  //   setVehicleData((prevData) => {
-  //     // Handle multi-select dropdown
-  //     if (type === "select-multiple") {
-  //       const selectedValues = Array.from(options)
-  //         .filter((option) => option.selected)
-  //         .map((option) => option.value);
-
-  //       return {
-  //         ...prevData,
-  //         [name]: selectedValues,
-  //       };
-  //     }
-
-  //     // Handle file inputs
-  //     if (type === "file") {
-  //       return {
-  //         ...prevData,
-  //         [name]: Array.from(files), // Convert FileList to an array
-  //       };
-  //     }
-
-  //     // Handle checkbox inputs
-  //     if (type === "checkbox") {
-  //       return {
-  //         ...prevData,
-  //         [name]: checked,
-  //       };
-  //     }
-
-  //     // Handle regular inputs (text, radio, etc.)
-  //     return {
-  //       ...prevData,
-  //       [name]: value,
-  //     };
-  //   });
-  // };
-
-  // const handleChange = (e) => {
-  //   const { name, value, type, checked, files, options } = e.target;
-
-  //   setVehicleData((prevData) => {
-  //     // Handle multi-select dropdown
-  //     if (type === "select-multiple") {
-  //       const selectedValues = Array.from(options)
-  //         .filter((option) => option.selected)
-  //         .map((option) => option.value);
-
-  //       return {
-  //         ...prevData,
-  //         [name]: selectedValues,
-  //       };
-  //     }
-
-  //     // Handle file inputs
-  //     if (type === "file") {
-  //       return {
-  //         ...prevData,
-  //         [name]: Array.from(files), // Convert FileList to an array
-  //       };
-  //     }
-
-  //     // Handle checkbox inputs for safety features
-  //     if (name === "safetyFeatures") {
-  //       const currentSafetyFeatures = prevData[name] || [];
-  //       if (checked) {
-  //         // Add feature if checked
-  //         return {
-  //           ...prevData,
-  //           [name]: [...currentSafetyFeatures, value], // Add selected feature
-  //         };
-  //       } else {
-  //         // Remove feature if unchecked
-  //         return {
-  //           ...prevData,
-  //           [name]: currentSafetyFeatures.filter(
-  //             (feature) => feature !== value
-  //           ), // Remove deselected feature
-  //         };
-  //       }
-  //     }
-  //     if (type === "checkbox") {
-  //       return {
-  //         ...prevData,
-  //         [name]: checked,
-  //       };
-  //     }
-  //     // Handle regular inputs (text, radio, etc.)
-  //     return {
-  //       ...prevData,
-  //       [name]: value,
-  //     };
-  //   });
-  // };
 
   const handleChange = (e) => {
     const { name, value, type, checked, files, options } = e.target;
@@ -391,491 +283,522 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
     });
   };
 
+  // Handle navigation
+  const nextStep = () => setStep(step + 1);
+  const prevStep = () => setStep(step - 1);
+
+  // Handle site selection
+  const handleSiteChange = (e) => {
+    setSelectedSite(e.target.value);
+  };
+
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50 ">
       <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-4xl overflow-y-auto max-h-screen">
         <form onSubmit={handleSubmit} className="max-w-4xl mx-auto p-6 ">
-          <h2 className="text-2xl font-bold mb-6">Vehicle Form</h2>
+          {step === 1 && (
+            <>
+              <h2 className="text-2xl font-bold mb-6">Vehicle Form</h2>
 
-          <div className="grid grid-cols-3 md:grid-cols-3 gap-2">
-            <div>
-              <div className="flex gap-1">
-                <label className="block font-semibold">Manufacturer</label>
-                <span className="text-red-600">*</span>
+              <div className="grid grid-cols-3 md:grid-cols-3 gap-2">
+                <div>
+                  <div className="flex gap-1">
+                    <label className="block font-semibold">Manufacturer</label>
+                    <span className="text-red-600">*</span>
+                  </div>
+                  <select
+                    id="manufacturer"
+                    name="manufacturer"
+                    value={vehicleData.manufacturer}
+                    onChange={handleChange}
+                    className="w-full p-2 border border-gray-300 rounded"
+                    required
+                  >
+                    <option value="">Select Manufacturer</option>
+                    {manufacturer.map((item) => (
+                      <option key={item._id} value={item.name}>
+                        {item.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <div className="flex gap-1">
+                    <label className="block font-semibold">Model</label>
+                    <span className="text-red-600">*</span>
+                  </div>
+                  <input
+                    type="text"
+                    name="model"
+                    value={vehicleData.model}
+                    onChange={handleChange}
+                    className="w-full p-2 border border-gray-300 rounded"
+                    placeholder="e.g., Camry, Mustang"
+                    required
+                  />
+                </div>
+                <div>
+                  <div className="flex gap-1">
+                    <label className="block font-semibold">Year</label>
+                    <span className="text-red-600">*</span>
+                  </div>
+                  <input
+                    type="number"
+                    name="year"
+                    value={vehicleData.year}
+                    onChange={handleChange}
+                    className="w-full p-2 border border-gray-300 rounded"
+                    placeholder="e.g., 2024"
+                    required
+                  />
+                </div>
               </div>
-              <select
-                id="manufacturer"
-                name="manufacturer"
-                value={vehicleData.manufacturer}
-                onChange={handleChange}
-                className="w-full p-2 border border-gray-300 rounded"
-                required
+
+              <div className="grid grid-cols-3 md:grid-cols-3 gap-2 mt-4">
+                <div className="">
+                  <div className="flex gap-1">
+                    <label className="block font-semibold">Body Type</label>
+                    <span className="text-red-600">*</span>
+                  </div>
+
+                  <select
+                    name="type"
+                    value={vehicleData.type}
+                    onChange={handleChange}
+                    className="w-full p-2 border border-gray-300 rounded"
+                    required
+                  >
+                    <option value="" disabled>
+                      Select type
+                    </option>
+                    {type.map((item) => (
+                      <option key={item._id} value={item.name}>
+                        {item.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <div className="flex gap-1">
+                    <label className="block font-semibold">Engine Type</label>
+                    <span className="text-red-600">*</span>
+                  </div>
+                  <input
+                    type="text"
+                    name="engineType"
+                    value={vehicleData.engineType}
+                    onChange={handleChange}
+                    className="w-full p-2 border border-gray-300 rounded"
+                    placeholder="e.g., 2.5L 4-Cylinder"
+                    required
+                  />
+                </div>
+                <div className="">
+                  <div className="flex gap-1">
+                    <label className="block font-semibold">Fuel Type</label>
+                    <span className="text-red-600">*</span>
+                  </div>
+                  <select
+                    name="fuelType"
+                    value={vehicleData.fuelType}
+                    onChange={handleChange}
+                    className="w-full p-2 border border-gray-300 rounded"
+                    required
+                  >
+                    <option value="" disabled>
+                      Select fuel type
+                    </option>
+                    {fueltype.map((item) => (
+                      <option key={item._id} value={item.name}>
+                        {item.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-2 mt-4">
+                <div>
+                  <div className="flex gap-1">
+                    <label className="block font-semibold">Transmission</label>
+                    <span className="text-red-600">*</span>
+                  </div>
+                  <select
+                    name="transmission"
+                    value={vehicleData.transmission}
+                    onChange={handleChange}
+                    className="w-full p-2 border border-gray-300 rounded"
+                    placeholder="e.g., Automatic"
+                    required
+                  >
+                    <option value="" disabled>
+                      Select Transmission
+                    </option>
+                    {transmission.map((item) => (
+                      <option key={item._id} value={item.name}>
+                        {item.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="">
+                  <div className="flex gap-1">
+                    <label className="block font-semibold">Drivetrain</label>
+                    <span className="text-red-600">*</span>
+                  </div>
+                  <select
+                    name="drivetrain"
+                    value={vehicleData.drivetrain}
+                    onChange={handleChange}
+                    className="w-full p-2 border border-gray-300 rounded"
+                    required
+                  >
+                    <option value="" disabled>
+                      Select drivetrain
+                    </option>
+                    <option value="FWD">Front-wheel drive (FWD)</option>
+                    <option value="RWD">Rear-wheel drive (RWD)</option>
+                    <option value="AWD">All-wheel drive (AWD)</option>
+                    <option value="4WD">Four-wheel drive (4WD)</option>
+                  </select>
+                </div>
+                <div>
+                  <div className="flex gap-1">
+                    <label className="block font-semibold">
+                      Exterior Color
+                    </label>
+                    <span className="text-red-600">*</span>
+                  </div>
+                  <input
+                    type="text"
+                    name="exteriorColor"
+                    value={vehicleData.exteriorColor}
+                    onChange={handleChange}
+                    className="w-full p-2 border border-gray-300 rounded"
+                    placeholder="e.g., Red, Blue"
+                    required
+                  />
+                </div>
+                <div>
+                  <div className="flex gap-1">
+                    <label className="block font-semibold">
+                      Interior Color
+                    </label>
+                    <span className="text-red-600">*</span>
+                  </div>
+                  <input
+                    type="text"
+                    name="interiorColor"
+                    value={vehicleData.interiorColor}
+                    onChange={handleChange}
+                    className="w-full p-2 border border-gray-300 rounded"
+                    placeholder="e.g., Black, Beige"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-3 md:grid-cols-3 gap-2 mt-4"></div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mt-4">
+                <div>
+                  <div className="flex gap-1">
+                    <label className="block font-semibold">Height</label>
+                  </div>
+                  <input
+                    type="number"
+                    name="height"
+                    value={vehicleData.height}
+                    onChange={handleChange}
+                    className="w-full p-2 border border-gray-300 rounded"
+                  />
+                </div>
+                <div>
+                  <div className="flex gap-1">
+                    <label className="block font-semibold">Width</label>
+                  </div>
+                  <input
+                    type="number"
+                    name="width"
+                    value={vehicleData.width}
+                    onChange={handleChange}
+                    className="w-full p-2 border border-gray-300 rounded"
+                  />
+                </div>
+                <div>
+                  <div className="flex gap-1">
+                    <label className="block font-semibold">Length</label>
+                  </div>
+                  <input
+                    type="number"
+                    name="length"
+                    value={vehicleData.length}
+                    onChange={handleChange}
+                    className="w-full p-2 border border-gray-300 rounded"
+                  />
+                </div>
+              </div>
+              <button
+                onClick={nextStep}
+                className="px-4 py-2 mt-4 text-white bg-blue-500 rounded-md"
               >
-                <option value="">Select Manufacturer</option>
-                {manufacturer.map((item) => (
-                  <option key={item._id} value={item.name}>
-                    {item.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <div className="flex gap-1">
-                <label className="block font-semibold">Model</label>
-                <span className="text-red-600">*</span>
-              </div>
-              <input
-                type="text"
-                name="model"
-                value={vehicleData.model}
-                onChange={handleChange}
-                className="w-full p-2 border border-gray-300 rounded"
-                placeholder="e.g., Camry, Mustang"
-                required
-              />
-            </div>
-            <div>
-              <div className="flex gap-1">
-                <label className="block font-semibold">Year</label>
-                <span className="text-red-600">*</span>
-              </div>
-              <input
-                type="number"
-                name="year"
-                value={vehicleData.year}
-                onChange={handleChange}
-                className="w-full p-2 border border-gray-300 rounded"
-                placeholder="e.g., 2024"
-                required
-              />
-            </div>
-          </div>
+                Next Page
+              </button>
+            </>
+          )}
+          {/* first end */}
+          {step === 2 && (
+            <>
+              {" "}
+              <div className="grid grid-cols-3 md:grid-cols-3 gap-2 mt-4">
+                <div>
+                  <div className="flex gap-1">
+                    <label className="block font-semibold">
+                      Passenger Capacity
+                    </label>
+                    <span className="text-red-600">*</span>
+                  </div>
+                  <select
+                    name="passengerCapacity"
+                    value={vehicleData.passengerCapacity}
+                    onChange={handleChange}
+                    className="w-full p-2 border border-gray-300 rounded"
+                    required
+                  >
+                    <option value="" disabled>
+                      Select Capacity
+                    </option>
+                    {[...Array(10)].map((_, index) => (
+                      <option key={index + 1} value={index + 1}>
+                        {index + 1}
+                      </option>
+                    ))}
+                  </select>
+                </div>
 
-          <div className="grid grid-cols-3 md:grid-cols-3 gap-2 mt-4">
-            <div className="">
-              <div className="flex gap-1">
-                <label className="block font-semibold">Body Type</label>
-                <span className="text-red-600">*</span>
+                <div>
+                  <div className="flex gap-1">
+                    <label className="block font-semibold">
+                      Cargo Capacity
+                    </label>
+                  </div>
+                  <input
+                    type="text"
+                    name="cargoCapacity"
+                    value={vehicleData.cargoCapacity}
+                    onChange={handleChange}
+                    className="w-full p-2 border border-gray-300 rounded"
+                  />
+                </div>
+                <div>
+                  <div className="flex gap-1">
+                    <label className="block font-semibold">Horsepower</label>
+                  </div>
+                  <input
+                    type="number"
+                    name="horsepower"
+                    value={vehicleData.horsepower}
+                    onChange={handleChange}
+                    className="w-full p-2 border border-gray-300 rounded"
+                  />
+                </div>
               </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mt-4">
+                <div>
+                  <div className="flex gap-1">
+                    <label className="block font-semibold">Torque</label>
+                  </div>
+                  <input
+                    type="number"
+                    name="torque"
+                    value={vehicleData.torque}
+                    onChange={handleChange}
+                    className="w-full p-2 border border-gray-300 rounded"
+                  />
+                </div>
+                <div>
+                  <div className="flex gap-1">
+                    <label className="block font-semibold">
+                      Top Speed (mph)
+                    </label>
+                  </div>
+                  <input
+                    type="number"
+                    name="topSpeed"
+                    value={vehicleData.topSpeed}
+                    onChange={handleChange}
+                    className="w-full p-2 border border-gray-300 rounded"
+                  />
+                </div>
+                <div>
+                  <div className="flex gap-1">
+                    <label className="block font-semibold">
+                      Towing Capacity (lbs)
+                    </label>{" "}
+                  </div>
 
-              <select
-                name="type"
-                value={vehicleData.type}
-                onChange={handleChange}
-                className="w-full p-2 border border-gray-300 rounded"
-                required
-              >
-                <option value="" disabled>
-                  Select type
-                </option>
-                {type.map((item) => (
-                  <option key={item._id} value={item.name}>
-                    {item.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <div className="flex gap-1">
-                <label className="block font-semibold">Engine Type</label>
-                <span className="text-red-600">*</span>
+                  <input
+                    type="number"
+                    name="towingCapacity"
+                    value={vehicleData.towingCapacity}
+                    onChange={handleChange}
+                    className="w-full p-2 border border-gray-300 rounded"
+                  />
+                </div>
               </div>
-              <input
-                type="text"
-                name="engineType"
-                value={vehicleData.engineType}
-                onChange={handleChange}
-                className="w-full p-2 border border-gray-300 rounded"
-                placeholder="e.g., 2.5L 4-Cylinder"
-                required
-              />
-            </div>
-            <div className="">
-              <div className="flex gap-1">
-                <label className="block font-semibold">Fuel Type</label>
-                <span className="text-red-600">*</span>
+              <div className="grid grid-cols-2 md:grid-cols-2 gap-2 mt-4">
+                <div>
+                  <div className="flex gap-1">
+                    <label className="block font-semibold">
+                      Safety Features
+                    </label>
+                    <span className="text-red-600">*</span>
+                  </div>
+                  <div className="grid grid-cols-2 md:grid-cols-2 gap-1  border border-gray-300 pl-1">
+                    {/* List of safety features as checkboxes */}
+                    {[
+                      "Airbags",
+                      "ABS",
+                      "Stability Control",
+                      "Traction Control",
+                      "Blind Spot Monitoring",
+                      "Lane Departure Warning",
+                      "Adaptive Cruise Control",
+                      "Rearview Camera",
+                      "Parking Sensors",
+                      "Automatic Emergency Braking",
+                    ].map((feature) => (
+                      <label key={feature} className="flex items-center">
+                        <input
+                          type="checkbox"
+                          name="safetyFeatures"
+                          value={feature}
+                          checked={vehicleData.safetyFeatures.includes(feature)}
+                          onChange={handleChange}
+                          className="mr-1"
+                        />
+                        {feature}
+                      </label>
+                    ))}
+                  </div>
+                </div>
+                <div className="">
+                  <div className="flex gap-1 ">
+                    <label className="block font-semibold">
+                      Technology Features
+                    </label>
+                    <span className="text-red-600">*</span>
+                  </div>
+                  <div className="grid grid-cols-2 md:grid-cols-2 gap-1.5 border border-gray-300 pl-1">
+                    {/* List of technology features as checkboxes */}
+                    {[
+                      "Navigation",
+                      "Bluetooth",
+                      "Backup Camera",
+                      "Adaptive Headlights",
+                      "Lane Keep Assist",
+                      "Parking Assist",
+                      "Smartphone Integration",
+                      "Voice Recognition",
+                      "Keyless Entry",
+                      "Rear Seat Entertainment",
+                    ].map((feature) => (
+                      <label key={feature} className="flex items-center">
+                        <input
+                          type="checkbox"
+                          name="techFeatures"
+                          value={feature}
+                          checked={vehicleData.techFeatures.includes(feature)}
+                          onChange={handleChange}
+                          className="mr-1"
+                        />
+                        {feature}
+                      </label>
+                    ))}
+                  </div>
+                </div>
               </div>
-              <select
-                name="fuelType"
-                value={vehicleData.fuelType}
-                onChange={handleChange}
-                className="w-full p-2 border border-gray-300 rounded"
-                required
-              >
-                <option value="" disabled>
-                  Select fuel type
-                </option>
-                {fueltype.map((item) => (
-                  <option key={item._id} value={item.name}>
-                    {item.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
+              <div className="grid grid-cols-2 md:grid-cols-2 gap-2 mt-4">
+                <div>
+                  <div className="flex gap-1">
+                    <label className="block font-semibold">
+                      Fuel Efficiency
+                    </label>
+                  </div>
 
-          <div className="grid grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-2 mt-4">
-            <div>
-              <div className="flex gap-1">
-                <label className="block font-semibold">Transmission</label>
-                <span className="text-red-600">*</span>
-              </div>
-              <select
-                name="transmission"
-                value={vehicleData.transmission}
-                onChange={handleChange}
-                className="w-full p-2 border border-gray-300 rounded"
-                placeholder="e.g., Automatic"
-                required
-              >
-                <option value="" disabled>
-                  Select Transmission
-                </option>
-                {transmission.map((item) => (
-                  <option key={item._id} value={item.name}>
-                    {item.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="">
-              <div className="flex gap-1">
-                <label className="block font-semibold">Drivetrain</label>
-                <span className="text-red-600">*</span>
-              </div>
-              <select
-                name="drivetrain"
-                value={vehicleData.drivetrain}
-                onChange={handleChange}
-                className="w-full p-2 border border-gray-300 rounded"
-                required
-              >
-                <option value="" disabled>
-                  Select drivetrain
-                </option>
-                <option value="FWD">Front-wheel drive (FWD)</option>
-                <option value="RWD">Rear-wheel drive (RWD)</option>
-                <option value="AWD">All-wheel drive (AWD)</option>
-                <option value="4WD">Four-wheel drive (4WD)</option>
-              </select>
-            </div>
-            <div>
-              <div className="flex gap-1">
-                <label className="block font-semibold">Exterior Color</label>
-                <span className="text-red-600">*</span>
-              </div>
-              <input
-                type="text"
-                name="exteriorColor"
-                value={vehicleData.exteriorColor}
-                onChange={handleChange}
-                className="w-full p-2 border border-gray-300 rounded"
-                placeholder="e.g., Red, Blue"
-                required
-              />
-            </div>
-            <div>
-              <div className="flex gap-1">
-                <label className="block font-semibold">Interior Color</label>
-                <span className="text-red-600">*</span>
-              </div>
-              <input
-                type="text"
-                name="interiorColor"
-                value={vehicleData.interiorColor}
-                onChange={handleChange}
-                className="w-full p-2 border border-gray-300 rounded"
-                placeholder="e.g., Black, Beige"
-                required
-              />
-            </div>
-          </div>
+                  <input
+                    type="text"
+                    name="fuelEfficiency"
+                    value={vehicleData.fuelEfficiency}
+                    onChange={handleChange}
+                    className="w-full p-2 border border-gray-300 rounded"
+                    placeholder="e.g., 25 MPG"
+                  />
+                </div>
+                <div>
+                  <div className="flex gap-1">
+                    <label className="block font-semibold">Price (£)</label>
 
-          <div className="grid grid-cols-3 md:grid-cols-3 gap-2 mt-4"></div>
+                    <span className="text-red-600">*</span>
+                  </div>
+                  <input
+                    type="number"
+                    name="price"
+                    value={vehicleData.price}
+                    onChange={handleChange}
+                    className="w-full p-2 border border-gray-300 rounded"
+                    required
+                  />
+                </div>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-4">
+                <div>
+                  <div className="flex gap-1">
+                    <label className="block font-semibold">
+                      Registration Number
+                    </label>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mt-4">
-            <div>
-              <div className="flex gap-1">
-                <label className="block font-semibold">Height</label>
-              </div>
-              <input
-                type="number"
-                name="height"
-                value={vehicleData.height}
-                onChange={handleChange}
-                className="w-full p-2 border border-gray-300 rounded"
-              />
-            </div>
-            <div>
-              <div className="flex gap-1">
-                <label className="block font-semibold">Width</label>
-              </div>
-              <input
-                type="number"
-                name="width"
-                value={vehicleData.width}
-                onChange={handleChange}
-                className="w-full p-2 border border-gray-300 rounded"
-              />
-            </div>
-            <div>
-              <div className="flex gap-1">
-                <label className="block font-semibold">Length</label>
-              </div>
-              <input
-                type="number"
-                name="length"
-                value={vehicleData.length}
-                onChange={handleChange}
-                className="w-full p-2 border border-gray-300 rounded"
-              />
-            </div>
-          </div>
+                    <span className="text-red-600">*</span>
+                  </div>
+                  <input
+                    type="text"
+                    name="registrationNumber"
+                    value={vehicleData.registrationNumber}
+                    onChange={handleChange}
+                    className="w-full p-2 border border-gray-300 rounded"
+                    required
+                  />
+                </div>
 
-          <div className="grid grid-cols-3 md:grid-cols-3 gap-2 mt-4">
-            <div>
-              <div className="flex gap-1">
-                <label className="block font-semibold">
-                  Passenger Capacity
-                </label>
-                <span className="text-red-600">*</span>
-              </div>
-              <select
-                name="passengerCapacity"
-                value={vehicleData.passengerCapacity}
-                onChange={handleChange}
-                className="w-full p-2 border border-gray-300 rounded"
-                required
-              >
-                <option value="" disabled>
-                  Select Capacity
-                </option>
-                {[...Array(10)].map((_, index) => (
-                  <option key={index + 1} value={index + 1}>
-                    {index + 1}
-                  </option>
-                ))}
-              </select>
-            </div>
+                <div>
+                  <div className="flex gap-1">
+                    <label htmlFor="taxiFirm" className="block font-semibold">
+                      Taxi Local Authority:
+                    </label>
 
-            <div>
-              <div className="flex gap-1">
-                <label className="block font-semibold">Cargo Capacity</label>
-              </div>
-              <input
-                type="text"
-                name="cargoCapacity"
-                value={vehicleData.cargoCapacity}
-                onChange={handleChange}
-                className="w-full p-2 border border-gray-300 rounded"
-              />
-            </div>
-            <div>
-              <div className="flex gap-1">
-                <label className="block font-semibold">Horsepower</label>
-              </div>
-              <input
-                type="number"
-                name="horsepower"
-                value={vehicleData.horsepower}
-                onChange={handleChange}
-                className="w-full p-2 border border-gray-300 rounded"
-              />
-            </div>
-          </div>
+                    <span className="text-red-600">*</span>
+                  </div>
+                  <select
+                    id="LocalAuthority"
+                    name="LocalAuthority"
+                    value={vehicleData.LocalAuthority}
+                    onChange={handleChange}
+                    className="w-full p-2 border border-gray-300 rounded"
+                    required
+                  >
+                    <option value="">Select Local Authority</option>
+                    {local.map((auth) => (
+                      <option key={auth.id} value={auth.name}>
+                        {auth.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mt-4">
-            <div>
-              <div className="flex gap-1">
-                <label className="block font-semibold">Torque</label>
-              </div>
-              <input
-                type="number"
-                name="torque"
-                value={vehicleData.torque}
-                onChange={handleChange}
-                className="w-full p-2 border border-gray-300 rounded"
-              />
-            </div>
-            <div>
-              <div className="flex gap-1">
-                <label className="block font-semibold">Top Speed (mph)</label>
-              </div>
-              <input
-                type="number"
-                name="topSpeed"
-                value={vehicleData.topSpeed}
-                onChange={handleChange}
-                className="w-full p-2 border border-gray-300 rounded"
-              />
-            </div>
-            <div>
-              <div className="flex gap-1">
-                <label className="block font-semibold">
-                  Towing Capacity (lbs)
-                </label>{" "}
-              </div>
-
-              <input
-                type="number"
-                name="towingCapacity"
-                value={vehicleData.towingCapacity}
-                onChange={handleChange}
-                className="w-full p-2 border border-gray-300 rounded"
-              />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 md:grid-cols-2 gap-2 mt-4">
-            <div>
-              <div className="flex gap-1">
-                <label className="block font-semibold">Safety Features</label>
-                <span className="text-red-600">*</span>
-              </div>
-              <div className="grid grid-cols-2 md:grid-cols-2 gap-1  border border-gray-300 pl-1">
-                {/* List of safety features as checkboxes */}
-                {[
-                  "Airbags",
-                  "ABS",
-                  "Stability Control",
-                  "Traction Control",
-                  "Blind Spot Monitoring",
-                  "Lane Departure Warning",
-                  "Adaptive Cruise Control",
-                  "Rearview Camera",
-                  "Parking Sensors",
-                  "Automatic Emergency Braking",
-                ].map((feature) => (
-                  <label key={feature} className="flex items-center">
-                    <input
-                      type="checkbox"
-                      name="safetyFeatures"
-                      value={feature}
-                      checked={vehicleData.safetyFeatures.includes(feature)}
-                      onChange={handleChange}
-                      className="mr-1"
-                    />
-                    {feature}
-                  </label>
-                ))}
-              </div>
-            </div>
-            <div className="">
-              <div className="flex gap-1 ">
-                <label className="block font-semibold">
-                  Technology Features
-                </label>
-                <span className="text-red-600">*</span>
-              </div>
-              <div className="grid grid-cols-2 md:grid-cols-2 gap-1.5 border border-gray-300 pl-1">
-                {/* List of technology features as checkboxes */}
-                {[
-                  "Navigation",
-                  "Bluetooth",
-                  "Backup Camera",
-                  "Adaptive Headlights",
-                  "Lane Keep Assist",
-                  "Parking Assist",
-                  "Smartphone Integration",
-                  "Voice Recognition",
-                  "Keyless Entry",
-                  "Rear Seat Entertainment",
-                ].map((feature) => (
-                  <label key={feature} className="flex items-center">
-                    <input
-                      type="checkbox"
-                      name="techFeatures"
-                      value={feature}
-                      checked={vehicleData.techFeatures.includes(feature)}
-                      onChange={handleChange}
-                      className="mr-1"
-                    />
-                    {feature}
-                  </label>
-                ))}
-              </div>
-            </div>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-2 gap-2 mt-4">
-            <div>
-              <div className="flex gap-1">
-                <label className="block font-semibold">Fuel Efficiency</label>
-              </div>
-
-              <input
-                type="text"
-                name="fuelEfficiency"
-                value={vehicleData.fuelEfficiency}
-                onChange={handleChange}
-                className="w-full p-2 border border-gray-300 rounded"
-                placeholder="e.g., 25 MPG"
-              />
-            </div>
-            <div>
-              <div className="flex gap-1">
-                <label className="block font-semibold">Price (£)</label>
-
-                <span className="text-red-600">*</span>
-              </div>
-              <input
-                type="number"
-                name="price"
-                value={vehicleData.price}
-                onChange={handleChange}
-                className="w-full p-2 border border-gray-300 rounded"
-                required
-              />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-4">
-            <div>
-              <div className="flex gap-1">
-                <label className="block font-semibold">
-                  Registration Number
-                </label>
-
-                <span className="text-red-600">*</span>
-              </div>
-              <input
-                type="text"
-                name="registrationNumber"
-                value={vehicleData.registrationNumber}
-                onChange={handleChange}
-                className="w-full p-2 border border-gray-300 rounded"
-                required
-              />
-            </div>
-
-            <div>
-              <div className="flex gap-1">
-                <label htmlFor="taxiFirm" className="block font-semibold">
-                  Taxi Local Authority:
-                </label>
-
-                <span className="text-red-600">*</span>
-              </div>
-              <select
-                id="LocalAuthority"
-                name="LocalAuthority"
-                value={vehicleData.LocalAuthority}
-                onChange={handleChange}
-                className="w-full p-2 border border-gray-300 rounded"
-                required
-              >
-                <option value="">Select Local Authority</option>
-                {local.map((auth) => (
-                  <option key={auth.id} value={auth.name}>
-                    {auth.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* Vehicle Status Section */}
-            {/* <div className="">
+                {/* Vehicle Status Section */}
+                {/* <div className="">
               <div className="flex gap-1">
                 <label className="block font-semibold">Vehicle Status</label>
                 <span className="text-red-600">*</span>
@@ -897,74 +820,238 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                 <option value="Maintenance">Maintenance</option>
               </select>
             </div> */}
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-4 mb-2">
-            {/* Warranty Information Section */}
-            <div className="flex flex-col">
-              <div className="flex gap-1 items-center">
-                <label className="block font-semibold">
-                  Warranty Information
-                </label>
-                <span className="text-red-600">*</span>
               </div>
-              <textarea
-                name="warrantyInfo"
-                value={vehicleData.warrantyInfo}
-                onChange={handleChange}
-                className="border-2 border-dashed border-gray-300 rounded-lg p-5 resize-none" // Added 'resize-none' for better layout control
-                placeholder="e.g., 3 years or 36,000 miles"
-                required
-              />
-            </div>
-            <div className="">
-              <label className="block font-semibold">Vehicle Images</label>
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-2">
+              <div className="flex gap-2 mt-4">
+                <button
+                  onClick={prevStep}
+                  className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                >
+                  Prevouse Page
+                </button>
+                <button
+                  onClick={nextStep}
+                  className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                >
+                  Next Page
+                </button>
+              </div>
+            </>
+          )}
+
+          {step === 3 && (
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-4">
+                <div className="">
+                  <div className="flex gap-1">
+                    <label className="block font-semibold">Vehicle Site</label>
+                    <span className="text-red-600">*</span>
+                  </div>
+                  <select
+                    name="vehicleSite"
+                    value={selectedSite}
+                    onChange={handleSiteChange}
+                    className="w-full p-2 border border-gray-300 rounded"
+                    required
+                  >
+                    <option value="">Select vehicle site</option>
+                    <option value="Headquarters">Headquarters</option>
+                    <option value="Warehouse A">Warehouse A</option>
+                    <option value="Warehouse B">Warehouse B</option>
+                    <option value="Service Center">Service Center</option>
+                    <option value="Remote Site">Remote Site</option>
+                  </select>
+                </div>
+                {/* Conditionally Rendered Fleet Details */}
+                {selectedSite && (
+                  <div className="space-y-3">
+                    <h3 className="font-semibold">Fleet Entry Details</h3>
+
+                    <div>
+                      <label className="block">Date Fleet Entry</label>
+                      <input
+                        type="text"
+                        name="fleetEntryDate"
+                        // value={fleetData.fleetEntryDate}
+                        // onChange={handleFleetDataChange}
+                        placeholder="Enter fleet entry date"
+                        className="w-full p-2 border border-gray-300 rounded"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block">Miles on Fleet Entry</label>
+                      <input
+                        type="text"
+                        name="milesOnFleetEntry"
+                        // value={fleetData.milesOnFleetEntry}
+                        // onChange={handleFleetDataChange}
+                        placeholder="Enter miles on fleet entry"
+                        className="w-full p-2 border border-gray-300 rounded"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block">Planned Fleet Exit</label>
+                      <input
+                        type="text"
+                        name="plannedFleetExit"
+                        // value={fleetData.plannedFleetExit}
+                        // onChange={handleFleetDataChange}
+                        placeholder="Enter planned fleet exit"
+                        className="w-full p-2 border border-gray-300 rounded"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block">Miles on Fleet Exit</label>
+                      <input
+                        type="text"
+                        name="milesOnFleetExit"
+                        // value={fleetData.milesOnFleetExit}
+                        // onChange={handleFleetDataChange}
+                        placeholder="Enter miles on fleet exit"
+                        className="w-full p-2 border border-gray-300 rounded"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block">
+                        Actual Date Exited From Fleet
+                      </label>
+                      <input
+                        type="text"
+                        name="actualExitDate"
+                        // value={fleetData.actualExitDate}
+                        // onChange={handleFleetDataChange}
+                        placeholder="Enter actual exit date"
+                        className="w-full p-2 border border-gray-300 rounded"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block">Miles at Actual Exit</label>
+                      <input
+                        type="text"
+                        name="milesAtActualExit"
+                        // value={fleetData.milesAtActualExit}
+                        // onChange={handleFleetDataChange}
+                        placeholder="Enter miles at actual exit"
+                        className="w-full p-2 border border-gray-300 rounded"
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-4">
+                <div>
+                  <div className="flex gap-1">
+                    <label className="block font-semibold">Colour</label>
+                    <span className="text-red-600">*</span>
+                  </div>
+
+                  <select
+                    name="color"
+                    // value={color}
+                    // onChange={handleColorChange}
+                    className="w-full p-2 border border-gray-300 rounded"
+                    required
+                  >
+                    <option value="">Select color</option>
+                    <option value="Red">Red</option>
+                    <option value="Blue">Blue</option>
+                    <option value="Green">Green</option>
+                    <option value="Black">Black</option>
+                    <option value="White">White</option>
+                  </select>
+                </div>
+
+                <div>
+                  <div className="flex gap-1">
+                    <label className="block font-semibold">
+                      Editable Color
+                    </label>
+                  </div>
+                  <input
+                    type="text"
+                    // value={customColor}
+                    // onChange={handleCustomColorChange}
+                    placeholder="Enter custom color"
+                    className="w-full p-2 border border-gray-300 rounded"
+                  />
+                </div>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-4 mb-2">
+                {/* Warranty Information Section */}
+                <div className="flex flex-col">
+                  <div className="flex gap-1 items-center">
+                    <label className="block font-semibold">
+                      Warranty Information
+                    </label>
+                    <span className="text-red-600">*</span>
+                  </div>
+                  <textarea
+                    name="warrantyInfo"
+                    value={vehicleData.warrantyInfo}
+                    onChange={handleChange}
+                    className="border-2 border-dashed border-gray-300 rounded-lg p-5 resize-none" // Added 'resize-none' for better layout control
+                    placeholder="e.g., 3 years or 36,000 miles"
+                    required
+                  />
+                </div>
+                <div className="">
+                  <label className="block font-semibold">Vehicle Images</label>
+                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-2">
+                    <input
+                      type="file"
+                      id="imageFiles"
+                      name="imageFiles"
+                      onChange={handleChange}
+                      className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border file:border-gray-300 file:background-gray-100 hover:file:bg-gray-200 file:text-sm"
+                      placeholder="Select up to 10 images"
+                      multiple
+                    />
+                    <span className="block text-red-500 mt-2 text-sm">
+                      Maximum 10 images
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div className="flex items-center">
                 <input
-                  type="file"
-                  id="imageFiles"
-                  name="imageFiles"
+                  type="checkbox"
+                  id="isActive"
+                  name="isActive"
+                  checked={vehicleData.isActive}
                   onChange={handleChange}
-                  className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border file:border-gray-300 file:background-gray-100 hover:file:bg-gray-200 file:text-sm"
-                  placeholder="Select up to 10 images"
-                  multiple
+                  className="mr-2"
                 />
-                <span className="block text-red-500 mt-2 text-sm">
-                  Maximum 10 images
-                </span>
+                <label
+                  htmlFor="isActive"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Active
+                </label>
               </div>
-            </div>
-          </div>
-
-          <div className="flex items-center">
-            <input
-              type="checkbox"
-              id="isActive"
-              name="isActive"
-              checked={vehicleData.isActive}
-              onChange={handleChange}
-              className="mr-2"
-            />
-            <label
-              htmlFor="isActive"
-              className="text-sm font-medium text-gray-700"
-            >
-              Active
-            </label>
-          </div>
-
-          <div className="mt-6">
-            <button className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50">
-              Submit
-            </button>
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-6 py-2 ml-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
-            >
-              Close
-            </button>
-          </div>
+              <div className="mt-6 flex gap-2">
+                <button
+                  onClick={prevStep}
+                  className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                >
+                  Prevouse Page
+                </button>
+                <button className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50">
+                  Submit
+                </button>
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className="px-6 py-2 ml-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                >
+                  Close
+                </button>
+              </div>
+            </>
+          )}
         </form>
       </div>
     </div>

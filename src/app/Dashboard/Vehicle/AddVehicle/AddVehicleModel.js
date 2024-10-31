@@ -19,6 +19,8 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
   const [fueltype, setFuelType] = useState([]);
   const [step, setStep] = useState(1);
   const [selectedSite, setSelectedSite] = useState("");
+  const [maintenance, setMaintenance] = useState(false);
+
   const [vehicleData, setVehicleData] = useState({
     manufacturer: "",
     model: "",
@@ -340,6 +342,8 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
       vehicleSite: e.target.value,
     }));
   };
+
+  const handleMaintenanceToggle = () => setMaintenance(!maintenance);
 
   if (!isOpen) return null;
 
@@ -1247,6 +1251,237 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
 
           {step === 4 && (
             <>
+              <h2 className="text-2xl font-bold mb-4">
+                Financials Information
+              </h2>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mt-4 mb-2">
+                <div className="mb-4">
+                  <label className="block text-gray-700 font-semibold mb-1">
+                    List Price (P11D)
+                  </label>
+                  <input
+                    type="number"
+                    name="listPrice"
+                    // value={financials.listPrice}
+                    // onChange={handleChange}
+                    placeholder="Enter List Price"
+                    className="w-full p-2 border border-gray-300 rounded"
+                    required
+                  />
+                </div>
+
+                <div className="mb-4">
+                  <label className="block text-gray-700 font-semibold mb-1">
+                    Purchase Price
+                  </label>
+                  <input
+                    type="number"
+                    name="purchasePrice"
+                    // value={financials.purchasePrice}
+                    // onChange={handleChange}
+                    placeholder="Enter Purchase Price"
+                    className="w-full p-2 border border-gray-300 rounded"
+                    required
+                  />
+                </div>
+
+                <div className="mb-4">
+                  <label className="block text-gray-700 font-semibold mb-1">
+                    Insurance Value
+                  </label>
+                  <input
+                    type="number"
+                    name="insuranceValue"
+                    // value={financials.insuranceValue}
+                    // onChange={handleChange}
+                    placeholder="Enter Insurance Value"
+                    className="w-full p-2 border border-gray-300 rounded"
+                    required
+                  />
+                </div>
+
+                <div className="mb-4">
+                  <label className="block text-gray-700 font-semibold mb-1">
+                    Department Code
+                  </label>
+                  <input
+                    type="text"
+                    name="departmentCode"
+                    // value={financials.departmentCode}
+                    // onChange={handleChange}
+                    placeholder="Enter Department Code"
+                    className="w-full p-2 border border-gray-300 rounded"
+                    required
+                  />
+                </div>
+
+                <div className="mb-4">
+                  <label className="block text-gray-700 font-semibold mb-1">
+                    <input
+                      type="checkbox"
+                      checked={maintenance}
+                      onChange={handleMaintenanceToggle}
+                      className="mr-2"
+                    />
+                    Maintenance Record (if any notable maintenance done till
+                    date)
+                  </label>
+                </div>
+              </div>
+              {maintenance && (
+                <>
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mt-4 mb-2">
+                    <div className="mb-4">
+                      <label className="block text-gray-700 font-semibold mb-1">
+                        Issues/Damage
+                      </label>
+                      <textarea
+                        name="issues"
+                        // value={maintenanceData.issues}
+                        // onChange={handleChange}
+                        placeholder="Describe any issues or damage"
+                        className="w-full p-2 border border-gray-300 rounded"
+                      />
+                    </div>
+
+                    <div className="mb-4">
+                      <label className="block text-gray-700 font-semibold mb-1">
+                        Images
+                      </label>
+                      <input
+                        type="file"
+                        name="images"
+                        multiple
+                        // onChange={handleChange}
+                        className="w-full"
+                      />
+                    </div>
+
+                    <div className="mb-4">
+                      <label className="block text-gray-700 font-semibold mb-1">
+                        Recovery
+                      </label>
+                      <input
+                        type="text"
+                        name="recovery"
+                        // value={maintenanceData.recovery}
+                        // onChange={handleChange}
+                        placeholder="Describe recovery actions"
+                        className="w-full p-2 border border-gray-300 rounded"
+                      />
+                    </div>
+
+                    <div className="mb-4">
+                      <label className="block text-gray-700 font-semibold mb-1">
+                        Organization
+                      </label>
+                      <select
+                        name="organization"
+                        // value={maintenanceData.organization}
+                        // onChange={handleChange}
+                        className="w-full p-2 border border-gray-300 rounded"
+                      >
+                        <option value="">Select Organization</option>
+                        <option value="Organization1">Organization 1</option>
+                        <option value="Organization2">Organization 2</option>
+                      </select>
+                    </div>
+
+                    <div className="mb-4">
+                      <label className="block text-gray-700 font-semibold mb-1">
+                        Repair Status
+                      </label>
+                      <input
+                        type="text"
+                        name="repairStatus"
+                        // value={maintenanceData.repairStatus}
+                        // onChange={handleChange}
+                        placeholder="Enter repair status"
+                        className="w-full p-2 border border-gray-300 rounded"
+                      />
+                    </div>
+
+                    <div className="mb-4">
+                      <label className="block text-gray-700 font-semibold mb-1">
+                        Job Number
+                      </label>
+                      <input
+                        type="text"
+                        name="jobNumber"
+                        // value={maintenanceData.jobNumber}
+                        // onChange={handleChange}
+                        placeholder="Enter job number"
+                        className="w-full p-2 border border-gray-300 rounded"
+                      />
+                    </div>
+
+                    <div className="mb-4">
+                      <label className="block text-gray-700 font-semibold mb-1">
+                        Memo
+                      </label>
+                      <textarea
+                        name="memo"
+                        // value={maintenanceData.memo}
+                        // onChange={handleChange}
+                        placeholder="Memo for the repair"
+                        className="w-full p-2 border border-gray-300 rounded"
+                      />
+                    </div>
+
+                    <div className="">
+                      <h3 className="font-semibold text-gray-700 mb-2">
+                        Parts (Add multiple parts for a repair)
+                      </h3>
+                      <div>
+                        <input
+                          type="text"
+                          name="partNumber"
+                          // value={part.partNumber}
+                          // onChange={handlePartChange}
+                          placeholder="Part Number"
+                          className="w-full p-2 border border-gray-300 rounded mb-2"
+                        />
+                      </div>
+
+                      <div>
+                        <input
+                          type="text"
+                          name="partName"
+                          // value={part.partName}
+                          // onChange={handlePartChange}
+                          placeholder="Part Name"
+                          className="w-full p-2 border border-gray-300 rounded mb-2"
+                        />
+                      </div>
+
+                      <div>
+                        <input
+                          type="number"
+                          name="price"
+                          // value={part.price}
+                          // onChange={handlePartChange}
+                          placeholder="Price"
+                          className="w-full p-2 border border-gray-300 rounded mb-2"
+                        />
+                      </div>
+
+                      <div>
+                        <select
+                          name="supplier"
+                          // value={part.supplier}
+                          // onChange={handlePartChange}
+                          className="w-full p-2 border border-gray-300 rounded mb-2"
+                        >
+                          <option value="">Select Supplier</option>
+                          <option value="Supplier1">Supplier 1</option>
+                          <option value="Supplier2">Supplier 2</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </>
+              )}
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-4 mb-2">
                 {/* Warranty Information Section */}
                 <div className="flex flex-col">
@@ -1304,7 +1539,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                   onClick={prevStep}
                   className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
                 >
-                  Prevouse Page
+                  Back
                 </button>
                 <button className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50">
                   Submit

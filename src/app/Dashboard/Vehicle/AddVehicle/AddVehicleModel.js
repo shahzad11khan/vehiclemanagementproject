@@ -30,7 +30,6 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
     drivetrain: "",
     exteriorColor: "",
     interiorColor: "",
-
     height: "",
     width: "",
     length: "",
@@ -50,6 +49,20 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
     warrantyInfo: "",
     adminCreatedBy: "",
     adminCompanyName: "",
+    // new fields
+    enginesize: "",
+    chasisnumber: "",
+    vehicleSite: "",
+    fleetEntryDate: "",
+    milesOnFleetEntry: "",
+    plannedFleetExit: "",
+    milesOnFleetExit: "",
+    actualExitDate: "",
+    milesAtActualExit: "",
+    doors: "",
+    color: "",
+    editablecolor: "",
+
     isActive: false,
     imageFiles: [], // Store selected image files
   });
@@ -275,6 +288,20 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
       price: "",
       registrationNumber: "",
       vehicleStatus: "",
+      // new fields
+      enginesize: "",
+      chasisnumber: "",
+      vehicleSite: "",
+      fleetEntryDate: "",
+      milesOnFleetEntry: "",
+      plannedFleetExit: "",
+      milesOnFleetExit: "",
+      actualExitDate: "",
+      milesAtActualExit: "",
+      doors: "",
+      color: "",
+      editablecolor: "",
+
       warrantyInfo: "",
       adminCreatedBy: "",
       adminCompanyName: vehicleData.adminCompanyName,
@@ -287,9 +314,12 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
   const nextStep = () => setStep(step + 1);
   const prevStep = () => setStep(step - 1);
 
-  // Handle site selection
   const handleSiteChange = (e) => {
     setSelectedSite(e.target.value);
+    setVehicleData((prevData) => ({
+      ...prevData,
+      vehicleSite: e.target.value,
+    }));
   };
 
   if (!isOpen) return null;
@@ -846,10 +876,10 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                     <label className="block font-semibold">Engine Size</label>
                   </div>
                   <input
-                    type="text"
+                    type="number"
                     name="enginesize"
-                    // value={customColor}
-                    // onChange={handleCustomColorChange}
+                    value={vehicleData.enginesize}
+                    onChange={handleChange}
                     placeholder="Enter Engine Size"
                     className="w-full p-2 border border-gray-300 rounded"
                   />
@@ -864,8 +894,8 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                   <input
                     type="text"
                     name="chasisnumber"
-                    // value={customColor}
-                    // onChange={handleCustomColorChange}
+                    value={vehicleData.chasisnumber}
+                    onChange={handleChange}
                     placeholder="Enter Engine Size"
                     className="w-full p-2 border border-gray-300 rounded"
                   />
@@ -891,17 +921,18 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                   </select>
                 </div>
                 {/* Conditionally Rendered Fleet Details */}
-                {selectedSite && (
-                  <div className="space-y-3">
-                    <h3 className="font-semibold">Fleet Entry Details</h3>
-
+              </div>
+              {selectedSite && (
+                <>
+                  <h3 className="font-semibold mt-4">Fleet Entry Details</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mt-4">
                     <div>
                       <label className="block">Date Fleet Entry</label>
                       <input
-                        type="text"
+                        type="date"
                         name="fleetEntryDate"
-                        // value={fleetData.fleetEntryDate}
-                        // onChange={handleFleetDataChange}
+                        value={vehicleData.fleetEntryDate}
+                        onChange={handleChange}
                         placeholder="Enter fleet entry date"
                         className="w-full p-2 border border-gray-300 rounded"
                       />
@@ -912,8 +943,8 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                       <input
                         type="text"
                         name="milesOnFleetEntry"
-                        // value={fleetData.milesOnFleetEntry}
-                        // onChange={handleFleetDataChange}
+                        value={vehicleData.milesOnFleetEntry}
+                        onChange={handleChange}
                         placeholder="Enter miles on fleet entry"
                         className="w-full p-2 border border-gray-300 rounded"
                       />
@@ -924,8 +955,8 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                       <input
                         type="text"
                         name="plannedFleetExit"
-                        // value={fleetData.plannedFleetExit}
-                        // onChange={handleFleetDataChange}
+                        value={vehicleData.plannedFleetExit}
+                        onChange={handleChange}
                         placeholder="Enter planned fleet exit"
                         className="w-full p-2 border border-gray-300 rounded"
                       />
@@ -936,8 +967,8 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                       <input
                         type="text"
                         name="milesOnFleetExit"
-                        // value={fleetData.milesOnFleetExit}
-                        // onChange={handleFleetDataChange}
+                        value={vehicleData.milesOnFleetExit}
+                        onChange={handleChange}
                         placeholder="Enter miles on fleet exit"
                         className="w-full p-2 border border-gray-300 rounded"
                       />
@@ -948,10 +979,10 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                         Actual Date Exited From Fleet
                       </label>
                       <input
-                        type="text"
+                        type="date"
                         name="actualExitDate"
-                        // value={fleetData.actualExitDate}
-                        // onChange={handleFleetDataChange}
+                        value={vehicleData.actualExitDate}
+                        onChange={handleChange}
                         placeholder="Enter actual exit date"
                         className="w-full p-2 border border-gray-300 rounded"
                       />
@@ -962,15 +993,15 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                       <input
                         type="text"
                         name="milesAtActualExit"
-                        // value={fleetData.milesAtActualExit}
-                        // onChange={handleFleetDataChange}
+                        value={vehicleData.milesAtActualExit}
+                        onChange={handleChange}
                         placeholder="Enter miles at actual exit"
                         className="w-full p-2 border border-gray-300 rounded"
                       />
                     </div>
                   </div>
-                )}
-              </div>
+                </>
+              )}
               <div className="grid grid-cols-3 md:grid-cols-3 gap-2 mt-4">
                 <div>
                   <div className="flex gap-1">
@@ -979,8 +1010,8 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                   <input
                     type="number"
                     name="doors"
-                    // value={customColor}
-                    // onChange={handleCustomColorChange}
+                    value={vehicleData.doors}
+                    onChange={handleChange}
                     placeholder="Enter Engine Size"
                     className="w-full p-2 border border-gray-300 rounded"
                   />
@@ -993,8 +1024,8 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
 
                   <select
                     name="color"
-                    // value={color}
-                    // onChange={handleColorChange}
+                    value={vehicleData.color}
+                    onChange={handleChange}
                     className="w-full p-2 border border-gray-300 rounded"
                     required
                   >
@@ -1009,14 +1040,13 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
 
                 <div>
                   <div className="flex gap-1">
-                    <label className="block font-semibold">
-                      Editable Color
-                    </label>
+                    <label className=" font-semibold">Editable Color</label>
                   </div>
                   <input
                     type="text"
-                    // value={customColor}
-                    // onChange={handleCustomColorChange}
+                    name="editablecolor"
+                    value={vehicleData.editablecolor}
+                    onChange={handleChange}
                     placeholder="Enter custom color"
                     className="w-full p-2 border border-gray-300 rounded"
                   />

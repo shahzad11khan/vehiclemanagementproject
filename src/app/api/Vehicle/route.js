@@ -104,6 +104,19 @@ export async function POST(request) {
       adminCreatedBy,
       adminCompanyName,
       LocalAuthority,
+      // new fields
+      enginesize,
+      chasisnumber,
+      vehicleSite,
+      fleetEntryDate,
+      milesOnFleetEntry,
+      plannedFleetExit,
+      milesOnFleetExit,
+      actualExitDate,
+      milesAtActualExit,
+      doors,
+      color,
+      editablecolor,
     } = formDataObjectt;
 
     // Validate required fields
@@ -156,6 +169,19 @@ export async function POST(request) {
       adminCompanyName,
       LocalAuthority,
       images, // Include image URLs and Cloudinary public IDs
+      // new fields
+      enginesize,
+      chasisnumber,
+      vehicleSite,
+      fleetEntryDate,
+      milesOnFleetEntry,
+      plannedFleetExit,
+      milesOnFleetExit,
+      actualExitDate,
+      milesAtActualExit,
+      doors,
+      color,
+      editablecolor,
     });
 
     // Save the vehicle in the database

@@ -282,6 +282,28 @@ export async function PUT(request, context) {
       formDataObject.get("adminCreatedBy") || vehicle.adminCreatedBy;
     vehicle.adminCompanyName =
       formDataObject.get("adminCompanyName") || vehicle.adminCompanyName;
+    // new fields
+    vehicle.enginesize = formDataObject.get("enginesize") || vehicle.enginesize;
+    vehicle.chasisnumber =
+      formDataObject.get("chasisnumber") || vehicle.chasisnumber;
+    vehicle.vehicleSite =
+      formDataObject.get("vehicleSite") || vehicle.vehicleSite;
+    vehicle.fleetEntryDate =
+      formDataObject.get("fleetEntryDate") || vehicle.fleetEntryDate;
+    vehicle.milesOnFleetEntry =
+      formDataObject.get("milesOnFleetEntry") || vehicle.milesOnFleetEntry;
+    vehicle.plannedFleetExit =
+      formDataObject.get("plannedFleetExit") || vehicle.plannedFleetExit;
+    vehicle.milesOnFleetExit =
+      formDataObject.get("milesOnFleetExit") || vehicle.milesOnFleetExit;
+    vehicle.actualExitDate =
+      formDataObject.get("actualExitDate") || vehicle.actualExitDate;
+    vehicle.milesAtActualExit =
+      formDataObject.get("milesAtActualExit") || vehicle.milesAtActualExit;
+    vehicle.doors = formDataObject.get("doors") || vehicle.doors;
+    vehicle.color = formDataObject.get("color") || vehicle.color;
+    vehicle.editablecolor =
+      formDataObject.get("editablecolor") || vehicle.editablecolor;
 
     // Save the updated vehicle
     await vehicle.save();

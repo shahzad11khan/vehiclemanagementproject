@@ -80,6 +80,42 @@ const vehicleSchema = new mongoose.Schema(
     LocalAuthority: {
       type: String,
     },
+    enginesize: {
+      type: Number,
+    },
+    chasisnumber: {
+      type: String,
+    },
+    vehicleSite: {
+      type: String,
+    },
+    fleetEntryDate: {
+      type: String,
+    },
+    milesOnFleetEntry: {
+      type: String,
+    },
+    plannedFleetExit: {
+      type: String,
+    },
+    milesOnFleetExit: {
+      type: String,
+    },
+    actualExitDate: {
+      type: String,
+    },
+    milesAtActualExit: {
+      type: String,
+    },
+    doors: {
+      type: Number,
+    },
+    color: {
+      type: String,
+    },
+    editablecolor: {
+      type: String,
+    },
     isActive: {
       type: Boolean,
       default: false,

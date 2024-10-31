@@ -117,6 +117,15 @@ export async function POST(request) {
       doors,
       color,
       editablecolor,
+      roadTaxDate,
+      roadTaxCycle,
+      motDueDate,
+      motCycle,
+      seats,
+      abiCode,
+      nextServiceDate,
+      nextServiceMiles,
+      roadTaxCost,
     } = formDataObjectt;
 
     // Validate required fields
@@ -182,6 +191,15 @@ export async function POST(request) {
       doors,
       color,
       editablecolor,
+      roadTaxDate,
+      roadTaxCycle,
+      motDueDate,
+      motCycle,
+      seats,
+      abiCode,
+      nextServiceDate,
+      nextServiceMiles,
+      roadTaxCost,
     });
 
     // Save the vehicle in the database

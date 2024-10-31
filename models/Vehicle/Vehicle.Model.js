@@ -116,6 +116,36 @@ const vehicleSchema = new mongoose.Schema(
     editablecolor: {
       type: String,
     },
+    roadTaxDate: {
+      type: String,
+    },
+    roadTaxCycle: {
+      type: String,
+    },
+    motDueDate: {
+      type: String,
+    },
+    motCycle: {
+      type: String,
+    },
+    seats: {
+      type: String,
+    },
+    seats: {
+      type: Number,
+    },
+    abiCode: {
+      type: String,
+    },
+    nextServiceDate: {
+      type: String,
+    },
+    nextServiceMiles: {
+      type: Number,
+    },
+    roadTaxCost: {
+      type: Number,
+    },
     isActive: {
       type: Boolean,
       default: false,

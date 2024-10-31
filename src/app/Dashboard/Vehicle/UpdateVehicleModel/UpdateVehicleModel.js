@@ -47,7 +47,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
     adminCreatedBy: "",
     adminCompanyName: "",
     isActive: false,
-
+    // new fields
     enginesize: "",
     chasisnumber: "",
     vehicleSite: "",
@@ -60,6 +60,15 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
     doors: "",
     color: "",
     editablecolor: "",
+    roadTaxDate: "",
+    roadTaxCycle: "",
+    motDueDate: "",
+    motCycle: "",
+    seats: "",
+    abiCode: "",
+    nextServiceDate: "",
+    nextServiceMiles: "",
+    roadTaxCost: "",
   });
 
   const [superadmin, setSuperadmin] = useState(null);
@@ -383,13 +392,6 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
   const nextStep = () => setStep(step + 1);
   const prevStep = () => setStep(step - 1);
 
-  // const handleSiteChange = (e) => {
-  //   setSelectedSite(e.target.value);
-  //   setVehicleData((prevData) => ({
-  //     ...prevData,
-  //     vehicleSite: e.target.value,
-  //   }));
-  // };
   const selectSiteClick = (e) => {
     setSelectedSite(e.target.value);
     setVehicleData((prevData) => ({
@@ -649,6 +651,16 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                 className="px-4 py-2 mt-4 text-white bg-blue-500 rounded-md"
               >
                 Next
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  onClose();
+                  setStep(1);
+                }}
+                className="px-6 py-2 ml-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+              >
+                Close
               </button>
             </>
           )}
@@ -938,6 +950,16 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                 >
                   Next
                 </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    onClose();
+                    setStep(1);
+                  }}
+                  className="px-6 py-2 ml-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                >
+                  Close
+                </button>
               </div>
             </>
           )}
@@ -1127,6 +1149,161 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                   />
                 </div>
               </div>
+
+              <div className="grid grid-cols-3 md:grid-cols-3 gap-2 mt-4">
+                <div>
+                  <label className="block font-semibold">Road Tax Date</label>
+                  <input
+                    type="date"
+                    name="roadTaxDate"
+                    value={vehicleData.roadTaxDate}
+                    onChange={handleChange}
+                    className="w-full p-2 border border-gray-300 rounded"
+                  />
+                </div>
+
+                {/* Road Tax Cycle */}
+                <div>
+                  <label className="block font-semibold">Road Tax Cycle</label>
+                  <select
+                    name="roadTaxCycle"
+                    value={vehicleData.roadTaxCycle}
+                    onChange={handleChange}
+                    className="w-full p-2 border border-gray-300 rounded"
+                  >
+                    <option value="">Select Cycle</option>
+                    <option value="3months">3 Months</option>
+                    <option value="6months">6 Months</option>
+                    <option value="1year">1 Year</option>
+                  </select>
+                </div>
+
+                {/* MOT Due Date */}
+                <div>
+                  <label className="block font-semibold">MOT Due Date</label>
+                  <input
+                    type="date"
+                    name="motDueDate"
+                    value={vehicleData.motDueDate}
+                    onChange={handleChange}
+                    className="w-full p-2 border border-gray-300 rounded"
+                  />
+                </div>
+
+                {/* MOT Cycle */}
+                <div>
+                  <label className="block font-semibold">MOT Cycle</label>
+                  <select
+                    name="motCycle"
+                    value={vehicleData.motCycle}
+                    onChange={handleChange}
+                    className="w-full p-2 border border-gray-300 rounded"
+                  >
+                    <option value="">Select Cycle</option>
+                    <option value="3months">3 Months</option>
+                    <option value="6months">6 Months</option>
+                    <option value="1year">1 Year</option>
+                  </select>
+                </div>
+
+                {/* Seats */}
+                <div>
+                  <label className="block font-semibold">Seats</label>
+                  <input
+                    type="number"
+                    name="seats"
+                    value={vehicleData.seats}
+                    onChange={handleChange}
+                    className="w-full p-2 border border-gray-300 rounded"
+                    placeholder="Enter number of seats"
+                  />
+                </div>
+
+                {/* ABI Code */}
+                <div>
+                  <label className="block font-semibold">ABI Code</label>
+                  <input
+                    type="text"
+                    name="abiCode"
+                    value={vehicleData.abiCode}
+                    onChange={handleChange}
+                    className="w-full p-2 border border-gray-300 rounded"
+                    placeholder="Enter ABI Code"
+                  />
+                </div>
+
+                {/* Next Service Date */}
+                <div>
+                  <label className="block font-semibold">
+                    Next Service Date
+                  </label>
+                  <input
+                    type="date"
+                    name="nextServiceDate"
+                    value={vehicleData.nextServiceDate}
+                    onChange={handleChange}
+                    className="w-full p-2 border border-gray-300 rounded"
+                  />
+                </div>
+
+                {/* Next Service Miles */}
+                <div>
+                  <label className="block font-semibold">
+                    Next Service Miles
+                  </label>
+                  <input
+                    type="number"
+                    name="nextServiceMiles"
+                    value={vehicleData.nextServiceMiles}
+                    onChange={handleChange}
+                    className="w-full p-2 border border-gray-300 rounded"
+                    placeholder="Enter miles for next service"
+                  />
+                </div>
+
+                {/* Road Tax Cost */}
+                <div>
+                  <label className="block font-semibold">Road Tax Cost</label>
+                  <input
+                    type="number"
+                    name="roadTaxCost"
+                    value={vehicleData.roadTaxCost}
+                    onChange={handleChange}
+                    className="w-full p-2 border border-gray-300 rounded"
+                    placeholder="Enter road tax cost"
+                  />
+                </div>
+              </div>
+
+              <div className="mt-6 flex gap-2">
+                <button
+                  onClick={prevStep}
+                  className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                >
+                  Back
+                </button>
+                <button
+                  onClick={nextStep}
+                  className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                >
+                  Next
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    onClose();
+                    setStep(1);
+                  }}
+                  className="px-6 py-2 ml-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                >
+                  Close
+                </button>
+              </div>
+            </>
+          )}
+
+          {step === 4 && (
+            <>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-4 mb-2">
                 {/* Warranty Information Section */}
                 <div className="flex flex-col">
@@ -1223,7 +1400,10 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                 </button>
                 <button
                   type="button"
-                  onClick={onClose}
+                  onClick={() => {
+                    onClose();
+                    setStep(1);
+                  }}
                   className="px-6 py-2 ml-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
                 >
                   Close

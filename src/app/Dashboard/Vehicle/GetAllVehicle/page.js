@@ -369,6 +369,9 @@ const Page = () => {
                       Manufacturer
                     </th>
                     <th className="border border-gray-300 px-4 py-2">Model</th>
+                    <th className="border border-gray-300 px-4 py-2">
+                      Vehicle Status
+                    </th>
                     <th className="border border-gray-300 px-4 py-2">Year</th>
                     <th className="border border-gray-300 px-4 py-2">Type</th>
                     <th className="border border-gray-300 px-4 py-2">
@@ -391,6 +394,9 @@ const Page = () => {
                       </td>
                       <td className="border border-gray-300 px-4 py-2">
                         {row.model}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2">
+                        {row.vehicleStatus}
                       </td>
                       <td className="border border-gray-300 px-4 py-2">
                         {row.year}

@@ -10,23 +10,30 @@ export async function PUT(request, context) {
     const id = context.params.specificimageID;
     const data = await request.formData();
 
+    console.log(id);
+
     // console.log(id);
     const userAvatar = data.get("imageFile");
     const imagepublicId = data.get("imagepublicId");
     let Vehicleavatar = "";
     let VehicleavatarId = "";
-    const vehicle = await Vehicle.findOne({ "images._id": id });
+    let vehicle = await Vehicle.findOne({ "images._id": id });
     if (!vehicle) {
-      return NextResponse.json({ error: "Vehicle not found", status: 404 });
+      vehicle = await Vehicle.findOne({ "damageImage._id": id });
     }
-
-    const imageToDelete = vehicle.images.find(
+    // Try to find the image in the main images array
+    let imageToDelete = vehicle.images.find(
       (image) => image.publicId.toString() === imagepublicId
     );
+
     if (!imageToDelete) {
-      console.error("Image not found with the given ID:", imageToDelete);
-      return;
+      // If not found in images, try to find it in damageImage array
+      imageToDelete = vehicle.damageImage.find(
+        (damageImage) => damageImage.publicId.toString() === imagepublicId
+      );
     }
+
+    console.log(imageToDelete);
     if (imageToDelete.publicId) {
       try {
         await cloudinary.uploader.destroy(imageToDelete.publicId);
@@ -59,16 +66,30 @@ export async function PUT(request, context) {
       VehicleavatarId = uploadResponse.public_id;
 
       //   console.log(Vehicleavatar, VehicleavatarId);
-      const imageIndex = vehicle.images.findIndex(
+      let imageIndex = vehicle.images.findIndex(
         (image) => image._id.toString() === id
       );
 
+      let inImagesArray = true;
+
+      if (imageIndex === -1) {
+        imageIndex = vehicle.damageImage.findIndex(
+          (damage) => damage._id.toString() === id
+        );
+        inImagesArray = false;
+      }
+
       //   console.log(imageIndex);
       if (imageIndex !== -1) {
-        vehicle.images[imageIndex].url = Vehicleavatar;
-        vehicle.images[imageIndex].publicId = VehicleavatarId;
+        if (inImagesArray) {
+          vehicle.images[imageIndex].url = Vehicleavatar;
+          vehicle.images[imageIndex].publicId = VehicleavatarId;
+        } else {
+          vehicle.damageImage[imageIndex].url = Vehicleavatar;
+          vehicle.damageImage[imageIndex].publicId = VehicleavatarId;
+        }
+        console.log("Image is updated successfully");
       }
-      console.log("Image is Updated Successfully");
     }
 
     await vehicle.save();

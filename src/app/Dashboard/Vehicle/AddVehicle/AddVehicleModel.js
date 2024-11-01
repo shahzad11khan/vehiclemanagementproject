@@ -1019,10 +1019,10 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                   >
                     <option value="">Select vehicle site</option>
                     <option value="Headquarters">Headquarters</option>
-                    <option value="Warehouse A">Warehouse A</option>
-                    <option value="Warehouse B">Warehouse B</option>
-                    <option value="Service Center">Service Center</option>
-                    <option value="Remote Site">Remote Site</option>
+                    <option value="WarehouseA">Warehouse A</option>
+                    <option value="WarehouseB">Warehouse B</option>
+                    <option value="ServiceCenter">Service Center</option>
+                    <option value="RemoteSite">Remote Site</option>
                   </select>
                 </div>
                 {/* Conditionally Rendered Fleet Details */}

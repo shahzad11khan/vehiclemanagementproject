@@ -69,18 +69,37 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
     nextServiceDate: "",
     nextServiceMiles: "",
     roadTaxCost: "",
+
+    listPrice: "",
+    purchasePrice: "",
+    insuranceValue: "",
+    departmentCode: "",
+    maintenance: false,
+    issues_damage: "",
+    damage_image: [],
+    recovery: "",
+    organization: "",
+    repairStatus: "",
+    jobNumber: "",
+    memo: "",
+    partNumber: "",
+    partName: "",
+    partprice: "",
+    partsupplier: "",
   });
 
   const [superadmin, setSuperadmin] = useState(null);
   const [localAuthority, setLocalAuth] = useState([]);
   const [manufacturer, setManufacturer] = useState([]);
   const [imagePreview, setImagePreview] = useState([]);
+  const [damagePreview, setdamagePreview] = useState([]);
   const [transmission, setTransmission] = useState([]);
   const [type, setType] = useState([]);
   const [fueltype, setFuelType] = useState([]);
   const fileInputRef = useRef(null); // Create a ref for the file input
   const [step, setStep] = useState(1);
   const [selectedSite, setSelectedSite] = useState("");
+  const [maintenance, setMaintenance] = useState(false);
 
   useEffect(() => {
     const storedCompanyName = localStorage.getItem("companyName");
@@ -166,6 +185,14 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
           [name]: checked, // This will now ensure isActive is a boolean
         };
       }
+      // Handle regular checkbox inputs
+      if (type === "checkbox" && name === "maintenance") {
+        // Set isActive specifically as a boolean
+        return {
+          ...prevData,
+          [name]: checked, // This will now ensure isActive is a boolean
+        };
+      }
 
       // Handle regular inputs (text, radio, etc.)
       return {
@@ -244,6 +271,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
       setVehicleData(response.data.result);
       console.log(response.data.result);
       setImagePreview(response.data.result.images || null);
+      setdamagePreview(response.data.result.damageImage || null);
     } catch (error) {
       console.error("Error fetching vehicle data:", error);
     }
@@ -257,10 +285,24 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData();
+    // for (const key in vehicleData) {
+    //   if (key === "imageFiles") {
+    //     vehicleData.imageFiles.forEach((file) => {
+    //       formData.append("imageFiles", file);
+    //     });
+    //   } else if (typeof vehicleData[key] === "object") {
+    //     for (const subKey in vehicleData[key]) {
+    //       formData.append(`${key}[${subKey}]`, vehicleData[key][subKey]);
+    //     }
+    //   } else {
+    //     formData.append(key, vehicleData[key]);
+    //   }
+    // }
+
     for (const key in vehicleData) {
-      if (key === "imageFiles") {
-        vehicleData.imageFiles.forEach((file) => {
-          formData.append("imageFiles", file);
+      if (key === "imageFiles" || key === "damage_image") {
+        vehicleData[key].forEach((file) => {
+          formData.append(key, file); // Append each file
         });
       } else if (typeof vehicleData[key] === "object") {
         for (const subKey in vehicleData[key]) {
@@ -397,6 +439,15 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
     setVehicleData((prevData) => ({
       ...prevData,
       vehicleSite: e.target.value,
+    }));
+  };
+
+  const handleMaintenanceToggle = (e) => {
+    const { checked } = e.target;
+    setMaintenance(!maintenance);
+    setVehicleData((prevData) => ({
+      ...prevData,
+      maintenance: checked,
     }));
   };
 
@@ -1304,6 +1355,239 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
 
           {step === 4 && (
             <>
+              <h2 className="text-2xl font-bold mb-4">
+                Financials Information
+              </h2>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mt-4 mb-2">
+                <div className="mb-4">
+                  <label className="block text-gray-700 font-semibold mb-1">
+                    List Price (P11D)
+                  </label>
+                  <input
+                    type="number"
+                    name="listPrice"
+                    value={vehicleData.listPrice}
+                    onChange={handleChange}
+                    placeholder="Enter List Price"
+                    className="w-full p-2 border border-gray-300 rounded"
+                  />
+                </div>
+
+                <div className="mb-4">
+                  <label className="block text-gray-700 font-semibold mb-1">
+                    Purchase Price
+                  </label>
+                  <input
+                    type="number"
+                    name="purchasePrice"
+                    value={vehicleData.purchasePrice}
+                    onChange={handleChange}
+                    placeholder="Enter Purchase Price"
+                    className="w-full p-2 border border-gray-300 rounded"
+                  />
+                </div>
+
+                <div className="mb-4">
+                  <label className="block text-gray-700 font-semibold mb-1">
+                    Insurance Value
+                  </label>
+                  <input
+                    type="number"
+                    name="insuranceValue"
+                    value={vehicleData.insuranceValue}
+                    onChange={handleChange}
+                    placeholder="Enter Insurance Value"
+                    className="w-full p-2 border border-gray-300 rounded"
+                  />
+                </div>
+
+                <div className="mb-4">
+                  <label className="block text-gray-700 font-semibold mb-1">
+                    Department Code
+                  </label>
+                  <input
+                    type="text"
+                    name="departmentCode"
+                    value={vehicleData.departmentCode}
+                    onChange={handleChange}
+                    placeholder="Enter Department Code"
+                    className="w-full p-2 border border-gray-300 rounded"
+                  />
+                </div>
+
+                <div className="mb-4">
+                  <label className="block text-gray-700 font-semibold mb-1">
+                    <input
+                      type="checkbox"
+                      name="maintenance"
+                      // checked={maintenance}
+                      checked={vehicleData.maintenance}
+                      // onChange={handleMaintenanceToggle}
+                      onChange={handleChange}
+                      onClick={handleMaintenanceToggle}
+                      // onClick={selectSiteClick}
+                      className="mr-2"
+                    />
+                    Maintenance Record (if any notable maintenance done till
+                    date)
+                  </label>
+                </div>
+              </div>
+              {maintenance === true && (
+                <>
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mt-4 mb-2">
+                    <div className="mb-4">
+                      <label className="text-gray-700 font-semibold mb-1">
+                        Issues/Damage
+                      </label>
+                      <textarea
+                        name="issues_damage"
+                        value={vehicleData.issues_damage}
+                        onChange={handleChange}
+                        placeholder="Describe any issues or damage"
+                        className="w-full p-2 border border-gray-300 rounded"
+                      />
+                    </div>
+
+                    <div className="mb-4">
+                      <label className="block text-gray-700 font-semibold mb-1">
+                        Damage Image
+                      </label>
+                      <div className="border-2 border-dashed border-gray-300 rounded-lg p-2">
+                        <input
+                          type="file"
+                          id="damage_image"
+                          name="damage_image"
+                          onChange={handleChange}
+                          className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border file:border-gray-300 file:background-gray-100 hover:file:bg-gray-200 file:text-sm"
+                          multiple
+                        />
+                      </div>
+                    </div>
+
+                    <div className="mb-4">
+                      <label className="block text-gray-700 font-semibold mb-1">
+                        Recovery
+                      </label>
+                      <input
+                        type="text"
+                        name="recovery"
+                        value={vehicleData.recovery}
+                        onChange={handleChange}
+                        placeholder="Describe recovery actions"
+                        className="w-full p-2 border border-gray-300 rounded"
+                      />
+                    </div>
+
+                    <div className="mb-4">
+                      <label className="block text-gray-700 font-semibold mb-1">
+                        Organization
+                      </label>
+                      <select
+                        name="organization"
+                        value={vehicleData.organization}
+                        onChange={handleChange}
+                        className="w-full p-2 border border-gray-300 rounded"
+                      >
+                        <option value="">Select Organization</option>
+                        <option value="Organization1">Organization 1</option>
+                        <option value="Organization2">Organization 2</option>
+                      </select>
+                    </div>
+
+                    <div className="mb-4">
+                      <label className="block text-gray-700 font-semibold mb-1">
+                        Repair Status
+                      </label>
+                      <input
+                        type="text"
+                        name="repairStatus"
+                        value={vehicleData.repairStatus}
+                        onChange={handleChange}
+                        placeholder="Enter repair status"
+                        className="w-full p-2 border border-gray-300 rounded"
+                      />
+                    </div>
+
+                    <div className="mb-4">
+                      <label className="block text-gray-700 font-semibold mb-1">
+                        Job Number
+                      </label>
+                      <input
+                        type="text"
+                        name="jobNumber"
+                        value={vehicleData.jobNumber}
+                        onChange={handleChange}
+                        placeholder="Enter job number"
+                        className="w-full p-2 border border-gray-300 rounded"
+                      />
+                    </div>
+
+                    <div className="mb-4">
+                      <label className="block text-gray-700 font-semibold mb-1">
+                        Memo
+                      </label>
+                      <textarea
+                        name="memo"
+                        value={vehicleData.memo}
+                        onChange={handleChange}
+                        placeholder="Memo for the repair"
+                        className="w-full p-2 border border-gray-300 rounded"
+                      />
+                    </div>
+                  </div>
+                  <h3 className="font-semibold text-gray-700 mb-2">
+                    Parts (Add multiple parts for a repair)
+                  </h3>
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mt-4 mb-2">
+                    <div>
+                      <input
+                        type="text"
+                        name="partNumber"
+                        value={vehicleData.partNumber}
+                        onChange={handleChange}
+                        placeholder="Part Number"
+                        className="w-full p-2 border border-gray-300 rounded mb-2"
+                      />
+                    </div>
+
+                    <div>
+                      <input
+                        type="text"
+                        name="partName"
+                        value={vehicleData.partName}
+                        onChange={handleChange}
+                        placeholder="Part Name"
+                        className="w-full p-2 border border-gray-300 rounded mb-2"
+                      />
+                    </div>
+
+                    <div>
+                      <input
+                        type="number"
+                        name="partprice"
+                        value={vehicleData.partprice}
+                        onChange={handleChange}
+                        placeholder="Price"
+                        className="w-full p-2 border border-gray-300 rounded mb-2"
+                      />
+                    </div>
+
+                    <div>
+                      <select
+                        name="partsupplier"
+                        value={vehicleData.partsupplier}
+                        onChange={handleChange}
+                        className="w-full p-2 border border-gray-300 rounded mb-2"
+                      >
+                        <option value="">Select Supplier</option>
+                        <option value="Supplier1">Supplier 1</option>
+                        <option value="Supplier2">Supplier 2</option>
+                      </select>
+                    </div>
+                  </div>
+                </>
+              )}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-4 mb-2">
                 {/* Warranty Information Section */}
                 <div className="flex flex-col">
@@ -1359,7 +1643,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
 
               <div className="mt-3">
                 {/* File input for selecting an image */}
-
+                <div>Vehicle Images</div>
                 <div>
                   {/* Hidden file input for selecting an image */}
                   <input
@@ -1379,6 +1663,36 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                       >
                         <img
                           src={img.url}
+                          alt="Avatar Preview"
+                          className="avatar-preview w-32 h-20"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              <div className="mt-3">
+                {/* File input for selecting an image */}
+                <div>Demage Images</div>
+                <div>
+                  {/* Hidden file input for selecting an image */}
+                  <input
+                    type="file"
+                    onChange={handleFileSelect}
+                    accept="image/*"
+                    ref={fileInputRef} // Assign ref to the file input
+                    style={{ display: "none" }} // Hide the input element
+                  />
+
+                  <div className="grid grid-cols-3 md:grid-cols-6 gap-2  mb-2">
+                    {damagePreview.map((dimg, index) => (
+                      <div
+                        key={index}
+                        className="cursor-pointer"
+                        onClick={() => handleImageClick(dimg)} // Call handleImageClick with img
+                      >
+                        <img
+                          src={dimg.url}
                           alt="Avatar Preview"
                           className="avatar-preview w-32 h-20"
                         />

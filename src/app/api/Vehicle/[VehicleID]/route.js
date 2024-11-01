@@ -13,12 +13,14 @@ export async function PUT(request, context) {
     const imageFiles = formDataObject.getAll("imageFiles[]"); // Get all image files
     const safetyFeatures = formDataObject.getAll("safetyFeatures[]"); // Get all safety features
     const techFeatures = formDataObject.getAll("techFeatures[]"); // Get all tech features
+    const damage_image = formDataObject.getAll("damage_image[]"); // Get all files
 
     // console.log(id, imageFiles);
     // console.log(safetyFeatures);
     // console.log(techFeatures);
 
     const images = []; // To store Cloudinary URLs and IDs
+    const damageImage = [];
 
     const vehicle = await Vehicle.findById(id); // Fetch vehicle by ID directly
     // console.log(vehicle);
@@ -26,6 +28,7 @@ export async function PUT(request, context) {
       return NextResponse.json({ error: "Vehicle not found", status: 404 });
     }
 
+    // for imageFiles variables
     // Handle image uploads to Cloudinary
     for (const file of imageFiles) {
       console.log("Processing file line 204:", file.name); // Log the name of each file
@@ -92,6 +95,76 @@ export async function PUT(request, context) {
       // Update the vehicle with new images
       vehicle.images = images; // Directly assign the new images array
       console.log("Vehicle updated with new images: line 255", vehicle.images); // Log the updated vehicle images
+    }
+
+    // for damage_image variables
+    // Handle image uploads to Cloudinary
+    for (const file of damage_image) {
+      console.log("Processing file line 204:", file.name); // Log the name of each file
+
+      if (file.size > 0) {
+        const buffer = Buffer.from(await file.arrayBuffer());
+        console.log("Buffer created for file line 208:", file.name); // Log when buffer is created
+
+        const uploadResponse = await new Promise((resolve, reject) => {
+          cloudinary.uploader
+            .upload_stream({ resource_type: "auto" }, (error, result) => {
+              if (error) {
+                console.error("Error uploading image: line 214", error.message); // Log the error if upload fails
+                reject(new Error("Error uploading image: " + error.message));
+              } else {
+                console.log(
+                  "Successfully uploaded image: line 217",
+                  result.secure_url
+                ); // Log the successful upload
+                resolve(result);
+              }
+            })
+            .end(buffer);
+        });
+
+        damage_image.push({
+          url: uploadResponse.secure_url,
+          publicId: uploadResponse.public_id,
+        });
+
+        console.log("Image added to list line 229:", {
+          url: uploadResponse.secure_url,
+          publicId: uploadResponse.public_id,
+        }); // Log each image data added to the array
+      }
+    }
+
+    if (damageImage.length > 0) {
+      console.log("Images present, starting update process", vehicle.images);
+
+      // Optionally: Delete old images from Cloudinary
+      for (let i = 0; i < vehicle.damageImage.length; i++) {
+        if (vehicle.damageImage[i].publicId) {
+          console.log(
+            "Old image publicId to delete: line 243",
+            vehicle.damageImage[i].publicId
+          ); // Log the publicId of the old image
+
+          // Delete the image from Cloudinary
+          const deleteResponse = await cloudinary.uploader.destroy(
+            vehicle.damageImage[i].publicId
+          );
+          console.log("Delete response: line 256", deleteResponse);
+
+          console.log(
+            "Old image deleted from Cloudinary: line 246",
+            vehicle.damageImage[i].publicId
+          ); // Log the deletion confirmation
+        }
+      }
+
+      // Update the vehicle with new images
+      vehicle.damageImage = damageImage; // Directly assign the new images array
+      console.log(
+        "Vehicle updated with new images: line 255",
+        vehicle.damageImage
+      ); // Log the updated vehicle images
     }
 
     // Update vehicle properties
@@ -178,6 +251,34 @@ export async function PUT(request, context) {
       formDataObject.get("nextServiceMiles") || vehicle.nextServiceMiles;
     vehicle.roadTaxCost =
       formDataObject.get("roadTaxCost") || vehicle.roadTaxCost;
+    vehicle.listPrice = formDataObject.get("listPrice") || vehicle.listPrice;
+    vehicle.purchasePrice =
+      formDataObject.get("purchasePrice") || vehicle.purchasePrice;
+    vehicle.insuranceValue =
+      formDataObject.get("insuranceValue") || vehicle.insuranceValue;
+    vehicle.departmentCode =
+      formDataObject.get("departmentCode") || vehicle.departmentCode;
+    vehicle.departmentCode =
+      formDataObject.get("departmentCode") || vehicle.departmentCode;
+    vehicle.maintenance =
+      formDataObject.get("maintenance") !== undefined
+        ? formDataObject.get("maintenance") === "true"
+        : vehicle.maintenance;
+
+    vehicle.issues_damage =
+      formDataObject.get("issues_damage") || vehicle.issues_damage;
+    vehicle.recovery = formDataObject.get("recovery") || vehicle.recovery;
+    vehicle.organization =
+      formDataObject.get("organization") || vehicle.organization;
+    vehicle.repairStatus =
+      formDataObject.get("repairStatus") || vehicle.repairStatus;
+    vehicle.jobNumber = formDataObject.get("jobNumber") || vehicle.jobNumber;
+    vehicle.memo = formDataObject.get("memo") || vehicle.memo;
+    vehicle.partNumber = formDataObject.get("partNumber") || vehicle.partNumber;
+    vehicle.partName = formDataObject.get("partName") || vehicle.partName;
+    vehicle.partprice = formDataObject.get("partprice") || vehicle.partprice;
+    vehicle.partsupplier =
+      formDataObject.get("partsupplier") || vehicle.partsupplier;
 
     // Save the updated vehicle
     await vehicle.save();
@@ -249,17 +350,23 @@ export const DELETE = async (request, { params }) => {
     console.log(deleted);
 
     // Get the image public ID from the deleted vehicle object
-    const userPublicIdd = deletedVehicle.imagePublicId;
-    console.log("Image Public ID:", userPublicIdd);
+    const imagesPublicIdd = deletedVehicle.images.publicId;
+    const damageImagePublicIddd = deletedVehicle.damageImage.publicId;
+    console.log("imagesPublicIdd Public ID:", imagesPublicIdd);
+    console.log("damageImagePublicIddd Public ID:", damageImagePublicIddd);
 
     // If the vehicle has an associated image, delete it from Cloudinary
-    if (userPublicIdd) {
+    if (imagesPublicIdd && damageImagePublicIddd) {
       try {
         const cloudinaryResponse1 = await cloudinary.uploader.destroy(
-          userPublicIdd
+          imagesPublicIdd
+        );
+        const cloudinaryResponse2 = await cloudinary.uploader.destroy(
+          damageImagePublicIddd
         );
 
         console.log(`Cloudinary response: ${cloudinaryResponse1.result}`);
+        console.log(`Cloudinary response: ${cloudinaryResponse2.result}`);
       } catch (error) {
         console.error("Failed to delete image from Cloudinary:", error);
       }

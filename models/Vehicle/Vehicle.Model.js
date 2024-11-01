@@ -146,12 +146,76 @@ const vehicleSchema = new mongoose.Schema(
     roadTaxCost: {
       type: Number,
     },
+    listPrice: {
+      type: Number,
+    },
+    purchasePrice: {
+      type: Number,
+    },
+    insuranceValue: {
+      type: Number,
+    },
+    departmentCode: {
+      type: String,
+    },
+
+    maintenance: {
+      type: Boolean,
+      default: false,
+    },
+
+    issues_damage: {
+      type: String,
+    },
+    damage_image: {
+      type: String,
+    },
+    recovery: {
+      type: String,
+    },
+    organization: {
+      type: String,
+    },
+    repairStatus: {
+      type: String,
+    },
+    jobNumber: {
+      type: Number,
+    },
+    memo: {
+      type: String,
+    },
+    partNumber: {
+      type: Number,
+    },
+    partName: {
+      type: String,
+    },
+    partprice: {
+      type: Number,
+    },
+    partsupplier: {
+      type: String,
+    },
+
     isActive: {
       type: Boolean,
       default: false,
     },
     imageFile: { type: String, default: null },
     images: [
+      {
+        url: {
+          type: String,
+          required: true,
+        },
+        publicId: {
+          type: String,
+          required: true,
+        },
+      },
+    ],
+    damageImage: [
       {
         url: {
           type: String,

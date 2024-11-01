@@ -11,23 +11,19 @@ export async function POST(request) {
     // Parse the form data from the request
     const formDataObject = await request.formData();
     console.log(formDataObject);
-    const files = formDataObject.getAll("imageFiles[]"); // Get all files
     const safetyFeature = formDataObject.getAll("safetyFeatures[]"); // Get all files
     const techFeature = formDataObject.getAll("techFeatures[]"); // Get all files
-    console.log(files);
-    console.log(safetyFeature);
-    console.log(techFeature);
+    const files = formDataObject.getAll("imageFiles[]"); // Get all files
+    const damage_image = formDataObject.getAll("damage_image[]"); // Get all files
     const images = []; // To store Cloudinary URLs and IDs
+    const damageImage = [];
+    // for files
     if (files.length === 0) {
       // No files found in form data
       images.push({
         url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQVU1ne0ThYY7sT5PkP_HJ0dRIJ4lGOTnqQXQ&s",
         publicId: "123456789",
       });
-      // return NextResponse.json({
-      //   error: "No files found in form data.",
-      //   status: 400, // Bad Request
-      // });
     } else if (files.length > 10) {
       // More than 10 files uploaded
       return NextResponse.json({
@@ -37,7 +33,7 @@ export async function POST(request) {
     } else {
       console.log(`Found ${files.length} file(s).`);
     }
-
+    // for files
     // Upload files to Cloudinary
     for (const file of files) {
       // Ensure the file is valid
@@ -66,10 +62,55 @@ export async function POST(request) {
       }
     }
 
+    // for damage_files
+    if (damage_image.length === 0) {
+      // No files found in form data
+      damageImage.push({
+        url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQVU1ne0ThYY7sT5PkP_HJ0dRIJ4lGOTnqQXQ&s",
+        publicId: "123456789",
+      });
+    } else if (damage_image.length > 5) {
+      // Limit to 5 damage images
+      return NextResponse.json({
+        error: "You can upload a maximum of 5 damage images.",
+        status: 400,
+      });
+    } else {
+      console.log(`Found ${damage_image.length} damage image(s).`);
+    }
+    // for damage_files
+    // Upload files to Cloudinary
+    for (const file of damage_image) {
+      // Ensure the file is valid
+      if (file instanceof File) {
+        const buffer = Buffer.from(await file.arrayBuffer());
+        // Upload to Cloudinary
+        const uploadResponse = await new Promise((resolve, reject) => {
+          cloudinary.uploader
+            .upload_stream({ resource_type: "auto" }, (error, result) => {
+              if (error) {
+                reject(new Error("Error uploading image: " + error.message));
+              } else {
+                resolve(result);
+              }
+            })
+            .end(buffer); // Send buffer to Cloudinary
+        });
+
+        // Store Cloudinary response (URL and public ID)
+        damageImage.push({
+          url: uploadResponse.secure_url,
+          publicId: uploadResponse.public_id,
+        });
+      } else {
+        console.log("Invalid file detected:", file); // Debug if the file is invalid
+      }
+    }
+
     // Collect non-image fields from the form data
     const formDataObjectt = {};
     for (const [key, value] of formDataObject.entries()) {
-      if (!key.startsWith("imageFiles[]")) {
+      if (!key.startsWith("imageFiles[]" && !key.startsWith("damage_image"))) {
         formDataObjectt[key] = value; // Exclude image files from regular form fields
       }
     }
@@ -126,6 +167,21 @@ export async function POST(request) {
       nextServiceDate,
       nextServiceMiles,
       roadTaxCost,
+      listPrice,
+      purchasePrice,
+      insuranceValue,
+      departmentCode,
+      maintenance,
+      issues_damage,
+      recovery,
+      organization,
+      repairStatus,
+      jobNumber,
+      memo,
+      partNumber,
+      partName,
+      partprice,
+      partsupplier,
     } = formDataObjectt;
 
     // Validate required fields
@@ -200,6 +256,22 @@ export async function POST(request) {
       nextServiceDate,
       nextServiceMiles,
       roadTaxCost,
+      listPrice,
+      purchasePrice,
+      insuranceValue,
+      departmentCode,
+      maintenance,
+      issues_damage,
+      recovery,
+      organization,
+      repairStatus,
+      jobNumber,
+      memo,
+      partNumber,
+      partName,
+      partprice,
+      partsupplier,
+      damageImage,
     });
 
     // Save the vehicle in the database

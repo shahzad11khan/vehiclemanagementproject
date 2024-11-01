@@ -102,6 +102,12 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
     defectdescription: "",
     defectaction: "",
 
+    additionalInfo: "",
+    RPCExpiryDate: "",
+    tailLiftExpirydate: "",
+    forkLiftNumber: "",
+    ForkLiftInspectionDate: "",
+
     isActive: false,
     imageFiles: [], // Store selected image files
   });
@@ -404,6 +410,12 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
       defectstatus: "",
       defectdescription: "",
       defectaction: "",
+
+      additionalInfo: "",
+      RPCExpiryDate: "",
+      tailLiftExpirydate: "",
+      forkLiftNumber: "",
+      ForkLiftInspectionDate: "",
 
       warrantyInfo: "",
       adminCreatedBy: "",
@@ -1382,20 +1394,18 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                     className="w-full p-2 border border-gray-300 rounded"
                   />
                 </div>
-
-                <div className="mb-4">
-                  <label className="block text-gray-700 font-semibold mb-1">
-                    <input
-                      type="checkbox"
-                      name="maintenance"
-                      checked={maintenance}
-                      onChange={handleMaintenanceToggle}
-                      className="mr-2"
-                    />
-                    Maintenance Record (if any notable maintenance done till
-                    date)
-                  </label>
-                </div>
+              </div>
+              <div className="mb-4">
+                <label className="block text-gray-700 font-semibold mb-1">
+                  <input
+                    type="checkbox"
+                    name="maintenance"
+                    checked={maintenance}
+                    onChange={handleMaintenanceToggle}
+                    className="mr-2"
+                  />
+                  Maintenance Record (if any notable maintenance done till date)
+                </label>
               </div>
               {maintenance && (
                 <>
@@ -1557,7 +1567,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                   <input
                     type="date"
                     name="RPCExpiryDate"
-                    // value={rpcExpiry}
+                    value={vehicleData.RPCExpiryDate}
                     onChange={handleChange}
                     className="w-full border border-gray-300 p-2 rounded-md"
                   />
@@ -1570,7 +1580,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                   <input
                     type="date"
                     name="TailLiftExpiryDate"
-                    // value={tailLiftExpiry}
+                    value={vehicleData.tailLiftExpirydate}
                     onChange={handleChange}
                     className="w-full border border-gray-300 p-2 rounded-md"
                   />
@@ -1583,7 +1593,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                   <input
                     type="date"
                     name="ForkLiftInspectionDate"
-                    // value={forkLiftDate}
+                    value={vehicleData.ForkLiftInspectionDate}
                     onChange={handleChange}
                     className="w-full border border-gray-300 p-2 rounded-md"
                   />
@@ -1596,42 +1606,41 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                   <input
                     type="text"
                     name="ForkLiftInspectionNumberNotes"
-                    // value={forkLiftNumber}
+                    value={vehicleData.forkLiftNumber}
                     onChange={handleChange}
                     placeholder="Enter inspection number or notes"
                     className="w-full border border-gray-300 p-2 rounded-md"
                   />
                 </div>
-
-                {/* Toggle for self-fit setting */}
-                <div className="flex items-center space-x-2">
-                  <label className="block text-gray-700 font-semibold mb-1">
-                    <input
-                      type="checkbox"
-                      name="selfFitSetting"
-                      onChange={handleSelfFitsettingToggle}
-                      checked={selfFitSetting}
-                      className="mr-2"
-                    />
-                    Self-Fit Setting
-                  </label>
-                </div>
-
-                {selfFitSetting && (
-                  <div>
-                    <label className="block font-semibold">
-                      Additional Info:
-                    </label>
-                    <textarea
-                      // value={additionalInfo}
-                      // onChange={(e) => setAdditionalInfo(e.target.value)}
-                      placeholder="Enter any additional info"
-                      className="w-full border border-gray-300 p-2 rounded-md"
-                      rows="3"
-                    />
-                  </div>
-                )}
               </div>
+              {/* Toggle for self-fit setting */}
+              <div className="flex items-center space-x-2">
+                <label className="block text-gray-700 font-semibold mb-1">
+                  <input
+                    type="checkbox"
+                    name="selfFitSetting"
+                    onChange={handleSelfFitsettingToggle}
+                    checked={selfFitSetting}
+                    className="mr-2"
+                  />
+                  Self-Fit Setting
+                </label>
+              </div>
+
+              {selfFitSetting && (
+                <div>
+                  <label className="block font-semibold">
+                    Additional Info:
+                  </label>
+                  <textarea
+                    value={vehicleData.additionalInfo}
+                    onChange={handleChange}
+                    placeholder="Enter any additional info"
+                    className="w-full border border-gray-300 p-2 rounded-md"
+                    rows="3"
+                  />
+                </div>
+              )}
 
               <div className="mt-6 flex gap-2">
                 <button
@@ -1716,6 +1725,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                   <label className="block font-semibold">Insurance</label>
                   <input
                     type="text"
+                    name="Insurance"
                     value={vehicleData.Insurance}
                     onChange={handleChange}
                     placeholder="Enter insurance details"
@@ -1729,7 +1739,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                   </label>
                   <input
                     type="text"
-                    name="InsurancePolicyNumber"
+                    name="insurancePolicyNumber"
                     value={vehicleData.insurancePolicyNumber}
                     onChange={handleChange}
                     placeholder="Enter policy number"
@@ -1808,7 +1818,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                 <div>
                   <label className="block font-semibold">Action</label>
                   <textarea
-                    name="Action"
+                    name="defectaction"
                     value={vehicleData.defectaction}
                     onChange={handleChange}
                     placeholder="Describe the action taken or needed"

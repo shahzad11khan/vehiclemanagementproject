@@ -336,6 +336,17 @@ export async function PUT(request, context) {
       formDataObject.get("defectdescription") || vehicle.defectdescription;
     vehicle.defectaction =
       formDataObject.get("defectaction") || vehicle.defectaction;
+    vehicle.additionalInfo =
+      formDataObject.get("additionalInfo") || vehicle.additionalInfo;
+    vehicle.RPCExpiryDate =
+      formDataObject.get("RPCExpiryDate") || vehicle.RPCExpiryDate;
+    vehicle.tailLiftExpirydate =
+      formDataObject.get("tailLiftExpirydate") || vehicle.tailLiftExpirydate;
+    vehicle.forkLiftNumber =
+      formDataObject.get("forkLiftNumber") || vehicle.forkLiftNumber;
+    vehicle.ForkLiftInspectionDate =
+      formDataObject.get("ForkLiftInspectionDate") ||
+      vehicle.ForkLiftInspectionDate;
 
     // Save the updated vehicle
     await vehicle.save();

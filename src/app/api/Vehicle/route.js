@@ -235,6 +235,11 @@ export async function POST(request) {
       defectstatus,
       defectdescription,
       defectaction,
+      additionalInfo,
+      RPCExpiryDate,
+      tailLiftExpirydate,
+      forkLiftNumber,
+      ForkLiftInspectionDate,
     } = formDataObjectt;
 
     // Validate required fields
@@ -334,6 +339,11 @@ export async function POST(request) {
       defectstatus,
       defectdescription,
       defectaction,
+      additionalInfo,
+      RPCExpiryDate,
+      tailLiftExpirydate,
+      forkLiftNumber,
+      ForkLiftInspectionDate,
       PDFofPolicyUrl: pdfofpolicyUrl,
       PDFofPolicyPublicId: pdfofpolicyPublicId,
     });

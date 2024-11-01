@@ -86,6 +86,16 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
     partName: "",
     partprice: "",
     partsupplier: "",
+    TestDate: "",
+    PlateExpiryDate: "",
+    Insurance: "",
+    insurancePolicyNumber: "",
+    PDFofPolicy: "",
+    defect: "",
+    Defectdate: "",
+    defectstatus: "",
+    defectdescription: "",
+    defectaction: "",
   });
 
   const [superadmin, setSuperadmin] = useState(null);
@@ -93,6 +103,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
   const [manufacturer, setManufacturer] = useState([]);
   const [imagePreview, setImagePreview] = useState([]);
   const [damagePreview, setdamagePreview] = useState([]);
+  const [pdfPreview, setpdfPreview] = useState(null);
   const [transmission, setTransmission] = useState([]);
   const [type, setType] = useState([]);
   const [fueltype, setFuelType] = useState([]);
@@ -100,6 +111,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
   const [step, setStep] = useState(1);
   const [selectedSite, setSelectedSite] = useState("");
   const [maintenance, setMaintenance] = useState(false);
+  const [selfFitSetting, setSelfFitSetting] = useState(false);
 
   useEffect(() => {
     const storedCompanyName = localStorage.getItem("companyName");
@@ -194,6 +206,14 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
         };
       }
 
+      // Handle file inputs
+      if (type === "file" && name === "PDFofPolicy") {
+        return {
+          ...prevData,
+          [name]: files[0],
+        };
+      }
+
       // Handle regular inputs (text, radio, etc.)
       return {
         ...prevData,
@@ -272,6 +292,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
       console.log(response.data.result);
       setImagePreview(response.data.result.images || null);
       setdamagePreview(response.data.result.damageImage || null);
+      setpdfPreview(response.data.result.PDFofPolicyUrl || null);
     } catch (error) {
       console.error("Error fetching vehicle data:", error);
     }
@@ -409,12 +430,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
       price: "",
       registrationNumber: "",
       vehicleStatus: "",
-      warrantyInfo: "",
-      adminCreatedBy: "",
-      adminCompanyName: vehicleData.adminCompanyName,
-      isActive: false,
-      imageFiles: [], // Reset to an empty array
-      // new
+      // new fields
       enginesize: "",
       chasisnumber: "",
       vehicleSite: "",
@@ -427,6 +443,54 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
       doors: "",
       color: "",
       editablecolor: "",
+      roadTaxDate: "",
+      roadTaxCycle: "",
+      motDueDate: "",
+      motCycle: "",
+      seats: "",
+      abiCode: "",
+      nextServiceDate: "",
+      nextServiceMiles: "",
+      roadTaxCost: "",
+      listPrice: "",
+      purchasePrice: "",
+      insuranceValue: "",
+      departmentCode: "",
+      maintenance: false,
+      issues_damage: "",
+      damage_image: "",
+      recovery: "",
+      organization: "",
+      repairStatus: "",
+      jobNumber: "",
+      memo: "",
+      partNumber: "",
+      partName: "",
+      partprice: "",
+      partsupplier: "",
+
+      TestDate: "",
+      PlateExpiryDate: "",
+      Insurance: "",
+      insurancePolicyNumber: "",
+      PDFofPolicy: "",
+      defect: "",
+      Defectdate: "",
+      defectstatus: "",
+      defectdescription: "",
+      defectaction: "",
+
+      additionalInfo: "",
+      RPCExpiryDate: "",
+      tailLiftExpirydate: "",
+      forkLiftNumber: "",
+      ForkLiftInspectionDate: "",
+
+      warrantyInfo: "",
+      adminCreatedBy: "",
+      adminCompanyName: vehicleData.adminCompanyName,
+      isActive: false,
+      imageFiles: [], // Reset to an empty array
     });
   };
 
@@ -449,6 +513,15 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
       ...prevData,
       maintenance: checked,
     }));
+  };
+
+  const handleSelfFitsettingToggle = () => {
+    // const { checked } = e.target;
+    setSelfFitSetting(!selfFitSetting);
+    // setVehicleData((prevData) => ({
+    //   ...prevData,
+    //   maintenance: checked,
+    // }));
   };
 
   return (
@@ -939,7 +1012,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                   />
                 </div>
 
-                <div>
+                {/* <div>
                   <div className="flex gap-1">
                     <label htmlFor="taxiFirm" className="block font-semibold">
                       Taxi Local Authority:
@@ -962,7 +1035,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                       </option>
                     ))}
                   </select>
-                </div>
+                </div> */}
 
                 {/* Vehicle Status Section */}
                 {/* <div className="">
@@ -1414,24 +1487,22 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                     className="w-full p-2 border border-gray-300 rounded"
                   />
                 </div>
-
-                <div className="mb-4">
-                  <label className="block text-gray-700 font-semibold mb-1">
-                    <input
-                      type="checkbox"
-                      name="maintenance"
-                      // checked={maintenance}
-                      checked={vehicleData.maintenance}
-                      // onChange={handleMaintenanceToggle}
-                      onChange={handleChange}
-                      onClick={handleMaintenanceToggle}
-                      // onClick={selectSiteClick}
-                      className="mr-2"
-                    />
-                    Maintenance Record (if any notable maintenance done till
-                    date)
-                  </label>
-                </div>
+              </div>
+              <div className="mb-4">
+                <label className="block text-gray-700 font-semibold mb-1">
+                  <input
+                    type="checkbox"
+                    name="maintenance"
+                    // checked={maintenance}
+                    checked={vehicleData.maintenance}
+                    // onChange={handleMaintenanceToggle}
+                    onChange={handleChange}
+                    onClick={handleMaintenanceToggle}
+                    // onClick={selectSiteClick}
+                    className="mr-2"
+                  />
+                  Maintenance Record (if any notable maintenance done till date)
+                </label>
               </div>
               {maintenance === true && (
                 <>
@@ -1588,6 +1659,272 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                   </div>
                 </>
               )}
+              <h2 className="text-2xl font-bold mb-4">Commercial Vehicles</h2>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mt-4 mb-2">
+                <div>
+                  <label className="block font-semibold">RPC Expiry Date</label>
+                  <input
+                    type="date"
+                    name="RPCExpiryDate"
+                    value={vehicleData.RPCExpiryDate}
+                    onChange={handleChange}
+                    className="w-full border border-gray-300 p-2 rounded-md"
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-semibold">
+                    Tail-Lift Expiry Date
+                  </label>
+                  <input
+                    type="date"
+                    name="TailLiftExpiryDate"
+                    value={vehicleData.tailLiftExpirydate}
+                    onChange={handleChange}
+                    className="w-full border border-gray-300 p-2 rounded-md"
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-semibold">
+                    Fork Lift Inspection Date
+                  </label>
+                  <input
+                    type="date"
+                    name="ForkLiftInspectionDate"
+                    value={vehicleData.ForkLiftInspectionDate}
+                    onChange={handleChange}
+                    className="w-full border border-gray-300 p-2 rounded-md"
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-semibold">
+                    Fork Lift Inspection Number/Notes
+                  </label>
+                  <input
+                    type="text"
+                    name="ForkLiftInspectionNumberNotes"
+                    value={vehicleData.forkLiftNumber}
+                    onChange={handleChange}
+                    placeholder="Enter inspection number or notes"
+                    className="w-full border border-gray-300 p-2 rounded-md"
+                  />
+                </div>
+              </div>
+              {/* Toggle for self-fit setting */}
+              <div className="flex items-center space-x-2">
+                <label className="block text-gray-700 font-semibold mb-1">
+                  <input
+                    type="checkbox"
+                    name="selfFitSetting"
+                    onChange={handleSelfFitsettingToggle}
+                    checked={selfFitSetting}
+                    className="mr-2"
+                  />
+                  Self-Fit Setting
+                </label>
+              </div>
+
+              {selfFitSetting && (
+                <div>
+                  <label className="block font-semibold">
+                    Additional Info:
+                  </label>
+                  <textarea
+                    value={vehicleData.additionalInfo}
+                    onChange={handleChange}
+                    placeholder="Enter any additional info"
+                    className="w-full border border-gray-300 p-2 rounded-md"
+                    rows="3"
+                  />
+                </div>
+              )}
+
+              <div className="mt-6 flex gap-2">
+                <button
+                  onClick={prevStep}
+                  className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                >
+                  Back
+                </button>
+                <button
+                  onClick={nextStep}
+                  className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                >
+                  Next
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    onClose();
+                    resetForm();
+                  }}
+                  className="px-6 py-2 ml-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                >
+                  Close
+                </button>
+              </div>
+            </>
+          )}
+          {step === 5 && (
+            <>
+              <h2 className="text-2xl font-bold mb-4">Local Authority</h2>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mt-4 mb-2">
+                <div>
+                  <div className="flex gap-1">
+                    <label htmlFor="taxiFirm" className="block font-semibold">
+                      Taxi Local Authority:
+                    </label>
+
+                    <span className="text-red-600">*</span>
+                  </div>
+                  <select
+                    id="LocalAuthority"
+                    name="LocalAuthority"
+                    value={vehicleData.LocalAuthority}
+                    onChange={handleChange}
+                    className="w-full p-2 border border-gray-300 rounded"
+                    required
+                  >
+                    <option value="">Select Local Authority</option>
+                    {localAuthority.map((auth) => (
+                      <option key={auth.id} value={auth.name}>
+                        {auth.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="block font-semibold">Test Date</label>
+                  <input
+                    type="date"
+                    name="TestDate"
+                    value={vehicleData.TestDate}
+                    onChange={handleChange}
+                    className="w-full border border-gray-300 p-2 rounded-md"
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-semibold">
+                    Plate Expiry Date
+                  </label>
+                  <input
+                    type="date"
+                    name="PlateExpiryDate"
+                    value={vehicleData.PlateExpiryDate}
+                    onChange={handleChange}
+                    className="w-full border border-gray-300 p-2 rounded-md"
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-semibold">Insurance</label>
+                  <input
+                    type="text"
+                    name="Insurance"
+                    value={vehicleData.Insurance}
+                    onChange={handleChange}
+                    placeholder="Enter insurance details"
+                    className="w-full border border-gray-300 p-2 rounded-md"
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-semibold">
+                    Insurance Policy Number:
+                  </label>
+                  <input
+                    type="text"
+                    name="insurancePolicyNumber"
+                    value={vehicleData.insurancePolicyNumber}
+                    onChange={handleChange}
+                    placeholder="Enter policy number"
+                    className="w-full border border-gray-300 p-2 rounded-md"
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-semibold">
+                    Add PDF/Picture of Policy:
+                  </label>
+                  <input
+                    type="file"
+                    name="PDFofPolicy"
+                    onChange={handleChange}
+                    accept="application/pdf, image/*"
+                    className="w-full border border-gray-300 p-2 rounded-md"
+                  />
+                </div>
+              </div>
+              <h2 className="text-2xl font-bold mb-4">Defect Details</h2>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mt-4 mb-2">
+                <div>
+                  <label className="block font-semibold">Defect</label>
+                  <input
+                    type="text"
+                    name="defect"
+                    value={vehicleData.defect}
+                    onChange={handleChange}
+                    placeholder="Enter defect name"
+                    className="w-full border border-gray-300 p-2 rounded-md"
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-semibold">Date</label>
+                  <input
+                    type="date"
+                    name="Defectdate"
+                    value={vehicleData.Defectdate}
+                    onChange={handleChange}
+                    className="w-full border border-gray-300 p-2 rounded-md"
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-semibold">Status</label>
+                  <select
+                    name="defectstatus"
+                    value={vehicleData.defectstatus}
+                    onChange={handleChange}
+                    className="w-full border border-gray-300 p-2 rounded-md"
+                  >
+                    <option value="" disabled>
+                      Select status
+                    </option>
+                    <option value="Pending">Pending</option>
+                    <option value="InProgress">In Progress</option>
+                    <option value="Resolved">Resolved</option>
+                    {/* Add more statuses as needed */}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block font-semibold">Description</label>
+                  <textarea
+                    name="defectdescription"
+                    value={vehicleData.defectdescription}
+                    onChange={handleChange}
+                    placeholder="Enter a brief description of the defect"
+                    className="w-full border border-gray-300 p-2 rounded-md resize-none"
+                    rows="3"
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-semibold">Action</label>
+                  <textarea
+                    name="defectaction"
+                    value={vehicleData.defectaction}
+                    onChange={handleChange}
+                    placeholder="Describe the action taken or needed"
+                    className="w-full border border-gray-300 p-2 rounded-md resize-none"
+                    rows="3"
+                  />
+                </div>
+              </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-4 mb-2">
                 {/* Warranty Information Section */}
                 <div className="flex flex-col">
@@ -1698,6 +2035,34 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                         />
                       </div>
                     ))}
+                  </div>
+                </div>
+              </div>
+              <div className="mt-3">
+                {/* File input for selecting an image */}
+                <div>Pdf File</div>
+                <div>
+                  {/* Hidden file input for selecting an image
+                  <input
+                    type="file"
+                    onChange={handleFileSelect}
+                    accept="image/*"
+                    ref={fileInputRef} // Assign ref to the file input
+                    style={{ display: "none" }} // Hide the input element
+                  /> */}
+
+                  {/* {pdfPreview.map((dimg, index) => ( */}
+                  <div className="grid grid-cols-3 md:grid-cols-6 gap-2 mb-2">
+                    <div
+                      className="cursor-pointer"
+                      onClick={() => window.open(pdfPreview, "_blank")} // Opens the PDF in a new tab
+                    >
+                      <img
+                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhkCWG2q6izXrv9oKcp53cb6dUBBoX246G0w&s"
+                        alt="Avatar Preview"
+                        className="avatar-preview w-40 h-20"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>

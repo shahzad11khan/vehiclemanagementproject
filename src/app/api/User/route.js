@@ -130,7 +130,7 @@ export async function POST(request) {
       confirmpassword,
       companyname,
       CreatedBy, // Ensure this field matches your schema
-      useravatar, // Use the uploaded or dummy image
+      useravatar: useravatar, // Use the uploaded or dummy image
       userPublicId: useravatarId,
       isActive: isActive || false,
       adminCreatedBy: CreatedBy,

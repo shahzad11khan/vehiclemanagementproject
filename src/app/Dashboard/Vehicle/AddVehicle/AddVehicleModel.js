@@ -90,6 +90,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
     partName: "",
     partprice: "",
     partsupplier: "",
+
     TestDate: "",
     PlateExpiryDate: "",
     Insurance: "",
@@ -392,6 +393,17 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
       partName: "",
       partprice: "",
       partsupplier: "",
+
+      TestDate: "",
+      PlateExpiryDate: "",
+      Insurance: "",
+      insurancePolicyNumber: "",
+      PDFofPolicy: "",
+      defect: "",
+      Defectdate: "",
+      defectstatus: "",
+      defectdescription: "",
+      defectaction: "",
 
       warrantyInfo: "",
       adminCreatedBy: "",

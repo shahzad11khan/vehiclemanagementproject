@@ -197,6 +197,27 @@ const vehicleSchema = new mongoose.Schema(
     partsupplier: {
       type: String,
     },
+    TestDate: {
+      type: String,
+    },
+    PlateExpiryDate: {
+      type: String,
+    },
+    Insurance: {
+      type: String,
+    },
+    insurancePolicyNumber: {
+      type: String,
+    },
+    PDFofPolicyUrl: {
+      type: String,
+    },
+    PDFofPolicyPublicId: { type: String },
+    defect: { type: String },
+    Defectdate: { type: String },
+    defectstatus: { type: String },
+    defectdescription: { type: String },
+    defectaction: { type: String },
 
     isActive: {
       type: Boolean,
@@ -227,7 +248,7 @@ const vehicleSchema = new mongoose.Schema(
         },
       },
     ],
-    imagePublicId: { type: String, default: null },
+
     authority: {
       type: String,
     },

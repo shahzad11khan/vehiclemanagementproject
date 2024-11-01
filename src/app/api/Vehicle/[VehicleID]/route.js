@@ -14,10 +14,10 @@ export async function PUT(request, context) {
     const safetyFeatures = formDataObject.getAll("safetyFeatures[]"); // Get all safety features
     const techFeatures = formDataObject.getAll("techFeatures[]"); // Get all tech features
     const damage_image = formDataObject.getAll("damage_image[]"); // Get all files
+    const pdfofpolicy = formDataObject.get("PDFofPolicy"); // Get all files
 
-    // console.log(id, imageFiles);
-    // console.log(safetyFeatures);
-    // console.log(techFeatures);
+    let PDFofPolicyUrl = "";
+    let PDFofPolicyPublicId = "";
 
     const images = []; // To store Cloudinary URLs and IDs
     const damageImage = [];
@@ -26,6 +26,48 @@ export async function PUT(request, context) {
     // console.log(vehicle);
     if (!vehicle) {
       return NextResponse.json({ error: "Vehicle not found", status: 404 });
+    }
+
+    if (typeof pdfofpolicy === "object" && pdfofpolicy.name) {
+      const byteData = await pdfofpolicy.arrayBuffer();
+      const buffer = Buffer.from(byteData);
+
+      // Upload the new image to Cloudinary
+      const uploadResponse = await new Promise((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream(
+          { resource_type: "auto" },
+          (error, result) => {
+            if (error) {
+              reject(error);
+            } else {
+              resolve(result);
+            }
+          }
+        );
+
+        // Write buffer to the upload stream
+        uploadStream.end(buffer);
+      });
+
+      PDFofPolicyUrl = uploadResponse.secure_url;
+      PDFofPolicyPublicId = uploadResponse.public_id;
+    }
+    // Handle avatar update: remove old avatar from Cloudinary and update with new one if uploaded
+    if (PDFofPolicyUrl && PDFofPolicyPublicId) {
+      if (vehicle.PDFofPolicyPublicId) {
+        try {
+          // Delete old avatar from Cloudinary if it exists
+          await cloudinary.uploader.destroy(user.PDFofPolicyPublicId);
+          console.log("Old avatar deleted from Cloudinary.");
+        } catch (error) {
+          console.error("Failed to delete old image from Cloudinary:", error);
+        }
+      }
+
+      // Update user with new avatar details
+      vehicle.PDFofPolicyUrl = PDFofPolicyUrl;
+      vehicle.PDFofPolicyPublicId = PDFofPolicyPublicId;
+      console.log("New avatar uploaded and updated.");
     }
 
     // for imageFiles variables
@@ -279,6 +321,21 @@ export async function PUT(request, context) {
     vehicle.partprice = formDataObject.get("partprice") || vehicle.partprice;
     vehicle.partsupplier =
       formDataObject.get("partsupplier") || vehicle.partsupplier;
+    vehicle.TestDate = formDataObject.get("TestDate") || vehicle.TestDate;
+    vehicle.PlateExpiryDate =
+      formDataObject.get("PlateExpiryDate") || vehicle.PlateExpiryDate;
+    vehicle.Insurance = formDataObject.get("Insurance") || vehicle.Insurance;
+    vehicle.insurancePolicyNumber =
+      formDataObject.get("insurancePolicyNumber") ||
+      vehicle.insurancePolicyNumber;
+    vehicle.defect = formDataObject.get("defect") || vehicle.defect;
+    vehicle.Defectdate = formDataObject.get("Defectdate") || vehicle.Defectdate;
+    vehicle.defectstatus =
+      formDataObject.get("defectstatus") || vehicle.defectstatus;
+    vehicle.defectdescription =
+      formDataObject.get("defectdescription") || vehicle.defectdescription;
+    vehicle.defectaction =
+      formDataObject.get("defectaction") || vehicle.defectaction;
 
     // Save the updated vehicle
     await vehicle.save();
@@ -352,11 +409,13 @@ export const DELETE = async (request, { params }) => {
     // Get the image public ID from the deleted vehicle object
     const imagesPublicIdd = deletedVehicle.images.publicId;
     const damageImagePublicIddd = deletedVehicle.damageImage.publicId;
+    const PDFofPolicyPublicId = deletedVehicle.PDFofPolicyPublicId;
     console.log("imagesPublicIdd Public ID:", imagesPublicIdd);
     console.log("damageImagePublicIddd Public ID:", damageImagePublicIddd);
+    console.log("PDFofPolicyPublicId Public ID:", PDFofPolicyPublicId);
 
     // If the vehicle has an associated image, delete it from Cloudinary
-    if (imagesPublicIdd && damageImagePublicIddd) {
+    if (imagesPublicIdd && damageImagePublicIddd && PDFofPolicyPublicId) {
       try {
         const cloudinaryResponse1 = await cloudinary.uploader.destroy(
           imagesPublicIdd
@@ -364,9 +423,13 @@ export const DELETE = async (request, { params }) => {
         const cloudinaryResponse2 = await cloudinary.uploader.destroy(
           damageImagePublicIddd
         );
+        const cloudinaryResponse3 = await cloudinary.uploader.destroy(
+          PDFofPolicyPublicId
+        );
 
         console.log(`Cloudinary response: ${cloudinaryResponse1.result}`);
         console.log(`Cloudinary response: ${cloudinaryResponse2.result}`);
+        console.log(`Cloudinary response: ${cloudinaryResponse3.result}`);
       } catch (error) {
         console.error("Failed to delete image from Cloudinary:", error);
       }

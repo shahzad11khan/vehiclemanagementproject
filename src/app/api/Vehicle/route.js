@@ -15,8 +15,47 @@ export async function POST(request) {
     const techFeature = formDataObject.getAll("techFeatures[]"); // Get all files
     const files = formDataObject.getAll("imageFiles[]"); // Get all files
     const damage_image = formDataObject.getAll("damage_image[]"); // Get all files
+    const pdfofpolicy = formDataObject.get("PDFofPolicy"); // Get all files
     const images = []; // To store Cloudinary URLs and IDs
     const damageImage = [];
+
+    let pdfofpolicyUrl = "";
+    let pdfofpolicyPublicId = "";
+
+    if (!pdfofpolicy) {
+      pdfofpolicyUrl =
+        "https://www.smartcaptech.com/wp-content/uploads/sample.pdf";
+      pdfofpolicyPublicId = "123456789";
+    } else {
+      try {
+        const buffer1 = Buffer.from(await pdfofpolicy.arrayBuffer());
+        const uploadResponse1 = await new Promise((resolve, reject) => {
+          cloudinary.uploader
+            .upload_stream(
+              {
+                resource_type: "auto",
+              },
+              (error, result) => {
+                if (error) {
+                  reject(
+                    new Error("Error uploading displayImage: " + error.message)
+                  );
+                } else {
+                  resolve(result);
+                }
+              }
+            )
+            .end(buffer1);
+        });
+
+        PDFofPolicyUrl = uploadResponse1.secure_url; // Cloudinary URL for display image
+        PDFofPolicyPublicId = uploadResponse1.public_id;
+      } catch (error) {
+        pdfofpolicyUrl =
+          "https://www.smartcaptech.com/wp-content/uploads/sample.pdf";
+        pdfofpolicyPublicId = "123456789";
+      }
+    }
     // for files
     if (files.length === 0) {
       // No files found in form data
@@ -110,7 +149,12 @@ export async function POST(request) {
     // Collect non-image fields from the form data
     const formDataObjectt = {};
     for (const [key, value] of formDataObject.entries()) {
-      if (!key.startsWith("imageFiles[]" && !key.startsWith("damage_image"))) {
+      if (
+        !key.startsWith(
+          "imageFiles[]" &&
+            !key.startsWith("damage_image[]" && !key.startsWith("pdfofpolicy"))
+        )
+      ) {
         formDataObjectt[key] = value; // Exclude image files from regular form fields
       }
     }
@@ -182,6 +226,15 @@ export async function POST(request) {
       partName,
       partprice,
       partsupplier,
+      TestDate,
+      PlateExpiryDate,
+      Insurance,
+      insurancePolicyNumber,
+      defect,
+      Defectdate,
+      defectstatus,
+      defectdescription,
+      defectaction,
     } = formDataObjectt;
 
     // Validate required fields
@@ -272,6 +325,17 @@ export async function POST(request) {
       partprice,
       partsupplier,
       damageImage,
+      TestDate,
+      PlateExpiryDate,
+      Insurance,
+      insurancePolicyNumber,
+      defect,
+      Defectdate,
+      defectstatus,
+      defectdescription,
+      defectaction,
+      PDFofPolicyUrl: pdfofpolicyUrl,
+      PDFofPolicyPublicId: pdfofpolicyPublicId,
     });
 
     // Save the vehicle in the database

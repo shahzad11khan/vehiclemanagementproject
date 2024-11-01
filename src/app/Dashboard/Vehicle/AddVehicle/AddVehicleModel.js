@@ -20,7 +20,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
   const [step, setStep] = useState(1);
   const [selectedSite, setSelectedSite] = useState("");
   const [maintenance, setMaintenance] = useState(false);
-
+  const [selfFitSetting, setSelfFitSetting] = useState(false);
   const [vehicleData, setVehicleData] = useState({
     manufacturer: "",
     model: "",
@@ -90,6 +90,16 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
     partName: "",
     partprice: "",
     partsupplier: "",
+    TestDate: "",
+    PlateExpiryDate: "",
+    Insurance: "",
+    insurancePolicyNumber: "",
+    PDFofPolicy: "",
+    defect: "",
+    Defectdate: "",
+    defectstatus: "",
+    defectdescription: "",
+    defectaction: "",
 
     isActive: false,
     imageFiles: [], // Store selected image files
@@ -194,6 +204,13 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
       }
       // Handle file inputs
       if (type === "file" && name === "damage_image") {
+        return {
+          ...prevData,
+          [name]: files[0],
+        };
+      }
+      // Handle file inputs
+      if (type === "file" && name === "PDFofPolicy") {
         return {
           ...prevData,
           [name]: files[0],
@@ -403,6 +420,14 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
       ...prevData,
       maintenance: checked,
     }));
+  };
+  const handleSelfFitsettingToggle = () => {
+    // const { checked } = e.target;
+    setSelfFitSetting(!selfFitSetting);
+    // setVehicleData((prevData) => ({
+    //   ...prevData,
+    //   maintenance: checked,
+    // }));
   };
 
   if (!isOpen) return null;
@@ -895,31 +920,6 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                     className="w-full p-2 border border-gray-300 rounded"
                     required
                   />
-                </div>
-
-                <div>
-                  <div className="flex gap-1">
-                    <label htmlFor="taxiFirm" className="block font-semibold">
-                      Taxi Local Authority:
-                    </label>
-
-                    <span className="text-red-600">*</span>
-                  </div>
-                  <select
-                    id="LocalAuthority"
-                    name="LocalAuthority"
-                    value={vehicleData.LocalAuthority}
-                    onChange={handleChange}
-                    className="w-full p-2 border border-gray-300 rounded"
-                    required
-                  >
-                    <option value="">Select Local Authority</option>
-                    {local.map((auth) => (
-                      <option key={auth.id} value={auth.name}>
-                        {auth.name}
-                      </option>
-                    ))}
-                  </select>
                 </div>
 
                 {/* Vehicle Status Section */}
@@ -1488,9 +1488,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                       />
                     </div>
                   </div>
-                  <h3 className="font-semibold text-gray-700 mb-2">
-                    Parts (Add multiple parts for a repair)
-                  </h3>
+                  <h3 className="font-semibold text-gray-700 mb-2">Parts</h3>
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mt-4 mb-2">
                     <div>
                       <input
@@ -1540,7 +1538,273 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                   </div>
                 </>
               )}
+              <h2 className="text-2xl font-bold mb-4">Commercial Vehicles</h2>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mt-4 mb-2">
+                <div>
+                  <label className="block font-semibold">RPC Expiry Date</label>
+                  <input
+                    type="date"
+                    name="RPCExpiryDate"
+                    // value={rpcExpiry}
+                    onChange={handleChange}
+                    className="w-full border border-gray-300 p-2 rounded-md"
+                  />
+                </div>
 
+                <div>
+                  <label className="block font-semibold">
+                    Tail-Lift Expiry Date
+                  </label>
+                  <input
+                    type="date"
+                    name="TailLiftExpiryDate"
+                    // value={tailLiftExpiry}
+                    onChange={handleChange}
+                    className="w-full border border-gray-300 p-2 rounded-md"
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-semibold">
+                    Fork Lift Inspection Date
+                  </label>
+                  <input
+                    type="date"
+                    name="ForkLiftInspectionDate"
+                    // value={forkLiftDate}
+                    onChange={handleChange}
+                    className="w-full border border-gray-300 p-2 rounded-md"
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-semibold">
+                    Fork Lift Inspection Number/Notes
+                  </label>
+                  <input
+                    type="text"
+                    name="ForkLiftInspectionNumberNotes"
+                    // value={forkLiftNumber}
+                    onChange={handleChange}
+                    placeholder="Enter inspection number or notes"
+                    className="w-full border border-gray-300 p-2 rounded-md"
+                  />
+                </div>
+
+                {/* Toggle for self-fit setting */}
+                <div className="flex items-center space-x-2">
+                  <label className="block text-gray-700 font-semibold mb-1">
+                    <input
+                      type="checkbox"
+                      name="selfFitSetting"
+                      onChange={handleSelfFitsettingToggle}
+                      checked={selfFitSetting}
+                      className="mr-2"
+                    />
+                    Self-Fit Setting
+                  </label>
+                </div>
+
+                {selfFitSetting && (
+                  <div>
+                    <label className="block font-semibold">
+                      Additional Info:
+                    </label>
+                    <textarea
+                      // value={additionalInfo}
+                      // onChange={(e) => setAdditionalInfo(e.target.value)}
+                      placeholder="Enter any additional info"
+                      className="w-full border border-gray-300 p-2 rounded-md"
+                      rows="3"
+                    />
+                  </div>
+                )}
+              </div>
+
+              <div className="mt-6 flex gap-2">
+                <button
+                  onClick={prevStep}
+                  className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                >
+                  Back
+                </button>
+                <button
+                  onClick={nextStep}
+                  className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                >
+                  Next
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    onClose();
+                    resetForm();
+                  }}
+                  className="px-6 py-2 ml-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                >
+                  Close
+                </button>
+              </div>
+            </>
+          )}
+
+          {step === 5 && (
+            <>
+              <h2 className="text-2xl font-bold mb-4">Local Authority</h2>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mt-4 mb-2">
+                <div>
+                  <div className="flex gap-1">
+                    <label htmlFor="taxiFirm" className="block font-semibold">
+                      Taxi Local Authority:
+                    </label>
+
+                    <span className="text-red-600">*</span>
+                  </div>
+                  <select
+                    id="LocalAuthority"
+                    name="LocalAuthority"
+                    value={vehicleData.LocalAuthority}
+                    onChange={handleChange}
+                    className="w-full p-2 border border-gray-300 rounded"
+                    required
+                  >
+                    <option value="">Select Local Authority</option>
+                    {local.map((auth) => (
+                      <option key={auth.id} value={auth.name}>
+                        {auth.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="block font-semibold">Test Date</label>
+                  <input
+                    type="date"
+                    name="TestDate"
+                    value={vehicleData.TestDate}
+                    onChange={handleChange}
+                    className="w-full border border-gray-300 p-2 rounded-md"
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-semibold">
+                    Plate Expiry Date
+                  </label>
+                  <input
+                    type="date"
+                    name="PlateExpiryDate"
+                    value={vehicleData.PlateExpiryDate}
+                    onChange={handleChange}
+                    className="w-full border border-gray-300 p-2 rounded-md"
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-semibold">Insurance</label>
+                  <input
+                    type="text"
+                    value={vehicleData.Insurance}
+                    onChange={handleChange}
+                    placeholder="Enter insurance details"
+                    className="w-full border border-gray-300 p-2 rounded-md"
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-semibold">
+                    Insurance Policy Number:
+                  </label>
+                  <input
+                    type="text"
+                    name="InsurancePolicyNumber"
+                    value={vehicleData.insurancePolicyNumber}
+                    onChange={handleChange}
+                    placeholder="Enter policy number"
+                    className="w-full border border-gray-300 p-2 rounded-md"
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-semibold">
+                    Add PDF/Picture of Policy:
+                  </label>
+                  <input
+                    type="file"
+                    name="PDFofPolicy"
+                    onChange={handleChange}
+                    accept="application/pdf, image/*"
+                    className="w-full border border-gray-300 p-2 rounded-md"
+                  />
+                </div>
+              </div>
+              <h2 className="text-2xl font-bold mb-4">Defect Details</h2>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mt-4 mb-2">
+                <div>
+                  <label className="block font-semibold">Defect</label>
+                  <input
+                    type="text"
+                    name="defect"
+                    value={vehicleData.defect}
+                    onChange={handleChange}
+                    placeholder="Enter defect name"
+                    className="w-full border border-gray-300 p-2 rounded-md"
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-semibold">Date</label>
+                  <input
+                    type="date"
+                    name="Defectdate"
+                    value={vehicleData.Defectdate}
+                    onChange={handleChange}
+                    className="w-full border border-gray-300 p-2 rounded-md"
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-semibold">Status</label>
+                  <select
+                    name="defectstatus"
+                    value={vehicleData.defectstatus}
+                    onChange={handleChange}
+                    className="w-full border border-gray-300 p-2 rounded-md"
+                  >
+                    <option value="" disabled>
+                      Select status
+                    </option>
+                    <option value="Pending">Pending</option>
+                    <option value="InProgress">In Progress</option>
+                    <option value="Resolved">Resolved</option>
+                    {/* Add more statuses as needed */}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block font-semibold">Description</label>
+                  <textarea
+                    name="defectdescription"
+                    value={vehicleData.defectdescription}
+                    onChange={handleChange}
+                    placeholder="Enter a brief description of the defect"
+                    className="w-full border border-gray-300 p-2 rounded-md resize-none"
+                    rows="3"
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-semibold">Action</label>
+                  <textarea
+                    name="Action"
+                    value={vehicleData.defectaction}
+                    onChange={handleChange}
+                    placeholder="Describe the action taken or needed"
+                    className="w-full border border-gray-300 p-2 rounded-md resize-none"
+                    rows="3"
+                  />
+                </div>
+              </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-4 mb-2">
                 {/* Warranty Information Section */}
                 <div className="flex flex-col">

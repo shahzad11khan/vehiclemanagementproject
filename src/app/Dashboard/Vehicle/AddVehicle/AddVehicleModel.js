@@ -424,6 +424,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
       tailLiftExpirydate: "",
       forkLiftNumber: "",
       ForkLiftInspectionDate: "",
+      cardocuments: [],
 
       warrantyInfo: "",
       adminCreatedBy: "",

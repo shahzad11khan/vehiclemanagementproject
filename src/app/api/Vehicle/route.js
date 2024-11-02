@@ -164,7 +164,7 @@ export async function POST(request) {
     } else {
       console.log(`Found ${files.length} file(s).`);
     }
-    // for files
+    // for cardocuments
     // Upload files to Cloudinary
     for (const file of files) {
       // Ensure the file is valid

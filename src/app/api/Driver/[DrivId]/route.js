@@ -12,7 +12,7 @@ export async function PUT(request, context) {
     const id = context.params.DrivId; // Use the correct parameter name
     const data = await request.formData();
 
-    console.log(data);
+    // console.log(data);
 
     const userAvatar = data.get("imageFile");
     let Driveravatar = "";

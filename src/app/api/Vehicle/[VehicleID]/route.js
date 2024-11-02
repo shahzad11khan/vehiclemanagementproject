@@ -14,13 +14,17 @@ export async function PUT(request, context) {
     const safetyFeatures = formDataObject.getAll("safetyFeatures[]"); // Get all safety features
     const techFeatures = formDataObject.getAll("techFeatures[]"); // Get all tech features
     const damage_image = formDataObject.getAll("damage_image[]"); // Get all files
-    const pdfofpolicy = formDataObject.get("PDFofPolicy"); // Get all files
+    const cardocument = formDataObject.getAll("cardocuments[]"); // Get all files
+    const pdfofpolicy = formDataObject.get("PDFofPolicy[]"); // Get all files
 
-    let PDFofPolicyUrl = "";
-    let PDFofPolicyPublicId = "";
+    // console.log(pdfofpolicy);
 
+    // console.log(cardocument);
     const images = []; // To store Cloudinary URLs and IDs
     const damageImage = [];
+    const cardocuments = [];
+    let PDFofPolicyUrl = "";
+    let PDFofPolicyPublicId = "";
 
     const vehicle = await Vehicle.findById(id); // Fetch vehicle by ID directly
     // console.log(vehicle);
@@ -28,7 +32,9 @@ export async function PUT(request, context) {
       return NextResponse.json({ error: "Vehicle not found", status: 404 });
     }
 
-    if (typeof pdfofpolicy === "object" && pdfofpolicy.name) {
+    // console.log(pdfofpolicy.name);
+
+    if (pdfofpolicy && typeof pdfofpolicy === "object" && pdfofpolicy.name) {
       const byteData = await pdfofpolicy.arrayBuffer();
       const buffer = Buffer.from(byteData);
 
@@ -57,7 +63,7 @@ export async function PUT(request, context) {
       if (vehicle.PDFofPolicyPublicId) {
         try {
           // Delete old avatar from Cloudinary if it exists
-          await cloudinary.uploader.destroy(user.PDFofPolicyPublicId);
+          await cloudinary.uploader.destroy(vehicle.PDFofPolicyPublicId);
           console.log("Old avatar deleted from Cloudinary.");
         } catch (error) {
           console.error("Failed to delete old image from Cloudinary:", error);
@@ -109,7 +115,7 @@ export async function PUT(request, context) {
     }
 
     // Log the list of images before proceeding
-    console.log("All images uploaded: line 237", images);
+    // console.log("All images uploaded: line 237", images);
     if (images.length > 0) {
       console.log("Images present, starting update process", vehicle.images);
 
@@ -206,6 +212,76 @@ export async function PUT(request, context) {
       console.log(
         "Vehicle updated with new images: line 255",
         vehicle.damageImage
+      ); // Log the updated vehicle images
+    }
+    // for cardocuments variables
+    // Handle image uploads to Cloudinary
+    for (const file of cardocument) {
+      console.log("Processing file line 204:", file.name); // Log the name of each file
+
+      if (file.size > 0) {
+        const buffer = Buffer.from(await file.arrayBuffer());
+        console.log("Buffer created for file line 208:", file.name); // Log when buffer is created
+
+        const uploadResponse = await new Promise((resolve, reject) => {
+          cloudinary.uploader
+            .upload_stream({ resource_type: "auto" }, (error, result) => {
+              if (error) {
+                console.error("Error uploading image: line 214", error.message); // Log the error if upload fails
+                reject(new Error("Error uploading image: " + error.message));
+              } else {
+                console.log(
+                  "Successfully uploaded image: line 217",
+                  result.secure_url
+                ); // Log the successful upload
+                resolve(result);
+              }
+            })
+            .end(buffer);
+        });
+
+        cardocuments.push({
+          url: uploadResponse.secure_url,
+          publicId: uploadResponse.public_id,
+        });
+
+        console.log("Image added to list line 229:", {
+          url: uploadResponse.secure_url,
+          publicId: uploadResponse.public_id,
+        }); // Log each image data added to the array
+      }
+    }
+
+    // console.log("All images uploaded: line 237", cardocuments);
+    if (cardocument.length > 0) {
+      console.log("Images present, starting update process", vehicle.images);
+
+      // Optionally: Delete old images from Cloudinary
+      for (let i = 0; i < vehicle.cardocuments.length; i++) {
+        if (vehicle.cardocuments[i].publicId) {
+          console.log(
+            "Old image publicId to delete: line 243",
+            vehicle.cardocuments[i].publicId
+          ); // Log the publicId of the old image
+
+          // Delete the image from Cloudinary
+          const deleteResponse = await cloudinary.uploader.destroy(
+            vehicle.cardocuments[i].publicId
+          );
+          console.log("Delete response: line 256", deleteResponse);
+
+          console.log(
+            "Old image deleted from Cloudinary: line 246",
+            vehicle.cardocuments[i].publicId
+          ); // Log the deletion confirmation
+        }
+      }
+
+      // Update the vehicle with new images
+      vehicle.images = cardocuments; // Directly assign the new images array
+      console.log(
+        "Vehicle updated with new images: line 255",
+        vehicle.cardocuments
       ); // Log the updated vehicle images
     }
 
@@ -372,12 +448,12 @@ export async function GET(request, context) {
 
     // Extract the product ID from the request parameters
     const id = context.params.VehicleID;
-    console.log(id);
+    // console.log(id);
 
     // Find the product by ID
     const Find_User = await Vehicle.findById(id);
 
-    console.log(Find_User);
+    // console.log(Find_User);
 
     // Check if the product exists
     if (!Find_User) {
@@ -421,12 +497,19 @@ export const DELETE = async (request, { params }) => {
     const imagesPublicIdd = deletedVehicle.images.publicId;
     const damageImagePublicIddd = deletedVehicle.damageImage.publicId;
     const PDFofPolicyPublicId = deletedVehicle.PDFofPolicyPublicId;
+    const cardocumentPublicId = deletedVehicle.cardocuments;
     console.log("imagesPublicIdd Public ID:", imagesPublicIdd);
     console.log("damageImagePublicIddd Public ID:", damageImagePublicIddd);
     console.log("PDFofPolicyPublicId Public ID:", PDFofPolicyPublicId);
+    console.log("cardocuments Public ID:", cardocumentPublicId);
 
     // If the vehicle has an associated image, delete it from Cloudinary
-    if (imagesPublicIdd && damageImagePublicIddd && PDFofPolicyPublicId) {
+    if (
+      imagesPublicIdd &&
+      damageImagePublicIddd &&
+      PDFofPolicyPublicId &&
+      cardocumentPublicId
+    ) {
       try {
         const cloudinaryResponse1 = await cloudinary.uploader.destroy(
           imagesPublicIdd
@@ -437,10 +520,14 @@ export const DELETE = async (request, { params }) => {
         const cloudinaryResponse3 = await cloudinary.uploader.destroy(
           PDFofPolicyPublicId
         );
+        const cloudinaryResponse4 = await cloudinary.uploader.destroy(
+          cardocumentPublicId
+        );
 
         console.log(`Cloudinary response: ${cloudinaryResponse1.result}`);
         console.log(`Cloudinary response: ${cloudinaryResponse2.result}`);
         console.log(`Cloudinary response: ${cloudinaryResponse3.result}`);
+        console.log(`Cloudinary response: ${cloudinaryResponse4.result}`);
       } catch (error) {
         console.error("Failed to delete image from Cloudinary:", error);
       }

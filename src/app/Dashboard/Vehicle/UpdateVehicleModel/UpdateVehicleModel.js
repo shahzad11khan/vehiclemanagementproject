@@ -96,6 +96,13 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
     defectstatus: "",
     defectdescription: "",
     defectaction: "",
+
+    additionalInfo: "",
+    RPCExpiryDate: "",
+    tailLiftExpirydate: "",
+    forkLiftNumber: "",
+    ForkLiftInspectionDate: "",
+    cardocuments: [],
   });
 
   const [superadmin, setSuperadmin] = useState(null);
@@ -104,6 +111,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
   const [imagePreview, setImagePreview] = useState([]);
   const [damagePreview, setdamagePreview] = useState([]);
   const [pdfPreview, setpdfPreview] = useState(null);
+  const [cardocumentimagePreview, setcardocumentimagePreview] = useState(null);
   const [transmission, setTransmission] = useState([]);
   const [type, setType] = useState([]);
   const [fueltype, setFuelType] = useState([]);
@@ -112,6 +120,9 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
   const [selectedSite, setSelectedSite] = useState("");
   const [maintenance, setMaintenance] = useState(false);
   const [selfFitSetting, setSelfFitSetting] = useState(false);
+  const [fileInputs, setFileInputs] = useState([]); // Store each file input's ID
+  const [files, setFiles] = useState([]); // Stores selected files
+  const [previews, setPreviews] = useState([]);
 
   useEffect(() => {
     const storedCompanyName = localStorage.getItem("companyName");
@@ -289,10 +300,10 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
     try {
       const response = await axios.get(`${API_URL_Vehicle}/${vehicleId}`);
       setVehicleData(response.data.result);
-      console.log(response.data.result);
       setImagePreview(response.data.result.images || null);
       setdamagePreview(response.data.result.damageImage || null);
       setpdfPreview(response.data.result.PDFofPolicyUrl || null);
+      setcardocumentimagePreview(response.data.result.cardocuments || null);
     } catch (error) {
       console.error("Error fetching vehicle data:", error);
     }
@@ -306,22 +317,13 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData();
-    // for (const key in vehicleData) {
-    //   if (key === "imageFiles") {
-    //     vehicleData.imageFiles.forEach((file) => {
-    //       formData.append("imageFiles", file);
-    //     });
-    //   } else if (typeof vehicleData[key] === "object") {
-    //     for (const subKey in vehicleData[key]) {
-    //       formData.append(`${key}[${subKey}]`, vehicleData[key][subKey]);
-    //     }
-    //   } else {
-    //     formData.append(key, vehicleData[key]);
-    //   }
-    // }
 
     for (const key in vehicleData) {
-      if (key === "imageFiles" || key === "damage_image") {
+      if (
+        key === "imageFiles" ||
+        key === "damage_image" ||
+        key === "cardocuments"
+      ) {
         vehicleData[key].forEach((file) => {
           formData.append(key, file); // Append each file
         });
@@ -345,6 +347,8 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
           },
         }
       );
+      // console.log(response.data);
+      // console.log(response.data.error);
       toast.success(response.data.message);
       fetchData();
       resetForm();
@@ -486,6 +490,13 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
       forkLiftNumber: "",
       ForkLiftInspectionDate: "",
 
+      additionalInfo: "",
+      RPCExpiryDate: "",
+      tailLiftExpirydate: "",
+      forkLiftNumber: "",
+      ForkLiftInspectionDate: "",
+      cardocuments: [],
+
       warrantyInfo: "",
       adminCreatedBy: "",
       adminCompanyName: vehicleData.adminCompanyName,
@@ -522,6 +533,69 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
     //   ...prevData,
     //   maintenance: checked,
     // }));
+  };
+
+  // Add a new file input by incrementing the input count
+  const addFileInput = () => {
+    if (fileInputs.length < 5) {
+      setFileInputs([...fileInputs, `input-${Date.now()}`]);
+    } else {
+      alert("You Not Added More Then 5 Files");
+    }
+  };
+
+  // Handle file selection for each input and store it in `files`
+  const handleFileChange = (event, index) => {
+    const selectedFile = event.target.files[0];
+    setFiles((prevFiles) => {
+      const updatedFiles = [...prevFiles];
+      updatedFiles[index] = selectedFile; // Update file in the array at the specific index
+      return updatedFiles;
+    });
+
+    setVehicleData((prevData) => ({
+      ...prevData,
+      cardocuments: [...prevData.cardocuments, selectedFile],
+    }));
+
+    // Update previews array
+    setPreviews((prevPreviews) => {
+      const updatedPreviews = [...prevPreviews];
+      updatedPreviews[index] = selectedFile
+        ? URL.createObjectURL(selectedFile)
+        : null; // Create a preview URL
+      return updatedPreviews;
+    });
+  };
+
+  // Trigger file input click programmatically when image is clicked
+  const handleImageClickk = (index) => {
+    document.getElementsByName("cardocuments")[index].click();
+  };
+
+  const cancleimages = () => {
+    setFileInputs([]);
+    setFiles([]);
+  };
+  const removeFileInput = (idx) => {
+    // console.log(idx);
+
+    setFileInputs((prevInputs) =>
+      prevInputs.filter((_, index) => index !== idx)
+    );
+
+    // Remove the corresponding file from files
+    setFiles((prevFiles) => {
+      // Create a new array that excludes the file at the specified index
+      return prevFiles.filter((_, index) => index !== idx);
+    });
+
+    // Remove the corresponding preview from previews
+    setPreviews((prevPreviews) => {
+      return prevPreviews.filter((_, index) => index !== idx);
+    });
+
+    // console.log(updatedPreviews);
   };
 
   return (
@@ -770,22 +844,27 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                   />
                 </div>
               </div>
-              <button
-                onClick={nextStep}
-                className="px-4 py-2 mt-4 text-white bg-blue-500 rounded-md"
-              >
-                Next
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  onClose();
-                  setStep(1);
-                }}
-                className="px-6 py-2 ml-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
-              >
-                Close
-              </button>
+
+              {/* end of multiple images */}
+              <div className="mt-6 flex gap-2">
+                <button
+                  onClick={nextStep}
+                  className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                >
+                  Next
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    onClose();
+                    resetForm();
+                    cancleimages();
+                  }}
+                  className="px-6 py-2 ml-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                >
+                  Close
+                </button>
+              </div>
             </>
           )}
 
@@ -1012,31 +1091,6 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                   />
                 </div>
 
-                {/* <div>
-                  <div className="flex gap-1">
-                    <label htmlFor="taxiFirm" className="block font-semibold">
-                      Taxi Local Authority:
-                    </label>
-
-                    <span className="text-red-600">*</span>
-                  </div>
-                  <select
-                    id="LocalAuthority"
-                    name="LocalAuthority"
-                    value={vehicleData.LocalAuthority}
-                    onChange={handleChange}
-                    className="w-full p-2 border border-gray-300 rounded"
-                    required
-                  >
-                    <option value="">Select Local Authority</option>
-                    {localAuthority.map((auth) => (
-                      <option key={auth.id} value={auth.name}>
-                        {auth.name}
-                      </option>
-                    ))}
-                  </select>
-                </div> */}
-
                 {/* Vehicle Status Section */}
                 {/* <div className="">
               <div className="flex gap-1">
@@ -1061,7 +1115,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
               </select>
             </div> */}
               </div>
-              <div className="flex gap-2 mt-4">
+              <div className="mt-6 flex gap-2">
                 <button
                   onClick={prevStep}
                   className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
@@ -1078,7 +1132,8 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                   type="button"
                   onClick={() => {
                     onClose();
-                    setStep(1);
+                    resetForm();
+                    cancleimages();
                   }}
                   className="px-6 py-2 ml-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
                 >
@@ -1493,18 +1548,14 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                   <input
                     type="checkbox"
                     name="maintenance"
-                    // checked={maintenance}
-                    checked={vehicleData.maintenance}
-                    // onChange={handleMaintenanceToggle}
-                    onChange={handleChange}
-                    onClick={handleMaintenanceToggle}
-                    // onClick={selectSiteClick}
+                    checked={maintenance}
+                    onChange={handleMaintenanceToggle}
                     className="mr-2"
                   />
                   Maintenance Record (if any notable maintenance done till date)
                 </label>
               </div>
-              {maintenance === true && (
+              {maintenance && (
                 <>
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mt-4 mb-2">
                     <div className="mb-4">
@@ -1607,9 +1658,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                       />
                     </div>
                   </div>
-                  <h3 className="font-semibold text-gray-700 mb-2">
-                    Parts (Add multiple parts for a repair)
-                  </h3>
+                  <h3 className="font-semibold text-gray-700 mb-2">Parts</h3>
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mt-4 mb-2">
                     <div>
                       <input
@@ -1759,6 +1808,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                   onClick={() => {
                     onClose();
                     resetForm();
+                    cancleimages();
                   }}
                   className="px-6 py-2 ml-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
                 >
@@ -1853,7 +1903,6 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                     type="file"
                     name="PDFofPolicy"
                     onChange={handleChange}
-                    accept="application/pdf, image/*"
                     className="w-full border border-gray-300 p-2 rounded-md"
                   />
                 </div>
@@ -1923,6 +1972,101 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                     className="w-full border border-gray-300 p-2 rounded-md resize-none"
                     rows="3"
                   />
+                </div>
+              </div>
+              <div>
+                {/* multiple images  */}
+                <h2 className="block font-semibold">Car Documents</h2>
+                <div>
+                  {" "}
+                  <div className="image-file-inputs">
+                    <img
+                      src="https://www.freeiconspng.com/uploads/file-add-icon-20.png"
+                      alt="Add new file input"
+                      onClick={addFileInput}
+                      className="cursor-pointer mt-3 w-20 h-20 border-2 border-dashed border-gray-400 hover:border-gray-600"
+                    />
+                    <div className="flex gap-2">
+                      {fileInputs.map((inputId, index) => {
+                        return (
+                          <div
+                            key={inputId}
+                            className="mt-8 bg-red-400 relative"
+                          >
+                            <img
+                              src={
+                                previews[index] ||
+                                "https://via.placeholder.com/150"
+                              } // Use a URL to display the file if it exists
+                              alt={
+                                files[index]
+                                  ? files[index].name
+                                  : "No file selected"
+                              }
+                              className="avatar-preview w-20 h-20 cursor-pointer rounded-md border border-gray-300 hover:border-gray-500 transition"
+                              onClick={() => handleImageClickk(index)}
+                            />
+                            <input
+                              name="cardocuments"
+                              type="file"
+                              onChange={(e) => handleFileChange(e, index)}
+                              style={{ display: "none" }} // Hide the file input
+                            />
+                            {/* <div className="bg-red-400 w-20 h-20">
+                            {files[index]
+                              ? files[index].name
+                              : "No file selected"}
+                          </div> */}
+                            {!files[index] && (
+                              <div
+                                className="text-red-500 absolute -top-7 right-0 cursor-pointer hover:bg-red-500 hover:text-white rounded-md w-7 text-center mb-2"
+                                onClick={() => removeFileInput(index)} // Remove file input
+                              >
+                                ✖
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+
+                    <div className="mt-3">
+                      {/* File input for selecting an image */}
+                      <div>Car Documents</div>
+                      <div>
+                        {/* Hidden file input for selecting an image */}
+                        <input
+                          type="file"
+                          // onChange={handleFileSelect}
+                          accept="image/*"
+                          ref={fileInputRef} // Assign ref to the file input
+                          style={{ display: "none" }} // Hide the input element
+                        />
+
+                        <div className="grid grid-cols-3 md:grid-cols-6 gap-2  mb-2">
+                          {cardocumentimagePreview.map((img, index) => (
+                            <div
+                              key={index}
+                              className="cursor-pointer"
+                              // onClick={() => handleImageClick(img)} // Call handleImageClick with img
+                            >
+                              <img
+                                src={img.url}
+                                alt="Car Document Preview"
+                                className="avatar-preview w-32 h-20"
+                              />
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                    {/* <button
+                     onClick={handleUpload}
+                    style={{ marginTop: "10px" }}
+                  >
+                    Upload Files
+                  </button> */}
+                  </div>
                 </div>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-4 mb-2">
@@ -2008,36 +2152,39 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                   </div>
                 </div>
               </div>
-              <div className="mt-3">
-                {/* File input for selecting an image */}
-                <div>Demage Images</div>
-                <div>
-                  {/* Hidden file input for selecting an image */}
-                  <input
-                    type="file"
-                    onChange={handleFileSelect}
-                    accept="image/*"
-                    ref={fileInputRef} // Assign ref to the file input
-                    style={{ display: "none" }} // Hide the input element
-                  />
+              {maintenance === true ? (
+                <div className="mt-3">
+                  {/* File input for selecting an image */}
+                  <div>Demage Images</div>
+                  <div>
+                    {/* Hidden file input for selecting an image */}
+                    <input
+                      type="file"
+                      onChange={handleFileSelect}
+                      accept="image/*"
+                      ref={fileInputRef} // Assign ref to the file input
+                      style={{ display: "none" }} // Hide the input element
+                    />
 
-                  <div className="grid grid-cols-3 md:grid-cols-6 gap-2  mb-2">
-                    {damagePreview.map((dimg, index) => (
-                      <div
-                        key={index}
-                        className="cursor-pointer"
-                        onClick={() => handleImageClick(dimg)} // Call handleImageClick with img
-                      >
-                        <img
-                          src={dimg.url}
-                          alt="Avatar Preview"
-                          className="avatar-preview w-32 h-20"
-                        />
-                      </div>
-                    ))}
+                    <div className="grid grid-cols-3 md:grid-cols-6 gap-2  mb-2">
+                      {damagePreview.map((dimg, index) => (
+                        <div
+                          key={index}
+                          className="cursor-pointer"
+                          onClick={() => handleImageClick(dimg)} // Call handleImageClick with img
+                        >
+                          <img
+                            src={dimg.url}
+                            alt="Avatar Preview"
+                            className="avatar-preview w-32 h-20"
+                          />
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
-              </div>
+              ) : null}
+
               <div className="mt-3">
                 {/* File input for selecting an image */}
                 <div>Pdf File</div>

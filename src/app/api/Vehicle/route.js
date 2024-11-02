@@ -16,10 +16,12 @@ export async function POST(request) {
     const files = formDataObject.getAll("imageFiles[]"); // Get all files
     const damage_image = formDataObject.getAll("damage_image[]"); // Get all files
     const cardocument = formDataObject.getAll("cardocuments[]"); // Get all files
-    const pdfofpolicy = formDataObject.get("PDFofPolicy"); // Get all files
+    const pdfofpolicy = formDataObject.get("PDFofPolicy[]"); // Get all files
     const images = []; // To store Cloudinary URLs and IDs
     const damageImage = [];
     const cardocuments = [];
+    // console.log("cardocuments", cardocument);
+    // console.log(pdfofpolicy);
 
     let pdfofpolicyUrl = "";
     let pdfofpolicyPublicId = "";
@@ -50,14 +52,15 @@ export async function POST(request) {
             .end(buffer1);
         });
 
-        PDFofPolicyUrl = uploadResponse1.secure_url; // Cloudinary URL for display image
-        PDFofPolicyPublicId = uploadResponse1.public_id;
+        pdfofpolicyUrl = uploadResponse1.secure_url; // Cloudinary URL for display image
+        pdfofpolicyPublicId = uploadResponse1.public_id;
       } catch (error) {
         pdfofpolicyUrl =
           "https://www.smartcaptech.com/wp-content/uploads/sample.pdf";
         pdfofpolicyPublicId = "123456789";
       }
     }
+
     // for files
     if (files.length === 0) {
       // No files found in form data
@@ -162,7 +165,7 @@ export async function POST(request) {
         status: 400, // Bad Request
       });
     } else {
-      console.log(`Found ${files.length} file(s).`);
+      console.log(`Found ${cardocument.length} cardcument file(s).`);
     }
     // for cardocuments
     // Upload files to Cloudinary
@@ -201,7 +204,7 @@ export async function POST(request) {
           "imageFiles[]" &&
             !key.startsWith(
               "damage_image[]" &&
-                !key.startsWith("pdfofpolicy") &&
+                !key.startsWith("pdfofpolicy[]") &&
                 !key.startsWith("cardocuments[]")
             )
         )

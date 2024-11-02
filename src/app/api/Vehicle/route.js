@@ -15,9 +15,11 @@ export async function POST(request) {
     const techFeature = formDataObject.getAll("techFeatures[]"); // Get all files
     const files = formDataObject.getAll("imageFiles[]"); // Get all files
     const damage_image = formDataObject.getAll("damage_image[]"); // Get all files
+    const cardocument = formDataObject.getAll("cardocuments[]"); // Get all files
     const pdfofpolicy = formDataObject.get("PDFofPolicy"); // Get all files
     const images = []; // To store Cloudinary URLs and IDs
     const damageImage = [];
+    const cardocuments = [];
 
     let pdfofpolicyUrl = "";
     let pdfofpolicyPublicId = "";
@@ -146,13 +148,62 @@ export async function POST(request) {
       }
     }
 
+    // for cardocuments
+    if (cardocument.length === 0) {
+      // No files found in form data
+      cardocuments.push({
+        url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQVU1ne0ThYY7sT5PkP_HJ0dRIJ4lGOTnqQXQ&s",
+        publicId: "123456789",
+      });
+    } else if (cardocument.length > 5) {
+      // More than 10 files uploaded
+      return NextResponse.json({
+        error: "You can upload a maximum of 10 images.",
+        status: 400, // Bad Request
+      });
+    } else {
+      console.log(`Found ${files.length} file(s).`);
+    }
+    // for files
+    // Upload files to Cloudinary
+    for (const file of files) {
+      // Ensure the file is valid
+      if (file instanceof File) {
+        const buffer = Buffer.from(await file.arrayBuffer()); // Convert file to buffer
+        // Upload to Cloudinary
+        const uploadResponse = await new Promise((resolve, reject) => {
+          cloudinary.uploader
+            .upload_stream({ resource_type: "auto" }, (error, result) => {
+              if (error) {
+                reject(new Error("Error uploading image: " + error.message));
+              } else {
+                resolve(result);
+              }
+            })
+            .end(buffer); // Send buffer to Cloudinary
+        });
+
+        // Store Cloudinary response (URL and public ID)
+        cardocuments.push({
+          url: uploadResponse.secure_url,
+          publicId: uploadResponse.public_id,
+        });
+      } else {
+        console.log("Invalid file detected:", file); // Debug if the file is invalid
+      }
+    }
+
     // Collect non-image fields from the form data
     const formDataObjectt = {};
     for (const [key, value] of formDataObject.entries()) {
       if (
         !key.startsWith(
           "imageFiles[]" &&
-            !key.startsWith("damage_image[]" && !key.startsWith("pdfofpolicy"))
+            !key.startsWith(
+              "damage_image[]" &&
+                !key.startsWith("pdfofpolicy") &&
+                !key.startsWith("cardocuments[]")
+            )
         )
       ) {
         formDataObjectt[key] = value; // Exclude image files from regular form fields
@@ -346,6 +397,7 @@ export async function POST(request) {
       ForkLiftInspectionDate,
       PDFofPolicyUrl: pdfofpolicyUrl,
       PDFofPolicyPublicId: pdfofpolicyPublicId,
+      cardocuments,
     });
 
     // Save the vehicle in the database

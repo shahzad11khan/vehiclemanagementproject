@@ -248,6 +248,18 @@ const vehicleSchema = new mongoose.Schema(
         },
       },
     ],
+    cardocuments: [
+      {
+        url: {
+          type: String,
+          required: true,
+        },
+        publicId: {
+          type: String,
+          required: true,
+        },
+      },
+    ],
 
     authority: {
       type: String,

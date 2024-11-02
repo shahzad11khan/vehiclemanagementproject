@@ -21,6 +21,9 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
   const [selectedSite, setSelectedSite] = useState("");
   const [maintenance, setMaintenance] = useState(false);
   const [selfFitSetting, setSelfFitSetting] = useState(false);
+  const [fileInputs, setFileInputs] = useState([]); // Store each file input's ID
+  const [files, setFiles] = useState([]); // Stores selected files
+  const [previews, setPreviews] = useState([]);
   const [vehicleData, setVehicleData] = useState({
     manufacturer: "",
     model: "",
@@ -107,6 +110,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
     tailLiftExpirydate: "",
     forkLiftNumber: "",
     ForkLiftInspectionDate: "",
+    cardocuments: [],
 
     isActive: false,
     imageFiles: [], // Store selected image files
@@ -296,7 +300,11 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
     //   }
     // }
     for (const key in vehicleData) {
-      if (key === "imageFiles" || key === "damage_image") {
+      if (
+        key === "imageFiles" ||
+        key === "damage_image" ||
+        key === "cardocuments"
+      ) {
         vehicleData[key].forEach((file) => {
           formData.append(key, file); // Append each file
         });
@@ -445,13 +453,71 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
       maintenance: checked,
     }));
   };
+
   const handleSelfFitsettingToggle = () => {
-    // const { checked } = e.target;
     setSelfFitSetting(!selfFitSetting);
-    // setVehicleData((prevData) => ({
-    //   ...prevData,
-    //   maintenance: checked,
-    // }));
+  };
+
+  // Add a new file input by incrementing the input count
+  const addFileInput = () => {
+    if (fileInputs.length < 5) {
+      setFileInputs([...fileInputs, `input-${Date.now()}`]);
+    } else {
+      alert("You Not Added More Then 5 Files");
+    }
+  };
+
+  // Handle file selection for each input and store it in `files`
+  const handleFileChange = (event, index) => {
+    const selectedFile = event.target.files[0];
+    setFiles((prevFiles) => {
+      const updatedFiles = [...prevFiles];
+      updatedFiles[index] = selectedFile; // Update file in the array at the specific index
+      return updatedFiles;
+    });
+
+    setVehicleData((prevData) => ({
+      ...prevData,
+      cardocuments: [...prevData.cardocuments, selectedFile],
+    }));
+
+    // Update previews array
+    setPreviews((prevPreviews) => {
+      const updatedPreviews = [...prevPreviews];
+      updatedPreviews[index] = selectedFile
+        ? URL.createObjectURL(selectedFile)
+        : null; // Create a preview URL
+      return updatedPreviews;
+    });
+  };
+
+  // Trigger file input click programmatically when image is clicked
+  const handleImageClick = (index) => {
+    document.getElementsByName("cardocuments")[index].click();
+  };
+  const cancleimages = () => {
+    setFileInputs([]);
+    setFiles([]);
+  };
+  const removeFileInput = (idx) => {
+    // console.log(idx);
+
+    setFileInputs((prevInputs) =>
+      prevInputs.filter((_, index) => index !== idx)
+    );
+
+    // Remove the corresponding file from files
+    setFiles((prevFiles) => {
+      // Create a new array that excludes the file at the specified index
+      return prevFiles.filter((_, index) => index !== idx);
+    });
+
+    // Remove the corresponding preview from previews
+    setPreviews((prevPreviews) => {
+      return prevPreviews.filter((_, index) => index !== idx);
+    });
+
+    // console.log(updatedPreviews);
   };
 
   if (!isOpen) return null;
@@ -702,6 +768,8 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                   />
                 </div>
               </div>
+
+              {/* end of multiple images */}
               <div className="mt-6 flex gap-2">
                 <button
                   onClick={nextStep}
@@ -714,6 +782,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                   onClick={() => {
                     onClose();
                     resetForm();
+                    cancleimages();
                   }}
                   className="px-6 py-2 ml-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
                 >
@@ -988,6 +1057,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                   onClick={() => {
                     onClose();
                     resetForm();
+                    cancleimages();
                   }}
                   className="px-6 py-2 ml-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
                 >
@@ -1324,6 +1394,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                   onClick={() => {
                     onClose();
                     resetForm();
+                    cancleimages();
                   }}
                   className="px-6 py-2 ml-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
                 >
@@ -1660,6 +1731,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                   onClick={() => {
                     onClose();
                     resetForm();
+                    cancleimages();
                   }}
                   className="px-6 py-2 ml-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
                 >
@@ -1827,6 +1899,71 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                   />
                 </div>
               </div>
+              <div>
+                {/* multiple images  */}
+                <h2 className="block font-semibold">Car Documents</h2>
+                <div>
+                  {" "}
+                  <div className="image-file-inputs">
+                    <img
+                      src="https://www.freeiconspng.com/uploads/file-add-icon-20.png"
+                      alt="Add new file input"
+                      onClick={addFileInput}
+                      className="cursor-pointer mt-3 w-20 h-20 border-2 border-dashed border-gray-400 hover:border-gray-600"
+                    />
+                    <div className="flex gap-2">
+                      {fileInputs.map((inputId, index) => {
+                        return (
+                          <div
+                            key={inputId}
+                            className="mt-8 bg-red-400 relative"
+                          >
+                            <img
+                              src={
+                                previews[index] ||
+                                "https://via.placeholder.com/150"
+                              } // Use a URL to display the file if it exists
+                              alt={
+                                files[index]
+                                  ? files[index].name
+                                  : "No file selected"
+                              }
+                              className="avatar-preview w-20 h-20 cursor-pointer rounded-md border border-gray-300 hover:border-gray-500 transition"
+                              onClick={() => handleImageClick(index)}
+                            />
+                            <input
+                              name="cardocuments"
+                              type="file"
+                              onChange={(e) => handleFileChange(e, index)}
+                              style={{ display: "none" }} // Hide the file input
+                            />
+                            {/* <div className="bg-red-400 w-20 h-20">
+                            {files[index]
+                              ? files[index].name
+                              : "No file selected"}
+                          </div> */}
+                            {!files[index] && (
+                              <div
+                                className="text-red-500 absolute -top-7 right-0 cursor-pointer hover:bg-red-500 hover:text-white rounded-md w-7 text-center mb-2"
+                                onClick={() => removeFileInput(index)} // Remove file input
+                              >
+                                ✖
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                    {/* <button
+                     onClick={handleUpload}
+                    style={{ marginTop: "10px" }}
+                  >
+                    Upload Files
+                  </button> */}
+                  </div>
+                </div>
+              </div>
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-4 mb-2">
                 {/* Warranty Information Section */}
                 <div className="flex flex-col">
@@ -1894,6 +2031,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                   onClick={() => {
                     onClose();
                     resetForm();
+                    cancleimages();
                   }}
                   className="px-6 py-2 ml-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
                 >

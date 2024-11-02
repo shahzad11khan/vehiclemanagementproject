@@ -169,7 +169,7 @@ export async function POST(request) {
     }
     // for cardocuments
     // Upload files to Cloudinary
-    for (const file of files) {
+    for (const file of cardocument) {
       // Ensure the file is valid
       if (file instanceof File) {
         const buffer = Buffer.from(await file.arrayBuffer()); // Convert file to buffer
@@ -200,14 +200,10 @@ export async function POST(request) {
     const formDataObjectt = {};
     for (const [key, value] of formDataObject.entries()) {
       if (
-        !key.startsWith(
-          "imageFiles[]" &&
-            !key.startsWith(
-              "damage_image[]" &&
-                !key.startsWith("pdfofpolicy[]") &&
-                !key.startsWith("cardocuments[]")
-            )
-        )
+        !key.startsWith("imageFiles[]") &&
+        !key.startsWith("damage_image[]") &&
+        !key.startsWith("pdfofpolicy[]") &&
+        !key.startsWith("cardocuments[]")
       ) {
         formDataObjectt[key] = value; // Exclude image files from regular form fields
       }

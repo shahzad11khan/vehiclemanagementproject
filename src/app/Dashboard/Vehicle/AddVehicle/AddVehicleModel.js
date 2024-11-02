@@ -332,6 +332,8 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
         fetchData();
         onClose();
         resetForm();
+        setFileInputs([]);
+        setFiles([]);
       } else {
         toast.error(response.data.error);
       }

@@ -357,6 +357,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
       fetchData();
       resetForm();
       onClose();
+      setStep(1);
     } catch (error) {
       console.error("Error updating vehicle data:", error);
       toast.error(response.data.error);
@@ -402,6 +403,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
         }
       );
       fetchVehicleData();
+      setStep(1);
       console.log("Response:", response.data); // Log the response data
     } catch (error) {
       console.error("Error updating vehicle image:", error);
@@ -2060,7 +2062,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                   </div>
                 </div>
               </div>
-              {maintenance === true ? (
+              {maintenance ? (
                 <div className="mt-3">
                   {/* File input for selecting an image */}
                   <div>Demage Images</div>
@@ -2112,6 +2114,11 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                       className="cursor-pointer"
                       onClick={() => window.open(pdfPreview, "_blank")} // Opens the PDF in a new tab
                     >
+                      <img
+                        src={pdfPreview}
+                        alt="Avatar Preview"
+                        className="avatar-preview w-40 h-20"
+                      />
                       <img
                         src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhkCWG2q6izXrv9oKcp53cb6dUBBoX246G0w&s"
                         alt="Avatar Preview"

@@ -76,12 +76,12 @@ export async function GET(request, context) {
     console.log("driver payment id is:", id);
 
     // Find all records related to the driverId
-    const Find_User_All = await DriverMoreInfo.find({ driverId: id });
+    const find_user_all = await DriverMoreInfo.find({ driverId: id });
 
     // If there are records associated with driverId
-    if (Find_User_All.length > 0) {
+    if (find_user_all.length > 0) {
       // Return all records as a JSON response
-      return NextResponse.json({ result: Find_User_All, status: 200 });
+      return NextResponse.json({ result: find_user_all, status: 200 });
     } else {
       // If no records found for driverId, try to find by _id
       const Find_User = await DriverMoreInfo.findById(id);

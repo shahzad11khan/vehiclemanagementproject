@@ -36,55 +36,29 @@ export async function PUT(request, context) {
     // console.log(pdfofpolicy.name);
 
     if (pdfofpolicy && typeof pdfofpolicy === "object" && pdfofpolicy.name) {
-      const fileSizeInBytes = pdfofpolicy.size;
-      console.log(`File size: ${fileSizeInBytes} bytes`);
-
-      // Check for file size (10 MB limit)
-      if (fileSizeInBytes > 10 * 1024 * 1024) {
-        console.error("File size exceeds 10 MB.");
-        return NextResponse.json("File size exceeds 10 MB.");
-      }
-
-      // Read the file as an array buffer
       const byteData = await pdfofpolicy.arrayBuffer();
       const buffer = Buffer.from(byteData);
 
-      // Upload the new PDF to Cloudinary
-      try {
-        const uploadResponse = await new Promise((resolve, reject) => {
-          const uploadStream = cloudinary.uploader.upload_stream(
-            {
-              resource_type: "raw", // Specify 'raw' for files like PDFs
-              type: "upload", // This should allow public access
-              format: "pdf", // Explicitly set the format to pdf
-              access_mode: "public", // Ensure public access
-            },
-            (error, result) => {
-              if (error) {
-                console.error("Upload error:", error);
-                reject(error);
-              } else {
-                resolve(result);
-              }
+      // Upload the new image to Cloudinary
+      const uploadResponse = await new Promise((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream(
+          { resource_type: "auto" },
+          (error, result) => {
+            if (error) {
+              reject(error);
+            } else {
+              resolve(result);
             }
-          );
+          }
+        );
 
-          // Write buffer to the upload stream
-          uploadStream.end(buffer);
-        });
+        // Write buffer to the upload stream
+        uploadStream.end(buffer);
+      });
 
-        // Store the URL and public ID
-        PDFofPolicyUrl = uploadResponse.secure_url;
-        PDFofPolicyPublicId = uploadResponse.public_id;
-
-        const testResponse = await fetch(PDFofPolicyUrl);
-
-        console.log("testResponse:", testResponse);
-        console.log("PDF URL:", PDFofPolicyUrl);
-        console.log("PDF Public ID:", PDFofPolicyPublicId);
-      } catch (error) {
-        console.error("Error during upload:", error);
-      }
+      // Store the URL and ID of the uploaded image
+      PDFofPolicyUrl = uploadResponse.secure_url;
+      PDFofPolicyPublicId = uploadResponse.public_id;
     }
 
     // Handle avatar update: remove old avatar from Cloudinary and update with new one if uploaded
@@ -483,19 +457,29 @@ export async function GET(request, context) {
 
     // Extract the product ID from the request parameters
     const id = context.params.VehicleID;
-    // console.log(id);
+    console.log("Vehicle Report", id);
 
-    // Find the product by ID
-    const Find_User = await Vehicle.findById(id);
-
-    // console.log(Find_User);
-
-    // Check if the product exists
-    if (!Find_User) {
-      return NextResponse.json({ result: "No User Found", status: 404 });
+    // Find all records related to the driverId
+    const find_user_all = await Vehicle.find({ _id: id });
+    // console.log(find_user_all);
+    // If there are records associated with driverId
+    if (find_user_all.length > 0) {
+      // Return all records as a JSON response
+      return NextResponse.json({ result: find_user_all, status: 200 });
     } else {
-      // Return the found product as a JSON response
-      return NextResponse.json({ result: Find_User, status: 200 });
+      // If no records found for driverId, try to find by _id
+
+      // Find the product by ID
+      const Find_User = await Vehicle.findById(id);
+      console.log(Find_User);
+
+      // Check if the product exists
+      if (!Find_User) {
+        return NextResponse.json({ result: "No User Found", status: 404 });
+      } else {
+        // Return the found product as a JSON response
+        return NextResponse.json({ result: Find_User, status: 200 });
+      }
     }
   } catch (error) {
     console.error("Error retrieving product:", error);

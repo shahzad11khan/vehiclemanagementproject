@@ -21,6 +21,15 @@ export async function PUT(request, context) {
     if (!vehicle) {
       vehicle = await Vehicle.findOne({ "damageImage._id": id });
     }
+    if (!vehicle) {
+      vehicle = await Vehicle.findOne({ "cardocuments._id": id });
+    }
+
+    if (!vehicle) {
+      // If no vehicle found, handle this case (e.g., return an error or exit)
+      throw new Error("Vehicle not found with the specified image ID");
+    }
+
     // Try to find the image in the main images array
     let imageToDelete = vehicle.images.find(
       (image) => image.publicId.toString() === imagepublicId
@@ -32,6 +41,21 @@ export async function PUT(request, context) {
         (damageImage) => damageImage.publicId.toString() === imagepublicId
       );
     }
+
+    if (!imageToDelete) {
+      // If not found in damageImage, try to find it in cardocuments array
+      imageToDelete = vehicle.cardocuments.find(
+        (cardocument) => cardocument.publicId.toString() === imagepublicId
+      );
+    }
+
+    if (!imageToDelete) {
+      throw new Error(
+        "Image with the specified public ID not found in any array"
+      );
+    }
+
+    // Proceed with the deletion process
 
     console.log(imageToDelete);
     if (imageToDelete.publicId) {
@@ -65,29 +89,59 @@ export async function PUT(request, context) {
       Vehicleavatar = uploadResponse.secure_url;
       VehicleavatarId = uploadResponse.public_id;
 
-      //   console.log(Vehicleavatar, VehicleavatarId);
+      // console.log(Vehicleavatar, VehicleavatarId);
       let imageIndex = vehicle.images.findIndex(
         (image) => image._id.toString() === id
       );
 
-      let inImagesArray = true;
+      let imageLocation = "images"; // Track which array contains the image
 
       if (imageIndex === -1) {
         imageIndex = vehicle.damageImage.findIndex(
           (damage) => damage._id.toString() === id
         );
-        inImagesArray = false;
+        if (imageIndex !== -1) {
+          imageLocation = "damageImage"; // Update location if found in damageImage
+        }
       }
 
-      //   console.log(imageIndex);
-      if (imageIndex !== -1) {
-        if (inImagesArray) {
-          vehicle.images[imageIndex].url = Vehicleavatar;
-          vehicle.images[imageIndex].publicId = VehicleavatarId;
-        } else {
-          vehicle.damageImage[imageIndex].url = Vehicleavatar;
-          vehicle.damageImage[imageIndex].publicId = VehicleavatarId;
+      if (imageIndex === -1) {
+        imageIndex = vehicle.cardocuments.findIndex(
+          (cardo) => cardo._id.toString() === id
+        );
+        if (imageIndex !== -1) {
+          imageLocation = "cardocuments"; // Update location if found in cardocuments
         }
+      }
+
+      // After determining the location, you can use imageIndex and imageLocation as needed
+      if (imageIndex === -1) {
+        throw new Error("Image with the specified ID not found in any array");
+      }
+
+      // Now, imageIndex contains the index of the image, and imageLocation indicates the array where it's located
+
+      if (imageIndex !== -1) {
+        switch (imageLocation) {
+          case "images":
+            vehicle.images[imageIndex].url = Vehicleavatar;
+            vehicle.images[imageIndex].publicId = VehicleavatarId;
+            break;
+
+          case "damageImage":
+            vehicle.damageImage[imageIndex].url = Vehicleavatar;
+            vehicle.damageImage[imageIndex].publicId = VehicleavatarId;
+            break;
+
+          case "cardocuments":
+            vehicle.cardocuments[imageIndex].url = Vehicleavatar;
+            vehicle.cardocuments[imageIndex].publicId = VehicleavatarId;
+            break;
+
+          default:
+            throw new Error("Invalid image location");
+        }
+
         console.log("Image is updated successfully");
       }
     }

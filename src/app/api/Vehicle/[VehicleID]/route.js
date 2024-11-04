@@ -9,7 +9,7 @@ export async function PUT(request, context) {
 
     const id = context.params.VehicleID;
     const formDataObject = await request.formData(); // Ensure to await formData
-    // console.log(id, formDataObject);
+    console.log(id, formDataObject);
     const imageFiles = formDataObject.getAll("imageFiles[]"); // Get all image files
     const safetyFeatures = formDataObject.getAll("safetyFeatures[]"); // Get all safety features
     const techFeatures = formDataObject.getAll("techFeatures[]"); // Get all tech features
@@ -19,7 +19,8 @@ export async function PUT(request, context) {
 
     // console.log(pdfofpolicy);
 
-    // console.log(cardocument);
+    console.log("car documents", cardocument);
+    // console.log("imageFiles ", imageFiles);
     const images = []; // To store Cloudinary URLs and IDs
     const damageImage = [];
     const cardocuments = [];
@@ -73,7 +74,7 @@ export async function PUT(request, context) {
       // Update user with new avatar details
       vehicle.PDFofPolicyUrl = PDFofPolicyUrl;
       vehicle.PDFofPolicyPublicId = PDFofPolicyPublicId;
-      console.log("New avatar uploaded and updated.");
+      console.log("New avatar uploaded and updated PDFs.");
     }
 
     // for imageFiles variables
@@ -89,7 +90,7 @@ export async function PUT(request, context) {
           cloudinary.uploader
             .upload_stream({ resource_type: "auto" }, (error, result) => {
               if (error) {
-                console.error("Error uploading image: line 214", error.message); // Log the error if upload fails
+                console.error("Error uploading images Array", error.message); // Log the error if upload fails
                 reject(new Error("Error uploading image: " + error.message));
               } else {
                 console.log(
@@ -107,7 +108,7 @@ export async function PUT(request, context) {
           publicId: uploadResponse.public_id,
         });
 
-        console.log("Image added to list line 229:", {
+        console.log("Image added to list line Images Array:", {
           url: uploadResponse.secure_url,
           publicId: uploadResponse.public_id,
         }); // Log each image data added to the array
@@ -158,11 +159,14 @@ export async function PUT(request, context) {
           cloudinary.uploader
             .upload_stream({ resource_type: "auto" }, (error, result) => {
               if (error) {
-                console.error("Error uploading image: line 214", error.message); // Log the error if upload fails
+                console.error(
+                  "Error uploading image Damage File",
+                  error.message
+                ); // Log the error if upload fails
                 reject(new Error("Error uploading image: " + error.message));
               } else {
                 console.log(
-                  "Successfully uploaded image: line 217",
+                  "Successfully uploaded image Damage File",
                   result.secure_url
                 ); // Log the successful upload
                 resolve(result);
@@ -231,7 +235,7 @@ export async function PUT(request, context) {
                 reject(new Error("Error uploading image: " + error.message));
               } else {
                 console.log(
-                  "Successfully uploaded image: line 217",
+                  "Successfully uploaded image CarDocuments",
                   result.secure_url
                 ); // Log the successful upload
                 resolve(result);
@@ -254,13 +258,16 @@ export async function PUT(request, context) {
 
     // console.log("All images uploaded: line 237", cardocuments);
     if (cardocument.length > 0) {
-      console.log("Images present, starting update process", vehicle.images);
+      console.log(
+        "Images present, starting update process",
+        vehicle.cardocuments
+      );
 
       // Optionally: Delete old images from Cloudinary
       for (let i = 0; i < vehicle.cardocuments.length; i++) {
         if (vehicle.cardocuments[i].publicId) {
           console.log(
-            "Old image publicId to delete: line 243",
+            "Old image publicId to delete CarDocument",
             vehicle.cardocuments[i].publicId
           ); // Log the publicId of the old image
 
@@ -268,17 +275,17 @@ export async function PUT(request, context) {
           const deleteResponse = await cloudinary.uploader.destroy(
             vehicle.cardocuments[i].publicId
           );
-          console.log("Delete response: line 256", deleteResponse);
+          console.log("Delete response Cardocumens", deleteResponse);
 
           console.log(
-            "Old image deleted from Cloudinary: line 246",
+            "Old image deleted from Cloudinary CarDocuments line 246",
             vehicle.cardocuments[i].publicId
           ); // Log the deletion confirmation
         }
       }
 
       // Update the vehicle with new images
-      vehicle.images = cardocuments; // Directly assign the new images array
+      vehicle.cardocuments = cardocuments; // Directly assign the new images array
       console.log(
         "Vehicle updated with new images: line 255",
         vehicle.cardocuments

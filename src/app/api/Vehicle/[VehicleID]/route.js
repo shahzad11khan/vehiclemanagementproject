@@ -19,7 +19,7 @@ export async function PUT(request, context) {
 
     // console.log(pdfofpolicy);
 
-    console.log("car documents", cardocument);
+    console.log("pdf documents", pdfofpolicy);
     // console.log("imageFiles ", imageFiles);
     const images = []; // To store Cloudinary URLs and IDs
     const damageImage = [];
@@ -36,29 +36,57 @@ export async function PUT(request, context) {
     // console.log(pdfofpolicy.name);
 
     if (pdfofpolicy && typeof pdfofpolicy === "object" && pdfofpolicy.name) {
+      const fileSizeInBytes = pdfofpolicy.size;
+      console.log(`File size: ${fileSizeInBytes} bytes`);
+
+      // Check for file size (10 MB limit)
+      if (fileSizeInBytes > 10 * 1024 * 1024) {
+        console.error("File size exceeds 10 MB.");
+        return NextResponse.json("File size exceeds 10 MB.");
+      }
+
+      // Read the file as an array buffer
       const byteData = await pdfofpolicy.arrayBuffer();
       const buffer = Buffer.from(byteData);
 
-      // Upload the new image to Cloudinary
-      const uploadResponse = await new Promise((resolve, reject) => {
-        const uploadStream = cloudinary.uploader.upload_stream(
-          { resource_type: "auto" },
-          (error, result) => {
-            if (error) {
-              reject(error);
-            } else {
-              resolve(result);
+      // Upload the new PDF to Cloudinary
+      try {
+        const uploadResponse = await new Promise((resolve, reject) => {
+          const uploadStream = cloudinary.uploader.upload_stream(
+            {
+              resource_type: "raw", // Specify 'raw' for files like PDFs
+              type: "upload", // This should allow public access
+              format: "pdf", // Explicitly set the format to pdf
+              access_mode: "public", // Ensure public access
+            },
+            (error, result) => {
+              if (error) {
+                console.error("Upload error:", error);
+                reject(error);
+              } else {
+                resolve(result);
+              }
             }
-          }
-        );
+          );
 
-        // Write buffer to the upload stream
-        uploadStream.end(buffer);
-      });
+          // Write buffer to the upload stream
+          uploadStream.end(buffer);
+        });
 
-      PDFofPolicyUrl = uploadResponse.secure_url;
-      PDFofPolicyPublicId = uploadResponse.public_id;
+        // Store the URL and public ID
+        PDFofPolicyUrl = uploadResponse.secure_url;
+        PDFofPolicyPublicId = uploadResponse.public_id;
+
+        const testResponse = await fetch(PDFofPolicyUrl);
+
+        console.log("testResponse:", testResponse);
+        console.log("PDF URL:", PDFofPolicyUrl);
+        console.log("PDF Public ID:", PDFofPolicyPublicId);
+      } catch (error) {
+        console.error("Error during upload:", error);
+      }
     }
+
     // Handle avatar update: remove old avatar from Cloudinary and update with new one if uploaded
     if (PDFofPolicyUrl && PDFofPolicyPublicId) {
       if (vehicle.PDFofPolicyPublicId) {

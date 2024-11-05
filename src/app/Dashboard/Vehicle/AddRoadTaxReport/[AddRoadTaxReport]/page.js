@@ -5,23 +5,26 @@ import { toast } from "react-toastify";
 import { FaTrash } from "react-icons/fa";
 import Header from "../../../Components/Header";
 import Sidebar from "../../../Components/Sidebar";
-// import AddTitleModel from "../AddTitle/AddTitleModel";
+// import AddMaintenanceModel from "../../AddMaintenanceModal/AddmaintenanceModel";
 import { GetTitle } from "../../../Components/ApiUrl/ShowApiDatas/ShowApiDatas";
 import { API_URL_Title } from "../../../Components/ApiUrl/ApiUrls";
 import { getCompanyName } from "@/utils/storageUtils";
 import axios from "axios";
 
-const Page = () => {
+const Page = ({ params }) => {
+  const addRoadTaxReportId = params.AddRoadTaxReport;
+  console.log("ADD Road Taxt page id", addRoadTaxReportId);
   const [searchTerm, setSearchTerm] = useState("");
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   // const [isOpenTitle, setIsOpenTitle] = useState(false);
   const [selectedCompanyName, setSelectedCompanyName] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  // const [selectedid, setselectedid] = useState(null);
   const recordsPerPage = 10;
 
   useEffect(() => {
-    const companyNameFromStorage = getCompanyName() || "superadmin";
+    const companyNameFromStorage = getCompanyName();
     if (companyNameFromStorage) {
       setSelectedCompanyName(companyNameFromStorage);
     }
@@ -68,7 +71,11 @@ const Page = () => {
     setCurrentPage(1);
   }, [searchTerm, data, selectedCompanyName]);
 
-  // const toggleTitleModal = () => setIsOpenTitle((prev) => !prev);
+  // const toggleTitleModal = () => {
+  //   // console.log("model click");
+  //   setIsOpenTitle((prev) => !prev);
+  //   setselectedid(addmaintenancereportId);
+  // };
 
   const totalPages = Math.ceil(filteredData.length / recordsPerPage);
   const startIndex = (currentPage - 1) * recordsPerPage;
@@ -80,14 +87,14 @@ const Page = () => {
   return (
     <>
       <Header />
-      <div className="flex gap-4">
-        <Sidebar />
-        <div className="container mx-auto p-4">
-          <div className="border-2 mt-3">
+      <div className="flex w-full">
+        <Sidebar className="w-4/12" />
+        <div className="mx-auto w-10/12 p-4">
+          <div className="border-2 mt-3 w-full ">
             <div className="flex justify-between">
               <input
                 type="text"
-                placeholder="Search by title"
+                placeholder="Search"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="border rounded px-4 py-2 w-64"
@@ -96,16 +103,61 @@ const Page = () => {
                 // onClick={toggleTitleModal}
                 className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
               >
-                Add Road Text Report
+                Add Road Text
               </button>
             </div>
 
-            <div className="mt-4 overflow-x-auto">
+            <div className="mt-4 overflow-x-auto w-full">
               <table className="min-w-full bg-white border border-gray-200">
                 <thead>
                   <tr>
                     <th className="py-2 px-4 border-b border-gray-200 text-left">
                       Vehicle Name
+                    </th>
+                    <th className="py-2 px-4 border-b border-gray-200 text-left">
+                      Vehicle Registration Number
+                    </th>
+                    <th className="py-2 px-4 border-b border-gray-200 text-left">
+                      Issues And Damages
+                    </th>
+                    <th className="py-2 px-4 border-b border-gray-200 text-left">
+                      Organisation
+                    </th>
+                    <th className="py-2 px-4 border-b border-gray-200 text-left">
+                      Repair Status
+                    </th>
+                    <th className="py-2 px-4 border-b border-gray-200 text-left">
+                      Job Number
+                    </th>
+                    <th className="py-2 px-4 border-b border-gray-200 text-left">
+                      Memo
+                    </th>
+                    <th className="py-2 px-4 border-b border-gray-200 text-left">
+                      Part Number
+                    </th>
+                    <th className="py-2 px-4 border-b border-gray-200 text-left">
+                      Part Name
+                    </th>
+                    <th className="py-2 px-4 border-b border-gray-200 text-left">
+                      Part Price
+                    </th>
+                    <th className="py-2 px-4 border-b border-gray-200 text-left">
+                      Part Supplier
+                    </th>
+                    <th className="py-2 px-4 border-b border-gray-200 text-left">
+                      Labour Hours
+                    </th>
+                    <th className="py-2 px-4 border-b border-gray-200 text-left">
+                      Cost
+                    </th>
+                    <th className="py-2 px-4 border-b border-gray-200 text-left">
+                      Signed By
+                    </th>
+                    <th className="py-2 px-4 border-b border-gray-200 text-left">
+                      Repair Date
+                    </th>
+                    <th className="py-2 px-4 border-b border-gray-200 text-left">
+                      Repair Images
                     </th>
                     <th className="py-2 px-4 border-b border-gray-200 text-left">
                       Actions
@@ -116,8 +168,54 @@ const Page = () => {
                   {currentRecords.map((row) => (
                     <tr key={row._id} className="hover:bg-gray-100">
                       <td className="py-2 px-4 border-b border-gray-200">
-                        {row.name}
+                        {row.VehicleName}
                       </td>
+                      <td className="py-2 px-4 border-b border-gray-200">
+                        {row.registrationNumber}
+                      </td>
+                      <td className="py-2 px-4 border-b border-gray-200">
+                        {row.issues}
+                      </td>
+                      <td className="py-2 px-4 border-b border-gray-200">
+                        {/* {row.repairHistory.organisations} */}
+                      </td>
+                      <td className="py-2 px-4 border-b border-gray-200">
+                        {/* {row.repairHistory.repairStatus} */}
+                      </td>
+                      <td className="py-2 px-4 border-b border-gray-200">
+                        {/* {row.repairHistory.jobNumber} */}
+                      </td>
+                      <td className="py-2 px-4 border-b border-gray-200">
+                        {/* {row.repairHistory.memo} */}
+                      </td>
+                      <td className="py-2 px-4 border-b border-gray-200">
+                        {/* {row.repairHistory.parts.partNumber} */}
+                      </td>
+                      <td className="py-2 px-4 border-b border-gray-200">
+                        {/* {row.repairHistory.parts.partName} */}
+                      </td>
+                      <td className="py-2 px-4 border-b border-gray-200">
+                        {/* {row.repairHistory.parts.price} */}
+                      </td>
+                      <td className="py-2 px-4 border-b border-gray-200">
+                        {/* {row.repairHistory.parts.supplier} */}
+                      </td>
+                      <td className="py-2 px-4 border-b border-gray-200">
+                        {/* {row.repairHistory.labourHours} */}
+                      </td>
+                      <td className="py-2 px-4 border-b border-gray-200">
+                        {/* {row.repairHistory.signedOffBy} */}
+                      </td>
+                      <td className="py-2 px-4 border-b border-gray-200">
+                        {/* {row.repairHistory.date} */}
+                      </td>
+                      <td className="py-2 px-4 border-b border-gray-200">
+                        {/* {row.repairHistory.images} */}
+                      </td>
+                      <td className="py-2 px-4 border-b border-gray-200">
+                        {/* {row.repairHistory.images} */}
+                      </td>
+
                       <td className="py-2 px-4 border-b border-gray-200">
                         <button
                           onClick={() => handleDelete(row._id)}
@@ -162,10 +260,11 @@ const Page = () => {
           </div>
         </div>
       </div>
-      {/* <AddTitleModel
+      {/* <AddMaintenanceModel
         isOpen={isOpenTitle}
         onClose={toggleTitleModal}
         fetchData={fetchData}
+        selectedid={selectedid}
       /> */}
     </>
   );

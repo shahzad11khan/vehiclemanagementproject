@@ -87,14 +87,14 @@ const Page = ({ params }) => {
   return (
     <>
       <Header />
-      <div className="flex gap-4">
-        <Sidebar />
-        <div className="container mx-auto p-4">
-          <div className="border-2 mt-3">
+      <div className="flex w-full">
+        <Sidebar className="w-4/12" />
+        <div className="mx-auto w-10/12 p-4">
+          <div className="border-2 mt-3 w-full ">
             <div className="flex justify-between">
               <input
                 type="text"
-                placeholder="Search by title"
+                placeholder="Search"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="border rounded px-4 py-2 w-64"
@@ -107,12 +107,57 @@ const Page = ({ params }) => {
               </button>
             </div>
 
-            <div className="mt-4 overflow-x-auto">
+            <div className="mt-4 overflow-x-auto w-full">
               <table className="min-w-full bg-white border border-gray-200">
                 <thead>
                   <tr>
                     <th className="py-2 px-4 border-b border-gray-200 text-left">
                       Vehicle Name
+                    </th>
+                    <th className="py-2 px-4 border-b border-gray-200 text-left">
+                      Vehicle Registration Number
+                    </th>
+                    <th className="py-2 px-4 border-b border-gray-200 text-left">
+                      Issues And Damages
+                    </th>
+                    <th className="py-2 px-4 border-b border-gray-200 text-left">
+                      Organisation
+                    </th>
+                    <th className="py-2 px-4 border-b border-gray-200 text-left">
+                      Repair Status
+                    </th>
+                    <th className="py-2 px-4 border-b border-gray-200 text-left">
+                      Job Number
+                    </th>
+                    <th className="py-2 px-4 border-b border-gray-200 text-left">
+                      Memo
+                    </th>
+                    <th className="py-2 px-4 border-b border-gray-200 text-left">
+                      Part Number
+                    </th>
+                    <th className="py-2 px-4 border-b border-gray-200 text-left">
+                      Part Name
+                    </th>
+                    <th className="py-2 px-4 border-b border-gray-200 text-left">
+                      Part Price
+                    </th>
+                    <th className="py-2 px-4 border-b border-gray-200 text-left">
+                      Part Supplier
+                    </th>
+                    <th className="py-2 px-4 border-b border-gray-200 text-left">
+                      Labour Hours
+                    </th>
+                    <th className="py-2 px-4 border-b border-gray-200 text-left">
+                      Cost
+                    </th>
+                    <th className="py-2 px-4 border-b border-gray-200 text-left">
+                      Signed By
+                    </th>
+                    <th className="py-2 px-4 border-b border-gray-200 text-left">
+                      Repair Date
+                    </th>
+                    <th className="py-2 px-4 border-b border-gray-200 text-left">
+                      Repair Images
                     </th>
                     <th className="py-2 px-4 border-b border-gray-200 text-left">
                       Actions
@@ -123,8 +168,54 @@ const Page = ({ params }) => {
                   {currentRecords.map((row) => (
                     <tr key={row._id} className="hover:bg-gray-100">
                       <td className="py-2 px-4 border-b border-gray-200">
-                        {row.name}
+                        {row.VehicleName}
                       </td>
+                      <td className="py-2 px-4 border-b border-gray-200">
+                        {row.registrationNumber}
+                      </td>
+                      <td className="py-2 px-4 border-b border-gray-200">
+                        {row.issues}
+                      </td>
+                      <td className="py-2 px-4 border-b border-gray-200">
+                        {/* {row.repairHistory.organisations} */}
+                      </td>
+                      <td className="py-2 px-4 border-b border-gray-200">
+                        {/* {row.repairHistory.repairStatus} */}
+                      </td>
+                      <td className="py-2 px-4 border-b border-gray-200">
+                        {/* {row.repairHistory.jobNumber} */}
+                      </td>
+                      <td className="py-2 px-4 border-b border-gray-200">
+                        {/* {row.repairHistory.memo} */}
+                      </td>
+                      <td className="py-2 px-4 border-b border-gray-200">
+                        {/* {row.repairHistory.parts.partNumber} */}
+                      </td>
+                      <td className="py-2 px-4 border-b border-gray-200">
+                        {/* {row.repairHistory.parts.partName} */}
+                      </td>
+                      <td className="py-2 px-4 border-b border-gray-200">
+                        {/* {row.repairHistory.parts.price} */}
+                      </td>
+                      <td className="py-2 px-4 border-b border-gray-200">
+                        {/* {row.repairHistory.parts.supplier} */}
+                      </td>
+                      <td className="py-2 px-4 border-b border-gray-200">
+                        {/* {row.repairHistory.labourHours} */}
+                      </td>
+                      <td className="py-2 px-4 border-b border-gray-200">
+                        {/* {row.repairHistory.signedOffBy} */}
+                      </td>
+                      <td className="py-2 px-4 border-b border-gray-200">
+                        {/* {row.repairHistory.date} */}
+                      </td>
+                      <td className="py-2 px-4 border-b border-gray-200">
+                        {/* {row.repairHistory.images} */}
+                      </td>
+                      <td className="py-2 px-4 border-b border-gray-200">
+                        {/* {row.repairHistory.images} */}
+                      </td>
+
                       <td className="py-2 px-4 border-b border-gray-200">
                         <button
                           onClick={() => handleDelete(row._id)}

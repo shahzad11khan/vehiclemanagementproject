@@ -22,6 +22,7 @@ const Page = () => {
   const [selectedCompanyName, setSelectedCompanyName] = useState("");
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [isOpenVehicleUpdate, setIsOpenVehcleUpdate] = useState(false);
+  const [openDropdownId, setOpenDropdownId] = useState(null);
 
   // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
@@ -115,7 +116,9 @@ const Page = () => {
     indexOfLastRecord
   );
   const totalPages = Math.ceil(filteredData.length / recordsPerPage);
-
+  const toggleDropdown = (id) => {
+    setOpenDropdownId(openDropdownId === id ? null : id);
+  };
   return (
     <>
       <Header className="min-w-full" />
@@ -144,7 +147,7 @@ const Page = () => {
             </div>
 
             {/* Responsive Tailwind CSS Table */}
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto h-72">
               <table className="min-w-full border-collapse border border-gray-300">
                 <thead>
                   <tr className="bg-gray-200">
@@ -210,13 +213,62 @@ const Page = () => {
                           >
                             <FaTrash />
                           </button>
-                          <Link
-                            href={`/Dashboard/Vehicle/VehicleReports/${row._id}`}
-                          >
-                            <button className="text-red-500 hover:text-red-700">
-                              Car Reports
-                            </button>
-                          </Link>
+
+                          <div className="flex gap-2">
+                            {/* Dropdown for Additional Reports */}
+                            <div className="relative">
+                              <button
+                                onClick={() => toggleDropdown(row._id)}
+                                className="text-gray-500 hover:text-gray-700"
+                              >
+                                Reports
+                              </button>
+                              {openDropdownId === row._id && (
+                                <div className="absolute top-6 bg-white border border-gray-200 shadow-lg rounded-md py-1 w-[200px] z-10 flex flex-col">
+                                  <div className="px-4 py-2 hover:bg-gray-300">
+                                    <Link
+                                      href={`/Dashboard/Vehicle/VehicleReports/${row._id}`}
+                                      className="bg-transparent"
+                                    >
+                                      Car Reports
+                                    </Link>
+                                  </div>
+                                  <div className="px-4 py-2 hover:bg-gray-300">
+                                    <Link
+                                      href={`/Dashboard/Vehicle/AddMaintenanceReport/${row._id}`}
+                                      className="bg-transparent"
+                                    >
+                                      Add Maintenance Report
+                                    </Link>
+                                  </div>
+                                  <div className="px-4 py-2 hover:bg-gray-300">
+                                    <Link
+                                      href={`/Dashboard/Vehicle/AddRoadTaxReport/${row._id}`}
+                                      className="bg-transparent"
+                                    >
+                                      Add Road Tax Report
+                                    </Link>
+                                  </div>
+                                  <div className="px-4 py-2 hover:bg-gray-300">
+                                    <Link
+                                      href={`/Dashboard/Vehicle/AddServiceReport/${row._id}`}
+                                      className="bg-transparent"
+                                    >
+                                      Add Service Report
+                                    </Link>
+                                  </div>
+                                  <div className="px-4 py-2 hover:bg-gray-300">
+                                    <Link
+                                      href={`/Dashboard/Vehicle/AddMOTReport/${row._id}`}
+                                      className="bg-transparent"
+                                    >
+                                      Add MOT Report
+                                    </Link>
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+                          </div>
                         </div>
                       </td>
                     </tr>

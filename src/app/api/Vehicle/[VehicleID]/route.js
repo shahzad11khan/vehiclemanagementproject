@@ -460,26 +460,27 @@ export async function GET(request, context) {
     console.log("Vehicle Report", id);
 
     // Find all records related to the driverId
-    const find_user_all = await Vehicle.find({ _id: id });
-    // console.log(find_user_all);
-    // If there are records associated with driverId
-    if (find_user_all.length > 0) {
-      // Return all records as a JSON response
-      return NextResponse.json({ result: find_user_all, status: 200 });
+    // Find the product by ID
+    // Attempt to find the user by ID
+    const Find_User = await Vehicle.findById(id);
+    console.log(Find_User);
+
+    // Check if the user was found
+    if (Find_User) {
+      // User found, return the user data
+      return NextResponse.json({ result: Find_User, status: 200 });
     } else {
-      // If no records found for driverId, try to find by _id
+      // If no user found, try to find by _id in an array
+      const find_user_all = await Vehicle.find({ _id: id });
 
-      // Find the product by ID
-      const Find_User = await Vehicle.findById(id);
-      console.log(Find_User);
-
-      // Check if the product exists
-      if (!Find_User) {
-        return NextResponse.json({ result: "No User Found", status: 404 });
-      } else {
-        // Return the found product as a JSON response
-        return NextResponse.json({ result: Find_User, status: 200 });
+      // Check if there are any records found
+      if (find_user_all.length > 0) {
+        // Return all records as a JSON response
+        return NextResponse.json({ result: find_user_all, status: 200 });
       }
+
+      // No records found
+      return NextResponse.json({ result: "No User Found", status: 404 });
     }
   } catch (error) {
     console.error("Error retrieving product:", error);

@@ -17,6 +17,7 @@ export const API_URL_Payment = `${url}/api/Payment`;
 export const API_URL_Signature = `${url}/api/Signature`;
 export const API_URL_Supplier = `${url}/api/Supplier`;
 export const API_URL_Vehicle = `${url}/api/Vehicle`;
+export const API_URL_Vehicle_getspecificvehicleid = `${url}/api/Vehicle/getspecificvehicle`;
 export const API_URL_VehicleType = `${url}/api/VehicleType`;
 export const API_URL_Title = `${url}/api/Title`;
 export const API_URL_Badge = `${url}/api/Badge`;

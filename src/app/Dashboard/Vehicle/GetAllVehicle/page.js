@@ -238,7 +238,7 @@ const Page = () => {
                                       href={`/Dashboard/Vehicle/AddMaintenanceReport/${row._id}`}
                                       className="bg-transparent"
                                     >
-                                      Add Maintenance Report
+                                      Maintenance Report
                                     </Link>
                                   </div>
 
@@ -247,7 +247,23 @@ const Page = () => {
                                       href={`/Dashboard/Vehicle/AddMOTReport/${row._id}`}
                                       className="bg-transparent"
                                     >
-                                      Add MOT Report
+                                      MOT Report
+                                    </Link>
+                                  </div>
+                                  <div className="px-4 py-2 hover:bg-gray-300">
+                                    <Link
+                                      href={`/Dashboard/Vehicle/AddServiceReport/${row._id}`}
+                                      className="bg-transparent"
+                                    >
+                                      Service Report
+                                    </Link>
+                                  </div>
+                                  <div className="px-4 py-2 hover:bg-gray-300">
+                                    <Link
+                                      href={`/Dashboard/Vehicle/AddRoadTaxReport/${row._id}`}
+                                      className="bg-transparent"
+                                    >
+                                      Road Tax Report
                                     </Link>
                                   </div>
                                 </div>

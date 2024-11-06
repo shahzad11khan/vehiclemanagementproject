@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { API_URL_Vehicle_getspecificvehicleid } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import axios from "axios";
 
-const AddMotModal = ({
+const AddRoadTexModal = ({
   isOpen,
   onClose,
   // fetchData,
@@ -12,10 +12,10 @@ const AddMotModal = ({
   const [formData, setFormData] = useState({
     VehicleName: "",
     registrationNumber: "",
-    motCurrentDate: "",
-    motDueDate: "",
-    motCycle: "",
-    motStatus: "",
+    roadTaxCurrentDate: "",
+    roadTaxDueDate: "",
+    roadTaxCycle: "",
+    roadTaxStatus: "",
     adminCreatedBy: "",
     adminCompanyName: "",
     adminCompanyId: "",
@@ -89,7 +89,7 @@ const AddMotModal = ({
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
       <div className="p-4 sm:p-6 rounded-lg shadow-lg w-full bg-white max-w-lg sm:max-w-2xl md:max-w-3xl max-h-[80vh] overflow-y-auto">
         <h2 className="text-2xl sm:text-3xl font-semibold text-center mb-4">
-          Add MOT
+          Add Road Tax
         </h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="flex flex-col sm:flex-row sm:justify-between sm:space-x-4">
@@ -121,24 +121,24 @@ const AddMotModal = ({
 
           <div className="flex flex-col sm:flex-row sm:justify-between sm:space-x-4">
             <div className="flex flex-col flex-1 mb-4 sm:mb-0">
-              <label className="text-sm font-medium">MOT Current Date:</label>
+              <label className="text-sm font-medium">Road Tax Date:</label>
               <input
                 type="date"
-                name="motDueDate"
-                value={formData.motCurrentDate}
+                name="roadTaxCurrentDate"
+                value={formData.roadTaxCurrentDate}
                 onChange={handleChange}
                 className="mt-1 p-2 border border-gray-300 rounded"
               />
             </div>
             <div className="flex flex-col flex-1">
-              <label className="text-sm font-medium">MOT Cycle:</label>
+              <label className="text-sm font-medium">Road Tax Cycle:</label>
               <select
-                name="motCycle"
-                value={formData.motCycle}
+                name="roadTaxCycle"
+                value={formData.roadTaxCycle}
                 onChange={handleChange}
                 className="mt-1 p-2 border border-gray-300 rounded"
               >
-                <option value="">Select MOT Cycle</option>
+                <option value="">Select Road Tax Cycle</option>
                 <option value="3month">3 Months</option>
                 <option value="6month">6 Months</option>
                 <option value="1year">1 Year</option>
@@ -148,24 +148,24 @@ const AddMotModal = ({
 
           <div className="flex flex-col sm:flex-row sm:justify-between sm:space-x-4">
             <div className="flex flex-col flex-1 mb-4 sm:mb-0">
-              <label className="text-sm font-medium">Next MOT Date:</label>
+              <label className="text-sm font-medium">Next Raod Tax Date:</label>
               <input
                 type="date"
-                name="motDueDate"
-                value={formData.motDueDate}
+                name="roadTaxDueDate"
+                value={formData.roadTaxDueDate}
                 onChange={handleChange}
                 className="mt-1 p-2 border border-gray-300 rounded"
               />
             </div>
             <div className="flex flex-col flex-1">
-              <label className="text-sm font-medium">MOT Status:</label>
+              <label className="text-sm font-medium">Road Tax Status:</label>
               <select
-                name="motStatus"
-                value={formData.motStatus}
+                name="roadTaxStatus"
+                value={formData.roadTaxStatus}
                 onChange={handleChange}
                 className="mt-1 p-2 border border-gray-300 rounded"
               >
-                <option value="">Select MOT Cycle</option>
+                <option value="">Select Road Tax Cycle</option>
                 <option value="pandding">Pandding</option>
                 <option value="done">Done</option>
               </select>
@@ -192,4 +192,4 @@ const AddMotModal = ({
   );
 };
 
-export default AddMotModal;
+export default AddRoadTexModal;

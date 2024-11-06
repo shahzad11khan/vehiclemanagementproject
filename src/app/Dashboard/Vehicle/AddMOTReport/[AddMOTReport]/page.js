@@ -10,10 +10,10 @@ import { GetTitle } from "../../../Components/ApiUrl/ShowApiDatas/ShowApiDatas";
 import { API_URL_Title } from "../../../Components/ApiUrl/ApiUrls";
 import { getCompanyName } from "@/utils/storageUtils";
 import axios from "axios";
+import jsPDF from "jspdf";
 
 const Page = ({ params }) => {
   const addAddMOTReporttId = params.AddMOTReport;
-  console.log("addMOT page id", addAddMOTReporttId);
   const [searchTerm, setSearchTerm] = useState("");
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
@@ -72,7 +72,6 @@ const Page = ({ params }) => {
   }, [searchTerm, data, selectedCompanyName]);
 
   const toggleTitleModal = () => {
-    // console.log("model click");
     setIsOpenTitle((prev) => !prev);
     setselectedid(addAddMOTReporttId);
   };
@@ -83,6 +82,188 @@ const Page = ({ params }) => {
     startIndex,
     startIndex + recordsPerPage
   );
+
+  // const generatePDF = () => {
+  //   const doc = new jsPDF();
+
+  //   // Set title and report date
+  //   doc.setFontSize(12); // Large font for title
+  //   doc.text("MOT Records Report", 14, 10);
+
+  //   const reportDate = new Date().toLocaleDateString();
+  //   doc.setFontSize(10); // Smaller font for the report date
+  //   doc.text(`Report Generated: ${reportDate}`, 14, 15);
+
+  //   // Display the vehicle name once at the top
+  //   const vehicleName = filteredData[0]?.VehicleName || "Name Unavailable";
+  //   doc.text(`Vehicle Name: ${vehicleName}`, 14, 20);
+  //   const vehicleRegistration =
+  //     filteredData[0]?.registrationNumber || "Registration Unavailable";
+  //   doc.text(`Registration Number: ${vehicleRegistration}`, 14, 25);
+  //   doc.text(`Company Name: ${selectedCompanyName}`, 14, 30);
+
+  //   // Define table columns and their initial X positions
+  //   const tableColumn = [
+  //     "MOT Dates",
+  //     "MOT Cycle",
+  //     "Next MOT Date",
+  //     "MOT Status",
+  //   ];
+
+  //   let startX = 14;
+  //   let startY = 42; // Adjust to leave space after the vehicle name
+  //   const columnWidth = 35; // Reduce width of each column to fit within the page
+  //   const lineHeight = 9; // Height of each row
+  //   const padding = 6; // Padding inside cells
+  //   const pageHeight = doc.internal.pageSize.height; // Get the height of the page
+  //   const pageWidth = doc.internal.pageSize.width; // Get the width of the page
+  //   const totalWidth = columnWidth * tableColumn.length; // Total width of all columns
+
+  //   // Ensure that the total width of columns fits within the page width
+  //   if (totalWidth > pageWidth - 28) {
+  //     // Consider the margins (14px on both sides)
+  //     console.warn("Warning: Column widths exceed the page width.");
+  //   }
+
+  //   // Add table header
+  //   tableColumn.forEach((column, index) => {
+  //     doc.text(column, startX + index * columnWidth + padding, startY);
+  //     doc.rect(startX + index * columnWidth, startY - 4, columnWidth, 8);
+  //   });
+
+  //   // Add table rows without Vehicle Name
+  //   let currentY = startY + lineHeight;
+  //   filteredData.forEach((row) => {
+  //     // Check if the next row fits within the current page
+  //     if (currentY + lineHeight > pageHeight - 20) {
+  //       doc.addPage(); // Add a new page if the row won't fit
+  //       currentY = 20; // Reset Y to start at the top of the new page
+  //       // Re-add the header on the new page
+  //       tableColumn.forEach((column, index) => {
+  //         doc.text(column, startX + index * columnWidth + padding, currentY);
+  //         doc.rect(startX + index * columnWidth, currentY - 4, columnWidth, 8);
+  //       });
+  //       currentY += lineHeight; // Adjust the Y after the header
+  //     }
+
+  //     // Add the data cells with borders
+  //     doc.text(row.registrationNumber || "N/A", startX + padding, currentY);
+  //     doc.rect(startX, currentY - 4, columnWidth, lineHeight);
+
+  //     doc.text(row.motDates || "N/A", startX + columnWidth + padding, currentY);
+  //     doc.rect(startX + columnWidth, currentY - 4, columnWidth, lineHeight);
+
+  //     doc.text(
+  //       row.motCycle || "N/A",
+  //       startX + 2 * columnWidth + padding,
+  //       currentY
+  //     );
+  //     doc.rect(startX + 2 * columnWidth, currentY - 4, columnWidth, lineHeight);
+
+  //     doc.text(
+  //       row.nextMotDate || "N/A",
+  //       startX + 3 * columnWidth + padding,
+  //       currentY
+  //     );
+  //     doc.rect(startX + 3 * columnWidth, currentY - 4, columnWidth, lineHeight);
+
+  //     doc.text(
+  //       row.motStatus || "N/A",
+  //       startX + 4 * columnWidth + padding,
+  //       currentY
+  //     );
+  //     doc.rect(startX + 4 * columnWidth, currentY - 4, columnWidth, lineHeight);
+
+  //     // Increment Y for the next row
+  //     currentY += lineHeight;
+  //   });
+
+  //   // Save the PDF
+  //   doc.save("MOT_Records_Report.pdf");
+  // };
+  const generatePDF = () => {
+    const doc = new jsPDF();
+
+    // Set title and report date
+    doc.setFontSize(12); // Large font for title
+    doc.text("MOT Records Report", 14, 10);
+
+    const reportDate = new Date().toLocaleDateString();
+    doc.setFontSize(10); // Smaller font for the report date
+    doc.text(`Report Generated: ${reportDate}`, 14, 15);
+
+    // Display the vehicle name once at the top
+    const vehicleName = filteredData[0]?.VehicleName || "Name Unavailable";
+    doc.text(`Vehicle Name: ${vehicleName}`, 14, 20);
+    const vehicleRegistration =
+      filteredData[0]?.registrationNumber || "Registration Unavailable";
+    doc.text(`Registration Number: ${vehicleRegistration}`, 14, 25);
+    doc.text(`Company Name: ${selectedCompanyName}`, 14, 30);
+
+    // Define table columns and their initial X positions (remove 'Registration Number')
+    const tableColumn = [
+      "MOT Dates",
+      "MOT Cycle",
+      "Next MOT Date",
+      "MOT Status",
+    ];
+
+    let startX = 14;
+    let startY = 42; // Adjust to leave space after the vehicle name
+    const columnWidth = 45; // Adjusted column width to better fit the page
+    const lineHeight = 9; // Height of each row
+    const padding = 6; // Padding inside cells
+    const pageHeight = doc.internal.pageSize.height; // Get the height of the page
+
+    // Add table header (updated to exclude 'Registration Number')
+    tableColumn.forEach((column, index) => {
+      doc.text(column, startX + index * columnWidth + padding, startY);
+      doc.rect(startX + index * columnWidth, startY - 4, columnWidth, 8);
+    });
+
+    // Add table rows (updated to exclude 'registrationNumber' column)
+    let currentY = startY + lineHeight;
+    filteredData.forEach((row) => {
+      // Check if the next row fits within the current page
+      if (currentY + lineHeight > pageHeight - 20) {
+        doc.addPage(); // Add a new page if the row won't fit
+        currentY = 20; // Reset Y to start at the top of the new page
+        // Re-add the header on the new page
+        tableColumn.forEach((column, index) => {
+          doc.text(column, startX + index * columnWidth + padding, currentY);
+          doc.rect(startX + index * columnWidth, currentY - 4, columnWidth, 8);
+        });
+        currentY += lineHeight; // Adjust the Y after the header
+      }
+
+      // Add the remaining data cells with borders
+      doc.text(row.motDates || "N/A", startX + padding, currentY);
+      doc.rect(startX, currentY - 4, columnWidth, lineHeight);
+
+      doc.text(row.motCycle || "N/A", startX + columnWidth + padding, currentY);
+      doc.rect(startX + columnWidth, currentY - 4, columnWidth, lineHeight);
+
+      doc.text(
+        row.nextMotDate || "N/A",
+        startX + 2 * columnWidth + padding,
+        currentY
+      );
+      doc.rect(startX + 2 * columnWidth, currentY - 4, columnWidth, lineHeight);
+
+      doc.text(
+        row.motStatus || "N/A",
+        startX + 3 * columnWidth + padding,
+        currentY
+      );
+      doc.rect(startX + 3 * columnWidth, currentY - 4, columnWidth, lineHeight);
+
+      // Increment Y for the next row
+      currentY += lineHeight;
+    });
+
+    // Save the PDF
+    doc.save("MOT_Records_Report.pdf");
+  };
 
   return (
     <>
@@ -99,12 +280,20 @@ const Page = ({ params }) => {
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="border rounded px-4 py-2 w-64"
               />
-              <button
-                onClick={toggleTitleModal}
-                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-              >
-                Add MOT
-              </button>
+              <div>
+                <button
+                  onClick={toggleTitleModal}
+                  className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mr-2"
+                >
+                  Add MOT
+                </button>
+                <button
+                  onClick={generatePDF}
+                  className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+                >
+                  Generate Report
+                </button>
+              </div>
             </div>
 
             <div className="mt-4 overflow-x-auto w-full">
@@ -118,33 +307,17 @@ const Page = ({ params }) => {
                       Vehicle Registration Number
                     </th>
                     <th className="py-2 px-4 border-b border-gray-200 text-left">
-                      Road Tax Date
+                      Vehicle MOT Dates
                     </th>
                     <th className="py-2 px-4 border-b border-gray-200 text-left">
-                      Road Tax Cycle
+                      Vehicle MOT Cycle
                     </th>
                     <th className="py-2 px-4 border-b border-gray-200 text-left">
-                      Mot Due Date
+                      Vehicle Next MOT Date
                     </th>
                     <th className="py-2 px-4 border-b border-gray-200 text-left">
-                      Mot Cycle
+                      Vehicle MOT Status
                     </th>
-                    <th className="py-2 px-4 border-b border-gray-200 text-left">
-                      Seats
-                    </th>
-                    <th className="py-2 px-4 border-b border-gray-200 text-left">
-                      ABI Code
-                    </th>
-                    <th className="py-2 px-4 border-b border-gray-200 text-left">
-                      Next Service Date
-                    </th>
-                    <th className="py-2 px-4 border-b border-gray-200 text-left">
-                      Next Service Miles
-                    </th>
-                    <th className="py-2 px-4 border-b border-gray-200 text-left">
-                      Road Tax Cost
-                    </th>
-
                     <th className="py-2 px-4 border-b border-gray-200 text-left">
                       Actions
                     </th>
@@ -160,33 +333,17 @@ const Page = ({ params }) => {
                         {row.registrationNumber}
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
-                        {/* {row.issues} */}
+                        {row.motDates || "N/A"}
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
-                        {/* {row.repairHistory.organisations} */}
+                        {row.motCycle || "N/A"}
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
-                        {/* {row.repairHistory.repairStatus} */}
+                        {row.nextMotDate || "N/A"}
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
-                        {/* {row.repairHistory.jobNumber} */}
+                        {row.motStatus || "N/A"}
                       </td>
-                      <td className="py-2 px-4 border-b border-gray-200">
-                        {/* {row.repairHistory.memo} */}
-                      </td>
-                      <td className="py-2 px-4 border-b border-gray-200">
-                        {/* {row.repairHistory.parts.partNumber} */}
-                      </td>
-                      <td className="py-2 px-4 border-b border-gray-200">
-                        {/* {row.repairHistory.parts.partName} */}
-                      </td>
-                      <td className="py-2 px-4 border-b border-gray-200">
-                        {/* {row.repairHistory.parts.price} */}
-                      </td>
-                      <td className="py-2 px-4 border-b border-gray-200">
-                        {/* {row.repairHistory.parts.supplier} */}
-                      </td>
-
                       <td className="py-2 px-4 border-b border-gray-200">
                         <button
                           onClick={() => handleDelete(row._id)}
@@ -233,8 +390,7 @@ const Page = ({ params }) => {
       </div>
       <AddMotModal
         isOpen={isOpenTitle}
-        onClose={toggleTitleModal}
-        fetchData={fetchData}
+        onClose={() => setIsOpenTitle(false)}
         selectedid={selectedid}
       />
     </>

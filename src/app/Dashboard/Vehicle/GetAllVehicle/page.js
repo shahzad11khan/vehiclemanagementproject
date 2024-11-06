@@ -241,22 +241,7 @@ const Page = () => {
                                       Add Maintenance Report
                                     </Link>
                                   </div>
-                                  <div className="px-4 py-2 hover:bg-gray-300">
-                                    <Link
-                                      href={`/Dashboard/Vehicle/AddRoadTaxReport/${row._id}`}
-                                      className="bg-transparent"
-                                    >
-                                      Add Road Tax Report
-                                    </Link>
-                                  </div>
-                                  <div className="px-4 py-2 hover:bg-gray-300">
-                                    <Link
-                                      href={`/Dashboard/Vehicle/AddServiceReport/${row._id}`}
-                                      className="bg-transparent"
-                                    >
-                                      Add Service Report
-                                    </Link>
-                                  </div>
+
                                   <div className="px-4 py-2 hover:bg-gray-300">
                                     <Link
                                       href={`/Dashboard/Vehicle/AddMOTReport/${row._id}`}

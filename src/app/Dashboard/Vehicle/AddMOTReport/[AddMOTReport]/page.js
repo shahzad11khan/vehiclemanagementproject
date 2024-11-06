@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { FaTrash } from "react-icons/fa";
 import Header from "../../../Components/Header";
 import Sidebar from "../../../Components/Sidebar";
-// import AddMaintenanceModel from "../../AddMaintenanceModal/AddmaintenanceModel";
+import AddMotModal from "../AddMOTModal/AddMotModal";
 import { GetTitle } from "../../../Components/ApiUrl/ShowApiDatas/ShowApiDatas";
 import { API_URL_Title } from "../../../Components/ApiUrl/ApiUrls";
 import { getCompanyName } from "@/utils/storageUtils";
@@ -17,10 +17,10 @@ const Page = ({ params }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
-  // const [isOpenTitle, setIsOpenTitle] = useState(false);
+  const [isOpenTitle, setIsOpenTitle] = useState(false);
   const [selectedCompanyName, setSelectedCompanyName] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  // const [selectedid, setselectedid] = useState(null);
+  const [selectedid, setselectedid] = useState(null);
   const recordsPerPage = 10;
 
   useEffect(() => {
@@ -71,11 +71,11 @@ const Page = ({ params }) => {
     setCurrentPage(1);
   }, [searchTerm, data, selectedCompanyName]);
 
-  // const toggleTitleModal = () => {
-  //   // console.log("model click");
-  //   setIsOpenTitle((prev) => !prev);
-  //   setselectedid(addmaintenancereportId);
-  // };
+  const toggleTitleModal = () => {
+    // console.log("model click");
+    setIsOpenTitle((prev) => !prev);
+    setselectedid(addAddMOTReporttId);
+  };
 
   const totalPages = Math.ceil(filteredData.length / recordsPerPage);
   const startIndex = (currentPage - 1) * recordsPerPage;
@@ -100,7 +100,7 @@ const Page = ({ params }) => {
                 className="border rounded px-4 py-2 w-64"
               />
               <button
-                // onClick={toggleTitleModal}
+                onClick={toggleTitleModal}
                 className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
               >
                 Add MOT
@@ -118,47 +118,33 @@ const Page = ({ params }) => {
                       Vehicle Registration Number
                     </th>
                     <th className="py-2 px-4 border-b border-gray-200 text-left">
-                      Issues And Damages
+                      Road Tax Date
                     </th>
                     <th className="py-2 px-4 border-b border-gray-200 text-left">
-                      Organisation
+                      Road Tax Cycle
                     </th>
                     <th className="py-2 px-4 border-b border-gray-200 text-left">
-                      Repair Status
+                      Mot Due Date
                     </th>
                     <th className="py-2 px-4 border-b border-gray-200 text-left">
-                      Job Number
+                      Mot Cycle
                     </th>
                     <th className="py-2 px-4 border-b border-gray-200 text-left">
-                      Memo
+                      Seats
                     </th>
                     <th className="py-2 px-4 border-b border-gray-200 text-left">
-                      Part Number
+                      ABI Code
                     </th>
                     <th className="py-2 px-4 border-b border-gray-200 text-left">
-                      Part Name
+                      Next Service Date
                     </th>
                     <th className="py-2 px-4 border-b border-gray-200 text-left">
-                      Part Price
+                      Next Service Miles
                     </th>
                     <th className="py-2 px-4 border-b border-gray-200 text-left">
-                      Part Supplier
+                      Road Tax Cost
                     </th>
-                    <th className="py-2 px-4 border-b border-gray-200 text-left">
-                      Labour Hours
-                    </th>
-                    <th className="py-2 px-4 border-b border-gray-200 text-left">
-                      Cost
-                    </th>
-                    <th className="py-2 px-4 border-b border-gray-200 text-left">
-                      Signed By
-                    </th>
-                    <th className="py-2 px-4 border-b border-gray-200 text-left">
-                      Repair Date
-                    </th>
-                    <th className="py-2 px-4 border-b border-gray-200 text-left">
-                      Repair Images
-                    </th>
+
                     <th className="py-2 px-4 border-b border-gray-200 text-left">
                       Actions
                     </th>
@@ -174,7 +160,7 @@ const Page = ({ params }) => {
                         {row.registrationNumber}
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
-                        {row.issues}
+                        {/* {row.issues} */}
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
                         {/* {row.repairHistory.organisations} */}
@@ -199,21 +185,6 @@ const Page = ({ params }) => {
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
                         {/* {row.repairHistory.parts.supplier} */}
-                      </td>
-                      <td className="py-2 px-4 border-b border-gray-200">
-                        {/* {row.repairHistory.labourHours} */}
-                      </td>
-                      <td className="py-2 px-4 border-b border-gray-200">
-                        {/* {row.repairHistory.signedOffBy} */}
-                      </td>
-                      <td className="py-2 px-4 border-b border-gray-200">
-                        {/* {row.repairHistory.date} */}
-                      </td>
-                      <td className="py-2 px-4 border-b border-gray-200">
-                        {/* {row.repairHistory.images} */}
-                      </td>
-                      <td className="py-2 px-4 border-b border-gray-200">
-                        {/* {row.repairHistory.images} */}
                       </td>
 
                       <td className="py-2 px-4 border-b border-gray-200">
@@ -260,12 +231,12 @@ const Page = ({ params }) => {
           </div>
         </div>
       </div>
-      {/* <AddMaintenanceModel
+      <AddMotModal
         isOpen={isOpenTitle}
         onClose={toggleTitleModal}
         fetchData={fetchData}
         selectedid={selectedid}
-      /> */}
+      />
     </>
   );
 };

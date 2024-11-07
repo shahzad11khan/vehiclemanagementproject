@@ -10,6 +10,7 @@ import { GetTitle } from "../../../Components/ApiUrl/ShowApiDatas/ShowApiDatas";
 import { API_URL_Title } from "../../../Components/ApiUrl/ApiUrls";
 import { getCompanyName } from "@/utils/storageUtils";
 import axios from "axios";
+import jsPDF from "jspdf";
 
 const Page = ({ params }) => {
   const addmaintenancereportId = params.AddMaintenanceReport;
@@ -84,6 +85,223 @@ const Page = ({ params }) => {
     startIndex + recordsPerPage
   );
 
+  const generatePDF = () => {
+    const doc = new jsPDF();
+
+    // Set title and report date
+    doc.setFontSize(12);
+    doc.text("Maintenance Records Report", 14, 10);
+
+    const reportDate = new Date().toLocaleDateString();
+    doc.setFontSize(10);
+    doc.text(`Report Generated: ${reportDate}`, 14, 15);
+
+    // Display the vehicle name once at the top
+    const vehicleName = filteredData[0]?.VehicleName || "Name Unavailable";
+    doc.text(`Vehicle Name: ${vehicleName}`, 14, 20);
+    const vehicleRegistration =
+      filteredData[0]?.registrationNumber || "Registration Unavailable";
+    doc.text(`Registration Number: ${vehicleRegistration}`, 14, 25);
+    doc.text(`Company Name: ${selectedCompanyName}`, 14, 30);
+
+    // Define table columns and their initial X positions
+    const tableColumn = [
+      "Issues",
+      "Organisation",
+      "Repair Status",
+      "Job Number",
+      "Memo",
+      "Parts",
+      "Labour Hours",
+      "Cost",
+      "Signed Off By",
+      "Date",
+    ];
+
+    let startX = 14;
+    let startY = 42;
+    const columnWidth = 35;
+    const lineHeight = 9;
+    const padding = 6;
+    const pageHeight = doc.internal.pageSize.height;
+
+    // Add table header
+    tableColumn.forEach((column, index) => {
+      doc.text(column, startX + index * columnWidth + padding, startY);
+      doc.rect(startX + index * columnWidth, startY - 4, columnWidth, 8);
+    });
+
+    // Add table rows
+    let currentY = startY + lineHeight;
+    filteredData.forEach((row) => {
+      // Add issues field
+      const issues = doc.splitTextToSize(
+        row.issues || "N/A",
+        columnWidth - padding
+      );
+
+      // Loop through each repair entry in repairHistory
+      row.repairHistory.forEach((repair) => {
+        // Check if the next row fits within the current page
+        if (currentY + lineHeight > pageHeight - 20) {
+          doc.addPage();
+          currentY = 20;
+
+          // Re-add the header on the new page
+          tableColumn.forEach((column, index) => {
+            doc.text(column, startX + index * columnWidth + padding, currentY);
+            doc.rect(
+              startX + index * columnWidth,
+              currentY - 4,
+              columnWidth,
+              8
+            );
+          });
+          currentY += lineHeight;
+        }
+
+        // Define content for each cell in repairHistory
+        const organisation = doc.splitTextToSize(
+          repair.organisation || "N/A",
+          columnWidth - padding
+        );
+        const repairStatus = doc.splitTextToSize(
+          repair.repairStatus || "N/A",
+          columnWidth - padding
+        );
+        const jobNumber = doc.splitTextToSize(
+          repair.jobNumber || "N/A",
+          columnWidth - padding
+        );
+        const memo = doc.splitTextToSize(
+          repair.memo || "N/A",
+          columnWidth - padding
+        );
+        const parts = repair.parts
+          .map(
+            (part) =>
+              `${part.partNumber || "N/A"}: ${part.partName || "N/A"} - $${
+                part.price || 0
+              } (${part.supplier || "N/A"})`
+          )
+          .join(", ");
+        const partsText = doc.splitTextToSize(
+          parts || "N/A",
+          columnWidth - padding
+        );
+        const labourHours = repair.labourHours || "N/A";
+        const cost = `$${repair.cost || 0}`;
+        const signedOffBy = doc.splitTextToSize(
+          repair.signedOffBy || "N/A",
+          columnWidth - padding
+        );
+        const date = doc.splitTextToSize(
+          repair.date || "N/A",
+          columnWidth - padding
+        );
+
+        // Determine the maximum height required for the row
+        const maxCellHeight =
+          Math.max(
+            issues.length,
+            organisation.length,
+            repairStatus.length,
+            jobNumber.length,
+            memo.length,
+            partsText.length,
+            signedOffBy.length,
+            date.length
+          ) * lineHeight;
+
+        // Add the data cells with dynamic height
+        doc.text(issues, startX + padding, currentY);
+        doc.rect(startX, currentY - 4, columnWidth, maxCellHeight);
+
+        doc.text(organisation, startX + columnWidth + padding, currentY);
+        doc.rect(
+          startX + columnWidth,
+          currentY - 4,
+          columnWidth,
+          maxCellHeight
+        );
+
+        doc.text(repairStatus, startX + 2 * columnWidth + padding, currentY);
+        doc.rect(
+          startX + 2 * columnWidth,
+          currentY - 4,
+          columnWidth,
+          maxCellHeight
+        );
+
+        doc.text(jobNumber, startX + 3 * columnWidth + padding, currentY);
+        doc.rect(
+          startX + 3 * columnWidth,
+          currentY - 4,
+          columnWidth,
+          maxCellHeight
+        );
+
+        doc.text(memo, startX + 4 * columnWidth + padding, currentY);
+        doc.rect(
+          startX + 4 * columnWidth,
+          currentY - 4,
+          columnWidth,
+          maxCellHeight
+        );
+
+        doc.text(partsText, startX + 5 * columnWidth + padding, currentY);
+        doc.rect(
+          startX + 5 * columnWidth,
+          currentY - 4,
+          columnWidth,
+          maxCellHeight
+        );
+
+        doc.text(
+          labourHours.toString(),
+          startX + 6 * columnWidth + padding,
+          currentY
+        );
+        doc.rect(
+          startX + 6 * columnWidth,
+          currentY - 4,
+          columnWidth,
+          maxCellHeight
+        );
+
+        doc.text(cost, startX + 7 * columnWidth + padding, currentY);
+        doc.rect(
+          startX + 7 * columnWidth,
+          currentY - 4,
+          columnWidth,
+          maxCellHeight
+        );
+
+        doc.text(signedOffBy, startX + 8 * columnWidth + padding, currentY);
+        doc.rect(
+          startX + 8 * columnWidth,
+          currentY - 4,
+          columnWidth,
+          maxCellHeight
+        );
+
+        doc.text(date, startX + 9 * columnWidth + padding, currentY);
+        doc.rect(
+          startX + 9 * columnWidth,
+          currentY - 4,
+          columnWidth,
+          maxCellHeight
+        );
+
+        // Increment Y for the next row
+        currentY += maxCellHeight;
+      });
+    });
+
+    // Save the PDF
+    doc.save("Maintenance_Report.pdf");
+  };
+
   return (
     <>
       <Header />
@@ -99,12 +317,20 @@ const Page = ({ params }) => {
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="border rounded px-4 py-2 w-64"
               />
-              <button
-                onClick={toggleTitleModal}
-                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-              >
-                Add Maintenance
-              </button>
+              <div className="flex gap-2">
+                <button
+                  onClick={generatePDF}
+                  className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+                >
+                  Maintenance Report
+                </button>
+                <button
+                  onClick={toggleTitleModal}
+                  className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                >
+                  Add Maintenance
+                </button>
+              </div>
             </div>
 
             <div className="mt-4 overflow-x-auto w-full">

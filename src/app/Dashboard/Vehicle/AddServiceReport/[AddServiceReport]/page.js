@@ -10,6 +10,7 @@ import { GetTitle } from "../../../Components/ApiUrl/ShowApiDatas/ShowApiDatas";
 import { API_URL_Title } from "../../../Components/ApiUrl/ApiUrls";
 import { getCompanyName } from "@/utils/storageUtils";
 import axios from "axios";
+import jsPDF from "jspdf";
 
 const Page = ({ params }) => {
   const addServiceId = params.AddServiceReport;
@@ -84,6 +85,114 @@ const Page = ({ params }) => {
     startIndex + recordsPerPage
   );
 
+  const generatePDF = () => {
+    const doc = new jsPDF();
+
+    // Set title and report date
+    doc.setFontSize(12); // Large font for title
+    doc.text("Services Records Report", 14, 10);
+
+    const reportDate = new Date().toLocaleDateString();
+    doc.setFontSize(10); // Smaller font for the report date
+    doc.text(`Report Generated: ${reportDate}`, 14, 15);
+
+    // Display the vehicle name once at the top
+    const vehicleName = filteredData[0]?.VehicleName || "Name Unavailable";
+    doc.text(`Vehicle Name: ${vehicleName}`, 14, 20);
+    const vehicleRegistration =
+      filteredData[0]?.registrationNumber || "Registration Unavailable";
+    doc.text(`Registration Number: ${vehicleRegistration}`, 14, 25);
+    doc.text(`Company Name: ${selectedCompanyName}`, 14, 30);
+
+    // Define table columns and their initial X positions
+    const tableColumn = [
+      "Service Dates",
+      "Service Due Dates",
+      "Service Miles",
+      "Service Status",
+    ];
+
+    let startX = 14;
+    let startY = 42; // Adjust to leave space after the vehicle name
+    const columnWidth = 37; // Adjusted column width to better fit the page
+    const lineHeight = 9; // Height of each row
+    const padding = 2; // Padding inside cells
+    const pageHeight = doc.internal.pageSize.height; // Get the height of the page
+
+    // Add table header
+    tableColumn.forEach((column, index) => {
+      doc.text(column, startX + index * columnWidth + padding, startY);
+      doc.rect(startX + index * columnWidth, startY - 4, columnWidth, 8);
+    });
+
+    // Add table rows
+    let currentY = startY + lineHeight;
+    filteredData.forEach((row) => {
+      // Check if the next row fits within the current page
+      if (currentY + lineHeight > pageHeight - 20) {
+        doc.addPage(); // Add a new page if the row won't fit
+        currentY = 20; // Reset Y to start at the top of the new page
+        // Re-add the header on the new page
+        tableColumn.forEach((column, index) => {
+          doc.text(column, startX + index * columnWidth + padding, currentY);
+          doc.rect(startX + index * columnWidth, currentY - 4, columnWidth, 8);
+        });
+        currentY += lineHeight; // Adjust the Y after the header
+      }
+      const serviceCurrentDate = doc.splitTextToSize(
+        row.serviceCurrentDate || "N/A",
+        columnWidth - padding
+      );
+      const serviceDueDate = doc.splitTextToSize(
+        row.serviceDueDate || "N/A",
+        columnWidth - padding
+      );
+      const servicemailes = doc.splitTextToSize(
+        row.servicemailes || "N/A",
+        columnWidth - padding
+      );
+      const serviceStatus = doc.splitTextToSize(
+        row.serviceStatus || "N/A",
+        columnWidth - padding
+      );
+
+      const maxCellHeight =
+        Math.max(
+          serviceCurrentDate.length,
+          serviceDueDate.length,
+          servicemailes.length,
+          serviceStatus.length
+        ) * lineHeight;
+
+      // Add the data cells with borders
+      doc.text(serviceCurrentDate, startX + padding, currentY);
+      doc.rect(startX, currentY - 4, columnWidth, maxCellHeight);
+
+      doc.text(serviceDueDate, startX + columnWidth + padding, currentY);
+      doc.rect(startX + columnWidth, currentY - 4, columnWidth, maxCellHeight);
+      doc.text(servicemailes, startX + 2 * columnWidth + padding, currentY);
+      doc.rect(
+        startX + 2 * columnWidth,
+        currentY - 4,
+        columnWidth,
+        maxCellHeight
+      );
+      doc.text(serviceStatus, startX + 3 * columnWidth + padding, currentY);
+      doc.rect(
+        startX + 3 * columnWidth,
+        currentY - 4,
+        columnWidth,
+        maxCellHeight
+      );
+
+      // Increment Y for the next row
+      currentY + maxCellHeight;
+    });
+
+    // Save the PDF
+    doc.save("Road_Tax_Report.pdf");
+  };
+
   return (
     <>
       <Header />
@@ -99,12 +208,20 @@ const Page = ({ params }) => {
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="border rounded px-4 py-2 w-64"
               />
-              <button
-                onClick={toggleTitleModal}
-                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-              >
-                Add Service
-              </button>
+              <div className="flex gap-2">
+                <button
+                  onClick={generatePDF}
+                  className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+                >
+                  Generate Report
+                </button>
+                <button
+                  onClick={toggleTitleModal}
+                  className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                >
+                  Add Service
+                </button>
+              </div>
             </div>
 
             <div className="mt-4 overflow-x-auto w-full">

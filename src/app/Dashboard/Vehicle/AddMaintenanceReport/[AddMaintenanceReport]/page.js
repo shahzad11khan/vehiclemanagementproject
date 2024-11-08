@@ -394,7 +394,7 @@ const Page = ({ params }) => {
                   {currentRecords.map((row) => (
                     <tr key={row._id} className="hover:bg-gray-100">
                       <td className="py-2 px-4 border-b border-gray-200">
-                        {row.VehicleName}
+                        {row.model}
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
                         {row.registrationNumber}

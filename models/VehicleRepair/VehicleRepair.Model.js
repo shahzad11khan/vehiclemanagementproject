@@ -1,15 +1,5 @@
 // models/VehicleRepair.js
 import mongoose from "mongoose";
-const partSchema = new mongoose.Schema({
-  partNumber: { type: String },
-  partName: { type: String },
-  price: { type: Number },
-  supplier: { type: String },
-});
-
-const repairHistorySchema = new mongoose.Schema({
-  parts: [partSchema],
-});
 
 const repairSchema = new mongoose.Schema(
   {
@@ -55,7 +45,16 @@ const repairSchema = new mongoose.Schema(
     registrationNumber: {
       type: String,
     },
-    repairHistory: [repairHistorySchema],
+    repairHistory: {
+      parts: [
+        {
+          partNumber: { type: String },
+          partName: { type: String },
+          price: { type: Number },
+          supplier: { type: String },
+        },
+      ],
+    },
     adminCreatedBy: {
       type: String,
     },

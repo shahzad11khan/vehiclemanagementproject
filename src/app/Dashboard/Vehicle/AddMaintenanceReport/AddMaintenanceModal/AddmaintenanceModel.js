@@ -11,7 +11,7 @@ const AddMaintenanceModal = ({ isOpen, onClose, fetchData, selectedid }) => {
   const [loading, setLoading] = useState(false);
   const [repaitformData, setrepaitformData] = useState({
     issues: "",
-    VehicleName: "",
+    vehicleName: "",
     registrationNumber: "",
     repairHistory: [
       {
@@ -44,7 +44,7 @@ const AddMaintenanceModal = ({ isOpen, onClose, fetchData, selectedid }) => {
         if (data) {
           setrepaitformData((prevData) => ({
             ...prevData,
-            VehicleName: data.model,
+            vehicleName: data.model,
             registrationNumber: data.registrationNumber,
           }));
         } else {
@@ -122,7 +122,7 @@ const AddMaintenanceModal = ({ isOpen, onClose, fetchData, selectedid }) => {
 
       // Append direct fields
       formData.append("issues", repaitformData.issues);
-      formData.append("VehicleName", repaitformData.VehicleName);
+      formData.append("vehicleName", repaitformData.vehicleName);
       formData.append("registrationNumber", repaitformData.registrationNumber);
       formData.append("adminCompanyName", repaitformData.adminCompanyName);
       formData.append("adminCreatedBy", repaitformData.adminCreatedBy);
@@ -177,13 +177,14 @@ const AddMaintenanceModal = ({ isOpen, onClose, fetchData, selectedid }) => {
       });
 
       const response = await axios.post(API_URL_Maintainance, formData);
-      console.log(response);
-      response.data.success
-        ? toast.success(response.data.message)
-        : toast.warn(response.data.error);
-      if (response.data.success) {
+      console.log("data is ", response.data);
+      if (response.data.message) {
+        toast.success(response.data.message);
+        reset();
         fetchData(); // Refresh data on success
-        onClose(); // Close the modal
+        onClose();
+      } else {
+        toast.warn(response.data.error);
       }
     } catch (error) {
       console.error("Failed to submit data:", error);
@@ -192,7 +193,30 @@ const AddMaintenanceModal = ({ isOpen, onClose, fetchData, selectedid }) => {
       setLoading(false);
     }
   };
-
+  const reset = () => {
+    setrepaitformData({
+      issues: "",
+      VehicleName: "",
+      registrationNumber: "",
+      repairHistory: [
+        {
+          images: [],
+          organisation: "",
+          repairStatus: "",
+          jobNumber: "",
+          memo: "",
+          parts: [{ partNumber: "", partName: "", price: 0, supplier: "" }],
+          labourHours: 0,
+          cost: 0,
+          signedOffBy: "",
+          date: "",
+        },
+      ],
+      adminCreatedBy: "",
+      adminCompanyName: "",
+      adminCompanyId: "",
+    });
+  };
   const handleImageChange = (index, e) => {
     const files = Array.from(e.target.files);
     const updatedRepairHistory = [...repaitformData.repairHistory];
@@ -219,7 +243,7 @@ const AddMaintenanceModal = ({ isOpen, onClose, fetchData, selectedid }) => {
               </label>
               <input
                 type="text"
-                value={repaitformData.VehicleName}
+                value={repaitformData.vehicleName}
                 name="VehicleName"
                 onChange={handleInputChange}
                 className="mt-1 block w-full border border-gray-300 rounded-md p-2"

@@ -230,7 +230,7 @@ const Page = () => {
                                       href={`/Dashboard/Vehicle/VehicleReports/${row._id}`}
                                       className="bg-transparent"
                                     >
-                                      Car Reports
+                                      Car Details
                                     </Link>
                                   </div>
                                   <div className="px-4 py-2 hover:bg-gray-300">

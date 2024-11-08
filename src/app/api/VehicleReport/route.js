@@ -7,7 +7,6 @@ import { catchAsyncErrors } from "@middlewares/catchAsyncErrors.js";
 export async function POST(request) {
   try {
     await connect(); // Connect to the database
-
     const formData = await request.formData(); // Get the FormData object
     console.log(formData);
     // Extract fields from FormData
@@ -58,11 +57,12 @@ export async function POST(request) {
         parts[index][field] = value;
       }
     }
-    console.log(parts);
+    // console.log(parts);
     repairHistory.push({ parts });
 
     const uploadedImages = [];
-    for (const imageFile of Object.entries(imageFiles)) {
+    for (const [key, imageFile] of Object.entries(imageFiles)) {
+      console.log(key, imageFile);
       const imageBuffer = await imageFile.arrayBuffer();
       const uploadedImage = await cloudinary.uploader
         .upload_stream({ folder: "vehicle_repairs/" }, (error, result) => {

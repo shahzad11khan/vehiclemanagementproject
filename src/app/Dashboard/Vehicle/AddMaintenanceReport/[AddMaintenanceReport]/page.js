@@ -6,8 +6,7 @@ import { FaTrash } from "react-icons/fa";
 import Header from "../../../Components/Header";
 import Sidebar from "../../../Components/Sidebar";
 import AddMaintenanceModel from "../AddMaintenanceModal/AddmaintenanceModel";
-import { GetTitle } from "../../../Components/ApiUrl/ShowApiDatas/ShowApiDatas";
-import { API_URL_Title } from "../../../Components/ApiUrl/ApiUrls";
+import { API_URL_Maintainance } from "../../../Components/ApiUrl/ApiUrls";
 import { getCompanyName } from "@/utils/storageUtils";
 import axios from "axios";
 import jsPDF from "jspdf";
@@ -33,12 +32,11 @@ const Page = ({ params }) => {
 
   const fetchData = async () => {
     try {
-      const { result } = await GetTitle();
-      setData(result);
-      setFilteredData(result);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      setData([]);
+      const response = await axios.get(`${API_URL_Maintainance}`);
+      console.log(response.data.result);
+      setData(response.data.result);
+    } catch (err) {
+      console.error("Error fetching data:", err);
     }
   };
 
@@ -62,15 +60,19 @@ const Page = ({ params }) => {
   }, []);
 
   useEffect(() => {
+    // data.map((r, i) => {
+    //   console.log(r.repairHistory);
+    // });
+    const companyName = getCompanyName();
     const filtered = data.filter(
       (item) =>
-        item.adminCompanyName?.toLowerCase() ===
-          selectedCompanyName.toLowerCase() &&
-        item.name?.toLowerCase().includes(searchTerm.toLowerCase())
+        item.adminCompanyName?.toLowerCase() === companyName.toLowerCase()
+      //   &&
+      // item.vehicleName?.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setFilteredData(filtered);
     setCurrentPage(1);
-  }, [searchTerm, data, selectedCompanyName]);
+  }, [searchTerm, data]);
 
   const toggleTitleModal = () => {
     // console.log("model click");
@@ -403,40 +405,61 @@ const Page = ({ params }) => {
                         {row.issues}
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
-                        {/* {row.repairHistory.organisations} */}
+                        {row.organisation}
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
-                        {/* {row.repairHistory.repairStatus} */}
+                        {row.repairStatus}
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
-                        {/* {row.repairHistory.jobNumber} */}
+                        {row.jobNumber}
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
-                        {/* {row.repairHistory.memo} */}
+                        {row.memo}
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
-                        {/* {row.repairHistory.parts.partNumber} */}
+                        {/* {row.repairHistory[0].parts.map((part) => (
+                          <tr key={part._id}>
+                            <td>{part.partNumber}</td>
+                            <td>{part.partName}</td>
+                            <td>{part.price}</td>
+                            <td>{part.supplier}</td>
+                          </tr>
+                        ))} */}
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
-                        {/* {row.repairHistory.parts.partName} */}
+                        {/* {row.repairHistory.Parts.map(
+                          (part) => part.partName
+                        ).join(", ")} */}
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
-                        {/* {row.repairHistory.parts.price} */}
+                        {/* {row.repairHistory.parts
+                          .map((part) => part.price)
+
+                          .join(", ")} */}
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
-                        {/* {row.repairHistory.parts.supplier} */}
+                        {/* {row.repairHistory
+                          .flatMap((repair) =>
+                            repair.parts.map((part) => part.supplier)
+                          )
+                          .join(", ")} */}
+                      </td>
+
+                      <td className="py-2 px-4 border-b border-gray-200">
+                        {row.labourHours}
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
-                        {/* {row.repairHistory.labourHours} */}
+                        {row.signedOffBy}
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
-                        {/* {row.repairHistory.signedOffBy} */}
+                        {row.date}
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
-                        {/* {row.repairHistory.date} */}
-                      </td>
-                      <td className="py-2 px-4 border-b border-gray-200">
-                        {/* {row.repairHistory.images} */}
+                        {/* {row.images
+                          .flatMap((repair) =>
+                            repair.parts.map((part) => part.supplier)
+                          )
+                          .join(", ")} */}
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
                         {/* {row.repairHistory.images} */}

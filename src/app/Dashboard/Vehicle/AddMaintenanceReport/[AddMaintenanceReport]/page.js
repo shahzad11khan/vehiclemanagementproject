@@ -14,7 +14,7 @@ import jsPDF from "jspdf";
 const Page = ({ params }) => {
   const addmaintenancereportId = params.AddMaintenanceReport;
   console.log("addmain page id", addmaintenancereportId);
-  const [searchTerm, setSearchTerm] = useState("");
+  // const [searchTerm, setSearchTerm] = useState("");
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [isOpenTitle, setIsOpenTitle] = useState(false);
@@ -33,7 +33,7 @@ const Page = ({ params }) => {
   const fetchData = async () => {
     try {
       const response = await axios.get(`${API_URL_Maintainance}`);
-      console.log(response.data.result);
+      // console.log("data is", response);
       setData(response.data.result);
     } catch (err) {
       console.error("Error fetching data:", err);
@@ -73,7 +73,7 @@ const Page = ({ params }) => {
     );
     setFilteredData(filtered);
     setCurrentPage(1);
-  }, [searchTerm, data]);
+  }, data);
 
   const toggleTitleModal = () => {
     // console.log("model click");
@@ -157,14 +157,10 @@ const Page = ({ params }) => {
           row.repairStatus || "N/A",
           row.jobNumber || "N/A",
           row.memo || "N/A",
-          repair.parts
-            .map(
-              (part) =>
-                `${part.partNumber || "N/A"}: ${part.partName || "N/A"} - $${
-                  part.price || 0
-                } (${part.supplier || "N/A"})`
-            )
-            .join(", "),
+
+          `${repair.partNumber || "N/A"}: ${repair.partName || "N/A"} - $${
+            repair.price || 0
+          } (${repair.supplier || "N/A"})`,
           row.labourHours || "N/A",
           `$${row.cost || 0}`,
           row.signedOffBy || "N/A",
@@ -240,13 +236,13 @@ const Page = ({ params }) => {
         <div className="mx-auto w-10/12 p-4">
           <div className="border-2 mt-3 w-full ">
             <div className="flex justify-between">
-              <input
+              {/* <input
                 type="text"
                 placeholder="Search"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="border rounded px-4 py-2 w-64"
-              />
+              /> */}
               <div className="flex gap-2">
                 <button
                   onClick={generatePDF}
@@ -342,35 +338,35 @@ const Page = ({ params }) => {
                         {row.jobNumber}
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
-                        {row.memo}
+                        {row.memo || "N/A"}
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
-                        {/* {row.repairHistory[0].parts.map((part) => (
+                        {row.repairHistory.map((part) => (
                           <tr key={part._id}>
                             <td>{part.partNumber}</td>
                           </tr>
-                        ))} */}
+                        ))}
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
-                        {/* {row.repairHistory[0].parts.map((part) => (
+                        {row.repairHistory.map((part) => (
                           <tr key={part._id}>
                             <td>{part.partName}</td>
                           </tr>
-                        ))} */}
+                        ))}
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
-                        {/* {row.repairHistory[0].parts.map((part) => (
+                        {row.repairHistory.map((part) => (
                           <tr key={part._id}>
                             <td>{part.price}</td>
                           </tr>
-                        ))} */}
+                        ))}
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
-                        {/* {row.repairHistory[0].parts.map((part) => (
+                        {row.repairHistory.map((part) => (
                           <tr key={part._id}>
-                            <td>{part.supplier}</td>
+                            <td>{part.supplier || "N/A"}</td>
                           </tr>
-                        ))} */}
+                        ))}
                       </td>
 
                       <td className="py-2 px-4 border-b border-gray-200">
@@ -396,14 +392,9 @@ const Page = ({ params }) => {
                       </td>
 
                       <td className="py-2 px-4 border-b border-gray-200">
-                        {/* {row.repairHistory.images.map((image) => (
-                          <img
-                            key={image._id}
-                            src={image.url} // Make sure `url` is the correct field for the image source
-                            alt={"Demage Image"}
-                            className="w-20 h-20 object-cover rounded"
-                          />
-                        ))} */}
+                        {row.images && Array.isArray(row.images)
+                          ? row.images.length
+                          : 0}
                       </td>
 
                       <td className="py-2 px-4 border-b border-gray-200">

@@ -72,21 +72,37 @@ export const DELETE = async (request, { params }) => {
     console.log(deleted);
 
     // Get the image public ID from the deleted vehicle object
-    console.log(deletedVehicle.images.public_Id);
-    const imagesPublicIdd = deletedVehicle.images.public_Id;
-    console.log("imagesPublicIdd Public ID:", imagesPublicIdd);
+    // Check if deletedVehicle exists and has images
+    if (
+      deletedVehicle &&
+      deletedVehicle.images &&
+      deletedVehicle.images.length > 0
+    ) {
+      // Iterate through each image in the array
+      for (const image of deletedVehicle.images) {
+        const imagePublicId = image.publicId;
+        console.log("Deleting Cloudinary image with public ID:", imagePublicId);
 
-    // If the vehicle has an associated image, delete it from Cloudinary
-    if (imagesPublicIdd) {
-      try {
-        const cloudinaryResponse1 = await cloudinary.uploader.destroy(
-          imagesPublicIdd
-        );
+        if (imagePublicId) {
+          try {
+            // Delete the image from Cloudinary
+            const cloudinaryResponse = await cloudinary.uploader.destroy(
+              imagePublicId
+            );
 
-        console.log(`Cloudinary response: ${cloudinaryResponse1.result}`);
-      } catch (error) {
-        console.error("Failed to delete image from Cloudinary:", error);
+            console.log(
+              `Cloudinary response for ${imagePublicId}: ${cloudinaryResponse.result}`
+            );
+          } catch (error) {
+            console.error(
+              `Failed to delete image ${imagePublicId} from Cloudinary:`,
+              error
+            );
+          }
+        }
       }
+    } else {
+      console.log("No images found for the deleted vehicle.");
     }
 
     // Return success response

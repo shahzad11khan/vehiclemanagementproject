@@ -27,18 +27,16 @@ export async function POST(request) {
     const signedOffBy = formData.get("repairHistory[0][signedOffBy]");
     const date = formData.get("repairHistory[0][date]");
 
-    // const imageFiles = [];
+    // Handle images and parts
     const images = [];
     const parts = [];
 
     // Separate handling of files and parts from FormData
     for (const [key, value] of formData.entries()) {
+      // Handle image files
       if (key.startsWith("repairHistory[0][images]")) {
-        console.log(key, value);
-        // imageFiles.push(value);
-        if (value) {
+        if (value instanceof File) {
           const buffer = Buffer.from(await value.arrayBuffer()); // Convert file to buffer
-          // Upload to Cloudinary
           const uploadResponse = await new Promise((resolve, reject) => {
             cloudinary.uploader
               .upload_stream({ resource_type: "auto" }, (error, result) => {
@@ -48,16 +46,21 @@ export async function POST(request) {
                   resolve(result);
                 }
               })
-              .end(buffer); // Send buffer to Cloudinary
+              .end(buffer);
           });
 
-          // Store Cloudinary response (URL and public ID)
+          // Push the uploaded image details to the images array
           images.push({
+            url: uploadResponse.secure_url,
+            publicId: uploadResponse.public_id,
+          });
+          console.log({
             url: uploadResponse.secure_url,
             publicId: uploadResponse.public_id,
           });
         }
       }
+
       // Handle parts
       const partsMatch = key.match(
         /repairHistory\[0\]\[parts\]\[(\d+)\]\[(\w+)\]/
@@ -74,12 +77,15 @@ export async function POST(request) {
       }
     }
 
-    // Prepare the repair history object
-    const repairHistory = {
-      parts,
-    };
+    // Check if no images were uploaded, set a default one
+    if (images.length === 0) {
+      images.push({
+        url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQVU1ne0ThYY7sT5PkP_HJ0dRIJ4lGOTnqQXQ&s",
+        publicId: "1234345678",
+      });
+    }
 
-    console.log(images);
+    // console.log(parts);
     // Create a new vehicle repair record
     const newVehicleRepair = new VehicleRepair({
       issues,
@@ -96,7 +102,7 @@ export async function POST(request) {
       cost,
       signedOffBy,
       date,
-      repairHistory,
+      repairHistory: parts,
       images,
     });
 

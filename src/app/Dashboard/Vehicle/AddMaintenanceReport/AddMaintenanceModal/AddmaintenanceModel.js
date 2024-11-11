@@ -46,6 +46,7 @@ const AddMaintenanceModal = ({ isOpen, onClose, fetchData, selectedid }) => {
             ...prevData,
             vehicleName: data.model,
             registrationNumber: data.registrationNumber,
+            adminCompanyName: data.adminCompanyName,
           }));
         } else {
           console.warn("No data found for the selected vehicle ID.");
@@ -61,13 +62,6 @@ const AddMaintenanceModal = ({ isOpen, onClose, fetchData, selectedid }) => {
   };
 
   useEffect(() => {
-    const companyName = localStorage.getItem("companyName");
-    if (companyName) {
-      setrepaitformData((prevData) => ({
-        ...prevData,
-        adminCompanyName: companyName,
-      }));
-    }
     fetchDat();
   }, [selectedid]);
 

@@ -1,14 +1,13 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { API_URL_Vehicle_getspecificvehicleid } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
+import {
+  API_URL_Vehicle_getspecificvehicleid,
+  API_URL_VehicleMOT,
+} from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import axios from "axios";
+import { toast } from "react-toastify";
 
-const AddMotModal = ({
-  isOpen,
-  onClose,
-  // fetchData,
-  selectedid,
-}) => {
+const AddMotModal = ({ isOpen, onClose, fetchData, selectedid }) => {
   const [formData, setFormData] = useState({
     VehicleName: "",
     registrationNumber: "",
@@ -36,7 +35,7 @@ const AddMotModal = ({
             ...prevData,
             VehicleName: data.model, // Assuming 'model' is the key for the vehicle model
             registrationNumber: data.registrationNumber, // Assuming 'registrationNumber' is the key for registration number
-            adminCompanyId: data.adminCompanyId,
+            adminCompanyName: data.adminCompanyName,
           }));
         } else {
           // Handle the case when there is no data
@@ -44,9 +43,6 @@ const AddMotModal = ({
         }
       } catch (err) {
         console.error("Error fetching data:", err); // Log the error
-      } finally {
-        // setLoading(false); // Indicate loading ended
-        console.log(false);
       }
     } else {
       console.log("No selected ID found");
@@ -54,13 +50,6 @@ const AddMotModal = ({
   };
 
   useEffect(() => {
-    const companyName = localStorage.getItem("companyName");
-    if (companyName) {
-      setFormData((prevData) => ({
-        ...prevData,
-        adminCompanyName: companyName,
-      }));
-    }
     fetchDat(); // Fetch data whenever the component mounts or selectedid changes
   }, [selectedid]); // Include selectedid in the dependency array
 
@@ -71,19 +60,37 @@ const AddMotModal = ({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
-    // try {
-    //   const response = await axios.post(
-    //     "http://localhost:5000/api/vehicle",
-    //     formData
-    //   );
-    //   console.log("Data sent successfully:", response.data);
-    // } catch (error) {
-    //   console.error("Error sending data:", error);
-    // }
+    // console.log(formData);
+    try {
+      const response = await axios.post(`${API_URL_VehicleMOT}`, formData);
+      console.log("Data sent successfully:", response.data);
+      if (response.data.message) {
+        toast.success(response.data.message);
+        fetchData();
+        resetform();
+      } else {
+        toast.warn(response.data.message);
+      }
+    } catch (error) {
+      console.error("Error sending data:", error);
+    }
   };
 
   if (!isOpen) return null;
+
+  const resetform = () => {
+    setFormData({
+      VehicleName: "",
+      registrationNumber: "",
+      motCurrentDate: "",
+      motDueDate: "",
+      motCycle: "",
+      motStatus: "",
+      adminCreatedBy: "",
+      adminCompanyName: "",
+      adminCompanyId: "",
+    });
+  };
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
@@ -124,7 +131,7 @@ const AddMotModal = ({
               <label className="text-sm font-medium">MOT Current Date:</label>
               <input
                 type="date"
-                name="motDueDate"
+                name="motCurrentDate"
                 value={formData.motCurrentDate}
                 onChange={handleChange}
                 className="mt-1 p-2 border border-gray-300 rounded"

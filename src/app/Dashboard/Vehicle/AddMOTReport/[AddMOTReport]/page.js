@@ -6,15 +6,13 @@ import { FaTrash } from "react-icons/fa";
 import Header from "../../../Components/Header";
 import Sidebar from "../../../Components/Sidebar";
 import AddMotModal from "../AddMOTModal/AddMotModal";
-import { GetTitle } from "../../../Components/ApiUrl/ShowApiDatas/ShowApiDatas";
-import { API_URL_Title } from "../../../Components/ApiUrl/ApiUrls";
+import { API_URL_VehicleMOT } from "../../../Components/ApiUrl/ApiUrls";
 import { getCompanyName } from "@/utils/storageUtils";
 import axios from "axios";
 import jsPDF from "jspdf";
 
 const Page = ({ params }) => {
   const addAddMOTReporttId = params.AddMOTReport;
-  const [searchTerm, setSearchTerm] = useState("");
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [isOpenTitle, setIsOpenTitle] = useState(false);
@@ -32,18 +30,18 @@ const Page = ({ params }) => {
 
   const fetchData = async () => {
     try {
-      const { result } = await GetTitle();
-      setData(result);
-      setFilteredData(result);
+      const response = await axios.get(`${API_URL_VehicleMOT}`);
+      console.log("MOT Data: ", response.data.Result);
+      setData(response.data.Result);
+      setFilteredData(response.data.Result);
     } catch (error) {
       console.error("Error fetching data:", error);
-      setData([]);
     }
   };
 
   const handleDelete = async (id) => {
     try {
-      const response = await axios.delete(`${API_URL_Title}/${id}`);
+      const response = await axios.delete(`${API_URL_VehicleMOT}/${id}`);
       if (response.data.success) {
         setData((prev) => prev.filter((item) => item._id !== id));
         toast.success(response.data.message);
@@ -61,15 +59,15 @@ const Page = ({ params }) => {
   }, []);
 
   useEffect(() => {
+    const companyName = getCompanyName();
+
     const filtered = data.filter(
       (item) =>
-        item.adminCompanyName?.toLowerCase() ===
-          selectedCompanyName.toLowerCase() &&
-        item.name?.toLowerCase().includes(searchTerm.toLowerCase())
+        item.adminCompanyName.toLowerCase() === companyName.toLowerCase()
     );
     setFilteredData(filtered);
     setCurrentPage(1);
-  }, [searchTerm, data, selectedCompanyName]);
+  }, [data]);
 
   const toggleTitleModal = () => {
     setIsOpenTitle((prev) => !prev);
@@ -83,104 +81,6 @@ const Page = ({ params }) => {
     startIndex + recordsPerPage
   );
 
-  // const generatePDF = () => {
-  //   const doc = new jsPDF();
-
-  //   // Set title and report date
-  //   doc.setFontSize(12); // Large font for title
-  //   doc.text("MOT Records Report", 14, 10);
-
-  //   const reportDate = new Date().toLocaleDateString();
-  //   doc.setFontSize(10); // Smaller font for the report date
-  //   doc.text(`Report Generated: ${reportDate}`, 14, 15);
-
-  //   // Display the vehicle name once at the top
-  //   const vehicleName = filteredData[0]?.VehicleName || "Name Unavailable";
-  //   doc.text(`Vehicle Name: ${vehicleName}`, 14, 20);
-  //   const vehicleRegistration =
-  //     filteredData[0]?.registrationNumber || "Registration Unavailable";
-  //   doc.text(`Registration Number: ${vehicleRegistration}`, 14, 25);
-  //   doc.text(`Company Name: ${selectedCompanyName}`, 14, 30);
-
-  //   // Define table columns and their initial X positions
-  //   const tableColumn = [
-  //     "MOT Dates",
-  //     "MOT Cycle",
-  //     "Next MOT Date",
-  //     "MOT Status",
-  //   ];
-
-  //   let startX = 14;
-  //   let startY = 42; // Adjust to leave space after the vehicle name
-  //   const columnWidth = 35; // Reduce width of each column to fit within the page
-  //   const lineHeight = 9; // Height of each row
-  //   const padding = 6; // Padding inside cells
-  //   const pageHeight = doc.internal.pageSize.height; // Get the height of the page
-  //   const pageWidth = doc.internal.pageSize.width; // Get the width of the page
-  //   const totalWidth = columnWidth * tableColumn.length; // Total width of all columns
-
-  //   // Ensure that the total width of columns fits within the page width
-  //   if (totalWidth > pageWidth - 28) {
-  //     // Consider the margins (14px on both sides)
-  //     console.warn("Warning: Column widths exceed the page width.");
-  //   }
-
-  //   // Add table header
-  //   tableColumn.forEach((column, index) => {
-  //     doc.text(column, startX + index * columnWidth + padding, startY);
-  //     doc.rect(startX + index * columnWidth, startY - 4, columnWidth, 8);
-  //   });
-
-  //   // Add table rows without Vehicle Name
-  //   let currentY = startY + lineHeight;
-  //   filteredData.forEach((row) => {
-  //     // Check if the next row fits within the current page
-  //     if (currentY + lineHeight > pageHeight - 20) {
-  //       doc.addPage(); // Add a new page if the row won't fit
-  //       currentY = 20; // Reset Y to start at the top of the new page
-  //       // Re-add the header on the new page
-  //       tableColumn.forEach((column, index) => {
-  //         doc.text(column, startX + index * columnWidth + padding, currentY);
-  //         doc.rect(startX + index * columnWidth, currentY - 4, columnWidth, 8);
-  //       });
-  //       currentY += lineHeight; // Adjust the Y after the header
-  //     }
-
-  //     // Add the data cells with borders
-  //     doc.text(row.registrationNumber || "N/A", startX + padding, currentY);
-  //     doc.rect(startX, currentY - 4, columnWidth, lineHeight);
-
-  //     doc.text(row.motDates || "N/A", startX + columnWidth + padding, currentY);
-  //     doc.rect(startX + columnWidth, currentY - 4, columnWidth, lineHeight);
-
-  //     doc.text(
-  //       row.motCycle || "N/A",
-  //       startX + 2 * columnWidth + padding,
-  //       currentY
-  //     );
-  //     doc.rect(startX + 2 * columnWidth, currentY - 4, columnWidth, lineHeight);
-
-  //     doc.text(
-  //       row.nextMotDate || "N/A",
-  //       startX + 3 * columnWidth + padding,
-  //       currentY
-  //     );
-  //     doc.rect(startX + 3 * columnWidth, currentY - 4, columnWidth, lineHeight);
-
-  //     doc.text(
-  //       row.motStatus || "N/A",
-  //       startX + 4 * columnWidth + padding,
-  //       currentY
-  //     );
-  //     doc.rect(startX + 4 * columnWidth, currentY - 4, columnWidth, lineHeight);
-
-  //     // Increment Y for the next row
-  //     currentY += lineHeight;
-  //   });
-
-  //   // Save the PDF
-  //   doc.save("MOT_Records_Report.pdf");
-  // };
   const generatePDF = () => {
     const doc = new jsPDF();
 
@@ -193,10 +93,10 @@ const Page = ({ params }) => {
     doc.text(`Report Generated: ${reportDate}`, 14, 15);
 
     // Display the vehicle name once at the top
-    const vehicleName = filteredData[0]?.VehicleName || "Name Unavailable";
+    const vehicleName = filteredData[0].VehicleName || "Name Unavailable";
     doc.text(`Vehicle Name: ${vehicleName}`, 14, 20);
     const vehicleRegistration =
-      filteredData[0]?.registrationNumber || "Registration Unavailable";
+      filteredData.registrationNumber || "Registration Unavailable";
     doc.text(`Registration Number: ${vehicleRegistration}`, 14, 25);
     doc.text(`Company Name: ${selectedCompanyName}`, 14, 30);
 
@@ -273,13 +173,6 @@ const Page = ({ params }) => {
         <div className="mx-auto w-10/12 p-4">
           <div className="border-2 mt-3 w-full ">
             <div className="flex justify-between">
-              <input
-                type="text"
-                placeholder="Search"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="border rounded px-4 py-2 w-64"
-              />
               <div>
                 <button
                   onClick={generatePDF}
@@ -392,6 +285,7 @@ const Page = ({ params }) => {
         isOpen={isOpenTitle}
         onClose={() => setIsOpenTitle(false)}
         selectedid={selectedid}
+        fetchData={fetchData}
       />
     </>
   );

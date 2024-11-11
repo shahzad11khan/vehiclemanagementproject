@@ -334,7 +334,6 @@ const AddMaintenanceModal = ({ isOpen, onClose, fetchData, selectedid }) => {
                   name="memo"
                   onChange={(e) => handleRepairHistoryChange(index, e)}
                   className="mt-1 block w-full border border-gray-300 rounded-md p-2"
-                  required
                 />
               </div>
 
@@ -394,7 +393,6 @@ const AddMaintenanceModal = ({ isOpen, onClose, fetchData, selectedid }) => {
                         value={part.supplier}
                         onChange={(e) => handlePartChange(index, partIndex, e)}
                         className="mt-1 block w-full border border-gray-300 rounded-md p-2"
-                        required
                       />
                     </div>
                   </div>

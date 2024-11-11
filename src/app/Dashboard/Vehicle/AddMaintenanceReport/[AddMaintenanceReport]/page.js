@@ -42,16 +42,15 @@ const Page = ({ params }) => {
 
   const handleDelete = async (id) => {
     try {
-      const response = await axios.delete(`${API_URL_Title}/${id}`);
+      const response = await axios.delete(`${API_URL_Maintainance}/${id}`);
       if (response.data.success) {
         setData((prev) => prev.filter((item) => item._id !== id));
         toast.success(response.data.message);
       } else {
-        toast.warn(response.data.message);
+        toast.warn(response.data.error);
       }
     } catch (error) {
-      console.error("Error deleting title:", error);
-      toast.error("Failed to delete title");
+      console.error("Error deleting:", error);
     }
   };
 
@@ -89,222 +88,6 @@ const Page = ({ params }) => {
     startIndex + recordsPerPage
   );
 
-  // const generatePDF = () => {
-  //   const doc = new jsPDF();
-
-  //   // Set title and report date
-  //   doc.setFontSize(12);
-  //   doc.text("Maintenance Records Report", 14, 10);
-
-  //   const reportDate = new Date().toLocaleDateString();
-  //   doc.setFontSize(10);
-  //   doc.text(`Report Generated: ${reportDate}`, 14, 15); // Display the vehicle name once at the top
-  //   const VehicleName = filteredData[0].vehicleName || "Name Unavailable";
-  //   doc.text(`Vehicle Name: ${VehicleName}`, 14, 20);
-  //   const vehicleRegistration =
-  //     filteredData[0].registrationNumber || "Registration Unavailable";
-  //   doc.text(`Registration Number: ${vehicleRegistration}`, 14, 25);
-  //   doc.text(`Company Name: ${selectedCompanyName}`, 14, 30);
-
-  //   // Define table columns and their initial X positions
-  //   const tableColumn = [
-  //     "Issues",
-  //     "Organisation",
-  //     "Repair Status",
-  //     "Job Number",
-  //     "Memo",
-  //     "Parts",
-  //     "Labour Hours",
-  //     "Cost",
-  //     "Signed Off By",
-  //     "Date",
-  //   ];
-
-  //   let startX = 14;
-  //   let startY = 42;
-  //   const columnWidth = 35;
-  //   const lineHeight = 9;
-  //   const padding = 6;
-  //   const pageHeight = doc.internal.pageSize.height;
-
-  //   // Add table header
-  //   tableColumn.forEach((column, index) => {
-  //     doc.text(column, startX + index * columnWidth + padding, startY);
-  //     doc.rect(startX + index * columnWidth, startY - 4, columnWidth, 8);
-  //   });
-
-  //   // Add table rows
-  //   let currentY = startY + lineHeight;
-  //   filteredData.forEach((row) => {
-  //     // Add issues field
-  //     const issues = doc.splitTextToSize(
-  //       row.issues || "N/A",
-  //       columnWidth - padding
-  //     );
-  //     // Define content for each cell in repairHistory
-  //     const organisation = doc.splitTextToSize(
-  //       row.organisation || "N/A",
-  //       columnWidth - padding
-  //     );
-
-  //     const repairStatus = doc.splitTextToSize(
-  //       row.repairStatus || "N/A",
-  //       columnWidth - padding
-  //     );
-
-  //     const jobNumber = doc.splitTextToSize(
-  //       row.jobNumber || "N/A",
-  //       columnWidth - padding
-  //     );
-  //     const memo = doc.splitTextToSize(
-  //       row.memo || "N/A",
-  //       columnWidth - padding
-  //     );
-  //     // Loop through each repair entry in repairHistory
-  //     row.repairHistory.forEach((repair) => {
-  //       console.log("Repair is : ", repair);
-  //       // Check if the next row fits within the current page
-  //       if (currentY + lineHeight > pageHeight - 20) {
-  //         doc.addPage();
-  //         currentY = 20;
-
-  //         // Re-add the header on the new page
-  //         tableColumn.forEach((column, index) => {
-  //           doc.text(column, startX + index * columnWidth + padding, currentY);
-  //           doc.rect(
-  //             startX + index * columnWidth,
-  //             currentY - 4,
-  //             columnWidth,
-  //             8
-  //           );
-  //         });
-  //         currentY += lineHeight;
-  //       }
-
-  //       const parts = repair.parts
-  //         .map(
-  //           (part) =>
-  //             `${part.partNumber || "N/A"}: ${part.partName || "N/A"} - $${
-  //               part.price || 0
-  //             } (${part.supplier || "N/A"})`
-  //         )
-  //         .join(", ");
-  //       const partsText = doc.splitTextToSize(
-  //         parts || "N/A",
-  //         columnWidth - padding
-  //       );
-  //       const labourHours = repair.labourHours || "N/A";
-  //       const cost = `$${repair.cost || 0}`;
-  //       const signedOffBy = doc.splitTextToSize(
-  //         repair.signedOffBy || "N/A",
-  //         columnWidth - padding
-  //       );
-  //       const date = doc.splitTextToSize(
-  //         repair.date || "N/A",
-  //         columnWidth - padding
-  //       );
-
-  //       // Determine the maximum height required for the row
-  //       const maxCellHeight =
-  //         Math.max(
-  //           issues.length,
-  //           organisation.length,
-  //           repairStatus.length,
-  //           jobNumber.length,
-  //           memo.length,
-  //           partsText.length,
-  //           signedOffBy.length,
-  //           date.length
-  //         ) * lineHeight;
-
-  //       // Add the data cells with dynamic height
-  //       doc.text(issues, startX + padding, currentY);
-  //       doc.rect(startX, currentY - 4, columnWidth, maxCellHeight);
-
-  //       doc.text(organisation, startX + columnWidth + padding, currentY);
-  //       doc.rect(
-  //         startX + columnWidth,
-  //         currentY - 4,
-  //         columnWidth,
-  //         maxCellHeight
-  //       );
-
-  //       doc.text(repairStatus, startX + 2 * columnWidth + padding, currentY);
-  //       doc.rect(
-  //         startX + 2 * columnWidth,
-  //         currentY - 4,
-  //         columnWidth,
-  //         maxCellHeight
-  //       );
-
-  //       doc.text(jobNumber, startX + 3 * columnWidth + padding, currentY);
-  //       doc.rect(
-  //         startX + 3 * columnWidth,
-  //         currentY - 4,
-  //         columnWidth,
-  //         maxCellHeight
-  //       );
-
-  //       doc.text(memo, startX + 4 * columnWidth + padding, currentY);
-  //       doc.rect(
-  //         startX + 4 * columnWidth,
-  //         currentY - 4,
-  //         columnWidth,
-  //         maxCellHeight
-  //       );
-
-  //       doc.text(partsText, startX + 5 * columnWidth + padding, currentY);
-  //       doc.rect(
-  //         startX + 5 * columnWidth,
-  //         currentY - 4,
-  //         columnWidth,
-  //         maxCellHeight
-  //       );
-
-  //       doc.text(
-  //         labourHours.toString(),
-  //         startX + 6 * columnWidth + padding,
-  //         currentY
-  //       );
-  //       doc.rect(
-  //         startX + 6 * columnWidth,
-  //         currentY - 4,
-  //         columnWidth,
-  //         maxCellHeight
-  //       );
-
-  //       doc.text(cost, startX + 7 * columnWidth + padding, currentY);
-  //       doc.rect(
-  //         startX + 7 * columnWidth,
-  //         currentY - 4,
-  //         columnWidth,
-  //         maxCellHeight
-  //       );
-
-  //       doc.text(signedOffBy, startX + 8 * columnWidth + padding, currentY);
-  //       doc.rect(
-  //         startX + 8 * columnWidth,
-  //         currentY - 4,
-  //         columnWidth,
-  //         maxCellHeight
-  //       );
-
-  //       doc.text(date, startX + 9 * columnWidth + padding, currentY);
-  //       doc.rect(
-  //         startX + 9 * columnWidth,
-  //         currentY - 4,
-  //         columnWidth,
-  //         maxCellHeight
-  //       );
-
-  //       // Increment Y for the next row
-  //       currentY += maxCellHeight;
-  //     });
-  //   });
-
-  //   // Save the PDF
-  //   doc.save("Maintenance_Report.pdf");
-  // };
   const generatePDF = () => {
     const doc = new jsPDF();
 
@@ -562,32 +345,32 @@ const Page = ({ params }) => {
                         {row.memo}
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
-                        {row.repairHistory[0].parts.map((part) => (
+                        {/* {row.repairHistory[0].parts.map((part) => (
                           <tr key={part._id}>
                             <td>{part.partNumber}</td>
                           </tr>
-                        ))}
+                        ))} */}
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
-                        {row.repairHistory[0].parts.map((part) => (
+                        {/* {row.repairHistory[0].parts.map((part) => (
                           <tr key={part._id}>
                             <td>{part.partName}</td>
                           </tr>
-                        ))}
+                        ))} */}
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
-                        {row.repairHistory[0].parts.map((part) => (
+                        {/* {row.repairHistory[0].parts.map((part) => (
                           <tr key={part._id}>
                             <td>{part.price}</td>
                           </tr>
-                        ))}
+                        ))} */}
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
-                        {row.repairHistory[0].parts.map((part) => (
+                        {/* {row.repairHistory[0].parts.map((part) => (
                           <tr key={part._id}>
                             <td>{part.supplier}</td>
                           </tr>
-                        ))}
+                        ))} */}
                       </td>
 
                       <td className="py-2 px-4 border-b border-gray-200">
@@ -613,7 +396,14 @@ const Page = ({ params }) => {
                       </td>
 
                       <td className="py-2 px-4 border-b border-gray-200">
-                        {/* {row.date} */}
+                        {/* {row.repairHistory.images.map((image) => (
+                          <img
+                            key={image._id}
+                            src={image.url} // Make sure `url` is the correct field for the image source
+                            alt={"Demage Image"}
+                            className="w-20 h-20 object-cover rounded"
+                          />
+                        ))} */}
                       </td>
 
                       <td className="py-2 px-4 border-b border-gray-200">

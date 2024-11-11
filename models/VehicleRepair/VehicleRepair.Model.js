@@ -1,12 +1,24 @@
 // models/VehicleRepair.js
 import mongoose from "mongoose";
 
+const partSchema = new mongoose.Schema({
+  partNumber: { type: String },
+  partName: { type: String },
+  price: { type: Number },
+  supplier: { type: String },
+});
 const repairSchema = new mongoose.Schema(
   {
     images: [
       {
-        url: { type: String }, // Cloudinary URL
-        public_id: { type: String }, // Cloudinary public ID
+        url: {
+          type: String,
+          required: true,
+        },
+        publicId: {
+          type: String,
+          required: true,
+        },
       },
     ],
     organisation: {
@@ -45,16 +57,7 @@ const repairSchema = new mongoose.Schema(
     registrationNumber: {
       type: String,
     },
-    repairHistory: {
-      parts: [
-        {
-          partNumber: { type: String },
-          partName: { type: String },
-          price: { type: Number },
-          supplier: { type: String },
-        },
-      ],
-    },
+    repairHistory: [partSchema],
     adminCreatedBy: {
       type: String,
     },

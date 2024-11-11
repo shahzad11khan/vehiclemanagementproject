@@ -8,14 +8,16 @@ export async function POST(request) {
   try {
     await connect(); // Connect to the database
     const formData = await request.formData(); // Get the FormData object
-    console.log(formData);
-    // Extract fields from FormData
+
+    // Extract general fields from FormData
     const issues = formData.get("issues");
     const vehicleName = formData.get("vehicleName");
     const registrationNumber = formData.get("registrationNumber");
     const adminCreatedBy = formData.get("adminCreatedBy");
     const adminCompanyName = formData.get("adminCompanyName");
     const adminCompanyId = formData.get("adminCompanyId");
+
+    // Extract repair-related fields
     const organisation = formData.get("repairHistory[0][organisation]");
     const repairStatus = formData.get("repairHistory[0][repairStatus]");
     const jobNumber = formData.get("repairHistory[0][jobNumber]");
@@ -25,79 +27,80 @@ export async function POST(request) {
     const signedOffBy = formData.get("repairHistory[0][signedOffBy]");
     const date = formData.get("repairHistory[0][date]");
 
-    // Handle images
-    const imageFiles = {};
-    const repairHistor = [];
-    for (const [key, value] of formData.entries()) {
-      // console.log(key, value);
-
-      if (key.startsWith("repairHistory[0][images]")) {
-        imageFiles[key] = value;
-      } else if (key.startsWith("repairHistory[0][parts]")) {
-        repairHistor[key] = value;
-        // console.log("repair history ", key, value);
-      }
-    }
-
-    // console.log("console agian : ", repairHistor);
-    const repairHistory = [];
+    // const imageFiles = [];
+    const images = [];
     const parts = [];
-    for (const [key, value] of Object.entries(repairHistor)) {
-      const match = key.match(
-        /repairHistory\[\d+\]\[parts\]\[(\d+)\]\[(\w+)\]/
+
+    // Separate handling of files and parts from FormData
+    for (const [key, value] of formData.entries()) {
+      if (key.startsWith("repairHistory[0][images]")) {
+        console.log(key, value);
+        // imageFiles.push(value);
+        if (value) {
+          const buffer = Buffer.from(await value.arrayBuffer()); // Convert file to buffer
+          // Upload to Cloudinary
+          const uploadResponse = await new Promise((resolve, reject) => {
+            cloudinary.uploader
+              .upload_stream({ resource_type: "auto" }, (error, result) => {
+                if (error) {
+                  reject(new Error("Error uploading image: " + error.message));
+                } else {
+                  resolve(result);
+                }
+              })
+              .end(buffer); // Send buffer to Cloudinary
+          });
+
+          // Store Cloudinary response (URL and public ID)
+          images.push({
+            url: uploadResponse.secure_url,
+            publicId: uploadResponse.public_id,
+          });
+        }
+      }
+      // Handle parts
+      const partsMatch = key.match(
+        /repairHistory\[0\]\[parts\]\[(\d+)\]\[(\w+)\]/
       );
-      if (match) {
-        const index = parseInt(match[1], 10);
-        const field = match[2];
+      if (partsMatch) {
+        const index = parseInt(partsMatch[1], 10);
+        const field = partsMatch[2];
 
         // Ensure parts array has enough space
         if (!parts[index]) parts[index] = {};
 
-        // Assign the value to the correct field
+        // Assign value to the correct part field
         parts[index][field] = value;
       }
     }
-    // console.log(parts);
-    repairHistory.push({ parts });
 
-    const uploadedImages = [];
-    for (const [key, imageFile] of Object.entries(imageFiles)) {
-      console.log(key, imageFile);
-      const imageBuffer = await imageFile.arrayBuffer();
-      const uploadedImage = await cloudinary.uploader
-        .upload_stream({ folder: "vehicle_repairs/" }, (error, result) => {
-          if (error) {
-            throw new Error("Cloudinary upload failed");
-          }
-          return result;
-        })
-        .end(Buffer.from(imageBuffer));
+    // Prepare the repair history object
+    const repairHistory = {
+      parts,
+    };
 
-      uploadedImages.push({
-        url: uploadedImage.secure_url,
-        public_id: uploadedImage.public_id,
-      });
-    }
-    // Create the vehicle repair record with images
+    console.log(images);
+    // Create a new vehicle repair record
     const newVehicleRepair = new VehicleRepair({
       issues,
       vehicleName,
-      organisation,
-      repairStatus,
-      memo,
       registrationNumber,
-      jobNumber,
-      labourHours,
-      cost,
-      repairHistory,
-      signedOffBy,
-      date,
       adminCreatedBy,
       adminCompanyName,
       adminCompanyId,
-      images: uploadedImages, // Store Cloudinary image URLs and public_ids
+      organisation,
+      repairStatus,
+      labourHours,
+      memo,
+      jobNumber,
+      cost,
+      signedOffBy,
+      date,
+      repairHistory,
+      images,
     });
 
+    // Save to database
     await newVehicleRepair.save();
 
     return NextResponse.json(
@@ -110,7 +113,7 @@ export async function POST(request) {
   } catch (error) {
     console.error(error);
     return NextResponse.json(
-      { message: "Error creating vehicle repair record", error },
+      { message: "Error creating vehicle repair record", error: error.message },
       { status: 500 }
     );
   }

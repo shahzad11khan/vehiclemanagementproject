@@ -207,7 +207,7 @@ const AddRoadTexModal = ({ isOpen, onClose, fetchData, selectedid }) => {
                 className="mt-1 p-2 border border-gray-300 rounded"
               >
                 <option value="">Select Road Tax Cycle</option>
-                <option value="pandding">Pandding</option>
+                <option value="pending">Pending</option>
                 <option value="done">Done</option>
               </select>
             </div>

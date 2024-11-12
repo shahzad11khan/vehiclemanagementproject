@@ -206,7 +206,7 @@ const AddServiceModal = ({ isOpen, onClose, fetchData, selectedid }) => {
                 className="mt-1 p-2 border border-gray-300 rounded"
               >
                 <option value="">Select MOT Cycle</option>
-                <option value="pandding">Pandding</option>
+                <option value="pendding">Pendding</option>
                 <option value="done">Done</option>
               </select>
             </div>

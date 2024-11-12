@@ -212,7 +212,7 @@ const Page = ({ params }) => {
                       MOT Status
                     </th>
                     <th className="py-2 px-4 border-b border-gray-200 text-left">
-                      MOT Asign
+                      MOT Assign
                     </th>
                     <th className="py-2 px-4 border-b border-gray-200 text-left">
                       Actions

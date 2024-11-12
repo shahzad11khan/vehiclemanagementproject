@@ -3,9 +3,11 @@ import React, { useState, useEffect } from "react";
 import {
   API_URL_Vehicle_getspecificvehicleid,
   API_URL_VehicleMOT,
+  API_URL_USER,
 } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { getCompanyName } from "@/utils/storageUtils";
 
 const AddMotModal = ({ isOpen, onClose, fetchData, selectedid }) => {
   const [formData, setFormData] = useState({
@@ -15,10 +17,14 @@ const AddMotModal = ({ isOpen, onClose, fetchData, selectedid }) => {
     motDueDate: "",
     motCycle: "",
     motStatus: "",
+    asignto: "",
     adminCreatedBy: "",
     adminCompanyName: "",
     adminCompanyId: "",
   });
+
+  const [users, setUsers] = useState([]);
+  const [filtered, setFilteredData] = useState([]);
   const fetchDat = async () => {
     if (selectedid) {
       console.log(selectedid);
@@ -49,10 +55,34 @@ const AddMotModal = ({ isOpen, onClose, fetchData, selectedid }) => {
     }
   };
 
+  const fetchCompanyuserData = async () => {
+    try {
+      const response = await axios.get(`${API_URL_USER}`);
+      setUsers(response.data.result);
+      setFilteredData(response.data.result);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
   useEffect(() => {
     fetchDat(); // Fetch data whenever the component mounts or selectedid changes
+    fetchCompanyuserData();
   }, [selectedid]); // Include selectedid in the dependency array
 
+  useEffect(() => {
+    const companyNameFromStorage = getCompanyName();
+    const filtered = users.filter((item) => {
+      // console.log(item);
+      // Ensure both strings are defined before comparing
+      return (
+        item.companyname &&
+        companyNameFromStorage &&
+        item.companyname.toLowerCase() === companyNameFromStorage.toLowerCase()
+      );
+    });
+    // console.log(filtered);
+    setFilteredData(filtered);
+  }, [users, getCompanyName]);
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -64,10 +94,11 @@ const AddMotModal = ({ isOpen, onClose, fetchData, selectedid }) => {
     try {
       const response = await axios.post(`${API_URL_VehicleMOT}`, formData);
       console.log("Data sent successfully:", response.data);
-      if (response.data.message) {
+      if (response.data.success) {
         toast.success(response.data.message);
         fetchData();
         resetform();
+        onClose();
       } else {
         toast.warn(response.data.message);
       }
@@ -86,6 +117,7 @@ const AddMotModal = ({ isOpen, onClose, fetchData, selectedid }) => {
       motDueDate: "",
       motCycle: "",
       motStatus: "",
+      asignto: "",
       adminCreatedBy: "",
       adminCompanyName: "",
       adminCompanyId: "",
@@ -177,20 +209,36 @@ const AddMotModal = ({ isOpen, onClose, fetchData, selectedid }) => {
                 <option value="done">Done</option>
               </select>
             </div>
+            <div className="flex flex-col flex-1">
+              <label className="text-sm font-medium">Asign To:</label>
+              <select
+                name="asignto"
+                value={formData.asignto}
+                onChange={handleChange}
+                className="mt-1 p-2 border border-gray-300 rounded"
+              >
+                <option value="">Select User</option>
+                {filtered.map((user) => (
+                  <option key={user.id} value={user.username}>
+                    {user.username}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
           <div className="flex flex-col sm:flex-row sm:justify-between sm:space-x-4">
-            <button
-              type="submit"
-              className="w-full py-2 mt-4 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
-            >
-              Submit
-            </button>
             <button
               onClick={onClose}
               type="submit"
               className="w-full py-2 mt-4 bg-gray-400  text-white rounded hover:bg-black transition"
             >
               Close
+            </button>
+            <button
+              type="submit"
+              className="w-full py-2 mt-4 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+            >
+              Submit
             </button>
           </div>
         </form>

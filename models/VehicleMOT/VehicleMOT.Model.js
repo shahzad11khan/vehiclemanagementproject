@@ -30,7 +30,7 @@ const VehicleMOTSchema = new mongoose.Schema(
     adminCompanyId: {
       type: String,
     },
-    assignedTo: {
+    asignto: {
       type: String,
       default: "",
     },

@@ -173,7 +173,7 @@ const Page = ({ params }) => {
         <div className="mx-auto w-10/12 p-4">
           <div className="border-2 mt-3 w-full ">
             <div className="flex justify-between">
-              <div>
+              <div className="flex gap-2">
                 <button
                   onClick={generatePDF}
                   className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
@@ -212,6 +212,9 @@ const Page = ({ params }) => {
                       Vehicle MOT Status
                     </th>
                     <th className="py-2 px-4 border-b border-gray-200 text-left">
+                      Vehicle MOT Asign
+                    </th>
+                    <th className="py-2 px-4 border-b border-gray-200 text-left">
                       Actions
                     </th>
                   </tr>
@@ -226,16 +229,19 @@ const Page = ({ params }) => {
                         {row.registrationNumber}
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
-                        {row.motDates || "N/A"}
+                        {row.motCurrentDate || "N/A"}
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
                         {row.motCycle || "N/A"}
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
-                        {row.nextMotDate || "N/A"}
+                        {row.motDueDate || "N/A"}
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
                         {row.motStatus || "N/A"}
+                      </td>
+                      <td className="py-2 px-4 border-b border-gray-200">
+                        {row.asignto || "N/A"}
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
                         <button

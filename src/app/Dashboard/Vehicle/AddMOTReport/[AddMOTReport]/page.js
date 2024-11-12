@@ -200,19 +200,19 @@ const Page = ({ params }) => {
                       Vehicle Registration Number
                     </th>
                     <th className="py-2 px-4 border-b border-gray-200 text-left">
-                      Vehicle MOT Dates
+                      MOT Dates
                     </th>
                     <th className="py-2 px-4 border-b border-gray-200 text-left">
-                      Vehicle MOT Cycle
+                      MOT Cycle
                     </th>
                     <th className="py-2 px-4 border-b border-gray-200 text-left">
-                      Vehicle Next MOT Date
+                      Next MOT Date
                     </th>
                     <th className="py-2 px-4 border-b border-gray-200 text-left">
-                      Vehicle MOT Status
+                      MOT Status
                     </th>
                     <th className="py-2 px-4 border-b border-gray-200 text-left">
-                      Vehicle MOT Asign
+                      MOT Asign
                     </th>
                     <th className="py-2 px-4 border-b border-gray-200 text-left">
                       Actions

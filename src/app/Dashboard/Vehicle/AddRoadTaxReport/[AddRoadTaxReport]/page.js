@@ -238,19 +238,19 @@ const Page = ({ params }) => {
                     </th>
 
                     <th className="py-2 px-4 border-b border-gray-200 text-left">
-                      Vehicle Road Tax Dates
+                      Road Tax Dates
                     </th>
                     <th className="py-2 px-4 border-b border-gray-200 text-left">
-                      Vehicle Road Tax Cycle
+                      Road Tax Cycle
                     </th>
                     <th className="py-2 px-4 border-b border-gray-200 text-left">
-                      Vehicle Road Tax Due Date
+                      Road Tax Due Date
                     </th>
                     <th className="py-2 px-4 border-b border-gray-200 text-left">
-                      Vehicle Road Tax Status
+                      Road Tax Status
                     </th>
                     <th className="py-2 px-4 border-b border-gray-200 text-left">
-                      Vehicle Road Tax Asign
+                      Road Tax Asign
                     </th>
                     <th className="py-2 px-4 border-b border-gray-200 text-left">
                       Actions

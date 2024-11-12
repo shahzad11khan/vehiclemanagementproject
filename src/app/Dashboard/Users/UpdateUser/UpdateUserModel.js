@@ -199,7 +199,6 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                   required
                 >
                   <option value="">Select Title</option>
-                  <option value="">Select Title</option>
                   <option value="Mr">Mr</option>
                   <option value="Miss">Miss</option>
                   <option value="Miss">Miss</option>

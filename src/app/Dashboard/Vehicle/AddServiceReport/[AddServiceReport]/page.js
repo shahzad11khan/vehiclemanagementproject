@@ -225,19 +225,19 @@ const Page = ({ params }) => {
                       Vehicle Registration Number
                     </th>
                     <th className="py-2 px-4 border-b border-gray-200 text-left">
-                      Vehicle Service Dates
+                      Service Dates
                     </th>
                     <th className="py-2 px-4 border-b border-gray-200 text-left">
-                      Vehicle Service Due Dates
+                      Service Due Dates
                     </th>
                     <th className="py-2 px-4 border-b border-gray-200 text-left">
-                      Vehicle Service Status
+                      Service Status
                     </th>
                     <th className="py-2 px-4 border-b border-gray-200 text-left">
-                      Vehicle Service Mails
+                      Service Mails
                     </th>
                     <th className="py-2 px-4 border-b border-gray-200 text-left">
-                      Vehicle Service Asign
+                      Service Asign
                     </th>
 
                     <th className="py-2 px-4 border-b border-gray-200 text-left">

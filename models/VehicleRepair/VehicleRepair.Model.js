@@ -65,8 +65,7 @@ const repairSchema = new mongoose.Schema(
       type: String,
     },
     adminCompanyId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Company",
+      type: String,
     },
   },
   { timestamps: true }

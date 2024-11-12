@@ -60,8 +60,9 @@ const Page = () => {
       let maintenance = 0;
 
       result.forEach((vehicle) => {
+        // console.log(companyname);
         if (vehicle.adminCompanyName === companyname) {
-          console.log(vehicle);
+          // console.log(vehicle);
           switch (vehicle.vehicleStatus) {
             case "Standby":
               standbyCar++;

@@ -137,11 +137,25 @@ const Page = ({ params }) => {
         currentY += lineHeight; // Adjust the Y after the header
       }
       const roadtexCurrentDate = doc.splitTextToSize(
-        row.roadtexCurrentDate || "N/A",
+        (() => {
+          const date = new Date(row.roadtexCurrentDate);
+          const formattedDate = `${String(date.getMonth() + 1).padStart(
+            2,
+            "0"
+          )}/${String(date.getDate()).padStart(2, "0")}/${date.getFullYear()}`;
+          return formattedDate;
+        })() || "N/A",
         columnWidth - padding
       );
       const roadtexDueDate = doc.splitTextToSize(
-        row.roadtexDueDate || "N/A",
+        (() => {
+          const date = new Date(row.roadtexDueDate);
+          const formattedDate = `${String(date.getMonth() + 1).padStart(
+            2,
+            "0"
+          )}/${String(date.getDate()).padStart(2, "0")}/${date.getFullYear()}`;
+          return formattedDate;
+        })() || "N/A",
         columnWidth - padding
       );
       const roadtexCycle = doc.splitTextToSize(
@@ -267,13 +281,31 @@ const Page = ({ params }) => {
                         {row.registrationNumber}
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
-                        {row.roadtexCurrentDate}
+                        {(() => {
+                          const date = new Date(row.roadtexCurrentDate);
+                          const formattedDate = `${String(
+                            date.getMonth() + 1
+                          ).padStart(2, "0")}/${String(date.getDate()).padStart(
+                            2,
+                            "0"
+                          )}/${date.getFullYear()}`;
+                          return formattedDate;
+                        })()}
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
                         {row.roadtexCycle}
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
-                        {row.roadtexDueDate}
+                        {(() => {
+                          const date = new Date(row.roadtexDueDate);
+                          const formattedDate = `${String(
+                            date.getMonth() + 1
+                          ).padStart(2, "0")}/${String(date.getDate()).padStart(
+                            2,
+                            "0"
+                          )}/${date.getFullYear()}`;
+                          return formattedDate;
+                        })()}
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
                         {row.roadtexStatus}

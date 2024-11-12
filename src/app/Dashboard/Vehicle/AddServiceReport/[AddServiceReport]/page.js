@@ -107,6 +107,7 @@ const Page = ({ params }) => {
       "Service Due Dates",
       "Service Miles",
       "Service Status",
+      "Service Assign",
     ];
 
     let startX = 14;
@@ -136,20 +137,42 @@ const Page = ({ params }) => {
         });
         currentY += lineHeight; // Adjust the Y after the header
       }
+
       const serviceCurrentDate = doc.splitTextToSize(
-        row.serviceCurrentDate || "N/A",
+        (() => {
+          const date = new Date(row.serviceCurrentDate);
+          const formattedDate = `${String(date.getMonth() + 1).padStart(
+            2,
+            "0"
+          )}/${String(date.getDate()).padStart(2, "0")}/${date.getFullYear()}`;
+          return formattedDate;
+        })() || "N/A",
         columnWidth - padding
       );
+
       const serviceDueDate = doc.splitTextToSize(
-        row.serviceDueDate || "N/A",
+        (() => {
+          const date = new Date(row.serviceDueDate);
+          const formattedDate = `${String(date.getMonth() + 1).padStart(
+            2,
+            "0"
+          )}/${String(date.getDate()).padStart(2, "0")}/${date.getFullYear()}`;
+          return formattedDate;
+        })() || "N/A",
         columnWidth - padding
       );
+
       const servicemailes = doc.splitTextToSize(
         row.servicemailes || "N/A",
         columnWidth - padding
       );
+
       const serviceStatus = doc.splitTextToSize(
         row.serviceStatus || "N/A",
+        columnWidth - padding
+      );
+      const serviceAssing = doc.splitTextToSize(
+        row.asignto || "N/A",
         columnWidth - padding
       );
 
@@ -158,7 +181,8 @@ const Page = ({ params }) => {
           serviceCurrentDate.length,
           serviceDueDate.length,
           servicemailes.length,
-          serviceStatus.length
+          serviceStatus.length,
+          serviceAssing.length
         ) * lineHeight;
 
       // Add the data cells with borders
@@ -167,6 +191,7 @@ const Page = ({ params }) => {
 
       doc.text(serviceDueDate, startX + columnWidth + padding, currentY);
       doc.rect(startX + columnWidth, currentY - 4, columnWidth, maxCellHeight);
+
       doc.text(servicemailes, startX + 2 * columnWidth + padding, currentY);
       doc.rect(
         startX + 2 * columnWidth,
@@ -174,6 +199,7 @@ const Page = ({ params }) => {
         columnWidth,
         maxCellHeight
       );
+
       doc.text(serviceStatus, startX + 3 * columnWidth + padding, currentY);
       doc.rect(
         startX + 3 * columnWidth,
@@ -181,9 +207,16 @@ const Page = ({ params }) => {
         columnWidth,
         maxCellHeight
       );
+      doc.text(serviceAssing, startX + 4 * columnWidth + padding, currentY);
+      doc.rect(
+        startX + 4 * columnWidth,
+        currentY - 4,
+        columnWidth,
+        maxCellHeight
+      );
 
       // Increment Y for the next row
-      currentY + maxCellHeight;
+      currentY += maxCellHeight; // Fix the issue here by using +=
     });
 
     // Save the PDF
@@ -255,11 +288,29 @@ const Page = ({ params }) => {
                         {row.registrationNumber}
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
-                        {row.serviceCurrentDate || "N/A"}
+                        {(() => {
+                          const date = new Date(row.serviceCurrentDate);
+                          const formattedDate = `${String(
+                            date.getMonth() + 1
+                          ).padStart(2, "0")}/${String(date.getDate()).padStart(
+                            2,
+                            "0"
+                          )}/${date.getFullYear()}`;
+                          return formattedDate;
+                        })() || "N/A"}
                       </td>
 
                       <td className="py-2 px-4 border-b border-gray-200">
-                        {row.serviceDueDate || "N/A"}
+                        {(() => {
+                          const date = new Date(row.serviceDueDate);
+                          const formattedDate = `${String(
+                            date.getMonth() + 1
+                          ).padStart(2, "0")}/${String(date.getDate()).padStart(
+                            2,
+                            "0"
+                          )}/${date.getFullYear()}`;
+                          return formattedDate;
+                        })() || "N/A"}
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
                         {row.serviceStatus || "N/A"}

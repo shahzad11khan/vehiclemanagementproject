@@ -106,11 +106,12 @@ const Page = ({ params }) => {
       "MOT Cycle",
       "Next MOT Date",
       "MOT Status",
+      "MOT Assing",
     ];
 
     let startX = 14;
     let startY = 42; // Adjust to leave space after the vehicle name
-    const columnWidth = 45; // Adjusted column width to better fit the page
+    const columnWidth = 32; // Adjusted column width to better fit the page
     const lineHeight = 9; // Height of each row
     const padding = 6; // Padding inside cells
     const pageHeight = doc.internal.pageSize.height; // Get the height of the page
@@ -137,14 +138,32 @@ const Page = ({ params }) => {
       }
 
       // Add the remaining data cells with borders
-      doc.text(row.motDates || "N/A", startX + padding, currentY);
+      doc.text(
+        (() => {
+          const date = new Date(row.motCurrentDate);
+          const formattedDate = `${String(date.getMonth() + 1).padStart(
+            2,
+            "0"
+          )}/${String(date.getDate()).padStart(2, "0")}/${date.getFullYear()}`;
+          return formattedDate;
+        })() || "N/A",
+        startX + padding,
+        currentY
+      );
       doc.rect(startX, currentY - 4, columnWidth, lineHeight);
 
       doc.text(row.motCycle || "N/A", startX + columnWidth + padding, currentY);
       doc.rect(startX + columnWidth, currentY - 4, columnWidth, lineHeight);
 
       doc.text(
-        row.nextMotDate || "N/A",
+        (() => {
+          const date = new Date(row.motDueDate);
+          const formattedDate = `${String(date.getMonth() + 1).padStart(
+            2,
+            "0"
+          )}/${String(date.getDate()).padStart(2, "0")}/${date.getFullYear()}`;
+          return formattedDate;
+        })() || "N/A",
         startX + 2 * columnWidth + padding,
         currentY
       );
@@ -156,6 +175,12 @@ const Page = ({ params }) => {
         currentY
       );
       doc.rect(startX + 3 * columnWidth, currentY - 4, columnWidth, lineHeight);
+      doc.text(
+        row.asignto || "N/A",
+        startX + 4 * columnWidth + padding,
+        currentY
+      );
+      doc.rect(startX + 4 * columnWidth, currentY - 4, columnWidth, lineHeight);
 
       // Increment Y for the next row
       currentY += lineHeight;
@@ -229,13 +254,31 @@ const Page = ({ params }) => {
                         {row.registrationNumber}
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
-                        {row.motCurrentDate || "N/A"}
+                        {(() => {
+                          const date = new Date(row.motCurrentDate);
+                          const formattedDate = `${String(
+                            date.getMonth() + 1
+                          ).padStart(2, "0")}/${String(date.getDate()).padStart(
+                            2,
+                            "0"
+                          )}/${date.getFullYear()}`;
+                          return formattedDate;
+                        })() || "N/A"}
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
                         {row.motCycle || "N/A"}
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
-                        {row.motDueDate || "N/A"}
+                        {(() => {
+                          const date = new Date(row.motDueDate);
+                          const formattedDate = `${String(
+                            date.getMonth() + 1
+                          ).padStart(2, "0")}/${String(date.getDate()).padStart(
+                            2,
+                            "0"
+                          )}/${date.getFullYear()}`;
+                          return formattedDate;
+                        })() || "N/A"}
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
                         {row.motStatus || "N/A"}

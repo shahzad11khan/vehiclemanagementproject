@@ -49,7 +49,7 @@ export const POST = catchAsyncErrors(async (request) => {
 });
 export const GET = catchAsyncErrors(async () => {
   await connect();
-  const allFuelType = await FuelType.find();
+  const allFuelType = await FuelType.find().sort({ createdAt: -1 });
   const FuelTypeCount = await FuelType.countDocuments();
   if (!allFuelType || allFuelType.length === 0) {
     return NextResponse.json({ Result: allFuelType });

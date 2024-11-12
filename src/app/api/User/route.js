@@ -322,7 +322,7 @@ export async function POST(request) {
 
 export const GET = catchAsyncErrors(async () => {
   await connect();
-  const allUsers = await User.find();
+  const allUsers = await User.find().sort({ createdAt: -1 });
   const userCount = await User.countDocuments();
   if (!allUsers || allUsers.length === 0) {
     return NextResponse.json({ result: allUsers });

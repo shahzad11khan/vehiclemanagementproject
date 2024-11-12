@@ -49,7 +49,7 @@ export const POST = catchAsyncErrors(async (request) => {
 });
 export const GET = catchAsyncErrors(async () => {
   await connect();
-  const allLocalAuthority = await LocalAuthority.find();
+  const allLocalAuthority = await LocalAuthority.find().sort({ createdAt: -1 });
   const LocalAuthorityCount = await LocalAuthority.countDocuments();
   if (!allLocalAuthority || allLocalAuthority.length === 0) {
     return NextResponse.json({ Result: allLocalAuthority });

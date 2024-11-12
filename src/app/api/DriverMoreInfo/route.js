@@ -72,7 +72,7 @@ export const POST = catchAsyncErrors(async (request) => {
 });
 export const GET = catchAsyncErrors(async () => {
   await connect();
-  const allDriverMoreInfo = await DriverMoreInfo.find();
+  const allDriverMoreInfo = await DriverMoreInfo.find().sort({ createdAt: -1 });
   const DriverMoreInfoCount = await DriverMoreInfo.countDocuments();
   if (!allDriverMoreInfo || allDriverMoreInfo.length === 0) {
     return NextResponse.json({ Result: allDriverMoreInfo });

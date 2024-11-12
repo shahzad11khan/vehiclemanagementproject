@@ -169,7 +169,7 @@ export async function POST(request) {
 
 export const GET = catchAsyncErrors(async () => {
   await connect();
-  const allDriver = await Driver.find();
+  const allDriver = await Driver.find().sort({ createdAt: -1 });
   const DriverCount = await Driver.countDocuments();
   if (!allDriver || allDriver.length === 0) {
     return NextResponse.json({ result: allDriver });

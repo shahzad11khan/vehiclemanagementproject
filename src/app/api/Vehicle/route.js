@@ -418,7 +418,7 @@ export async function POST(request) {
 }
 export const GET = catchAsyncErrors(async () => {
   await connect();
-  const allVehicle = await Vehicle.find();
+  const allVehicle = await Vehicle.find().sort({ createdAt: -1 });
   const VehicleCount = await Vehicle.countDocuments();
   if (!allVehicle || allVehicle.length === 0) {
     return NextResponse.json({ result: allVehicle });

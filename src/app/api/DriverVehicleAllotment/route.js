@@ -68,7 +68,9 @@ export const POST = catchAsyncErrors(async (request) => {
 });
 export const GET = catchAsyncErrors(async () => {
   await connect();
-  const allDriverVehicleAllotment = await DriverVehicleAllotment.find();
+  const allDriverVehicleAllotment = await DriverVehicleAllotment.find().sort({
+    createdAt: -1,
+  });
   const DriverVehicleAllotmentCount =
     await DriverVehicleAllotment.countDocuments();
   if (!allDriverVehicleAllotment || allDriverVehicleAllotment.length === 0) {

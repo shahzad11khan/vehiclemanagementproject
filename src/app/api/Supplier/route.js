@@ -49,7 +49,7 @@ export const POST = catchAsyncErrors(async (request) => {
 });
 export const GET = catchAsyncErrors(async () => {
   await connect();
-  const allSupplier = await Supplier.find();
+  const allSupplier = await Supplier.find().sort({ createdAt: -1 });
   const SupplierCount = await Supplier.countDocuments();
   if (!allSupplier || allSupplier.length === 0) {
     return NextResponse.json({ Result: allSupplier });

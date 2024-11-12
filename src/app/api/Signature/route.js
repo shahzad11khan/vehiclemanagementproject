@@ -103,7 +103,7 @@ export async function POST(request) {
 
 export const GET = catchAsyncErrors(async () => {
   await connect();
-  const allSignature = await Signature.find();
+  const allSignature = await Signature.find().sort({ createdAt: -1 });
   const SignatureCount = await Signature.countDocuments();
   if (!allSignature || allSignature.length === 0) {
     return NextResponse.json({ Result: allSignature });

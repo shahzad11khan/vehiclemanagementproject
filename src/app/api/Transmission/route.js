@@ -49,7 +49,7 @@ export const POST = catchAsyncErrors(async (request) => {
 });
 export const GET = catchAsyncErrors(async () => {
   await connect();
-  const allTransmission = await Transmission.find();
+  const allTransmission = await Transmission.find().sort({ createdAt: -1 });
   const TransmissionCount = await Transmission.countDocuments();
   if (!allTransmission || allTransmission.length === 0) {
     return NextResponse.json({ Result: allTransmission });

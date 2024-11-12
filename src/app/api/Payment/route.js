@@ -49,7 +49,7 @@ export const POST = catchAsyncErrors(async (request) => {
 });
 export const GET = catchAsyncErrors(async () => {
   await connect();
-  const allPayment = await Payment.find();
+  const allPayment = await Payment.find().sort({ createdAt: -1 });
   const PaymentCount = await Payment.countDocuments();
   if (!allPayment || allPayment.length === 0) {
     return NextResponse.json({ Result: allPayment });

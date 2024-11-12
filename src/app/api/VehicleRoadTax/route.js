@@ -54,7 +54,7 @@ export const POST = catchAsyncErrors(async (request) => {
 });
 export const GET = catchAsyncErrors(async () => {
   await connect();
-  const allVehicleRoadTax = await VehicleRoadTax.find();
+  const allVehicleRoadTax = await VehicleRoadTax.find().sort({ createdAt: -1 });
   const VehicleRoadTaxCount = await VehicleRoadTax.countDocuments();
   if (!allVehicleRoadTax || allVehicleRoadTax.length === 0) {
     return NextResponse.json({ Result: allVehicleRoadTax });

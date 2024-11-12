@@ -81,7 +81,7 @@ export const POST = catchAsyncErrors(async (request) => {
 });
 export const GET = catchAsyncErrors(async () => {
   await connect();
-  const allEnquiry = await Enquiry.find();
+  const allEnquiry = await Enquiry.find().sort({ createdAt: -1 });
   const EnquiryCount = await Enquiry.countDocuments();
   if (!allEnquiry || allEnquiry.length === 0) {
     return NextResponse.json({ Result: allEnquiry });

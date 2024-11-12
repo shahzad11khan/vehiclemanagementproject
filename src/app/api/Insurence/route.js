@@ -49,7 +49,7 @@ export const POST = catchAsyncErrors(async (request) => {
 });
 export const GET = catchAsyncErrors(async () => {
   await connect();
-  const allInsurence = await Insurence.find();
+  const allInsurence = await Insurence.find().sort({ createdAt: -1 });
   const InsurenceCount = await Insurence.countDocuments();
   if (!allInsurence || allInsurence.length === 0) {
     return NextResponse.json({ Result: allInsurence });

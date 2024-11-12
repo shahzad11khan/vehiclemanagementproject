@@ -69,7 +69,7 @@ export const POST = catchAsyncErrors(async (request) => {
 
 export const GET = catchAsyncErrors(async () => {
   await connect();
-  const allManufecturer = await Manufecturer.find();
+  const allManufecturer = await Manufecturer.find().sort({ createdAt: -1 });
   const ManufecturerCount = await Manufecturer.countDocuments();
   if (!allManufecturer || allManufecturer.length === 0) {
     return NextResponse.json({ Result: allManufecturer });

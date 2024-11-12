@@ -180,7 +180,7 @@ const AddDriverMoreInfoModal = ({
         );
         console.log(newRecordResponse);
         const formDataupdate = new FormData();
-        formDataupdate.append("vehicleStatus", "raint");
+        formDataupdate.append("vehicleStatus", "Rent");
         const updateResponse = await axios.put(
           `${API_URL_Vehicle}/${vehicleStatus}`,
           formDataupdate, // Pass the FormData object as the request body

@@ -73,6 +73,7 @@ const vehicleSchema = new mongoose.Schema(
     },
     vehicleStatus: {
       type: String,
+      default: "Standby",
     },
     warrantyInfo: {
       type: String,

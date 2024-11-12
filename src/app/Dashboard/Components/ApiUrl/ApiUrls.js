@@ -32,3 +32,4 @@ export const API_URL_Driver_Vehicle_Allotment = `${url}/api/DriverVehicleAllotme
 // Report API
 export const API_URL_Maintainance = `${url}/api/VehicleReport`;
 export const API_URL_VehicleMOT = `${url}/api/VehicleMOT`;
+export const API_URL_VehicleService = `${url}/api/VehicleService`;

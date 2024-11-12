@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const VehicleMOTSchema = new mongoose.Schema(
+const VehicleServiceSchema = new mongoose.Schema(
   {
     VehicleName: {
       type: String,
@@ -8,18 +8,20 @@ const VehicleMOTSchema = new mongoose.Schema(
     registrationNumber: {
       type: String,
     },
-    motCurrentDate: {
+    serviceCurrentDate: {
       type: Date,
     },
-    motDueDate: {
+    serviceDueDate: {
       type: Date,
     },
-    motCycle: {
+
+    serviceStatus: {
       type: String,
+      //   default: "active",
     },
-    motStatus: {
-      type: String,
-      // default: "active",
+    servicemailes: {
+      type: Number,
+      //   default: "active",
     },
     adminCreatedBy: {
       type: String,
@@ -38,5 +40,5 @@ const VehicleMOTSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export default mongoose.models.VehicleMOT ||
-  mongoose.model("VehicleMOT", VehicleMOTSchema);
+export default mongoose.models.VehicleService ||
+  mongoose.model("VehicleService", VehicleServiceSchema);

@@ -6,16 +6,14 @@ import { FaTrash } from "react-icons/fa";
 import Header from "../../../Components/Header";
 import Sidebar from "../../../Components/Sidebar";
 import AddServiceModal from "../AddServiceModal/AddServiceModal";
-import { GetTitle } from "../../../Components/ApiUrl/ShowApiDatas/ShowApiDatas";
-import { API_URL_Title } from "../../../Components/ApiUrl/ApiUrls";
+import { API_URL_VehicleService } from "../../../Components/ApiUrl/ApiUrls";
 import { getCompanyName } from "@/utils/storageUtils";
 import axios from "axios";
 import jsPDF from "jspdf";
 
 const Page = ({ params }) => {
   const addServiceId = params.AddServiceReport;
-  console.log("ADD Service Id page id", addServiceId);
-  const [searchTerm, setSearchTerm] = useState("");
+  // console.log("ADD Service Id page id", addServiceId);
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [isOpenTitle, setIsOpenTitle] = useState(false);
@@ -33,18 +31,18 @@ const Page = ({ params }) => {
 
   const fetchData = async () => {
     try {
-      const { result } = await GetTitle();
-      setData(result);
-      setFilteredData(result);
+      const response = await axios.get(`${API_URL_VehicleService}`);
+      console.log("service Data: ", response.data.Result);
+      setData(response.data.Result);
+      setFilteredData(response.data.Result);
     } catch (error) {
       console.error("Error fetching data:", error);
-      setData([]);
     }
   };
 
   const handleDelete = async (id) => {
     try {
-      const response = await axios.delete(`${API_URL_Title}/${id}`);
+      const response = await axios.delete(`${API_URL_VehicleService}/${id}`);
       if (response.data.success) {
         setData((prev) => prev.filter((item) => item._id !== id));
         toast.success(response.data.message);
@@ -52,8 +50,7 @@ const Page = ({ params }) => {
         toast.warn(response.data.message);
       }
     } catch (error) {
-      console.error("Error deleting title:", error);
-      toast.error("Failed to delete title");
+      console.error("Error deleting service:", error);
     }
   };
 
@@ -62,15 +59,15 @@ const Page = ({ params }) => {
   }, []);
 
   useEffect(() => {
+    const companyName = getCompanyName();
+
     const filtered = data.filter(
       (item) =>
-        item.adminCompanyName?.toLowerCase() ===
-          selectedCompanyName.toLowerCase() &&
-        item.name?.toLowerCase().includes(searchTerm.toLowerCase())
+        item.adminCompanyName.toLowerCase() === companyName.toLowerCase()
     );
     setFilteredData(filtered);
     setCurrentPage(1);
-  }, [searchTerm, data, selectedCompanyName]);
+  }, [data]);
 
   const toggleTitleModal = () => {
     // console.log("model click");
@@ -201,13 +198,6 @@ const Page = ({ params }) => {
         <div className="mx-auto w-10/12 p-4">
           <div className="border-2 mt-3 w-full ">
             <div className="flex justify-between">
-              <input
-                type="text"
-                placeholder="Search"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="border rounded px-4 py-2 w-64"
-              />
               <div className="flex gap-2">
                 <button
                   onClick={generatePDF}
@@ -244,7 +234,10 @@ const Page = ({ params }) => {
                       Vehicle Service Status
                     </th>
                     <th className="py-2 px-4 border-b border-gray-200 text-left">
-                      Vehicle Service Miles
+                      Vehicle Service Mails
+                    </th>
+                    <th className="py-2 px-4 border-b border-gray-200 text-left">
+                      Vehicle Service Asign
                     </th>
 
                     <th className="py-2 px-4 border-b border-gray-200 text-left">
@@ -262,16 +255,21 @@ const Page = ({ params }) => {
                         {row.registrationNumber}
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
-                        {row.issues}
+                        {row.serviceCurrentDate || "N/A"}
+                      </td>
+
+                      <td className="py-2 px-4 border-b border-gray-200">
+                        {row.serviceDueDate || "N/A"}
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
-                        {/* {row.repairHistory.organisations} */}
+                        {row.serviceStatus || "N/A"}
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
-                        {/* {row.repairHistory.repairStatus} */}
+                        {row.servicemailes || "N/A"}
                       </td>
+
                       <td className="py-2 px-4 border-b border-gray-200">
-                        {/* {row.repairHistory.jobNumber} */}
+                        {row.asignto || "N/A"}
                       </td>
 
                       <td className="py-2 px-4 border-b border-gray-200">

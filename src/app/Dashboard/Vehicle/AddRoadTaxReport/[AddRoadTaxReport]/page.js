@@ -6,8 +6,7 @@ import { FaTrash } from "react-icons/fa";
 import Header from "../../../Components/Header";
 import Sidebar from "../../../Components/Sidebar";
 import AddRoadTexModal from "../AddRoadTaxModal/AddRoadTaxModal";
-import { GetTitle } from "../../../Components/ApiUrl/ShowApiDatas/ShowApiDatas";
-import { API_URL_Title } from "../../../Components/ApiUrl/ApiUrls";
+import { API_URL_VehicleRoadTex } from "../../../Components/ApiUrl/ApiUrls";
 import { getCompanyName } from "@/utils/storageUtils";
 import axios from "axios";
 import jsPDF from "jspdf";
@@ -15,7 +14,6 @@ import jsPDF from "jspdf";
 const Page = ({ params }) => {
   const addRoadTaxReportId = params.AddRoadTaxReport;
   console.log("ADD Road Taxt page id", addRoadTaxReportId);
-  const [searchTerm, setSearchTerm] = useState("");
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [isOpenTitle, setIsOpenTitle] = useState(false);
@@ -33,18 +31,18 @@ const Page = ({ params }) => {
 
   const fetchData = async () => {
     try {
-      const { result } = await GetTitle();
-      setData(result);
-      setFilteredData(result);
+      const response = await axios.get(`${API_URL_VehicleRoadTex}`);
+      console.log("Road Tex Data: ", response.data.Result);
+      setData(response.data.Result);
+      setFilteredData(response.data.Result);
     } catch (error) {
       console.error("Error fetching data:", error);
-      setData([]);
     }
   };
 
   const handleDelete = async (id) => {
     try {
-      const response = await axios.delete(`${API_URL_Title}/${id}`);
+      const response = await axios.delete(`${API_URL_VehicleRoadTex}/${id}`);
       if (response.data.success) {
         setData((prev) => prev.filter((item) => item._id !== id));
         toast.success(response.data.message);
@@ -52,8 +50,7 @@ const Page = ({ params }) => {
         toast.warn(response.data.message);
       }
     } catch (error) {
-      console.error("Error deleting title:", error);
-      toast.error("Failed to delete title");
+      console.error("Error deleting:", error);
     }
   };
 
@@ -65,12 +62,11 @@ const Page = ({ params }) => {
     const filtered = data.filter(
       (item) =>
         item.adminCompanyName?.toLowerCase() ===
-          selectedCompanyName.toLowerCase() &&
-        item.name?.toLowerCase().includes(searchTerm.toLowerCase())
+        selectedCompanyName.toLowerCase()
     );
     setFilteredData(filtered);
     setCurrentPage(1);
-  }, [searchTerm, data, selectedCompanyName]);
+  }, [data, selectedCompanyName]);
 
   const toggleTitleModal = () => {
     // console.log("model click");
@@ -106,10 +102,10 @@ const Page = ({ params }) => {
 
     // Define table columns and their initial X positions
     const tableColumn = [
-      "Issues And Damages",
-      "Tax Dates",
+      "Current Date",
+      "Due Date",
       "Tax Cycle",
-      "Tax Due Date",
+      "Asign To",
       "Tax Status",
     ];
 
@@ -140,49 +136,49 @@ const Page = ({ params }) => {
         });
         currentY += lineHeight; // Adjust the Y after the header
       }
-      const issuesAndDamages = doc.splitTextToSize(
-        row.issuesAndDamages || "N/A",
+      const roadtexCurrentDate = doc.splitTextToSize(
+        row.roadtexCurrentDate || "N/A",
         columnWidth - padding
       );
-      const roadTaxDates = doc.splitTextToSize(
-        row.roadTaxDates || "N/A",
+      const roadtexDueDate = doc.splitTextToSize(
+        row.roadtexDueDate || "N/A",
         columnWidth - padding
       );
-      const roadTaxCycle = doc.splitTextToSize(
-        row.roadTaxCycle || "N/A",
+      const roadtexCycle = doc.splitTextToSize(
+        row.roadtexCycle || "N/A",
         columnWidth - padding
       );
-      const roadTaxDueDate = doc.splitTextToSize(
-        row.roadTaxDueDate || "N/A",
+      const asignto = doc.splitTextToSize(
+        row.asignto || "N/A",
         columnWidth - padding
       );
-      const roadTaxStatus = doc.splitTextToSize(
-        row.roadTaxStatus || "N/A",
+      const roadtexStatus = doc.splitTextToSize(
+        row.roadtexStatus || "N/A",
         columnWidth - padding
       );
       const maxCellHeight =
         Math.max(
-          issuesAndDamages.length,
-          roadTaxDates.length,
-          roadTaxCycle.length,
-          roadTaxDueDate.length,
-          roadTaxStatus.length
+          roadtexCurrentDate.length,
+          roadtexDueDate.length,
+          roadtexCycle.length,
+          asignto.length,
+          roadtexStatus.length
         ) * lineHeight;
 
       // Add the data cells with borders
-      doc.text(issuesAndDamages, startX + padding, currentY);
+      doc.text(roadtexCurrentDate, startX + padding, currentY);
       doc.rect(startX, currentY - 4, columnWidth, maxCellHeight);
 
-      doc.text(roadTaxDates, startX + columnWidth + padding, currentY);
+      doc.text(roadtexDueDate, startX + columnWidth + padding, currentY);
       doc.rect(startX + columnWidth, currentY - 4, columnWidth, maxCellHeight);
-      doc.text(roadTaxCycle, startX + 2 * columnWidth + padding, currentY);
+      doc.text(roadtexCycle, startX + 2 * columnWidth + padding, currentY);
       doc.rect(
         startX + 2 * columnWidth,
         currentY - 4,
         columnWidth,
         maxCellHeight
       );
-      doc.text(roadTaxDueDate, startX + 3 * columnWidth + padding, currentY);
+      doc.text(asignto, startX + 3 * columnWidth + padding, currentY);
       doc.rect(
         startX + 3 * columnWidth,
         currentY - 4,
@@ -190,7 +186,7 @@ const Page = ({ params }) => {
         maxCellHeight
       );
 
-      doc.text(roadTaxStatus, startX + 4 * columnWidth + padding, currentY);
+      doc.text(roadtexStatus, startX + 4 * columnWidth + padding, currentY);
       doc.rect(
         startX + 4 * columnWidth,
         currentY - 4,
@@ -214,13 +210,6 @@ const Page = ({ params }) => {
         <div className="mx-auto w-10/12 p-4">
           <div className="border-2 mt-3 w-full ">
             <div className="flex justify-between">
-              <input
-                type="text"
-                placeholder="Search"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="border rounded px-4 py-2 w-64"
-              />
               <div className="flex gap-2">
                 <button
                   onClick={generatePDF}
@@ -247,9 +236,7 @@ const Page = ({ params }) => {
                     <th className="py-2 px-4 border-b border-gray-200 text-left">
                       Vehicle Registration Number
                     </th>
-                    <th className="py-2 px-4 border-b border-gray-200 text-left">
-                      Issues And Damages
-                    </th>
+
                     <th className="py-2 px-4 border-b border-gray-200 text-left">
                       Vehicle Road Tax Dates
                     </th>
@@ -261,6 +248,9 @@ const Page = ({ params }) => {
                     </th>
                     <th className="py-2 px-4 border-b border-gray-200 text-left">
                       Vehicle Road Tax Status
+                    </th>
+                    <th className="py-2 px-4 border-b border-gray-200 text-left">
+                      Vehicle Road Tax Asign
                     </th>
                     <th className="py-2 px-4 border-b border-gray-200 text-left">
                       Actions
@@ -277,19 +267,19 @@ const Page = ({ params }) => {
                         {row.registrationNumber}
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
-                        {row.issues}
+                        {row.roadtexCurrentDate}
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
-                        {/* {row.repairHistory.organisations} */}
+                        {row.roadtexCycle}
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
-                        {/* {row.repairHistory.repairStatus} */}
+                        {row.roadtexDueDate}
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
-                        {/* {row.repairHistory.jobNumber} */}
+                        {row.roadtexStatus}
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
-                        {/* {row.repairHistory.memo} */}
+                        {row.asignto}
                       </td>
 
                       <td className="py-2 px-4 border-b border-gray-200">

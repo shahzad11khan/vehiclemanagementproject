@@ -3,6 +3,7 @@ import {
   API_URL_Driver,
   API_URL_Driver_Vehicle_Allotment,
   API_URL_DriverMoreInfo,
+  API_URL_Vehicle,
 } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -44,6 +45,7 @@ const AddDriverMoreInfoModal = ({
   const [vehicle, setVehicle] = useState([]);
   const [filteredVehicles, setFilteredVehicles] = useState([]);
   const [superadmin, setSuperadmin] = useState(null);
+  const [vehicleStatus, setVehicleStatus] = useState("");
 
   useEffect(() => {
     const storedCompanyName = getCompanyName() || getsuperadmincompanyname();
@@ -123,6 +125,15 @@ const AddDriverMoreInfoModal = ({
       [name]: value,
     }));
 
+    if (name === "vehicle") {
+      const selectedVehicle = filteredVehicles.find(
+        (vehicle) => vehicle.model === value
+      );
+      if (selectedVehicle) {
+        setVehicleStatus(selectedVehicle._id);
+      }
+    }
+
     if (name === "taxilocalauthority") {
       const matchedVehicles = vehicle.filter(
         (veh) => veh.LocalAuthority === value
@@ -144,7 +155,7 @@ const AddDriverMoreInfoModal = ({
         toast.success(data.message);
         fetchData();
         onClose();
-        // console.log(data.savedDriverVehicleAllotment);
+        console.log(data.savedDriverVehicleAllotment);
         const getdata = data.savedDriverVehicleAllotment;
         const newRecordData = {
           driverId: getdata.driverId, // Add your specific fields here
@@ -161,12 +172,25 @@ const AddDriverMoreInfoModal = ({
           adminCompanyId: "",
           adminCompanyName: getdata.adminCompanyName, // Keep existing field
         };
+
         // console.log(newRecordData);
         const newRecordResponse = await axios.post(
           `${API_URL_DriverMoreInfo}`,
           newRecordData
         );
         console.log(newRecordResponse);
+        const formDataupdate = new FormData();
+        formDataupdate.append("vehicleStatus", "raint");
+        const updateResponse = await axios.put(
+          `${API_URL_Vehicle}/${vehicleStatus}`,
+          formDataupdate, // Pass the FormData object as the request body
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+        console.log(updateResponse);
       } else {
         toast.warn(data.error);
       }
@@ -310,7 +334,7 @@ const AddDriverMoreInfoModal = ({
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
                 required
               >
-                <option value="null">Select Vehicle</option>
+                <option value="">Select Vehicle</option>
                 {filteredVehicles.map((vehicle) => (
                   <option key={vehicle._id} value={vehicle.model}>
                     {vehicle.model}

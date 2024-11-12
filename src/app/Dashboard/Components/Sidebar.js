@@ -58,7 +58,7 @@ const Sidebar = () => {
     localStorage.removeItem("companyName");
   };
   return (
-    <div className="relative bg-yellow-300">
+    <div className="relative">
       <button
         className="fixed top-3 left-4 z-50 block lg:hidden text-sm"
         onClick={handleToggleSidebar}

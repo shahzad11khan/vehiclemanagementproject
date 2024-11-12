@@ -23,7 +23,8 @@ const Page = ({ params }) => {
   const [selectedCompanyName, setSelectedCompanyName] = useState("");
   const [isOpenDriver, setIsOpenDriver] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState(null);
-
+  const [currentPage, setCurrentPage] = useState(1);
+  const recordsPerPage = 10;
   useEffect(() => {
     setIsMounted(true);
     const companyNameFromStorage = getCompanyName();
@@ -331,6 +332,11 @@ const Page = ({ params }) => {
       .toString()
       .padStart(2, "0")}/${dateObject.getFullYear()}`;
   }
+  const totalPages = Math.ceil(data.length / recordsPerPage);
+  const currentData = data.slice(
+    (currentPage - 1) * recordsPerPage,
+    currentPage * recordsPerPage
+  );
 
   return (
     <>
@@ -381,8 +387,8 @@ const Page = ({ params }) => {
                     </tr>
                   </thead>
                   <tbody>
-                    {data.length > 0 ? (
-                      data
+                    {currentData.length > 0 ? (
+                      currentData
                         .filter(
                           (row) =>
                             row.adminCompanyName &&
@@ -458,6 +464,35 @@ const Page = ({ params }) => {
                     )}
                   </tbody>
                 </table>
+              </div>
+              <div className="flex justify-center items-center mt-4">
+                <button
+                  onClick={() =>
+                    setCurrentPage((prev) => Math.max(prev - 1, 1))
+                  }
+                  disabled={currentPage === 1}
+                  className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
+                >
+                  Previous
+                </button>
+                <span
+                  className={`px-3 py-1 mx-1 rounded ${
+                    currentPage
+                      ? "bg-blue-300 text-white"
+                      : "bg-gray-100 hover:bg-gray-300"
+                  }`}
+                >
+                  {currentPage} of {totalPages}
+                </span>
+                <button
+                  onClick={() =>
+                    setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                  }
+                  disabled={currentPage === totalPages}
+                  className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
+                >
+                  Next
+                </button>
               </div>
             </div>
           </div>

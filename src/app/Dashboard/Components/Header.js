@@ -17,6 +17,11 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { API_URL_Company, API_URL_USER } from "../Components/ApiUrl/ApiUrls";
 import { isAuthenticated, clearAuthData } from "@/utils/verifytoken";
+import {
+  API_URL_VehicleMOT,
+  API_URL_VehicleService,
+  API_URL_VehicleRoadTex,
+} from "../Components/ApiUrl/ApiUrls";
 
 const Header = () => {
   const router = useRouter();
@@ -39,6 +44,28 @@ const Header = () => {
     }
   };
 
+  const fetchService = async () => {
+    try {
+      const response = await axios.get(`${API_URL_VehicleService}`);
+      console.log("Service Data: ", response.data.Result);
+      setData(filteredData);
+      setFilteredData(filteredData);
+    } catch (error) {
+      console.error("Error fetching Service data:", error);
+    }
+  };
+
+  const fetchRoadtax = async () => {
+    try {
+      const response = await axios.get(`${API_URL_VehicleRoadTex}`);
+      console.log("RoadTax Data: ", response.data.Result);
+
+      setData(filteredData);
+      setFilteredData(filteredData);
+    } catch (error) {
+      console.error("Error fetching Road Tax data:", error);
+    }
+  };
   useEffect(() => {
     if (!isAuthenticated()) {
       router.push("/");
@@ -62,6 +89,8 @@ const Header = () => {
       flag === "true" && companyNameFromStorage ? companyId : userId;
     showAllAdmins(idToFetch);
     fetchMOT();
+    fetchService();
+    fetchRoadtax();
   }, []);
 
   useEffect(() => {
@@ -121,27 +150,32 @@ const Header = () => {
           {/* wiht out dot bill icon */}
           {/* https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfsOGyy0EjeoAY6mSWABHXAQ15e4MbuFmxcUSs_y_-EVfzcSLOh0k-AQmbKKQG9NWCDfo&usqp=CAU  */}
           <div className="flex gap-2">
-            {filteredData.every(
-              (item) =>
-                role === "user" &&
-                username === item.asignto &&
-                (item.motStatus.toLowerCase() === "pending" ||
-                  item.motStatus.toLowerCase() === "pandding")
-            ) ? (
-              <img
-                src="https://static.vecteezy.com/system/resources/previews/029/719/841/non_2x/notification-bell-icon-free-png.png"
-                alt="notification"
-                height={30}
-                width={30}
-              />
-            ) : (
-              <img
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfsOGyy0EjeoAY6mSWABHXAQ15e4MbuFmxcUSs_y_-EVfzcSLOh0k-AQmbKKQG9NWCDfo&usqp=CAU"
-                alt="notification"
-                height={30}
-                width={30}
-              />
-            )}
+            {role === "superadmin" && companyName ? null : role === "user" ? ( // Don't render anything if the role is 'superadmin' and there's a company name
+              filteredData.every(
+                (item) =>
+                  username === item.asignto &&
+                  (item.motStatus.toLowerCase() === "pending" ||
+                    item.motStatus.toLowerCase() === "pandding" ||
+                    item.serviceStatus.toLowerCase() === "pending" ||
+                    item.serviceStatus.toLowerCase() === "pandding" ||
+                    item.roadtaxStatus.toLowerCase() === "pending" ||
+                    item.roadtaxStatus.toLowerCase() === "pandding")
+              ) ? (
+                <img
+                  src="https://static.vecteezy.com/system/resources/previews/029/719/841/non_2x/notification-bell-icon-free-png.png"
+                  alt="notification"
+                  height={30}
+                  width={30}
+                />
+              ) : (
+                <img
+                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfsOGyy0EjeoAY6mSWABHXAQ15e4MbuFmxcUSs_y_-EVfzcSLOh0k-AQmbKKQG9NWCDfo&usqp=CAU"
+                  alt="notification"
+                  height={30}
+                  width={30}
+                />
+              )
+            ) : null}
           </div>
 
           <div>

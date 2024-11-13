@@ -11,7 +11,11 @@ import { RiFolderReceivedFill } from "react-icons/ri";
 import HeroSection from "../Components/HeroSection";
 import { getAuthData, isAuthenticated } from "@/utils/verifytoken";
 import { GetVehicle } from "../Components/ApiUrl/ShowApiDatas/ShowApiDatas.js";
-import { API_URL_VehicleMOT } from "../Components/ApiUrl/ApiUrls";
+import {
+  API_URL_VehicleMOT,
+  API_URL_VehicleService,
+  API_URL_VehicleRoadTex,
+} from "../Components/ApiUrl/ApiUrls";
 import { getCompanyName } from "@/utils/storageUtils";
 import axios from "axios";
 import Link from "next/link.js";
@@ -29,68 +33,111 @@ const Page = () => {
   const [flag, setflag] = useState("");
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
+  const [activeTab, setActiveTab] = useState("MOT");
 
-  const fetch = async () => {
+  // Click handler to change tabs
+  const handleTabClick = (tab) => {
+    setActiveTab(tab);
+  };
+
+  const fetchMOT = async () => {
     try {
       const response = await axios.get(`${API_URL_VehicleMOT}`);
       console.log("MOT Data: ", response.data.Result);
-
-      // Filter and map records to show only those with a due date and include countdown logic
-      const filteredData = response.data.Result.map((row) => {
-        const motDueDate = new Date(row.motDueDate);
-        let currentDate = new Date();
-        currentDate.setHours(0, 0, 0, 0); // Set the time to midnight to avoid time issues
-
-        // Increment current date by 1 day
-        currentDate.setDate(currentDate.getDate() + 1); // Adds one day to the current date
-
-        motDueDate.setHours(0, 0, 0, 0); // Set the time to midnight to avoid time issues
-
-        // Compare just the date (day, month, year)
-        const motDueDateParts = motDueDate.toISOString().split("T")[0]; // 'yyyy-mm-dd' format
-        const currentDateParts = currentDate.toISOString().split("T")[0]; // 'yyyy-mm-dd' format
-
-        console.log(motDueDateParts, currentDateParts);
-
-        const diffInDays = Math.floor(
-          (new Date(motDueDateParts) - new Date(currentDateParts)) /
-            (1000 * 60 * 60 * 24)
-        );
-
-        // Calculate days remaining or overdue days
-        let daysLeft;
-        let status;
-        let daysExpired = 1; // Track days expired if the MOT is expired
-
-        if (diffInDays > 0) {
-          // MOT is still active
-          daysLeft = diffInDays;
-          status = "Active";
-        } else {
-          // MOT is expired
-          daysExpired = Math.abs(diffInDays);
-          status = "Expired";
-        }
-
-        // Return an object with the original data, formatted date, and additional info
-        return {
-          ...row,
-          motDueDate: motDueDateParts, // Include the formatted date
-          currentDateParts,
-          daysLeft,
-          daysExpired,
-          status, // Active or Expired
-        };
-      });
-
-      // Set state with filtered data
+      const filteredData = processData(response.data.Result, "motDueDate");
       setData(filteredData);
       setFilteredData(filteredData);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error("Error fetching MOT data:", error);
     }
   };
 
+  const fetchService = async () => {
+    try {
+      const response = await axios.get(`${API_URL_VehicleService}`);
+      console.log("Service Data: ", response.data.Result);
+      const filteredData = processData(response.data.Result, "serviceDueDate");
+      setData(filteredData);
+      setFilteredData(filteredData);
+    } catch (error) {
+      console.error("Error fetching Service data:", error);
+    }
+  };
+
+  const fetchRoadtax = async () => {
+    try {
+      const response = await axios.get(`${API_URL_VehicleRoadTex}`);
+      console.log("RoadTax Data: ", response.data.Result);
+      const filteredData = processData(response.data.Result, "roadtexDueDate");
+      setData(filteredData);
+      setFilteredData(filteredData);
+    } catch (error) {
+      console.error("Error fetching Road Tax data:", error);
+    }
+  };
+
+  // Helper function to process data
+  const processData = (data, dueDateKey) => {
+    return data.map((row) => {
+      const dueDate = new Date(row[dueDateKey]);
+      let currentDate = new Date();
+      currentDate.setHours(0, 0, 0, 0);
+      currentDate.setDate(currentDate.getDate() + 1);
+
+      dueDate.setHours(0, 0, 0, 0);
+
+      const dueDateParts = dueDate.toISOString().split("T")[0];
+      const currentDateParts = currentDate.toISOString().split("T")[0];
+
+      const diffInDays = Math.floor(
+        (new Date(dueDateParts) - new Date(currentDateParts)) /
+          (1000 * 60 * 60 * 24)
+      );
+
+      let daysLeft;
+      let status;
+      let daysExpired = 1;
+
+      if (diffInDays > 0) {
+        daysLeft = diffInDays;
+        status = "Active";
+      } else {
+        daysExpired = Math.abs(diffInDays);
+        status = "Expired";
+      }
+
+      return {
+        ...row,
+        dueDate: dueDateParts,
+        currentDateParts,
+        daysLeft,
+        daysExpired,
+        status,
+      };
+    });
+  };
+
+  // useEffect to fetch data based on active tab
+  useEffect(() => {
+    if (activeTab === "RoadTax") {
+      fetchRoadtax();
+    } else if (activeTab === "Service") {
+      fetchService();
+    } else if (activeTab === "MOT") {
+      fetchMOT();
+    }
+  }, [activeTab]);
+  const getPath = () => {
+    switch (activeTab) {
+      case "Service":
+        return `/Dashboard/Vehicle/AddServiceReport/`;
+      case "RoadTax":
+        return `/Dashboard/Vehicle/AddRoadTaxReport/`;
+      case "MOT":
+      default:
+        return `/Dashboard/Vehicle/AddMOTReport/`;
+    }
+  };
   useEffect(() => {
     const companyName = getCompanyName();
 
@@ -110,7 +157,6 @@ const Page = () => {
     } else {
       router.push("/");
     }
-    fetch();
   }, [router]);
 
   Chart.register(...registerables);
@@ -378,38 +424,59 @@ const Page = () => {
             ))}
           </section>
 
-          <section className="flex gap-4 min-w-full justify-between mt-4 ">
-            <div className="overflow-auto max-h-[200px] table-auto  min-w-full">
+          <section className="flex flex-col gap-4 min-w-full mt-4">
+            {/* Buttons to switch between tabs */}
+            <div className="flex gap-4">
+              <button
+                onClick={() => handleTabClick("MOT")}
+                className={`px-4 py-2 ${
+                  activeTab === "MOT" ? "bg-green-700" : "bg-green-500"
+                } text-white`}
+              >
+                MOT
+              </button>
+              <button
+                onClick={() => handleTabClick("Service")}
+                className={`px-4 py-2 ${
+                  activeTab === "Service" ? "bg-blue-700" : "bg-blue-500"
+                } text-white`}
+              >
+                Service
+              </button>
+
+              <button
+                onClick={() => handleTabClick("RoadTax")}
+                className={`px-4 py-2 ${
+                  activeTab === "RoadTax" ? "bg-red-700" : "bg-red-500"
+                } text-white`}
+              >
+                Road Tax
+              </button>
+            </div>
+
+            {/* Table to display data */}
+            <div className="overflow-auto max-h-[400px] min-w-full">
               <table className="min-w-full bg-white border border-gray-200">
                 <thead>
-                  <tr className="bg-gray-800 text-white text-sm bg-transparent">
+                  <tr className="bg-gray-800 text-white text-sm">
                     <th className="py-2 px-4 border-b border-gray-300 text-left">
                       Vehicle
                     </th>
                     <th className="py-2 px-4 border-b border-gray-300 text-left">
-                      R.Number
+                      R. Number
                     </th>
                     <th className="py-2 px-4 border-b border-gray-300 text-left">
-                      MOT Dates
+                      Due Date
                     </th>
-                    <th className="py-2 px-4 border-b border-gray-300 text-left">
-                      MOT Cycle
-                    </th>
-                    <th className="py-2 px-4 border-b border-gray-300 text-left">
-                      Next MOT Date
-                    </th>
-                    <th className="py-2 px-4 border-b border-gray-300 text-left">
-                      Current date
-                    </th>
+                    {/* <th className="py-2 px-4 border-b border-gray-300 text-left">
+                      Current Date
+                    </th> */}
                     <th className="py-2 px-4 border-b border-gray-300 text-left">
                       Description
                     </th>
                     <th className="py-2 px-4 border-b border-gray-300 text-left">
                       Status
                     </th>
-                    {/* <th className="py-2 px-4 border-b border-gray-300 text-left">
-                      MOT Assign
-                    </th> */}
                     <th className="py-2 px-4 border-b border-gray-300 text-left">
                       Actions
                     </th>
@@ -425,26 +492,11 @@ const Page = () => {
                         {row.registrationNumber}
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
-                        {(() => {
-                          const date = new Date(row.motCurrentDate);
-                          const formattedDate = `${String(
-                            date.getDate()
-                          ).padStart(2, "0")}/${String(
-                            date.getMonth() + 1
-                          ).padStart(2, "0")}/${date.getFullYear()}`;
-                          return formattedDate;
-                        })() || "N/A"}
+                        {row.dueDate || "N/A"}
                       </td>
-                      <td className="py-2 px-4 border-b border-gray-200">
-                        {row.motCycle || "N/A"}
-                      </td>
-                      <td className="py-2 px-4 border-b border-gray-200">
-                        {row.motDueDate || "N/A"}
-                      </td>
-                      <td className="py-2 px-4 border-b border-gray-200">
+                      {/* <td className="py-2 px-4 border-b border-gray-200">
                         {row.currentDateParts || "N/A"}
-                      </td>
-
+                      </td> */}
                       <td className="py-2 px-4 border-b border-gray-200">
                         {row.daysLeft > 0
                           ? `${row.daysLeft} days left`
@@ -457,7 +509,8 @@ const Page = () => {
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
                         <Link
-                          href={`/Dashboard/Vehicle/AddMOTReport/${row._id}`}
+                          // href={`/Dashboard/Vehicle/AddMOTReport/${row._id}`}
+                          href={`${getPath()}${row._id}`}
                           className="bg-transparent"
                         >
                           <CiWarning />

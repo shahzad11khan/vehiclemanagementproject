@@ -28,6 +28,8 @@ export async function POST(request) {
     const date = formData.get("repairHistory[0][date]");
 
     // Handle images and parts
+
+    // console.log(formData);
     const images = [];
     const parts = [];
 
@@ -85,6 +87,7 @@ export async function POST(request) {
       });
     }
 
+    // console.log(images);
     // console.log(parts);
     // Create a new vehicle repair record
     const newVehicleRepair = new VehicleRepair({
@@ -109,13 +112,12 @@ export async function POST(request) {
     // Save to database
     await newVehicleRepair.save();
 
-    return NextResponse.json(
-      {
-        message: "Vehicle repair created successfully",
-        vehicleRepair: newVehicleRepair,
-      },
-      { status: 201 }
-    );
+    return NextResponse.json({
+      success: true,
+      status: 200,
+      message: "Vehicle repair created successfully",
+      vehicleRepair: newVehicleRepair,
+    });
   } catch (error) {
     console.error(error);
     return NextResponse.json(

@@ -30,123 +30,117 @@ const Page = ({ params }) => {
   useEffect(() => {
     setIsMounted(true);
   }, []);
+
   const handleDownloadReport = () => {
     const doc = new jsPDF();
 
     // Set title and report date
-    doc.setFontSize(12); // Large font for title
+    doc.setFontSize(12);
     doc.text("Car All Records Report", 14, 10);
 
     const reportDate = new Date().toLocaleDateString();
-    doc.setFontSize(10); // Smaller font for the report date
+    doc.setFontSize(10);
     doc.text(`Report Generated: ${reportDate}`, 14, 15);
 
-    // Display the vehicle name once at the top
-    const vehicleName = data.model || "Name Unavailable";
-    doc.text(`Vehicle Name: ${vehicleName}`, 14, 20);
+    // Display vehicle details
+    const vehicleName = data?.model || "Name Unavailable";
     const vehicleRegistration =
-      data.registrationNumber || "Registration Unavailable";
-    doc.text(`Registration Number: ${vehicleRegistration}`, 14, 25);
+      data?.registrationNumber || "Registration Unavailable";
     const selectedCompanyName = getCompanyName();
+
+    doc.text(`Vehicle Name: ${vehicleName}`, 14, 20);
+    doc.text(`Registration Number: ${vehicleRegistration}`, 14, 25);
     doc.text(`Company Name: ${selectedCompanyName}`, 14, 30);
 
-    // Define table columns and their initial X positions
+    // Define table columns
     const tableColumn = [
       "Manufacturer",
       "Authority",
       "Engine Type",
       "Drive Train",
       "Transmission",
-      "ExteriorColor",
-      "InteriorColor",
+      "Exterior Color",
+      "Interior Color",
     ];
-    let startX = 14;
-    let startY = 42; // Adjust to leave space after the vehicle name
-    const columnWidth = 30; // Adjusted column width to better fit the page
-    const lineHeight = 9; // Height of each row
-    const padding = 2; // Padding inside cells
-    const pageHeight = doc.internal.pageSize.height; // Get the height of the page
 
-    // Add table header
-    tableColumn.forEach((column, index) => {
-      doc.text(column, startX + index * columnWidth + padding, startY);
-      doc.rect(startX + index * columnWidth, startY - 4, columnWidth, 8);
-    });
+    // Set up dimensions and spacing
+    const pageWidth = doc.internal.pageSize.width;
+    const pageHeight = doc.internal.pageSize.height;
+    const startX = 14;
+    const startY = 42;
+    const columnWidth = 35;
+    const lineHeight = 9;
+    const padding = 6;
 
-    // Add table rows for the single vehicle record
-    let currentY = startY + lineHeight;
+    let currentY = startY;
 
-    // Prepare data for each column
-    const manufacturer = doc.splitTextToSize(
-      data.manufacturer || "N/A",
-      columnWidth - padding
-    );
-    const LocalAuthority = doc.splitTextToSize(
-      data.LocalAuthority || "N/A",
-      columnWidth - padding
-    );
-    const engineType = doc.splitTextToSize(
-      data.engineType || "N/A",
-      columnWidth - padding
-    );
-    const drivetrain = doc.splitTextToSize(
-      data.drivetrain || "N/A",
-      columnWidth - padding
-    );
-    const transmission = doc.splitTextToSize(
-      data.transmission || "N/A",
-      columnWidth - padding
-    );
-    const exteriorColor = doc.splitTextToSize(
-      data.exteriorColor || "N/A",
-      columnWidth - padding
-    );
-    const interiorColor = doc.splitTextToSize(
-      data.interiorColor || "N/A",
-      columnWidth - padding
-    );
-
-    // Find the maximum number of lines across all columns
-    const maxLines = Math.max(
-      manufacturer.length,
-      LocalAuthority.length,
-      engineType.length,
-      drivetrain.length,
-      transmission.length,
-      exteriorColor.length,
-      interiorColor.length
-    );
-
-    // Loop through all rows of data
-    for (let rowIndex = 0; rowIndex < maxLines; rowIndex++) {
+    // Function to render column headers
+    const renderHeaders = (startColumnIndex = 0) => {
       let currentX = startX;
+      for (let i = startColumnIndex; i < tableColumn.length; i++) {
+        if (currentX + columnWidth > pageWidth) {
+          // If column exceeds page width, move to the next line
+          currentY += lineHeight;
+          currentX = startX;
+        }
+        doc.text(tableColumn[i], currentX + padding, currentY);
+        doc.rect(currentX, currentY - 4, columnWidth, lineHeight);
+        currentX += columnWidth;
+      }
+      currentY += lineHeight; // Move down for data rows
+    };
 
-      // Add each cell's text and border
-      const columnsData = [
-        manufacturer[rowIndex] || "",
-        LocalAuthority[rowIndex] || "",
-        engineType[rowIndex] || "",
-        drivetrain[rowIndex] || "",
-        transmission[rowIndex] || "",
-        exteriorColor[rowIndex] || "",
-        interiorColor[rowIndex] || "",
+    // Render headers initially
+    renderHeaders(1);
+
+    // Check if data is an array; if not, convert it to an array
+    const vehicleDataArray = Array.isArray(data) ? data : [data];
+
+    // Add table rows
+    vehicleDataArray.forEach((row) => {
+      const rowData = [
+        row.manufacturer || "N/A",
+        row.LocalAuthority || "N/A",
+        row.engineType || "N/A",
+        row.drivetrain || "N/A",
+        row.transmission || "N/A",
+        row.exteriorColor || "N/A",
+        row.interiorColor || "N/A",
       ];
 
-      columnsData.forEach((text) => {
-        doc.text(text, currentX + padding, currentY);
-        doc.rect(currentX, currentY - 4, columnWidth, lineHeight); // Border around the cell
-        currentX += columnWidth; // Move to the next column
+      let currentX = startX;
+
+      rowData.forEach((cellData, index) => {
+        // Check if a new page is needed
+        if (currentY + lineHeight > pageHeight - 20) {
+          doc.addPage();
+          currentY = 20; // Reset Y for new page
+          renderHeaders(); // Render headers on the new page
+        }
+
+        // Wrap columns to a new line if exceeding page width
+        if (currentX + columnWidth > pageWidth) {
+          currentY += lineHeight;
+          currentX = startX;
+          renderHeaders(index); // Render headers for wrapped columns
+        }
+
+        // Print the data for each column
+        const cellText = doc.splitTextToSize(cellData, columnWidth - padding);
+        doc.text(cellText, currentX + padding, currentY);
+        doc.rect(
+          currentX,
+          currentY - 4,
+          columnWidth,
+          lineHeight * cellText.length
+        );
+
+        currentX += columnWidth;
       });
 
-      // Move to the next row
+      // Move to the next row after each entry
       currentY += lineHeight;
-
-      // If the content exceeds the page height, add a new page
-      if (currentY > pageHeight - 20) {
-        doc.addPage(); // Add a new page if the content exceeds the page height
-        currentY = 20; // Reset Y to start at the top of the new page
-      }
-    }
+    });
 
     // Save the PDF
     doc.save("Vehicle_Report.pdf");

@@ -172,7 +172,7 @@ const AddMaintenanceModal = ({ isOpen, onClose, fetchData, selectedid }) => {
 
       const response = await axios.post(API_URL_Maintainance, formData);
       console.log("data is ", response.data);
-      if (response.data.message) {
+      if (response.data.success) {
         toast.success(response.data.message);
         reset();
         fetchData(); // Refresh data on success
@@ -182,7 +182,6 @@ const AddMaintenanceModal = ({ isOpen, onClose, fetchData, selectedid }) => {
       }
     } catch (error) {
       console.error("Failed to submit data:", error);
-      toast.error("An error occurred during submission.");
     } finally {
       setLoading(false);
     }

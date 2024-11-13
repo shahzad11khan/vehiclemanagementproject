@@ -11,6 +11,9 @@ import { RiFolderReceivedFill } from "react-icons/ri";
 import HeroSection from "../Components/HeroSection";
 import { getAuthData, isAuthenticated } from "@/utils/verifytoken";
 import { GetVehicle } from "../Components/ApiUrl/ShowApiDatas/ShowApiDatas.js";
+import { API_URL_VehicleMOT } from "../Components/ApiUrl/ApiUrls";
+import { getCompanyName } from "@/utils/storageUtils";
+import axios from "axios";
 
 const Page = () => {
   const router = useRouter();
@@ -22,6 +25,46 @@ const Page = () => {
   const [rent, setRentcar] = useState(0);
   const [maintenance, setMaintenance] = useState(0);
   const [flag, setflag] = useState("");
+  const [data, setData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
+
+  const fetch = async () => {
+    try {
+      const response = await axios.get(`${API_URL_VehicleMOT}`);
+      console.log("MOT Data: ", response.data.Result);
+
+      // Get the current date
+      const currentDate = new Date();
+
+      // Filter records to show only those where 'motDueDate' is within the next 7 days
+      const filteredData = response.data.Result.filter((row) => {
+        const motDueDate = new Date(row.motDueDate);
+
+        // Calculate the difference in days between motDueDate and the current date
+        const diffInTime = motDueDate.getTime() - currentDate.getTime();
+        const diffInDays = diffInTime / (1000 * 60 * 60 * 24);
+
+        // Return true if the motDueDate is less than or equal to 7 days from now
+        return diffInDays >= 0 && diffInDays <= 10;
+      });
+
+      // Set state with filtered data
+      setData(filteredData);
+      setFilteredData(filteredData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
+    const companyName = getCompanyName();
+
+    const filtered = data.filter(
+      (item) =>
+        item.adminCompanyName.toLowerCase() === companyName.toLowerCase()
+    );
+    setFilteredData(filtered);
+  }, [data]);
 
   useEffect(() => {
     if (isAuthenticated()) {
@@ -32,6 +75,7 @@ const Page = () => {
     } else {
       router.push("/");
     }
+    fetch();
   }, [router]);
 
   Chart.register(...registerables);
@@ -300,103 +344,89 @@ const Page = () => {
           </section>
 
           <section className="flex gap-4 min-w-full justify-between mt-4 ">
-            {/* First Container - Customer Data */}
-            {/* <div className="flex flex-col w-3/6  p-4 rounded-md shadow">
-              <h2 className="text-lg font-semibold mb-2">Drivers</h2>
-              <ul className="space-y-4">
-                <li className="flex items-start">
-                  <Image
-                    src="/image.jpg" // replace with actual image path
-                    alt="John Smith"
-                    className="w-10 h-10 rounded-full"
-                    width={100}
-                    height={100}
-                  />
-                  <div className="ml-4">
-                    <strong className="text-lg block">John Smith</strong>
-                    <p className="text-sm text-gray-600">
-                      Is the Driver of BMW.
-                    </p>
-                  </div>
-                </li>
-
-                <li className="flex items-start">
-                  <Image
-                    src="/image.jpg" // replace with actual image path
-                    alt="Emma Johnson"
-                    className="w-10 h-10 rounded-full"
-                    width={100}
-                    height={100}
-                  />
-                  <div className="ml-4">
-                    <strong className="text-lg block">Emma Johnson</strong>
-                    <p className="text-sm text-gray-600">
-                      Is the Driver of Honda.
-                    </p>
-                  </div>
-                </li>
-
-                <li className="flex items-start">
-                  <Image
-                    src="/image.jpg" // replace with actual image path
-                    alt="David Brown"
-                    className="w-10 h-10 rounded-full"
-                    width={100}
-                    height={100}
-                  />
-                  <div className="ml-4">
-                    <strong className="text-lg block">David Brown</strong>
-                    <p className="text-sm text-gray-600">
-                      Is the Driver of Toyota.
-                    </p>
-                  </div>
-                </li>
-              </ul>
-            </div> */}
-
-            {/* Second Container - User Table */}
-            {/* <div className="w-full bg-white p-4 rounded-md shadow">
-              <h2 className="text-lg font-semibold mb-2">User Table</h2>
-              <h2 className="text-xm text-gray-600 font-semibold mb-2">
-                Register User In Website
-              </h2>
-              <table className="min-w-full border-collapse">
-                <thead>
-                  <tr className="bg-slate-950 text-white">
-                    <th className="border px-4 py-2">User Name</th>
-                    <th className="border px-4 py-2">Email</th>
-                    <th className="border px-4 py-2">Is Active</th>
+            <table className="min-w-full bg-white border border-gray-200">
+              <thead>
+                <tr>
+                  <th className="py-2 px-4 border-b border-gray-200 text-left">
+                    Vehicle Name
+                  </th>
+                  <th className="py-2 px-4 border-b border-gray-200 text-left">
+                    Vehicle Registration Number
+                  </th>
+                  <th className="py-2 px-4 border-b border-gray-200 text-left">
+                    MOT Dates
+                  </th>
+                  <th className="py-2 px-4 border-b border-gray-200 text-left">
+                    MOT Cycle
+                  </th>
+                  <th className="py-2 px-4 border-b border-gray-200 text-left">
+                    Next MOT Date
+                  </th>
+                  <th className="py-2 px-4 border-b border-gray-200 text-left">
+                    MOT Status
+                  </th>
+                  <th className="py-2 px-4 border-b border-gray-200 text-left">
+                    MOT Assign
+                  </th>
+                  <th className="py-2 px-4 border-b border-gray-200 text-left">
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredData.map((row) => (
+                  <tr key={row._id} className="hover:bg-gray-100">
+                    <td className="py-2 px-4 border-b border-gray-200">
+                      {row.VehicleName}
+                    </td>
+                    <td className="py-2 px-4 border-b border-gray-200">
+                      {row.registrationNumber}
+                    </td>
+                    <td className="py-2 px-4 border-b border-gray-200">
+                      {(() => {
+                        const date = new Date(row.motCurrentDate);
+                        const formattedDate = `${String(
+                          date.getMonth() + 1
+                        ).padStart(2, "0")}/${String(date.getDate()).padStart(
+                          2,
+                          "0"
+                        )}/${date.getFullYear()}`;
+                        return formattedDate;
+                      })() || "N/A"}
+                    </td>
+                    <td className="py-2 px-4 border-b border-gray-200">
+                      {row.motCycle || "N/A"}
+                    </td>
+                    <td className="py-2 px-4 border-b border-gray-200">
+                      {(() => {
+                        const date = new Date(row.motDueDate);
+                        const formattedDate = `${String(
+                          date.getMonth() + 1
+                        ).padStart(2, "0")}/${String(date.getDate()).padStart(
+                          2,
+                          "0"
+                        )}/${date.getFullYear()}`;
+                        return formattedDate;
+                      })() || "N/A"}
+                    </td>
+                    <td className="py-2 px-4 border-b border-gray-200">
+                      {row.motStatus || "N/A"}
+                    </td>
+                    <td className="py-2 px-4 border-b border-gray-200">
+                      {row.asignto || "N/A"}
+                    </td>
+                    <td className="py-2 px-4 border-b border-gray-200">
+                      <button
+                        onClick={() => handleDelete(row._id)}
+                        className="text-red-500 hover:text-red-700"
+                      >
+                        goto
+                      </button>
+                    </td>
                   </tr>
-                </thead>
-                <tbody>
-                  {[
-                    {
-                      username: "johndoe",
-                      email: "john@example.com",
-                      isActive: true,
-                    },
-                    {
-                      username: "janesmith",
-                      email: "jane@example.com",
-                      isActive: false,
-                    },
-                    {
-                      username: "michaelj",
-                      email: "michael@example.com",
-                      isActive: true,
-                    },
-                  ].map((user, index) => (
-                    <tr key={index} className="hover:bg-gray-100">
-                      <td className="border px-4 py-2">{user.username}</td>
-                      <td className="border px-4 py-2">{user.email}</td>
-                      <td className="border px-4 py-2">
-                        {user.isActive ? "Yes" : "No"}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div> */}
+                ))}
+              </tbody>
+            </table>
           </section>
         </main>
       </div>

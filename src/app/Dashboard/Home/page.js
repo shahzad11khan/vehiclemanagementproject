@@ -14,6 +14,8 @@ import { GetVehicle } from "../Components/ApiUrl/ShowApiDatas/ShowApiDatas.js";
 import { API_URL_VehicleMOT } from "../Components/ApiUrl/ApiUrls";
 import { getCompanyName } from "@/utils/storageUtils";
 import axios from "axios";
+import Link from "next/link.js";
+import { CiWarning } from "react-icons/ci";
 
 const Page = () => {
   const router = useRouter();
@@ -344,89 +346,92 @@ const Page = () => {
           </section>
 
           <section className="flex gap-4 min-w-full justify-between mt-4 ">
-            <table className="min-w-full bg-white border border-gray-200">
-              <thead>
-                <tr>
-                  <th className="py-2 px-4 border-b border-gray-200 text-left">
-                    Vehicle Name
-                  </th>
-                  <th className="py-2 px-4 border-b border-gray-200 text-left">
-                    Vehicle Registration Number
-                  </th>
-                  <th className="py-2 px-4 border-b border-gray-200 text-left">
-                    MOT Dates
-                  </th>
-                  <th className="py-2 px-4 border-b border-gray-200 text-left">
-                    MOT Cycle
-                  </th>
-                  <th className="py-2 px-4 border-b border-gray-200 text-left">
-                    Next MOT Date
-                  </th>
-                  <th className="py-2 px-4 border-b border-gray-200 text-left">
-                    MOT Status
-                  </th>
-                  <th className="py-2 px-4 border-b border-gray-200 text-left">
-                    MOT Assign
-                  </th>
-                  <th className="py-2 px-4 border-b border-gray-200 text-left">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredData.map((row) => (
-                  <tr key={row._id} className="hover:bg-gray-100">
-                    <td className="py-2 px-4 border-b border-gray-200">
-                      {row.VehicleName}
-                    </td>
-                    <td className="py-2 px-4 border-b border-gray-200">
-                      {row.registrationNumber}
-                    </td>
-                    <td className="py-2 px-4 border-b border-gray-200">
-                      {(() => {
-                        const date = new Date(row.motCurrentDate);
-                        const formattedDate = `${String(
-                          date.getMonth() + 1
-                        ).padStart(2, "0")}/${String(date.getDate()).padStart(
-                          2,
-                          "0"
-                        )}/${date.getFullYear()}`;
-                        return formattedDate;
-                      })() || "N/A"}
-                    </td>
-                    <td className="py-2 px-4 border-b border-gray-200">
-                      {row.motCycle || "N/A"}
-                    </td>
-                    <td className="py-2 px-4 border-b border-gray-200">
-                      {(() => {
-                        const date = new Date(row.motDueDate);
-                        const formattedDate = `${String(
-                          date.getMonth() + 1
-                        ).padStart(2, "0")}/${String(date.getDate()).padStart(
-                          2,
-                          "0"
-                        )}/${date.getFullYear()}`;
-                        return formattedDate;
-                      })() || "N/A"}
-                    </td>
-                    <td className="py-2 px-4 border-b border-gray-200">
-                      {row.motStatus || "N/A"}
-                    </td>
-                    <td className="py-2 px-4 border-b border-gray-200">
-                      {row.asignto || "N/A"}
-                    </td>
-                    <td className="py-2 px-4 border-b border-gray-200">
-                      <button
-                        onClick={() => handleDelete(row._id)}
-                        className="text-red-500 hover:text-red-700"
-                      >
-                        goto
-                      </button>
-                    </td>
+            <div className="w-6/12">
+              <table className="min-w-full bg-white border border-gray-200">
+                <thead>
+                  <tr className="bg-gray-800 text-white text-sm">
+                    <th className="py-2 px-4 border-b border-gray-300 text-left">
+                      Vehicle
+                    </th>
+                    <th className="py-2 px-4 border-b border-gray-300 text-left">
+                      R.Number
+                    </th>
+                    <th className="py-2 px-4 border-b border-gray-300 text-left">
+                      MOT Dates
+                    </th>
+                    <th className="py-2 px-4 border-b border-gray-300 text-left">
+                      MOT Cycle
+                    </th>
+                    <th className="py-2 px-4 border-b border-gray-300 text-left">
+                      Next MOT Date
+                    </th>
+                    <th className="py-2 px-4 border-b border-gray-300 text-left">
+                      MOT Status
+                    </th>
+                    {/* <th className="py-2 px-4 border-b border-gray-300 text-left">
+                      MOT Assign
+                    </th> */}
+                    <th className="py-2 px-4 border-b border-gray-300 text-left">
+                      Actions
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {filteredData.map((row) => (
+                    <tr key={row._id} className="hover:bg-gray-100">
+                      <td className="py-2 px-4 border-b border-gray-200">
+                        {row.VehicleName}
+                      </td>
+                      <td className="py-2 px-4 border-b border-gray-200">
+                        {row.registrationNumber}
+                      </td>
+                      <td className="py-2 px-4 border-b border-gray-200">
+                        {(() => {
+                          const date = new Date(row.motCurrentDate);
+                          const formattedDate = `${String(
+                            date.getMonth() + 1
+                          ).padStart(2, "0")}/${String(date.getDate()).padStart(
+                            2,
+                            "0"
+                          )}/${date.getFullYear()}`;
+                          return formattedDate;
+                        })() || "N/A"}
+                      </td>
+                      <td className="py-2 px-4 border-b border-gray-200">
+                        {row.motCycle || "N/A"}
+                      </td>
+                      <td className="py-2 px-4 border-b border-gray-200">
+                        {(() => {
+                          const date = new Date(row.motDueDate);
+                          const formattedDate = `${String(
+                            date.getMonth() + 1
+                          ).padStart(2, "0")}/${String(date.getDate()).padStart(
+                            2,
+                            "0"
+                          )}/${date.getFullYear()}`;
+                          return formattedDate;
+                        })() || "N/A"}
+                      </td>
+                      <td className="py-2 px-4 border-b border-gray-200">
+                        {/* {row.motStatus || "N/A"} */}
+                        warning
+                      </td>
+                      {/* <td className="py-2 px-4 border-b border-gray-200">
+                        {row.asignto || "N/A"}
+                      </td> */}
+                      <td className="py-2 px-4 border-b border-gray-200">
+                        <Link
+                          href={`/Dashboard/Vehicle/AddMOTReport/${row._id}`}
+                          className="bg-transparent"
+                        >
+                          <CiWarning />
+                        </Link>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </section>
         </main>
       </div>

@@ -35,19 +35,52 @@ const Page = () => {
       const response = await axios.get(`${API_URL_VehicleMOT}`);
       console.log("MOT Data: ", response.data.Result);
 
-      // Get the current date
-      const currentDate = new Date();
-
-      // Filter records to show only those where 'motDueDate' is within the next 7 days
-      const filteredData = response.data.Result.filter((row) => {
+      // Filter and map records to show only those with a due date and include countdown logic
+      const filteredData = response.data.Result.map((row) => {
         const motDueDate = new Date(row.motDueDate);
+        let currentDate = new Date();
+        currentDate.setHours(0, 0, 0, 0); // Set the time to midnight to avoid time issues
 
-        // Calculate the difference in days between motDueDate and the current date
-        const diffInTime = motDueDate.getTime() - currentDate.getTime();
-        const diffInDays = diffInTime / (1000 * 60 * 60 * 24);
+        // Increment current date by 1 day
+        currentDate.setDate(currentDate.getDate() + 1); // Adds one day to the current date
 
-        // Return true if the motDueDate is less than or equal to 7 days from now
-        return diffInDays >= 0 && diffInDays <= 10;
+        motDueDate.setHours(0, 0, 0, 0); // Set the time to midnight to avoid time issues
+
+        // Compare just the date (day, month, year)
+        const motDueDateParts = motDueDate.toISOString().split("T")[0]; // 'yyyy-mm-dd' format
+        const currentDateParts = currentDate.toISOString().split("T")[0]; // 'yyyy-mm-dd' format
+
+        console.log(motDueDateParts, currentDateParts);
+
+        const diffInDays = Math.floor(
+          (new Date(motDueDateParts) - new Date(currentDateParts)) /
+            (1000 * 60 * 60 * 24)
+        );
+
+        // Calculate days remaining or overdue days
+        let daysLeft;
+        let status;
+        let daysExpired = 1; // Track days expired if the MOT is expired
+
+        if (diffInDays > 0) {
+          // MOT is still active
+          daysLeft = diffInDays;
+          status = "Active";
+        } else {
+          // MOT is expired
+          daysExpired = Math.abs(diffInDays);
+          status = "Expired";
+        }
+
+        // Return an object with the original data, formatted date, and additional info
+        return {
+          ...row,
+          motDueDate: motDueDateParts, // Include the formatted date
+          currentDateParts,
+          daysLeft,
+          daysExpired,
+          status, // Active or Expired
+        };
       });
 
       // Set state with filtered data
@@ -346,10 +379,10 @@ const Page = () => {
           </section>
 
           <section className="flex gap-4 min-w-full justify-between mt-4 ">
-            <div className="w-6/12">
+            <div className="overflow-auto max-h-[200px] table-auto  min-w-full">
               <table className="min-w-full bg-white border border-gray-200">
                 <thead>
-                  <tr className="bg-gray-800 text-white text-sm">
+                  <tr className="bg-gray-800 text-white text-sm bg-transparent">
                     <th className="py-2 px-4 border-b border-gray-300 text-left">
                       Vehicle
                     </th>
@@ -366,7 +399,13 @@ const Page = () => {
                       Next MOT Date
                     </th>
                     <th className="py-2 px-4 border-b border-gray-300 text-left">
-                      MOT Status
+                      Current date
+                    </th>
+                    <th className="py-2 px-4 border-b border-gray-300 text-left">
+                      Description
+                    </th>
+                    <th className="py-2 px-4 border-b border-gray-300 text-left">
+                      Status
                     </th>
                     {/* <th className="py-2 px-4 border-b border-gray-300 text-left">
                       MOT Assign
@@ -389,11 +428,10 @@ const Page = () => {
                         {(() => {
                           const date = new Date(row.motCurrentDate);
                           const formattedDate = `${String(
+                            date.getDate()
+                          ).padStart(2, "0")}/${String(
                             date.getMonth() + 1
-                          ).padStart(2, "0")}/${String(date.getDate()).padStart(
-                            2,
-                            "0"
-                          )}/${date.getFullYear()}`;
+                          ).padStart(2, "0")}/${date.getFullYear()}`;
                           return formattedDate;
                         })() || "N/A"}
                       </td>
@@ -401,24 +439,22 @@ const Page = () => {
                         {row.motCycle || "N/A"}
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
-                        {(() => {
-                          const date = new Date(row.motDueDate);
-                          const formattedDate = `${String(
-                            date.getMonth() + 1
-                          ).padStart(2, "0")}/${String(date.getDate()).padStart(
-                            2,
-                            "0"
-                          )}/${date.getFullYear()}`;
-                          return formattedDate;
-                        })() || "N/A"}
+                        {row.motDueDate || "N/A"}
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
-                        {/* {row.motStatus || "N/A"} */}
-                        warning
+                        {row.currentDateParts || "N/A"}
                       </td>
-                      {/* <td className="py-2 px-4 border-b border-gray-200">
-                        {row.asignto || "N/A"}
-                      </td> */}
+
+                      <td className="py-2 px-4 border-b border-gray-200">
+                        {row.daysLeft > 0
+                          ? `${row.daysLeft} days left`
+                          : row.daysExpired > 1
+                          ? `${row.daysExpired} days expired`
+                          : "N/A"}
+                      </td>
+                      <td className="py-2 px-4 border-b border-gray-200">
+                        {row.status || "N/A"}
+                      </td>
                       <td className="py-2 px-4 border-b border-gray-200">
                         <Link
                           href={`/Dashboard/Vehicle/AddMOTReport/${row._id}`}

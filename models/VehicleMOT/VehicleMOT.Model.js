@@ -10,9 +10,11 @@ const VehicleMOTSchema = new mongoose.Schema(
     },
     motCurrentDate: {
       type: Date,
+      default: "",
     },
     motDueDate: {
       type: Date,
+      default: "",
     },
     motCycle: {
       type: String,

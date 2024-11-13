@@ -95,19 +95,37 @@ const Header = () => {
       </div>
 
       <div className="flex items-center">
-        <h6 className="mr-4 hidden md:block">
-          {role === "superadmin" && flag === "false" ? (
-            <div>
-              <p>{username}</p>
-            </div>
-          ) : role === "superadmin" && flag === "true" ? (
-            <p>{companyName}</p>
-          ) : role === "user" ? (
-            <p> {username}</p>
-          ) : (
-            <p> {companyName}</p>
-          )}
-        </h6>
+        <div className="flex gap-2">
+          {/* wiht out dot bill icon */}
+          {/* https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfsOGyy0EjeoAY6mSWABHXAQ15e4MbuFmxcUSs_y_-EVfzcSLOh0k-AQmbKKQG9NWCDfo&usqp=CAU  */}
+          <div>
+            {role === "user" ? (
+              <img
+                src="https://static.vecteezy.com/system/resources/previews/029/719/841/non_2x/notification-bell-icon-free-png.png"
+                alt="notification"
+                height={30}
+                width={30}
+              />
+            ) : null}
+          </div>
+
+          <div>
+            <h6 className="mr-4 hidden md:block">
+              {role === "superadmin" && flag === "false" ? (
+                <div>
+                  <p>{username}</p>
+                </div>
+              ) : role === "superadmin" && flag === "true" ? (
+                <p>{companyName}</p>
+              ) : role === "user" ? (
+                <p> {username}</p>
+              ) : (
+                <p> {companyName}</p>
+              )}
+            </h6>
+          </div>
+        </div>
+
         <div className="relative">
           <div
             className="h-8 w-8 rounded-lg cursor-pointer"

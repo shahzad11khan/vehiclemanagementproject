@@ -77,18 +77,58 @@ const Page = () => {
   };
 
   // Helper function to process data
+  // const processData = (data, dueDateKey) => {
+  //   return data.map((row) => {
+  //     const dueDate = new Date(row[dueDateKey]);
+  //     let currentDate = new Date();
+  //     currentDate.setHours(0, 0, 0, 0);
+  //     currentDate.setDate(currentDate.getDate() + 1);
+
+  //     dueDate.setHours(0, 0, 0, 0);
+
+  //     const dueDateParts = dueDate.toISOString().split("T")[0];
+  //     const currentDateParts = currentDate.toISOString().split("T")[0];
+
+  //     const diffInDays = Math.floor(
+  //       (new Date(dueDateParts) - new Date(currentDateParts)) /
+  //         (1000 * 60 * 60 * 24)
+  //     );
+
+  //     let daysLeft;
+  //     let status;
+  //     let daysExpired = 1;
+
+  //     if (diffInDays > 0) {
+  //       daysLeft = diffInDays;
+  //       status = "Active";
+  //     } else {
+  //       daysExpired = Math.abs(diffInDays);
+  //       status = "Expired";
+  //     }
+
+  //     return {
+  //       ...row,
+  //       dueDate: dueDateParts,
+  //       currentDateParts,
+  //       daysLeft,
+  //       daysExpired,
+  //       status,
+  //     };
+  //   });
+  // };
   const processData = (data, dueDateKey) => {
     return data.map((row) => {
       const dueDate = new Date(row[dueDateKey]);
       let currentDate = new Date();
-      currentDate.setHours(0, 0, 0, 0);
-      currentDate.setDate(currentDate.getDate() + 1);
+      currentDate.setHours(0, 0, 0, 0); // Set current time to midnight
+      currentDate.setDate(currentDate.getDate() + 1); // Add 1 day (to make it "tomorrow")
 
-      dueDate.setHours(0, 0, 0, 0);
+      dueDate.setHours(0, 0, 0, 0); // Set due date time to midnight
 
       const dueDateParts = dueDate.toISOString().split("T")[0];
       const currentDateParts = currentDate.toISOString().split("T")[0];
 
+      // Calculate the difference in days
       const diffInDays = Math.floor(
         (new Date(dueDateParts) - new Date(currentDateParts)) /
           (1000 * 60 * 60 * 24)
@@ -106,12 +146,29 @@ const Page = () => {
         status = "Expired";
       }
 
+      // Add the logic to show "daysExpired" if it's greater than 60 days
+      if (daysLeft && daysLeft < 60) {
+        return {
+          ...row,
+          dueDate: dueDateParts,
+          currentDateParts,
+          daysLeft, // Show number of days left if less than 60
+          status,
+        };
+      } else if (daysExpired && daysExpired > 60) {
+        return {
+          ...row,
+          dueDate: dueDateParts,
+          currentDateParts,
+          daysExpired, // Show number of days expired if greater than 60
+          status,
+        };
+      }
+
       return {
         ...row,
         dueDate: dueDateParts,
         currentDateParts,
-        daysLeft,
-        daysExpired,
         status,
       };
     });
@@ -483,8 +540,13 @@ const Page = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredData.map((row) => (
-                    <tr key={row._id} className="hover:bg-gray-100">
+                  {filteredData.map((row, index) => (
+                    <tr
+                      key={row._id}
+                      className={`hover:bg-gray-100  ${
+                        index % 2 === 0 ? "bg-white" : "bg-gray-50"
+                      }`}
+                    >
                       <td className="py-2 px-4 border-b border-gray-200">
                         {row.VehicleName}
                       </td>
@@ -494,9 +556,6 @@ const Page = () => {
                       <td className="py-2 px-4 border-b border-gray-200">
                         {row.dueDate || "N/A"}
                       </td>
-                      {/* <td className="py-2 px-4 border-b border-gray-200">
-                        {row.currentDateParts || "N/A"}
-                      </td> */}
                       <td className="py-2 px-4 border-b border-gray-200">
                         {row.daysLeft > 0
                           ? `${row.daysLeft} days left`
@@ -509,7 +568,6 @@ const Page = () => {
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
                         <Link
-                          // href={`/Dashboard/Vehicle/AddMOTReport/${row._id}`}
                           href={`${getPath()}${row._id}`}
                           className="bg-transparent"
                         >

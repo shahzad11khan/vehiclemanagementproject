@@ -26,6 +26,18 @@ const Header = () => {
   const [username, setusername] = useState("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [imagePreview, setImagePreview] = useState("");
+  const [data, setData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
+  const fetchMOT = async () => {
+    try {
+      const response = await axios.get(`${API_URL_VehicleMOT}`);
+      console.log("MOT Data: ", response.data.Result);
+      setData(filteredData);
+      setFilteredData(filteredData);
+    } catch (error) {
+      console.error("Error fetching MOT data:", error);
+    }
+  };
 
   useEffect(() => {
     if (!isAuthenticated()) {
@@ -49,7 +61,17 @@ const Header = () => {
     const idToFetch =
       flag === "true" && companyNameFromStorage ? companyId : userId;
     showAllAdmins(idToFetch);
+    fetchMOT();
   }, []);
+
+  useEffect(() => {
+    const companyName = getCompanyName();
+    const filtered = data.filter(
+      (item) =>
+        item.adminCompanyName.toLowerCase() === companyName.toLowerCase()
+    );
+    setFilteredData(filtered);
+  }, [data]);
 
   const showAllAdmins = async (id) => {
     try {
@@ -98,15 +120,28 @@ const Header = () => {
         <div className="flex gap-2">
           {/* wiht out dot bill icon */}
           {/* https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfsOGyy0EjeoAY6mSWABHXAQ15e4MbuFmxcUSs_y_-EVfzcSLOh0k-AQmbKKQG9NWCDfo&usqp=CAU  */}
-          <div>
-            {role === "user" ? (
+          <div className="flex gap-2">
+            {filteredData.every(
+              (item) =>
+                role === "user" &&
+                username === item.asignto &&
+                (item.motStatus.toLowerCase() === "pending" ||
+                  item.motStatus.toLowerCase() === "pandding")
+            ) ? (
               <img
                 src="https://static.vecteezy.com/system/resources/previews/029/719/841/non_2x/notification-bell-icon-free-png.png"
                 alt="notification"
                 height={30}
                 width={30}
               />
-            ) : null}
+            ) : (
+              <img
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfsOGyy0EjeoAY6mSWABHXAQ15e4MbuFmxcUSs_y_-EVfzcSLOh0k-AQmbKKQG9NWCDfo&usqp=CAU"
+                alt="notification"
+                height={30}
+                width={30}
+              />
+            )}
           </div>
 
           <div>

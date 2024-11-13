@@ -482,40 +482,37 @@ const Page = () => {
           </section>
 
           <section className="flex flex-col gap-4 min-w-full mt-4">
-            {/* Buttons to switch between tabs */}
-            <div className="flex gap-4">
-              <button
-                onClick={() => handleTabClick("MOT")}
-                className={`px-4 py-2 ${
-                  activeTab === "MOT" ? "bg-green-700" : "bg-green-500"
-                } text-white`}
-              >
-                MOT
-              </button>
-              <button
-                onClick={() => handleTabClick("Service")}
-                className={`px-4 py-2 ${
-                  activeTab === "Service" ? "bg-blue-700" : "bg-blue-500"
-                } text-white`}
-              >
-                Service
-              </button>
-
-              <button
-                onClick={() => handleTabClick("RoadTax")}
-                className={`px-4 py-2 ${
-                  activeTab === "RoadTax" ? "bg-red-700" : "bg-red-500"
-                } text-white`}
-              >
-                Road Tax
-              </button>
-            </div>
+            {/* Dropdown to switch between tabs above the table */}
+            <div className="flex gap-4 mb-4"></div>
 
             {/* Table to display data */}
             <div className="overflow-auto max-h-[400px] min-w-full">
               <table className="min-w-full bg-white border border-gray-200">
                 <thead>
                   <tr className="bg-gray-800 text-white text-sm">
+                    <th className="py-2 px-4 border-b border-gray-300 text-left">
+                      <select
+                        onChange={(e) => handleTabClick(e.target.value)}
+                        value={activeTab}
+                        className="px-4 py-2 bg-gray-500 text-white rounded"
+                      >
+                        <option value="MOT" className="bg-green-700 text-white">
+                          MOT
+                        </option>
+                        <option
+                          value="Service"
+                          className="bg-blue-700 text-white"
+                        >
+                          Service
+                        </option>
+                        <option
+                          value="RoadTax"
+                          className="bg-red-700 text-white"
+                        >
+                          Road Tax
+                        </option>
+                      </select>
+                    </th>
                     <th className="py-2 px-4 border-b border-gray-300 text-left">
                       Vehicle
                     </th>
@@ -526,8 +523,8 @@ const Page = () => {
                       Due Date
                     </th>
                     {/* <th className="py-2 px-4 border-b border-gray-300 text-left">
-                      Current Date
-                    </th> */}
+            Current Date
+          </th> */}
                     <th className="py-2 px-4 border-b border-gray-300 text-left">
                       Description
                     </th>
@@ -547,6 +544,9 @@ const Page = () => {
                         index % 2 === 0 ? "bg-white" : "bg-gray-50"
                       }`}
                     >
+                      <td className="py-2 px-4 border-b border-gray-200">
+                        {activeTab}
+                      </td>
                       <td className="py-2 px-4 border-b border-gray-200">
                         {row.VehicleName}
                       </td>

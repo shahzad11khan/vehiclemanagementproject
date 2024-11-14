@@ -15,6 +15,7 @@ export const POST = catchAsyncErrors(async (request) => {
     motCycle,
     motStatus,
     asignto,
+    motPending_Done,
     adminCreatedBy,
     adminCompanyName,
     adminCompanyId,
@@ -30,6 +31,7 @@ export const POST = catchAsyncErrors(async (request) => {
     motStatus,
     asignto,
     adminCreatedBy,
+    motPending_Done,
     adminCompanyName,
     adminCompanyId,
   });

@@ -20,6 +20,7 @@ export const PUT = async (request, context) => {
       serviceDueDate,
       serviceStatus,
       servicemailes,
+      servicePending_Done,
       asignto,
       adminCreatedBy,
       adminCompanyName,
@@ -65,6 +66,9 @@ export const PUT = async (request, context) => {
     VehicleService.servicemailes = servicemailes
       ? servicemailes
       : VehicleService.servicemailes;
+    VehicleService.servicePending_Done = servicePending_Done
+      ? servicePending_Done
+      : VehicleService.servicePending_Done;
 
     // Save the updated manufacturer
     await VehicleService.save();

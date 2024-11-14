@@ -17,6 +17,7 @@ const AddServiceModal = ({ isOpen, onClose, fetchData, selectedid }) => {
     serviceDueDate: "",
     serviceStatus: "",
     servicemailes: "",
+    servicePending_Done: "",
     asignto: "",
     adminCreatedBy: "",
     adminCompanyName: "",
@@ -85,7 +86,19 @@ const AddServiceModal = ({ isOpen, onClose, fetchData, selectedid }) => {
   }, [users, getCompanyName]);
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+
+    // Determine motPending_Done based on motStatus value
+    let servicePending_Done = formData.servicePending_Done;
+
+    if (name === "serviceStatus") {
+      servicePending_Done = value === "done" ? "0" : "1";
+    }
+
+    setFormData({
+      ...formData,
+      [name]: value,
+      servicePending_Done,
+    });
   };
 
   const handleSubmit = async (e) => {

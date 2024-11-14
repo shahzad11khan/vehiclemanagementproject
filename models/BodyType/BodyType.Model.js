@@ -17,7 +17,7 @@ const BodyTypeSchema = new mongoose.Schema({
   },
   adminCreatedBy: { type: String },
   adminCompanyName: { type: String },
-  adminCompanyId: { type: mongoose.Schema.Types.ObjectId, ref: "Company" },
+  adminCompanyId: { type: String },
 });
 
 // Create the model

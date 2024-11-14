@@ -29,7 +29,10 @@ const VehicleServiceSchema = new mongoose.Schema(
     adminCompanyName: {
       type: String,
     },
-    adminCompanyId: { type: mongoose.Schema.Types.ObjectId, ref: "Company" },
+    servicePending_Done: {
+      type: String,
+    },
+    adminCompanyId: { type: String },
     asignto: {
       type: String,
       default: "",

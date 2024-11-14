@@ -19,6 +19,9 @@ const VehicleMOTSchema = new mongoose.Schema(
     motCycle: {
       type: String,
     },
+    motPending_Done: {
+      type: String,
+    },
     motStatus: {
       type: String,
       // default: "active",
@@ -29,7 +32,7 @@ const VehicleMOTSchema = new mongoose.Schema(
     adminCompanyName: {
       type: String,
     },
-    adminCompanyId: { type: mongoose.Schema.Types.ObjectId, ref: "Company" },
+    adminCompanyId: { type: String },
     asignto: {
       type: String,
       default: "",

@@ -21,6 +21,8 @@ export const PUT = async (request, context) => {
       roadtexStatus,
       roadtexCycle,
       asignto,
+      roadtexPending_Done,
+
       adminCreatedBy,
       adminCompanyName,
       adminCompanyId,
@@ -68,6 +70,9 @@ export const PUT = async (request, context) => {
     VehicleRoadTax.roadtexCycle = roadtexCycle
       ? roadtexCycle
       : VehicleRoadTax.roadtexCycle;
+    VehicleRoadTax.roadtexPending_Dones = roadtexPending_Done
+      ? roadtexPending_Done
+      : VehicleRoadTax.roadtexPending_Done;
 
     // Save the updated manufacturer
     await VehicleRoadTax.save();

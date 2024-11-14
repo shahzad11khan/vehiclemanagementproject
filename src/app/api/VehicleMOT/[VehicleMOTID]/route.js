@@ -21,6 +21,7 @@ export const PUT = async (request, context) => {
       motCycle,
       motStatus,
       asignto,
+      motPending_Done,
       adminCreatedBy,
       adminCompanyName,
       adminCompanyId,
@@ -57,6 +58,9 @@ export const PUT = async (request, context) => {
       ? adminCompanyId
       : VehicleMOT.adminCompanyId;
     VehicleMOT.asignto = asignto ? asignto : VehicleMOT.asignto;
+    VehicleMOT.motPending_Done = motPending_Done
+      ? motPending_Done
+      : VehicleMOT.motPending_Done;
 
     // Save the updated manufacturer
     await VehicleMOT.save();

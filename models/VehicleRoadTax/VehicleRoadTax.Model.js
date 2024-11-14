@@ -21,13 +21,16 @@ const VehicleroadtexSchema = new mongoose.Schema(
       type: String,
       // default: "active",
     },
+    roadtexPending_Done: {
+      type: String,
+    },
     adminCreatedBy: {
       type: String,
     },
     adminCompanyName: {
       type: String,
     },
-    adminCompanyId: { type: mongoose.Schema.Types.ObjectId, ref: "Company" },
+    adminCompanyId: { type: String },
     asignto: {
       type: String,
       default: "",

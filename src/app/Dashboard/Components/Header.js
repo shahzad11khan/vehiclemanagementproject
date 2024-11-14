@@ -150,16 +150,17 @@ const Header = () => {
           {/* wiht out dot bill icon */}
           {/* https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfsOGyy0EjeoAY6mSWABHXAQ15e4MbuFmxcUSs_y_-EVfzcSLOh0k-AQmbKKQG9NWCDfo&usqp=CAU  */}
           <div className="flex gap-2">
-            {role === "superadmin" && companyName ? null : role === "user" ? ( // Don't render anything if the role is 'superadmin' and there's a company name
+            {role === "superadmin" && companyName ? null : role === "user" &&
+              filteredData.length > 0 ? (
               filteredData.every(
                 (item) =>
                   username === item.asignto &&
-                  (item.motStatus.toLowerCase() === "pending" ||
-                    item.motStatus.toLowerCase() === "pandding" ||
-                    item.serviceStatus.toLowerCase() === "pending" ||
-                    item.serviceStatus.toLowerCase() === "pandding" ||
-                    item.roadtaxStatus.toLowerCase() === "pending" ||
-                    item.roadtaxStatus.toLowerCase() === "pandding")
+                  ((item.motStatus?.toLowerCase() === "pending" &&
+                    item.motPending_Done === "1") ||
+                    (item.serviceStatus?.toLowerCase() === "pending" &&
+                      item.servicePending_Done === "1") ||
+                    (item.roadtexStatus?.toLowerCase() === "pending" &&
+                      item.roadtexPending_Done === "1"))
               ) ? (
                 <img
                   src="https://static.vecteezy.com/system/resources/previews/029/719/841/non_2x/notification-bell-icon-free-png.png"

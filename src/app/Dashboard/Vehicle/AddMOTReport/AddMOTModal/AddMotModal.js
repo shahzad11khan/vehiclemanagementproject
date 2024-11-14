@@ -18,6 +18,7 @@ const AddMotModal = ({ isOpen, onClose, fetchData, selectedid }) => {
     motCycle: "",
     motStatus: "",
     asignto: "",
+    motPending_Done: "",
     adminCreatedBy: "",
     adminCompanyName: "",
     adminCompanyId: "",
@@ -83,9 +84,22 @@ const AddMotModal = ({ isOpen, onClose, fetchData, selectedid }) => {
     // console.log(filtered);
     setFilteredData(filtered);
   }, [users, getCompanyName]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+
+    // Determine motPending_Done based on motStatus value
+    let motPending_Done = formData.motPending_Done;
+
+    if (name === "motStatus") {
+      motPending_Done = value === "done" ? "0" : "1";
+    }
+
+    setFormData({
+      ...formData,
+      [name]: value,
+      motPending_Done,
+    });
   };
 
   const handleSubmit = async (e) => {
@@ -100,7 +114,7 @@ const AddMotModal = ({ isOpen, onClose, fetchData, selectedid }) => {
         resetform();
         onClose();
       } else {
-        toast.warn(response.data.message);
+        toast.warn(response.data.error);
       }
     } catch (error) {
       console.error("Error sending data:", error);
@@ -111,8 +125,8 @@ const AddMotModal = ({ isOpen, onClose, fetchData, selectedid }) => {
 
   const resetform = () => {
     setFormData({
-      VehicleName: "",
-      registrationNumber: "",
+      VehicleName: formData.VehicleName,
+      registrationNumber: formData.registrationNumber,
       motCurrentDate: "",
       motDueDate: "",
       motCycle: "",

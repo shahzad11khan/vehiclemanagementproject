@@ -18,6 +18,7 @@ const AddRoadTexModal = ({ isOpen, onClose, fetchData, selectedid }) => {
     roadtexCycle: "",
     roadtexStatus: "",
     asignto: "",
+    roadtexPending_Done: "",
     adminCreatedBy: "",
     adminCompanyName: "",
     adminCompanyId: "",
@@ -83,11 +84,23 @@ const AddRoadTexModal = ({ isOpen, onClose, fetchData, selectedid }) => {
     // console.log(filtered);
     setFilteredData(filtered);
   }, [users, getCompanyName]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
 
+    // Determine motPending_Done based on motStatus value
+    let roadtexPending_Done = formData.roadtexPending_Done;
+
+    if (name === "roadtexStatus") {
+      roadtexPending_Done = value === "done" ? "0" : "1";
+    }
+
+    setFormData({
+      ...formData,
+      [name]: value,
+      roadtexPending_Done,
+    });
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
     // console.log(formData);

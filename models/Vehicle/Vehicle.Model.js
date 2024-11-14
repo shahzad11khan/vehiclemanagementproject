@@ -268,7 +268,7 @@ const vehicleSchema = new mongoose.Schema(
 
     adminCreatedBy: { type: String },
     adminCompanyName: { type: String },
-    adminCompanyId: { type: mongoose.Schema.Types.ObjectId, ref: "Company" },
+    adminCompanyId: { type: String },
   },
   { timestamps: true }
 );

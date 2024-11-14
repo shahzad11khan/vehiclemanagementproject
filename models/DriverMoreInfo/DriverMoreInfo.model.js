@@ -14,8 +14,7 @@ const DriverMoreInfoSchema = new mongoose.Schema(
     totalToremain: { type: Number },
     remaining: { type: Number },
     adminCompanyName: { type: String },
-    adminCreatedBy: { type: String },
-    adminCompanyId: { type: mongoose.Schema.Types.ObjectId, ref: "Company" },
+    adminCompanyId: { type: String },
   },
   {
     timestamps: true,

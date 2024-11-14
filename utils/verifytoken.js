@@ -29,5 +29,5 @@ export const clearAuthData = () => {
   localStorage.removeItem("role");
   localStorage.removeItem("companyID");
   localStorage.removeItem("flag");
-  localStorage.removeItem("Iscompanyselecteds");
+  localStorage.removeItem("Iscompanyselected");
 };

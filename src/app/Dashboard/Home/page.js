@@ -76,46 +76,6 @@ const Page = () => {
     }
   };
 
-  // Helper function to process data
-  // const processData = (data, dueDateKey) => {
-  //   return data.map((row) => {
-  //     const dueDate = new Date(row[dueDateKey]);
-  //     let currentDate = new Date();
-  //     currentDate.setHours(0, 0, 0, 0);
-  //     currentDate.setDate(currentDate.getDate() + 1);
-
-  //     dueDate.setHours(0, 0, 0, 0);
-
-  //     const dueDateParts = dueDate.toISOString().split("T")[0];
-  //     const currentDateParts = currentDate.toISOString().split("T")[0];
-
-  //     const diffInDays = Math.floor(
-  //       (new Date(dueDateParts) - new Date(currentDateParts)) /
-  //         (1000 * 60 * 60 * 24)
-  //     );
-
-  //     let daysLeft;
-  //     let status;
-  //     let daysExpired = 1;
-
-  //     if (diffInDays > 0) {
-  //       daysLeft = diffInDays;
-  //       status = "Active";
-  //     } else {
-  //       daysExpired = Math.abs(diffInDays);
-  //       status = "Expired";
-  //     }
-
-  //     return {
-  //       ...row,
-  //       dueDate: dueDateParts,
-  //       currentDateParts,
-  //       daysLeft,
-  //       daysExpired,
-  //       status,
-  //     };
-  //   });
-  // };
   const processData = (data, dueDateKey) => {
     return data.map((row) => {
       const dueDate = new Date(row[dueDateKey]);

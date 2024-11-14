@@ -37,8 +37,7 @@ const Header = () => {
     try {
       const response = await axios.get(`${API_URL_VehicleMOT}`);
       console.log("MOT Data: ", response.data.Result);
-      setData(filteredData);
-      setFilteredData(filteredData);
+      setData(response.data.Result);
     } catch (error) {
       console.error("Error fetching MOT data:", error);
     }
@@ -48,8 +47,7 @@ const Header = () => {
     try {
       const response = await axios.get(`${API_URL_VehicleService}`);
       console.log("Service Data: ", response.data.Result);
-      setData(filteredData);
-      setFilteredData(filteredData);
+      setData(response.data.Result);
     } catch (error) {
       console.error("Error fetching Service data:", error);
     }
@@ -60,12 +58,21 @@ const Header = () => {
       const response = await axios.get(`${API_URL_VehicleRoadTex}`);
       console.log("RoadTax Data: ", response.data.Result);
 
-      setData(filteredData);
-      setFilteredData(filteredData);
+      setData(response.data.Result);
     } catch (error) {
       console.error("Error fetching Road Tax data:", error);
     }
   };
+  useEffect(() => {
+    const companyName = getCompanyName();
+    console.log(data);
+    const filtered = data.filter(
+      (item) =>
+        item.adminCompanyName.toLowerCase() === companyName.toLowerCase()
+    );
+    setFilteredData(filtered);
+    console.log("filtered data : ", filteredData);
+  }, [data]);
   useEffect(() => {
     if (!isAuthenticated()) {
       router.push("/");
@@ -92,15 +99,6 @@ const Header = () => {
     fetchService();
     fetchRoadtax();
   }, []);
-
-  useEffect(() => {
-    const companyName = getCompanyName();
-    const filtered = data.filter(
-      (item) =>
-        item.adminCompanyName.toLowerCase() === companyName.toLowerCase()
-    );
-    setFilteredData(filtered);
-  }, [data]);
 
   const showAllAdmins = async (id) => {
     try {
@@ -150,9 +148,8 @@ const Header = () => {
           {/* wiht out dot bill icon */}
           {/* https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfsOGyy0EjeoAY6mSWABHXAQ15e4MbuFmxcUSs_y_-EVfzcSLOh0k-AQmbKKQG9NWCDfo&usqp=CAU  */}
           <div className="flex gap-2">
-            {role === "superadmin" && companyName ? null : role === "user" &&
-              filteredData.length > 0 ? (
-              filteredData.every(
+            {role === "user" && filteredData.length > 0 ? (
+              filteredData.some(
                 (item) =>
                   username === item.asignto &&
                   ((item.motStatus?.toLowerCase() === "pending" &&
@@ -176,7 +173,14 @@ const Header = () => {
                   width={30}
                 />
               )
-            ) : null}
+            ) : (
+              <img
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfsOGyy0EjeoAY6mSWABHXAQ15e4MbuFmxcUSs_y_-EVfzcSLOh0k-AQmbKKQG9NWCDfo&usqp=CAU"
+                alt="notification"
+                height={30}
+                width={30}
+              />
+            )}
           </div>
 
           <div>

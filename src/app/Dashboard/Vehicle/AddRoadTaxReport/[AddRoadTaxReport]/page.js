@@ -69,7 +69,6 @@ const Page = ({ params }) => {
   }, [data, selectedCompanyName]);
 
   const toggleTitleModal = () => {
-    // console.log("model click");
     setIsOpenTitle((prev) => !prev);
     setselectedid(addRoadTaxReportId);
   };
@@ -138,6 +137,7 @@ const Page = ({ params }) => {
       }
       const roadtexCurrentDate = doc.splitTextToSize(
         (() => {
+          if (!row.roadtexCurrentDate) return "N/A";
           const date = new Date(row.roadtexCurrentDate);
           const formattedDate = `${String(date.getMonth() + 1).padStart(
             2,
@@ -149,15 +149,18 @@ const Page = ({ params }) => {
       );
       const roadtexDueDate = doc.splitTextToSize(
         (() => {
+          if (!row.roadtexDueDate) return "N/A"; // If roadtexDueDate is null or undefined, return "N/A"
+
           const date = new Date(row.roadtexDueDate);
           const formattedDate = `${String(date.getMonth() + 1).padStart(
             2,
             "0"
           )}/${String(date.getDate()).padStart(2, "0")}/${date.getFullYear()}`;
           return formattedDate;
-        })() || "N/A",
+        })(),
         columnWidth - padding
       );
+
       const roadtexCycle = doc.splitTextToSize(
         row.roadtexCycle || "N/A",
         columnWidth - padding
@@ -280,9 +283,18 @@ const Page = ({ params }) => {
                       <td className="py-2 px-4 border-b border-gray-200">
                         {row.registrationNumber}
                       </td>
+
                       <td className="py-2 px-4 border-b border-gray-200">
                         {(() => {
+                          // Check if motDueDate is null
+                          if (!row.roadtexCurrentDate) return " "; // If the date is null or falsy, return an empty space
+
                           const date = new Date(row.roadtexCurrentDate);
+
+                          // Check if the date is invalid (NaN)
+                          if (isNaN(date.getTime())) return " "; // If the date is invalid, return an empty space
+
+                          // Format the valid date as MM/DD/YYYY
                           const formattedDate = `${String(
                             date.getMonth() + 1
                           ).padStart(2, "0")}/${String(date.getDate()).padStart(
@@ -292,12 +304,21 @@ const Page = ({ params }) => {
                           return formattedDate;
                         })()}
                       </td>
+
                       <td className="py-2 px-4 border-b border-gray-200">
                         {row.roadtexCycle}
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
                         {(() => {
-                          const date = new Date(row.roadtexDueDate);
+                          // Check if motDueDate is null
+                          if (!row.motDueDate) return " "; // If the date is null or falsy, return an empty space
+
+                          const date = new Date(row.motDueDate);
+
+                          // Check if the date is invalid (NaN)
+                          if (isNaN(date.getTime())) return " "; // If the date is invalid, return an empty space
+
+                          // Format the valid date as MM/DD/YYYY
                           const formattedDate = `${String(
                             date.getMonth() + 1
                           ).padStart(2, "0")}/${String(date.getDate()).padStart(
@@ -307,6 +328,7 @@ const Page = ({ params }) => {
                           return formattedDate;
                         })()}
                       </td>
+
                       <td className="py-2 px-4 border-b border-gray-200">
                         {row.roadtexStatus}
                       </td>

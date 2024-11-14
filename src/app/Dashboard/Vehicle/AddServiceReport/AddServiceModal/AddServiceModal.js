@@ -124,15 +124,15 @@ const AddServiceModal = ({ isOpen, onClose, fetchData, selectedid }) => {
 
   const resetform = () => {
     setFormData({
-      VehicleName: "",
-      registrationNumber: "",
+      VehicleName: formData.VehicleName,
+      registrationNumber: formData.registrationNumber,
       serviceCurrentDate: "",
       serviceDueDate: "",
       serviceStatus: "",
       servicemailes: "",
       asignto: "",
       adminCreatedBy: "",
-      adminCompanyName: "",
+      adminCompanyName: formData.adminCompanyName,
       adminCompanyId: "",
     });
   };

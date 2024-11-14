@@ -133,7 +133,7 @@ const AddMotModal = ({ isOpen, onClose, fetchData, selectedid }) => {
       motStatus: "",
       asignto: "",
       adminCreatedBy: "",
-      adminCompanyName: "",
+      adminCompanyName: formData.adminCompanyName,
       adminCompanyId: "",
     });
   };

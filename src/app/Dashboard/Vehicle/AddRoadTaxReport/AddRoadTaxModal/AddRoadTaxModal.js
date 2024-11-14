@@ -124,15 +124,15 @@ const AddRoadTexModal = ({ isOpen, onClose, fetchData, selectedid }) => {
 
   const resetform = () => {
     setFormData({
-      VehicleName: "",
-      registrationNumber: "",
+      VehicleName: formData.VehicleName,
+      registrationNumber: formData.registrationNumber,
       roadtexCurrentDate: "",
       roadtexDueDate: "",
       roadtexCycle: "",
       roadtexStatus: "",
       asignto: "",
       adminCreatedBy: "",
-      adminCompanyName: "",
+      adminCompanyName: formData.adminCompanyName,
       adminCompanyId: "",
     });
   };

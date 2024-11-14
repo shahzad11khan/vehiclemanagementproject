@@ -17,7 +17,7 @@ const CarModelSchema = new mongoose.Schema({
   },
   adminCreatedBy: { type: String },
   adminCompanyName: { type: String },
-  adminCompanyId: { type: String },
+  adminCompanyId: { type: mongoose.Schema.Types.ObjectId, ref: "Company" },
 });
 
 // Create the model

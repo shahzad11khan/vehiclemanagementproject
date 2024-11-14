@@ -35,7 +35,7 @@ const driverSchema = new mongoose.Schema(
     isActive: { type: Boolean, default: false },
     adminCreatedBy: { type: String },
     adminCompanyName: { type: String },
-    adminCompanyId: { type: String },
+    adminCompanyId: { type: mongoose.Schema.Types.ObjectId, ref: "Company" },
   },
   { timestamps: true }
 );

@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 
 const DriverMoreInfoSchema = new mongoose.Schema(
   {
-    driverId: { type: mongoose.Schema.Types.ObjectId, ref: "Driver" }, // Reference to the Driver
+    driverId: { type: mongoose.Schema.Types.ObjectId, ref: "Driver" },
     driverName: { type: String },
     vehicle: { type: String },
     startDate: { type: Date },
@@ -15,7 +15,7 @@ const DriverMoreInfoSchema = new mongoose.Schema(
     remaining: { type: Number },
     adminCompanyName: { type: String },
     adminCreatedBy: { type: String },
-    adminCompanyId: { type: String },
+    adminCompanyId: { type: mongoose.Schema.Types.ObjectId, ref: "Company" },
   },
   {
     timestamps: true,

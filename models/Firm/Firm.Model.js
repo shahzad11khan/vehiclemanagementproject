@@ -23,7 +23,7 @@ const FirmSchema = new mongoose.Schema({
   imagepublicId: { type: String },
   adminCreatedBy: { type: String },
   adminCompanyName: { type: String },
-  adminCompanyId: { type: String },
+  adminCompanyId: { type: mongoose.Schema.Types.ObjectId, ref: "Company" },
 });
 
 export const Firm = mongoose.models.Firm || mongoose.model("Firm", FirmSchema);

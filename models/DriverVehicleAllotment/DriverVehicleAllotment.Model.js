@@ -13,6 +13,7 @@ const DriverVehicleAllotmentInfoSchema = new mongoose.Schema(
     payment: { type: Number },
     adminCreatedBy: { type: String },
     adminCompanyName: { type: String },
+    adminCompanyId: { type: mongoose.Schema.Types.ObjectId, ref: "Company" },
   },
   {
     timestamps: true,

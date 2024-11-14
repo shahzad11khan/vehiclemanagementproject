@@ -27,9 +27,7 @@ const VehicleroadtexSchema = new mongoose.Schema(
     adminCompanyName: {
       type: String,
     },
-    adminCompanyId: {
-      type: String,
-    },
+    adminCompanyId: { type: mongoose.Schema.Types.ObjectId, ref: "Company" },
     asignto: {
       type: String,
       default: "",

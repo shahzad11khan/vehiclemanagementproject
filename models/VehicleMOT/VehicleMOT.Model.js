@@ -26,6 +26,9 @@ const VehicleMOTSchema = new mongoose.Schema(
       type: String,
       // default: "active",
     },
+    VehicleStatus: {
+      type: Boolean,
+    },
     adminCreatedBy: {
       type: String,
     },

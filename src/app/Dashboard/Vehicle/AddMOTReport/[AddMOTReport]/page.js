@@ -237,6 +237,9 @@ const Page = ({ params }) => {
                       MOT Status
                     </th>
                     <th className="py-2 px-4 border-b border-gray-200 text-left">
+                      Vehicle Status
+                    </th>
+                    <th className="py-2 px-4 border-b border-gray-200 text-left">
                       MOT Assign
                     </th>
                     <th className="py-2 px-4 border-b border-gray-200 text-left">
@@ -282,6 +285,9 @@ const Page = ({ params }) => {
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
                         {row.motStatus || "N/A"}
+                      </td>
+                      <td className="py-2 px-4 border-b border-gray-200">
+                        {row.VehicleStatus || "N/A"}
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
                         {row.asignto || "N/A"}

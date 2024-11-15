@@ -17,6 +17,7 @@ const AddMotModal = ({ isOpen, onClose, fetchData, selectedid }) => {
     motDueDate: "",
     motCycle: "",
     motStatus: "",
+    VehicleStatus: "",
     asignto: "",
     motPending_Done: "",
     adminCreatedBy: "",
@@ -43,6 +44,7 @@ const AddMotModal = ({ isOpen, onClose, fetchData, selectedid }) => {
             VehicleName: data.model, // Assuming 'model' is the key for the vehicle model
             registrationNumber: data.registrationNumber, // Assuming 'registrationNumber' is the key for registration number
             adminCompanyName: data.adminCompanyName,
+            VehicleStatus: data.isActive,
           }));
         } else {
           // Handle the case when there is no data

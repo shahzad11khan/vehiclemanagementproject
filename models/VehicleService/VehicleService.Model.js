@@ -23,6 +23,9 @@ const VehicleServiceSchema = new mongoose.Schema(
       type: Number,
       //   default: "active",
     },
+    VehicleStatus: {
+      type: Boolean,
+    },
     adminCreatedBy: {
       type: String,
     },

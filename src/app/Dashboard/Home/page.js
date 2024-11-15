@@ -524,7 +524,7 @@ const Page = () => {
                           : "N/A"}
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
-                        {row.status || "N/A"}
+                        {row.VehicleStatus || "N/A"}
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
                         <Link

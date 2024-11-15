@@ -21,6 +21,9 @@ const VehicleroadtexSchema = new mongoose.Schema(
       type: String,
       // default: "active",
     },
+    VehicleStatus: {
+      type: Boolean,
+    },
     roadtexPending_Done: {
       type: String,
     },

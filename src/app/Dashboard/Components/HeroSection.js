@@ -4,8 +4,10 @@ import { Line } from "react-chartjs-2";
 import { Doughnut } from "react-chartjs-2";
 import { getAuthData, isAuthenticated } from "@/utils/verifytoken";
 import { GetVehicle } from "../Components/ApiUrl/ShowApiDatas/ShowApiDatas.js";
+import { useRouter } from "next/navigation";
 
 const HeroSection = () => {
+  const router = useRouter();
   const [superadmin, setsuperadmin] = useState("");
   const [companyname, setcompnayname] = useState("");
   const [totalCar, setTotalcar] = useState(0);

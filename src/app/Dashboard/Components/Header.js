@@ -238,8 +238,8 @@ const Header = () => {
                     <img
                       src="https://static.vecteezy.com/system/resources/previews/029/719/841/non_2x/notification-bell-icon-free-png.png"
                       alt="notification"
-                      height={30}
-                      width={30}
+                      height={25}
+                      width={25}
                     />
                   </div>
                   {typeof window !== "undefined" && isPendingDropdown && (
@@ -296,15 +296,15 @@ const Header = () => {
                     </div>
                   )}
                 </>
-              ) : null
-            ) : (
-              <img
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfsOGyy0EjeoAY6mSWABHXAQ15e4MbuFmxcUSs_y_-EVfzcSLOh0k-AQmbKKQG9NWCDfo&usqp=CAU"
-                alt="notification"
-                height={30}
-                width={30}
-              />
-            )}
+              ) : (
+                <img
+                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfsOGyy0EjeoAY6mSWABHXAQ15e4MbuFmxcUSs_y_-EVfzcSLOh0k-AQmbKKQG9NWCDfo&usqp=CAU"
+                  alt="notification"
+                  height={25}
+                  width={25}
+                />
+              )
+            ) : null}
           </div>
 
           <div>

@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import {
   API_URL_Vehicle_getspecificvehicleid,
   API_URL_VehicleMOT,
+  API_URL_UpdateMostRecentPendingInMot,
   API_URL_USER,
 } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import axios from "axios";
@@ -106,12 +107,32 @@ const AddMotModal = ({ isOpen, onClose, fetchData, selectedid }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // console.log(formData);
+
     try {
+      // Step 1: Send POST request to create/update VehicleMOT record
       const response = await axios.post(`${API_URL_VehicleMOT}`, formData);
       console.log("Data sent successfully:", response.data);
+
       if (response.data.success) {
-        toast.success(response.data.message);
+        // Check if the current record has motPending_Done set to "1"
+        if (formData.motPending_Done === "0") {
+          // Step 2: Call the PUT request to update motPending_Done from 1 to 0
+          const updateResponse = await axios.put(
+            `${API_URL_UpdateMostRecentPendingInMot}`,
+            formData
+          );
+          console.log("Update Response:", updateResponse.data);
+
+          if (updateResponse.data.success) {
+            console.log("MOT status updated successfully");
+          } else {
+            console.log(updateResponse.data.error);
+          }
+        } else {
+          console.log(response.data.message);
+        }
+
+        // Refresh the data and reset the form
         fetchData();
         resetform();
         onClose();
@@ -120,6 +141,7 @@ const AddMotModal = ({ isOpen, onClose, fetchData, selectedid }) => {
       }
     } catch (error) {
       console.error("Error sending data:", error);
+      toast.error("Failed to send data");
     }
   };
 

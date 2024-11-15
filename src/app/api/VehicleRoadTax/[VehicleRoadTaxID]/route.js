@@ -22,7 +22,6 @@ export const PUT = async (request, context) => {
       roadtexCycle,
       asignto,
       roadtexPending_Done,
-
       adminCreatedBy,
       adminCompanyName,
       adminCompanyId,

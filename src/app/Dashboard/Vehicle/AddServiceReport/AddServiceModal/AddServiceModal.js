@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import {
   API_URL_Vehicle_getspecificvehicleid,
   API_URL_VehicleService,
+  API_URL_UpdateMostRecentPendingInServeice,
   API_URL_USER,
 } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import axios from "axios";
@@ -110,12 +111,30 @@ const AddServiceModal = ({ isOpen, onClose, fetchData, selectedid }) => {
       const response = await axios.post(`${API_URL_VehicleService}`, formData);
       console.log("Data sent successfully:", response.data);
       if (response.data.success) {
-        toast.success(response.data.message);
+        // Check if the current record has motPending_Done set to "1"
+        if (formData.servicePending_Done === "0") {
+          // Step 2: Call the PUT request to update motPending_Done from 1 to 0
+          const updateResponse = await axios.put(
+            `${API_URL_UpdateMostRecentPendingInServeice}`,
+            formData
+          );
+          console.log("Update Response:", updateResponse.data);
+
+          if (updateResponse.data.success) {
+            console.log("Service status updated successfully");
+          } else {
+            console.log(updateResponse.data.error);
+          }
+        } else {
+          console.log(response.data.message);
+        }
+
+        // Refresh the data and reset the form
         fetchData();
         resetform();
         onClose();
       } else {
-        toast.warn(response.data.message);
+        toast.warn(response.data.error);
       }
     } catch (error) {
       console.error("Error sending data:", error);

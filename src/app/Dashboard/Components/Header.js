@@ -36,6 +36,8 @@ const Header = () => {
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [filtered2Data, set2FilteredData] = useState([]);
+  const [activeTab, setActiveTab] = useState("MOT");
+
   const fetchMOT = async () => {
     try {
       const response = await axios.get(`${API_URL_VehicleMOT}`);
@@ -178,6 +180,34 @@ const Header = () => {
     fetchAllData();
   }, []);
 
+  // Click handler to change tabs
+  const handleTabClick = (tab) => {
+    setActiveTab(tab);
+  };
+
+  // useEffect to fetch data based on active tab
+  useEffect(() => {
+    if (activeTab === "RoadTax") {
+      fetchRoadtax();
+    } else if (activeTab === "Service") {
+      fetchService();
+    } else if (activeTab === "MOT") {
+      fetchMOT();
+    }
+  }, [activeTab]);
+
+  const getPath = () => {
+    switch (activeTab) {
+      case "Service":
+        return `/Dashboard/Vehicle/AddServiceReport/`;
+      case "RoadTax":
+        return `/Dashboard/Vehicle/AddRoadTaxReport/`;
+      case "MOT":
+      default:
+        return `/Dashboard/Vehicle/AddMOTReport/`;
+    }
+  };
+
   return (
     <header className=" text-black flex items-center justify-between opacity-90 w-full shadow-sm shadow-custom-blue">
       <div className="flex flex-shrink-0 py-5 px-3 bg-gradient-to-r from-rose-400 to-purple-200">
@@ -213,42 +243,56 @@ const Header = () => {
                     />
                   </div>
                   {typeof window !== "undefined" && isPendingDropdown && (
-                    <div className="absolute right-0 mt-2 flex flex-col bg-white rounded shadow-lg z-10 text-black">
-                      <div className="absolute right-0 mt-12 flex flex-col bg-white rounded shadow-lg text-black w-80">
-                        <table className="min-w-full table-auto border-collapse">
-                          <thead>
-                            <tr>
-                              <th className="px-4 py-2 text-left">Car Name</th>
-                              <th className="px-4 py-2 text-left">
-                                Registration No.
-                              </th>
-                              <th className="px-4 py-2 text-left">Action</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {filtered2Data.map((item, index) => (
-                              <tr
-                                key={item.id}
-                                className={
-                                  index % 2 === 0 ? "bg-gray-100" : "bg-white"
-                                }
+                    <div className="absolute right-60 mt-12 flex flex-col bg-white rounded shadow-lg text-black w-80">
+                      <table className="min-w-full table-auto border-collapse">
+                        <thead>
+                          <tr>
+                            <th className="py-2 px-4  text-left">
+                              <select
+                                onChange={(e) => handleTabClick(e.target.value)}
+                                value={activeTab}
+                                className="px-4 py-2 bg-gray-500 text-white rounded"
                               >
-                                <td className="px-4 py-2">
-                                  {item.VehicleName}
-                                </td>
-                                <td className="px-4 py-2">
-                                  {item.registrationNumber}
-                                </td>
-                                <td className="px-4 py-2 text-blue-500 hover:text-blue-700">
-                                  <Link href={`/car-details/${item.id}`}>
-                                    <CiWarning className="text-xl" />
-                                  </Link>
-                                </td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
+                                <option value="MOT" className=" text-black">
+                                  MOT
+                                </option>
+                                <option value="Service" className=" text-black">
+                                  Service
+                                </option>
+                                <option value="RoadTax" className=" text-black">
+                                  Road Tax
+                                </option>
+                              </select>
+                            </th>{" "}
+                            <th className="px-4 py-2 text-left">Car Name</th>
+                            <th className="px-4 py-2 text-left">
+                              Registration No.
+                            </th>
+                            <th className="px-4 py-2 text-left">Action</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {filtered2Data.map((item, index) => (
+                            <tr
+                              key={item.id}
+                              className={
+                                index % 2 === 0 ? "bg-gray-100" : "bg-white"
+                              }
+                            >
+                              <td className="px-4 py-2">{activeTab}</td>
+                              <td className="px-4 py-2">{item.VehicleName}</td>
+                              <td className="px-4 py-2">
+                                {item.registrationNumber}
+                              </td>
+                              <td className="px-4 py-2 text-blue-500 hover:text-blue-700">
+                                <Link href={`${getPath()}${item._id}`}>
+                                  <CiWarning className="text-xl" />
+                                </Link>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
                     </div>
                   )}
                 </>

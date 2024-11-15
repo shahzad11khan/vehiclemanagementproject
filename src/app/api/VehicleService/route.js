@@ -9,6 +9,7 @@ export const POST = catchAsyncErrors(async (request) => {
 
   const {
     VehicleName,
+    VehicleStatus,
     registrationNumber,
     serviceCurrentDate,
     serviceDueDate,
@@ -24,6 +25,7 @@ export const POST = catchAsyncErrors(async (request) => {
   // Create and save the new vehicle entry
   const newVehicleService = new VehicleService({
     VehicleName,
+    VehicleStatus,
     registrationNumber,
     serviceCurrentDate,
     serviceDueDate,

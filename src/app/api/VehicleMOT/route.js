@@ -9,6 +9,7 @@ export const POST = catchAsyncErrors(async (request) => {
 
   const {
     VehicleName,
+    VehicleStatus,
     registrationNumber,
     motCurrentDate,
     motDueDate,
@@ -25,6 +26,7 @@ export const POST = catchAsyncErrors(async (request) => {
   const newVehicleMOT = new VehicleMOT({
     VehicleName,
     registrationNumber,
+    VehicleStatus,
     motCurrentDate,
     motDueDate,
     motCycle,

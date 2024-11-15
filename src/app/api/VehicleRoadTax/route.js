@@ -9,6 +9,7 @@ export const POST = catchAsyncErrors(async (request) => {
 
   const {
     VehicleName,
+    VehicleStatus,
     registrationNumber,
     roadtexCurrentDate,
     roadtexDueDate,
@@ -24,6 +25,7 @@ export const POST = catchAsyncErrors(async (request) => {
   // Create and save the new vehicle entry
   const newVehicleRoadTax = new VehicleRoadTax({
     VehicleName,
+    VehicleStatus,
     registrationNumber,
     roadtexCurrentDate,
     roadtexDueDate,

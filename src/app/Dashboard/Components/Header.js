@@ -35,46 +35,37 @@ const Header = () => {
   const [imagePreview, setImagePreview] = useState("");
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
-
-  // Fetch data from all three APIs and combine
-  const fetchAllData = async () => {
+  const [filtered2Data, set2FilteredData] = useState([]);
+  const fetchMOT = async () => {
     try {
-      const [motResponse, serviceResponse, roadtaxResponse] = await Promise.all(
-        [
-          axios.get(API_URL_VehicleMOT),
-          axios.get(API_URL_VehicleService),
-          axios.get(API_URL_VehicleRoadTex),
-        ]
-      );
-
-      const combinedData = [
-        ...motResponse.data.Result,
-        ...serviceResponse.data.Result,
-        ...roadtaxResponse.data.Result,
-      ];
-      setData(combinedData);
+      const response = await axios.get(`${API_URL_VehicleMOT}`);
+      console.log("MOT Data: ", response.data.Result);
+      setData(response.data.Result);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error("Error fetching MOT data:", error);
     }
   };
-  // Filter data based on conditions
-  useEffect(() => {
-    const filterData = data.filter(
-      (item) =>
-        username === item.asignto &&
-        ((item.motStatus?.toLowerCase() === "pending" &&
-          item.motPending_Done === "1") ||
-          (item.serviceStatus?.toLowerCase() === "pending" &&
-            item.servicePending_Done === "1") ||
-          (item.roadtexStatus?.toLowerCase() === "pending" &&
-            item.roadtexPending_Done === "1"))
-    );
-    setFilteredData(filterData);
-  }, [data, username]);
-  useEffect(() => {
-    fetchAllData();
-  }, []);
 
+  const fetchService = async () => {
+    try {
+      const response = await axios.get(`${API_URL_VehicleService}`);
+      console.log("Service Data: ", response.data.Result);
+      setData(response.data.Result);
+    } catch (error) {
+      console.error("Error fetching Service data:", error);
+    }
+  };
+
+  const fetchRoadtax = async () => {
+    try {
+      const response = await axios.get(`${API_URL_VehicleRoadTex}`);
+      console.log("RoadTax Data: ", response.data.Result);
+
+      setData(response.data.Result);
+    } catch (error) {
+      console.error("Error fetching Road Tax data:", error);
+    }
+  };
   useEffect(() => {
     const companyName = getCompanyName();
     console.log(data);
@@ -107,6 +98,9 @@ const Header = () => {
     const idToFetch =
       flag === "true" && companyNameFromStorage ? companyId : userId;
     showAllAdmins(idToFetch);
+    fetchMOT();
+    fetchService();
+    fetchRoadtax();
   }, []);
 
   const showAllAdmins = async (id) => {
@@ -148,6 +142,42 @@ const Header = () => {
     setIsPendingDropdown((prev) => !prev);
   });
 
+  const fetchAllData = async () => {
+    try {
+      const [motResponse, serviceResponse, roadtaxResponse] = await Promise.all(
+        [
+          axios.get(API_URL_VehicleMOT),
+          axios.get(API_URL_VehicleService),
+          axios.get(API_URL_VehicleRoadTex),
+        ]
+      );
+
+      const combinedData = [
+        ...motResponse.data.Result,
+        ...serviceResponse.data.Result,
+        ...roadtaxResponse.data.Result,
+      ];
+      setData(combinedData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+  useEffect(() => {
+    // console.log("all data is", data);
+    const filterData = data.filter(
+      (item) =>
+        // console.log(username === item.asignto)
+        (username === item.asignto && item.motPending_Done === "1") ||
+        (username === item.asignto && item.servicePending_Done === "1") ||
+        (username === item.asignto && item.roadtexPending_Done === "1")
+    );
+    console.log("show filter data : ", filterData);
+    set2FilteredData(filterData);
+  }, [data, username]);
+  useEffect(() => {
+    fetchAllData();
+  }, []);
+
   return (
     <header className=" text-black flex items-center justify-between opacity-90 w-full shadow-sm shadow-custom-blue">
       <div className="flex flex-shrink-0 py-5 px-3 bg-gradient-to-r from-rose-400 to-purple-200">
@@ -158,63 +188,75 @@ const Header = () => {
 
       <div className="flex items-center">
         <div className="flex gap-2">
-          <div className="flex gap-2 relative">
+          {/* wiht out dot bill icon */}
+          {/* https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfsOGyy0EjeoAY6mSWABHXAQ15e4MbuFmxcUSs_y_-EVfzcSLOh0k-AQmbKKQG9NWCDfo&usqp=CAU  */}
+          <div className="flex gap-2">
             {role === "user" && filteredData.length > 0 ? (
-              <>
-                <div
-                  className="h-8 w-8 rounded-lg cursor-pointer"
-                  onClick={pendingDropdown}
-                >
-                  <img
-                    src="https://static.vecteezy.com/system/resources/previews/029/719/841/non_2x/notification-bell-icon-free-png.png"
-                    alt="notification"
-                    height={30}
-                    width={30}
-                  />
-                </div>
-
-                {/* Conditional Dropdown */}
-                {isPendingDropdown && (
-                  <div className="absolute right-0 mt-12 flex flex-col bg-white rounded shadow-lg text-black w-80">
-                    <table className="min-w-full table-auto border-collapse">
-                      <thead>
-                        <tr>
-                          <th className="px-4 py-2 text-left">Car Name</th>
-                          <th className="px-4 py-2 text-left">
-                            Registration No.
-                          </th>
-                          <th className="px-4 py-2 text-left">Action</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {filteredData.map((item, index) => (
-                          <tr
-                            key={item.id}
-                            className={
-                              index % 2 === 0 ? "bg-gray-100" : "bg-white"
-                            }
-                          >
-                            <td className="px-4 py-2">{item.VehicleName}</td>
-                            <td className="px-4 py-2">
-                              {item.registrationNumber}
-                            </td>
-                            <td className="px-4 py-2 text-blue-500 hover:text-blue-700">
-                              <Link href={`/car-details/${item._id}`}>
-                                <CiWarning className="text-xl" />
-                              </Link>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
+              filteredData.some(
+                (item) =>
+                  (username === item.asignto && item.motPending_Done === "1") ||
+                  (username === item.asignto &&
+                    item.servicePending_Done === "1") ||
+                  (username === item.asignto &&
+                    item.roadtexPending_Done === "1")
+              ) ? (
+                <>
+                  <div
+                    className="h-8 w-8 rounded-lg cursor-pointer"
+                    onClick={pendingDropdown}
+                  >
+                    <img
+                      src="https://static.vecteezy.com/system/resources/previews/029/719/841/non_2x/notification-bell-icon-free-png.png"
+                      alt="notification"
+                      height={30}
+                      width={30}
+                    />
                   </div>
-                )}
-              </>
+                  {typeof window !== "undefined" && isPendingDropdown && (
+                    <div className="absolute right-0 mt-2 flex flex-col bg-white rounded shadow-lg z-10 text-black">
+                      <div className="absolute right-0 mt-12 flex flex-col bg-white rounded shadow-lg text-black w-80">
+                        <table className="min-w-full table-auto border-collapse">
+                          <thead>
+                            <tr>
+                              <th className="px-4 py-2 text-left">Car Name</th>
+                              <th className="px-4 py-2 text-left">
+                                Registration No.
+                              </th>
+                              <th className="px-4 py-2 text-left">Action</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {filtered2Data.map((item, index) => (
+                              <tr
+                                key={item.id}
+                                className={
+                                  index % 2 === 0 ? "bg-gray-100" : "bg-white"
+                                }
+                              >
+                                <td className="px-4 py-2">
+                                  {item.VehicleName}
+                                </td>
+                                <td className="px-4 py-2">
+                                  {item.registrationNumber}
+                                </td>
+                                <td className="px-4 py-2 text-blue-500 hover:text-blue-700">
+                                  <Link href={`/car-details/${item.id}`}>
+                                    <CiWarning className="text-xl" />
+                                  </Link>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  )}
+                </>
+              ) : null
             ) : (
-              // Default notification icon when no pending items
               <img
                 src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfsOGyy0EjeoAY6mSWABHXAQ15e4MbuFmxcUSs_y_-EVfzcSLOh0k-AQmbKKQG9NWCDfo&usqp=CAU"
-                alt="no notification"
+                alt="notification"
                 height={30}
                 width={30}
               />

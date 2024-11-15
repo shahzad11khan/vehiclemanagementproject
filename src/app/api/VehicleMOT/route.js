@@ -8,6 +8,7 @@ export const POST = catchAsyncErrors(async (request) => {
   const data = await request.json();
 
   const {
+    VehicleId,
     VehicleName,
     VehicleStatus,
     registrationNumber,
@@ -24,6 +25,7 @@ export const POST = catchAsyncErrors(async (request) => {
 
   // Create and save the new vehicle entry
   const newVehicleMOT = new VehicleMOT({
+    VehicleId,
     VehicleName,
     registrationNumber,
     VehicleStatus,

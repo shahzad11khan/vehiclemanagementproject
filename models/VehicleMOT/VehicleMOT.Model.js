@@ -29,6 +29,7 @@ const VehicleMOTSchema = new mongoose.Schema(
     VehicleStatus: {
       type: Boolean,
     },
+    VehicleId: { type: mongoose.Schema.Types.ObjectId, ref: "Vehicle" },
     adminCreatedBy: {
       type: String,
     },

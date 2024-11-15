@@ -31,10 +31,12 @@ const Page = ({ params }) => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(`${API_URL_VehicleService}`);
-      console.log("service Data: ", response.data.Result);
-      setData(response.data.Result);
-      setFilteredData(response.data.Result);
+      const response = await axios.get(
+        `${API_URL_VehicleService}/${addServiceId}`
+      );
+      console.log("service Data: ", response.data.result);
+      setData(response.data.result);
+      setFilteredData(response.data.result);
     } catch (error) {
       console.error("Error fetching data:", error);
     }

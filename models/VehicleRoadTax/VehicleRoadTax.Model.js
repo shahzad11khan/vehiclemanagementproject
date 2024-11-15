@@ -24,6 +24,7 @@ const VehicleroadtexSchema = new mongoose.Schema(
     VehicleStatus: {
       type: Boolean,
     },
+    VehicleId: { type: mongoose.Schema.Types.ObjectId, ref: "Vehicle" },
     roadtexPending_Done: {
       type: String,
     },

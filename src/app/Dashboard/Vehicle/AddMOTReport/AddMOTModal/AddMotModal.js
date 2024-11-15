@@ -14,6 +14,7 @@ const AddMotModal = ({ isOpen, onClose, fetchData, selectedid }) => {
   const [formData, setFormData] = useState({
     VehicleName: "",
     registrationNumber: "",
+    VehicleId: "",
     motCurrentDate: "",
     motDueDate: "",
     motCycle: "",
@@ -42,6 +43,7 @@ const AddMotModal = ({ isOpen, onClose, fetchData, selectedid }) => {
           // Assuming you want to store vehicle model and registration number
           setFormData((prevData) => ({
             ...prevData,
+            VehicleId: data._id,
             VehicleName: data.model, // Assuming 'model' is the key for the vehicle model
             registrationNumber: data.registrationNumber, // Assuming 'registrationNumber' is the key for registration number
             adminCompanyName: data.adminCompanyName,
@@ -149,6 +151,7 @@ const AddMotModal = ({ isOpen, onClose, fetchData, selectedid }) => {
 
   const resetform = () => {
     setFormData({
+      VehicleId: formData.VehicleId,
       VehicleName: formData.VehicleName,
       registrationNumber: formData.registrationNumber,
       motCurrentDate: "",

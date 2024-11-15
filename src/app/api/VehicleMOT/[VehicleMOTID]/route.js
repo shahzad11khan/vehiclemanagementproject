@@ -79,37 +79,37 @@ export const PUT = async (request, context) => {
   }
 };
 
-// GET handler for retrieving a specific manufacturer by ID
-export const GET = async (request, context) => {
-  try {
-    // Connect to the database
-    await connect();
+// // GET handler for retrieving a specific manufacturer by ID
+// export const GET = async (request, context) => {
+//   try {
+//     // Connect to the database
+//     await connect();
 
-    // Extract the Manufacturer ID from the request parameters
-    const id = context.params.VehicleMOTID; // Use context.params for accessing the parameters
-    console.log(id);
+//     // Extract the Manufacturer ID from the request parameters
+//     const id = context.params.VehicleMOTID; // Use context.params for accessing the parameters
+//     console.log(id);
 
-    // Find the manufacturer by ID
-    const Find_VehicleMOT = await VehicleMOT.findById({ _id: id });
+//     // Find the manufacturer by ID
+//     const Find_VehicleMOT = await VehicleMOT.findById({ _id: id });
 
-    // Check if the manufacturer exists
-    if (!Find_VehicleMOT) {
-      return NextResponse.json({
-        result: "No VehicleMOT Found",
-        status: 404,
-      });
-    }
+//     // Check if the manufacturer exists
+//     if (!Find_VehicleMOT) {
+//       return NextResponse.json({
+//         result: "No VehicleMOT Found",
+//         status: 404,
+//       });
+//     }
 
-    // Return the found manufacturer as a JSON response
-    return NextResponse.json({ result: Find_VehicleMOT, status: 200 });
-  } catch (error) {
-    console.error("Error fetching VehicleMOT:", error); // Log the error for debugging
-    return NextResponse.json({
-      result: "Failed to fetch VehicleMOT",
-      status: 500,
-    });
-  }
-};
+//     // Return the found manufacturer as a JSON response
+//     return NextResponse.json({ result: Find_VehicleMOT, status: 200 });
+//   } catch (error) {
+//     console.error("Error fetching VehicleMOT:", error); // Log the error for debugging
+//     return NextResponse.json({
+//       result: "Failed to fetch VehicleMOT",
+//       status: 500,
+//     });
+//   }
+// };
 // DELETE handler for deleting a manufacturer
 export const DELETE = async (request, { params }) => {
   try {
@@ -145,3 +145,40 @@ export const DELETE = async (request, { params }) => {
     });
   }
 };
+
+// GET handler for retrieving a specific product by ID
+export async function GET(request, { params }) {
+  try {
+    // Connect to the database
+    await connect();
+
+    // Extract the product ID from the request parameters
+    console.log(params);
+    const id = params.VehicleMOTID;
+    // console.log("Your ID is:", id);
+
+    // Find all records related to the driverId
+    const Find_User_All = await VehicleMOT.find({ VehicleId: id });
+
+    // If there are records associated with driverId
+    if (Find_User_All.length > 0) {
+      // Return all records as a JSON response
+      return NextResponse.json({ result: Find_User_All, status: 200 });
+    } else {
+      // If no records found for driverId, try to find by _id
+      const Find_User = await VehicleMOT.findById(id);
+
+      // Check if the product exists
+      if (!Find_User) {
+        return NextResponse.json({ result: [], status: 404 });
+      } else {
+        // Return the found product as a JSON response
+        return NextResponse.json({ result: Find_User, status: 200 });
+      }
+    }
+  } catch (error) {
+    console.error("Error retrieving product:", error);
+    // Return an error response
+    return NextResponse.json({ message: "Internal Server Error", status: 500 });
+  }
+}

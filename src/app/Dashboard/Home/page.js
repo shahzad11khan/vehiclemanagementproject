@@ -16,7 +16,7 @@ import {
   API_URL_VehicleService,
   API_URL_VehicleRoadTex,
 } from "../Components/ApiUrl/ApiUrls";
-import { getCompanyName } from "@/utils/storageUtils";
+import { getCompanyName, getUserName, getUserRole } from "@/utils/storageUtils";
 import axios from "axios";
 import Link from "next/link.js";
 import { CiWarning } from "react-icons/ci";
@@ -157,12 +157,25 @@ const Page = () => {
   };
   useEffect(() => {
     const companyName = getCompanyName();
-
-    const filtered = data.filter(
-      (item) =>
-        item.adminCompanyName.toLowerCase() === companyName.toLowerCase()
-    );
+    const companyuser = getUserName();
+    const userrole = getUserRole();
+    const filtered = data.filter((item) => {
+      console.log(item.adminCompanyName, companyName);
+      if (companyuser && userrole === "user") {
+        // console.log("if part");
+        return (
+          item.adminCompanyName.toLowerCase() === companyName.toLowerCase() &&
+          item.asignto.toLowerCase() === companyuser.toLowerCase()
+        );
+      } else {
+        // console.log("else part");
+        return (
+          item.adminCompanyName.toLowerCase() === companyName.toLowerCase()
+        );
+      }
+    });
     setFilteredData(filtered);
+    console.log(filtered);
   }, [data]);
 
   useEffect(() => {
@@ -492,6 +505,9 @@ const Page = () => {
                       Status
                     </th>
                     <th className="py-2 px-4 border-b border-gray-300 text-left">
+                      Assigned
+                    </th>
+                    <th className="py-2 px-4 border-b border-gray-300 text-left">
                       Actions
                     </th>
                   </tr>
@@ -525,6 +541,9 @@ const Page = () => {
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
                         {row.VehicleStatus === true ? "Active" : "InActive"}
+                      </td>
+                      <td className="py-2 px-4 border-b border-gray-200">
+                        {row.asignto}
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
                         <Link

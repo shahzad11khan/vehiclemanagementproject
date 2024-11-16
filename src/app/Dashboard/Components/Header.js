@@ -22,7 +22,7 @@ import {
   API_URL_VehicleService,
   API_URL_VehicleRoadTex,
 } from "../Components/ApiUrl/ApiUrls";
-import { CiWarning } from "react-icons/ci";
+// import { CiWarning } from "react-icons/ci";
 
 const Header = () => {
   const router = useRouter();
@@ -35,8 +35,8 @@ const Header = () => {
   const [imagePreview, setImagePreview] = useState("");
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
-  const [filtered2Data, set2FilteredData] = useState([]);
-  const [activeTab, setActiveTab] = useState("MOT");
+  // const [filtered2Data, set2FilteredData] = useState([]);
+  // const [activeTab, setActiveTab] = useState("MOT");
 
   const fetchMOT = async () => {
     try {
@@ -144,69 +144,69 @@ const Header = () => {
     setIsPendingDropdown((prev) => !prev);
   });
 
-  const fetchAllData = async () => {
-    try {
-      const [motResponse, serviceResponse, roadtaxResponse] = await Promise.all(
-        [
-          axios.get(API_URL_VehicleMOT),
-          axios.get(API_URL_VehicleService),
-          axios.get(API_URL_VehicleRoadTex),
-        ]
-      );
+  // const fetchAllData = async () => {
+  //   try {
+  //     const [motResponse, serviceResponse, roadtaxResponse] = await Promise.all(
+  //       [
+  //         axios.get(API_URL_VehicleMOT),
+  //         axios.get(API_URL_VehicleService),
+  //         axios.get(API_URL_VehicleRoadTex),
+  //       ]
+  //     );
 
-      const combinedData = [
-        ...motResponse.data.Result,
-        ...serviceResponse.data.Result,
-        ...roadtaxResponse.data.Result,
-      ];
-      setData(combinedData);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
-  useEffect(() => {
-    // console.log("all data is", data);
-    const filterData = data.filter(
-      (item) =>
-        // console.log(username === item.asignto)
-        (username === item.asignto && item.motPending_Done === "1") ||
-        (username === item.asignto && item.servicePending_Done === "1") ||
-        (username === item.asignto && item.roadtexPending_Done === "1")
-    );
-    // console.log("show filter data : ", filterData);
-    set2FilteredData(filterData);
-  }, [data, username]);
-  useEffect(() => {
-    fetchAllData();
-  }, []);
+  //     const combinedData = [
+  //       ...motResponse.data.Result,
+  //       ...serviceResponse.data.Result,
+  //       ...roadtaxResponse.data.Result,
+  //     ];
+  //     setData(combinedData);
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //   }
+  // };
+  // useEffect(() => {
+  //   // console.log("all data is", data);
+  //   const filterData = data.filter(
+  //     (item) =>
+  //       // console.log(username === item.asignto)
+  //       (username === item.asignto && item.motPending_Done === "1") ||
+  //       (username === item.asignto && item.servicePending_Done === "1") ||
+  //       (username === item.asignto && item.roadtexPending_Done === "1")
+  //   );
+  //   // console.log("show filter data : ", filterData);
+  //   set2FilteredData(filterData);
+  // }, [data, username]);
+  // useEffect(() => {
+  //   fetchAllData();
+  // }, []);
 
   // Click handler to change tabs
-  const handleTabClick = (tab) => {
-    setActiveTab(tab);
-  };
+  // const handleTabClick = (tab) => {
+  //   setActiveTab(tab);
+  // };
 
   // useEffect to fetch data based on active tab
-  useEffect(() => {
-    if (activeTab === "RoadTax") {
-      fetchRoadtax();
-    } else if (activeTab === "Service") {
-      fetchService();
-    } else if (activeTab === "MOT") {
-      fetchMOT();
-    }
-  }, [activeTab]);
+  // useEffect(() => {
+  //   if (activeTab === "RoadTax") {
+  //     fetchRoadtax();
+  //   } else if (activeTab === "Service") {
+  //     fetchService();
+  //   } else if (activeTab === "MOT") {
+  //     fetchMOT();
+  //   }
+  // }, [activeTab]);
 
-  const getPath = () => {
-    switch (activeTab) {
-      case "Service":
-        return `/Dashboard/Vehicle/AddServiceReport/`;
-      case "RoadTax":
-        return `/Dashboard/Vehicle/AddRoadTaxReport/`;
-      case "MOT":
-      default:
-        return `/Dashboard/Vehicle/AddMOTReport/`;
-    }
-  };
+  // const getPath = () => {
+  //   switch (activeTab) {
+  //     case "Service":
+  //       return `/Dashboard/Vehicle/AddServiceReport/`;
+  //     case "RoadTax":
+  //       return `/Dashboard/Vehicle/AddRoadTaxReport/`;
+  //     case "MOT":
+  //     default:
+  //       return `/Dashboard/Vehicle/AddMOTReport/`;
+  //   }
+  // };
 
   return (
     <header className=" text-black flex items-center justify-between opacity-90 w-full shadow-sm shadow-custom-blue">
@@ -243,56 +243,11 @@ const Header = () => {
                     />
                   </div>
                   {typeof window !== "undefined" && isPendingDropdown && (
-                    <div className="absolute right-60 mt-12 flex flex-col bg-white rounded shadow-lg text-black w-80">
-                      <table className="min-w-full table-auto border-collapse">
-                        <thead>
-                          <tr>
-                            <th className="py-2 px-4  text-left">
-                              <select
-                                onChange={(e) => handleTabClick(e.target.value)}
-                                value={activeTab}
-                                className="px-4 py-2 bg-gray-500 text-white rounded"
-                              >
-                                <option value="MOT" className=" text-black">
-                                  MOT
-                                </option>
-                                <option value="Service" className=" text-black">
-                                  Service
-                                </option>
-                                <option value="RoadTax" className=" text-black">
-                                  Road Tax
-                                </option>
-                              </select>
-                            </th>{" "}
-                            <th className="px-4 py-2 text-left">Car Name</th>
-                            <th className="px-4 py-2 text-left">
-                              Registration No.
-                            </th>
-                            <th className="px-4 py-2 text-left">Action</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {filtered2Data.map((item, index) => (
-                            <tr
-                              key={item.id}
-                              className={
-                                index % 2 === 0 ? "bg-gray-100" : "bg-white"
-                              }
-                            >
-                              <td className="px-4 py-2">{activeTab}</td>
-                              <td className="px-4 py-2">{item.VehicleName}</td>
-                              <td className="px-4 py-2">
-                                {item.registrationNumber}
-                              </td>
-                              <td className="px-4 py-2 text-blue-500 hover:text-blue-700">
-                                <Link href={`${getPath()}${item._id}`}>
-                                  <CiWarning className="text-xl" />
-                                </Link>
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
+                    <div className="absolute right-20 mt-12 flex flex-col bg-white rounded shadow-lg text-black w-80 p-4 border-2 border-gray-500">
+                      <p>
+                        You have been assigned a task. Please review the
+                        details.
+                      </p>
                     </div>
                   )}
                 </>

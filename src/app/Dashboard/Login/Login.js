@@ -32,29 +32,23 @@ const Login = () => {
       const UserActive = response.data.isActive;
       const UserRole = response.data.role;
       const userId = response.data.userId;
+      const companyId = response.data.companyId;
 
       if (UserActive) {
+        localStorage.setItem("token", isVerifiedtoken);
+        localStorage.setItem("Userusername", Userusername);
+        localStorage.setItem("companyName", companyName);
+        localStorage.setItem("UserActive", UserActive);
+        localStorage.setItem("userId", userId);
+        localStorage.setItem("role", UserRole);
+
         if (UserRole === "superadmin") {
-          localStorage.setItem("token", isVerifiedtoken);
-          localStorage.setItem("Userusername", Userusername);
-          localStorage.setItem("companyname", companyName);
-          localStorage.setItem("UserActive", UserActive);
           localStorage.setItem("role", UserRole);
-          localStorage.setItem("userId", userId);
           localStorage.setItem("flag", "false");
           localStorage.setItem("Iscompanyselected", "No");
         } else {
-          localStorage.setItem("token", isVerifiedtoken);
-          localStorage.setItem("Userusername", Userusername);
-          localStorage.setItem("UserActive", UserActive);
-          localStorage.setItem("companyName", companyName);
-          localStorage.setItem("role", UserRole);
-          localStorage.setItem("userId", userId);
+          localStorage.setItem("companyId", companyId);
         }
-        localStorage.setItem("UserActive", UserActive);
-        localStorage.setItem("Userusername", Userusername);
-        localStorage.setItem("companyName", companyName);
-        localStorage.setItem("userId", userId);
 
         router.push("/Dashboard/Home");
         toast.success(response.data.message);

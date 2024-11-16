@@ -45,7 +45,7 @@ export async function POST(Request) {
 
     // Validate password using bcryptjs
     const isPasswordValid = await bcryptjs.compare(password, user.password);
-    console.log(isPasswordValid);
+    // console.log(isPasswordValid);
 
     if (!isPasswordValid) {
       return NextResponse.json({
@@ -53,7 +53,7 @@ export async function POST(Request) {
         status: 401,
       });
     }
-    // console.log(user);
+    console.log(user);
     // Generate JWT token with appropriate user data
     const token = jwt.sign(
       {
@@ -76,6 +76,7 @@ export async function POST(Request) {
       username: user.username,
       email: user.email,
       company: user.companyname || user.CompanyName,
+      companyId: user._id,
       role: user.role,
       isActive: user.isActive,
       message: "Login successfully",

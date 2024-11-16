@@ -7,7 +7,7 @@ import Header from "../../../Components/Header";
 import Sidebar from "../../../Components/Sidebar";
 import AddRoadTexModal from "../AddRoadTaxModal/AddRoadTaxModal";
 import { API_URL_VehicleRoadTex } from "../../../Components/ApiUrl/ApiUrls";
-import { getCompanyName } from "@/utils/storageUtils";
+import { getCompanyName, getUserName } from "@/utils/storageUtils";
 import axios from "axios";
 import jsPDF from "jspdf";
 
@@ -61,14 +61,17 @@ const Page = ({ params }) => {
   }, []);
 
   useEffect(() => {
+    const companyName = getCompanyName();
+    const username = getUserName();
+
     const filtered = data.filter(
       (item) =>
-        item.adminCompanyName?.toLowerCase() ===
-        selectedCompanyName.toLowerCase()
+        username === item.asignto &&
+        item.adminCompanyName?.toLowerCase() === companyName.toLowerCase()
     );
     setFilteredData(filtered);
     setCurrentPage(1);
-  }, [data, selectedCompanyName]);
+  }, [data]);
 
   const toggleTitleModal = () => {
     setIsOpenTitle((prev) => !prev);

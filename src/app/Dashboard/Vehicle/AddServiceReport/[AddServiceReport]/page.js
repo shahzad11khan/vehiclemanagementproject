@@ -7,7 +7,7 @@ import Header from "../../../Components/Header";
 import Sidebar from "../../../Components/Sidebar";
 import AddServiceModal from "../AddServiceModal/AddServiceModal";
 import { API_URL_VehicleService } from "../../../Components/ApiUrl/ApiUrls";
-import { getCompanyName } from "@/utils/storageUtils";
+import { getCompanyName, getUserName } from "@/utils/storageUtils";
 import axios from "axios";
 import jsPDF from "jspdf";
 
@@ -62,9 +62,11 @@ const Page = ({ params }) => {
 
   useEffect(() => {
     const companyName = getCompanyName();
+    const username = getUserName();
 
     const filtered = data.filter(
       (item) =>
+        username === item.asignto &&
         item.adminCompanyName.toLowerCase() === companyName.toLowerCase()
     );
     setFilteredData(filtered);

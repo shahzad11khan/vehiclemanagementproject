@@ -35,8 +35,6 @@ const Header = () => {
   const [imagePreview, setImagePreview] = useState("");
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
-  // const [filtered2Data, set2FilteredData] = useState([]);
-  // const [activeTab, setActiveTab] = useState("MOT");
 
   const fetchMOT = async () => {
     try {
@@ -76,7 +74,6 @@ const Header = () => {
         item.adminCompanyName.toLowerCase() === companyName.toLowerCase()
     );
     setFilteredData(filtered);
-    // console.log("filtered data : ", filteredData);
   }, [data]);
   useEffect(() => {
     if (!isAuthenticated()) {
@@ -144,70 +141,6 @@ const Header = () => {
     setIsPendingDropdown((prev) => !prev);
   });
 
-  // const fetchAllData = async () => {
-  //   try {
-  //     const [motResponse, serviceResponse, roadtaxResponse] = await Promise.all(
-  //       [
-  //         axios.get(API_URL_VehicleMOT),
-  //         axios.get(API_URL_VehicleService),
-  //         axios.get(API_URL_VehicleRoadTex),
-  //       ]
-  //     );
-
-  //     const combinedData = [
-  //       ...motResponse.data.Result,
-  //       ...serviceResponse.data.Result,
-  //       ...roadtaxResponse.data.Result,
-  //     ];
-  //     setData(combinedData);
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //   }
-  // };
-  // useEffect(() => {
-  //   // console.log("all data is", data);
-  //   const filterData = data.filter(
-  //     (item) =>
-  //       // console.log(username === item.asignto)
-  //       (username === item.asignto && item.motPending_Done === "1") ||
-  //       (username === item.asignto && item.servicePending_Done === "1") ||
-  //       (username === item.asignto && item.roadtexPending_Done === "1")
-  //   );
-  //   // console.log("show filter data : ", filterData);
-  //   set2FilteredData(filterData);
-  // }, [data, username]);
-  // useEffect(() => {
-  //   fetchAllData();
-  // }, []);
-
-  // Click handler to change tabs
-  // const handleTabClick = (tab) => {
-  //   setActiveTab(tab);
-  // };
-
-  // useEffect to fetch data based on active tab
-  // useEffect(() => {
-  //   if (activeTab === "RoadTax") {
-  //     fetchRoadtax();
-  //   } else if (activeTab === "Service") {
-  //     fetchService();
-  //   } else if (activeTab === "MOT") {
-  //     fetchMOT();
-  //   }
-  // }, [activeTab]);
-
-  // const getPath = () => {
-  //   switch (activeTab) {
-  //     case "Service":
-  //       return `/Dashboard/Vehicle/AddServiceReport/`;
-  //     case "RoadTax":
-  //       return `/Dashboard/Vehicle/AddRoadTaxReport/`;
-  //     case "MOT":
-  //     default:
-  //       return `/Dashboard/Vehicle/AddMOTReport/`;
-  //   }
-  // };
-
   return (
     <header className=" text-black flex items-center justify-between opacity-90 w-full shadow-sm shadow-custom-blue">
       <div className="flex flex-shrink-0 py-5 px-3 bg-gradient-to-r from-rose-400 to-purple-200">
@@ -218,8 +151,6 @@ const Header = () => {
 
       <div className="flex items-center">
         <div className="flex gap-2">
-          {/* wiht out dot bill icon */}
-          {/* https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfsOGyy0EjeoAY6mSWABHXAQ15e4MbuFmxcUSs_y_-EVfzcSLOh0k-AQmbKKQG9NWCDfo&usqp=CAU  */}
           <div className="flex gap-2">
             {role === "user" && filteredData.length > 0 ? (
               filteredData.some(

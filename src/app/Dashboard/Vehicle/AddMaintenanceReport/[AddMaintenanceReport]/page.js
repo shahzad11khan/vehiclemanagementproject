@@ -7,7 +7,7 @@ import Header from "../../../Components/Header";
 import Sidebar from "../../../Components/Sidebar";
 import AddMaintenanceModel from "../AddMaintenanceModal/AddmaintenanceModel";
 import { API_URL_Maintainance } from "../../../Components/ApiUrl/ApiUrls";
-import { getCompanyName } from "@/utils/storageUtils";
+import { getCompanyName, getUserName } from "@/utils/storageUtils";
 import axios from "axios";
 import jsPDF from "jspdf";
 
@@ -59,17 +59,13 @@ const Page = ({ params }) => {
   }, []);
 
   useEffect(() => {
-    // data.map((r) => {
-    //   r.repairHistory[0].parts.map((x) => {
-    //     console.log(x);
-    //   });
-    // });
     const companyName = getCompanyName();
+    const username = getUserName();
+
     const filtered = data.filter(
       (item) =>
+        username === item.asignto &&
         item.adminCompanyName?.toLowerCase() === companyName.toLowerCase()
-      //   &&
-      // item.vehicleName?.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setFilteredData(filtered);
     setCurrentPage(1);

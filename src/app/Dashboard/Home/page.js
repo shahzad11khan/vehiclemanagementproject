@@ -33,7 +33,7 @@ const Page = () => {
   const [flag, setflag] = useState("");
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
-  const [activeTab, setActiveTab] = useState("MOT");
+  const [activeTab, setActiveTab] = useState("ALL");
 
   // Click handler to change tabs
   const handleTabClick = (tab) => {
@@ -134,6 +134,27 @@ const Page = () => {
     });
   };
 
+  const fetchAllData = async () => {
+    try {
+      const [motResponse, serviceResponse, roadtaxResponse] = await Promise.all(
+        [
+          axios.get(API_URL_VehicleMOT),
+          axios.get(API_URL_VehicleService),
+          axios.get(API_URL_VehicleRoadTex),
+        ]
+      );
+
+      const combinedData = [
+        ...motResponse.data.Result,
+        ...serviceResponse.data.Result,
+        ...roadtaxResponse.data.Result,
+      ];
+      setData(combinedData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
   // useEffect to fetch data based on active tab
   useEffect(() => {
     if (activeTab === "RoadTax") {
@@ -142,6 +163,8 @@ const Page = () => {
       fetchService();
     } else if (activeTab === "MOT") {
       fetchMOT();
+    } else if (activeTab === "ALL") {
+      fetchAllData();
     }
   }, [activeTab]);
   const getPath = () => {
@@ -162,13 +185,11 @@ const Page = () => {
     const filtered = data.filter((item) => {
       console.log(item.adminCompanyName, companyName);
       if (companyuser && userrole === "user") {
-        // console.log("if part");
         return (
           item.adminCompanyName.toLowerCase() === companyName.toLowerCase() &&
           item.asignto.toLowerCase() === companyuser.toLowerCase()
         );
       } else {
-        // console.log("else part");
         return (
           item.adminCompanyName.toLowerCase() === companyName.toLowerCase()
         );
@@ -469,19 +490,17 @@ const Page = () => {
                         value={activeTab}
                         className="px-4 py-2 bg-gray-500 text-white rounded"
                       >
-                        <option value="MOT" className="bg-green-700 text-white">
+                        <option value="ALL" className=" text-black">
+                          ALL
+                        </option>
+                        <option value="MOT" className=" text-black">
                           MOT
                         </option>
-                        <option
-                          value="Service"
-                          className="bg-blue-700 text-white"
-                        >
+
+                        <option value="Service" className=" text-black">
                           Service
                         </option>
-                        <option
-                          value="RoadTax"
-                          className="bg-red-700 text-white"
-                        >
+                        <option value="RoadTax" className=" text-black">
                           Road Tax
                         </option>
                       </select>
@@ -521,7 +540,7 @@ const Page = () => {
                       }`}
                     >
                       <td className="py-2 px-4 border-b border-gray-200">
-                        {activeTab}
+                        {activeTab === "ALL" ? null : activeTab}
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
                         {row.VehicleName}

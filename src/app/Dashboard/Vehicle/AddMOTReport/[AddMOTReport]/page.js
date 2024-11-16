@@ -13,6 +13,7 @@ import jsPDF from "jspdf";
 
 const Page = ({ params }) => {
   const addAddMOTReporttId = params.AddMOTReport;
+  // console.log("from home page : ", addAddMOTReporttId);
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [isOpenTitle, setIsOpenTitle] = useState(false);

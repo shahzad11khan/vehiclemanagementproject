@@ -524,11 +524,11 @@ const Page = () => {
                           : "N/A"}
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
-                        {row.VehicleStatus || "N/A"}
+                        {row.VehicleStatus === true ? "Active" : "InActive"}
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
                         <Link
-                          href={`${getPath()}${row._id}`}
+                          href={`${getPath()}${row.VehicleId}`}
                           className="bg-transparent"
                         >
                           <CiWarning />

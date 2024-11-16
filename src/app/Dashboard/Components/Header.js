@@ -41,7 +41,7 @@ const Header = () => {
   const fetchMOT = async () => {
     try {
       const response = await axios.get(`${API_URL_VehicleMOT}`);
-      console.log("MOT Data: ", response.data.Result);
+      // console.log("MOT Data: ", response.data);
       setData(response.data.Result);
     } catch (error) {
       console.error("Error fetching MOT data:", error);
@@ -51,7 +51,7 @@ const Header = () => {
   const fetchService = async () => {
     try {
       const response = await axios.get(`${API_URL_VehicleService}`);
-      console.log("Service Data: ", response.data.Result);
+      // console.log("Service Data: ", response.data);
       setData(response.data.Result);
     } catch (error) {
       console.error("Error fetching Service data:", error);
@@ -61,7 +61,7 @@ const Header = () => {
   const fetchRoadtax = async () => {
     try {
       const response = await axios.get(`${API_URL_VehicleRoadTex}`);
-      console.log("RoadTax Data: ", response.data.Result);
+      // console.log("RoadTax Data: ", response.data);
 
       setData(response.data.Result);
     } catch (error) {
@@ -70,13 +70,13 @@ const Header = () => {
   };
   useEffect(() => {
     const companyName = getCompanyName();
-    console.log(data);
+    // console.log(data);
     const filtered = data.filter(
       (item) =>
         item.adminCompanyName.toLowerCase() === companyName.toLowerCase()
     );
     setFilteredData(filtered);
-    console.log("filtered data : ", filteredData);
+    // console.log("filtered data : ", filteredData);
   }, [data]);
   useEffect(() => {
     if (!isAuthenticated()) {
@@ -173,7 +173,7 @@ const Header = () => {
         (username === item.asignto && item.servicePending_Done === "1") ||
         (username === item.asignto && item.roadtexPending_Done === "1")
     );
-    console.log("show filter data : ", filterData);
+    // console.log("show filter data : ", filterData);
     set2FilteredData(filterData);
   }, [data, username]);
   useEffect(() => {

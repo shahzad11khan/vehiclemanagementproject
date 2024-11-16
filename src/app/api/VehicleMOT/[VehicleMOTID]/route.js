@@ -158,7 +158,9 @@ export async function GET(request, { params }) {
     // console.log("Your ID is:", id);
 
     // Find all records related to the driverId
-    const Find_User_All = await VehicleMOT.find({ VehicleId: id });
+    const Find_User_All = await VehicleMOT.find({ VehicleId: id }).sort({
+      createdAt: -1,
+    });
 
     // If there are records associated with driverId
     if (Find_User_All.length > 0) {

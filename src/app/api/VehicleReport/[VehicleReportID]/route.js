@@ -24,7 +24,9 @@ export async function GET(request, context) {
       return NextResponse.json({ result: Find_User, status: 200 });
     } else {
       // If no user found, try to find by _id in an array
-      const find_user_all = await VehicleRepair.find({ _id: id });
+      const find_user_all = await VehicleRepair.find({ _id: id }).sort({
+        createdAt: -1,
+      });
 
       // Check if there are any records found
       if (find_user_all.length > 0) {

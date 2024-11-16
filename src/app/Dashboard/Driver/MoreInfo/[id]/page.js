@@ -33,6 +33,17 @@ const Page = ({ params }) => {
     }
   }, []);
 
+  useEffect(() => {
+    const oneDayInMilliseconds = 24 * 60 * 60 * 1000; // 1 day in milliseconds
+
+    const intervalId = setInterval(() => {
+      window.location.reload(); // Reload the page every 24 hours
+    }, oneDayInMilliseconds);
+
+    // Cleanup the interval when the component unmounts
+    return () => clearInterval(intervalId);
+  }, []);
+
   const fetchData = async () => {
     try {
       // Fetch the driver information from the API

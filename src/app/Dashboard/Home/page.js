@@ -484,92 +484,82 @@ const Page = () => {
               <table className="min-w-full bg-white border border-gray-200">
                 <thead>
                   <tr className="bg-gray-800 text-white text-sm">
-                    <th className="py-2 px-4 border-b border-gray-300 text-left">
-                      <select
-                        onChange={(e) => handleTabClick(e.target.value)}
-                        value={activeTab}
-                        className="px-4 py-2 bg-gray-500 text-white rounded"
-                      >
-                        <option value="ALL" className=" text-black">
-                          ALL
-                        </option>
-                        <option value="MOT" className=" text-black">
-                          MOT
-                        </option>
+                    {/* Header with Select Dropdown */}
+                    <th className="py-2 px-4 border-b border-gray-300">
+                      <div className="flex items-center justify-center gap-2">
+                        <select
+                          onChange={(e) => handleTabClick(e.target.value)}
+                          value={activeTab}
+                          className="px-4 py-2 text-black border-2 border-gray-400 rounded-lg"
+                        >
+                          <option value="ALL">ALL</option>
+                          <option value="MOT">MOT</option>
+                          <option value="Service">Service</option>
+                          <option value="RoadTax">Road Tax</option>
+                        </select>
+                        <span>Vehicle</span>
+                      </div>
+                    </th>
 
-                        <option value="Service" className=" text-black">
-                          Service
-                        </option>
-                        <option value="RoadTax" className=" text-black">
-                          Road Tax
-                        </option>
-                      </select>
-                    </th>
-                    <th className="py-2 px-4 border-b border-gray-300 text-left">
-                      Vehicle
-                    </th>
-                    <th className="py-2 px-4 border-b border-gray-300 text-left">
+                    {/* Table Headers */}
+                    <th className="py-2 px-4 border-b border-gray-300 text-center">
                       R. Number
                     </th>
-                    <th className="py-2 px-4 border-b border-gray-300 text-left">
+                    <th className="py-2 px-4 border-b border-gray-300 text-center">
                       Due Date
                     </th>
-                    {/* <th className="py-2 px-4 border-b border-gray-300 text-left">
-            Current Date
-          </th> */}
-                    <th className="py-2 px-4 border-b border-gray-300 text-left">
+                    <th className="py-2 px-4 border-b border-gray-300 text-center">
                       Description
                     </th>
-                    <th className="py-2 px-4 border-b border-gray-300 text-left">
+                    <th className="py-2 px-4 border-b border-gray-300 text-center">
                       Status
                     </th>
-                    <th className="py-2 px-4 border-b border-gray-300 text-left">
+                    <th className="py-2 px-4 border-b border-gray-300 text-center">
                       Assigned
                     </th>
-                    <th className="py-2 px-4 border-b border-gray-300 text-left">
+                    <th className="py-2 px-4 border-b border-gray-300 text-center">
                       Actions
                     </th>
                   </tr>
                 </thead>
+
+                {/* Table Body */}
                 <tbody>
                   {filteredData.map((row, index) => (
                     <tr
                       key={row._id}
-                      className={`hover:bg-gray-100  ${
+                      className={`hover:bg-gray-100 ${
                         index % 2 === 0 ? "bg-white" : "bg-gray-50"
                       }`}
                     >
-                      <td className="py-2 px-4 border-b border-gray-200">
-                        {activeTab === "ALL" ? null : activeTab}
+                      <td className="py-2 px-4 border-b border-gray-200 text-center">
+                        {row.VehicleName || "N/A"}
                       </td>
-                      <td className="py-2 px-4 border-b border-gray-200">
-                        {row.VehicleName}
+                      <td className="py-2 px-4 border-b border-gray-200 text-center">
+                        {row.registrationNumber || "N/A"}
                       </td>
-                      <td className="py-2 px-4 border-b border-gray-200">
-                        {row.registrationNumber}
-                      </td>
-                      <td className="py-2 px-4 border-b border-gray-200">
+                      <td className="py-2 px-4 border-b border-gray-200 text-center">
                         {row.dueDate || "N/A"}
                       </td>
-                      <td className="py-2 px-4 border-b border-gray-200">
+                      <td className="py-2 px-4 border-b border-gray-200 text-center">
                         {row.daysLeft > 0
                           ? `${row.daysLeft} days left`
                           : row.daysExpired > 1
                           ? `${row.daysExpired} days expired`
                           : "N/A"}
                       </td>
-                      <td className="py-2 px-4 border-b border-gray-200">
-                        {row.VehicleStatus === true ? "Active" : "InActive"}
+                      <td className="py-2 px-4 border-b border-gray-200 text-center">
+                        {row.VehicleStatus ? "Active" : "Inactive"}
                       </td>
-                      <td className="py-2 px-4 border-b border-gray-200">
-                        {row.asignto}
+                      <td className="py-2 px-4 border-b border-gray-200 text-center">
+                        {row.asignto || "N/A"}
                       </td>
-                      <td className="py-2 px-4 border-b border-gray-200">
+                      <td className="py-2 px-4 border-b border-gray-200 text-center">
                         <Link
                           href={`${getPath()}${row.VehicleId}`}
                           className="bg-transparent"
                         >
-                          <CiWarning />
+                          <CiWarning className="text-red-500 text-lg cursor-pointer" />
                         </Link>
                       </td>
                     </tr>

@@ -13,8 +13,10 @@ import axios from "axios";
 import { API_URL_Driver } from "../../Components/ApiUrl/ApiUrls";
 import { getCompanyName } from "@/utils/storageUtils";
 import Link from "next/link";
-
+import { isAuthenticated } from "@/utils/verifytoken";
+import { useRouter } from "next/navigation";
 const Page = () => {
+  const router = useRouter();
   const [drivers, setDrivers] = useState([]);
   const [filteredDrivers, setFilteredDrivers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -23,10 +25,15 @@ const Page = () => {
   const [isOpenDriverUpdate, setIsOpenDriverUpdate] = useState(false);
   const [selectedCompanyName, setSelectedCompanyName] = useState("");
   const [selectedUserId, setSelectedUserId] = useState(null);
-
   // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
+  useEffect(() => {
+    if (!isAuthenticated()) {
+      router.push("/");
+      return;
+    }
+  }, [router]);
 
   useEffect(() => {
     setIsMounted(true);

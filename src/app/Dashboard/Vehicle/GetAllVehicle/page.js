@@ -12,8 +12,11 @@ import axios from "axios";
 import { API_URL_Vehicle } from "../../Components/ApiUrl/ApiUrls";
 import { getCompanyName } from "@/utils/storageUtils";
 import Link from "next/link";
+import { isAuthenticated } from "@/utils/verifytoken";
+import { useRouter } from "next/navigation";
 
 const Page = () => {
+  const router = useRouter();
   const [vehicle, setVehicle] = useState([]); // For storing fetched data
   const [filteredData, setFilteredData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -27,7 +30,12 @@ const Page = () => {
   // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
   const recordsPerPage = 10;
-
+  useEffect(() => {
+    if (!isAuthenticated()) {
+      router.push("/");
+      return;
+    }
+  }, [router]);
   useEffect(() => {
     setIsMounted(true);
     const companyNameFromStorage = getCompanyName();

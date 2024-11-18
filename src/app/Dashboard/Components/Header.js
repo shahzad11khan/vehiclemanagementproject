@@ -36,45 +36,44 @@ const Header = () => {
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
 
-  const fetchMOT = async () => {
+  const fetchAllData = async () => {
     try {
-      const response = await axios.get(`${API_URL_VehicleMOT}`);
-      // console.log("MOT Data: ", response.data);
-      setData(response.data.Result);
+      const [motResponse, serviceResponse, roadtaxResponse] = await Promise.all(
+        [
+          axios.get(API_URL_VehicleMOT),
+          axios.get(API_URL_VehicleService),
+          axios.get(API_URL_VehicleRoadTex),
+        ]
+      );
+
+      const combinedData = [
+        ...motResponse.data.Result,
+        ...serviceResponse.data.Result,
+        ...roadtaxResponse.data.Result,
+      ];
+      setData(combinedData);
+      // console.log("All data :", combinedData);
     } catch (error) {
-      console.error("Error fetching MOT data:", error);
+      console.error("Error fetching data:", error);
     }
   };
-
-  const fetchService = async () => {
-    try {
-      const response = await axios.get(`${API_URL_VehicleService}`);
-      // console.log("Service Data: ", response.data);
-      setData(response.data.Result);
-    } catch (error) {
-      console.error("Error fetching Service data:", error);
-    }
-  };
-
-  const fetchRoadtax = async () => {
-    try {
-      const response = await axios.get(`${API_URL_VehicleRoadTex}`);
-      // console.log("RoadTax Data: ", response.data);
-
-      setData(response.data.Result);
-    } catch (error) {
-      console.error("Error fetching Road Tax data:", error);
-    }
-  };
+  // Filter data based on conditions
   useEffect(() => {
-    const companyName = getCompanyName();
-    // console.log(data);
-    const filtered = data.filter(
+    const filterData = data.filter(
       (item) =>
-        item.adminCompanyName.toLowerCase() === companyName.toLowerCase()
+        username === item.asignto &&
+        companyName === item.adminCompanyName &&
+        (item.motPending_Done === "1" ||
+          item.servicePending_Done === "1" ||
+          item.roadtexPending_Done === "1")
     );
-    setFilteredData(filtered);
-  }, [data]);
+    // console.log(filterData);
+    setFilteredData(filterData);
+  }, [data, username]);
+  // Fetch data on component mount
+  useEffect(() => {
+    fetchAllData();
+  }, []);
   useEffect(() => {
     if (!isAuthenticated()) {
       router.push("/");
@@ -97,9 +96,6 @@ const Header = () => {
     const idToFetch =
       flag === "true" && companyNameFromStorage ? companyId : userId;
     showAllAdmins(idToFetch);
-    fetchMOT();
-    fetchService();
-    fetchRoadtax();
   }, []);
 
   const showAllAdmins = async (id) => {
@@ -151,46 +147,39 @@ const Header = () => {
 
       <div className="flex items-center">
         <div className="flex gap-2">
-          <div className="flex gap-2">
+          <div className="flex gap-2 relative">
             {role === "user" && filteredData.length > 0 ? (
-              filteredData.some(
-                (item) =>
-                  (username === item.asignto && item.motPending_Done === "1") ||
-                  (username === item.asignto &&
-                    item.servicePending_Done === "1") ||
-                  (username === item.asignto &&
-                    item.roadtexPending_Done === "1")
-              ) ? (
-                <>
-                  <div
-                    className="h-8 w-8 rounded-lg cursor-pointer"
-                    onClick={pendingDropdown}
-                  >
-                    <img
-                      src="https://static.vecteezy.com/system/resources/previews/029/719/841/non_2x/notification-bell-icon-free-png.png"
-                      alt="notification"
-                      height={25}
-                      width={25}
-                    />
+              <>
+                <div
+                  className="h-8 w-8 rounded-lg cursor-pointer"
+                  onClick={pendingDropdown}
+                >
+                  <img
+                    src="https://static.vecteezy.com/system/resources/previews/029/719/841/non_2x/notification-bell-icon-free-png.png"
+                    alt="notification"
+                    height={25}
+                    width={25}
+                  />
+                </div>
+
+                {/* Conditional Dropdown */}
+                {isPendingDropdown && (
+                  <div className="absolute right-0 mt-12 flex flex-col bg-white rounded shadow-lg text-black w-80 p-4  border-2 border-gray-500">
+                    <p>
+                      You have been assigned a task. Please review the details.
+                    </p>
                   </div>
-                  {typeof window !== "undefined" && isPendingDropdown && (
-                    <div className="absolute right-20 mt-12 flex flex-col bg-white rounded shadow-lg text-black w-80 p-4 border-2 border-gray-500">
-                      <p>
-                        You have been assigned a task. Please review the
-                        details.
-                      </p>
-                    </div>
-                  )}
-                </>
-              ) : (
-                <img
-                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfsOGyy0EjeoAY6mSWABHXAQ15e4MbuFmxcUSs_y_-EVfzcSLOh0k-AQmbKKQG9NWCDfo&usqp=CAU"
-                  alt="notification"
-                  height={25}
-                  width={25}
-                />
-              )
-            ) : null}
+                )}
+              </>
+            ) : (
+              // Default notification icon when no pending items
+              <img
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfsOGyy0EjeoAY6mSWABHXAQ15e4MbuFmxcUSs_y_-EVfzcSLOh0k-AQmbKKQG9NWCDfo&usqp=CAU"
+                alt="no notification"
+                height={25}
+                width={25}
+              />
+            )}
           </div>
 
           <div>

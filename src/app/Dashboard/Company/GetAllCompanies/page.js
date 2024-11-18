@@ -11,8 +11,11 @@ import { GetCompany } from "../../Components/ApiUrl/ShowApiDatas/ShowApiDatas";
 import { API_URL_Company } from "../../Components/ApiUrl/ApiUrls";
 import axios from "axios";
 import UpdateCompanyModel from "../UpdateCompany/UpdateCompanyModel";
+import { isAuthenticated } from "@/utils/verifytoken";
+import { useRouter } from "next/navigation";
 
 const Page = () => {
+  const router = useRouter();
   const [searchTerm, setSearchTerm] = useState("");
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
@@ -21,6 +24,13 @@ const Page = () => {
   const [isOpenDriverUpdate, setIsOpenDriverUpdate] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
+
+  useEffect(() => {
+    if (!isAuthenticated()) {
+      router.push("/");
+      return;
+    }
+  }, [router]);
 
   const fetchData = async () => {
     try {

@@ -13,11 +13,13 @@ import {
 } from "../../../Components/ApiUrl/ApiUrls";
 import { getCompanyName } from "@/utils/storageUtils";
 import axios from "axios";
+import { isAuthenticated } from "@/utils/verifytoken";
+import { useRouter } from "next/navigation";
 
 const Page = ({ params }) => {
+  const router = useRouter();
   const id = params.id;
   console.log(id);
-
   const [isMounted, setIsMounted] = useState(false);
   const [data, setData] = useState([]);
   const [selectedCompanyName, setSelectedCompanyName] = useState("");
@@ -25,6 +27,12 @@ const Page = ({ params }) => {
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const recordsPerPage = 10;
+  useEffect(() => {
+    if (!isAuthenticated()) {
+      router.push("/");
+      return;
+    }
+  }, [router]);
   useEffect(() => {
     setIsMounted(true);
     const companyNameFromStorage = getCompanyName();

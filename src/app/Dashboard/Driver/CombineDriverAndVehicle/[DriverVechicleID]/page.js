@@ -12,8 +12,11 @@ import UpdateCombineDriverAndVehicle from "../UpdateCombineDriverAndVehicle/Upda
 import { API_URL_Driver_Vehicle_Allotment } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import { getCompanyName } from "@/utils/storageUtils";
 import Link from "next/link";
+import { isAuthenticated } from "@/utils/verifytoken";
+import { useRouter } from "next/navigation";
 
 const Page = ({ params }) => {
+  const router = useRouter();
   const id = params.DriverVechicleID;
   const [data, setData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -23,7 +26,12 @@ const Page = ({ params }) => {
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [isOpenAddDriverModal, setIsOpenAddDriverModal] = useState(false);
   const [isOpenUpdateModal, setIsOpenUpdateModal] = useState(false);
-
+  useEffect(() => {
+    if (!isAuthenticated()) {
+      router.push("/");
+      return;
+    }
+  }, [router]);
   useEffect(() => {
     setIsMounted(true);
     const companyNameFromStorage = getCompanyName();

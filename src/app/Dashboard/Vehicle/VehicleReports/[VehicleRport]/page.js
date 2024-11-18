@@ -6,12 +6,20 @@ import Header from "../../../Components/Header";
 import Sidebar from "../../../Components/Sidebar";
 import { API_URL_Vehicle } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import { getCompanyName } from "@/utils/storageUtils";
+import { isAuthenticated } from "@/utils/verifytoken";
+import { useRouter } from "next/navigation";
 
 const Page = ({ params }) => {
+  const router = useRouter();
   const id = params.VehicleRport;
   const [data, setData] = useState(null);
   const [isMounted, setIsMounted] = useState(false);
-
+  useEffect(() => {
+    if (!isAuthenticated()) {
+      router.push("/");
+      return;
+    }
+  }, [router]);
   useEffect(() => {
     const fetchData = async () => {
       try {

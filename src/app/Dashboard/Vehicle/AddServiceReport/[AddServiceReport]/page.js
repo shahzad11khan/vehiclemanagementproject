@@ -10,8 +10,11 @@ import { API_URL_VehicleService } from "../../../Components/ApiUrl/ApiUrls";
 import { getCompanyName, getUserName } from "@/utils/storageUtils";
 import axios from "axios";
 import jsPDF from "jspdf";
+import { isAuthenticated } from "@/utils/verifytoken";
+import { useRouter } from "next/navigation";
 
 const Page = ({ params }) => {
+  const router = useRouter();
   const addServiceId = params.AddServiceReport;
   // console.log("ADD Service Id page id", addServiceId);
   const [data, setData] = useState([]);
@@ -21,6 +24,12 @@ const Page = ({ params }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedid, setselectedid] = useState(null);
   const recordsPerPage = 10;
+  useEffect(() => {
+    if (!isAuthenticated()) {
+      router.push("/");
+      return;
+    }
+  }, [router]);
 
   useEffect(() => {
     const companyNameFromStorage = getCompanyName();

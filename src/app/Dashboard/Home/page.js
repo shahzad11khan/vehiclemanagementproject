@@ -43,7 +43,7 @@ const Page = () => {
   const fetchMOT = async () => {
     try {
       const response = await axios.get(`${API_URL_VehicleMOT}`);
-      console.log("MOT Data: ", response.data.Result);
+      // console.log("MOT Data: ", response.data.Result);
       const filteredData = processData(response.data.Result, "motDueDate");
       setData(filteredData);
       setFilteredData(filteredData);
@@ -55,7 +55,7 @@ const Page = () => {
   const fetchService = async () => {
     try {
       const response = await axios.get(`${API_URL_VehicleService}`);
-      console.log("Service Data: ", response.data.Result);
+      // console.log("Service Data: ", response.data.Result);
       const filteredData = processData(response.data.Result, "serviceDueDate");
       setData(filteredData);
       setFilteredData(filteredData);
@@ -67,7 +67,7 @@ const Page = () => {
   const fetchRoadtax = async () => {
     try {
       const response = await axios.get(`${API_URL_VehicleRoadTex}`);
-      console.log("RoadTax Data: ", response.data.Result);
+      // console.log("RoadTax Data: ", response.data.Result);
       const filteredData = processData(response.data.Result, "roadtexDueDate");
       setData(filteredData);
       setFilteredData(filteredData);
@@ -183,7 +183,7 @@ const Page = () => {
     const companyuser = getUserName();
     const userrole = getUserRole();
     const filtered = data.filter((item) => {
-      console.log(item.adminCompanyName, companyName);
+      // console.log(item.adminCompanyName, companyName);
       if (companyuser && userrole === "user") {
         return (
           item.adminCompanyName.toLowerCase() === companyName.toLowerCase() &&
@@ -196,7 +196,7 @@ const Page = () => {
       }
     });
     setFilteredData(filtered);
-    console.log(filtered);
+    // console.log(filtered);
   }, [data]);
 
   useEffect(() => {

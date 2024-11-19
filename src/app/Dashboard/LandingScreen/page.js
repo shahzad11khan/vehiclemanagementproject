@@ -24,7 +24,7 @@ const page = () => {
       <div className="w-6/12 border-white  flex justify-center gap-4 bg-transparent">
         <div className="w-[150px] h-[150px] bg-transparent flex flex-col items-center gap-3">
           <img src="/01.png" alt="Management Icon" className="w-full h-auto" />
-          <Link href="/Dashboard/Home" className="w-full">
+          <Link href="/Dashboard/StartPage" className="w-full">
             <button className="px-4 py-2 w-full rounded-md bg-white text-black hover:bg-gray-200 focus:ring-2 focus:ring-gray-400">
               Management
             </button>
@@ -32,7 +32,7 @@ const page = () => {
         </div>
         <div className="w-[150px] h-[150px] bg-transparent flex flex-col items-center gap-2">
           <img src="/02.png" alt="Management Icon" className="w-full h-auto" />
-          <Link href="/Dashboard/Home" className="w-full">
+          <Link href="/Dashboard/StartPage" className="w-full">
             <button className="px-4 py-2 w-full rounded-md bg-white text-black hover:bg-gray-200 focus:ring-2 focus:ring-gray-400">
               Management
             </button>
@@ -40,7 +40,7 @@ const page = () => {
         </div>
         <div className="w-[150px] h-[150px] bg-transparent flex flex-col items-center gap-2">
           <img src="/03.png" alt="Management Icon" className="w-full h-auto" />
-          <Link href="/Dashboard/Home" className="w-full">
+          <Link href="/Dashboard/StartPage" className="w-full">
             <button className="px-4 py-2 w-full rounded-md bg-white text-black hover:bg-gray-200 focus:ring-2 focus:ring-gray-400">
               Management
             </button>

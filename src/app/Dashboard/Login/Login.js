@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { API_URL_Login } from "../Components/ApiUrl/ApiUrls";
 import { FaEnvelope, FaLock } from "react-icons/fa";
+import LoadingScreen from "../Components/LoadingScreen";
 
 const Login = () => {
   const [userlogin, setuserlogin] = useState({
@@ -50,11 +51,10 @@ const Login = () => {
         } else {
           localStorage.setItem("companyId", companyId);
         }
-
+        // toast.success(response.data.message);
         router.push("/Dashboard/Home");
-        toast.success(response.data.message);
       } else {
-        toast.warning(`${response.data.error}`);
+        toast.warning(response.data.error);
         router.push("/");
       }
     } catch (error) {
@@ -73,16 +73,18 @@ const Login = () => {
   }, [userlogin]);
 
   return (
-    <div
-      className="min-h-screen overflow-hidden  flex justify-center items-center relative"
-      style={{ background: "#313342" }}
-    >
+    <div className="min-h-screen overflow-hidden  flex justify-center items-center relativ bg-custom-bg">
+      {loading && (
+        <div className="absolute inset-0 bg-opacity-50 z-50 ">
+          <LoadingScreen loading={loading} />
+        </div>
+      )}
       {/* <div className="absolute top-0 right-0    opacity-70 transform -translate-y-1/4"> */}
       {/* <img src="/Vectorright.png" className="top-0 right-0 absolute" /> */}
       {/* </div> */}
 
       <div
-        className="absolute bottom-0 -left-40 w-[300px] h-[300px] md:w-[400px] md:h-[400px] lg:w-[500px] lg:h-[500px]   opacity-70 transform translate-y-1/4 rounded-full"
+        className="absolute bottom-0 -left-40 w-[300px] h-[300px] md:w-[400px] md:h-[400px] lg:w-[500px] lg:h-[500px] opacity-70 transform translate-y-1/4 rounded-full"
         style={{ backgroundColor: "#23397D" }}
       ></div>
       <div
@@ -114,7 +116,7 @@ const Login = () => {
             type="email"
             name="email"
             placeholder="Enter your email"
-            className="w-full pl-10 pr-3 py-2 border focus:outline-none  bg-custom-bg"
+            className="w-full pl-10 pr-3 py-2 border focus:outline-none  bg-custom-bg text-white"
             value={userlogin.email}
             onChange={(e) =>
               setuserlogin({ ...userlogin, email: e.target.value })
@@ -131,7 +133,7 @@ const Login = () => {
             type="password"
             name="password"
             placeholder="Enter your password"
-            className="w-full pl-10 pr-3 py-2 border bg-custom-bg"
+            className="w-full pl-10 pr-3 py-2 border bg-custom-bg text-white"
             value={userlogin.password}
             onChange={(e) =>
               setuserlogin({ ...userlogin, password: e.target.value })
@@ -143,7 +145,7 @@ const Login = () => {
           className="w-full  text-black py-2 px-4 rounded-md hover:bg-blue-600 transition duration-300 bg-white"
           disabled={buttonDisable || loading}
         >
-          {loading ? "Logging in..." : "Login"}
+          Login
         </button>
       </form>
     </div>

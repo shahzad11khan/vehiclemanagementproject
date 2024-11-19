@@ -27,6 +27,7 @@ module.exports = {
       colors: {
         "custom-blue": "#A6CE39", // Define a custom color
         "custom-color": "#454544", // Define a custom color
+        "custom-bg": "#313342", // Define a custom color
         custom: "#e5e5e5", // Define a custom color
       },
       // Extend background image utilities

@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { API_URL_Login } from "../Components/ApiUrl/ApiUrls";
+import { FaEnvelope, FaLock } from "react-icons/fa";
 
 const Login = () => {
   const [userlogin, setuserlogin] = useState({
@@ -72,43 +73,65 @@ const Login = () => {
   }, [userlogin]);
 
   return (
-    <div className="min-h-screen  flex justify-center items-center">
+    <div
+      className="min-h-screen overflow-hidden  flex justify-center items-center relative"
+      style={{ background: "#313342" }}
+    >
+      {/* <div className="absolute top-0 right-0    opacity-70 transform -translate-y-1/4"> */}
+      {/* <img src="/Vectorright.png" className="top-0 right-0 absolute" /> */}
+      {/* </div> */}
+
+      <div
+        className="absolute bottom-0 -left-40 w-[300px] h-[300px] md:w-[400px] md:h-[400px] lg:w-[500px] lg:h-[500px]   opacity-70 transform translate-y-1/4 rounded-full"
+        style={{ backgroundColor: "#23397D" }}
+      ></div>
+      <div
+        className="absolute bottom-0 -left-40 w-[272px] h-[272px] md:w-[372px] md:h-[372px] lg:w-[472px] lg:h-[472px]  opacity-70 transform translate-y-1/4 rounded-full"
+        style={{
+          backgroundColor: "#244BC5",
+        }}
+      ></div>
+      <div
+        className="absolute bottom-0 -left-40 w-[288px] h-[288px] md:w-[338px] md:h-[338px] lg:w-[438px] lg:h-[438px] opacity-70 transform translate-y-1/4 rounded-full"
+        style={{
+          backgroundColor: "#23397D",
+        }}
+      ></div>
       <form
-        className="bg-transparent p-10 rounded-xl shadow-xl w-96"
+        className="bg-transparent p-10 rounded-xl -mt-32  w-[300px] h-[198px] md:w-[300px] md:h-[198px] lg:w-[300px] lg:h-[198px]"
         onSubmit={handleSubmit}
       >
-        <h2 className="text-2xl font-bold mb-5">
-          {loading ? "Processing..." : "Vehicle Management Dashboard"}
-        </h2>
-        <div className="mb-4">
-          <label htmlFor="email" className="block text-gray-700 font-bold mb-2">
-            Email
-          </label>
+        <div className=" text-center bg-transparent">
+          <h2 className="text-2xl font-bold mb-5  text-white bg-transparent ">
+            Sign In
+          </h2>
+        </div>
+        <div className="mb-6 relative">
+          <span className="absolute inset-y-0 left-2 flex items-center p-2 bg-transparent">
+            <FaEnvelope className="bg-transparent" />
+          </span>
           <input
             type="email"
-            id="email"
             name="email"
             placeholder="Enter your email"
-            className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-500"
+            className="w-full pl-10 pr-3 py-2 border focus:outline-none  bg-custom-bg"
             value={userlogin.email}
             onChange={(e) =>
               setuserlogin({ ...userlogin, email: e.target.value })
             }
           />
         </div>
-        <div className="mb-4">
-          <label
-            htmlFor="password"
-            className="block text-gray-700 font-bold mb-2"
-          >
-            Password
-          </label>
+
+        {/* Password Input with Icon */}
+        <div className="mb-6 relative">
+          <span className="absolute inset-y-0 left-2 flex items-center p-2 bg-transparent">
+            <FaLock className="bg-transparent" />
+          </span>
           <input
             type="password"
-            id="password"
             name="password"
             placeholder="Enter your password"
-            className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-500"
+            className="w-full pl-10 pr-3 py-2 border bg-custom-bg"
             value={userlogin.password}
             onChange={(e) =>
               setuserlogin({ ...userlogin, password: e.target.value })
@@ -117,7 +140,7 @@ const Login = () => {
         </div>
         <button
           type="submit"
-          className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-300"
+          className="w-full  text-black py-2 px-4 rounded-md hover:bg-blue-600 transition duration-300 bg-white"
           disabled={buttonDisable || loading}
         >
           {loading ? "Logging in..." : "Login"}

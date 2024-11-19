@@ -52,7 +52,8 @@ const Login = () => {
           localStorage.setItem("companyId", companyId);
         }
         // toast.success(response.data.message);
-        router.push("/Dashboard/Home");
+        // router.push("/Dashboard/Home");
+        router.push("/Dashboard/LandingScreen");
       } else {
         toast.warning(response.data.error);
         router.push("/");
@@ -79,9 +80,10 @@ const Login = () => {
           <LoadingScreen loading={loading} />
         </div>
       )}
-      {/* <div className="absolute top-0 right-0    opacity-70 transform -translate-y-1/4"> */}
-      {/* <img src="/Vectorright.png" className="top-0 right-0 absolute" /> */}
-      {/* </div> */}
+      {/* <div className="absolute top-0 right-0    opacity-70 transform -translate-y-1/4">
+        {" "}
+        <img src="/new.png" alt="png" />
+      </div> */}
 
       <div
         className="absolute bottom-0 -left-40 w-[300px] h-[300px] md:w-[400px] md:h-[400px] lg:w-[500px] lg:h-[500px] opacity-70 transform translate-y-1/4 rounded-full"

@@ -3,10 +3,7 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { IoPersonAdd } from "react-icons/io5";
 import { FaCar } from "react-icons/fa";
-// import { TbReport } from "react-icons/tb";
-// import { MdManageSearch } from "react-icons/md";
 import { CiSettings } from "react-icons/ci";
-// import { GrSystem } from "react-icons/gr";
 import { RiOrganizationChart } from "react-icons/ri";
 import { IoIosArrowBack } from "react-icons/io";
 import { getAuthData, isAuthenticated } from "@/utils/verifytoken";
@@ -21,6 +18,7 @@ const Sidebar = () => {
       setflag(authData.flag);
     } else {
       console.log("User is not authenticated");
+      return;
     }
   }, []);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -82,7 +80,7 @@ const Sidebar = () => {
                 onClick={() => handleLinkClick("/Dashboard/Home")}
                 className={`${
                   activeLink === "/Dashboard/Home"
-                    ? "border-l-4 border-red-400"
+                    ? "border-l-4 border-b-2 border-red-400"
                     : "text-blue "
                 } flex items-center p-3 cursor-pointer hover:border-b-2  rounded-lg bg-transparent`}
               >
@@ -103,7 +101,7 @@ const Sidebar = () => {
                     }
                     className={`${
                       activeLink === "/Dashboard/Company/GetAllCompanies"
-                        ? "border-l-4 border-red-400"
+                        ? "border-l-4 border-b-2 border-red-400"
                         : "text-blue"
                     } flex items-center p-3 cursor-pointer hover:border-b-2 rounded-lg bg-transparent`}
                   >
@@ -120,7 +118,7 @@ const Sidebar = () => {
                     onClick={() => handleLinkClick("/Dashboard/Superadmin")}
                     className={`${
                       activeLink === "/Dashboard/Superadmin"
-                        ? "border-l-4 border-red-400"
+                        ? "border-l-4 border-b-2 border-red-400"
                         : " text-blue"
                     } flex items-center p-3 cursor-pointer hover:border-b-2 rounded-lg bg-transparent`}
                   >
@@ -164,7 +162,7 @@ const Sidebar = () => {
                     }
                     className={`${
                       activeLink === "/Dashboard/Users/GetAllusers"
-                        ? "border-l-4 border-red-400"
+                        ? "border-l-4 border-b-2 border-red-400"
                         : " text-blue"
                     } flex items-center p-3 cursor-pointer hover:border-b-2 rounded-lg bg-transparent`}
                   >
@@ -184,7 +182,7 @@ const Sidebar = () => {
                     onMouseLeave={() => setIsOpenManagement(false)}
                     className={`${
                       isOpenManagement === true
-                        ? "border-l-4 border-red-400"
+                        ? "border-l-4 border-b-2 border-red-400"
                         : " text-blue"
                     } flex items-center p-3 cursor-pointer hover:border-b-2 rounded-lg relative bg-transparent`}
                   >
@@ -269,7 +267,7 @@ const Sidebar = () => {
                     }
                     className={`${
                       activeLink === "/Dashboard/Users/GetAllusers"
-                        ? "border-l-4 border-red-400"
+                        ? "border-l-4 border-b-2 border-red-400"
                         : "bg-white text-blue"
                     } flex items-center p-3 cursor-pointer hover:bg-gray-100 rounded-lg`}
                   >
@@ -293,7 +291,7 @@ const Sidebar = () => {
                     }
                     className={`${
                       activeLink === "/Dashboard/Driver/GetAllDrivers"
-                        ? "border-l-4 border-red-400"
+                        ? "border-l-4 border-b-2 border-red-400"
                         : "bg-white text-blue"
                     } flex items-center p-3 cursor-pointer hover:bg-gray-100 rounded-lg`}
                   >
@@ -317,7 +315,7 @@ const Sidebar = () => {
                     }
                     className={`${
                       activeLink === "/Dashboard/Vehicle/GetAllVehicle"
-                        ? "border-l-4 border-red-400"
+                        ? "border-l-4 border-b-2 border-red-400"
                         : "bg-white text-blue"
                     } flex items-center p-3 cursor-pointer hover:bg-gray-100 rounded-lg`}
                   >
@@ -340,7 +338,7 @@ const Sidebar = () => {
                     onMouseLeave={() => setIsOpenManagement(false)}
                     className={`${
                       isOpenManagement === true
-                        ? "border-l-4 border-red-400"
+                        ? "border-l-4 border-b-2 border-red-400"
                         : "bg-white text-blue"
                     } flex items-center p-3 cursor-pointer hover:bg-gray-100 rounded-lg relative`}
                   >
@@ -462,7 +460,7 @@ const Sidebar = () => {
                     }
                     className={`${
                       activeLink === "/Dashboard/Users/GetAllusers"
-                        ? "border-l-4 border-red-400"
+                        ? "border-l-4 border-b-2 border-red-400"
                         : " text-blue"
                     } flex items-center p-3 cursor-pointer hover:border-b-2 rounded-lg bg-transparent`}
                   >
@@ -481,7 +479,7 @@ const Sidebar = () => {
                     }
                     className={`${
                       activeLink === "/Dashboard/Driver/GetAllDrivers"
-                        ? "border-l-4 border-red-400"
+                        ? "border-l-4 border-b-2 border-red-400"
                         : "text-blue"
                     } flex items-center p-3 cursor-pointer hover:border-b-2 rounded-lg bg-transparent`}
                   >
@@ -500,7 +498,7 @@ const Sidebar = () => {
                     }
                     className={`${
                       activeLink === "/Dashboard/Vehicle/GetAllVehicle"
-                        ? "border-l-4 border-red-400"
+                        ? "border-l-4 border-b-2 border-red-400"
                         : "text-blue"
                     } flex items-center p-3 cursor-pointer hover:border-b-2 rounded-lg bg-transparent`}
                   >
@@ -519,7 +517,7 @@ const Sidebar = () => {
                     onMouseLeave={() => setIsOpenManagement(false)}
                     className={`${
                       isOpenManagement === true
-                        ? "border-l-4 border-red-400"
+                        ? "border-l-4 border-b-2 border-red-400"
                         : "text-blue"
                     } flex items-center p-3 cursor-pointer hover:border-b-2 rounded-lg relative bg-transparent`}
                   >

@@ -200,11 +200,14 @@ const Header = () => {
         </div>
 
         <div className="relative">
-          <div
-            className="h-8 w-8 rounded-lg cursor-pointer"
-            onClick={toggleDropdown}
-          >
-            <img src={imagePreview} alt="Profile" height={40} width={40} />
+          <div className="h-8 w-8 cursor-pointer" onClick={toggleDropdown}>
+            <img
+              src={imagePreview}
+              alt="Profile"
+              height={40}
+              width={40}
+              className="rounded-full"
+            />
           </div>
 
           {typeof window !== "undefined" && isDropdownOpen && (

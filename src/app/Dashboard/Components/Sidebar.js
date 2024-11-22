@@ -2,12 +2,11 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { IoPersonAdd } from "react-icons/io5";
-import { FaHouseLaptop } from "react-icons/fa6";
-import { FaCar, FaIndustry } from "react-icons/fa";
+import { FaCar } from "react-icons/fa";
 // import { TbReport } from "react-icons/tb";
 // import { MdManageSearch } from "react-icons/md";
 import { CiSettings } from "react-icons/ci";
-import { GrSystem } from "react-icons/gr";
+// import { GrSystem } from "react-icons/gr";
 import { RiOrganizationChart } from "react-icons/ri";
 import { IoIosArrowBack } from "react-icons/io";
 import { getAuthData, isAuthenticated } from "@/utils/verifytoken";
@@ -105,26 +104,12 @@ const Sidebar = () => {
                     className={`${
                       activeLink === "/Dashboard/Company/GetAllCompanies"
                         ? "border-l-4 border-red-400"
-                        : "bg-white text-blue"
-                    } flex items-center p-3 cursor-pointer hover:bg-gray-100 rounded-lg`}
+                        : "text-blue"
+                    } flex items-center p-3 cursor-pointer hover:border-b-2 rounded-lg bg-transparent`}
                   >
-                    <div className="flex items-center gap-3">
-                      <FaHouseLaptop
-                        className={`${
-                          activeLink === "/Dashboard/Company/GetAllCompanies"
-                            ? "text-red-400"
-                            : "text-black text-sm"
-                        }`}
-                        style={{
-                          backgroundColor: "transparent",
-                        }}
-                      />
-                      <span
-                        className="hidden sm:block text-sm"
-                        style={{
-                          backgroundColor: "transparent",
-                        }}
-                      >
+                    <div className="flex items-center gap-3 bg-transparent">
+                      <img src="/reg.png" alt="reg" />
+                      <span className="hidden sm:block text-sm text-white bg-transparent">
                         Registered Companies
                       </span>
                     </div>
@@ -136,30 +121,19 @@ const Sidebar = () => {
                     className={`${
                       activeLink === "/Dashboard/Superadmin"
                         ? "border-l-4 border-red-400"
-                        : "bg-white text-blue"
-                    } flex items-center p-3 cursor-pointer hover:bg-gray-100 rounded-lg`}
+                        : " text-blue"
+                    } flex items-center p-3 cursor-pointer hover:border-b-2 rounded-lg bg-transparent`}
                   >
-                    <div className="flex items-center gap-3">
-                      <FaIndustry
-                        className={`${
-                          activeLink === "/Dashboard/Superadmin"
-                            ? "text-red-400"
-                            : "text-black text-sm"
-                        }`}
-                      />
-                      <span
-                        className="hidden sm:block text-sm"
-                        style={{
-                          backgroundColor: "transparent",
-                        }}
-                      >
+                    <div className="flex items-center gap-3 bg-transparent">
+                      <img src="/register.png" alt="regitstercompany" />
+                      <span className="hidden sm:block text-sm text-white bg-transparent">
                         All Companies
                       </span>
                     </div>
                   </li>
                 </Link>
 
-                <Link passHref href="/Dashboard/Title/GetAllTitles">
+                {/* <Link passHref href="/Dashboard/Title/GetAllTitles">
                   <li
                     onClick={() =>
                       handleLinkClick("/Dashboard/Title/GetAllTitles")
@@ -181,7 +155,7 @@ const Sidebar = () => {
                       <span className="hidden sm:block text-sm">System</span>
                     </div>
                   </li>
-                </Link>
+                </Link> */}
 
                 <Link passHref href={"/Dashboard/Users/GetAllusers"}>
                   <li
@@ -191,43 +165,35 @@ const Sidebar = () => {
                     className={`${
                       activeLink === "/Dashboard/Users/GetAllusers"
                         ? "border-l-4 border-red-400"
-                        : "bg-white text-blue"
-                    } flex items-center p-3 cursor-pointer hover:bg-gray-100 rounded-lg`}
+                        : " text-blue"
+                    } flex items-center p-3 cursor-pointer hover:border-b-2 rounded-lg bg-transparent`}
                   >
-                    <div className="flex items-center gap-3">
-                      <RiOrganizationChart
-                        className={`${
-                          activeLink === "/Dashboard/Users/GetAllusers"
-                            ? "text-red-400"
-                            : "text-black text-sm"
-                        }`}
-                      />
-                      <span className="hidden sm:block text-sm">
+                    <div className="flex items-center gap-3 bg-transparent">
+                      <img src="/superadmin.png" alt="superadmin" />
+
+                      <span className="hidden sm:block text-sm text-white bg-transparent">
                         Superadmin Users
                       </span>
                     </div>
                   </li>
                 </Link>
 
-                <div>
+                <div className="bg-transparent">
                   <li
                     onMouseEnter={() => setIsOpenManagement(true)}
                     onMouseLeave={() => setIsOpenManagement(false)}
                     className={`${
                       isOpenManagement === true
                         ? "border-l-4 border-red-400"
-                        : "bg-white text-blue"
-                    } flex items-center p-3 cursor-pointer hover:bg-gray-100 rounded-lg relative`}
+                        : " text-blue"
+                    } flex items-center p-3 cursor-pointer hover:border-b-2 rounded-lg relative bg-transparent`}
                   >
-                    <div className="flex items-center gap-3 relative">
-                      <CiSettings
-                        className={`${
-                          isOpenManagement === true
-                            ? "text-red-400"
-                            : "text-black text-sm"
-                        }`}
-                      />
-                      <span className="hidden sm:block text-sm">Settings</span>
+                    <div className="flex items-center gap-3 relative bg-transparent">
+                      <img src="/setting.png" alt="superadmin" />
+
+                      <span className="hidden sm:block text-sm bg-transparent text-white">
+                        Settings
+                      </span>
 
                       {isOpenManagement && (
                         <div className="absolute left-36 mt-2 w-full sm:w-[170px] hover:bg-gray-200   border border-gray-300 rounded-md shadow-lg ">

@@ -3,11 +3,8 @@ import React, { useState, useCallback, useEffect } from "react";
 import { Chart, registerables } from "chart.js";
 import Header from "../Components/Header.js";
 import Sidebar from "../Components/Sidebar.js";
-import { LuBarChart2 } from "react-icons/lu";
 import { useRouter } from "next/navigation";
-import { CiWavePulse1 } from "react-icons/ci";
-import { FaChartLine } from "react-icons/fa";
-import { RiFolderReceivedFill } from "react-icons/ri";
+
 import HeroSection from "../Components/HeroSection";
 import { getAuthData, isAuthenticated } from "@/utils/verifytoken";
 import { GetVehicle } from "../Components/ApiUrl/ShowApiDatas/ShowApiDatas.js";
@@ -276,206 +273,182 @@ const Page = () => {
         <Sidebar />
         <main className="w-full mt-5 min-h-screen">
           <HeroSection />
-          <section className="grid grid-cols-5 min-w-full justify-between gap-2 text-center rounded-xl">
-            {[
-              {
-                icon: (
-                  <LuBarChart2
-                    size={30}
-                    style={{
-                      background: "#E64B87",
-                    }}
-                  />
-                ),
-                title:
-                  superadmin === "superadmin" && flag === "false"
-                    ? "Total Cars"
-                    : superadmin === "superadmin" && flag === "true"
-                    ? "Total Cars"
-                    : "Total Cars",
-                count:
-                  superadmin === "superadmin" && flag === "false"
-                    ? TotalCar
-                    : superadmin === "superadmin" && flag === "true"
-                    ? TotalCar
-                    : TotalCar,
-                colorx: {
-                  background: "#E64B87",
-                },
-                gradient: "bg-gradient-to-r",
-                style: {
-                  backgroundImage:
-                    "linear-gradient(to right, #E64B87, #B35A9E)",
-                },
-              },
-              {
-                icon: (
-                  <FaChartLine
-                    size={30}
-                    style={{
-                      background: "#8461BF",
-                    }}
-                  />
-                ),
 
-                title:
-                  superadmin === "superadmin" && flag === "false"
-                    ? "Cars for Rent"
-                    : superadmin === "superadmin" && flag === "true"
-                    ? "Cars for Rent"
-                    : "Cars for Rent",
-                count:
-                  superadmin === "superadmin" && flag === "false"
-                    ? standby
-                    : superadmin === "superadmin" && flag === "true"
-                    ? standby
-                    : standby,
-
-                colorx: {
-                  background: "#8461BF",
-                },
-                gradient: "bg-gradient-to-r",
-                style: {
-                  backgroundImage:
-                    "linear-gradient(to right, #8461BF, #4F4699)",
-                },
-              },
-              {
-                icon: (
-                  <CiWavePulse1
-                    size={30}
-                    style={{
-                      background: "#47C2FF",
-                    }}
-                  />
-                ),
-                title:
-                  superadmin === "superadmin" && flag === "false"
-                    ? "Cars for sale"
-                    : superadmin === "superadmin" && flag === "true"
-                    ? "Cars for sale"
-                    : "Cars for sale",
-                count:
-                  superadmin === "superadmin" && flag === "false"
-                    ? sellCar
-                    : superadmin === "superadmin" && flag === "true"
-                    ? sellCar
-                    : sellCar,
-                colorx: {
-                  background: "#47C2FF",
-                },
-                gradient: "bg-gradient-to-r",
-                style: {
-                  backgroundImage:
-                    "linear-gradient(to right, #47C2FF, #6893D8)",
-                },
-              },
-              {
-                icon: (
-                  <LuBarChart2
-                    size={30}
-                    style={{
-                      background: "#47C2FF",
-                    }}
-                  />
-                ),
-                color: "text-red-500",
-                title:
-                  superadmin === "superadmin" && flag === "false"
-                    ? "Cars on Rent"
-                    : superadmin === "superadmin" && flag === "true"
-                    ? "Cars on Rent"
-                    : "Cars on Rent",
-                count:
-                  superadmin === "superadmin" && flag === "false"
-                    ? rent
-                    : superadmin === "superadmin" && flag === "true"
-                    ? rent
-                    : rent,
-                colorx: {
-                  background: "#47C2FF",
-                },
-                gradient: "bg-gradient-to-r",
-                style: {
-                  backgroundImage:
-                    "linear-gradient(to right, #47C2FF, #6893D8)",
-                },
-              },
-              {
-                title:
-                  superadmin === "superadmin" && flag === "false"
-                    ? "Cars out for Maintenance"
-                    : superadmin === "superadmin" && flag === "true"
-                    ? "Cars out for Maintenance"
-                    : "Cars out for Maintenance",
-                count:
-                  superadmin === "superadmin" && flag === "false"
-                    ? maintenance
-                    : superadmin === "superadmin" && flag === "true"
-                    ? maintenance
-                    : maintenance,
-                gradient: "bg-gradient-to-r",
-                style: {
-                  backgroundImage:
-                    "linear-gradient(to right, #FFB72D, #F38459)",
-                },
-                colorx: {
-                  background: "#FFB72D",
-                },
-                icon: (
-                  <RiFolderReceivedFill
-                    size={30}
-                    style={{
-                      background: "#FFB72D",
-                      color: "white",
-                    }}
-                  />
-                ),
-              },
-            ].map((item, index) => (
-              <div
-                key={index}
-                className={`border-2 shadow-sm shadow-custom-blue rounded-md py-3 ${item.gradient} text-white`}
-                style={item.style}
-              >
-                <div
-                  className={`flex items-center flex-col sm:flex-row gap-4 justify-start ml-3 bg-transparent`}
-                  style={item.style}
-                >
-                  <div
-                    className={`flex flex-col items-start gap-2 justify-starttext-white`}
-                    style={{ ...item.colorx, backgroundColor: "transparent" }}
-                  >
-                    <span
-                      className={`font-medium text-white`}
-                      style={{ ...item.colorx, backgroundColor: "transparent" }}
-                    >
-                      {item.title}
-                    </span>
-
-                    <span
-                      className={`text-start text-white`}
-                      style={{ backgroundColor: "transparent", color: "white" }}
-                    >
-                      {item.icon}
-                    </span>
+          <section className="grid grid-cols-4  min-w-full justify-between gap-2 text-center rounded-xl">
+            <div className="w-[268px] h-[132px] shadow-md p-2 shadow-blue-200 rounded-md relative">
+              <div className="flex justify-between mt-3">
+                <div>Total Cars</div>
+                <div className="bg-pink-600 rounded-md h-[41px] w-[41px] flex justify-center text-center">
+                  <div className="flex bg-transparent flex-col justify-center">
+                    <img src="/vehicle.png" alt="vehicle" />
                   </div>
-                  <span
-                    className="text-2xl text-white"
-                    style={{ ...item.colorx, backgroundColor: "transparent" }}
-                  >
-                    <strong
-                      style={{ ...item.colorx, backgroundColor: "transparent" }}
-                      className="text-white"
-                    ></strong>{" "}
-                    {item.count}
-                  </span>
                 </div>
               </div>
-            ))}
+              <div className="border-l-4 border-red-500 h-12 absolute left-0 top-14"></div>
+              <h2 className="text-left pl-10 font-semibold text-3xl">
+                {superadmin === "superadmin" && flag === "false"
+                  ? TotalCar
+                  : superadmin === "superadmin" && flag === "true"
+                  ? TotalCar
+                  : TotalCar}
+              </h2>
+            </div>
+            <div className="w-[268px] h-[132px] shadow-md p-2 shadow-blue-200 rounded-md relative">
+              <div className="flex justify-between mt-3">
+                <div>Cars for Rent</div>
+                <div
+                  className=" rounded-md h-[41px] w-[41px] flex justify-center text-center"
+                  style={{
+                    backgroundColor: "#7D5EBA",
+                  }}
+                >
+                  <div className="flex bg-transparent flex-col relative">
+                    <img
+                      src="/right.png"
+                      alt="righticon"
+                      className="h-2 w-2 text-end absolute top-1 right-0"
+                    />
+                    <img
+                      src="/vehicle.png"
+                      alt="vehicle"
+                      className="text-end mt-3"
+                    />
+                  </div>{" "}
+                </div>
+              </div>
+              <div
+                className="h-12 absolute left-0 top-14"
+                style={{
+                  border: "2px solid #7D5EBA",
+                }}
+              ></div>
+              <h2 className="text-left pl-10 font-semibold text-3xl">
+                {superadmin === "superadmin" && flag === "false"
+                  ? standby
+                  : superadmin === "superadmin" && flag === "true"
+                  ? standby
+                  : standby}
+              </h2>
+            </div>
+            <div className="w-[268px] h-[132px] shadow-md p-2 shadow-blue-200 rounded-md relative">
+              <div className="flex justify-between mt-3">
+                <div>Cars on Rent</div>
+                <div
+                  className=" rounded-md h-[41px] w-[41px] flex justify-center text-center"
+                  style={{
+                    backgroundColor: "#53B1F1",
+                  }}
+                >
+                  <div className="flex bg-transparent flex-col relative">
+                    <img
+                      src="/tick.png"
+                      alt="righticon"
+                      className="h-2 w-2 text-end absolute top-1 right-0"
+                    />
+                    <img
+                      src="/tick.png"
+                      alt="righticon"
+                      className="h-2 w-2 text-end absolute top-1 left-2 right-0"
+                    />
+                    <img
+                      src="/vehicle.png"
+                      alt="vehicle"
+                      className="text-end mt-3"
+                    />
+                  </div>{" "}
+                </div>
+              </div>
+              <div
+                className="h-12 absolute left-0 top-14"
+                style={{
+                  border: "2px solid #53B1F1",
+                }}
+              ></div>
+              <h2 className="text-left pl-10 font-semibold text-3xl">
+                {superadmin === "superadmin" && flag === "false"
+                  ? rent
+                  : superadmin === "superadmin" && flag === "true"
+                  ? rent
+                  : rent}
+              </h2>
+            </div>
+            <div className="w-[268px] h-[132px] shadow-md p-2 shadow-blue-200 rounded-md relative">
+              <div className="flex justify-between mt-3">
+                <div>Cars for Sale</div>
+                <div
+                  className=" rounded-md h-[41px] w-[41px] flex justify-center text-center"
+                  style={{
+                    backgroundColor: "#5A58D7",
+                  }}
+                >
+                  <div className="flex bg-transparent flex-col relative">
+                    <img
+                      src="/dollar.png"
+                      alt="righticon"
+                      className="h-2 w-2 text-end absolute top-1 right-0"
+                    />
+                    <img
+                      src="/vehicle.png"
+                      alt="vehicle"
+                      className="text-end mt-3"
+                    />
+                  </div>{" "}
+                </div>
+              </div>
+              <div
+                className="h-12 absolute left-0 top-14"
+                style={{
+                  border: "2px solid #5A58D7",
+                }}
+              ></div>
+              <h2 className="text-left pl-10 font-semibold text-3xl">
+                {superadmin === "superadmin" && flag === "false"
+                  ? sellCar
+                  : superadmin === "superadmin" && flag === "true"
+                  ? sellCar
+                  : sellCar}
+              </h2>{" "}
+            </div>
+            <div className="w-[268px] h-[132px] shadow-md p-2 shadow-blue-200 rounded-md relative">
+              <div className="flex justify-between mt-3">
+                <div>Cars under Maintenance</div>
+                <div
+                  className="rounded-md h-[41px] w-[41px] flex justify-center text-center"
+                  style={{
+                    backgroundColor: "#FFB52F",
+                  }}
+                >
+                  <div className="flex bg-transparent flex-col relative">
+                    <img
+                      src="/maint.png"
+                      alt="righticon"
+                      className="h-2 w-2 text-end absolute top-1 right-0"
+                    />
+                    <img
+                      src="/vehicle.png"
+                      alt="vehicle"
+                      className="text-end mt-3"
+                    />
+                  </div>{" "}
+                </div>
+              </div>
+              <div
+                className="h-12 absolute left-0 top-14"
+                style={{
+                  border: "2px solid #FFB52F",
+                }}
+              ></div>
+              <h2 className="text-left pl-10 font-semibold text-3xl">
+                {superadmin === "superadmin" && flag === "false"
+                  ? maintenance
+                  : superadmin === "superadmin" && flag === "true"
+                  ? maintenance
+                  : maintenance}
+              </h2>{" "}
+            </div>
           </section>
 
-          <section className="flex flex-col gap-4 min-w-full mt-4">
+          <section className="flex flex-col gap-4 min-w-full ">
             {/* Dropdown to switch between tabs above the table */}
             <div className="flex gap-4 mb-4"></div>
 

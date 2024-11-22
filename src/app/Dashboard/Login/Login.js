@@ -7,15 +7,23 @@ import "react-toastify/dist/ReactToastify.css";
 import { API_URL_Login } from "../Components/ApiUrl/ApiUrls";
 import { FaEnvelope, FaLock } from "react-icons/fa";
 import LoadingScreen from "../Components/LoadingScreen";
+import { isAuthenticated } from "@/utils/verifytoken";
 
 const Login = () => {
+  const router = useRouter();
+  const [buttonDisable, setbuttondisable] = useState(true);
+  const [loading, setloading] = useState(false);
+
   const [userlogin, setuserlogin] = useState({
     email: "",
     password: "",
   });
-  const [buttonDisable, setbuttondisable] = useState(true);
-  const [loading, setloading] = useState(false);
-  const router = useRouter();
+  useEffect(() => {
+    if (isAuthenticated()) {
+      router.push("/");
+      return;
+    }
+  }, [router]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

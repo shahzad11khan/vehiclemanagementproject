@@ -16,7 +16,6 @@ import {
 import { getCompanyName, getUserName, getUserRole } from "@/utils/storageUtils";
 import axios from "axios";
 import Link from "next/link.js";
-import { CiWarning } from "react-icons/ci";
 
 const Page = () => {
   const router = useRouter();
@@ -448,49 +447,47 @@ const Page = () => {
             </div>
           </section>
 
-          <section className="flex flex-col gap-4 min-w-full ">
+          <section className="flex flex-col gap-4 min-w-full mt-4 ">
             {/* Dropdown to switch between tabs above the table */}
-            <div className="flex gap-4 mb-4"></div>
-
             {/* Table to display data */}
             <div className="overflow-auto max-h-[400px] min-w-full">
-              <table className="min-w-full bg-white border border-gray-200">
+              <table className="min-w-full  border border-gray-200">
                 <thead>
-                  <tr className="bg-gray-800 text-white text-sm">
+                  <tr className="">
                     {/* Header with Select Dropdown */}
-                    <th className="py-2 px-4 border-b border-gray-300">
-                      <div className="flex items-center justify-center gap-2">
+                    <th className="py-2 px-4 border-b border-gray-300 text-white bg-custom-bg">
+                      <div className="flex items-center justify-center gap-2 text-white bg-custom-bg">
                         <select
                           onChange={(e) => handleTabClick(e.target.value)}
                           value={activeTab}
-                          className="px-4 py-2 text-black border-2 border-gray-400 rounded-lg"
+                          className="px-4 py-2  border-2 border-gray-400 rounded-lg text-white bg-custom-bg"
                         >
                           <option value="ALL">ALL</option>
                           <option value="MOT">MOT</option>
                           <option value="Service">Service</option>
                           <option value="RoadTax">Road Tax</option>
                         </select>
-                        <span>Vehicle</span>
+                        <span className="text-white bg-custom-bg">Vehicle</span>
                       </div>
                     </th>
 
                     {/* Table Headers */}
-                    <th className="py-2 px-4 border-b border-gray-300 text-center">
+                    <th className="py-2 px-4 border-b border-gray-300 text-center text-white bg-custom-bg">
                       R. Number
                     </th>
-                    <th className="py-2 px-4 border-b border-gray-300 text-center">
+                    <th className="py-2 px-4 border-b border-gray-300 text-center text-white bg-custom-bg">
                       Due Date
                     </th>
-                    <th className="py-2 px-4 border-b border-gray-300 text-center">
+                    <th className="py-2 px-4 border-b border-gray-300 text-center text-white bg-custom-bg">
                       Description
                     </th>
-                    <th className="py-2 px-4 border-b border-gray-300 text-center">
+                    <th className="py-2 px-4 border-b border-gray-300 text-center text-white bg-custom-bg">
                       Status
                     </th>
-                    <th className="py-2 px-4 border-b border-gray-300 text-center">
+                    <th className="py-2 px-4 border-b border-gray-300 text-center text-white bg-custom-bg">
                       Assigned
                     </th>
-                    <th className="py-2 px-4 border-b border-gray-300 text-center">
+                    <th className="py-2 px-4 border-b border-gray-300 text-center text-white bg-custom-bg">
                       Actions
                     </th>
                   </tr>
@@ -532,7 +529,8 @@ const Page = () => {
                           href={`${getPath()}${row.VehicleId}`}
                           className="bg-transparent"
                         >
-                          <CiWarning className="text-red-500 text-lg cursor-pointer" />
+                          {/* <CiWarning className="text-red-500 text-lg cursor-pointer" /> */}
+                          <img src="/warning.png" alt="linkgoto" />
                         </Link>
                       </td>
                     </tr>

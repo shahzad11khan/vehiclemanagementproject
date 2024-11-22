@@ -79,12 +79,12 @@ const Login = () => {
         <div className="absolute inset-0 bg-opacity-50 z-50 ">
           <LoadingScreen loading={loading} />
         </div>
-      )}
-      {/* <div className="absolute top-0 right-0    opacity-70 transform -translate-y-1/4">
-        {" "}
-        <img src="/new.png" alt="png" />
-      </div> */}
-
+      )}{" "}
+      <img
+        src="/Rightvector.png"
+        alt="png"
+        className="bg-transparent absolute top-0 right-0 w-[564px]"
+      />
       <div
         className="absolute bottom-0 -left-40 w-[300px] h-[300px] md:w-[400px] md:h-[400px] lg:w-[500px] lg:h-[500px] opacity-70 transform translate-y-1/4 rounded-full"
         style={{ backgroundColor: "#23397D" }}

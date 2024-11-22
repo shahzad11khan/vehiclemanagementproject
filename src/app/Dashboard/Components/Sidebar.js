@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { FaHome } from "react-icons/fa";
 import { IoPersonAdd } from "react-icons/io5";
 import { FaHouseLaptop } from "react-icons/fa6";
 import { FaCar, FaIndustry } from "react-icons/fa";
@@ -66,30 +65,33 @@ const Sidebar = () => {
         {isSidebarOpen ? "✖" : "☰"}
       </button>
       <aside
-        className={`bg-white text-black  min-h-screen lg:w-52 w-20 transition-transform duration-300 ease-in-out ${
+        className={` text-black  min-h-screen lg:w-52 w-20 transition-transform duration-300 ease-in-out ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } lg:translate-x-0 fixed lg:relative top-0 left-0 flex flex-col shadow-2xl  mt-1 shadow-custom-blue`}
+        } lg:translate-x-0 fixed lg:relative top-0 left-0 flex flex-col shadow-2xl  mt-1 shadow-custom-blue `}
       >
-        <nav className="flex-1">
-          <ul className="space-y-1">
+        <nav
+          className="flex-1 "
+          style={{
+            backgroundImage: "url('/bgimage.png')",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        >
+          <ul className="space-y-1 bg-transparent">
             <Link passHref href="/Dashboard/Home">
               <li
                 onClick={() => handleLinkClick("/Dashboard/Home")}
                 className={`${
                   activeLink === "/Dashboard/Home"
                     ? "border-l-4 border-red-400"
-                    : "bg-white text-blue"
-                } flex items-center p-3 cursor-pointer hover:bg-gray-100 rounded-lg`}
+                    : "text-blue "
+                } flex items-center p-3 cursor-pointer hover:border-b-2  rounded-lg bg-transparent`}
               >
-                <div className="flex items-center gap-3 ">
-                  <FaHome
-                    className={`${
-                      activeLink === "/Dashboard/Home"
-                        ? "text-red-400"
-                        : "text-black text-sm "
-                    } `}
-                  />
-                  <span className="hidden sm:block text-sm ">Dashboard</span>
+                <div className="flex items-center gap-3 hover:text-black  bg-transparent">
+                  <img src="/dashboard.png" alt="dashboard" />
+                  <span className="hidden sm:block text-sm text-white  bg-transparent ">
+                    Dashboard
+                  </span>
                 </div>
               </li>
             </Link>
@@ -246,78 +248,7 @@ const Sidebar = () => {
                                 All Models
                               </Link>
                             </li>
-                            {/* <li>
-                              <Link
-                                href="/Dashboard/Models/VehicleType/GetVehicleTypes"
-                                className="  rounded hover:bg-gray-200"
-                              >
-                                All Vehicle Types
-                              </Link>
-                            </li> */}
-                            {/* <li>
-                              <Link
-                                href="/Dashboard/Models/Enquiry/GetEnquiries"
-                                className="  rounded hover:bg-gray-200"
-                              >
-                                All Enquiries
-                              </Link>
-                            </li>
-                            <li>
-                              <Link
-                                href="/Dashboard/Models/Firm/GetFirms"
-                                className="  rounded hover:bg-gray-200"
-                              >
-                                All Firms
-                              </Link>
-                            </li>
-                            <li>
-                              <Link
-                                href="/Dashboard/Models/Signature/GetSignatures"
-                                className="  rounded hover:bg-gray-200"
-                              >
-                                All Signatures
-                              </Link>
-                            </li>
-                            <li>
-                              <Link
-                                href="/Dashboard/Models/LocalAuthority/GetLocalAuthority"
-                                className="  rounded hover:bg-gray-200"
-                              >
-                                All Local Authority
-                              </Link>
-                            </li>
-                            <li>
-                              <Link
-                                href="/Dashboard/Models/Supplier/GetSuppliers"
-                                className="  rounded hover:bg-gray-200"
-                              >
-                                All Suppliers
-                              </Link>
-                            </li>
-                            <li>
-                              <Link
-                                href="/Dashboard/Models/Employee/GetEmploies"
-                                className="  rounded hover:bg-gray-200"
-                              >
-                                All Employees
-                              </Link>
-                            </li> */}
-                            {/* <li>
-                              <Link
-                                href="/Dashboard/Models/Badge/GetBadges"
-                                className="  rounded hover:bg-gray-200"
-                              >
-                                All Badges
-                              </Link>
-                            </li> */}
-                            {/* <li>
-                              <Link
-                                href="/Dashboard/Models/Insurance/GetInsurances"
-                                className="  rounded hover:bg-gray-200"
-                              >
-                                All Insurances
-                              </Link>
-                            </li> */}
+
                             <li>
                               <Link
                                 href="/Dashboard/Models/Type_BodyStyle/GetTypes"
@@ -364,30 +295,6 @@ const Sidebar = () => {
                     </div>
                   </li>
                 </Link>
-
-                {/* <Link passHref href="/Dashboard/Title/GetAllTitles">
-                  <li
-                    onClick={() =>
-                      handleLinkClick("/Dashboard/Title/GetAllTitles")
-                    }
-                    className={`${
-                      activeLink === "/Dashboard/Title/GetAllTitles"
-                        ? "border-l-4 border-red-400"
-                        : "bg-white text-blue"
-                    } flex items-center p-3 cursor-pointer hover:bg-gray-100 rounded-lg`}
-                  >
-                    <div className="flex items-center gap-3">
-                      <GrSystem
-                        className={`${
-                          activeLink === "/Dashboard/Title/GetAllTitles"
-                            ? "text-red-400"
-                            : "text-black text-sm"
-                        }`}
-                      />
-                      <span className="hidden sm:block text-sm">System</span>
-                    </div>
-                  </li>
-                </Link> */}
 
                 <Link passHref href={"/Dashboard/Users/GetAllusers"}>
                   <li
@@ -540,22 +447,7 @@ const Sidebar = () => {
                                 All Suppliers
                               </Link>
                             </li>
-                            {/* <li>
-                              <Link
-                                href="/Dashboard/Models/Employee/GetEmploies"
-                                className="  rounded hover:bg-gray-200"
-                              >
-                                All Employees
-                              </Link>
-                            </li> */}
-                            {/* <li>
-                              <Link
-                                href="/Dashboard/Models/Badge/GetBadges"
-                                className="  rounded hover:bg-gray-200"
-                              >
-                                All Badges
-                              </Link>
-                            </li> */}
+
                             <li>
                               <Link
                                 href="/Dashboard/Models/Insurance/GetInsurances"
@@ -594,206 +486,9 @@ const Sidebar = () => {
                     </div>
                   </li>
                 </div>
-
-                {/* <div>
-                  <li
-                    onMouseEnter={() => setIsOpen(true)}
-                    onMouseLeave={() => setIsOpen(false)}
-                    className={`${
-                      isOpen === true
-                        ? "border-l-4 border-red-400"
-                        : "bg-white text-blue"
-                    } flex items-center p-3 cursor-pointer hover:bg-gray-100 rounded-lg`}
-                  >
-                    <TbReport
-                      className={`${
-                        isOpen === true ? "text-red-400" : "text-black text-sm"
-                      }`}
-                    />
-                    <div className="relative inline-block text-sm">
-                      <span className="items-center cursor-pointer hover:bg-gray-100 rounded-lg hidden sm:block ml-2">
-                        Reports
-                      </span>
-                      {isOpen && (
-                        <div className="absolute left-36 -mt-12 w-auto bg-white border border-gray-300 rounded-md shadow-lg z-50">
-                          <ul className="grid grid-row-3 w-[200px] bg-red-500">
-                            <li
-                              className="relative hover:bg-gray-100 cursor-pointer"
-                              onMouseEnter={() =>
-                                handleMouseEnter("systemReports")
-                              }
-                              onMouseLeave={handleMouseLeave}
-                            >
-                              <Link
-                                href="#"
-                                className="block px-4 py-2 text-gray-800"
-                              >
-                                System Reports
-                              </Link>
-                              {openDropdown === "systemReports" && (
-                                <ul className="absolute left-32 w-[200px] bg-white  rounded-md shadow-lg space-y-4 z-50">
-                                  <li>
-                                    <Link
-                                      href="#"
-                                      className="px-4 py-3  rounded hover:bg-gray-200"
-                                    >
-                                      Employee Update Reports
-                                    </Link>
-                                  </li>
-                                  <li>
-                                    <Link
-                                      href="#"
-                                      className="px-4 py-3 rounded hover:bg-gray-200"
-                                    >
-                                      Rental Invoice Reports
-                                    </Link>
-                                  </li>
-                                  <li>
-                                    <Link
-                                      href="#"
-                                      className="px-4 py-3 rounded hover:bg-gray-200"
-                                    >
-                                      Overdue Payment Reports
-                                    </Link>
-                                  </li>
-                                </ul>
-                              )}
-                            </li>
-                            <li
-                              className="relative hover:bg-gray-100 cursor-pointer"
-                              onMouseEnter={() =>
-                                handleMouseEnter("vehicleReports")
-                              }
-                              onMouseLeave={handleMouseLeave}
-                            >
-                              <Link
-                                href="#"
-                                className="block px-4 py-2 text-gray-800"
-                              >
-                                Vehicle Reports
-                              </Link>
-                              {openDropdown === "vehicleReports" && (
-                                <ul className="absolute left-32 -mt-5 w-[160px] bg-white rounded-md shadow-lg space-y-4  z-50">
-                                  <li>
-                                    <Link
-                                      href="#"
-                                      className="px-4 py-3 rounded hover:bg-gray-200"
-                                    >
-                                      Interim Test Expiry
-                                    </Link>
-                                  </li>
-                                  <li>
-                                    <Link
-                                      href="#"
-                                      className="px-4 py-3 rounded hover:bg-gray-200"
-                                    >
-                                      Mot Expiry
-                                    </Link>
-                                  </li>
-                                  <li>
-                                    <Link
-                                      href="#"
-                                      className="px-4 py-3 rounded hover:bg-gray-200"
-                                    >
-                                      Road Tax Expiry
-                                    </Link>
-                                  </li>
-                                  <li>
-                                    <Link
-                                      href="#"
-                                      className="px-4 py-2 rounded hover:bg-gray-200"
-                                    >
-                                      Test Date Expiry
-                                    </Link>
-                                  </li>
-                                  <li>
-                                    <Link
-                                      href="#"
-                                      className="px-4 py-2 rounded hover:bg-gray-200"
-                                    >
-                                      Plate Expiry
-                                    </Link>
-                                  </li>
-                                </ul>
-                              )}
-                            </li>
-
-                            <li
-                              className="relative hover:bg-gray-100 cursor-pointer"
-                              onMouseEnter={() =>
-                                handleMouseEnter("driverReports")
-                              }
-                              onMouseLeave={handleMouseLeave}
-                            >
-                              <Link
-                                href="#"
-                                className="block px-4 py-2 text-gray-800"
-                              >
-                                Driver Reports
-                              </Link>
-
-                              {openDropdown === "driverReports" && (
-                                <ul className="absolute left-32 -mt-5 w-[160px] bg-white rounded-md shadow-lg space-y-4 z-50">
-                                  <li>
-                                    <Link
-                                      href="#"
-                                      className="px-4 py-3 rounded hover:bg-gray-200"
-                                    >
-                                      Drivers Holidays
-                                    </Link>
-                                  </li>
-                                  <li>
-                                    <Link
-                                      href="#"
-                                      className="px-4 py-3 rounded hover:bg-gray-200"
-                                    >
-                                      Licence Expiry
-                                    </Link>
-                                  </li>
-                                  <li>
-                                    <Link
-                                      href="#"
-                                      className="px-4 py-3 rounded hover:bg-gray-200"
-                                    >
-                                      Taxi Badge Expiry
-                                    </Link>
-                                  </li>
-                                </ul>
-                              )}
-                            </li>
-                          </ul>
-                        </div>
-                      )}
-                    </div>
-                  </li>
-                </div> */}
               </>
             ) : (
               <>
-                {" "}
-                {/* <Link passHref href="/Dashboard/Title/GetAllTitles">
-                  <li
-                    onClick={() =>
-                      handleLinkClick("/Dashboard/Title/GetAllTitles")
-                    }
-                    className={`${
-                      activeLink === "/Dashboard/Title/GetAllTitles"
-                        ? "border-l-4 border-red-400"
-                        : "bg-white text-blue"
-                    } flex items-center p-3 cursor-pointer hover:bg-gray-100 rounded-lg`}
-                  >
-                    <div className="flex items-center gap-3">
-                      <GrSystem
-                        className={`${
-                          activeLink === "/Dashboard/Title/GetAllTitles"
-                            ? "text-red-400"
-                            : "text-black text-sm"
-                        }`}
-                      />
-                      <span className="hidden sm:block text-sm">System</span>
-                    </div>
-                  </li>
-                </Link> */}
                 <Link passHref href={"/Dashboard/Users/GetAllusers"}>
                   <li
                     onClick={() =>
@@ -802,18 +497,14 @@ const Sidebar = () => {
                     className={`${
                       activeLink === "/Dashboard/Users/GetAllusers"
                         ? "border-l-4 border-red-400"
-                        : "bg-white text-blue"
-                    } flex items-center p-3 cursor-pointer hover:bg-gray-100 rounded-lg`}
+                        : " text-blue"
+                    } flex items-center p-3 cursor-pointer hover:border-b-2 rounded-lg bg-transparent`}
                   >
-                    <div className="flex items-center gap-3">
-                      <RiOrganizationChart
-                        className={`${
-                          activeLink === "/Dashboard/Users/GetAllusers"
-                            ? "text-red-400"
-                            : "text-black text-sm"
-                        }`}
-                      />
-                      <span className="hidden sm:block text-sm">Users</span>
+                    <div className="flex items-center gap-3 bg-transparent">
+                      <img src="/user.png" alt="user" />
+                      <span className="hidden sm:block text-sm bg-transparent text-white">
+                        Users
+                      </span>
                     </div>
                   </li>
                 </Link>
@@ -825,18 +516,14 @@ const Sidebar = () => {
                     className={`${
                       activeLink === "/Dashboard/Driver/GetAllDrivers"
                         ? "border-l-4 border-red-400"
-                        : "bg-white text-blue"
-                    } flex items-center p-3 cursor-pointer hover:bg-gray-100 rounded-lg`}
+                        : "text-blue"
+                    } flex items-center p-3 cursor-pointer hover:border-b-2 rounded-lg bg-transparent`}
                   >
-                    <div className="flex items-center gap-3">
-                      <IoPersonAdd
-                        className={`${
-                          activeLink === "/Dashboard/Driver/GetAllDrivers"
-                            ? "text-red-400"
-                            : "text-black text-sm"
-                        }`}
-                      />
-                      <span className="hidden sm:block text-sm ">Driver</span>
+                    <div className="flex items-center gap-3 bg-transparent">
+                      <img src="/driver.png" alt="user" />
+                      <span className="hidden sm:block text-sm bg-transparent text-white">
+                        Driver
+                      </span>
                     </div>
                   </li>
                 </Link>
@@ -848,40 +535,33 @@ const Sidebar = () => {
                     className={`${
                       activeLink === "/Dashboard/Vehicle/GetAllVehicle"
                         ? "border-l-4 border-red-400"
-                        : "bg-white text-blue"
-                    } flex items-center p-3 cursor-pointer hover:bg-gray-100 rounded-lg`}
+                        : "text-blue"
+                    } flex items-center p-3 cursor-pointer hover:border-b-2 rounded-lg bg-transparent`}
                   >
-                    <div className="flex items-center gap-3">
-                      <FaCar
-                        className={`${
-                          activeLink === "/Dashboard/Vehicle/GetAllVehicle"
-                            ? "text-red-400"
-                            : "text-black text-sm"
-                        }`}
-                      />
-                      <span className="hidden sm:block text-sm">Vehicle</span>
+                    <div className="flex items-center gap-3 bg-transparent">
+                      <img src="/vehicle.png" alt="user" />
+
+                      <span className="hidden sm:block text-sm text-white bg-transparent">
+                        Vehicle
+                      </span>
                     </div>
                   </li>
                 </Link>
-                <div>
+                <div className="bg-transparent">
                   <li
                     onMouseEnter={() => setIsOpenManagement(true)}
                     onMouseLeave={() => setIsOpenManagement(false)}
                     className={`${
                       isOpenManagement === true
                         ? "border-l-4 border-red-400"
-                        : "bg-white text-blue"
-                    } flex items-center p-3 cursor-pointer hover:bg-gray-100 rounded-lg relative`}
+                        : "text-blue"
+                    } flex items-center p-3 cursor-pointer hover:border-b-2 rounded-lg relative bg-transparent`}
                   >
-                    <div className="flex items-center gap-3 relative">
-                      <CiSettings
-                        className={`${
-                          isOpenManagement === true
-                            ? "text-red-400"
-                            : "text-black text-sm"
-                        }`}
-                      />
-                      <span className="hidden sm:block text-sm">Settings</span>
+                    <div className="flex items-center gap-3 relative bg-transparent">
+                      <img src="/setting.png" alt="user" />
+                      <span className="hidden sm:block text-sm text-white bg-transparent">
+                        Settings
+                      </span>
 
                       {isOpenManagement && (
                         <div className="absolute left-36 mt-2 w-full sm:w-[170px] hover:bg-gray-200   border border-gray-300 rounded-md shadow-lg">
@@ -942,14 +622,7 @@ const Sidebar = () => {
                                 All Suppliers
                               </Link>
                             </li>
-                            {/* <li>
-                              <Link
-                                href="/Dashboard/Models/Employee/GetEmploies"
-                                className=" py-2 rounded hover:bg-gray-200"
-                              >
-                                All Employees
-                              </Link>
-                            </li> */}
+
                             <li>
                               <Link
                                 href="/Dashboard/Models/Badge/GetBadges"
@@ -996,178 +669,6 @@ const Sidebar = () => {
                     </div>
                   </li>
                 </div>
-                {/* <div>
-                  <li
-                    onMouseEnter={() => setIsOpen(true)}
-                    onMouseLeave={() => setIsOpen(false)}
-                    className={`${
-                      isOpen === true
-                        ? "border-l-4 border-red-400"
-                        : "bg-white text-blue"
-                    } flex items-center p-3 cursor-pointer hover:bg-gray-100 rounded-lg`}
-                  >
-                    <TbReport
-                      className={`${
-                        isOpen === true ? "text-red-400" : "text-black text-sm"
-                      }`}
-                    />
-                    <div className="relative inline-block text-sm">
-                      <span className="items-center cursor-pointer hover:bg-gray-100 rounded-lg hidden sm:block ml-2">
-                        Reports
-                      </span>
-                      {isOpen && (
-                        <div className="absolute left-36 -mt-12 w-auto bg-white border border-gray-300 rounded-md shadow-lg z-50">
-                          <ul className="grid grid-row-3 w-[200px] bg-red-500">
-                            <li
-                              className="relative hover:bg-gray-100 cursor-pointer"
-                              onMouseEnter={() =>
-                                handleMouseEnter("systemReports")
-                              }
-                              onMouseLeave={handleMouseLeave}
-                            >
-                              <Link
-                                href="#"
-                                className="block px-4 py-2 text-gray-800"
-                              >
-                                System Reports
-                              </Link>
-                              {openDropdown === "systemReports" && (
-                                <ul className="absolute left-32 w-[200px] bg-white  rounded-md shadow-lg space-y-4 z-50">
-                                  <li>
-                                    <Link
-                                      href="#"
-                                      className="px-4 py-3  rounded hover:bg-gray-200"
-                                    >
-                                      Employee Update Reports
-                                    </Link>
-                                  </li>
-                                  <li>
-                                    <Link
-                                      href="#"
-                                      className="px-4 py-3 rounded hover:bg-gray-200"
-                                    >
-                                      Rental Invoice Reports
-                                    </Link>
-                                  </li>
-                                  <li>
-                                    <Link
-                                      href="#"
-                                      className="px-4 py-3 rounded hover:bg-gray-200"
-                                    >
-                                      Overdue Payment Reports
-                                    </Link>
-                                  </li>
-                                </ul>
-                              )}
-                            </li>
-                            <li
-                              className="relative hover:bg-gray-100 cursor-pointer"
-                              onMouseEnter={() =>
-                                handleMouseEnter("vehicleReports")
-                              }
-                              onMouseLeave={handleMouseLeave}
-                            >
-                              <Link
-                                href="#"
-                                className="block px-4 py-2 text-gray-800"
-                              >
-                                Vehicle Reports
-                              </Link>
-                              {openDropdown === "vehicleReports" && (
-                                <ul className="absolute left-32 -mt-5 w-[160px] bg-white rounded-md shadow-lg space-y-4  z-50">
-                                  <li>
-                                    <Link
-                                      href="#"
-                                      className="px-4 py-3 rounded hover:bg-gray-200"
-                                    >
-                                      Interim Test Expiry
-                                    </Link>
-                                  </li>
-                                  <li>
-                                    <Link
-                                      href="#"
-                                      className="px-4 py-3 rounded hover:bg-gray-200"
-                                    >
-                                      Mot Expiry
-                                    </Link>
-                                  </li>
-                                  <li>
-                                    <Link
-                                      href="#"
-                                      className="px-4 py-3 rounded hover:bg-gray-200"
-                                    >
-                                      Road Tax Expiry
-                                    </Link>
-                                  </li>
-                                  <li>
-                                    <Link
-                                      href="#"
-                                      className="px-4 py-2 rounded hover:bg-gray-200"
-                                    >
-                                      Test Date Expiry
-                                    </Link>
-                                  </li>
-                                  <li>
-                                    <Link
-                                      href="#"
-                                      className="px-4 py-2 rounded hover:bg-gray-200"
-                                    >
-                                      Plate Expiry
-                                    </Link>
-                                  </li>
-                                </ul>
-                              )}
-                            </li>
-
-                            <li
-                              className="relative hover:bg-gray-100 cursor-pointer"
-                              onMouseEnter={() =>
-                                handleMouseEnter("driverReports")
-                              }
-                              onMouseLeave={handleMouseLeave}
-                            >
-                              <Link
-                                href="#"
-                                className="block px-4 py-2 text-gray-800"
-                              >
-                                Driver Reports
-                              </Link>
-
-                              {openDropdown === "driverReports" && (
-                                <ul className="absolute left-32 -mt-5 w-[160px] bg-white rounded-md shadow-lg space-y-4 z-50">
-                                  <li>
-                                    <Link
-                                      href="#"
-                                      className="px-4 py-3 rounded hover:bg-gray-200"
-                                    >
-                                      Drivers Holidays
-                                    </Link>
-                                  </li>
-                                  <li>
-                                    <Link
-                                      href="#"
-                                      className="px-4 py-3 rounded hover:bg-gray-200"
-                                    >
-                                      Licence Expiry
-                                    </Link>
-                                  </li>
-                                  <li>
-                                    <Link
-                                      href="#"
-                                      className="px-4 py-3 rounded hover:bg-gray-200"
-                                    >
-                                      Taxi Badge Expiry
-                                    </Link>
-                                  </li>
-                                </ul>
-                              )}
-                            </li>
-                          </ul>
-                        </div>
-                      )}
-                    </div>
-                  </li>
-                </div> */}
               </>
             )}
           </ul>

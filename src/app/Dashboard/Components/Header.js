@@ -138,24 +138,24 @@ const Header = () => {
   });
 
   return (
-    <header className=" text-black flex items-center justify-between opacity-90 w-full shadow-sm shadow-custom-blue">
-      <div className="flex flex-shrink-0 py-5 px-3 bg-gradient-to-r from-rose-400 to-purple-200">
+    <header className=" text-black flex items-center justify-between opacity-90 w-full shadow-sm shadow-custom-blue bg-custom-bg">
+      <div className="flex flex-shrink-0 py-5 px-3  bg-transparent">
         <span className="text-sm font-sm text-white bg-transparent">
           Vehicle Management System{" "}
         </span>
       </div>
 
-      <div className="flex items-center">
-        <div className="flex gap-2">
-          <div className="flex gap-2 relative">
+      <div className="flex items-center bg-transparent">
+        <div className="flex gap-2 bg-transparent">
+          <div className="flex gap-2 relative bg-transparent">
             {role === "user" && filteredData.length > 0 ? (
               <>
                 <div
-                  className="h-8 w-8 rounded-lg cursor-pointer"
+                  className="h-8 w-8 rounded-lg cursor-pointer bg-transparent"
                   onClick={pendingDropdown}
                 >
                   <img
-                    src="https://static.vecteezy.com/system/resources/previews/029/719/841/non_2x/notification-bell-icon-free-png.png"
+                    src="/bill.png"
                     alt="notification"
                     height={25}
                     width={25}
@@ -174,7 +174,8 @@ const Header = () => {
             ) : (
               // Default notification icon when no pending items
               <img
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfsOGyy0EjeoAY6mSWABHXAQ15e4MbuFmxcUSs_y_-EVfzcSLOh0k-AQmbKKQG9NWCDfo&usqp=CAU"
+                src="/billwithoutnoti.png"
+                className="bg-transparent"
                 alt="no notification"
                 height={25}
                 width={25}
@@ -182,25 +183,28 @@ const Header = () => {
             )}
           </div>
 
-          <div>
-            <h6 className="mr-4 hidden md:block">
+          <div className="bg-transparent">
+            <h6 className="mr-4 hidden md:block bg-transparent text-white">
               {role === "superadmin" && flag === "false" ? (
-                <div>
-                  <p>{username}</p>
+                <div className="bg-transparent">
+                  <p className="bg-transparent text-white">{username}</p>
                 </div>
               ) : role === "superadmin" && flag === "true" ? (
-                <p>{companyName}</p>
+                <p className="bg-transparent text-white">{companyName}</p>
               ) : role === "user" ? (
-                <p> {username}</p>
+                <p className="bg-transparent text-white"> {username}</p>
               ) : (
-                <p> {companyName}</p>
+                <p className="bg-transparent text-white"> {companyName}</p>
               )}
             </h6>
           </div>
         </div>
 
-        <div className="relative">
-          <div className="h-8 w-8 cursor-pointer" onClick={toggleDropdown}>
+        <div className="relative bg-transparent">
+          <div
+            className="h-8 w-8 cursor-pointer bg-transparent"
+            onClick={toggleDropdown}
+          >
             <img
               src={imagePreview}
               alt="Profile"

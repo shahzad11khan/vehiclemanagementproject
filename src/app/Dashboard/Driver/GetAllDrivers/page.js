@@ -26,7 +26,6 @@ const Page = () => {
   const [selectedUserId, setSelectedUserId] = useState(null);
   // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
   const [itemperpage, setitemperpage] = useState(5);
 
   useEffect(() => {
@@ -124,7 +123,7 @@ const Page = () => {
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  const totalPages = Math.ceil(filteredDrivers.length / itemsPerPage);
+  const totalPages = Math.ceil(filteredDrivers.length / itemperpage);
   const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1); // Create an array of page numbers
 
   return (

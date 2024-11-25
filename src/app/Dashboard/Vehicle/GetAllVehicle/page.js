@@ -28,7 +28,6 @@ const Page = () => {
 
   // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
-  const recordsPerPage = 10;
   const [itemperpage, setitemperpage] = useState(5);
 
   useEffect(() => {
@@ -124,7 +123,7 @@ const Page = () => {
     indexOfFirstRecord,
     indexOfLastRecord
   );
-  const totalPages = Math.ceil(filteredData.length / recordsPerPage);
+  const totalPages = Math.ceil(filteredData.length / itemperpage);
   const toggleDropdown = (id) => {
     setOpenDropdownId(openDropdownId === id ? null : id);
   };

@@ -133,7 +133,7 @@ const Page = () => {
       <div className="flex gap-4">
         <Sidebar />
         <div className="container mx-auto p-4 w-[82%]">
-          <div className="justify-between mx-auto items-center border-2 mt-3 p-4">
+          <div className="justify-between mx-auto items-center mt-3">
             <div className="flex justify-between">
               <div className="flex justify-center text-center gap-3">
                 <div className="text-custom-bg mt-2">Show</div>
@@ -175,28 +175,28 @@ const Page = () => {
             </div>
 
             <div className="w-full overflow-x-auto mt-4">
-              <table className="w-11/12 border-collapse border border-gray-200 overflow-x-scroll">
+              <table className="w-full border-collapse border border-gray-200 overflow-x-scroll">
                 <thead>
                   <tr className="">
-                    <th className="text-sm border border-gray-200 px-4 py-2 text-white bg-custom-bg">
+                    <th className=" px-4 py-2 bg-custom-bg text-white text-sm">
                       Full Name
                     </th>
-                    <th className="text-sm border border-gray-200 px-4 py-2 text-white bg-custom-bg">
+                    <th className="text-sm  px-4 py-2 text-white bg-custom-bg">
                       Driver Email
                     </th>
-                    <th className="border text-sm border-gray-200 px-4 py-2 text-white bg-custom-bg">
+                    <th className="text-sm px-4 py-2 text-white bg-custom-bg">
                       Home Telephone
                     </th>
-                    <th className="border text-sm border-gray-200 px-4 py-2 text-white bg-custom-bg">
+                    <th className=" text-sm  px-4 py-2 text-white bg-custom-bg">
                       Mobile Telephone
                     </th>
-                    <th className="border text-sm border-gray-200 px-4 py-2 text-white bg-custom-bg">
+                    <th className=" text-sm  px-4 py-2 text-white bg-custom-bg">
                       License Number
                     </th>
-                    <th className="border text-sm border-gray-200 px-4 py-2 text-white bg-custom-bg">
+                    <th className=" text-sm  px-4 py-2 text-white bg-custom-bg">
                       NI Number
                     </th>
-                    <th className="border text-sm border-gray-200 px-4 py-2 text-white bg-custom-bg">
+                    <th className=" text-sm  px-4 py-2 text-white bg-custom-bg">
                       Badge Type
                     </th>
                     {/* <th className="border border-gray-200 px-4 py-2">
@@ -205,34 +205,46 @@ const Page = () => {
                     {/* <th className="border border-gray-200 px-4 py-2">
                       Payment
                     </th> */}
-                    <th className="text-sm border border-gray-200 px-4 py-2 text-white bg-custom-bg">
+                    <th className="text-sm px-3 py-2 text-white bg-custom-bg">
                       Date Of Birth
                     </th>
                     {/* <th className="border border-gray-200 px-4 py-2">
                       Start Date
                     </th> */}
-                    <th className="border text-sm border-gray-200 px-4 py-2 text-white bg-custom-bg">
-                      Actions
+                    <th className=" text-sm  px-4 py-2 text-white bg-custom-bg">
+                      Status
                     </th>
                   </tr>
                 </thead>
                 <tbody>
                   {currentDrivers.map((driver) => (
                     <tr key={driver._id} className="hover:bg-gray-50">
-                      <td className="p-3">
+                      <td className="border border-gray-300 px-4 py-2">
                         {driver.firstName} {driver.lastName}
                       </td>
-                      <td className="p-3">{driver.email}</td>
-                      <td className="p-3">{driver.tel1}</td>
-                      <td className="p-3">{driver.tel2}</td>
-                      <td className="p-3">{driver.licenseNumber}</td>
-                      <td className="p-3">{driver.niNumber}</td>
-                      <td className="p-3">{driver.badgeType}</td>
-                      {/* <td className="p-3">{driver.rentPaymentCycle}</td> */}
-                      {/* <td className="p-3">£ {driver.pay}</td> */}
-                      <td className="p-3">{formatDate(driver.dateOfBirth)}</td>
-                      {/* <td className="p-3">{formatDate(driver.startDate)}</td> */}
-                      <td className="p-3">
+                      <td className="border border-gray-300 px-4 py-2 ">
+                        {driver.email}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2">
+                        {driver.tel1}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2">
+                        {driver.tel2}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2">
+                        {driver.licenseNumber}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2">
+                        {driver.niNumber}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2">
+                        {driver.badgeType}
+                      </td>
+
+                      <td className="border border-gray-300 px-3 py-2">
+                        {formatDate(driver.dateOfBirth)}
+                      </td>
+                      <td className="border border-gray-300">
                         <div className="flex gap-2">
                           {/* <button className="text-blue-500 hover:text-blue-700">
                             <Link
@@ -246,7 +258,7 @@ const Page = () => {
                           </button> */}
                           <button
                             onClick={() => handleEdit(driver._id)}
-                            className="text-blue-500 hover:text-blue-700 "
+                            className="text-blue-500 hover:text-blue-700"
                           >
                             <img src="/edit.png" alt="edit" />
                           </button>
@@ -268,11 +280,7 @@ const Page = () => {
                               href={`/Dashboard/Driver/CombineDriverAndVehicle/${driver._id}`}
                             >
                               <div className="flex items-center gap-3">
-                                <img
-                                  src="/bcar.png"
-                                  alt="delete"
-                                  className="text-custom-bg"
-                                />
+                                <img src="/bcar.png" alt="info" />
                               </div>
                             </Link>
                           </button>
@@ -284,7 +292,6 @@ const Page = () => {
               </table>
             </div>
 
-            {/* Pagination Controls */}
             {/* Pagination Controls */}
             <div className="flex justify-center mt-4">
               <nav>

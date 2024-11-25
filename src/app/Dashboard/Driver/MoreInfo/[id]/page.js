@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { FaTrash } from "react-icons/fa";
 import Header from "../../../Components/Header";
 import Sidebar from "../../../Components/Sidebar";
 import AddMoreInfoModal from "../AddMoreInfoModal/AddMoreInfoModal";
@@ -27,6 +26,8 @@ const Page = ({ params }) => {
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const recordsPerPage = 10;
+  const [itemperpage, setitemperpage] = useState(5);
+
   useEffect(() => {
     if (!isAuthenticated()) {
       router.push("/");
@@ -353,8 +354,8 @@ const Page = ({ params }) => {
   }
   const totalPages = Math.ceil(data.length / recordsPerPage);
   const currentData = data.slice(
-    (currentPage - 1) * recordsPerPage,
-    currentPage * recordsPerPage
+    (currentPage - 1) * itemperpage,
+    currentPage * itemperpage
   );
 
   return (
@@ -363,49 +364,70 @@ const Page = ({ params }) => {
       <div className="flex gap-4">
         <Sidebar />
         <div className="container mx-auto p-4">
-          <div className="justify-between items-center border-2 mt-3">
-            <div className="flex justify-between">
-              <button
-                onClick={OpenDriverModel}
-                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-              >
-                Add Driver Info
-              </button>
+          <div className="justify-between items-center mt-3">
+            <div className="flex justify-between items-center">
+              <div className="flex gap-2">
+                <div className="text-custom-bg mt-2">Show</div>
+                <div>
+                  <select
+                    value={itemperpage}
+                    onChange={(e) => setitemperpage(e.target.value)}
+                    className="border rounded-md px-4 py-2 w-16 border-custom-bg"
+                  >
+                    <option value="">0</option>
+                    {Array.from({ length: 10 }, (_, i = 1) => i + 1).map(
+                      (number) => (
+                        <option key={number} value={number}>
+                          {number}
+                        </option>
+                      )
+                    )}
+                  </select>
+                </div>
+              </div>
+              <div>
+                <button
+                  onClick={OpenDriverModel}
+                  className="bg-custom-bg text-white px-4 py-2 rounded hover:bg-blue-600"
+                >
+                  Add Driver Info
+                </button>
+              </div>
             </div>
 
             {/* Responsive Table */}
-            <div className="mt-4">
-              <div className="overflow-x-auto">
-                <table className="min-w-full bg-white border border-gray-200">
+            <div className="mt-3 w-full">
+              <div className="overflow-x-auto w-full bg-red-300">
+                <table className="w-full bg-white border border-gray-200">
                   <thead>
-                    <tr>
-                      <th className="py-2 px-4 border-b border-gray-200 text-left">
+                    <tr className="w-full">
+                      <th className="px-4 py-2 bg-custom-bg text-white text-sm">
                         Vehicle
                       </th>
-                      <th className="py-2 px-4 border-b border-gray-200 text-left">
+                      <th className="px-4 py-2 bg-custom-bg text-white text-sm">
                         payment Cycle
                       </th>
-                      <th className="py-2 px-4 border-b border-gray-200 text-left">
+                      <th className="px-4 py-2 bg-custom-bg text-white text-sm">
                         Dates
                       </th>
-                      <th className="py-2 px-4 border-b border-gray-200 text-left">
+                      <th className="px-4 py-2 bg-custom-bg text-white text-sm">
                         Payment
                       </th>
-                      <th className="py-2 px-4 border-b border-gray-200 text-left">
+                      <th className="px-4 py-2 bg-custom-bg text-white text-sm">
                         Submitted Date
                       </th>
-                      <th className="py-2 px-4 border-b border-gray-200 text-left">
+                      <th className="px-4 py-2 bg-custom-bg text-white text-sm">
                         Submitted Payment
                       </th>
-                      <th className="py-2 px-4 border-b border-gray-200 text-left">
+                      <th className="px-4 py-2 bg-custom-bg text-white text-sm">
                         Remaining Payment
                       </th>
-                      <th className="py-2 px-4 border-b border-gray-200 text-left">
+                      <th className="px-4 py-2 bg-custom-bg text-white text-sm">
                         Actions
                       </th>
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody className="w-full">
                     {currentData.length > 0 ? (
                       currentData
                         .filter(
@@ -415,7 +437,10 @@ const Page = ({ params }) => {
                               selectedCompanyName.toLowerCase()
                         )
                         .map((row) => (
-                          <tr key={row._id} className="hover:bg-gray-100">
+                          <tr
+                            key={row._id}
+                            className="hover:bg-gray-100 w-full"
+                          >
                             <td className="py-2 px-4 border-b border-gray-200">
                               {row.vehicle}
                             </td>
@@ -425,6 +450,7 @@ const Page = ({ params }) => {
                             <td className="py-2 px-4 border-b border-gray-200">
                               {formatDate(row.startDate)}
                             </td>
+
                             <td className="py-2 px-4 border-b border-gray-200">
                               £ {row.payment}
                             </td>
@@ -444,7 +470,7 @@ const Page = ({ params }) => {
                                 onClick={() => handleDelete(row._id)}
                                 className="text-red-500 hover:text-red-700"
                               >
-                                <FaTrash />
+                                <img src="/trash.png" alt="delete" />
                               </button>
                             </td>
                           </tr>
@@ -459,7 +485,7 @@ const Page = ({ params }) => {
                         </td>
                       </tr>
                     )}
-                    {/* Total Row */}
+
                     {data.length > 0 && (
                       <tr className="font-bold">
                         <td className="py-2 px-4 border-b border-gray-200">
@@ -470,7 +496,7 @@ const Page = ({ params }) => {
                         <td className="py-2 px-4 border-b border-gray-200">
                           £ {totalamount}
                         </td>
-                        <td className="py-2 px-4 border-b border-gray-200"></td>
+                        {/* <td className="py-2 px-4 border-b border-gray-200"></td> */}
                         <td className="py-2 px-4 border-b border-gray-200">
                           £ {totalToremain}
                         </td>
@@ -497,7 +523,7 @@ const Page = ({ params }) => {
                 <span
                   className={`px-3 py-1 mx-1 rounded ${
                     currentPage
-                      ? "bg-blue-300 text-white"
+                      ? "bg-custom-bg text-white"
                       : "bg-gray-100 hover:bg-gray-300"
                   }`}
                 >

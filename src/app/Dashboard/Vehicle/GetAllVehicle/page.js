@@ -182,31 +182,31 @@ const Page = () => {
               <table className="min-w-full border-collapse border border-gray-300 mt-4">
                 <thead>
                   <tr className="">
-                    <th className="border border-gray-300 px-4 py-2 bg-custom-bg text-white text-sm">
+                    <th className=" px-4 py-2 bg-custom-bg text-white text-sm">
                       Manufacturer
                     </th>
-                    <th className="border border-gray-300 px-4 py-2 bg-custom-bg text-white text-sm">
+                    <th className=" px-4 py-2 bg-custom-bg text-white text-sm">
                       Model
                     </th>
-                    <th className="border border-gray-300 px-4 py-2 bg-custom-bg text-white text-sm">
+                    <th className=" px-4 py-2 bg-custom-bg text-white text-sm">
                       Vehicle Status
                     </th>
-                    <th className="border border-gray-300 px-4 py-2 bg-custom-bg text-white text-sm">
+                    <th className=" px-4 py-2 bg-custom-bg text-white text-sm">
                       Year
                     </th>
-                    <th className="border border-gray-300 px-4 py-2 bg-custom-bg text-white text-sm">
+                    <th className=" px-4 py-2 bg-custom-bg text-white text-sm">
                       Type
                     </th>
-                    <th className="border border-gray-300 px-4 py-2 bg-custom-bg text-white text-sm">
+                    <th className=" px-4 py-2 bg-custom-bg text-white text-sm">
                       Engine Type
                     </th>
-                    <th className="border border-gray-300 px-4 py-2 bg-custom-bg text-white text-sm">
+                    <th className=" px-4 py-2 bg-custom-bg text-white text-sm">
                       Company
                     </th>
-                    <th className="border border-gray-300 px-4 py-2 bg-custom-bg text-white text-sm">
-                      Active
+                    <th className=" px-4 py-2 bg-custom-bg text-white text-sm">
+                      Status
                     </th>
-                    <th className="border border-gray-300 px-4 py-2 bg-custom-bg text-white text-sm">
+                    <th className=" px-4 py-2 bg-custom-bg text-white text-sm">
                       Actions
                     </th>
                   </tr>

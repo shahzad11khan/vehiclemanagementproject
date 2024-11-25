@@ -5,8 +5,6 @@ import Header from "../../../Components/Header";
 import Sidebar from "../../../Components/Sidebar";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { IoIosInformationCircle } from "react-icons/io";
-import { FaEdit, FaTrash } from "react-icons/fa";
 import AddDriverAndVehicleModel from "../AddDriverAndVehicleModel/AddDriverAndVehicleModel";
 import UpdateCombineDriverAndVehicle from "../UpdateCombineDriverAndVehicle/UpdateCombineDriverAndVehicle";
 import { API_URL_Driver_Vehicle_Allotment } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
@@ -26,6 +24,9 @@ const Page = ({ params }) => {
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [isOpenAddDriverModal, setIsOpenAddDriverModal] = useState(false);
   const [isOpenUpdateModal, setIsOpenUpdateModal] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+  const [itemperpage, setitemperpage] = useState(5);
   useEffect(() => {
     if (!isAuthenticated()) {
       router.push("/");
@@ -111,6 +112,19 @@ const Page = ({ params }) => {
     setIsOpenUpdateModal(!isOpenUpdateModal);
   };
 
+  // Pagination calculations
+  const indexOfLastDriver = currentPage * itemperpage;
+  const indexOfFirstDriver = indexOfLastDriver - itemperpage;
+  const currentDrivers = filteredData.slice(
+    indexOfFirstDriver,
+    indexOfLastDriver
+  );
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+  const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1); // Create an array of page numbers
+
   if (!isMounted) {
     return null;
   }
@@ -121,58 +135,80 @@ const Page = ({ params }) => {
       <div className="flex gap-4">
         <Sidebar />
         <div className="container mx-auto p-4">
-          <div className="justify-between mx-auto items-center border-2 mt-3 w-full">
+          <div className="justify-between mx-auto items-center mt-3 w-full">
             <div className="flex justify-between">
-              <div className="justify-start">
-                <input
-                  type="text"
-                  placeholder="Search"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="border rounded px-4 py-2 w-64"
-                />
+              <div className="flex justify-center text-center gap-3">
+                <div className="text-custom-bg mt-2">Show</div>
+                <div>
+                  <select
+                    value={itemperpage}
+                    onChange={(e) => setitemperpage(e.target.value)}
+                    className="border rounded-md px-4 py-2 w-16 border-custom-bg"
+                  >
+                    <option value="">0</option>
+                    {Array.from({ length: 10 }, (_, i = 1) => i + 1).map(
+                      (number) => (
+                        <option key={number} value={number}>
+                          {number}
+                        </option>
+                      )
+                    )}
+                  </select>
+                </div>
+                <div className="flex justify-center text-center gap-3">
+                  <div className="text-custom-bg mt-2">entries</div>
+                  <div>
+                    <input
+                      type="text"
+                      placeholder="Search by Driver Name"
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="border rounded-md px-4 py-2 w-64 border-custom-bg"
+                    />
+                  </div>
+                </div>
               </div>
               <div className="justify-end">
                 <button
                   onClick={OpenAddDriverModal}
-                  className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                  className="bg-custom-bg text-white px-4 py-2 rounded hover:bg-blue-600"
                 >
                   Car Allotment
                 </button>
               </div>
             </div>
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto mt-4">
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-4 py-2 bg-custom-bg text-white text-sm">
                       Driver Name
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-4 py-2 bg-custom-bg text-white text-sm">
                       Vehicle Name
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-4 py-2 bg-custom-bg text-white text-sm">
                       Local Authority
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-4 py-2 bg-custom-bg text-white text-sm">
                       Start Date
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-4 py-2 bg-custom-bg text-white text-sm">
                       Payment Cycle
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-4 py-2 bg-custom-bg text-white text-sm">
                       Payment
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-4 py-2 bg-custom-bg text-white text-sm">
                       Status
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-4 py-2 bg-custom-bg text-white text-sm">
                       Actions
                     </th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {filteredData.map((item) => (
+                  {currentDrivers.map((item) => (
                     <tr key={item._id}>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                         {item.driverName}
@@ -193,28 +229,30 @@ const Page = ({ params }) => {
                         {item.payment || 0}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {item.isActive ? "Active" : "Inactive"}
+                        <span className="bg-gray-400 px-1 py-1 border-2 rounded-2xl">
+                          {item.isActive ? "Active" : "Inactive"}
+                        </span>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium mx-auto">
-                        <div className="flex justify-center space-x-4">
+                      <td className="whitespace-nowrap text-sm font-medium mx-auto">
+                        <div className="flex gap-2">
                           <button
                             onClick={() => handleEdit(item._id)}
                             className="text-blue-500 hover:text-blue-700"
                           >
-                            <FaEdit />
+                            <img src="/edit.png" alt="edit" />
                           </button>
                           <button
                             onClick={() => handleDelete(item._id)}
                             className="text-red-500 hover:text-red-700"
                           >
-                            <FaTrash />
+                            <img src="/trash.png" alt="delete" />
                           </button>
                           <Link
                             passHref
                             href={`/Dashboard/Driver/MoreInfo/${item.driverId}`}
                           >
                             <button className="text-blue-500 hover:text-blue-700">
-                              <IoIosInformationCircle size={20} />
+                              <img src="/info.png" alt="delete" />
                             </button>
                           </Link>
                         </div>
@@ -223,6 +261,55 @@ const Page = ({ params }) => {
                   ))}
                 </tbody>
               </table>
+            </div>
+            {/* Pagination Controls */}
+            <div className="flex justify-center mt-4">
+              <nav>
+                <ul className="flex items-center space-x-2">
+                  <li>
+                    <button
+                      onClick={() => paginate(currentPage - 1)}
+                      disabled={currentPage === 1}
+                      className={`px-4 py-2 border rounded ${
+                        currentPage === 1
+                          ? "opacity-50 cursor-not-allowed"
+                          : "bg-white"
+                      }`}
+                    >
+                      Previous
+                    </button>
+                  </li>
+
+                  {pageNumbers.map((number) => (
+                    <li key={number}>
+                      <button
+                        onClick={() => paginate(number)}
+                        className={`px-4 py-2 border rounded ${
+                          currentPage === number
+                            ? "bg-custom-bg text-white"
+                            : "bg-white"
+                        }`}
+                      >
+                        {number}
+                      </button>
+                    </li>
+                  ))}
+
+                  <li>
+                    <button
+                      onClick={() => paginate(currentPage + 1)}
+                      disabled={currentPage === totalPages}
+                      className={`px-4 py-2 border rounded ${
+                        currentPage === totalPages
+                          ? "opacity-50 cursor-not-allowed"
+                          : "bg-white"
+                      }`}
+                    >
+                      Next
+                    </button>
+                  </li>
+                </ul>
+              </nav>
             </div>
           </div>
         </div>

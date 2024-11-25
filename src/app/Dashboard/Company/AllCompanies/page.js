@@ -24,7 +24,6 @@ const Page = () => {
       try {
         const { result } = await GetCompany();
         setData(result);
-        setFilteredData(result);
       } catch (error) {
         console.error("Error fetching company data:", error);
         setData([]);

@@ -110,7 +110,7 @@ const AllCompanies = () => {
     fetchData();
   }, []);
 
-  if (!chartData) return <p>Loading chart...</p>;
+  if (!chartData) return <p>Loading...</p>;
 
   return (
     <div className="container mx-auto px-4 py-2">

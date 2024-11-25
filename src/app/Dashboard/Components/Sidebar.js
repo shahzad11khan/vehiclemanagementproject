@@ -1,10 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { IoPersonAdd } from "react-icons/io5";
-import { FaCar } from "react-icons/fa";
-import { CiSettings } from "react-icons/ci";
-import { RiOrganizationChart } from "react-icons/ri";
 import { IoIosArrowBack } from "react-icons/io";
 import { getAuthData, isAuthenticated } from "@/utils/verifytoken";
 const Sidebar = () => {
@@ -94,7 +90,7 @@ const Sidebar = () => {
             </Link>
             {role === "superadmin" && flag === "false" ? (
               <>
-                <Link passHref href="/Dashboard/Company/GetAllCompanies">
+                {/* <Link passHref href="/Dashboard/Company/GetAllCompanies">
                   <li
                     onClick={() =>
                       handleLinkClick("/Dashboard/Company/GetAllCompanies")
@@ -112,7 +108,7 @@ const Sidebar = () => {
                       </span>
                     </div>
                   </li>
-                </Link>
+                </Link> */}
                 <Link passHref href="/Dashboard/Superadmin">
                   <li
                     onClick={() => handleLinkClick("/Dashboard/Superadmin")}
@@ -247,13 +243,13 @@ const Sidebar = () => {
             ) : role === "superadmin" && flag === "true" ? (
               <>
                 <Link passHref href="/Dashboard/Home">
-                  <li className="flex items-center p-3 cursor-pointer  rounded-lg">
+                  <li className="flex items-center p-3 cursor-pointer hover:border-red-400 hover:border-b-2 rounded-lg bg-transparent">
                     <div
-                      className="flex items-center gap-3"
+                      className="flex items-center gap-3 bg-transparent"
                       onClick={handleCardClick}
                     >
-                      <IoIosArrowBack className="text-black text-sm" />
-                      <span className="hidden sm:block">
+                      <IoIosArrowBack className="text-white text-sm bg-transparent" />
+                      <span className="hidden sm:block bg-transparent text-white">
                         Go Back Superadmin
                       </span>
                     </div>
@@ -268,18 +264,14 @@ const Sidebar = () => {
                     className={`${
                       activeLink === "/Dashboard/Users/GetAllusers"
                         ? "border-l-4 border-b-2 border-red-400"
-                        : "bg-white text-blue"
-                    } flex items-center p-3 cursor-pointer hover:bg-gray-100 rounded-lg`}
+                        : " text-blue"
+                    } flex items-center p-3 cursor-pointer hover:border-red-400 hover:border-b-2 rounded-lg bg-transparent`}
                   >
-                    <div className="flex items-center gap-3">
-                      <RiOrganizationChart
-                        className={`${
-                          activeLink === "/Dashboard/Users/GetAllusers"
-                            ? "text-red-400"
-                            : "text-black text-sm"
-                        }`}
-                      />
-                      <span className="hidden sm:block text-sm">Users</span>
+                    <div className="flex items-center gap-3 bg-transparent">
+                      <img src="/user.png" alt="user" />
+                      <span className="hidden sm:block text-sm bg-transparent text-white">
+                        Users
+                      </span>
                     </div>
                   </li>
                 </Link>
@@ -292,18 +284,14 @@ const Sidebar = () => {
                     className={`${
                       activeLink === "/Dashboard/Driver/GetAllDrivers"
                         ? "border-l-4 border-b-2 border-red-400"
-                        : "bg-white text-blue"
-                    } flex items-center p-3 cursor-pointer hover:bg-gray-100 rounded-lg`}
+                        : " text-blue"
+                    } flex items-center p-3 cursor-pointer hover:border-red-400 hover:border-b-2 rounded-lg bg-transparent`}
                   >
-                    <div className="flex items-center gap-3">
-                      <IoPersonAdd
-                        className={`${
-                          activeLink === "/Dashboard/Driver/GetAllDrivers"
-                            ? "text-red-400"
-                            : "text-black text-sm"
-                        }`}
-                      />
-                      <span className="hidden sm:block text-sm ">Driver</span>
+                    <div className="flex items-center gap-3 bg-transparent">
+                      <img src="/driver.png" alt="user" />
+                      <span className="hidden sm:block text-sm bg-transparent text-white">
+                        Driver
+                      </span>
                     </div>
                   </li>
                 </Link>
@@ -316,41 +304,35 @@ const Sidebar = () => {
                     className={`${
                       activeLink === "/Dashboard/Vehicle/GetAllVehicle"
                         ? "border-l-4 border-b-2 border-red-400"
-                        : "bg-white text-blue"
-                    } flex items-center p-3 cursor-pointer hover:bg-gray-100 rounded-lg`}
+                        : " text-blue"
+                    } flex items-center p-3 cursor-pointer hover:border-red-400 hover:border-b-2 rounded-lg bg-transparent`}
                   >
-                    <div className="flex items-center gap-3">
-                      <FaCar
-                        className={`${
-                          activeLink === "/Dashboard/Vehicle/GetAllVehicle"
-                            ? "text-red-400"
-                            : "text-black text-sm"
-                        }`}
-                      />
-                      <span className="hidden sm:block text-sm">Vehicle</span>
+                    <div className="flex items-center gap-3 bg-transparent">
+                      <img src="/driver.png" alt="user" />
+
+                      <span className="hidden sm:block text-sm bg-transparent text-white">
+                        Vehicle
+                      </span>
                     </div>
                   </li>
                 </Link>
 
-                <div>
+                <div className="bg-transparent">
                   <li
                     onMouseEnter={() => setIsOpenManagement(true)}
                     onMouseLeave={() => setIsOpenManagement(false)}
                     className={`${
                       isOpenManagement === true
                         ? "border-l-4 border-b-2 border-red-400"
-                        : "bg-white text-blue"
-                    } flex items-center p-3 cursor-pointer hover:bg-gray-100 rounded-lg relative`}
+                        : " text-blue"
+                    } flex items-center p-3 cursor-pointer hover:border-b-2 rounded-lg relative bg-transparent`}
                   >
-                    <div className="flex items-center gap-3 relative">
-                      <CiSettings
-                        className={`${
-                          isOpenManagement === true
-                            ? "text-red-400"
-                            : "text-black text-sm"
-                        }`}
-                      />
-                      <span className="hidden sm:block text-sm">Settings</span>
+                    <div className="flex items-center gap-3 relative bg-transparent">
+                      <img src="/setting.png" alt="superadmin" />
+
+                      <span className="hidden sm:block text-sm bg-transparent text-white">
+                        Settings
+                      </span>
 
                       {isOpenManagement && (
                         <div className="absolute left-36 mt-2 w-full sm:w-[170px] hover:bg-gray-200   border border-gray-300 rounded-md shadow-lg ">
@@ -518,12 +500,13 @@ const Sidebar = () => {
                     className={`${
                       isOpenManagement === true
                         ? "border-l-4 border-b-2 border-red-400"
-                        : "text-blue"
+                        : " text-blue"
                     } flex items-center p-3 cursor-pointer hover:border-b-2 rounded-lg relative bg-transparent`}
                   >
                     <div className="flex items-center gap-3 relative bg-transparent">
-                      <img src="/setting.png" alt="user" />
-                      <span className="hidden sm:block text-sm text-white bg-transparent">
+                      <img src="/setting.png" alt="superadmin" />
+
+                      <span className="hidden sm:block text-sm bg-transparent text-white">
                         Settings
                       </span>
 

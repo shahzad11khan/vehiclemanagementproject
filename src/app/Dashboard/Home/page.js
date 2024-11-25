@@ -176,16 +176,20 @@ const Page = () => {
   };
   useEffect(() => {
     const companyName = getCompanyName();
+    // console.log(companyName)
     const companyuser = getUserName();
     const userrole = getUserRole();
     const filtered = data.filter((item) => {
-      // console.log(item.adminCompanyName, companyName);
+      console.log(item.adminCompanyName, companyName);
       if (companyuser && userrole === "user") {
         return (
           item.adminCompanyName.toLowerCase() === companyName.toLowerCase() &&
           item.asignto.toLowerCase() === companyuser.toLowerCase()
         );
       } else {
+        if (userrole === "superadmin") {
+          return data;
+        }
         return (
           item.adminCompanyName.toLowerCase() === companyName.toLowerCase()
         );

@@ -5,7 +5,6 @@ import Header from "../../../Components/Header";
 import Sidebar from "../../../Components/Sidebar";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { FaEdit, FaTrash } from "react-icons/fa";
 import AddCarModel from "../AddCarModel/AddCarmodel";
 import UpdateCarModel from "../UpdateCarModel/UpdateCarModel";
 import axios from "axios";
@@ -23,7 +22,7 @@ const Page = () => {
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [isOpenVehicleUpdate, setIsOpenVehicleUpdate] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const recordsPerPage = 10;
+  const [itemperpage, setitemperpage] = useState(5);
 
   useEffect(() => {
     setIsMounted(true);
@@ -95,11 +94,11 @@ const Page = () => {
     setIsOpenVehicleUpdate(!isOpenVehicleUpdate);
   };
 
-  const totalPages = Math.ceil(filteredData.length / recordsPerPage);
-  const startIndex = (currentPage - 1) * recordsPerPage;
+  const totalPages = Math.ceil(filteredData.length / itemperpage);
+  const startIndex = (currentPage - 1) * itemperpage;
   const currentRecords = filteredData.slice(
     startIndex,
-    startIndex + recordsPerPage
+    startIndex + itemperpage
   );
 
   if (!isMounted) {
@@ -112,40 +111,60 @@ const Page = () => {
       <div className="flex gap-4">
         <Sidebar />
         <div className="container mx-auto p-4">
-          <div className="justify-between mx-auto items-center border-2 mt-3 w-full">
+          <div className="justify-between mx-auto items-center  mt-3 w-full">
             <div className="flex justify-between">
-              <input
-                type="text"
-                placeholder="Search"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="border rounded px-4 py-2 w-64"
-              />
+              <div className="flex gap-2">
+                <div className="text-custom-bg mt-2">Show</div>
+                <div>
+                  <select
+                    value={itemperpage}
+                    onChange={(e) => setitemperpage(e.target.value)}
+                    className="border rounded-md px-4 py-2 w-16 border-custom-bg"
+                  >
+                    <option value="">0</option>
+                    {Array.from({ length: 10 }, (_, i = 1) => i + 1).map(
+                      (number) => (
+                        <option key={number} value={number}>
+                          {number}
+                        </option>
+                      )
+                    )}
+                  </select>
+                </div>{" "}
+                <div className="text-custom-bg mt-2">entries</div>
+                <input
+                  type="text"
+                  placeholder="Search"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="border rounded px-4 py-2 w-64"
+                />
+              </div>
               <button
                 onClick={OpenBadgeModle}
-                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                className="bg-custom-bg text-white px-4 py-2 rounded hover:bg-blue-600"
               >
                 Add New Car Model
               </button>
             </div>
 
             <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
+              <table className="min-w-full divide-y divide-gray-200 mt-4">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-4 py-2 bg-custom-bg text-white text-sm">
                       Car Model
                     </th>
 
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-4 py-2 bg-custom-bg text-white text-sm">
                       Car Active
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-4 py-2 bg-custom-bg text-white text-sm">
                       Actions
                     </th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody className="bg-white divide-y divide-gray-200 text-center">
                   {currentRecords.map((item) => (
                     <tr key={item._id}>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
@@ -160,13 +179,13 @@ const Page = () => {
                           onClick={() => handleEdit(item._id)}
                           className="text-blue-500 hover:text-blue-700"
                         >
-                          <FaEdit />
+                          <img src="/edit.png" alt="delete" />
                         </button>
                         <button
                           onClick={() => handleDelete(item._id)}
                           className="text-red-500 hover:text-red-700"
                         >
-                          <FaTrash />
+                          <img src="/trash.png" alt="delete" />
                         </button>
                       </td>
                     </tr>
@@ -186,7 +205,7 @@ const Page = () => {
               <span
                 className={`px-3 py-1 mx-1 rounded ${
                   currentPage
-                    ? "bg-blue-300 text-white"
+                    ? "bg-custom-bg text-white"
                     : "bg-gray-100 hover:bg-gray-300"
                 }`}
               >

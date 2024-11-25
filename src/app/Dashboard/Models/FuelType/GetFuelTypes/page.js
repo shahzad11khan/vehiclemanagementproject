@@ -5,7 +5,6 @@ import Header from "../../../Components/Header";
 import Sidebar from "../../../Components/Sidebar";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { FaEdit, FaTrash } from "react-icons/fa";
 import AddFuelTypeModel from "../AddFuelType/AddFuelTypeModel";
 import UpdateFuelTypeModel from "../UpdateFuelType/UpdateFuelType";
 import axios from "axios";
@@ -22,6 +21,8 @@ const Page = () => {
   const [selectedCompanyName, setSelectedCompanyName] = useState("");
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [isOpenVehicleUpdate, setIsOpenVehcleUpdate] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemperpage, setitemperpage] = useState(5);
 
   useEffect(() => {
     setIsMounted(true);
@@ -103,18 +104,42 @@ const Page = () => {
     setIsOpenVehcleUpdate(!isOpenVehicleUpdate);
   };
 
+  const totalPages = Math.ceil(filteredData.length / itemperpage);
+  const currentData = filteredData.slice(
+    (currentPage - 1) * itemperpage,
+    currentPage * itemperpage
+  );
+
   return (
     <>
       <Header className="min-w-full" />
       <div className="flex gap-4">
         <Sidebar />
         <div className="container mx-auto p-4">
-          <div className="justify-between mx-auto items-center border-2 mt-3 w-full">
+          <div className="justify-between mx-auto items-center mt-3 w-full">
             <div className="flex justify-between">
-              <div className="justify-start">
+              <div className="flex gap-2">
+                <div className="text-custom-bg mt-2">Show</div>
+                <div>
+                  <select
+                    value={itemperpage}
+                    onChange={(e) => setitemperpage(e.target.value)}
+                    className="border rounded-md px-4 py-2 w-16 border-custom-bg"
+                  >
+                    <option value="">0</option>
+                    {Array.from({ length: 10 }, (_, i = 1) => i + 1).map(
+                      (number) => (
+                        <option key={number} value={number}>
+                          {number}
+                        </option>
+                      )
+                    )}
+                  </select>
+                </div>{" "}
+                <div className="text-custom-bg mt-2">entries</div>
                 <input
                   type="text"
-                  placeholder="Search by title"
+                  placeholder="Search by Name"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="border rounded px-4 py-2 w-64"
@@ -123,7 +148,7 @@ const Page = () => {
               <div className="justify-end">
                 <button
                   onClick={OpenPaymentModle}
-                  className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                  className="bg-custom-bg text-white px-4 py-2 rounded hover:bg-blue-600"
                 >
                   Add New Fuel
                 </button>
@@ -135,45 +160,45 @@ const Page = () => {
               <table className="min-w-full mt-4 bg-white border border-gray-200">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-4 py-2 text-left text-gray-600">
+                    <th className="px-4 py-2 bg-custom-bg text-white text-sm">
                       Fuel Name
                     </th>
-                    <th className="px-4 py-2 text-left text-gray-600">
+                    <th className="px-4 py-2 bg-custom-bg text-white text-sm">
                       Fuel Description
                     </th>
                     {/* <th className="px-4 py-2 text-left text-gray-600">
                       Company
                     </th> */}
-                    <th className="px-4 py-2 text-left text-gray-600">
-                      Fuel Status
+                    <th className="px-4 py-2 bg-custom-bg text-white text-sm">
+                      Status
                     </th>
-                    <th className="px-4 py-2 text-left text-gray-600">
+                    <th className="px-4 py-2 bg-custom-bg text-white text-sm">
                       Actions
                     </th>
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredData.map((row) => (
-                    <tr key={row._id} className="border-t">
-                      <td className="px-4 py-2">{row.name}</td>
-                      <td className="px-4 py-2">{row.description}</td>
+                  {currentData.map((row) => (
+                    <tr key={row._id} className="border-t text-center">
+                      <td className="px-4 py-2 text-sm">{row.name}</td>
+                      <td className="px-4 py-2 text-sm">{row.description}</td>
                       {/* <td className="px-4 py-2">{row.adminCompanyName}</td> */}
-                      <td className="px-4 py-2">
+                      <td className="px-4 py-2 text-sm">
                         {row.isActive ? "Active" : "Inactive"}
                       </td>
-                      <td className="px-4 py-2">
-                        <div className="flex gap-2">
+                      <td className="px-4 py-2 text-sm">
+                        <div className="flex gap-2 justify-center">
                           <button
                             onClick={() => handleEdit(row._id)}
                             className="text-blue-500 hover:text-blue-700"
                           >
-                            <FaEdit />
+                            <img src="/edit.png" alt="delete" />
                           </button>
                           <button
                             onClick={() => handleDelete(row._id)}
                             className="text-red-500 hover:text-red-700"
                           >
-                            <FaTrash />
+                            <img src="/trash.png" alt="delete" />
                           </button>
                         </div>
                       </td>
@@ -181,6 +206,33 @@ const Page = () => {
                   ))}
                 </tbody>
               </table>
+            </div>
+            <div className="flex justify-center items-center mt-4">
+              <button
+                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+                className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
+              >
+                Previous
+              </button>
+              <span
+                className={`px-3 py-1 mx-1 rounded ${
+                  currentPage
+                    ? "bg-custom-bg text-white"
+                    : "bg-gray-100 hover:bg-gray-300"
+                }`}
+              >
+                {currentPage} of {totalPages}
+              </span>
+              <button
+                onClick={() =>
+                  setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                }
+                disabled={currentPage === totalPages}
+                className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
+              >
+                Next
+              </button>
             </div>
           </div>
         </div>

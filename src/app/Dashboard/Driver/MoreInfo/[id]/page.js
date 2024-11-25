@@ -25,7 +25,6 @@ const Page = ({ params }) => {
   const [isOpenDriver, setIsOpenDriver] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const recordsPerPage = 10;
   const [itemperpage, setitemperpage] = useState(5);
 
   useEffect(() => {
@@ -352,7 +351,7 @@ const Page = ({ params }) => {
       .toString()
       .padStart(2, "0")}/${dateObject.getFullYear()}`;
   }
-  const totalPages = Math.ceil(data.length / recordsPerPage);
+  const totalPages = Math.ceil(data.length / itemperpage);
   const currentData = data.slice(
     (currentPage - 1) * itemperpage,
     currentPage * itemperpage

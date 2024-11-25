@@ -60,7 +60,7 @@ const Sidebar = () => {
       <aside
         className={` text-black  min-h-screen lg:w-52 w-20 transition-transform duration-300 ease-in-out ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } lg:translate-x-0 fixed lg:relative top-0 left-0 flex flex-col shadow-2xl  mt-1 shadow-custom-blue `}
+        } lg:translate-x-0 fixed lg:relative top-0 left-0 flex flex-col shadow-2xl shadow-custom-blue `}
       >
         <nav
           className="flex-1 "

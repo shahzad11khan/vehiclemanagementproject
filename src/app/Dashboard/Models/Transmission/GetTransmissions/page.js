@@ -5,7 +5,6 @@ import Header from "../../../Components/Header";
 import Sidebar from "../../../Components/Sidebar";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { FaEdit, FaTrash } from "react-icons/fa";
 import AddTransmissionModel from "../AddTransmission/AddTransmissionModel";
 import UpdateTransmissionModel from "../UpdateTransmission/UpdateTransmissionModel";
 import axios from "axios";
@@ -22,6 +21,8 @@ const Page = () => {
   const [selectedCompanyName, setSelectedCompanyName] = useState("");
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [isOpenVehicleUpdate, setIsOpenVehcleUpdate] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemperpage, setitemperpage] = useState(5);
 
   useEffect(() => {
     setIsMounted(true);
@@ -102,18 +103,41 @@ const Page = () => {
     setIsOpenVehcleUpdate(!isOpenVehicleUpdate);
   };
 
+  const totalPages = Math.ceil(filteredData.length / itemperpage);
+  const currentData = filteredData.slice(
+    (currentPage - 1) * itemperpage,
+    currentPage * itemperpage
+  );
   return (
     <>
       <Header className="min-w-full" />
       <div className="flex gap-4">
         <Sidebar />
         <div className="container mx-auto p-4">
-          <div className="justify-between mx-auto items-center border-2 mt-3 w-full">
+          <div className="justify-between mx-auto items-center  mt-3 w-full">
             <div className="flex justify-between">
-              <div className="justify-start">
+              <div className="flex gap-2">
+                <div className="text-custom-bg mt-2">Show</div>
+                <div>
+                  <select
+                    value={itemperpage}
+                    onChange={(e) => setitemperpage(e.target.value)}
+                    className="border rounded-md px-4 py-2 w-16 border-custom-bg"
+                  >
+                    <option value="">0</option>
+                    {Array.from({ length: 10 }, (_, i = 1) => i + 1).map(
+                      (number) => (
+                        <option key={number} value={number}>
+                          {number}
+                        </option>
+                      )
+                    )}
+                  </select>
+                </div>{" "}
+                <div className="text-custom-bg mt-2">entries</div>
                 <input
                   type="text"
-                  placeholder="Search by title"
+                  placeholder="Search by Name"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="border rounded px-4 py-2 w-64"
@@ -122,7 +146,7 @@ const Page = () => {
               <div className="justify-end">
                 <button
                   onClick={OpenPaymentModle}
-                  className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                  className="bg-custom-bg text-white px-4 py-2 rounded hover:bg-blue-600"
                 >
                   Add New Transmission
                 </button>
@@ -133,37 +157,47 @@ const Page = () => {
             <div className="overflow-x-auto mt-4">
               <table className="min-w-full table-auto border-collapse border border-gray-300">
                 <thead>
-                  <tr className="bg-gray-200 text-gray-600 text-left">
-                    <th className="p-3 border">Transmission</th>
-                    <th className="p-3 border">Description</th>
+                  <tr className=" text-gray-600 text-left">
+                    <th className="px-4 py-2 bg-custom-bg text-white text-sm">
+                      Transmission
+                    </th>
+                    <th className="px-4 py-2 bg-custom-bg text-white text-sm">
+                      Description
+                    </th>
                     {/* <th className="p-3 border">Company</th> */}
-                    <th className="p-3 border">Status</th>
-                    <th className="p-3 border">Actions</th>
+                    <th className="px-4 py-2 bg-custom-bg text-white text-sm">
+                      Status
+                    </th>
+                    <th className="px-4 py-2 bg-custom-bg text-white text-sm">
+                      Actions
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredData.length > 0 ? (
-                    filteredData.map((row) => (
+                  {currentData.length > 0 ? (
+                    currentData.map((row) => (
                       <tr key={row._id} className="bg-white hover:bg-gray-100">
-                        <td className="p-3 border">{row.name}</td>
-                        <td className="p-3 border">{row.description}</td>
+                        <td className="px-4 py-2  text-sm">{row.name}</td>
+                        <td className="px-4 py-2  text-sm">
+                          {row.description}
+                        </td>
                         {/* <td className="p-3 border">{row.adminCompanyName}</td> */}
-                        <td className="p-3 border">
+                        <td className="px-4 py-2  text-sm">
                           {row.isActive ? "Active" : "Inactive"}
                         </td>
-                        <td className="p-3 border">
+                        <td className="px-4 py-2  text-sm">
                           <div className="flex gap-2">
                             <button
                               onClick={() => handleEdit(row._id)}
                               className="text-blue-500 hover:text-blue-700"
                             >
-                              <FaEdit />
+                              <img src="/edit.png" alt="edit" />
                             </button>
                             <button
                               onClick={() => handleDelete(row._id)}
                               className="text-red-500 hover:text-red-700"
                             >
-                              <FaTrash />
+                              <img src="/trash.png" alt="delete" />
                             </button>
                           </div>
                         </td>
@@ -178,6 +212,33 @@ const Page = () => {
                   )}
                 </tbody>
               </table>
+            </div>
+            <div className="flex justify-center items-center mt-4">
+              <button
+                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+                className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
+              >
+                Previous
+              </button>
+              <span
+                className={`px-3 py-1 mx-1 rounded ${
+                  currentPage
+                    ? "bg-custom-bg text-white"
+                    : "bg-gray-100 hover:bg-gray-300"
+                }`}
+              >
+                {currentPage} of {totalPages}
+              </span>
+              <button
+                onClick={() =>
+                  setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                }
+                disabled={currentPage === totalPages}
+                className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
+              >
+                Next
+              </button>
             </div>
           </div>
         </div>

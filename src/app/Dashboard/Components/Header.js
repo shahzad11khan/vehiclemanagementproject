@@ -215,16 +215,16 @@ const Header = () => {
           </div>
 
           {typeof window !== "undefined" && isDropdownOpen && (
-            <div className="absolute right-0 mt-2 flex flex-col bg-white rounded shadow-lg z-10 text-black">
+            <div className="absolute right-10 mt-2 flex flex-col bg-white rounded shadow-lg z-10 text-black w-44">
               <ul className="">
                 {(role === "superadmin" && flag === "false") ||
                 role === "admin" ||
                 role === "user" ? (
                   <Link href="/Dashboard/Profile">
-                    <li className="px-4 py-2 hover:bg-cyan-100 cursor-pointer rounded-lg flex items-center">
-                      <CgProfile className="mr-2" />
+                    <li className="px-4 py-2  cursor-pointer  flex items-center hover:bg-custom-bg  hover:text-white">
+                      <CgProfile className="mr-2 bg-transparent text-white" />
                       <span
-                        className="hidden md:inline"
+                        className="hidden md:inline text-black hover:text-white"
                         style={{ backgroundColor: "transparent" }}
                       >
                         Profile
@@ -233,10 +233,10 @@ const Header = () => {
                   </Link>
                 ) : role === "superadmin" && flag === "true" ? (
                   <Link href="/Dashboard/CompanyProfile">
-                    <li className="px-4 py-2 hover:bg-cyan-100 cursor-pointer rounded-lg flex items-center">
-                      <CgProfile className="mr-2" />
+                    <li className="px-4 py-2  cursor-pointer  flex items-center hover:bg-custom-bg  hover:text-white">
+                      <CgProfile className="mr-2 bg-transparent text-white" />
                       <span
-                        className="hidden md:inline"
+                        className="hidden md:inline text-black hover:text-white"
                         style={{ backgroundColor: "transparent" }}
                       >
                         Profile
@@ -245,10 +245,10 @@ const Header = () => {
                   </Link>
                 ) : (
                   <Link href="/Dashboard/CompanyProfile">
-                    <li className="px-4 py-2 hover:bg-cyan-100 cursor-pointer rounded-lg flex items-center">
-                      <CgProfile className="mr-2" />
+                    <li className="px-4 py-2  cursor-pointer  flex items-center hover:bg-custom-bg  hover:text-white">
+                      <CgProfile className="mr-2 bg-transparent text-white" />
                       <span
-                        className="hidden md:inline"
+                        className="hidden md:inline text-black hover:text-white"
                         style={{ backgroundColor: "transparent" }}
                       >
                         Profile
@@ -257,11 +257,11 @@ const Header = () => {
                   </Link>
                 )}
 
-                <li className="px-4 py-2 hover:bg-cyan-100 cursor-pointer rounded-lg flex items-center">
+                <li className="px-4 py-2 hover:bg-custom-bg cursor-pointer  flex hover:text-white">
+                  <IoIosLogOut className="mr-2 bg-transparent text-white" />
                   <button onClick={handleLogout}>
-                    <IoIosLogOut className="mr-2" />
                     <span
-                      className="hidden md:inline"
+                      className="hidden md:inline text-black hover:text-white "
                       style={{ backgroundColor: "transparent" }}
                     >
                       Logout

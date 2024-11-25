@@ -127,9 +127,9 @@ const Page = () => {
             <div className="flex justify-center items-center m-auto">
               <div className="bg-white rounded-xl p-8 max-w-lg mx-auto shadow-xl shadow-custom-blue">
                 <h2 className="text-2xl font-semibold mb-6 text-center">
-                  Edit User
+                  Profile
                 </h2>
-                {loading && <p>Loading...</p>} {/* Show loading state */}
+                {loading && <p>Loading...</p>}
                 <form onSubmit={handleSubmit}>
                   <div className="mb-4 flex flex-col items-center">
                     <div className="w-24 h-24 mb-4">
@@ -171,7 +171,7 @@ const Page = () => {
                     </label>
                   </div>
                   <div className="flex gap-3">
-                    <div className="mb-4">
+                    <div className="mb-4 w-full">
                       <label
                         className="block text-gray-700 text-sm font-bold mb-2"
                         htmlFor="email"
@@ -201,13 +201,6 @@ const Page = () => {
                         value={formData.password}
                         onChange={handleChange}
                       />
-                      <button
-                        type="button"
-                        className="absolute inset-y-0 right-0 flex items-center px-2 text-sm text-black ml-10"
-                        onClick={() => setShowPassword(!showPassword)}
-                      >
-                        {showPassword ? "Hide" : "Show"}
-                      </button>
                     </div>
                     <div className="relative mb-4">
                       <label
@@ -225,6 +218,13 @@ const Page = () => {
                         onChange={handleChange}
                       />
                     </div>
+                    <button
+                      type="button"
+                      className="border-2 h-10 mt-6 p-2 rounded-lg"
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                      {showPassword ? "Hide" : "Show"}
+                    </button>
                   </div>
                   <div className="flex justify-center">
                     <button

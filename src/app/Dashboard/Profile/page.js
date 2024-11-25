@@ -210,13 +210,6 @@ const Page = () => {
                         value={formData.password}
                         onChange={handleChange}
                       />
-                      <button
-                        type="button"
-                        className="absolute inset-y-0 right-0 flex items-center px-2 text-sm text-black ml-10"
-                        onClick={() => setShowPassword(!showPassword)}
-                      >
-                        {showPassword ? "Hide" : "Show"}
-                      </button>
                     </div>
                     <div className="relative mb-4">
                       <label
@@ -234,6 +227,13 @@ const Page = () => {
                         onChange={handleChange}
                       />
                     </div>
+                    <button
+                      type="button"
+                      className="border-2 h-10 mt-6 p-2 rounded-lg"
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                      {showPassword ? "Hide" : "Show"}
+                    </button>
                   </div>
                   <div className="flex justify-center">
                     <button

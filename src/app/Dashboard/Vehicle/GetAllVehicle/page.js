@@ -5,7 +5,6 @@ import Header from "../../Components/Header";
 import Sidebar from "../../Components/Sidebar";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { FaEdit, FaTrash } from "react-icons/fa";
 import AddVehicleModel from "../AddVehicle/AddVehicleModel";
 import UpdateVehicleModel from "../UpdateVehicleModel/UpdateVehicleModel";
 import axios from "axios";
@@ -30,6 +29,8 @@ const Page = () => {
   // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
   const recordsPerPage = 10;
+  const [itemperpage, setitemperpage] = useState(5);
+
   useEffect(() => {
     if (!isAuthenticated()) {
       router.push("/");
@@ -117,8 +118,8 @@ const Page = () => {
   };
 
   // Pagination logic
-  const indexOfLastRecord = currentPage * recordsPerPage;
-  const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
+  const indexOfLastRecord = currentPage * itemperpage;
+  const indexOfFirstRecord = indexOfLastRecord - itemperpage;
   const currentRecords = filteredData.slice(
     indexOfFirstRecord,
     indexOfLastRecord
@@ -133,21 +134,43 @@ const Page = () => {
       <div className="flex gap-4">
         <Sidebar />
         <div className="container mx-auto p-4">
-          <div className="mx-auto items-center border-2 mt-3 w-full">
+          <div className="mx-auto items-center  mt-3 w-full">
             <div className="flex justify-between">
-              <div className="justify-start">
-                <input
-                  type="text"
-                  placeholder="Search by model"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="border rounded px-4 py-2 w-64"
-                />
+              <div className="flex justify-center text-center gap-3">
+                <div className="text-custom-bg mt-2">Show</div>
+                <div>
+                  <select
+                    value={itemperpage}
+                    onChange={(e) => setitemperpage(e.target.value)}
+                    className="border rounded-md px-4 py-2 w-16 border-custom-bg"
+                  >
+                    <option value="">0</option>
+                    {Array.from({ length: 10 }, (_, i = 1) => i + 1).map(
+                      (number) => (
+                        <option key={number} value={number}>
+                          {number}
+                        </option>
+                      )
+                    )}
+                  </select>
+                </div>
+                <div className="flex justify-center text-center gap-3">
+                  <div className="text-custom-bg mt-2">entries</div>
+                  <div>
+                    <input
+                      type="text"
+                      placeholder="Search by Manufacturer"
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="border rounded-md px-4 py-2 w-64 border-custom-bg"
+                    />
+                  </div>
+                </div>
               </div>
               <div className="justify-end">
                 <button
                   onClick={OpenVehicleModle}
-                  className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                  className="bg-custom-bg text-white px-4 py-2 rounded hover:bg-blue-600"
                 >
                   Add Vehicle
                 </button>
@@ -155,27 +178,35 @@ const Page = () => {
             </div>
 
             {/* Responsive Tailwind CSS Table */}
-            <div className="overflow-x-auto h-72">
-              <table className="min-w-full border-collapse border border-gray-300">
+            <div className="overflow-x-auto">
+              <table className="min-w-full border-collapse border border-gray-300 mt-4">
                 <thead>
-                  <tr className="bg-gray-200">
-                    <th className="border border-gray-300 px-4 py-2">
+                  <tr className="">
+                    <th className="border border-gray-300 px-4 py-2 bg-custom-bg text-white text-sm">
                       Manufacturer
                     </th>
-                    <th className="border border-gray-300 px-4 py-2">Model</th>
-                    <th className="border border-gray-300 px-4 py-2">
+                    <th className="border border-gray-300 px-4 py-2 bg-custom-bg text-white text-sm">
+                      Model
+                    </th>
+                    <th className="border border-gray-300 px-4 py-2 bg-custom-bg text-white text-sm">
                       Vehicle Status
                     </th>
-                    <th className="border border-gray-300 px-4 py-2">Year</th>
-                    <th className="border border-gray-300 px-4 py-2">Type</th>
-                    <th className="border border-gray-300 px-4 py-2">
+                    <th className="border border-gray-300 px-4 py-2 bg-custom-bg text-white text-sm">
+                      Year
+                    </th>
+                    <th className="border border-gray-300 px-4 py-2 bg-custom-bg text-white text-sm">
+                      Type
+                    </th>
+                    <th className="border border-gray-300 px-4 py-2 bg-custom-bg text-white text-sm">
                       Engine Type
                     </th>
-                    <th className="border border-gray-300 px-4 py-2">
+                    <th className="border border-gray-300 px-4 py-2 bg-custom-bg text-white text-sm">
                       Company
                     </th>
-                    <th className="border border-gray-300 px-4 py-2">Active</th>
-                    <th className="border border-gray-300 px-4 py-2">
+                    <th className="border border-gray-300 px-4 py-2 bg-custom-bg text-white text-sm">
+                      Active
+                    </th>
+                    <th className="border border-gray-300 px-4 py-2 bg-custom-bg text-white text-sm">
                       Actions
                     </th>
                   </tr>
@@ -204,8 +235,11 @@ const Page = () => {
                       <td className="border border-gray-300 px-4 py-2">
                         {row.adminCompanyName}
                       </td>
+
                       <td className="border border-gray-300 px-4 py-2">
-                        {row.isActive ? "Yes" : "No"}
+                        <span className="bg-gray-400 px-1 py-1 border-2 rounded-2xl">
+                          {row.isActive ? "Active" : "Inactive"}
+                        </span>
                       </td>
                       <td className="border border-gray-300 px-4 py-2">
                         <div className="flex gap-2">
@@ -213,13 +247,13 @@ const Page = () => {
                             onClick={() => handleEdit(row._id)}
                             className="text-blue-500 hover:text-blue-700"
                           >
-                            <FaEdit />
+                            <img src="/edit.png" alt="edit" />
                           </button>
                           <button
                             onClick={() => handleDelete(row._id)}
                             className="text-red-500 hover:text-red-700"
                           >
-                            <FaTrash />
+                            <img src="/trash.png" alt="delete" />
                           </button>
 
                           <div className="flex gap-2">
@@ -298,7 +332,7 @@ const Page = () => {
               <span
                 className={`px-3 py-1 mx-1 rounded ${
                   currentPage
-                    ? "bg-blue-300 text-white"
+                    ? "bg-custom-bg text-white"
                     : "bg-gray-100 hover:bg-gray-300"
                 }`}
               >

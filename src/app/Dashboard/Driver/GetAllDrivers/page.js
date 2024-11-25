@@ -5,7 +5,6 @@ import Header from "../../Components/Header";
 import Sidebar from "../../Components/Sidebar";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { FaEdit, FaTrash, FaCarAlt } from "react-icons/fa";
 // import { MdCurrencyPound } from "react-icons/md";
 import AddDriverModel from "../AddDriver/AddDriverModel";
 import UpdateDriverModel from "../UpdateDriver/UpdateDriverModel";
@@ -28,6 +27,8 @@ const Page = () => {
   // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
+  const [itemperpage, setitemperpage] = useState(5);
+
   useEffect(() => {
     if (!isAuthenticated()) {
       router.push("/");
@@ -103,10 +104,6 @@ const Page = () => {
     setIsOpenDriver(!isOpenDriver);
   };
 
-  const onGlobalFilterChange = (event) => {
-    setSearchTerm(event.target.value);
-  };
-
   const formatDate = (dateString) => {
     const dateObject = new Date(dateString);
     return `${(dateObject.getMonth() + 1)
@@ -118,8 +115,8 @@ const Page = () => {
   };
 
   // Pagination calculations
-  const indexOfLastDriver = currentPage * itemsPerPage;
-  const indexOfFirstDriver = indexOfLastDriver - itemsPerPage;
+  const indexOfLastDriver = currentPage * itemperpage;
+  const indexOfFirstDriver = indexOfLastDriver - itemperpage;
   const currentDrivers = filteredDrivers.slice(
     indexOfFirstDriver,
     indexOfLastDriver
@@ -138,18 +135,40 @@ const Page = () => {
         <div className="container mx-auto p-4 w-[82%]">
           <div className="justify-between mx-auto items-center border-2 mt-3 p-4">
             <div className="flex justify-between">
-              <div className="flex-1">
-                <input
-                  type="search"
-                  onChange={onGlobalFilterChange}
-                  placeholder="Search by full name"
-                  className="border rounded px-4 py-2 w-full"
-                />
+              <div className="flex justify-center text-center gap-3">
+                <div className="text-custom-bg mt-2">Show</div>
+                <div>
+                  <select
+                    value={itemperpage}
+                    onChange={(e) => setitemperpage(e.target.value)}
+                    className="border rounded-md px-4 py-2 w-16 border-custom-bg"
+                  >
+                    <option value="">0</option>
+                    {Array.from({ length: 10 }, (_, i = 1) => i + 1).map(
+                      (number) => (
+                        <option key={number} value={number}>
+                          {number}
+                        </option>
+                      )
+                    )}
+                  </select>
+                </div>
+                <div className="flex justify-center text-center gap-3">
+                  <div className="text-custom-bg mt-2">entries</div>
+                  <div>
+                    <input
+                      type="text"
+                      placeholder="Search by email"
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="border rounded-md px-4 py-2 w-64 border-custom-bg"
+                    />
+                  </div>
+                </div>
               </div>
-
               <button
                 onClick={OpenDriverModel}
-                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                className="bg-custom-bg text-white px-5 py-2 rounded hover:bg-blue-600"
               >
                 Add Driver
               </button>
@@ -158,26 +177,26 @@ const Page = () => {
             <div className="w-full overflow-x-auto mt-4">
               <table className="w-11/12 border-collapse border border-gray-200 overflow-x-scroll">
                 <thead>
-                  <tr className="bg-gray-100">
-                    <th className="border border-gray-200 px-4 py-2">
+                  <tr className="">
+                    <th className="text-sm border border-gray-200 px-4 py-2 text-white bg-custom-bg">
                       Full Name
                     </th>
-                    <th className="border border-gray-200 px-4 py-2">
+                    <th className="text-sm border border-gray-200 px-4 py-2 text-white bg-custom-bg">
                       Driver Email
                     </th>
-                    <th className="border border-gray-200 px-4 py-2">
+                    <th className="border text-sm border-gray-200 px-4 py-2 text-white bg-custom-bg">
                       Home Telephone
                     </th>
-                    <th className="border border-gray-200 px-4 py-2">
+                    <th className="border text-sm border-gray-200 px-4 py-2 text-white bg-custom-bg">
                       Mobile Telephone
                     </th>
-                    <th className="border border-gray-200 px-4 py-2">
+                    <th className="border text-sm border-gray-200 px-4 py-2 text-white bg-custom-bg">
                       License Number
                     </th>
-                    <th className="border border-gray-200 px-4 py-2">
+                    <th className="border text-sm border-gray-200 px-4 py-2 text-white bg-custom-bg">
                       NI Number
                     </th>
-                    <th className="border border-gray-200 px-4 py-2">
+                    <th className="border text-sm border-gray-200 px-4 py-2 text-white bg-custom-bg">
                       Badge Type
                     </th>
                     {/* <th className="border border-gray-200 px-4 py-2">
@@ -186,13 +205,13 @@ const Page = () => {
                     {/* <th className="border border-gray-200 px-4 py-2">
                       Payment
                     </th> */}
-                    <th className="border border-gray-200 px-4 py-2">
+                    <th className="text-sm border border-gray-200 px-4 py-2 text-white bg-custom-bg">
                       Date Of Birth
                     </th>
                     {/* <th className="border border-gray-200 px-4 py-2">
                       Start Date
                     </th> */}
-                    <th className="border border-gray-200 px-4 py-2">
+                    <th className="border text-sm border-gray-200 px-4 py-2 text-white bg-custom-bg">
                       Actions
                     </th>
                   </tr>
@@ -227,15 +246,15 @@ const Page = () => {
                           </button> */}
                           <button
                             onClick={() => handleEdit(driver._id)}
-                            className="text-blue-500 hover:text-blue-700"
+                            className="text-blue-500 hover:text-blue-700 "
                           >
-                            <FaEdit size={20} />
+                            <img src="/edit.png" alt="edit" />
                           </button>
                           <button
                             onClick={() => handleDelete(driver._id)}
                             className="text-red-500 hover:text-red-700"
                           >
-                            <FaTrash size={20} />
+                            <img src="/trash.png" alt="delete" />
                           </button>
                           {/* <button
                             onClick={() => handleDelete(driver._id)}
@@ -249,7 +268,11 @@ const Page = () => {
                               href={`/Dashboard/Driver/CombineDriverAndVehicle/${driver._id}`}
                             >
                               <div className="flex items-center gap-3">
-                                <FaCarAlt size={20} />
+                                <img
+                                  src="/bcar.png"
+                                  alt="delete"
+                                  className="text-custom-bg"
+                                />
                               </div>
                             </Link>
                           </button>
@@ -286,7 +309,7 @@ const Page = () => {
                         onClick={() => paginate(number)}
                         className={`px-4 py-2 border rounded ${
                           currentPage === number
-                            ? "bg-blue-500 text-white"
+                            ? "bg-custom-bg text-white"
                             : "bg-white"
                         }`}
                       >

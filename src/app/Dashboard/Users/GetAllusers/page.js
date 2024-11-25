@@ -10,7 +10,11 @@ import AddUserModel from "../AddUser/AddUserModel";
 import UpdateUserModel from "../UpdateUser/UpdateUserModel";
 import axios from "axios";
 import { API_URL_USER } from "../../Components/ApiUrl/ApiUrls";
-import { getCompanyName, getsuperadmincompanyname } from "@/utils/storageUtils";
+import {
+  getCompanyName,
+  getsuperadmincompanyname,
+  getUserRole,
+} from "@/utils/storageUtils";
 
 const Page = () => {
   const columns = [
@@ -81,7 +85,11 @@ const Page = () => {
   };
 
   useEffect(() => {
+    const userrole = getUserRole();
     const filtered = users.filter((item) => {
+      if (userrole === "superadmin") {
+        return users;
+      }
       let companyMatch =
         item &&
         item.companyname &&
@@ -155,7 +163,7 @@ const Page = () => {
               <div className="justify-end">
                 <button
                   onClick={OpenUserModle}
-                  className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                  className="bg-custom-bg text-white px-4 py-2 rounded hover:bg-blue-600"
                 >
                   Add User
                 </button>
@@ -176,49 +184,51 @@ const Page = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {currentUsers.map((user) => (
-                    <tr key={user._id} className="hover:bg-gray-100">
-                      <td className="py-2 px-4 border-b">{user.username}</td>
-                      <td className="py-2 px-4 border-b">{user.email}</td>
-                      <td className="py-2 px-4 border-b">
-                        <img
-                          src={user.useravatar}
-                          alt="User Avatar"
-                          className="h-10 w-10 rounded-full"
-                        />
-                      </td>
-                      <td className="py-2 px-4 border-b">
-                        {user.isActive ? (
-                          <FaCheckCircle
-                            className="text-green-500"
-                            title="Active"
+                  {currentUsers
+                    .filter((user) => user.username !== "superadmin")
+                    .map((user) => (
+                      <tr key={user._id} className="hover:bg-gray-100">
+                        <td className="py-2 px-4 border-b">{user.username}</td>
+                        <td className="py-2 px-4 border-b">{user.email}</td>
+                        <td className="py-2 px-4 border-b">
+                          <img
+                            src={user.useravatar}
+                            alt="User Avatar"
+                            className="h-10 w-10 rounded-full"
                           />
-                        ) : (
-                          <FaTimesCircle
-                            className="text-red-500"
-                            title="Inactive"
-                          />
-                        )}
-                      </td>
-                      <td className="py-2 px-4 border-b">{user.role}</td>
-                      <td className="py-2 px-4 border-b">
-                        <div className="flex gap-2">
-                          <button
-                            onClick={() => handleEdit(user._id)}
-                            className="text-blue-500 hover:text-blue-700"
-                          >
-                            <img src="/edit.png" alt="edit" />
-                          </button>
-                          <button
-                            onClick={() => handleDelete(user._id)}
-                            className="text-red-500 hover:text-red-700"
-                          >
-                            <img src="/trash.png" alt="delete" />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
+                        </td>
+                        <td className="py-2 px-4 border-b">
+                          {user.isActive ? (
+                            <FaCheckCircle
+                              className="text-green-500"
+                              title="Active"
+                            />
+                          ) : (
+                            <FaTimesCircle
+                              className="text-red-500"
+                              title="Inactive"
+                            />
+                          )}
+                        </td>
+                        <td className="py-2 px-4 border-b">{user.role}</td>
+                        <td className="py-2 px-4 border-b">
+                          <div className="flex gap-2">
+                            <button
+                              onClick={() => handleEdit(user._id)}
+                              className="text-blue-500 hover:text-blue-700"
+                            >
+                              <img src="/edit.png" alt="edit" />
+                            </button>
+                            <button
+                              onClick={() => handleDelete(user._id)}
+                              className="text-red-500 hover:text-red-700"
+                            >
+                              <img src="/trash.png" alt="delete" />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
                 </tbody>
               </table>
             </div>
@@ -233,7 +243,7 @@ const Page = () => {
               <span
                 className={`px-3 py-1 mx-1 rounded ${
                   currentPage
-                    ? "bg-blue-300 text-white"
+                    ? "bg-custom-bg text-white"
                     : "bg-gray-100 hover:bg-gray-300"
                 }`}
               >

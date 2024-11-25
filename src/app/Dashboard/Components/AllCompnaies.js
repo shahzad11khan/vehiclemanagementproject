@@ -11,6 +11,7 @@ import axios from "axios";
 import UpdateCompanyModel from "../Company/UpdateCompany/UpdateCompanyModel";
 import { isAuthenticated } from "@/utils/verifytoken";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 // Register Chart.js components
 ChartJS.register(ArcElement, Tooltip, Legend);
@@ -113,8 +114,8 @@ const AllCompanies = () => {
 
   return (
     <div className="container mx-auto px-4 py-2">
-      <h1 className="text-2xl font-bold text-center mb-8 underline">
-        All Companies
+      <h1 className="text-2xl font-bold  mb-8 underline">
+        Registered Companies
       </h1>
 
       {/* Doughnut Chart */}
@@ -122,25 +123,27 @@ const AllCompanies = () => {
         <h3 className="text-lg font-semibold mb-2 flex justify-center">
           Total Companies: {totalCompanies}
         </h3>
-        <div className="flex  items-center justify-center mt-6">
-          <div className="flex flex-col w-[156.01px] h-[156.28px]">
-            <Doughnut data={chartData} />
-            <div className="flex  m-4 justify-between">
-              <div className="flex items-center">
-                <div className="w-3 h-3 rounded-full bg-blue-500"></div>
-                <h3 className="mt-2 text-center text-xs text-gray-700 ml-2">
-                  Active
-                </h3>
-              </div>
-              <div className="flex items-center">
-                <div className="w-3 h-3 rounded-full bg-custom-bg"></div>
-                <h3 className="mt-2 text-center text-xs text-gray-700 ml-2">
-                  Inactive
-                </h3>
+        <Link href="/Dashboard/Company/AllCompanies">
+          <div className="flex  items-center justify-center mt-6">
+            <div className="flex flex-col w-[156.01px] h-[156.28px]">
+              <Doughnut data={chartData} />
+              <div className="flex  m-4 justify-between">
+                <div className="flex items-center">
+                  <div className="w-3 h-3 rounded-full bg-blue-500"></div>
+                  <h3 className="mt-2 text-center text-xs text-gray-700 ml-2">
+                    Active
+                  </h3>
+                </div>
+                <div className="flex items-center">
+                  <div className="w-3 h-3 rounded-full bg-custom-bg"></div>
+                  <h3 className="mt-2 text-center text-xs text-gray-700 ml-2">
+                    Inactive
+                  </h3>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        </Link>
       </div>
 
       {/* Cards Section */}

@@ -5,7 +5,7 @@ import Header from "../../Components/Header";
 import Sidebar from "../../Components/Sidebar";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { FaEdit, FaTrash, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
+import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 import AddUserModel from "../AddUser/AddUserModel";
 import UpdateUserModel from "../UpdateUser/UpdateUserModel";
 import axios from "axios";
@@ -32,6 +32,7 @@ const Page = () => {
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
+  const [itemperpage, setitemperpage] = useState(5);
 
   useEffect(() => {
     setIsMounted(true);
@@ -103,8 +104,8 @@ const Page = () => {
     setIsOpenUserUpdate(!isOpenUserUpdate);
   };
 
-  const indexOfLastUser = currentPage * itemsPerPage;
-  const indexOfFirstUser = indexOfLastUser - itemsPerPage;
+  const indexOfLastUser = currentPage * itemperpage;
+  const indexOfFirstUser = indexOfLastUser - itemperpage;
   const currentUsers = filteredData.slice(indexOfFirstUser, indexOfLastUser);
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
@@ -120,14 +121,36 @@ const Page = () => {
         <div className="container mx-auto p-4 w-[82%]">
           <div className="justify-between mx-auto items-center border-2 mt-3 p-4">
             <div className="flex justify-between">
-              <div className="justify-start">
-                <input
-                  type="text"
-                  placeholder="Search by UserName"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="border rounded px-4 py-2 w-64"
-                />
+              <div className="flex justify-center text-center gap-3">
+                <div className="text-custom-bg mt-2">Show</div>
+                <div>
+                  <select
+                    value={itemperpage}
+                    onChange={(e) => setitemperpage(e.target.value)}
+                    className="border rounded-md px-4 py-2 w-16 border-custom-bg"
+                  >
+                    <option value="">0</option>
+                    {Array.from({ length: 10 }, (_, i = 1) => i + 1).map(
+                      (number) => (
+                        <option key={number} value={number}>
+                          {number}
+                        </option>
+                      )
+                    )}
+                  </select>
+                </div>
+                <div className="flex justify-center text-center gap-3">
+                  <div className="text-custom-bg mt-2">entries</div>
+                  <div>
+                    <input
+                      type="text"
+                      placeholder="Search by email"
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="border rounded-md px-4 py-2 w-64 border-custom-bg"
+                    />
+                  </div>
+                </div>
               </div>
               <div className="justify-end">
                 <button
@@ -141,11 +164,11 @@ const Page = () => {
             <div className="w-full overflow-x-auto mt-4 ">
               <table className="w-full border-collapse border border-gray-200 overflow-x-scroll">
                 <thead>
-                  <tr className="bg-gray-200">
+                  <tr className="">
                     {columns.map((column, index) => (
                       <th
                         key={index}
-                        className="py-2 px-4 border-b text-left text-gray-600"
+                        className="py-2 px-4 border-b text-left text-white bg-custom-bg"
                       >
                         {column}
                       </th>
@@ -184,13 +207,13 @@ const Page = () => {
                             onClick={() => handleEdit(user._id)}
                             className="text-blue-500 hover:text-blue-700"
                           >
-                            <FaEdit />
+                            <img src="/edit.png" alt="edit" />
                           </button>
                           <button
                             onClick={() => handleDelete(user._id)}
                             className="text-red-500 hover:text-red-700"
                           >
-                            <FaTrash />
+                            <img src="/trash.png" alt="delete" />
                           </button>
                         </div>
                       </td>

@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { GetCompany } from "../Components/ApiUrl/ShowApiDatas/ShowApiDatas";
 import { Doughnut } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
-import { FaEdit, FaTrash } from "react-icons/fa";
 // import Card from "./Card";
 import AddCompanymodel from "../Company/AddCompany/AddCompanyModel";
 import { API_URL_Company } from "../Components/ApiUrl/ApiUrls";
@@ -232,7 +231,9 @@ const AllCompanies = () => {
                       />
                     </td>
                     <td className="py-3 px-4">
-                      {item.isActive ? "Active" : "Inactive"}
+                      <span className="bg-gray-400 px-5 py-3 border-2 rounded-2xl">
+                        {item.isActive ? "Active" : "Inactive"}
+                      </span>
                     </td>
                     <td className="py-3 px-4">
                       <div className="flex gap-2">
@@ -240,13 +241,13 @@ const AllCompanies = () => {
                           onClick={() => handleEdit(item._id)}
                           className="text-blue-500 hover:text-blue-700"
                         >
-                          <FaEdit />
+                          <img src="/edit.png" alt="edit" />
                         </button>
                         <button
                           onClick={() => handleDelete(item._id)}
                           className="text-red-500 hover:text-red-700"
                         >
-                          <FaTrash />
+                          <img src="/trash.png" alt="delete" />
                         </button>
                       </div>
                     </td>

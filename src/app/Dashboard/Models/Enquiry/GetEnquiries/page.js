@@ -5,7 +5,6 @@ import Header from "../../../Components/Header";
 import Sidebar from "../../../Components/Sidebar";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { FaEdit, FaTrash } from "react-icons/fa";
 import AddEnquiryModel from "../AddEnquiry/AddEnquiryModel";
 import UpdateEnquiryModel from "../UpdateEnquiry/UpdateEnquiryModel";
 import { API_URL_Enquiry } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
@@ -22,6 +21,8 @@ const Page = () => {
   const [selectedCompanyName, setSelectedCompanyName] = useState("");
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [isOpenVehicleUpdate, setIsOpenVehicleUpdate] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemperpage, setitemperpage] = useState(5);
 
   useEffect(() => {
     setIsMounted(true);
@@ -104,6 +105,11 @@ const Page = () => {
   const OpenVehicleUpdateModel = () => {
     setIsOpenVehicleUpdate(!isOpenVehicleUpdate);
   };
+  const totalPages = Math.ceil(filteredData.length / itemperpage);
+  const currentData = filteredData.slice(
+    (currentPage - 1) * itemperpage,
+    currentPage * itemperpage
+  );
 
   return (
     <>
@@ -111,18 +117,38 @@ const Page = () => {
       <div className="flex gap-4">
         <Sidebar />
         <div className="container mx-auto p-4">
-          <div className="justify-between mx-auto items-center border-2 mt-3 w-full">
+          <div className="justify-between mx-auto items-center mt-3 w-full">
             <div className="flex justify-between mb-4">
-              <input
-                type="text"
-                placeholder="Search by title"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="border rounded px-4 py-2 w-64"
-              />
+              <div className="flex gap-2">
+                <div className="text-custom-bg mt-2">Show</div>
+                <div>
+                  <select
+                    value={itemperpage}
+                    onChange={(e) => setitemperpage(e.target.value)}
+                    className="border rounded-md px-4 py-2 w-16 border-custom-bg"
+                  >
+                    <option value="">0</option>
+                    {Array.from({ length: 10 }, (_, i = 1) => i + 1).map(
+                      (number) => (
+                        <option key={number} value={number}>
+                          {number}
+                        </option>
+                      )
+                    )}
+                  </select>
+                </div>{" "}
+                <div className="text-custom-bg mt-2">entries</div>
+                <input
+                  type="text"
+                  placeholder="Search by Name"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="border rounded px-4 py-2 w-64"
+                />
+              </div>
               <button
                 onClick={OpenEnquiryModel}
-                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                className="bg-custom-bg text-white px-4 py-2 rounded hover:bg-blue-600"
               >
                 Add New Enquiry
               </button>
@@ -132,47 +158,45 @@ const Page = () => {
               <table className="min-w-full border-collapse border border-gray-300">
                 <thead>
                   <tr>
-                    <th className="border border-gray-300 px-4 py-2">
+                    <th className="px-4 py-2 bg-custom-bg text-white text-sm">
                       Enquiry Name
                     </th>
-                    <th className="border border-gray-300 px-4 py-2">
+                    <th className="px-4 py-2 bg-custom-bg text-white text-sm">
                       Enquiry Email
                     </th>
 
-                    <th className="border border-gray-300 px-4 py-2">
+                    <th className="px-4 py-2 bg-custom-bg text-white text-sm">
                       Enquiry Status
                     </th>
-                    <th className="border border-gray-300 px-4 py-2">
+                    <th className="px-4 py-2 bg-custom-bg text-white text-sm">
                       Actions
                     </th>
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredData.map((row) => (
-                    <tr key={row._id}>
-                      <td className="border border-gray-300 px-4 py-2">
+                  {currentData.map((row) => (
+                    <tr key={row._id} className="text-center">
+                      <td className=" px-4 py-2">
                         {`${row.firstName} ${row.lastName}`}
                       </td>
-                      <td className="border border-gray-300 px-4 py-2">
-                        {row.email}
-                      </td>
+                      <td className=" px-4 py-2">{row.email}</td>
 
-                      <td className="border border-gray-300 px-4 py-2">
+                      <td className="0 px-4 py-2">
                         {row.isActive ? "Active" : "Inactive"}
                       </td>
-                      <td className="border border-gray-300 px-4 py-2">
+                      <td className="px-4 py-2">
                         <div className="flex gap-2">
                           <button
                             onClick={() => handleEdit(row._id)}
                             className="text-blue-500 hover:text-blue-700"
                           >
-                            <FaEdit />
+                            <img src="/edit.png" alt="edit" />
                           </button>
                           <button
                             onClick={() => handleDelete(row._id)}
                             className="text-red-500 hover:text-red-700"
                           >
-                            <FaTrash />
+                            <img src="/trash.png" alt="delete" />
                           </button>
                         </div>
                       </td>
@@ -180,6 +204,33 @@ const Page = () => {
                   ))}
                 </tbody>
               </table>
+            </div>
+            <div className="flex justify-center items-center mt-4">
+              <button
+                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+                className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
+              >
+                Previous
+              </button>
+              <span
+                className={`px-3 py-1 mx-1 rounded ${
+                  currentPage
+                    ? "bg-custom-bg text-white"
+                    : "bg-gray-100 hover:bg-gray-300"
+                }`}
+              >
+                {currentPage} of {totalPages}
+              </span>
+              <button
+                onClick={() =>
+                  setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                }
+                disabled={currentPage === totalPages}
+                className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
+              >
+                Next
+              </button>
             </div>
           </div>
         </div>

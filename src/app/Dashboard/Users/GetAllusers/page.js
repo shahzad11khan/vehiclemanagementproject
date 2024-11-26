@@ -95,10 +95,20 @@ const Page = () => {
         item.companyname &&
         selectedCompanyName &&
         item.companyname.toLowerCase() === selectedCompanyName.toLowerCase();
+      // const usernameMatch =
+      //   item &&
+      //   item.username &&
+      //   item.username.toLowerCase().includes(searchTerm.toLowerCase());
       const usernameMatch =
-        item &&
-        item.username &&
-        item.username.toLowerCase().includes(searchTerm.toLowerCase());
+        item?.username &&
+        searchTerm
+          .toLowerCase()
+          .split("") // Split searchTerm into individual characters
+          .every(
+            (char) =>
+              item.username.toLowerCase().includes(char) || // Check in username
+              item.email?.toLowerCase().includes(char)
+          );
       return companyMatch && usernameMatch;
     });
     setFilteredData(filtered);
@@ -127,7 +137,7 @@ const Page = () => {
       <div className="flex gap-4">
         <Sidebar />
         <div className="container mx-auto p-4 w-[82%]">
-          <div className="justify-between mx-auto items-center border-2 mt-3 p-4">
+          <div className="justify-between mx-auto items-center  mt-3 p-4">
             <div className="flex justify-between">
               <div className="flex justify-center text-center gap-3">
                 <div className="text-custom-bg mt-2">Show</div>
@@ -152,7 +162,7 @@ const Page = () => {
                   <div>
                     <input
                       type="text"
-                      placeholder="Search by email"
+                      placeholder="Search by Username / Email"
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                       className="border rounded-md px-4 py-2 w-64 border-custom-bg"

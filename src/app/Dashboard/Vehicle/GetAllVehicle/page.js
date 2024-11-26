@@ -177,7 +177,7 @@ const Page = () => {
             </div>
 
             {/* Responsive Tailwind CSS Table */}
-            <div className="overflow-x-auto">
+            {/* <div className="overflow-x-auto">
               <table className="min-w-full border-collapse border border-gray-300 mt-4">
                 <thead>
                   <tr className="">
@@ -213,34 +213,20 @@ const Page = () => {
                 <tbody>
                   {currentRecords.map((row) => (
                     <tr key={row._id} className="hover:bg-gray-100">
-                      <td className="border border-gray-300 px-4 py-2">
-                        {row.manufacturer}
-                      </td>
-                      <td className="border border-gray-300 px-4 py-2">
-                        {row.model}
-                      </td>
-                      <td className="border border-gray-300 px-4 py-2">
-                        {row.vehicleStatus}
-                      </td>
-                      <td className="border border-gray-300 px-4 py-2">
-                        {row.year}
-                      </td>
-                      <td className="border border-gray-300 px-4 py-2">
-                        {row.type}
-                      </td>
-                      <td className="border border-gray-300 px-4 py-2">
-                        {row.engineType}
-                      </td>
-                      <td className="border border-gray-300 px-4 py-2">
-                        {row.adminCompanyName}
-                      </td>
+                      <td className=" px-4 py-2">{row.manufacturer}</td>
+                      <td className=" px-4 py-2">{row.model}</td>
+                      <td className=" px-4 py-2">{row.vehicleStatus}</td>
+                      <td className=" px-4 py-2">{row.year}</td>
+                      <td className=" px-4 py-2">{row.type}</td>
+                      <td className=" px-4 py-2">{row.engineType}</td>
+                      <td className=" px-4 py-2">{row.adminCompanyName}</td>
 
-                      <td className="border border-gray-300 px-4 py-2">
+                      <td className=" px-4 py-2">
                         <span className="bg-gray-400 px-1 py-1 border-2 rounded-2xl">
                           {row.isActive ? "Active" : "Inactive"}
                         </span>
                       </td>
-                      <td className="border border-gray-300 px-4 py-2">
+                      <td className=" px-4 py-2">
                         <div className="flex gap-2">
                           <button
                             onClick={() => handleEdit(row._id)}
@@ -256,7 +242,6 @@ const Page = () => {
                           </button>
 
                           <div className="flex gap-2">
-                            {/* Dropdown for Additional Reports */}
                             <div className="relative">
                               <button
                                 onClick={() => toggleDropdown(row._id)}
@@ -312,6 +297,129 @@ const Page = () => {
                             </div>
                           </div>
                         </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div> */}
+            <div className="">
+              <table className="min-w-full border-collapse border border-gray-300 mt-4 overflow-x-auto relative">
+                <thead>
+                  <tr>
+                    <th className="px-4 py-2 bg-custom-bg text-white text-sm">
+                      Manufacturer
+                    </th>
+                    <th className="px-4 py-2 bg-custom-bg text-white text-sm">
+                      Model
+                    </th>
+                    <th className="px-4 py-2 bg-custom-bg text-white text-sm">
+                      Vehicle Status
+                    </th>
+                    <th className="px-4 py-2 bg-custom-bg text-white text-sm">
+                      Year
+                    </th>
+                    <th className="px-4 py-2 bg-custom-bg text-white text-sm">
+                      Type
+                    </th>
+                    <th className="px-4 py-2 bg-custom-bg text-white text-sm">
+                      Engine Type
+                    </th>
+                    <th className="px-4 py-2 bg-custom-bg text-white text-sm">
+                      Company
+                    </th>
+                    <th className="px-4 py-2 bg-custom-bg text-white text-sm">
+                      Status
+                    </th>
+                    <th className="px-4 py-2 bg-custom-bg text-white text-sm">
+                      Actions
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {currentRecords.map((row) => (
+                    <tr key={row._id} className="hover:bg-gray-100">
+                      <td className="px-4 py-2">{row.manufacturer}</td>
+                      <td className="px-4 py-2">{row.model}</td>
+                      <td className="px-4 py-2">{row.vehicleStatus}</td>
+                      <td className="px-4 py-2">{row.year}</td>
+                      <td className="px-4 py-2">{row.type}</td>
+                      <td className="px-4 py-2">{row.engineType}</td>
+                      <td className="px-4 py-2">{row.adminCompanyName}</td>
+                      <td className="px-4 py-2">
+                        <span className="bg-gray-400 px-1 py-1 border-2 rounded-2xl">
+                          {row.isActive ? "Active" : "Inactive"}
+                        </span>
+                      </td>
+                      <td className="px-4 py-2 relative">
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => handleEdit(row._id)}
+                            className="text-blue-500 hover:text-blue-700"
+                          >
+                            <img src="/edit.png" alt="edit" />
+                          </button>
+                          <button
+                            onClick={() => handleDelete(row._id)}
+                            className="text-red-500 hover:text-red-700"
+                          >
+                            <img src="/trash.png" alt="delete" />
+                          </button>
+
+                          {/* Button to toggle dropdown */}
+                          <button
+                            onClick={() => toggleDropdown(row._id)}
+                            className="text-gray-500 hover:text-gray-700"
+                          >
+                            Reports
+                          </button>
+                        </div>
+
+                        {/* Dropdown menu */}
+                        {openDropdownId === row._id && (
+                          <div className="absolute top-10 left-0 bg-white border border-gray-200 shadow-lg rounded-md py-1 w-[170px] z-50">
+                            <div className="px-4 py-2 hover:bg-gray-300">
+                              <Link
+                                href={`/Dashboard/Vehicle/VehicleReports/${row._id}`}
+                                className="bg-transparent"
+                              >
+                                Car Details
+                              </Link>
+                            </div>
+                            <div className="px-4 py-2 hover:bg-gray-300">
+                              <Link
+                                href={`/Dashboard/Vehicle/AddMaintenanceReport/${row._id}`}
+                                className="bg-transparent"
+                              >
+                                Maintenance Report
+                              </Link>
+                            </div>
+                            <div className="px-4 py-2 hover:bg-gray-300">
+                              <Link
+                                href={`/Dashboard/Vehicle/AddMOTReport/${row._id}`}
+                                className="bg-transparent"
+                              >
+                                MOT Report
+                              </Link>
+                            </div>
+                            <div className="px-4 py-2 hover:bg-gray-300">
+                              <Link
+                                href={`/Dashboard/Vehicle/AddServiceReport/${row._id}`}
+                                className="bg-transparent"
+                              >
+                                Service Report
+                              </Link>
+                            </div>
+                            <div className="px-4 py-2 hover:bg-gray-300">
+                              <Link
+                                href={`/Dashboard/Vehicle/AddRoadTaxReport/${row._id}`}
+                                className="bg-transparent"
+                              >
+                                Road Tax Report
+                              </Link>
+                            </div>
+                          </div>
+                        )}
                       </td>
                     </tr>
                   ))}

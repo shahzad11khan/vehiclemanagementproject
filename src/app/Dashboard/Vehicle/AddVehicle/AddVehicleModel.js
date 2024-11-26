@@ -533,7 +533,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
             <>
               <h2 className="text-2xl font-bold mb-6">Vehicle Form</h2>
 
-              <div className="grid grid-cols-3 md:grid-cols-3 gap-2">
+              <div className="grid grid-cols-2 md:grid-cols-2 gap-2">
                 <div>
                   <div className="flex gap-1">
                     <label className="block font-semibold">Manufacturer</label>
@@ -585,9 +585,6 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                     required
                   />
                 </div>
-              </div>
-
-              <div className="grid grid-cols-3 md:grid-cols-3 gap-2 mt-4">
                 <div className="">
                   <div className="flex gap-1">
                     <label className="block font-semibold">Body Type</label>
@@ -611,6 +608,9 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                     ))}
                   </select>
                 </div>
+              </div>
+
+              <div className="grid grid-cols-2 md:grid-cols-2 gap-2 mt-4">
                 <div>
                   <div className="flex gap-1">
                     <label className="block font-semibold">Engine Type</label>
@@ -650,7 +650,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-2 mt-4">
+              <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-2 mt-4">
                 <div>
                   <div className="flex gap-1">
                     <label className="block font-semibold">Transmission</label>
@@ -731,9 +731,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-3 md:grid-cols-3 gap-2 mt-4"></div>
-
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mt-4">
+              <div className="grid grid-cols-2 md:grid-cols-2 gap-2 mt-4">
                 <div>
                   <div className="flex gap-1">
                     <label className="block font-semibold">Height</label>
@@ -743,6 +741,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                     name="height"
                     value={vehicleData.height}
                     onChange={handleChange}
+                    placeholder="0.001"
                     className="w-full p-2 border border-gray-300 rounded"
                   />
                 </div>
@@ -756,6 +755,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                     value={vehicleData.width}
                     onChange={handleChange}
                     className="w-full p-2 border border-gray-300 rounded"
+                    placeholder="0.001"
                   />
                 </div>
                 <div>
@@ -768,18 +768,13 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                     value={vehicleData.length}
                     onChange={handleChange}
                     className="w-full p-2 border border-gray-300 rounded"
+                    placeholder="0.001"
                   />
                 </div>
               </div>
 
               {/* end of multiple images */}
-              <div className="mt-6 flex gap-2">
-                <button
-                  onClick={nextStep}
-                  className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
-                >
-                  Next
-                </button>
+              <div className="mt-6 flex gap-2 justify-end">
                 <button
                   type="button"
                   onClick={() => {
@@ -787,9 +782,15 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                     resetForm();
                     cancleimages();
                   }}
-                  className="px-6 py-2 ml-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                  className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
                 >
                   Close
+                </button>
+                <button
+                  onClick={nextStep}
+                  className="px-6 py-2 bg-custom-bg text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                >
+                  Next
                 </button>
               </div>
             </>
@@ -798,7 +799,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
           {step === 2 && (
             <>
               {" "}
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mt-4">
+              <div className="grid grid-cols-2 md:grid-cols-2 gap-2 mt-4">
                 <div>
                   <div className="flex gap-1">
                     <label className="block font-semibold">
@@ -850,8 +851,6 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                     className="w-full p-2 border border-gray-300 rounded"
                   />
                 </div>
-              </div>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mt-4">
                 <div>
                   <div className="flex gap-1">
                     <label className="block font-semibold">Torque</label>
@@ -864,6 +863,8 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                     className="w-full p-2 border border-gray-300 rounded"
                   />
                 </div>
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-2 gap-2 mt-4">
                 <div>
                   <div className="flex gap-1">
                     <label className="block font-semibold">
@@ -1042,37 +1043,39 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
               </select>
             </div> */}
               </div>
-              <div className="mt-6 flex gap-2">
+              <div className="mt-6 flex gap-2 justify-between">
                 <button
                   onClick={prevStep}
-                  className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                  className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
                 >
                   Back
                 </button>
-                <button
-                  onClick={nextStep}
-                  className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
-                >
-                  Next
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    onClose();
-                    resetForm();
-                    cancleimages();
-                  }}
-                  className="px-6 py-2 ml-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
-                >
-                  Close
-                </button>
+                <div className="flex justify-end gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onClose();
+                      resetForm();
+                      cancleimages();
+                    }}
+                    className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                  >
+                    Close
+                  </button>
+                  <button
+                    onClick={nextStep}
+                    className="px-6 py-2 bg-custom-bg text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                  >
+                    Next
+                  </button>
+                </div>
               </div>
             </>
           )}
 
           {step === 3 && (
             <>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mt-4">
+              <div className="grid grid-cols-2 md:grid-cols-2 gap-2 mt-4">
                 <div>
                   <div className="flex gap-1">
                     <label className="block font-semibold">Engine Size</label>
@@ -1123,11 +1126,24 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                   </select>
                 </div>
                 {/* Conditionally Rendered Fleet Details */}
+                <div>
+                  <div className="flex gap-1">
+                    <label className="block font-semibold">Doors</label>
+                  </div>
+                  <input
+                    type="number"
+                    name="doors"
+                    value={vehicleData.doors}
+                    onChange={handleChange}
+                    placeholder="Enter Engine Size"
+                    className="w-full p-2 border border-gray-300 rounded"
+                  />
+                </div>
               </div>
               {selectedSite && (
                 <>
                   <h3 className="font-semibold mt-4">Fleet Entry Details</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mt-4">
+                  <div className="grid grid-cols-2 md:grid-cols-2 gap-2 mt-4">
                     <div>
                       <label className="block">Date Fleet Entry</label>
                       <input
@@ -1204,20 +1220,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                   </div>
                 </>
               )}
-              <div className="grid grid-cols-3 md:grid-cols-3 gap-2 mt-4">
-                <div>
-                  <div className="flex gap-1">
-                    <label className="block font-semibold">Doors</label>
-                  </div>
-                  <input
-                    type="number"
-                    name="doors"
-                    value={vehicleData.doors}
-                    onChange={handleChange}
-                    placeholder="Enter Engine Size"
-                    className="w-full p-2 border border-gray-300 rounded"
-                  />
-                </div>
+              <div className="grid grid-cols-2 md:grid-cols-2 gap-2 mt-4">
                 <div>
                   <div className="flex gap-1">
                     <label className="block font-semibold">Colour</label>
@@ -1255,7 +1258,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-3 md:grid-cols-3 gap-2 mt-4">
+              <div className="grid grid-cols-2 md:grid-cols-2 gap-2 mt-4">
                 <div>
                   <label className="block font-semibold">Road Tax Date</label>
                   <input
@@ -1379,30 +1382,32 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                   />
                 </div>
               </div>
-              <div className="mt-6 flex gap-2">
+              <div className="mt-6 flex gap-2 justify-between">
                 <button
                   onClick={prevStep}
-                  className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                  className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
                 >
                   Back
                 </button>
-                <button
-                  onClick={nextStep}
-                  className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
-                >
-                  Next
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    onClose();
-                    resetForm();
-                    cancleimages();
-                  }}
-                  className="px-6 py-2 ml-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
-                >
-                  Close
-                </button>
+                <div className="flex justify-end gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onClose();
+                      resetForm();
+                      cancleimages();
+                    }}
+                    className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                  >
+                    Close
+                  </button>
+                  <button
+                    onClick={nextStep}
+                    className="px-6 py-2 bg-custom-bg text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                  >
+                    Next
+                  </button>
+                </div>
               </div>
             </>
           )}
@@ -1412,7 +1417,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
               <h2 className="text-2xl font-bold mb-4">
                 Financials Information
               </h2>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mt-4 mb-2">
+              <div className="grid grid-cols-2 md:grid-cols-2 gap-2 mt-4 mb-2">
                 <div className="mb-4">
                   <label className="block text-gray-700 font-semibold mb-1">
                     List Price (P11D)
@@ -1483,7 +1488,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
               </div>
               {maintenance && (
                 <>
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mt-4 mb-2">
+                  <div className="grid grid-cols-2 md:grid-cols-2 gap-2 mt-4 mb-2">
                     <div className="mb-4">
                       <label className="text-gray-700 font-semibold mb-1">
                         Issues/Damage
@@ -1585,7 +1590,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                     </div>
                   </div>
                   <h3 className="font-semibold text-gray-700 mb-2">Parts</h3>
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mt-4 mb-2">
+                  <div className="grid grid-cols-2 md:grid-cols-2 gap-2 mt-4 mb-2">
                     <div>
                       <input
                         type="text"
@@ -1635,7 +1640,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                 </>
               )}
               <h2 className="text-2xl font-bold mb-4">Commercial Vehicles</h2>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mt-4 mb-2">
+              <div className="grid grid-cols-2 md:grid-cols-2 gap-2 mt-4 mb-2">
                 <div>
                   <label className="block font-semibold">RPC Expiry Date</label>
                   <input
@@ -1716,30 +1721,32 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                 </div>
               )}
 
-              <div className="mt-6 flex gap-2">
+              <div className="mt-6 flex gap-2 justify-between">
                 <button
                   onClick={prevStep}
-                  className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                  className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
                 >
                   Back
                 </button>
-                <button
-                  onClick={nextStep}
-                  className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
-                >
-                  Next
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    onClose();
-                    resetForm();
-                    cancleimages();
-                  }}
-                  className="px-6 py-2 ml-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
-                >
-                  Close
-                </button>
+                <div className="flex justify-end gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onClose();
+                      resetForm();
+                      cancleimages();
+                    }}
+                    className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                  >
+                    Close
+                  </button>
+                  <button
+                    onClick={nextStep}
+                    className="px-6 py-2 bg-custom-bg text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                  >
+                    Next
+                  </button>
+                </div>
               </div>
             </>
           )}
@@ -1747,7 +1754,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
           {step === 5 && (
             <>
               <h2 className="text-2xl font-bold mb-4">Local Authority</h2>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mt-4 mb-2">
+              <div className="grid grid-cols-2 md:grid-cols-2 gap-2 mt-4 mb-2">
                 <div>
                   <div className="flex gap-1">
                     <label htmlFor="taxiFirm" className="block font-semibold">
@@ -2003,7 +2010,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                   </div>
                 </div>
               </div>
-              <div className="flex items-center">
+              {/* <div className="flex items-center">
                 <input
                   type="checkbox"
                   id="isActive"
@@ -2018,28 +2025,69 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                 >
                   Active
                 </label>
+              </div> */}
+
+              <div>
+                <label className="block font-medium mb-2">Is Active:</label>
+                <div className="flex gap-4">
+                  {/* Yes Option */}
+                  <label className="flex items-center gap-2">
+                    <input
+                      type="radio"
+                      name="isActive"
+                      value="true"
+                      checked={vehicleData.isActive === true}
+                      onChange={() =>
+                        handleChange({
+                          target: { name: "isActive", value: true },
+                        })
+                      }
+                      className="accent-green-500"
+                    />
+                    <span>Active</span>
+                  </label>
+
+                  {/* No Option */}
+                  <label className="flex items-center gap-2">
+                    <input
+                      type="radio"
+                      name="isActive"
+                      value="false"
+                      checked={vehicleData.isActive === false}
+                      onChange={() =>
+                        handleChange({
+                          target: { name: "isActive", value: false },
+                        })
+                      }
+                      className="accent-red-500"
+                    />
+                    <span>InActive</span>
+                  </label>
+                </div>
               </div>
-              <div className="mt-6 flex gap-2">
+              <div className="mt-6 flex gap-2 justify-between">
                 <button
                   onClick={prevStep}
-                  className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                  className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
                 >
                   Back
                 </button>
-                <button className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50">
-                  Submit
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    onClose();
-                    resetForm();
-                    cancleimages();
-                  }}
-                  className="px-6 py-2 ml-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
-                >
-                  Close
-                </button>
+                <div className="flex justify-end gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onClose();
+                      resetForm();
+                      cancleimages();
+                    }}
+                    className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                  >
+                    Close
+                  </button>
+                  <button className="px-6 py-2 bg-custom-bg text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50">
+                    Submit
+                  </button>
+                </div>
               </div>
             </>
           )}

@@ -793,7 +793,7 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                       }
                       className="accent-green-500"
                     />
-                    <span>Yes</span>
+                    <span>Active</span>
                   </label>
 
                   {/* No Option */}
@@ -810,7 +810,7 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                       }
                       className="accent-red-500"
                     />
-                    <span>No</span>
+                    <span>InActive</span>
                   </label>
                 </div>
               </div>

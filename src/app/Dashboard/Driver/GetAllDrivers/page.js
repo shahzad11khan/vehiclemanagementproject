@@ -218,32 +218,20 @@ const Page = () => {
                 <tbody>
                   {currentDrivers.map((driver) => (
                     <tr key={driver._id} className="hover:bg-gray-50">
-                      <td className="border border-gray-300 px-4 py-2">
+                      <td className="px-2 py-2">
                         {driver.firstName} {driver.lastName}
                       </td>
-                      <td className="border border-gray-300 px-4 py-2 ">
-                        {driver.email}
-                      </td>
-                      <td className="border border-gray-300 px-4 py-2">
-                        {driver.tel1}
-                      </td>
-                      <td className="border border-gray-300 px-4 py-2">
-                        {driver.tel2}
-                      </td>
-                      <td className="border border-gray-300 px-4 py-2">
-                        {driver.licenseNumber}
-                      </td>
-                      <td className="border border-gray-300 px-4 py-2">
-                        {driver.niNumber}
-                      </td>
-                      <td className="border border-gray-300 px-4 py-2">
-                        {driver.badgeType}
-                      </td>
+                      <td className="px-2 py-2 ">{driver.email}</td>
+                      <td className="px-2 py-2">{driver.tel1}</td>
+                      <td className="px-2 py-2">{driver.tel2}</td>
+                      <td className="px-2 py-2">{driver.licenseNumber}</td>
+                      <td className="px-2 py-2">{driver.niNumber}</td>
+                      <td className="px-2 py-2">{driver.badgeType}</td>
 
-                      <td className="border border-gray-300 px-3 py-2">
+                      <td className="px-2 py-2">
                         {formatDate(driver.dateOfBirth)}
                       </td>
-                      <td className="border border-gray-300">
+                      <td className="px-2 py-2">
                         <div className="flex gap-2">
                           {/* <button className="text-blue-500 hover:text-blue-700">
                             <Link

@@ -304,7 +304,7 @@ const Page = () => {
               </table>
             </div> */}
             <div className="">
-              <table className="min-w-full border-collapse border border-gray-300 mt-4 overflow-x-auto relative">
+              <table className="min-w-full border-collapse border border-gray-300 mt-4 overflow-x-auto ">
                 <thead>
                   <tr>
                     <th className="px-4 py-2 bg-custom-bg text-white text-sm">

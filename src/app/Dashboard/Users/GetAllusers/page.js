@@ -35,7 +35,6 @@ const Page = () => {
   const [selectedCompanyName, setSelectedCompanyName] = useState("");
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(10);
   const [itemperpage, setitemperpage] = useState(5);
 
   useEffect(() => {
@@ -125,7 +124,7 @@ const Page = () => {
   const indexOfLastUser = currentPage * itemperpage;
   const indexOfFirstUser = indexOfLastUser - itemperpage;
   const currentUsers = filteredData.slice(indexOfFirstUser, indexOfLastUser);
-  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+  const totalPages = Math.ceil(filteredData.length / setitemperpage);
 
   if (!isMounted) {
     return null;

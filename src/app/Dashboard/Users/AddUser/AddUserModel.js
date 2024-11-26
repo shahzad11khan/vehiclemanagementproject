@@ -12,6 +12,8 @@ import {
 const AddUserModel = ({ isOpen, onClose, fetchData }) => {
   // const [title, setTitile] = useState([]);
   // const [role, setrole] = useState(null);
+  const [previewAvatar, setPreviewAvatar] = useState(null);
+  const [showPasswords, setShowPasswords] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
     firstName: "",
@@ -95,10 +97,23 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
   };
 
   const handleFileChange = (e) => {
+    // setFormData((prevData) => ({
+    //   ...prevData,
+    //   useravatar: e.target.files[0], // Store the selected file
+    // }));
+    const file = e.target.files[0];
+
+    // Update the formData and preview avatar
     setFormData((prevData) => ({
       ...prevData,
-      useravatar: e.target.files[0], // Store the selected file
+      useravatar: file, // Store the selected file
     }));
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => setPreviewAvatar(reader.result); // Set preview image
+      reader.readAsDataURL(file);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -121,35 +136,9 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
       // Handle the response as needed
       const data = await response.json();
       if (data.success) {
-        setFormData({
-          title: "",
-          firstName: "",
-          lastName: "",
-          email: "",
-          tel1: "",
-          tel2: "",
-          postcode: "",
-          postalAddress: "",
-          permanentAddress: "",
-          city: "",
-          county: "",
-          // accessLevel: "",
-          dateOfBirth: "",
-          position: "",
-          reportsTo: "",
-          username: "",
-          password: "",
-          passwordExpires: "",
-          // passwordExpiresEvery: "",
-          confirmpassword: "",
-          companyname: formData.companyname,
-          CreatedBy: "",
-          useravatar: null,
-          isActive: false,
-          role: "user", // Default role set to "user"
-        });
         toast.success(data.message);
         onClose();
+        resetform();
         fetchData();
         // console.log(data);
       } else {
@@ -160,6 +149,39 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
     }
   };
 
+  const resetform = () => {
+    setStep(1);
+    setFormData({
+      title: "",
+      firstName: "",
+      lastName: "",
+      email: "",
+      tel1: "",
+      tel2: "",
+      postcode: "",
+      postalAddress: "",
+      permanentAddress: "",
+      city: "",
+      county: "",
+      // accessLevel: "",
+      dateOfBirth: "",
+      position: "",
+      reportsTo: "",
+      username: "",
+      password: "",
+      passwordExpires: "",
+      // passwordExpiresEvery: "",
+      confirmpassword: "",
+      companyname: formData.companyname,
+      CreatedBy: "",
+      useravatar: null,
+      isActive: false,
+      role: "user", // Default role set to "user"
+    });
+  };
+  const [step, setStep] = useState(1);
+  const nextStep = () => setStep(step + 1);
+  const prevStep = () => setStep(step - 1);
   if (!isOpen) return null;
 
   return (
@@ -171,259 +193,311 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
 
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* User Details */}
-          <div>
-            <h3 className="text-xl font-semibold mb-2">User Details</h3>
-            <div className="grid grid-cols-4 sm:grid-cols-4 gap-3">
+          {step === 1 && (
+            <>
               <div>
-                <div className="flex gap-1">
-                  <label
-                    htmlFor="taxiFirm"
-                    className="text-sm font-medium text-gray-700"
-                  >
-                    Title:
-                  </label>
-                  <span className="text-red-600">*</span>
+                <h3 className="text-xl font-semibold mb-2">User Details</h3>
+                <div className="grid grid-cols-2 sm:grid-cols-2 gap-3">
+                  <div>
+                    <div className="flex gap-1">
+                      <label
+                        htmlFor="taxiFirm"
+                        className="text-sm font-medium text-gray-700"
+                      >
+                        Title:
+                      </label>
+                      <span className="text-red-600">*</span>
+                    </div>
+
+                    <select
+                      id="title"
+                      name="title"
+                      value={formData.title}
+                      onChange={handleChange}
+                      className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                      required
+                    >
+                      <option value="">Select Title</option>
+                      <option value="Mr">Mr</option>
+                      <option value="Miss">Miss</option>
+                      <option value="Miss">Miss</option>
+                      <option value="Mrs">Mrs</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <div className="flex gap-1">
+                      <label
+                        htmlFor="firstName"
+                        className="text-sm font-medium text-gray-700"
+                      >
+                        First Name:
+                      </label>
+                      <span className="text-red-600">*</span>
+                    </div>
+
+                    <input
+                      type="text"
+                      id="firstName"
+                      name="firstName"
+                      value={formData.firstName}
+                      onChange={handleChange}
+                      className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <div className="flex gap-1">
+                      <label
+                        htmlFor="lastName"
+                        className="text-sm font-medium text-gray-700"
+                      >
+                        Last Name:
+                      </label>
+                      <span className="text-red-600">*</span>
+                    </div>
+
+                    <input
+                      type="text"
+                      id="lastName"
+                      name="lastName"
+                      value={formData.lastName}
+                      onChange={handleChange}
+                      className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                      required
+                    />
+                  </div>
                 </div>
-
-                <select
-                  id="title"
-                  name="title"
-                  value={formData.title}
-                  onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                  required
-                >
-                  <option value="">Select Title</option>
-                  <option value="Mr">Mr</option>
-                  <option value="Miss">Miss</option>
-                  <option value="Miss">Miss</option>
-                  <option value="Mrs">Mrs</option>
-                  {/* {title.map((title) => (
-                    <option key={title._id} value={title.name}>
-                      {title.name}
-                    </option>
-                  ))} */}
-                </select>
-              </div>
-
-              <div>
-                <div className="flex gap-1">
-                  <label
-                    htmlFor="firstName"
-                    className="text-sm font-medium text-gray-700"
+                {/* end of multiple images */}
+                <div className="mt-6 flex gap-2 justify-end">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onClose();
+                      resetform();
+                    }}
+                    className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
                   >
-                    First Name:
-                  </label>
-                  <span className="text-red-600">*</span>
-                </div>
-
-                <input
-                  type="text"
-                  id="firstName"
-                  name="firstName"
-                  value={formData.firstName}
-                  onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                  required
-                />
-              </div>
-
-              <div>
-                <div className="flex gap-1">
-                  <label
-                    htmlFor="lastName"
-                    className="text-sm font-medium text-gray-700"
+                    Close
+                  </button>
+                  <button
+                    onClick={nextStep}
+                    className="px-6 py-2 bg-custom-bg text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
                   >
-                    Last Name:
-                  </label>
-                  <span className="text-red-600">*</span>
+                    Next
+                  </button>
                 </div>
-
-                <input
-                  type="text"
-                  id="lastName"
-                  name="lastName"
-                  value={formData.lastName}
-                  onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                  required
-                />
               </div>
-            </div>
-          </div>
-
+            </>
+          )}
           {/* Contact Information */}
-          <div>
-            <h3 className="text-xl font-semibold mb-4">Contact Information</h3>
-            <div className="grid grid-cols-4 sm:grid-cols-4 gap-3">
+          {step === 2 && (
+            <>
               <div>
-                <div className="flex gap-1">
-                  <label
-                    htmlFor="email"
-                    className="text-sm font-medium text-gray-700"
-                  >
-                    Email:
-                  </label>
-                  <span className="text-red-600">*</span>
+                <h3 className="text-xl font-semibold mb-4">
+                  Contact Information
+                </h3>
+                <div className="grid grid-cols-2 sm:grid-cols-2 gap-3">
+                  <div>
+                    <div className="flex gap-1">
+                      <label
+                        htmlFor="email"
+                        className="text-sm font-medium text-gray-700"
+                      >
+                        Email:
+                      </label>
+                      <span className="text-red-600">*</span>
+                    </div>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <div className="flex gap-1">
+                      <label
+                        htmlFor="tel1"
+                        className="text-sm font-medium text-gray-700"
+                      >
+                        Tel 1:
+                      </label>
+                      <span className="text-red-600">*</span>
+                    </div>
+                    <input
+                      type="number"
+                      id="tel1"
+                      name="tel1"
+                      value={formData.tel1}
+                      onChange={handleChange}
+                      className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="tel2"
+                      className="text-sm font-medium text-gray-700"
+                    >
+                      Tel 2:
+                    </label>
+
+                    <input
+                      type="number"
+                      id="tel2"
+                      name="tel2"
+                      value={formData.tel2}
+                      onChange={handleChange}
+                      className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                    />
+                  </div>
+
+                  <div>
+                    <div className="flex gap-1">
+                      <label
+                        htmlFor="postcode"
+                        className="text-sm font-medium text-gray-700"
+                      >
+                        Postcode:
+                      </label>
+                      <span className="text-red-600">*</span>
+                    </div>
+                    <input
+                      type="text"
+                      id="postcode"
+                      name="postcode"
+                      value={formData.postcode}
+                      onChange={handleChange}
+                      className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                    />
+                  </div>
+
+                  <div>
+                    <div className="flex gap-1">
+                      <label
+                        htmlFor="postalAddress"
+                        className="text-sm font-medium text-gray-700"
+                      >
+                        Postal Address:
+                      </label>
+                      <span className="text-red-600">*</span>
+                    </div>
+                    <input
+                      type="text"
+                      id="postalAddress"
+                      name="postalAddress"
+                      value={formData.postalAddress}
+                      onChange={handleChange}
+                      className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="permanentAddress"
+                      className="text-sm font-medium text-gray-700"
+                    >
+                      Permanent Address:
+                    </label>
+
+                    <input
+                      type="text"
+                      id="permanentAddress"
+                      name="permanentAddress"
+                      value={formData.permanentAddress}
+                      onChange={handleChange}
+                      className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                    />
+                  </div>
+
+                  <div>
+                    <div className="flex gap-1">
+                      <label
+                        htmlFor="city"
+                        className="text-sm font-medium text-gray-700"
+                      >
+                        City:
+                      </label>
+                      <span className="text-red-600">*</span>
+                    </div>
+                    <input
+                      type="text"
+                      id="city"
+                      name="city"
+                      value={formData.city}
+                      onChange={handleChange}
+                      className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <div className="flex gap-1">
+                      <label
+                        htmlFor="county"
+                        className="text-sm font-medium text-gray-700"
+                      >
+                        Country:
+                      </label>
+                      <span className="text-red-600">*</span>
+                    </div>
+                    <input
+                      type="text"
+                      id="county"
+                      name="county"
+                      value={formData.county}
+                      onChange={handleChange}
+                      className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                      required
+                    />
+                  </div>
                 </div>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                  required
-                />
-              </div>
-
-              <div>
-                <div className="flex gap-1">
-                  <label
-                    htmlFor="tel1"
-                    className="text-sm font-medium text-gray-700"
-                  >
-                    Tel 1:
-                  </label>
-                  <span className="text-red-600">*</span>
+                <div className="mt-6 flex gap-2 justify-between">
+                  <div>
+                    <button
+                      onClick={prevStep}
+                      className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                    >
+                      Back
+                    </button>
+                  </div>
+                  <div className="flex gap-2">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        onClose();
+                        resetform();
+                      }}
+                      className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                    >
+                      Close
+                    </button>
+                    <button
+                      onClick={nextStep}
+                      className="px-6 py-2 bg-custom-bg text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                    >
+                      Next
+                    </button>
+                  </div>
                 </div>
-                <input
-                  type="number"
-                  id="tel1"
-                  name="tel1"
-                  value={formData.tel1}
-                  onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                  required
-                />
               </div>
-
-              <div>
-                <label
-                  htmlFor="tel2"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Tel 2:
-                </label>
-
-                <input
-                  type="number"
-                  id="tel2"
-                  name="tel2"
-                  value={formData.tel2}
-                  onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                />
-              </div>
-
-              <div>
-                <div className="flex gap-1">
-                  <label
-                    htmlFor="postcode"
-                    className="text-sm font-medium text-gray-700"
-                  >
-                    Postcode:
-                  </label>
-                  <span className="text-red-600">*</span>
-                </div>
-                <input
-                  type="text"
-                  id="postcode"
-                  name="postcode"
-                  value={formData.postcode}
-                  onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                />
-              </div>
-
-              <div>
-                <div className="flex gap-1">
-                  <label
-                    htmlFor="postalAddress"
-                    className="text-sm font-medium text-gray-700"
-                  >
-                    Postal Address:
-                  </label>
-                  <span className="text-red-600">*</span>
-                </div>
-                <input
-                  type="text"
-                  id="postalAddress"
-                  name="postalAddress"
-                  value={formData.postalAddress}
-                  onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                  required
-                />
-              </div>
-
-              <div>
-                <label
-                  htmlFor="permanentAddress"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Permanent Address:
-                </label>
-
-                <input
-                  type="text"
-                  id="permanentAddress"
-                  name="permanentAddress"
-                  value={formData.permanentAddress}
-                  onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                />
-              </div>
-
-              <div>
-                <div className="flex gap-1">
-                  <label
-                    htmlFor="city"
-                    className="text-sm font-medium text-gray-700"
-                  >
-                    City:
-                  </label>
-                  <span className="text-red-600">*</span>
-                </div>
-                <input
-                  type="text"
-                  id="city"
-                  name="city"
-                  value={formData.city}
-                  onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                  required
-                />
-              </div>
-
-              <div>
-                <div className="flex gap-1">
-                  <label
-                    htmlFor="county"
-                    className="text-sm font-medium text-gray-700"
-                  >
-                    Country:
-                  </label>
-                  <span className="text-red-600">*</span>
-                </div>
-                <input
-                  type="text"
-                  id="county"
-                  name="county"
-                  value={formData.county}
-                  onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                  required
-                />
-              </div>
-            </div>
-          </div>
-
+            </>
+          )}
           {/* Security */}
-          <div>
-            <h3 className="text-xl font-semibold mb-4">Security</h3>
-            <div className="grid grid-cols-4 sm:grid-cols-4 gap-3">
-              {/* <div>
+          {step === 3 && (
+            <>
+              <div>
+                <h3 className="text-xl font-semibold mb-4">Security</h3>
+                <div className="grid grid-cols-2 sm:grid-cols-2 gap-3">
+                  {/* <div>
                 <label
                   htmlFor="accessLevel"
                   className="text-sm font-medium text-gray-700"
@@ -440,150 +514,159 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                 />
               </div> */}
 
-              <div>
-                <div className="flex gap-1">
-                  <label
-                    htmlFor="county"
-                    className="text-sm font-medium text-gray-700"
-                  >
-                    Date Of Birth:
-                  </label>
-                </div>
+                  <div>
+                    <div className="flex gap-1">
+                      <label
+                        htmlFor="county"
+                        className="text-sm font-medium text-gray-700"
+                      >
+                        Date Of Birth:
+                      </label>
+                    </div>
 
-                <input
-                  type="date"
-                  id="dateOfBirth"
-                  name="dateOfBirth"
-                  value={formData.dateOfBirth}
-                  onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                />
-              </div>
+                    <input
+                      type="date"
+                      id="dateOfBirth"
+                      name="dateOfBirth"
+                      value={formData.dateOfBirth}
+                      onChange={handleChange}
+                      className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                    />
+                  </div>
 
-              <div>
-                <div className="flex gap-1">
-                  <label
-                    htmlFor="position"
-                    className="text-sm font-medium text-gray-700"
-                  >
-                    Position:
-                  </label>
-                  <span className="text-red-600">*</span>
-                </div>
-                <input
-                  type="text"
-                  id="position"
-                  name="position"
-                  value={formData.position}
-                  onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                  required
-                />
-              </div>
+                  <div>
+                    <div className="flex gap-1">
+                      <label
+                        htmlFor="position"
+                        className="text-sm font-medium text-gray-700"
+                      >
+                        Position:
+                      </label>
+                      <span className="text-red-600">*</span>
+                    </div>
+                    <input
+                      type="text"
+                      id="position"
+                      name="position"
+                      value={formData.position}
+                      onChange={handleChange}
+                      className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                      required
+                    />
+                  </div>
 
-              <div>
-                <label
-                  htmlFor="reportsTo"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Reports To:
-                </label>
-                <input
-                  type="text"
-                  id="reportsTo"
-                  name="reportsTo"
-                  value={formData.reportsTo}
-                  onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                />
-              </div>
+                  <div>
+                    <label
+                      htmlFor="reportsTo"
+                      className="text-sm font-medium text-gray-700"
+                    >
+                      Reports To:
+                    </label>
+                    <input
+                      type="text"
+                      id="reportsTo"
+                      name="reportsTo"
+                      value={formData.reportsTo}
+                      onChange={handleChange}
+                      className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                    />
+                  </div>
 
-              <div>
-                <div className="flex gap-1">
-                  <label
-                    htmlFor="username"
-                    className="text-sm font-medium text-gray-700"
-                  >
-                    Username:
-                  </label>
-                  <span className="text-red-600">*</span>
-                </div>
-                <input
-                  type="text"
-                  id="username"
-                  name="username"
-                  value={formData.username}
-                  onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                  required
-                />
-              </div>
+                  <div>
+                    <div className="flex gap-1">
+                      <label
+                        htmlFor="username"
+                        className="text-sm font-medium text-gray-700"
+                      >
+                        Username:
+                      </label>
+                      <span className="text-red-600">*</span>
+                    </div>
+                    <input
+                      type="text"
+                      id="username"
+                      name="username"
+                      value={formData.username}
+                      onChange={handleChange}
+                      className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                      required
+                    />
+                  </div>
+                  <div className="flex gap-2">
+                    <div>
+                      <div className="flex gap-1">
+                        <label
+                          htmlFor="password"
+                          className="text-sm font-medium text-gray-700"
+                        >
+                          Password:
+                        </label>
+                        <span className="text-red-600">*</span>
+                      </div>
+                      <input
+                        type={showPasswords ? "text" : "password"}
+                        id="password"
+                        name="password"
+                        value={formData.password}
+                        onChange={handleChange}
+                        className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                        required
+                      />
+                    </div>
 
-              <div>
-                <div className="flex gap-1">
-                  <label
-                    htmlFor="password"
-                    className="text-sm font-medium text-gray-700"
-                  >
-                    Password:
-                  </label>
-                  <span className="text-red-600">*</span>
-                </div>
-                <input
-                  type="password"
-                  id="password"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                  required
-                />
-              </div>
+                    <div>
+                      <div className="flex gap-1">
+                        <label
+                          htmlFor="confirmpassword"
+                          className="text-sm font-medium text-gray-700"
+                        >
+                          Confirm Password:
+                        </label>
+                        <span className="text-red-600">*</span>
+                      </div>
+                      <input
+                        type={showPasswords ? "text" : "password"}
+                        id="confirmpassword"
+                        name="confirmpassword"
+                        value={formData.confirmpassword}
+                        onChange={handleChange}
+                        className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                        required
+                      />
+                    </div>
+                    <div className="mt-4">
+                      <button
+                        type="button"
+                        onClick={() => setShowPasswords(!showPasswords)}
+                        className="px-4 py-2"
+                      >
+                        {showPasswords ? "Hide" : "Show"}
+                      </button>
+                    </div>
+                  </div>
+                  <div>
+                    <div className="flex gap-1">
+                      <label
+                        htmlFor="passwordExpires"
+                        className="text-sm font-medium text-gray-700"
+                      >
+                        Password Expires:
+                      </label>
+                      <span className="text-red-600">*</span>
+                    </div>
 
-              <div>
-                <div className="flex gap-1">
-                  <label
-                    htmlFor="confirmpassword"
-                    className="text-sm font-medium text-gray-700"
-                  >
-                    Confirm Password:
-                  </label>
-                  <span className="text-red-600">*</span>
-                </div>
-                <input
-                  type="password"
-                  id="confirmpassword"
-                  name="confirmpassword"
-                  value={formData.confirmpassword}
-                  onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                  required
-                />
-              </div>
+                    <input
+                      type="date"
+                      id="passwordExpires"
+                      name="passwordExpires"
+                      value={formData.passwordExpires}
+                      onChange={handleChange}
+                      className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                      required
+                    />
+                  </div>
 
-              <div>
-                <div className="flex gap-1">
-                  <label
-                    htmlFor="passwordExpires"
-                    className="text-sm font-medium text-gray-700"
-                  >
-                    Password Expires:
-                  </label>
-                  <span className="text-red-600">*</span>
-                </div>
-
-                <input
-                  type="date"
-                  id="passwordExpires"
-                  name="passwordExpires"
-                  value={formData.passwordExpires}
-                  onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                  required
-                />
-              </div>
-
-              {/* <div>
+                  {/* <div>
                 <label
                   htmlFor="passwordExpiresEvery"
                   className="text-sm font-medium text-gray-700"
@@ -599,62 +682,212 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
                 />
               </div> */}
-            </div>
-          </div>
-
+                </div>
+                <div className="mt-6 flex gap-2 justify-between">
+                  <div>
+                    <button
+                      onClick={prevStep}
+                      className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                    >
+                      Back
+                    </button>
+                  </div>
+                  <div className="flex gap-2">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        onClose();
+                        resetform();
+                      }}
+                      className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                    >
+                      Close
+                    </button>
+                    <button
+                      onClick={nextStep}
+                      className="px-6 py-2 bg-custom-bg text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                    >
+                      Next
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
           {/* User Avatar */}
-          <div>
-            <label
-              htmlFor="useravatar"
-              className="text-sm font-medium text-gray-700"
-            >
-              User Avatar:
-            </label>
-            <input
-              type="file"
-              id="useravatar"
-              name="useravatar"
-              accept="image/*"
-              onChange={handleFileChange}
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-            />
-          </div>
-          <div>
-            <label>
-              Is Active:
-              <input
-                type="checkbox"
-                name="isActive"
-                checked={formData.isActive}
-                onChange={handleChange}
-              />
-            </label>
-          </div>
-          <div>
-            <label>
-              Role:
-              <select name="role" value={formData.role} onChange={handleChange}>
-                <option value="user">User</option>
-                <option value="admin">Admin</option>
-              </select>
-            </label>
-          </div>
+          {step === 4 && (
+            <>
+              {/* <div>
+                <label
+                  htmlFor="useravatar"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  User Avatar:
+                </label>
+                <input
+                  type="file"
+                  id="useravatar"
+                  name="useravatar"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                />
+              </div> */}
+              <div className="mb-4">
+                <label
+                  htmlFor="useravatar"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
+                  User Avatar:
+                </label>
+                <div className="flex items-center gap-4">
+                  <label
+                    htmlFor="useravatar"
+                    className="flex items-center justify-center w-32 h-32 bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:bg-gray-200 hover:border-gray-400 transition-all"
+                  >
+                    <span className="text-gray-500 text-sm font-medium">
+                      Upload Avatar
+                    </span>
+                  </label>
+                  <input
+                    type="file"
+                    id="useravatar"
+                    name="useravatar"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                    className="hidden"
+                  />
+                  <img
+                    src={previewAvatar || "/default-avatar.png"} // Use preview logic or a default image
+                    alt="Avatar Preview"
+                    className="w-32 h-32 rounded-lg border border-gray-300 object-cover"
+                  />
+                </div>
+              </div>
 
-          <div className="flex justify-end">
-            <button
-              type="button"
-              className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg mr-2"
-              onClick={onClose}
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              className="bg-blue-600 text-white px-4 py-2 rounded-lg"
-            >
-              Add User
-            </button>
-          </div>
+              {/* <div>
+                <label>
+                  Is Active:
+                  <input
+                    type="checkbox"
+                    name="isActive"
+                    checked={formData.isActive}
+                    onChange={handleChange}
+                  />
+                </label>
+              </div> */}
+              <div>
+                <label className="block font-medium mb-2">Is Active:</label>
+                <div className="flex gap-4">
+                  {/* Yes Option */}
+                  <label className="flex items-center gap-2">
+                    <input
+                      type="radio"
+                      name="isActive"
+                      value="true"
+                      checked={formData.isActive === true}
+                      onChange={() =>
+                        handleChange({
+                          target: { name: "isActive", value: true },
+                        })
+                      }
+                      className="accent-green-500"
+                    />
+                    <span>Yes</span>
+                  </label>
+
+                  {/* No Option */}
+                  <label className="flex items-center gap-2">
+                    <input
+                      type="radio"
+                      name="isActive"
+                      value="false"
+                      checked={formData.isActive === false}
+                      onChange={() =>
+                        handleChange({
+                          target: { name: "isActive", value: false },
+                        })
+                      }
+                      className="accent-red-500"
+                    />
+                    <span>No</span>
+                  </label>
+                </div>
+              </div>
+
+              {/* <div>
+                <label>
+                  Role:
+                  <select
+                    name="role"
+                    value={formData.role}
+                    onChange={handleChange}
+                  >
+                    <option value="user">User</option>
+                    <option value="admin">Admin</option>
+                  </select>
+                </label>
+              </div> */}
+              <div>
+                <label className="block font-medium mb-2">Role</label>
+                <div className="flex gap-4">
+                  <label className="flex items-center gap-2">
+                    <input
+                      type="radio"
+                      name="role"
+                      value="user"
+                      checked={formData.role === "user"}
+                      onChange={handleChange}
+                      className="accent-blue-500"
+                    />
+                    <span>User</span>
+                  </label>
+
+                  {/* Admin Role */}
+                  <label className="flex items-center gap-2">
+                    <input
+                      type="radio"
+                      name="role"
+                      value="admin"
+                      checked={formData.role === "admin"}
+                      onChange={handleChange}
+                      className="accent-blue-500"
+                    />
+                    <span>Admin</span>
+                  </label>
+                </div>
+              </div>
+
+              <div className="mt-6 flex gap-2 justify-between">
+                <div>
+                  <button
+                    onClick={prevStep}
+                    className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                  >
+                    Back
+                  </button>
+                </div>
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onClose();
+                      resetform();
+                    }}
+                    className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                  >
+                    Close
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-6 py-2 bg-custom-bg text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                  >
+                    Submit
+                  </button>
+                </div>
+              </div>
+            </>
+          )}
         </form>
       </div>
     </div>

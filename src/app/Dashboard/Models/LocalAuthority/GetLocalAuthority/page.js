@@ -132,7 +132,7 @@ const Page = () => {
       <div className="flex gap-4">
         <Sidebar />
         <div className="container mx-auto p-4 ">
-          <div className="justify-between mx-auto items-center border-2 mt-3 w-full p-4">
+          <div className="justify-between mx-auto items-center  mt-3 w-full p-4">
             <div className="flex justify-between mb-4">
               <div className="flex gap-2">
                 <div className="text-custom-bg mt-2">Show</div>
@@ -173,8 +173,8 @@ const Page = () => {
             </div>
 
             {/* Tailwind CSS Table */}
-            <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
+            <div className="">
+              <table className="min-w-full divide-y divide-gray-200 overflow-x-auto">
                 <thead className="bg-gray-50">
                   <tr>
                     {columns.map((column) => (
@@ -202,19 +202,31 @@ const Page = () => {
                         {item.isActive ? "Active" : "InActive"}
                       </td>
                       <td className="px-4 py-2">
-                        <div className="flex gap-2">
-                          <button
-                            onClick={() => handleEdit(item._id)}
-                            className="text-blue-500 hover:text-blue-700"
-                          >
-                            <img src="/edit.png" alt="edit" />
-                          </button>
-                          <button
-                            onClick={() => handleDelete(item._id)}
-                            className="text-red-500 hover:text-red-700"
-                          >
-                            <img src="/trash.png" alt="delete" />
-                          </button>
+                        <div className="flex gap-2 justify-center">
+                          <div className="relative group">
+                            <button
+                              onClick={() => handleEdit(item._id)}
+                              className="text-blue-500 hover:text-blue-700"
+                            >
+                              <img src="/edit.png" alt="edit" />
+                            </button>
+                            {/* Tooltip */}
+                            <div className="absolute  transform translate-x-1/2  px-2 py-1 bg-gray-700 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-50">
+                              Edit
+                            </div>
+                          </div>
+                          <div className="relative group">
+                            <button
+                              onClick={() => handleDelete(item._id)}
+                              className="text-red-500 hover:text-red-700"
+                            >
+                              <img src="/trash.png" alt="delete" />
+                            </button>
+                            {/* Tooltip */}
+                            <div className="absolute left-10 transform -translate-x-1/2  px-2 py-1 bg-gray-700 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-50">
+                              Delete
+                            </div>
+                          </div>
                         </div>
                       </td>
                     </tr>

@@ -179,8 +179,8 @@ const Page = () => {
                 </button>
               </div>
             </div>
-            <div className="w-full overflow-x-auto mt-4 ">
-              <table className="w-full border-collapse border border-gray-200 overflow-x-scroll">
+            <div className="w-full  mt-4 ">
+              <table className="w-full border-collapse border border-gray-200  overflow-x-auto">
                 <thead>
                   <tr className="">
                     {columns.map((column, index) => (
@@ -223,18 +223,33 @@ const Page = () => {
                         <td className="py-2 px-4 border-b">{user.role}</td>
                         <td className="py-2 px-4 border-b">
                           <div className="flex gap-2">
-                            <button
-                              onClick={() => handleEdit(user._id)}
-                              className="text-blue-500 hover:text-blue-700"
-                            >
-                              <img src="/edit.png" alt="edit" />
-                            </button>
-                            <button
-                              onClick={() => handleDelete(user._id)}
-                              className="text-red-500 hover:text-red-700"
-                            >
-                              <img src="/trash.png" alt="delete" />
-                            </button>
+                            {/* Edit Button with Tooltip */}
+                            <div className="relative group">
+                              <button
+                                onClick={() => handleEdit(user._id)}
+                                className="text-blue-500 hover:text-blue-700"
+                              >
+                                <img src="/edit.png" alt="edit" />
+                              </button>
+                              {/* Tooltip */}
+                              <div className="absolute  transform translate-x-1/2  px-2 py-1 bg-gray-700 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-50">
+                                Edit
+                              </div>
+                            </div>
+
+                            {/* Delete Button with Tooltip */}
+                            <div className="relative group">
+                              <button
+                                onClick={() => handleDelete(user._id)}
+                                className="text-red-500 hover:text-red-700"
+                              >
+                                <img src="/trash.png" alt="delete" />
+                              </button>
+                              {/* Tooltip */}
+                              <div className="absolute left-10 transform -translate-x-1/2  px-2 py-1 bg-gray-700 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-50">
+                                Delete
+                              </div>
+                            </div>
                           </div>
                         </td>
                       </tr>

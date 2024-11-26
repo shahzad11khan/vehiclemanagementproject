@@ -154,8 +154,8 @@ const Page = () => {
               </div>
             </div>
 
-            <div className="overflow-x-auto mt-4">
-              <table className="min-w-full divide-y divide-gray-200">
+            <div className=" mt-4">
+              <table className="min-w-full divide-y divide-gray-200 overflow-x-auto">
                 <thead className="bg-gray-50">
                   <tr>
                     <th className="px-4 py-2 bg-custom-bg text-white text-sm">
@@ -182,19 +182,31 @@ const Page = () => {
                       <td className="px-4 py-2">
                         {item.isActive ? "Active" : "Inactive"}
                       </td>
-                      <td className="px-4 py-2">
-                        <button
-                          onClick={() => handleEdit(item._id)}
-                          className="text-blue-500 hover:text-blue-700"
-                        >
-                          <img src="/edit.png" alt="edit" />
-                        </button>
-                        <button
-                          onClick={() => handleDelete(item._id)}
-                          className="text-red-500 hover:text-red-700"
-                        >
-                          <img src="/trash.png" alt="delete" />
-                        </button>
+                      <td className="px-4 py-2 flex justify-center">
+                        <div className="relative group">
+                          <button
+                            onClick={() => handleEdit(item._id)}
+                            className="text-blue-500 hover:text-blue-700"
+                          >
+                            <img src="/edit.png" alt="edit" />
+                          </button>
+                          {/* Tooltip */}
+                          <div className="absolute  transform translate-x-1/2  px-2 py-1 bg-gray-700 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-50">
+                            Edit
+                          </div>
+                        </div>
+                        <div className="relative group">
+                          <button
+                            onClick={() => handleDelete(item._id)}
+                            className="text-red-500 hover:text-red-700"
+                          >
+                            <img src="/trash.png" alt="delete" />
+                          </button>
+                          {/* Tooltip */}
+                          <div className="absolute left-10 transform -translate-x-1/2  px-2 py-1 bg-gray-700 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-50">
+                            Delete
+                          </div>
+                        </div>
                       </td>
                     </tr>
                   ))}

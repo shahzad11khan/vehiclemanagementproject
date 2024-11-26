@@ -173,8 +173,8 @@ const Page = () => {
               </button>
             </div>
 
-            <div className="w-full overflow-x-auto mt-4">
-              <table className="w-full border-collapse border border-gray-200 overflow-x-scroll">
+            <div className="mt-4">
+              <table className="w-full border-collapse border border-gray-200 overflow-x-auto">
                 <thead>
                   <tr className="">
                     <th className=" px-4 py-2 bg-custom-bg text-white text-sm">
@@ -211,7 +211,7 @@ const Page = () => {
                       Start Date
                     </th> */}
                     <th className=" text-sm  px-4 py-2 text-white bg-custom-bg">
-                      Status
+                      Actions
                     </th>
                   </tr>
                 </thead>
@@ -255,34 +255,48 @@ const Page = () => {
                               </div>
                             </Link>
                           </button> */}
-                          <button
-                            onClick={() => handleEdit(driver._id)}
-                            className="text-blue-500 hover:text-blue-700"
-                          >
-                            <img src="/edit.png" alt="edit" />
-                          </button>
-                          <button
-                            onClick={() => handleDelete(driver._id)}
-                            className="text-red-500 hover:text-red-700"
-                          >
-                            <img src="/trash.png" alt="delete" />
-                          </button>
+                          <div className="relative group">
+                            <button
+                              onClick={() => handleEdit(driver._id)}
+                              className="text-blue-500 hover:text-blue-700"
+                            >
+                              <img src="/edit.png" alt="edit" />
+                            </button>
+                            {/* Tooltip */}
+                            <div className="absolute  transform translate-x-1/2  px-2 py-1 bg-gray-700 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-50">
+                              Edit
+                            </div>
+                          </div>
+                          <div className="relative group">
+                            <button
+                              onClick={() => handleDelete(driver._id)}
+                              className="text-red-500 hover:text-red-700"
+                            >
+                              <img src="/trash.png" alt="delete" />
+                            </button>
+                            {/* Tooltip */}
+                            <div className="absolute left-10 transform -translate-x-1/2  px-2 py-1 bg-gray-700 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-50">
+                              Delete
+                            </div>
+                          </div>
                           {/* <button
                             onClick={() => handleDelete(driver._id)}
                             className="text-red-500 hover:text-red-700"
                           >
                             <FaCarAlt size={20} />
                           </button> */}
-                          <button className="text-blue-500 hover:text-blue-700">
-                            <Link
-                              passHref
-                              href={`/Dashboard/Driver/CombineDriverAndVehicle/${driver._id}`}
-                            >
-                              <div className="flex items-center gap-3">
-                                <img src="/bcar.png" alt="info" />
-                              </div>
-                            </Link>
-                          </button>
+                          <div className="relative group">
+                            <button className="text-blue-500 hover:text-blue-700">
+                              <Link
+                                passHref
+                                href={`/Dashboard/Driver/CombineDriverAndVehicle/${driver._id}`}
+                              >
+                                <div className="flex items-center gap-3">
+                                  <img src="/bcar.png" alt="info" />
+                                </div>
+                              </Link>
+                            </button>
+                          </div>
                         </div>
                       </td>
                     </tr>

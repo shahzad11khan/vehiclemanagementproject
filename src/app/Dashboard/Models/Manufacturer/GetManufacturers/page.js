@@ -161,8 +161,8 @@ const Page = () => {
               </button>
             </div>
 
-            <div className="overflow-x-auto mt-4">
-              <table className="min-w-full divide-y divide-gray-200">
+            <div className=" mt-4">
+              <table className="min-w-full divide-y divide-gray-200 overflow-x-auto">
                 <thead className="bg-gray-50">
                   <tr>
                     {columns.map((column) => (
@@ -180,7 +180,7 @@ const Page = () => {
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
                   {currentData.map((row) => (
-                    <tr key={row._id}>
+                    <tr key={row._id} className="text-center">
                       {columns.map((column) => (
                         <td
                           key={column.name}
@@ -191,20 +191,32 @@ const Page = () => {
                             : row[column.accessor]}
                         </td>
                       ))}
-                      <td className="py-2 px-4 border-b border-gray-200">
-                        <div className="flex gap-2">
-                          <button
-                            onClick={() => handleEdit(row._id)}
-                            className="text-blue-500 hover:text-blue-700"
-                          >
-                            <img src="/edit.png" alt="delete" />
-                          </button>
-                          <button
-                            onClick={() => handleDelete(row._id)}
-                            className="text-red-500 hover:text-red-700"
-                          >
-                            <img src="/trash.png" alt="delete" />
-                          </button>
+                      <td className="py-2 px-4 border-b border-gray-200 ">
+                        <div className="flex gap-2 justify-center">
+                          <div className="relative group">
+                            <button
+                              onClick={() => handleEdit(row._id)}
+                              className="text-blue-500 hover:text-blue-700"
+                            >
+                              <img src="/edit.png" alt="edit" />
+                            </button>
+                            {/* Tooltip */}
+                            <div className="absolute  transform translate-x-1/2  px-2 py-1 bg-gray-700 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-50">
+                              Edit
+                            </div>
+                          </div>
+                          <div className="relative group">
+                            <button
+                              onClick={() => handleDelete(row._id)}
+                              className="text-red-500 hover:text-red-700"
+                            >
+                              <img src="/trash.png" alt="delete" />
+                            </button>
+                            {/* Tooltip */}
+                            <div className="absolute left-10 transform -translate-x-1/2  px-2 py-1 bg-gray-700 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-50">
+                              Delete
+                            </div>
+                          </div>
                         </div>
                       </td>
                     </tr>

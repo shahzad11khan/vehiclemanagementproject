@@ -530,17 +530,17 @@ const UpdateFirmModel = ({ isOpen, onClose, fetchData, firmId }) => {
 
           <div className="mt-8 text-center">
             <button
-              type="submit"
-              className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:ring-4 focus:ring-blue-400 focus:ring-opacity-50"
-            >
-              Submit
-            </button>
-            <button
               type="button"
               onClick={onClose}
-              className="px-6 py-2 ml-3 bg-gray-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+              className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
             >
               Close
+            </button>
+            <button
+              type="submit"
+              className="px-6 py-2 bg-custom-bg text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+            >
+              Submit
             </button>
           </div>
         </form>

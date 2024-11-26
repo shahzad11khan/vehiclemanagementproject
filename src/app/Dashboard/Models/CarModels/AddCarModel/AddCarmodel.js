@@ -129,8 +129,15 @@ const AddCarModel = ({ isOpen, onClose, fetchData }) => {
 
           <div className="flex gap-4 justify-center">
             <button
+              type="button"
+              onClick={onClose}
+              className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+            >
+              Close
+            </button>
+            <button
               type="submit"
-              className="px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50"
+              className="px-6 py-2 bg-custom-bg text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
               disabled={loading}
             >
               {loading ? (
@@ -140,13 +147,6 @@ const AddCarModel = ({ isOpen, onClose, fetchData }) => {
               ) : (
                 "Submit"
               )}
-            </button>
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-6 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
-            >
-              Close
             </button>
           </div>
         </form>

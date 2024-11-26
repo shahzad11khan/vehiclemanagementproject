@@ -271,7 +271,7 @@ const Page = () => {
                     : "bg-gray-100 hover:bg-gray-300"
                 }`}
               >
-                {currentPage} of {totalPages}
+                {currentPage}
               </span>
               <button
                 onClick={() =>

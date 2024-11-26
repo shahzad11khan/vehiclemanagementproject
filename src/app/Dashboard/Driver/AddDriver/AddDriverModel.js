@@ -57,6 +57,9 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
   const [superadmin, setSuperadmin] = useState(null);
   // const [filteredVehicles, setFilteredVehicles] = useState([]);
   // const [selectedvehicle, setselectedvehicle] = useState("");
+  const [step, setStep] = useState(1);
+  const nextStep = () => setStep(step + 1);
+  const prevStep = () => setStep(step - 1);
 
   useEffect(() => {
     const storedCompanyName = localStorage.getItem("companyName");
@@ -290,186 +293,211 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <h3 className="text-xl font-semibold mb-2">Driver Details</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              <div>
-                <div className="flex gap-1">
+          <h3 className="text-xl font-semibold mb-2">Driver Details</h3>
+          {step === 1 && (
+            <>
+              <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-4">
+                <div>
+                  <div className="flex gap-1">
+                    <label
+                      htmlFor="firstName"
+                      className="text-sm font-medium text-gray-700"
+                    >
+                      First Name:
+                    </label>
+                    <span className="text-red-600">*</span>
+                  </div>
+
+                  <input
+                    type="text"
+                    id="firstName"
+                    name="firstName"
+                    value={formData.firstName}
+                    onChange={handleChange}
+                    className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                    required
+                  />
+                </div>
+                <div>
+                  <div className="flex gap-1">
+                    <label
+                      htmlFor="lastName"
+                      className="text-sm font-medium text-gray-700"
+                    >
+                      Last Name:
+                    </label>
+                    <span className="text-red-600">*</span>
+                  </div>
+
+                  <input
+                    type="text"
+                    id="lastName"
+                    name="lastName"
+                    value={formData.lastName}
+                    onChange={handleChange}
+                    className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                    required
+                  />
+                </div>
+                <div>
                   <label
-                    htmlFor="firstName"
+                    htmlFor="dateOfBirth"
                     className="text-sm font-medium text-gray-700"
                   >
-                    First Name:
+                    Date of Birth:
                   </label>
-                  <span className="text-red-600">*</span>
+                  <input
+                    type="date"
+                    id="dateOfBirth"
+                    name="dateOfBirth"
+                    value={formData.dateOfBirth}
+                    onChange={handleChange}
+                    className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                  />
                 </div>
+                <div>
+                  <div className="flex gap-1">
+                    <label
+                      htmlFor="tel1"
+                      className="text-sm font-medium text-gray-700"
+                    >
+                      Tel 1:
+                    </label>
+                    <span className="text-red-600">*</span>
+                  </div>
 
-                <input
-                  type="text"
-                  id="firstName"
-                  name="firstName"
-                  value={formData.firstName}
-                  onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                  required
-                />
-              </div>
-              <div>
-                <div className="flex gap-1">
+                  <input
+                    type="tel"
+                    id="tel1"
+                    name="tel1"
+                    value={formData.tel1}
+                    onChange={handleChange}
+                    className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                    required
+                  />
+                </div>
+                <div>
                   <label
-                    htmlFor="lastName"
+                    htmlFor="tel2"
                     className="text-sm font-medium text-gray-700"
                   >
-                    Last Name:
+                    Tel 2:
                   </label>
-                  <span className="text-red-600">*</span>
+                  <input
+                    type="tel"
+                    id="tel2"
+                    name="tel2"
+                    value={formData.tel2}
+                    onChange={handleChange}
+                    className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                  />
                 </div>
+                <div>
+                  <div className="flex gap-1">
+                    <label
+                      htmlFor="email"
+                      className="text-sm font-medium text-gray-700"
+                    >
+                      Email Address:
+                    </label>
+                    <span className="text-red-600">*</span>
+                  </div>
 
-                <input
-                  type="text"
-                  id="lastName"
-                  name="lastName"
-                  value={formData.lastName}
-                  onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                  required
-                />
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                    required
+                  />
+                </div>
+                <div>
+                  <div className="flex gap-1">
+                    <label
+                      htmlFor="licenseNumber"
+                      className="text-sm font-medium text-gray-700"
+                    >
+                      License Number:
+                    </label>
+
+                    <span className="text-red-600">*</span>
+                  </div>
+                  <input
+                    type="text"
+                    id="licenseNumber"
+                    name="licenseNumber"
+                    value={formData.licenseNumber}
+                    onChange={handleChange}
+                    className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                    required
+                  />
+                </div>
+                <div>
+                  <div className="flex gap-1">
+                    <label
+                      htmlFor="niNumber"
+                      className="text-sm font-medium text-gray-700"
+                    >
+                      NI Number:
+                    </label>
+
+                    <span className="text-red-600">*</span>
+                  </div>
+                  <input
+                    type="text"
+                    id="niNumber"
+                    name="niNumber"
+                    value={formData.niNumber}
+                    onChange={handleChange}
+                    className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                    required
+                  />
+                </div>
+                <div>
+                  <div className="flex gap-1">
+                    <label
+                      htmlFor="driverNumber"
+                      className="text-sm font-medium text-gray-700"
+                    >
+                      Driver Number:
+                    </label>
+                  </div>
+                  <input
+                    type="text"
+                    id="driverNumber"
+                    name="driverNumber"
+                    value={formData.driverNumber}
+                    onChange={handleChange}
+                    className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                  />
+                </div>
               </div>
-              <div>
-                <label
-                  htmlFor="dateOfBirth"
-                  className="text-sm font-medium text-gray-700"
+              <div className="mt-6 flex gap-2 justify-end">
+                <button
+                  type="button"
+                  onClick={() => {
+                    onClose();
+                    // resetform();
+                  }}
+                  className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
                 >
-                  Date of Birth:
-                </label>
-                <input
-                  type="date"
-                  id="dateOfBirth"
-                  name="dateOfBirth"
-                  value={formData.dateOfBirth}
-                  onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                />
-              </div>
-              <div>
-                <div className="flex gap-1">
-                  <label
-                    htmlFor="tel1"
-                    className="text-sm font-medium text-gray-700"
-                  >
-                    Tel 1:
-                  </label>
-                  <span className="text-red-600">*</span>
-                </div>
-
-                <input
-                  type="tel"
-                  id="tel1"
-                  name="tel1"
-                  value={formData.tel1}
-                  onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                  required
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="tel2"
-                  className="text-sm font-medium text-gray-700"
+                  Close
+                </button>
+                <button
+                  onClick={nextStep}
+                  className="px-6 py-2 bg-custom-bg text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
                 >
-                  Tel 2:
-                </label>
-                <input
-                  type="tel"
-                  id="tel2"
-                  name="tel2"
-                  value={formData.tel2}
-                  onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                />
+                  Next
+                </button>
               </div>
-              <div>
-                <div className="flex gap-1">
-                  <label
-                    htmlFor="email"
-                    className="text-sm font-medium text-gray-700"
-                  >
-                    Email Address:
-                  </label>
-                  <span className="text-red-600">*</span>
-                </div>
-
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                  required
-                />
-              </div>
-              <div>
-                <div className="flex gap-1">
-                  <label
-                    htmlFor="licenseNumber"
-                    className="text-sm font-medium text-gray-700"
-                  >
-                    License Number:
-                  </label>
-
-                  <span className="text-red-600">*</span>
-                </div>
-                <input
-                  type="text"
-                  id="licenseNumber"
-                  name="licenseNumber"
-                  value={formData.licenseNumber}
-                  onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                  required
-                />
-              </div>
-              <div>
-                <div className="flex gap-1">
-                  <label
-                    htmlFor="niNumber"
-                    className="text-sm font-medium text-gray-700"
-                  >
-                    NI Number:
-                  </label>
-
-                  <span className="text-red-600">*</span>
-                </div>
-                <input
-                  type="text"
-                  id="niNumber"
-                  name="niNumber"
-                  value={formData.niNumber}
-                  onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                  required
-                />
-              </div>
-              <div>
-                <div className="flex gap-1">
-                  <label
-                    htmlFor="driverNumber"
-                    className="text-sm font-medium text-gray-700"
-                  >
-                    Driver Number:
-                  </label>
-                </div>
-                <input
-                  type="text"
-                  id="driverNumber"
-                  name="driverNumber"
-                  value={formData.driverNumber}
-                  onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                />
-              </div>
-              {/* <div>
+            </>
+          )}
+          {step === 2 && (
+            <>
+              <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-4">
+                {/* <div>
                 <label
                   htmlFor="taxiFirm"
                   className="text-sm font-medium text-gray-700"
@@ -491,7 +519,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                   ))}
                 </select>
               </div> */}
-              {/* <div>
+                {/* <div>
                 <label
                   htmlFor="taxiFirm"
                   className="text-sm font-medium text-gray-700"
@@ -514,7 +542,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                 </select>
               </div> */}
 
-              {/* <div>
+                {/* <div>
                 <label
                   htmlFor="taxiFirm"
                   className="text-sm font-medium text-gray-700"
@@ -552,52 +580,52 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                   ))}
                 </select>
               </div> */}
-              <div>
-                <label
-                  htmlFor="badgeType"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Badge Type:
-                </label>
-                <select
-                  id="badgeType"
-                  name="badgeType"
-                  value={formData.badgeType}
-                  onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                >
-                  <option value="null">Select badgeType </option>
-                  {badge.map((badge) => (
-                    <option key={badge._id} value={badge.name}>
-                      {badge.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label
-                  htmlFor="insurance"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Insurance:
-                </label>
-                <select
-                  id="insurance"
-                  name="insurance"
-                  value={formData.insurance}
-                  onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                >
-                  <option value="null">Select insurance </option>
+                <div>
+                  <label
+                    htmlFor="badgeType"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Badge Type:
+                  </label>
+                  <select
+                    id="badgeType"
+                    name="badgeType"
+                    value={formData.badgeType}
+                    onChange={handleChange}
+                    className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                  >
+                    <option value="null">Select badgeType </option>
+                    {badge.map((badge) => (
+                      <option key={badge._id} value={badge.name}>
+                        {badge.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label
+                    htmlFor="insurance"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Insurance:
+                  </label>
+                  <select
+                    id="insurance"
+                    name="insurance"
+                    value={formData.insurance}
+                    onChange={handleChange}
+                    className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                  >
+                    <option value="null">Select insurance </option>
 
-                  {insurance.map((insurence) => (
-                    <option key={insurence._id} value={insurence.name}>
-                      {insurence.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              {/* <div>
+                    {insurance.map((insurence) => (
+                      <option key={insurence._id} value={insurence.name}>
+                        {insurence.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                {/* <div>
                 <div className="flex gap-1">
                   <label
                     htmlFor="startDate"
@@ -637,50 +665,50 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                   required
                 />
               </div> */}
-              <div>
-                <div className="flex gap-1">
-                  <label
-                    htmlFor="licenseExpiryDate"
-                    className="text-sm font-medium text-gray-700"
-                  >
-                    License Expiry Date:
-                  </label>
+                <div>
+                  <div className="flex gap-1">
+                    <label
+                      htmlFor="licenseExpiryDate"
+                      className="text-sm font-medium text-gray-700"
+                    >
+                      License Expiry Date:
+                    </label>
 
-                  <span className="text-red-600">*</span>
+                    <span className="text-red-600">*</span>
+                  </div>
+
+                  <input
+                    type="date"
+                    id="licenseExpiryDate"
+                    name="licenseExpiryDate"
+                    value={formData.licenseExpiryDate}
+                    onChange={handleChange}
+                    className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                    required
+                  />
                 </div>
+                <div>
+                  <div className="flex gap-1">
+                    <label
+                      htmlFor="taxiBadgeDate"
+                      className="text-sm font-medium text-gray-700"
+                    >
+                      Taxi Badge Date:
+                    </label>
 
-                <input
-                  type="date"
-                  id="licenseExpiryDate"
-                  name="licenseExpiryDate"
-                  value={formData.licenseExpiryDate}
-                  onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                  required
-                />
-              </div>
-              <div>
-                <div className="flex gap-1">
-                  <label
-                    htmlFor="taxiBadgeDate"
-                    className="text-sm font-medium text-gray-700"
-                  >
-                    Taxi Badge Date:
-                  </label>
-
-                  <span className="text-red-600">*</span>
+                    <span className="text-red-600">*</span>
+                  </div>
+                  <input
+                    type="date"
+                    id="taxiBadgeDate"
+                    name="taxiBadgeDate"
+                    value={formData.taxiBadgeDate}
+                    onChange={handleChange}
+                    className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                    required
+                  />
                 </div>
-                <input
-                  type="date"
-                  id="taxiBadgeDate"
-                  name="taxiBadgeDate"
-                  value={formData.taxiBadgeDate}
-                  onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                  required
-                />
-              </div>
-              {/* <div>
+                {/* <div>
                 <div className="flex gap-1">
                   <label
                     htmlFor="rentPaymentCycle"
@@ -706,7 +734,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                   <option value="peryear">per year</option>
                 </select>
               </div> */}
-              {/* <div>
+                {/* <div>
                 <label
                   htmlFor="pay"
                   className="text-sm font-medium text-gray-700"
@@ -723,92 +751,92 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                   required
                 />
               </div> */}
-              <div>
-                <div className="flex gap-1">
-                  <label
-                    htmlFor="city"
-                    className="text-sm font-medium text-gray-700"
-                  >
-                    City:
-                  </label>
+                <div>
+                  <div className="flex gap-1">
+                    <label
+                      htmlFor="city"
+                      className="text-sm font-medium text-gray-700"
+                    >
+                      City:
+                    </label>
 
-                  <span className="text-red-600">*</span>
+                    <span className="text-red-600">*</span>
+                  </div>
+                  <input
+                    type="text"
+                    id="city"
+                    name="city"
+                    value={formData.city}
+                    onChange={handleChange}
+                    className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                    required
+                  />
                 </div>
-                <input
-                  type="text"
-                  id="city"
-                  name="city"
-                  value={formData.city}
-                  onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                  required
-                />
-              </div>
-              <div>
-                <div className="flex gap-1">
-                  <label
-                    htmlFor="county"
-                    className="text-sm font-medium text-gray-700"
-                  >
-                    Country:
-                  </label>
+                <div>
+                  <div className="flex gap-1">
+                    <label
+                      htmlFor="county"
+                      className="text-sm font-medium text-gray-700"
+                    >
+                      Country:
+                    </label>
 
-                  <span className="text-red-600">*</span>
+                    <span className="text-red-600">*</span>
+                  </div>
+                  <input
+                    type="text"
+                    id="county"
+                    name="county"
+                    value={formData.county}
+                    onChange={handleChange}
+                    className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                    required
+                  />
                 </div>
-                <input
-                  type="text"
-                  id="county"
-                  name="county"
-                  value={formData.county}
-                  onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                  required
-                />
-              </div>
-              <div>
-                <div className="flex gap-1">
-                  <label
-                    htmlFor="postcode"
-                    className="text-sm font-medium text-gray-700"
-                  >
-                    Postcode:
-                  </label>
+                <div>
+                  <div className="flex gap-1">
+                    <label
+                      htmlFor="postcode"
+                      className="text-sm font-medium text-gray-700"
+                    >
+                      Postcode:
+                    </label>
 
-                  <span className="text-red-600">*</span>
+                    <span className="text-red-600">*</span>
+                  </div>
+
+                  <input
+                    type="text"
+                    id="postcode"
+                    name="postcode"
+                    value={formData.postcode}
+                    onChange={handleChange}
+                    className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                    required
+                  />
                 </div>
+                <div>
+                  <div className="flex gap-1">
+                    <label
+                      htmlFor="postalAddress"
+                      className="text-sm font-medium text-gray-700"
+                    >
+                      Postal Address:
+                    </label>
 
-                <input
-                  type="text"
-                  id="postcode"
-                  name="postcode"
-                  value={formData.postcode}
-                  onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                  required
-                />
-              </div>
-              <div>
-                <div className="flex gap-1">
-                  <label
-                    htmlFor="postalAddress"
-                    className="text-sm font-medium text-gray-700"
-                  >
-                    Postal Address:
-                  </label>
-
-                  <span className="text-red-600">*</span>
+                    <span className="text-red-600">*</span>
+                  </div>
+                  <input
+                    type="text"
+                    id="postalAddress"
+                    name="postalAddress"
+                    value={formData.postalAddress}
+                    onChange={handleChange}
+                    className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                    required
+                  />
                 </div>
-                <input
-                  type="text"
-                  id="postalAddress"
-                  name="postalAddress"
-                  value={formData.postalAddress}
-                  onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                  required
-                />
-              </div>
-              {/* <div>
+                {/* <div>
                 <label
                   htmlFor="permanentAddress"
                   className="text-sm font-medium text-gray-700"
@@ -825,24 +853,22 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
                 />
               </div> */}
-            </div>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <div className="">
-              <h3 className="text-sm font-medium text-gray-700">
-                Upload Document
-              </h3>
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-2 mt-2">
-                <input
-                  type="file"
-                  id="imageFile"
-                  name="imageFile"
-                  onChange={handleChange}
-                  className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border file:border-gray-300 file:background-gray-100 hover:file:bg-gray-200 file:text-sm"
-                />
-              </div>
-            </div>
-            {/* <div>
+                {/* </div> */}
+                {/* </div> */}
+                <div className="">
+                  <h3 className="text-sm font-medium text-gray-700">
+                    Upload Document
+                  </h3>
+                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-2 mt-2">
+                    <input
+                      type="file"
+                      id="imageFile"
+                      name="imageFile"
+                      onChange={handleChange}
+                      className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border file:border-gray-300 file:background-gray-100 hover:file:bg-gray-200 file:text-sm"
+                    />
+                  </div>
+                  {/* <div>
               <h3 className="text-sm font-medium text-gray-700">
                 Document Name
               </h3>
@@ -857,38 +883,54 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                 className="border-2 border-dashed border-gray-300 rounded-lg p-2 h-14 w-full mt-2"
               />
             </div> */}
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                id="isActive"
-                name="isActive"
-                checked={formData.isActive}
-                onChange={handleChange}
-                className="mr-2"
-              />
-              <label
-                htmlFor="isActive"
-                className="text-sm font-medium text-gray-700"
-              >
-                Active
-              </label>
-            </div>
-          </div>
-          <div className="flex justify-end mt-4">
-            <button
-              type="submit"
-              className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
-            >
-              {loading ? "Submitting..." : "Submit"}
-            </button>
-            <button
-              type="button"
-              onClick={onClose}
-              className="ml-4 bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600"
-            >
-              Close
-            </button>
-          </div>
+                  <div className="flex items-center">
+                    <input
+                      type="checkbox"
+                      id="isActive"
+                      name="isActive"
+                      checked={formData.isActive}
+                      onChange={handleChange}
+                      className="mr-2"
+                    />
+                    <label
+                      htmlFor="isActive"
+                      className="text-sm font-medium text-gray-700"
+                    >
+                      Active
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div className="mt-6 flex gap-2 justify-between">
+                <div>
+                  <button
+                    onClick={prevStep}
+                    className="px-6 py-2 bg-custom-bg text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                  >
+                    Back
+                  </button>
+                </div>
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onClose();
+                      // resetform();
+                    }}
+                    className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                  >
+                    Close
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-6 py-2 bg-custom-bg text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                  >
+                    {loading ? "Submitting..." : "Submit"}
+                  </button>
+                </div>
+              </div>
+            </>
+          )}
         </form>
       </div>
     </div>

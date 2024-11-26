@@ -552,7 +552,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
             <>
               <h2 className="text-2xl font-bold mb-6">Vehicle Form</h2>
 
-              <div className="grid grid-cols-3 md:grid-cols-3 gap-2">
+              <div className="grid grid-cols-3 md:grid-cols-2 gap-2">
                 <div>
                   <div className="flex gap-1">
                     <label className="block font-semibold">Manufacturer</label>
@@ -604,10 +604,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                     required
                   />
                 </div>
-              </div>
-
-              <div className="grid grid-cols-3 md:grid-cols-3 gap-2 mt-4">
-                <div className="">
+                <div>
                   <div className="flex gap-1">
                     <label className="block font-semibold">Body Type</label>
                     <span className="text-red-600">*</span>
@@ -630,6 +627,9 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                     ))}
                   </select>
                 </div>
+              </div>
+
+              <div className="grid grid-cols-2 md:grid-cols-2 gap-2 mt-4">
                 <div>
                   <div className="flex gap-1">
                     <label className="block font-semibold">Engine Type</label>
@@ -645,7 +645,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                     required
                   />
                 </div>
-                <div className="">
+                <div>
                   <div className="flex gap-1">
                     <label className="block font-semibold">Fuel Type</label>
                     <span className="text-red-600">*</span>
@@ -667,9 +667,6 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                     ))}
                   </select>
                 </div>
-              </div>
-
-              <div className="grid grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-2 mt-4">
                 <div>
                   <div className="flex gap-1">
                     <label className="block font-semibold">Transmission</label>
@@ -693,7 +690,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                     ))}
                   </select>
                 </div>
-                <div className="">
+                <div>
                   <div className="flex gap-1">
                     <label className="block font-semibold">Drivetrain</label>
                     <span className="text-red-600">*</span>
@@ -714,6 +711,9 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                     <option value="4WD">Four-wheel drive (4WD)</option>
                   </select>
                 </div>
+              </div>
+
+              <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-2 mt-4">
                 <div>
                   <div className="flex gap-1">
                     <label className="block font-semibold">
@@ -748,11 +748,6 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                     required
                   />
                 </div>
-              </div>
-
-              <div className="grid grid-cols-3 md:grid-cols-3 gap-2 mt-4"></div>
-
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mt-4">
                 <div>
                   <div className="flex gap-1">
                     <label className="block font-semibold">Height</label>
@@ -777,6 +772,9 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                     className="w-full p-2 border border-gray-300 rounded"
                   />
                 </div>
+              </div>
+
+              <div className="grid grid-cols-2 md:grid-cols-2 gap-2 mt-4">
                 <div>
                   <div className="flex gap-1">
                     <label className="block font-semibold">Length</label>
@@ -792,13 +790,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
               </div>
 
               {/* end of multiple images */}
-              <div className="mt-6 flex gap-2">
-                <button
-                  onClick={nextStep}
-                  className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
-                >
-                  Next
-                </button>
+              <div className="mt-6 flex gap-2 justify-end">
                 <button
                   type="button"
                   onClick={() => {
@@ -806,9 +798,15 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                     resetForm();
                     cancleimages();
                   }}
-                  className="px-6 py-2 ml-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                  className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
                 >
                   Close
+                </button>
+                <button
+                  onClick={nextStep}
+                  className="px-6 py-2 bg-custom-bg text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                >
+                  Next
                 </button>
               </div>
             </>
@@ -817,7 +815,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
           {step === 2 && (
             <>
               {" "}
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mt-4">
+              <div className="grid grid-cols-2 md:grid-cols-2 gap-2 mt-4">
                 <div>
                   <div className="flex gap-1">
                     <label className="block font-semibold">
@@ -869,8 +867,6 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                     className="w-full p-2 border border-gray-300 rounded"
                   />
                 </div>
-              </div>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mt-4">
                 <div>
                   <div className="flex gap-1">
                     <label className="block font-semibold">Torque</label>
@@ -883,6 +879,8 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                     className="w-full p-2 border border-gray-300 rounded"
                   />
                 </div>
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-2 gap-2 mt-4">
                 <div>
                   <div className="flex gap-1">
                     <label className="block font-semibold">
@@ -1061,30 +1059,32 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
               </select>
             </div> */}
               </div>
-              <div className="mt-6 flex gap-2">
+              <div className="mt-6 flex gap-2 justify-between">
                 <button
                   onClick={prevStep}
-                  className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                  className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
                 >
                   Back
                 </button>
-                <button
-                  onClick={nextStep}
-                  className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
-                >
-                  Next
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    onClose();
-                    resetForm();
-                    cancleimages();
-                  }}
-                  className="px-6 py-2 ml-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
-                >
-                  Close
-                </button>
+                <div className="flex justify-end gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onClose();
+                      resetForm();
+                      cancleimages();
+                    }}
+                    className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                  >
+                    Close
+                  </button>
+                  <button
+                    onClick={nextStep}
+                    className="px-6 py-2 bg-custom-bg text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                  >
+                    Next
+                  </button>
+                </div>
               </div>
             </>
           )}
@@ -1400,29 +1400,32 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                 </div>
               </div>
 
-              <div className="mt-6 flex gap-2">
+              <div className="mt-6 flex gap-2 justify-between">
                 <button
                   onClick={prevStep}
-                  className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                  className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
                 >
                   Back
                 </button>
-                <button
-                  onClick={nextStep}
-                  className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
-                >
-                  Next
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    onClose();
-                    setStep(1);
-                  }}
-                  className="px-6 py-2 ml-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
-                >
-                  Close
-                </button>
+                <div className="flex justify-end gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onClose();
+                      resetForm();
+                      cancleimages();
+                    }}
+                    className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                  >
+                    Close
+                  </button>
+                  <button
+                    onClick={nextStep}
+                    className="px-6 py-2 bg-custom-bg text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                  >
+                    Next
+                  </button>
+                </div>
               </div>
             </>
           )}
@@ -1432,7 +1435,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
               <h2 className="text-2xl font-bold mb-4">
                 Financials Information
               </h2>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mt-4 mb-2">
+              <div className="grid grid-cols-2 md:grid-cols-2 gap-2 mt-4 mb-2">
                 <div className="mb-4">
                   <label className="block text-gray-700 font-semibold mb-1">
                     List Price (P11D)
@@ -1503,7 +1506,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
               </div>
               {maintenance && (
                 <>
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mt-4 mb-2">
+                  <div className="grid grid-cols-2 md:grid-cols-2 gap-2 mt-4 mb-2">
                     <div className="mb-4">
                       <label className="text-gray-700 font-semibold mb-1">
                         Issues/Damage
@@ -1655,7 +1658,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                 </>
               )}
               <h2 className="text-2xl font-bold mb-4">Commercial Vehicles</h2>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mt-4 mb-2">
+              <div className="grid grid-cols-2 md:grid-cols-2 gap-2 mt-4 mb-2">
                 <div>
                   <label className="block font-semibold">RPC Expiry Date</label>
                   <input
@@ -1736,37 +1739,39 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                 </div>
               )}
 
-              <div className="mt-6 flex gap-2">
+              <div className="mt-6 flex gap-2 justify-between">
                 <button
                   onClick={prevStep}
-                  className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                  className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
                 >
                   Back
                 </button>
-                <button
-                  onClick={nextStep}
-                  className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
-                >
-                  Next
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    onClose();
-                    resetForm();
-                    cancleimages();
-                  }}
-                  className="px-6 py-2 ml-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
-                >
-                  Close
-                </button>
+                <div className="flex justify-end gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onClose();
+                      resetForm();
+                      cancleimages();
+                    }}
+                    className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                  >
+                    Close
+                  </button>
+                  <button
+                    onClick={nextStep}
+                    className="px-6 py-2 bg-custom-bg text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                  >
+                    Next
+                  </button>
+                </div>
               </div>
             </>
           )}
           {step === 5 && (
             <>
               <h2 className="text-2xl font-bold mb-4">Local Authority</h2>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mt-4 mb-2">
+              <div className="grid grid-cols-2 md:grid-cols-2 gap-2 mt-4 mb-2">
                 <div>
                   <div className="flex gap-1">
                     <label htmlFor="taxiFirm" className="block font-semibold">
@@ -2015,7 +2020,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                   </div>
                 </div>
               </div>
-              <div className="flex items-center">
+              {/* <div className="flex items-center">
                 <input
                   type="checkbox"
                   id="isActive"
@@ -2030,6 +2035,44 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                 >
                   Active
                 </label>
+              </div> */}
+              <div>
+                <label className="block font-medium mb-2">Is Active:</label>
+                <div className="flex gap-4">
+                  {/* Yes Option */}
+                  <label className="flex items-center gap-2">
+                    <input
+                      type="radio"
+                      name="isActive"
+                      value="true"
+                      checked={vehicleData.isActive === true}
+                      onChange={() =>
+                        handleChange({
+                          target: { name: "isActive", value: true },
+                        })
+                      }
+                      className="accent-green-500"
+                    />
+                    <span>Active</span>
+                  </label>
+
+                  {/* No Option */}
+                  <label className="flex items-center gap-2">
+                    <input
+                      type="radio"
+                      name="isActive"
+                      value="false"
+                      checked={vehicleData.isActive === false}
+                      onChange={() =>
+                        handleChange({
+                          target: { name: "isActive", value: false },
+                        })
+                      }
+                      className="accent-red-500"
+                    />
+                    <span>InActive</span>
+                  </label>
+                </div>
               </div>
 
               <div className="mt-3">
@@ -2129,26 +2172,29 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                 </div>
               </div>
 
-              <div className="mt-6 flex gap-2">
+              <div className="mt-6 flex gap-2 justify-between">
                 <button
                   onClick={prevStep}
-                  className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                  className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
                 >
                   Back
                 </button>
-                <button className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50">
-                  Update
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    onClose();
-                    setStep(1);
-                  }}
-                  className="px-6 py-2 ml-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
-                >
-                  Close
-                </button>
+                <div className="flex justify-end gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onClose();
+                      resetForm();
+                      cancleimages();
+                    }}
+                    className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                  >
+                    Close
+                  </button>
+                  <button className="px-6 py-2 bg-custom-bg text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50">
+                    Submit
+                  </button>
+                </div>
               </div>
             </>
           )}

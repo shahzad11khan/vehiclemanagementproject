@@ -865,7 +865,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                       id="imageFile"
                       name="imageFile"
                       onChange={handleChange}
-                      className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border file:border-gray-300 file:background-gray-100 hover:file:bg-gray-200 file:text-sm"
+                      className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border file:border-gray-300 file:background-gray-100 hover:file:bg-gray-200 file:text-sm"
                     />
                   </div>
                   {/* <div>
@@ -883,7 +883,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                 className="border-2 border-dashed border-gray-300 rounded-lg p-2 h-14 w-full mt-2"
               />
             </div> */}
-                  <div className="flex items-center">
+                  {/* <div className="flex items-center">
                     <input
                       type="checkbox"
                       id="isActive"
@@ -897,6 +897,44 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                       className="text-sm font-medium text-gray-700"
                     >
                       Active
+                    </label>
+                  </div> */}
+                </div>
+                <div>
+                  <label className="block font-medium mb-2">Is Active:</label>
+                  <div className="flex gap-4">
+                    {/* Yes Option */}
+                    <label className="flex items-center gap-2">
+                      <input
+                        type="radio"
+                        name="isActive"
+                        value="true"
+                        checked={formData.isActive === true}
+                        onChange={() =>
+                          handleChange({
+                            target: { name: "isActive", value: true },
+                          })
+                        }
+                        className="accent-green-500"
+                      />
+                      <span>Active</span>
+                    </label>
+
+                    {/* No Option */}
+                    <label className="flex items-center gap-2">
+                      <input
+                        type="radio"
+                        name="isActive"
+                        value="false"
+                        checked={formData.isActive === false}
+                        onChange={() =>
+                          handleChange({
+                            target: { name: "isActive", value: false },
+                          })
+                        }
+                        className="accent-red-500"
+                      />
+                      <span>InActive</span>
                     </label>
                   </div>
                 </div>

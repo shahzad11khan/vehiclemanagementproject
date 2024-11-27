@@ -139,7 +139,7 @@ const AddFirmModal = ({ isOpen, onClose, fetchData }) => {
         <h2 className="text-3xl font-semibold text-center mb-8">Add Firm</h2>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
             <div>
               <div className="flex gap-1">
                 <label
@@ -398,7 +398,7 @@ const AddFirmModal = ({ isOpen, onClose, fetchData }) => {
               />
             </div>
 
-            <div>
+            {/* <div>
               <label className="inline-flex items-center">
                 <input
                   type="checkbox"
@@ -409,6 +409,44 @@ const AddFirmModal = ({ isOpen, onClose, fetchData }) => {
                 />
                 <span className="ml-2">Is Active</span>
               </label>
+            </div> */}
+            <div>
+              <label className="block font-medium mb-2">Is Active:</label>
+              <div className="flex gap-4">
+                {/* Yes Option */}
+                <label className="flex items-center gap-2">
+                  <input
+                    type="radio"
+                    name="isActive"
+                    value="true"
+                    checked={formData.isActive === true}
+                    onChange={() =>
+                      handleChange({
+                        target: { name: "isActive", value: true },
+                      })
+                    }
+                    className="accent-green-500"
+                  />
+                  <span>Active</span>
+                </label>
+
+                {/* No Option */}
+                <label className="flex items-center gap-2">
+                  <input
+                    type="radio"
+                    name="isActive"
+                    value="false"
+                    checked={formData.isActive === false}
+                    onChange={() =>
+                      handleChange({
+                        target: { name: "isActive", value: false },
+                      })
+                    }
+                    className="accent-red-500"
+                  />
+                  <span>InActive</span>
+                </label>
+              </div>
             </div>
           </div>
 
@@ -509,7 +547,7 @@ const AddFirmModal = ({ isOpen, onClose, fetchData }) => {
             </div>
           </div>
 
-          <div className="mt-8 text-center">
+          <div className="mt-8  flex justify-end gap-2">
             <button
               type="button"
               onClick={onClose}
@@ -519,7 +557,7 @@ const AddFirmModal = ({ isOpen, onClose, fetchData }) => {
             </button>
             <button
               type="submit"
-              className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:ring-4 focus:ring-blue-400 focus:ring-opacity-50"
+              className="px-6 py-2 bg-custom-bg text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
             >
               Submit
             </button>

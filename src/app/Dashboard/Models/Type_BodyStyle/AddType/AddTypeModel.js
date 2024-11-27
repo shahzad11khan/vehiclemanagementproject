@@ -116,7 +116,7 @@ const AddTypeModel = ({ isOpen, onClose, fetchData }) => {
             </div>
 
             {/* IsActive */}
-            <div className="col-span-2 flex items-center">
+            {/* <div className="col-span-2 flex items-center">
               <input
                 type="checkbox"
                 id="isActive"
@@ -131,23 +131,61 @@ const AddTypeModel = ({ isOpen, onClose, fetchData }) => {
               >
                 IsActive
               </label>
+            </div> */}
+            <div>
+              <label className="block font-medium mb-2">Is Active:</label>
+              <div className="flex gap-4">
+                {/* Yes Option */}
+                <label className="flex items-center gap-2">
+                  <input
+                    type="radio"
+                    name="isActive"
+                    value="true"
+                    checked={formData.isActive === true}
+                    onChange={() =>
+                      handleChange({
+                        target: { name: "isActive", value: true },
+                      })
+                    }
+                    className="accent-green-500"
+                  />
+                  <span>Active</span>
+                </label>
+
+                {/* No Option */}
+                <label className="flex items-center gap-2">
+                  <input
+                    type="radio"
+                    name="isActive"
+                    value="false"
+                    checked={formData.isActive === false}
+                    onChange={() =>
+                      handleChange({
+                        target: { name: "isActive", value: false },
+                      })
+                    }
+                    className="accent-red-500"
+                  />
+                  <span>InActive</span>
+                </label>
+              </div>
             </div>
           </div>
 
           {/* Button Group */}
           <div className="flex gap-4 justify-center">
             <button
-              type="submit"
-              className="px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50"
-            >
-              {loading ? "Submitting..." : "Submit"}
-            </button>
-            <button
               type="button"
               onClick={onClose}
-              className="px-6 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+              className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
             >
               Close
+            </button>
+            <button
+              type="submit"
+              className="px-6 py-2 bg-custom-bg text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+            >
+              {loading ? "Submitting..." : "Submit"}
             </button>
           </div>
         </form>

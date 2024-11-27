@@ -1,185 +1,3 @@
-// "use client";
-// import React, { useState } from "react";
-// import { API_URL_Company } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
-// import axios from "axios";
-// import { toast } from "react-toastify";
-
-// const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
-//   const [formData, setFormData] = useState({
-//     CompanyName: "",
-//     email: "",
-//     password: "",
-//     confirmPassword: "",
-//     isActive: false,
-//     CreatedBy: "",
-//     CompanyRegistrationNumber: "",
-//     vatnumber: "",
-//     mailingAddress: "",
-//     physical_Address: "",
-//     phoneNumber: "",
-//     generalEmail: "",
-//     accountsPayableEmail: "",
-//     specificContactEmail: "",
-//     accountsPayableContactName: "",
-//     accountsPayableContactPhoneNumberandEmail: "",
-//     billingAddress: "",
-//     paymentTermsAgreedPaymentSchedule: "",
-//     paymentTermsPreferredPaymentMethod: "",
-//     bankingInformationBankName: "",
-//     bankingInformationBankAccountNumber: "",
-//     bankingInformationBankIBANSWIFTCode: "",
-//     bankingInformationBankAddress: "",
-//     specificDepartmentContactInformationBillingFinanceDepartment: "",
-//     specificDepartmentContactInformationProcurementPurchasingContact: "",
-//     specificDepartmentContactInformationPrimaryContactfortheProject: "",
-
-//     image: null, // Add image to the form data
-//   });
-//   const [autoFillAll, setAutoFillAll] = useState(false);
-
-//   const handleChange = (e) => {
-//     const { name, value, type, checked, files } = e.target;
-//     setFormData({
-//       ...formData,
-//       [name]:
-//         type === "checkbox" ? checked : type === "file" ? files[0] : value, // Handle file input
-//     });
-
-//     // Auto-fill all other addresses if the checkbox is checked
-//     if (name === "mailingAddress" && autoFillAll) {
-//       setFormData((prevData) => ({
-//         ...prevData,
-//         billingAddress: value,
-//         bankingInformationBankAddress: value,
-//         physical_Address: value,
-//       }));
-//     }
-//   };
-
-//   // Handle the checkbox for auto-filling all addresses
-//   const handleCheckboxChange = (e) => {
-//     const { checked } = e.target;
-
-//     setAutoFillAll(checked);
-
-//     // If checked, immediately set all addresses to mailingAddress
-//     if (checked) {
-//       setFormData((prevData) => ({
-//         ...prevData,
-//         billingAddress: prevData.mailingAddress,
-//         bankingInformationBankAddress: prevData.mailingAddress,
-//         physical_Address: prevData.mailingAddress,
-//       }));
-//     } else {
-//       // If unchecked, clear all other addresses
-//       setFormData((prevData) => ({
-//         ...prevData,
-//         billingAddress: "",
-//         bankingInformationBankAddress: "",
-//         physical_Address: "",
-//       }));
-//     }
-//   };
-
-//   //
-
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-
-//     if (formData.password !== formData.confirmPassword) {
-//       alert("Passwords do not match!");
-//       return;
-//     }
-
-//     // Create FormData object to send the data as multipart/form-data
-//     const data = new FormData();
-//     data.append("CompanyName", formData.CompanyName);
-//     data.append("email", formData.email);
-//     data.append("password", formData.password);
-//     data.append("confirmPassword", formData.confirmPassword);
-//     data.append(
-//       "CompanyRegistrationNumber",
-//       formData.CompanyRegistrationNumber
-//     );
-//     data.append("vatnumber", formData.vatnumber);
-//     data.append("isActive", formData.isActive);
-//     data.append("CreatedBy", formData.CreatedBy ? formData.CreatedBy : "");
-//     //
-//     data.append("mailingAddress", formData.mailingAddress);
-//     data.append("physical_Address", formData.physical_Address);
-//     data.append("phoneNumber", formData.phoneNumber);
-//     data.append("generalEmail", formData.generalEmail);
-//     data.append("accountsPayableEmail", formData.accountsPayableEmail);
-//     data.append("specificContactEmail", formData.specificContactEmail);
-//     data.append(
-//       "accountsPayableContactName",
-//       formData.accountsPayableContactName
-//     );
-//     data.append(
-//       "accountsPayableContactPhoneNumberandEmail",
-//       formData.accountsPayableContactPhoneNumberandEmail
-//     );
-//     data.append("billingAddress", formData.billingAddress);
-//     data.append(
-//       "paymentTermsAgreedPaymentSchedule",
-//       formData.paymentTermsAgreedPaymentSchedule
-//     );
-//     data.append(
-//       "paymentTermsPreferredPaymentMethod",
-//       formData.paymentTermsPreferredPaymentMethod
-//     );
-//     data.append(
-//       "bankingInformationBankName",
-//       formData.bankingInformationBankName
-//     );
-//     data.append(
-//       "bankingInformationBankAccountNumber",
-//       formData.bankingInformationBankAccountNumber
-//     );
-//     data.append(
-//       "bankingInformationBankIBANSWIFTCode",
-//       formData.bankingInformationBankIBANSWIFTCode
-//     );
-//     data.append(
-//       "bankingInformationBankAddress",
-//       formData.bankingInformationBankAddress
-//     );
-//     data.append(
-//       "specificDepartmentContactInformationBillingFinanceDepartment",
-//       formData.specificDepartmentContactInformationBillingFinanceDepartment
-//     );
-//     data.append(
-//       "specificDepartmentContactInformationProcurementPurchasingContact",
-//       formData.specificDepartmentContactInformationProcurementPurchasingContact
-//     );
-//     data.append(
-//       "specificDepartmentContactInformationPrimaryContactfortheProject",
-//       formData.specificDepartmentContactInformationPrimaryContactfortheProject
-//     );
-
-//     //
-//     if (formData.image) {
-//       data.append("image", formData.image); // Add the image file to FormData
-//     }
-
-//     try {
-//       // Send the data to the backend (replace the URL with your API endpoint)
-//       const response = await axios.post(`${API_URL_Company}`, data, {
-//         headers: {
-//           "Content-Type": "multipart/form-data",
-//         },
-//       });
-//       console.log("Response: ", response.data);
-//       toast.success("Company Register Successfully");
-//       fetchData();
-//       onClose();
-//     } catch (error) {
-//       console.error("Error uploading the data: ", error);
-//       toast.warn("Error uploading the data");
-//     }
-//   };
-
-//   if (!isOpen) return null;
 "use client";
 import React, { useState } from "react";
 import { API_URL_Company } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
@@ -859,7 +677,7 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
           </div>
 
           {/* IsActive Checkbox */}
-          <div className="flex items-center">
+          {/* <div className="flex items-center">
             <input
               type="checkbox"
               id="isActive"
@@ -874,6 +692,44 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
             >
               Is Active
             </label>
+          </div> */}
+          <div>
+            <label className="block font-medium mb-2">Is Active:</label>
+            <div className="flex gap-4">
+              {/* Yes Option */}
+              <label className="flex items-center gap-2">
+                <input
+                  type="radio"
+                  name="isActive"
+                  value="true"
+                  checked={formData.isActive === true}
+                  onChange={() =>
+                    handleChange({
+                      target: { name: "isActive", value: true },
+                    })
+                  }
+                  className="accent-green-500"
+                />
+                <span>Active</span>
+              </label>
+
+              {/* No Option */}
+              <label className="flex items-center gap-2">
+                <input
+                  type="radio"
+                  name="isActive"
+                  value="false"
+                  checked={formData.isActive === false}
+                  onChange={() =>
+                    handleChange({
+                      target: { name: "isActive", value: false },
+                    })
+                  }
+                  className="accent-red-500"
+                />
+                <span>InActive</span>
+              </label>
+            </div>
           </div>
 
           {/* Upload Image */}
@@ -897,17 +753,17 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
           {/* Button Group */}
           <div className="flex justify-end gap-4">
             <button
-              type="submit"
-              className="px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50"
-            >
-              Register
-            </button>
-            <button
               type="button"
               onClick={onClose}
-              className="px-6 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+              className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
             >
               Close
+            </button>
+            <button
+              type="submit"
+              className="px-6 py-2 bg-custom-bg text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+            >
+              Register
             </button>
           </div>
         </form>

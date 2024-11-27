@@ -26,7 +26,6 @@ const AllCompanies = () => {
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [isOpenDriverUpdate, setIsOpenDriverUpdate] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
 
   const [itemperpage, setitemperpage] = useState(5);
 
@@ -71,13 +70,18 @@ const AllCompanies = () => {
   const OpenDriverUpdateModle = () =>
     setIsOpenDriverUpdate(!isOpenDriverUpdate);
 
-  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-  const paginatedData = filteredData.slice(
-    (currentPage - 1) * itemperpage,
-    currentPage * itemperpage
+  const indexOfLastDriver = currentPage * itemperpage;
+  const indexOfFirstDriver = indexOfLastDriver - itemperpage;
+  const currentcompany = filteredData.slice(
+    indexOfFirstDriver,
+    indexOfLastDriver
   );
 
-  const handlePageChange = (newPage) => setCurrentPage(newPage);
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  const totalPages = Math.ceil(filteredData.length / itemperpage);
+  const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1); // Create an array of page numbers
+
   const fetchData = async () => {
     try {
       const { result } = await GetCompany();
@@ -167,7 +171,7 @@ const AllCompanies = () => {
                   onChange={(e) => setitemperpage(e.target.value)}
                   className="border rounded-md px-4 py-2 w-16 border-custom-bg"
                 >
-                  <option value="">0</option>
+                  <option disabled>0</option>
                   {Array.from({ length: 10 }, (_, i = 1) => i + 1).map(
                     (number) => (
                       <option key={number} value={number}>
@@ -191,12 +195,13 @@ const AllCompanies = () => {
               </div>
             </div>
 
-            <div>
+            <div className="flex items-center gap-2">
               <button
                 onClick={OpenCompanyModle}
-                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                className="bg-custom-bg text-white px-4 py-2 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 flex items-center justify-center gap-2"
               >
-                Add New Company
+                <img src="/plus.png" alt="Add Company" className="w-4 h-4" />
+                Add Company
               </button>
             </div>
           </div>
@@ -218,7 +223,7 @@ const AllCompanies = () => {
                 </tr>
               </thead>
               <tbody>
-                {paginatedData.map((item) => (
+                {currentcompany.map((item) => (
                   <tr key={item._id} className="border-b">
                     <td className="py-3 px-4">{item.CompanyName}</td>
                     <td className="py-3 px-4">{item.email}</td>
@@ -258,7 +263,7 @@ const AllCompanies = () => {
           </div>
 
           {/* Pagination Controls */}
-          <div className="flex justify-center mt-4">
+          {/* <div className="flex justify-center mt-4">
             <button
               onClick={() => handlePageChange(currentPage - 1)}
               disabled={currentPage === 1}
@@ -286,6 +291,54 @@ const AllCompanies = () => {
             >
               Next
             </button>
+          </div> */}
+          <div className="flex justify-center mt-4">
+            <nav>
+              <ul className="flex items-center space-x-2">
+                <li>
+                  <button
+                    onClick={() => paginate(currentPage - 1)}
+                    disabled={currentPage === 1}
+                    className={`px-4 py-2 border rounded ${
+                      currentPage === 1
+                        ? "opacity-50 cursor-not-allowed"
+                        : "bg-white"
+                    }`}
+                  >
+                    Previous
+                  </button>
+                </li>
+
+                {pageNumbers.map((number) => (
+                  <li key={number}>
+                    <button
+                      onClick={() => paginate(number)}
+                      className={`px-4 py-2 border rounded ${
+                        currentPage === number
+                          ? "bg-custom-bg text-white"
+                          : "bg-white"
+                      }`}
+                    >
+                      {number}
+                    </button>
+                  </li>
+                ))}
+
+                <li>
+                  <button
+                    onClick={() => paginate(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                    className={`px-4 py-2 border rounded ${
+                      currentPage === totalPages
+                        ? "opacity-50 cursor-not-allowed"
+                        : "bg-white"
+                    }`}
+                  >
+                    Next
+                  </button>
+                </li>
+              </ul>
+            </nav>
           </div>
         </div>
       </div>

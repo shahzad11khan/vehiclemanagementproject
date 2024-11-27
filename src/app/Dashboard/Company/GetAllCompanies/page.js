@@ -106,10 +106,11 @@ const Page = () => {
                   className="border rounded px-4 py-2 w-64"
                 />
               </div>
-              <div>
+              <div className="flex gap-1">
+                {/* <img src="/plus.png" alt="plus" /> */}
                 <button
                   onClick={OpenCompanyModle}
-                  className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                  className="bg-custom-bg text-white px-4 py-2 rounded hover:bg-blue-600"
                 >
                   Add New Company
                 </button>

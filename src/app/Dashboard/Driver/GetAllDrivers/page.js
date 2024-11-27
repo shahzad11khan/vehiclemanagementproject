@@ -142,7 +142,7 @@ const Page = () => {
                     onChange={(e) => setitemperpage(e.target.value)}
                     className="border rounded-md px-4 py-2 w-16 border-custom-bg"
                   >
-                    <option value="">0</option>
+                    <option disabled>0</option>
                     {Array.from({ length: 10 }, (_, i = 1) => i + 1).map(
                       (number) => (
                         <option key={number} value={number}>

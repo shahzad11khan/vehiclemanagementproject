@@ -147,9 +147,10 @@ const Page = () => {
               <div className="justify-end">
                 <button
                   onClick={OpenBadgeModle}
-                  className="bg-custom-bg text-white px-4 py-2 rounded hover:bg-blue-600"
+                  className="bg-custom-bg text-white px-4 py-2 rounded hover:bg-blue-600 flex items-center justify-center gap-2"
                 >
-                  Add New Badges
+                  <img src="/plus.png" alt="Add Company" className="w-4 h-4" />
+                  Add Badges
                 </button>
               </div>
             </div>

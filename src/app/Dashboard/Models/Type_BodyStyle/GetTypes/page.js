@@ -135,7 +135,7 @@ const Page = () => {
                     onChange={(e) => setitemperpage(e.target.value)}
                     className="border rounded-md px-4 py-2 w-16 border-custom-bg"
                   >
-                    <option value="">0</option>
+                    <option disabled>0</option>
                     {Array.from({ length: 10 }, (_, i = 1) => i + 1).map(
                       (number) => (
                         <option key={number} value={number}>
@@ -158,9 +158,10 @@ const Page = () => {
               <div className="justify-end">
                 <button
                   onClick={OpenPaymentModle}
-                  className="bg-custom-bg text-white px-4 py-2 rounded hover:bg-blue-600"
+                  className="bg-custom-bg text-white px-4 py-2 rounded hover:bg-blue-600  flex items-center justify-center gap-2"
                 >
-                  Add New Type
+                  <img src="/plus.png" alt="Add Company" className="w-4 h-4" />
+                  Add Type
                 </button>
               </div>
             </div>

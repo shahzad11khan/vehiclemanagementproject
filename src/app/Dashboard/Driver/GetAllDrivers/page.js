@@ -167,8 +167,9 @@ const Page = () => {
               </div>
               <button
                 onClick={OpenDriverModel}
-                className="bg-custom-bg text-white px-5 py-2 rounded hover:bg-blue-600"
+                className="bg-custom-bg text-white px-5 py-2 rounded hover:bg-blue-600 flex items-center justify-center gap-2"
               >
+                <img src="/plus.png" alt="Add Company" className="w-4 h-4" />
                 Add Driver
               </button>
             </div>

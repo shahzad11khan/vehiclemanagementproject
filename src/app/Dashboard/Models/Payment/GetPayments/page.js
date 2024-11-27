@@ -188,9 +188,10 @@ const Page = () => {
               <div className="justify-end">
                 <button
                   onClick={OpenPaymentModle}
-                  className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                  className="bg-custom-bg text-white px-4 py-2 rounded hover:bg-blue-600  flex items-center justify-center gap-2"
                 >
-                  Add New Payment
+                  <img src="/plus.png" alt="Add Company" className="w-4 h-4" />
+                  Add Payment
                 </button>
               </div>
             </div>

@@ -289,11 +289,13 @@ const Page = () => {
               </div>
               <div className="border-l-4 border-red-500 h-12 absolute left-0 top-14"></div>
               <h2 className="text-left pl-10 font-semibold text-3xl">
-                {superadmin === "superadmin" && flag === "false"
-                  ? TotalCar
-                  : superadmin === "superadmin" && flag === "true"
-                  ? TotalCar
-                  : TotalCar}
+                {superadmin === "superadmin" && flag === "false" ? (
+                  <span className="text-red-500">{TotalCar}</span>
+                ) : superadmin === "superadmin" && flag === "true" ? (
+                  <span className="text-red-500">{TotalCar}</span>
+                ) : (
+                  <span className="text-red-500">{TotalCar}</span>
+                )}
               </h2>
             </div>
             <div className="w-[268px] h-[132px] shadow-md p-2 shadow-blue-200 rounded-md relative">
@@ -326,11 +328,13 @@ const Page = () => {
                 }}
               ></div>
               <h2 className="text-left pl-10 font-semibold text-3xl">
-                {superadmin === "superadmin" && flag === "false"
-                  ? standby
-                  : superadmin === "superadmin" && flag === "true"
-                  ? standby
-                  : standby}
+                {superadmin === "superadmin" && flag === "false" ? (
+                  <span style={{ color: " #7D5EBA" }}>{standby}</span>
+                ) : superadmin === "superadmin" && flag === "true" ? (
+                  <span style={{ color: " #7D5EBA" }}>{standby}</span>
+                ) : (
+                  <span style={{ color: " #7D5EBA" }}>{standby}</span>
+                )}
               </h2>
             </div>
             <div className="w-[268px] h-[132px] shadow-md p-2 shadow-blue-200 rounded-md relative">
@@ -368,11 +372,13 @@ const Page = () => {
                 }}
               ></div>
               <h2 className="text-left pl-10 font-semibold text-3xl">
-                {superadmin === "superadmin" && flag === "false"
-                  ? rent
-                  : superadmin === "superadmin" && flag === "true"
-                  ? rent
-                  : rent}
+                {superadmin === "superadmin" && flag === "false" ? (
+                  <span style={{ color: " #53B1F1" }}>{rent}</span>
+                ) : superadmin === "superadmin" && flag === "true" ? (
+                  <span style={{ color: " #53B1F1" }}>{rent}</span>
+                ) : (
+                  <span style={{ color: " #53B1F1" }}>{rent}</span>
+                )}
               </h2>
             </div>
             <div className="w-[268px] h-[132px] shadow-md p-2 shadow-blue-200 rounded-md relative">
@@ -405,11 +411,13 @@ const Page = () => {
                 }}
               ></div>
               <h2 className="text-left pl-10 font-semibold text-3xl">
-                {superadmin === "superadmin" && flag === "false"
-                  ? sellCar
-                  : superadmin === "superadmin" && flag === "true"
-                  ? sellCar
-                  : sellCar}
+                {superadmin === "superadmin" && flag === "false" ? (
+                  <span style={{ color: " #5A58D7" }}>{sellCar}</span>
+                ) : superadmin === "superadmin" && flag === "true" ? (
+                  <span style={{ color: " #5A58D7" }}>{sellCar}</span>
+                ) : (
+                  <span style={{ color: " #5A58D7" }}>{sellCar}</span>
+                )}
               </h2>{" "}
             </div>
             <div className="w-[268px] h-[132px] shadow-md p-2 shadow-blue-200 rounded-md relative">
@@ -442,11 +450,13 @@ const Page = () => {
                 }}
               ></div>
               <h2 className="text-left pl-10 font-semibold text-3xl">
-                {superadmin === "superadmin" && flag === "false"
-                  ? maintenance
-                  : superadmin === "superadmin" && flag === "true"
-                  ? maintenance
-                  : maintenance}
+                {superadmin === "superadmin" && flag === "false" ? (
+                  <span style={{ color: " #FFB52F" }}>{maintenance}</span>
+                ) : superadmin === "superadmin" && flag === "true" ? (
+                  <span style={{ color: " #FFB52F" }}>{maintenance}</span>
+                ) : (
+                  <span style={{ color: " #FFB52F" }}>{maintenance}</span>
+                )}
               </h2>{" "}
             </div>
           </section>

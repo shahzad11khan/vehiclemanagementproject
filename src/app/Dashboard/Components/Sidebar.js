@@ -63,7 +63,7 @@ const Sidebar = () => {
         } lg:translate-x-0 fixed lg:relative top-0 left-0 flex flex-col shadow-2xl shadow-custom-blue `}
       > */}
       <aside
-        className={`bg-white-800 text-black h-full lg:w-52 w-20 sm:w-48  flex flex-col shadow-xl border-2 shadow-custom-blue `}
+        className={`bg-white-800 text-black h-full lg:w-52 w-20 sm:w-48  flex flex-col shadow-xl border-2 shadow-custom-blue relative `}
       >
         <nav
           className="flex-1 "

@@ -278,7 +278,7 @@ const Page = () => {
           <HeroSection />
 
           <section className="grid grid-cols-4  min-w-full justify-between gap-2 text-center rounded-xl">
-            <div className="w-[268px] h-[132px] shadow-md p-2 shadow-blue-200 rounded-md relative">
+            <div className="w-[268px] h-[132px] shadow-md p-2 shadow-blue-200 rounded-md ">
               <div className="flex justify-between mt-3">
                 <div>Total Cars</div>
                 <div className="bg-pink-600 rounded-md h-[41px] w-[41px] flex justify-center text-center">
@@ -287,16 +287,18 @@ const Page = () => {
                   </div>
                 </div>
               </div>
-              <div className="border-l-4 border-red-500 h-12 absolute left-0 top-14"></div>
-              <h2 className="text-left pl-10 font-semibold text-3xl">
-                {superadmin === "superadmin" && flag === "false" ? (
-                  <span className="text-red-500">{TotalCar}</span>
-                ) : superadmin === "superadmin" && flag === "true" ? (
-                  <span className="text-red-500">{TotalCar}</span>
-                ) : (
-                  <span className="text-red-500">{TotalCar}</span>
-                )}
-              </h2>
+              <div className="flex">
+                <div className="border-l-4 border-red-500 h-12"></div>
+                <h2 className="text-left pl-10 font-semibold text-3xl">
+                  {superadmin === "superadmin" && flag === "false" ? (
+                    <span className="text-red-500">{TotalCar}</span>
+                  ) : superadmin === "superadmin" && flag === "true" ? (
+                    <span className="text-red-500">{TotalCar}</span>
+                  ) : (
+                    <span className="text-red-500">{TotalCar}</span>
+                  )}
+                </h2>
+              </div>
             </div>
             <div className="w-[268px] h-[132px] shadow-md p-2 shadow-blue-200 rounded-md relative">
               <div className="flex justify-between mt-3">

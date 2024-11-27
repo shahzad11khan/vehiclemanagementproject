@@ -371,6 +371,9 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
       price: "",
       registrationNumber: "",
       vehicleStatus: "",
+      warrantyInfo: "",
+      adminCreatedBy: "",
+      adminCompanyName: "",
       // new fields
       enginesize: "",
       chasisnumber: "",
@@ -393,13 +396,14 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
       nextServiceDate: "",
       nextServiceMiles: "",
       roadTaxCost: "",
+
       listPrice: "",
       purchasePrice: "",
       insuranceValue: "",
       departmentCode: "",
       maintenance: false,
       issues_damage: "",
-      damage_image: "",
+      damage_image: [],
       recovery: "",
       organization: "",
       repairStatus: "",
@@ -428,12 +432,11 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
       ForkLiftInspectionDate: "",
       cardocuments: [],
 
-      warrantyInfo: "",
-      adminCreatedBy: "",
       adminCompanyName: vehicleData.adminCompanyName,
       isActive: false,
       imageFiles: [], // Reset to an empty array
     });
+    window.location.reload();
   };
 
   // Handle navigation

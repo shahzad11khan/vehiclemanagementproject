@@ -413,6 +413,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
   if (!isOpen) return null;
 
   const resetForm = () => {
+    setStep(1);
     setVehicleData({
       manufacturer: "",
       model: "",
@@ -509,6 +510,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
       isActive: false,
       imageFiles: [], // Reset to an empty array
     });
+    window.location.reload();
   };
 
   // Handle navigation
@@ -796,7 +798,6 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                   onClick={() => {
                     onClose();
                     resetForm();
-                    cancleimages();
                   }}
                   className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
                 >
@@ -1072,7 +1073,6 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                     onClick={() => {
                       onClose();
                       resetForm();
-                      cancleimages();
                     }}
                     className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
                   >
@@ -1413,7 +1413,6 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                     onClick={() => {
                       onClose();
                       resetForm();
-                      cancleimages();
                     }}
                     className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
                   >
@@ -1752,7 +1751,6 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                     onClick={() => {
                       onClose();
                       resetForm();
-                      cancleimages();
                     }}
                     className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
                   >
@@ -2157,7 +2155,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                       className="cursor-pointer"
                       onClick={() => window.open(pdfPreview, "_blank")} // Opens the PDF in a new tab
                     >
-                      <img
+                      {/* <img
                         src={pdfPreview}
                         alt="Avatar Preview"
                         className="avatar-preview w-40 h-20"
@@ -2166,6 +2164,12 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                         src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhkCWG2q6izXrv9oKcp53cb6dUBBoX246G0w&s"
                         alt="Avatar Preview"
                         className="avatar-preview w-40 h-20"
+                      /> */}
+                      <embed
+                        src={pdfPreview}
+                        // width="100%"
+                        // height="600px"
+                        type="application/pdf"
                       />
                     </div>
                   </div>
@@ -2185,7 +2189,6 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                     onClick={() => {
                       onClose();
                       resetForm();
-                      cancleimages();
                     }}
                     className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
                   >

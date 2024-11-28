@@ -153,7 +153,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleid }) => {
             </div>
 
             {/* IsActive */}
-            <div className="col-span-2 flex items-center">
+            {/* <div className="col-span-2 flex items-center">
               <input
                 type="checkbox"
                 id="isActive"
@@ -168,6 +168,44 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleid }) => {
               >
                 IsActive
               </label>
+            </div> */}
+            <div>
+              <label className="block font-medium mb-2">Is Active:</label>
+              <div className="flex gap-4">
+                {/* Yes Option */}
+                <label className="flex items-center gap-2">
+                  <input
+                    type="radio"
+                    name="isActive"
+                    value="true"
+                    checked={formData.isActive === true}
+                    onChange={() =>
+                      handleChange({
+                        target: { name: "isActive", value: true },
+                      })
+                    }
+                    className="accent-green-500"
+                  />
+                  <span>Active</span>
+                </label>
+
+                {/* No Option */}
+                <label className="flex items-center gap-2">
+                  <input
+                    type="radio"
+                    name="isActive"
+                    value="false"
+                    checked={formData.isActive === false}
+                    onChange={() =>
+                      handleChange({
+                        target: { name: "isActive", value: false },
+                      })
+                    }
+                    className="accent-red-500"
+                  />
+                  <span>InActive</span>
+                </label>
+              </div>
             </div>
           </div>
 

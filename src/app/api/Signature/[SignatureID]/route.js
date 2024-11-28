@@ -25,30 +25,32 @@ export const PUT = async (request, context) => {
   let imagepublicId = existingSignature.imagepublicId;
 
   if (file1 && typeof file1 === "object" && file1.name) {
-    const buffer1 = Buffer.from(await file1.arrayBuffer());
+    const buffer = Buffer.from(await file1.arrayBuffer());
     // Delete the old image from Cloudinary if a new image is uploaded
     if (imagepublicId) {
-      await cloudinary.uploader.destroy(imagepublicId, {
-        resource_type: "auto",
-      });
+      try {
+        await cloudinary.uploader.destroy(imagepublicId);
+        console.log("Old avatar deleted from Cloudinary.");
+      } catch (error) {
+        console.error("Failed to delete old image from Cloudinary:", error);
+      }
     }
 
     // Upload new image to Cloudinary
     const uploadResponse1 = await new Promise((resolve, reject) => {
-      cloudinary.uploader
-        .upload_stream(
-          {
-            resource_type: "auto",
-          },
-          (error, result) => {
-            if (error) {
-              reject(new Error("Error uploading image: " + error.message));
-            } else {
-              resolve(result);
-            }
+      const uploadStream = cloudinary.uploader.upload_stream(
+        { resource_type: "auto" },
+        (error, result) => {
+          if (error) {
+            reject(error);
+          } else {
+            resolve(result);
           }
-        )
-        .end(buffer1);
+        }
+      );
+
+      // Write buffer to the upload stream
+      uploadStream.end(buffer);
     });
 
     imageFile = uploadResponse1.secure_url;

@@ -87,8 +87,8 @@ const AddSignatureType = ({ isOpen, onClose, fetchData }) => {
           Add Signature
         </h2>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="grid grid-cols-2 md:grid-cols-2 gap-2">
+        <form onSubmit={handleSubmit} className="overflow-y-auto">
+          <div className="grid grid-cols-2">
             {/* Name */}
             <div className="col-span-2">
               <label
@@ -147,7 +147,6 @@ const AddSignatureType = ({ isOpen, onClose, fetchData }) => {
             <div>
               <label className="block font-medium mb-2">Is Active:</label>
               <div className="flex gap-4">
-                {/* Yes Option */}
                 <label className="flex items-center gap-2">
                   <input
                     type="radio"

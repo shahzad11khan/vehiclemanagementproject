@@ -11,6 +11,7 @@ const UpdateSignatureModel = ({
   signatureData,
 }) => {
   // Added signatureData prop
+  const [perviewimage, setpreviewimage] = useState(null);
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -30,6 +31,7 @@ const UpdateSignatureModel = ({
           );
           console.log("Enquiry data:", data.result);
           setFormData(data.result);
+          setpreviewimage(data.result.imageFile);
         } catch (error) {
           console.error("Error fetching enquiry data:", error);
         }
@@ -86,8 +88,6 @@ const UpdateSignatureModel = ({
         imageName: "",
         imageFile: null,
       });
-
-      onClose();
     } catch (error) {
       console.error("Error submitting the form:", error);
       toast.error("An error occurred while updating the signature."); // Optional: Notify user of the error
@@ -239,6 +239,17 @@ const UpdateSignatureModel = ({
                 be less than 500kb. Preferred size of an image is Unlimited x
                 Unlimited (aspect ratio 1:1).
               </p>
+            </div>
+            <div>
+              {perviewimage && (
+                <div>
+                  <img
+                    src={perviewimage}
+                    alt="Avatar Preview"
+                    className="avatar-preview w-32 h-20"
+                  />
+                </div>
+              )}
             </div>
           </div>
 

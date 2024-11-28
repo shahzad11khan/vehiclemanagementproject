@@ -101,7 +101,7 @@ export async function POST(request) {
     console.log(formDataObject);
 
     const existingDriver = await Driver.findOne({
-      $or: [{ email: email }, { companyname: companyname }],
+      $or: [{ email: email }, { companyname: adminCompanyName }],
     });
     if (existingDriver) {
       return NextResponse.json({

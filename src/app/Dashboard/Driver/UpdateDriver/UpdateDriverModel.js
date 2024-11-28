@@ -35,14 +35,14 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, selectedUserId }) => {
     badgeType: "",
     insurance: "",
     startDate: "",
-    driverRent: "",
+    driverRent: 0,
     licenseExpiryDate: "",
     taxiBadgeDate: "",
     rentPaymentCycle: "",
     isActive: false,
     imageName: "",
     imageFile: null,
-    pay: "",
+    // pay: 0,
     calculation: "",
     adminCreatedBy: "",
     adminCompanyName: "",
@@ -221,8 +221,8 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, selectedUserId }) => {
       console.log("Update successful:", data);
       if (data.success) {
         fetchDataa();
-        toast.success(data.message);
         onClose();
+        toast.success(data.message);
       } else {
         toast.success(data.error);
       }

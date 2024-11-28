@@ -5,25 +5,119 @@ import cloudinary from "@middlewares/cloudinary.js";
 import { NextResponse } from "next/server";
 
 // PUT handler for updating driver details
+// export async function PUT(request, context) {
+//   try {
+//     await connect(); // Connect to the database
+
+//     const id = context.params.DrivId; // Use the correct parameter name
+//     const data = await request.formData();
+
+//     // console.log(data);
+
+//     const userAvatar = data.get("imageFile");
+//     console.log(userAvatar);
+//     let Driveravatar = "";
+//     let DriveravatarId = "";
+
+//     // Check if the user avatar is an object and has a valid name (indicating it's a file)
+//     if (userAvatar && typeof userAvatar === "object" && userAvatar.name) {
+//       const byteData = await userAvatar.arrayBuffer();
+//       const buffer = Buffer.from(byteData);
+
+//       // Upload the new image to Cloudinary
+//       const uploadResponse = await new Promise((resolve, reject) => {
+//         const uploadStream = cloudinary.uploader.upload_stream(
+//           { resource_type: "auto" },
+//           (error, result) => {
+//             if (error) {
+//               reject(error);
+//             } else {
+//               resolve(result);
+//             }
+//           }
+//         );
+
+//         // Write buffer to the upload stream
+//         uploadStream.end(buffer);
+//       });
+
+//       // Store the URL and ID of the uploaded image
+//       Driveravatar = uploadResponse.secure_url;
+//       DriveravatarId = uploadResponse.public_id;
+//     }
+
+//     // Convert FormData to a plain object
+//     const formDataObject = Object.fromEntries(data.entries());
+
+//     // Find the driver by ID
+//     const driver = await Driver.findById(id);
+//     if (!driver) {
+//       return NextResponse.json({ error: "Driver not found", status: 404 });
+//     }
+
+//     // Handle avatar update: remove old avatar from Cloudinary and update with new one if uploaded
+//     if (Driveravatar && DriveravatarId) {
+//       // Check if the driver has an existing avatar ID to delete
+//       if (driver.imagePublicId) {
+//         try {
+//           // Delete old avatar from Cloudinary if it exists
+//           await cloudinary.uploader.destroy(driver.imagePublicId);
+//           console.log("Old avatar deleted from Cloudinary.");
+//         } catch (error) {
+//           console.error("Failed to delete old image from Cloudinary:", error);
+//         }
+//       }
+
+//       // Update driver with new avatar details
+//       driver.imageFile = Driveravatar;
+//       driver.imagePublicId = DriveravatarId;
+//       console.log("New avatar uploaded ");
+//     } else {
+//       // If no new avatar uploaded, retain the old image
+//       Driveravatar = driver.imageFile;
+//       DriveravatarId = driver.imagePublicId;
+//     }
+
+//     // Update driver properties with values from formDataObject
+//     for (const key in formDataObject) {
+//       console.log(key);
+//       driver[key] = formDataObject[key];
+//     }
+
+//     // Save updated driver details
+//     await driver.save();
+
+//     return NextResponse.json({
+//       message: "Driver details updated successfully",
+//       driver,
+//       status: 200,
+//       success: true,
+//     });
+//   } catch (error) {
+//     console.error("Error updating driver details:", error);
+//     return NextResponse.json({
+//       error: "Failed to update driver details",
+//       status: 500,
+//     });
+//   }
+// }
+
 export async function PUT(request, context) {
   try {
     await connect(); // Connect to the database
 
-    const id = context.params.DrivId; // Use the correct parameter name
+    const id = context.params.DrivId; // Extract driver ID from params
     const data = await request.formData();
-
-    // console.log(data);
 
     const userAvatar = data.get("imageFile");
     let Driveravatar = "";
     let DriveravatarId = "";
 
-    // Check if the user avatar is an object and has a valid name (indicating it's a file)
     if (userAvatar && typeof userAvatar === "object" && userAvatar.name) {
       const byteData = await userAvatar.arrayBuffer();
       const buffer = Buffer.from(byteData);
 
-      // Upload the new image to Cloudinary
+      // Upload to Cloudinary
       const uploadResponse = await new Promise((resolve, reject) => {
         const uploadStream = cloudinary.uploader.upload_stream(
           { resource_type: "auto" },
@@ -35,56 +129,42 @@ export async function PUT(request, context) {
             }
           }
         );
-
-        // Write buffer to the upload stream
         uploadStream.end(buffer);
       });
 
-      // Store the URL and ID of the uploaded image
       Driveravatar = uploadResponse.secure_url;
       DriveravatarId = uploadResponse.public_id;
     }
 
-    // Convert FormData to a plain object
     const formDataObject = Object.fromEntries(data.entries());
 
-    // Find the driver by ID
+    // Fetch the driver document
     const driver = await Driver.findById(id);
     if (!driver) {
       return NextResponse.json({ error: "Driver not found", status: 404 });
     }
 
-    // Handle avatar update: remove old avatar from Cloudinary and update with new one if uploaded
+    // Handle avatar replacement
     if (Driveravatar && DriveravatarId) {
-      // Check if the driver has an existing avatar ID to delete
-      if (driver.DriveravatarId) {
+      if (driver.imagePublicId) {
         try {
-          // Delete old avatar from Cloudinary if it exists
-          await cloudinary.uploader.destroy(driver.DriveravatarId);
-          console.log("Old avatar deleted from Cloudinary.");
+          await cloudinary.uploader.destroy(driver.imagePublicId);
         } catch (error) {
           console.error("Failed to delete old image from Cloudinary:", error);
         }
       }
-
-      // Update driver with new avatar details
-      driver.Driveravatar = Driveravatar;
-      driver.DriveravatarId = DriveravatarId;
-      console.log("New avatar uploaded and updated.");
-    } else {
-      // If no new avatar uploaded, retain the old image
-      Driveravatar = driver.Driveravatar;
-      DriveravatarId = driver.DriveravatarId;
+      driver.imageFile = Driveravatar;
+      driver.imagePublicId = DriveravatarId;
     }
 
-    // Update driver properties with values from formDataObject
+    // Update driver fields
     for (const key in formDataObject) {
-      if (formDataObject[key] !== undefined) {
+      if (key !== "imageFile") {
         driver[key] = formDataObject[key];
       }
     }
 
-    // Save updated driver details
+    // Save the updated driver
     await driver.save();
 
     return NextResponse.json({

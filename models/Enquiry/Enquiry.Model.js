@@ -44,8 +44,7 @@ const EnquirySchema = new mongoose.Schema(
       default: "",
     },
     dateOfBirth: {
-      type: Date,
-      default: null,
+      type: String,
     },
     niNumber: {
       type: String,

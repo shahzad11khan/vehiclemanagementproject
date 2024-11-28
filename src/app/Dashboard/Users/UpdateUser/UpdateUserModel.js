@@ -81,8 +81,8 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
             companyname: "", // Assuming this should be initialized empty
             username: adminData.username,
             email: adminData.email,
-            password: adminData.lastName, // Set password to confirmpassword
-            confirmpassword: adminData.lastName, // Ensure confirmpassword is set
+            password: adminData.confirmpassword, // Set password to confirmpassword
+            confirmpassword: adminData.confirmpassword, // Ensure confirmpassword is set
             useravatar: adminData.useravatar,
             isActive: false, // Default value
             role: adminData.role, // Default role set to "user"

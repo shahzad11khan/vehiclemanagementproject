@@ -2,11 +2,17 @@ import { connect } from "@config/db.js";
 import Vehicle from "@models/Vehicle/Vehicle.Model.js";
 import { NextResponse } from "next/server";
 import cloudinary from "@middlewares/cloudinary.js";
+import fs from "fs";
+import path from "path";
+import { v4 as uuidv4 } from "uuid";
+const UPLOAD_DIR = path.join(process.cwd(), "public", "uploads");
 
 export async function PUT(request, context) {
   try {
     await connect(); // Connect to the database
-
+    if (!fs.existsSync(UPLOAD_DIR)) {
+      fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+    }
     const id = context.params.VehicleID;
     const formDataObject = await request.formData(); // Ensure to await formData
     console.log(id, formDataObject);
@@ -34,50 +40,64 @@ export async function PUT(request, context) {
     }
 
     // console.log(pdfofpolicy.name);
+    if (!pdfofpolicy) {
+      PDFofPolicyUrl = vehicle.PDFofPolicyUrl;
+      PDFofPolicyPublicId = vehicle.PDFofPolicyPublicId;
+    } else {
+      console.log("new pdf file");
+      const pdfBuffer = Buffer.from(await pdfofpolicy.arrayBuffer());
+      const pdfFileName = `${uuidv4()}.pdf`;
+      const pdfFilePath = path.join(UPLOAD_DIR, pdfFileName);
 
-    if (pdfofpolicy && typeof pdfofpolicy === "object" && pdfofpolicy.name) {
-      const byteData = await pdfofpolicy.arrayBuffer();
-      const buffer = Buffer.from(byteData);
-
-      // Upload the new image to Cloudinary
-      const uploadResponse = await new Promise((resolve, reject) => {
-        const uploadStream = cloudinary.uploader.upload_stream(
-          { resource_type: "auto" },
-          (error, result) => {
-            if (error) {
-              reject(error);
-            } else {
-              resolve(result);
-            }
-          }
-        );
-
-        // Write buffer to the upload stream
-        uploadStream.end(buffer);
-      });
-
-      // Store the URL and ID of the uploaded image
-      PDFofPolicyUrl = uploadResponse.secure_url;
-      PDFofPolicyPublicId = uploadResponse.public_id;
+      fs.writeFileSync(pdfFilePath, pdfBuffer); // Save the file to disk
+      PDFofPolicyUrl = `/uploads/${pdfFileName}`; // Public URL for the file
+      PDFofPolicyPublicId = pdfFileName;
     }
 
-    // Handle avatar update: remove old avatar from Cloudinary and update with new one if uploaded
-    if (PDFofPolicyUrl && PDFofPolicyPublicId) {
-      if (vehicle.PDFofPolicyPublicId) {
-        try {
-          // Delete old avatar from Cloudinary if it exists
-          await cloudinary.uploader.destroy(vehicle.PDFofPolicyPublicId);
-          console.log("Old avatar deleted from Cloudinary.");
-        } catch (error) {
-          console.error("Failed to delete old image from Cloudinary:", error);
-        }
-      }
+    // if (pdfofpolicy && typeof pdfofpolicy === "object" && pdfofpolicy.name) {
+    //   const byteData = await pdfofpolicy.arrayBuffer();
+    //   const buffer = Buffer.from(byteData);
 
-      // Update user with new avatar details
-      vehicle.PDFofPolicyUrl = PDFofPolicyUrl;
-      vehicle.PDFofPolicyPublicId = PDFofPolicyPublicId;
-      console.log("New avatar uploaded and updated PDFs.");
-    }
+    //   // Upload the new image to Cloudinary
+    //   const uploadResponse = await new Promise((resolve, reject) => {
+    //     const uploadStream = cloudinary.uploader.upload_stream(
+    //       { resource_type: "auto" },
+    //       (error, result) => {
+    //         if (error) {
+    //           reject(error);
+    //         } else {
+    //           resolve(result);
+    //         }
+    //       }
+    //     );
+
+    //     // Write buffer to the upload stream
+    //     uploadStream.end(buffer);
+    //   });
+
+    //   // Store the URL and ID of the uploaded image
+    //   PDFofPolicyUrl = uploadResponse.secure_url;
+    //   PDFofPolicyPublicId = uploadResponse.public_id;
+    // }
+
+    // // Handle avatar update: remove old avatar from Cloudinary and update with new one if uploaded
+    // if (PDFofPolicyUrl && PDFofPolicyPublicId) {
+    //   if (vehicle.PDFofPolicyPublicId) {
+    //     try {
+    //       // Delete old avatar from Cloudinary if it exists
+    //       await cloudinary.uploader.destroy(vehicle.PDFofPolicyPublicId);
+    //       console.log("Old avatar deleted from Cloudinary.");
+    //     } catch (error) {
+    //       console.error("Failed to delete old image from Cloudinary:", error);
+    //     }
+    //   }
+    // }
+
+    //   // Update user with new avatar details
+    //   vehicle.PDFofPolicyUrl = PDFofPolicyUrl;
+    //   vehicle.PDFofPolicyPublicId = PDFofPolicyPublicId;
+    //   console.log("New avatar uploaded and updated PDFs.");
+    // }
 
     // for imageFiles variables
     // Handle image uploads to Cloudinary
@@ -295,6 +315,9 @@ export async function PUT(request, context) {
     }
 
     // Update vehicle properties
+    vehicle.PDFofPolicyUrl = PDFofPolicyUrl || vehicle.PDFofPolicyUrl;
+    vehicle.PDFofPolicyPublicId =
+      PDFofPolicyPublicId || vehicle.PDFofPolicyPublicId;
     vehicle.manufacturer =
       formDataObject.get("manufacturer") || vehicle.manufacturer;
     vehicle.model = formDataObject.get("model") || vehicle.model;

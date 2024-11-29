@@ -199,9 +199,9 @@ const Page = ({ params }) => {
                     <th className="px-4 py-2 bg-custom-bg text-white text-sm">
                       Payment
                     </th>
-                    <th className="px-4 py-2 bg-custom-bg text-white text-sm">
+                    {/* <th className="px-4 py-2 bg-custom-bg text-white text-sm">
                       Status
-                    </th>
+                    </th> */}
                     <th className="px-4 py-2 bg-custom-bg text-white text-sm">
                       Actions
                     </th>
@@ -228,11 +228,11 @@ const Page = ({ params }) => {
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         {item.payment || 0}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {/* <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         <span className="bg-gray-400 px-1 py-1 border-2 rounded-2xl">
                           {item.isActive ? "Active" : "Inactive"}
                         </span>
-                      </td>
+                      </td> */}
                       <td className="whitespace-nowrap text-sm font-medium mx-auto">
                         <div className="flex gap-2">
                           <button

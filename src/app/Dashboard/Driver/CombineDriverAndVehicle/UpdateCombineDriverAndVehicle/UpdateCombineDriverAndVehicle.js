@@ -27,6 +27,7 @@ const UpdateCombineDriverAndVehicle = ({
     taxifirm: "",
     taxilocalauthority: "",
     vehicle: "",
+    vehicleId: "",
     paymentcycle: "",
     payment: "",
     adminCompanyName: "",
@@ -73,6 +74,7 @@ const UpdateCombineDriverAndVehicle = ({
           taxifirm: data.result.taxifirm || "",
           taxilocalauthority: data.result.taxilocalauthority || "",
           vehicle: data.result.vehicle,
+          vehicleId: data.result.vehicleId,
           paymentcycle: data.result.paymentcycle || "",
           payment: data.result.payment || 0,
         }));
@@ -339,17 +341,17 @@ const UpdateCombineDriverAndVehicle = ({
             </div>
           </div>
 
-          <div className="flex justify-end">
+          <div className="flex justify-end gap-2">
             <button
               type="button"
               onClick={onClose}
-              className="mr-4 px-4 py-2 bg-gray-300 text-gray-800 rounded-lg"
+              className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className={`px-4 py-2 text-white rounded-lg ${
+              className={`px-6 py-2 bg-custom-bg text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50${
                 loading ? "bg-gray-400" : "bg-blue-600"
               }`}
               disabled={loading}

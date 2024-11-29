@@ -104,14 +104,12 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
     defectstatus: "",
     defectdescription: "",
     defectaction: "",
-
     additionalInfo: "",
     RPCExpiryDate: "",
     tailLiftExpirydate: "",
     forkLiftNumber: "",
     ForkLiftInspectionDate: "",
     cardocuments: [],
-
     isActive: false,
     imageFiles: [], // Store selected image files
   });

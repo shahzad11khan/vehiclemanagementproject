@@ -200,7 +200,7 @@
 //     const formDataObjectt = {};
 //     for (const [key, value] of formDataObject.entries()) {
 //       if (
-//         !key.startsWith("imageFiles[]") &&
+//  !key.startsWith("imageFiles[]") &&
 //         !key.startsWith("damage_image[]") &&
 //         !key.startsWith("pdfofpolicy[]") &&
 //         !key.startsWith("cardocuments[]")
@@ -438,7 +438,7 @@ export async function POST(request) {
 
     // Parse the form data from the request
     const formDataObject = await request.formData();
-    // console.log(formDataObject);
+    console.log(formDataObject);
     const safetyFeature = formDataObject.getAll("safetyFeatures[]");
     const techFeature = formDataObject.getAll("techFeatures[]");
     const files = formDataObject.getAll("imageFiles[]");
@@ -484,7 +484,7 @@ export async function POST(request) {
 
     // Upload image files
     for (const file of files) {
-      if (file instanceof File) {
+      if (file && typeof file.arrayBuffer === "function" && file.name) {
         const buffer = Buffer.from(await file.arrayBuffer());
         const fileName = `${uuidv4()}.jpg`; // You can modify the extension based on file type
         const filePath = path.join(UPLOAD_DIR, fileName);
@@ -502,7 +502,8 @@ export async function POST(request) {
 
     // Upload damage images
     for (const file of damage_image) {
-      if (file instanceof File) {
+      // if (file instanceof File) {
+      if (file && typeof file.arrayBuffer === "function" && file.name) {
         const buffer = Buffer.from(await file.arrayBuffer());
         const fileName = `${uuidv4()}_damage.jpg`;
         const filePath = path.join(UPLOAD_DIR, fileName);
@@ -748,7 +749,7 @@ export async function POST(request) {
   } catch (error) {
     console.log(error);
     return NextResponse.json({
-      error: error.message || "An error occurred while uploading the vehicle",
+      error: error.message,
       status: 500,
     });
   }

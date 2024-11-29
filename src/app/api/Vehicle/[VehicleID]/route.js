@@ -1,5 +1,11 @@
 import { connect } from "@config/db.js";
 import Vehicle from "@models/Vehicle/Vehicle.Model.js";
+import DriverVehicleAllotment from "@models/DriverVehicleAllotment/DriverVehicleAllotment.Model.js";
+import DriverMoreInfo from "@models/DriverMoreInfo/DriverMoreInfo.model.js";
+import VehicleMOT from "@models/VehicleMOT/VehicleMOT.Model.js";
+import VehicleRoadTax from "@models/VehicleRoadTax/VehicleRoadTax.Model.js";
+import VehicleService from "@models/VehicleService/VehicleService.Model.js";
+
 import { NextResponse } from "next/server";
 import cloudinary from "@middlewares/cloudinary.js";
 import fs from "fs";
@@ -511,7 +517,6 @@ export async function GET(request, context) {
     return NextResponse.json({ message: "Internal Server Error", status: 500 });
   }
 }
-
 // DELETE handler for deleting a vehicle and associated image
 export const DELETE = async (request, { params }) => {
   try {
@@ -532,9 +537,33 @@ export const DELETE = async (request, { params }) => {
       });
     }
 
-    console.log(deletedVehicle); // For debugging
+    // console.log(deletedVehicle); // For debugging
     const deleted = await Vehicle.findByIdAndDelete({ _id: VehicleID });
-    console.log(deleted);
+    let VehicleAllotment = await DriverVehicleAllotment.deleteMany({
+      vehicleId: deletedVehicle._id,
+    });
+    let alldelete = await DriverMoreInfo.deleteMany({
+      vehicleId: deletedVehicle._id,
+    });
+    let allmot = await VehicleMOT.deleteMany({
+      VehicleId: deletedVehicle._id,
+    });
+    let allroadtex = await VehicleRoadTax.deleteMany({
+      VehicleId: deletedVehicle._id,
+    });
+    let allservice = await VehicleService.deleteMany({
+      VehicleId: deletedVehicle._id,
+    });
+
+    // console.log("all data", alldelete);
+    console.log(
+      deleted,
+      VehicleAllotment,
+      alldelete,
+      allmot,
+      allroadtex,
+      allservice
+    );
 
     // Get the image public ID from the deleted vehicle object
     const imagesPublicIdd = deletedVehicle.images.publicId;

@@ -1,5 +1,7 @@
 import { connect } from "@config/db.js";
 import DriverVehicleAllotment from "@models/DriverVehicleAllotment/DriverVehicleAllotment.Model.js";
+import DriverMoreInfo from "@models/DriverMoreInfo/DriverMoreInfo.model.js";
+
 // import { catchAsyncErrors } from "@middlewares/catchAsyncErrors.js";
 import { NextResponse } from "next/server";
 
@@ -111,11 +113,18 @@ export const DELETE = async (request, context) => {
 
     const id = context.params.DriverVehicleAllotmentID;
     console.log("DriverVehicleAllotment ID:", id);
+    const deletedVehicle = await DriverVehicleAllotment.findById({ _id: id });
 
     let deletedDriverVehicleAllotment =
       await DriverVehicleAllotment.findOneAndDelete({
         _id: id,
       });
+
+    let alldelete = await DriverMoreInfo.deleteMany({
+      vehicleId: deletedVehicle.vehicleId,
+    });
+
+    console.log("all data", alldelete);
 
     // console.log(deletedDriverVehicleAllotment);
     if (!deletedDriverVehicleAllotment) {

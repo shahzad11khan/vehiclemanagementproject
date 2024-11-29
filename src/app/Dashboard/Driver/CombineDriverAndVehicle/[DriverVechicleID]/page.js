@@ -249,7 +249,7 @@ const Page = ({ params }) => {
                           </button>
                           <Link
                             passHref
-                            href={`/Dashboard/Driver/MoreInfo/${item.driverId}`}
+                            href={`/Dashboard/Driver/MoreInfo/${item.vehicleId}`}
                           >
                             <button className="text-blue-500 hover:text-blue-700">
                               <img src="/info.png" alt="delete" />

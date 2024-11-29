@@ -32,6 +32,7 @@ const AddDriverMoreInfoModal = ({
     taxifirm: "",
     taxilocalauthority: "",
     vehicle: "",
+    vehicleId: "",
     paymentcycle: "",
     payment: "",
     adminCreatedBy: "",
@@ -131,6 +132,10 @@ const AddDriverMoreInfoModal = ({
       );
       if (selectedVehicle) {
         setVehicleStatus(selectedVehicle._id);
+        setFormData((prevFormData) => ({
+          ...prevFormData,
+          vehicleId: selectedVehicle._id, // Store the vehicle ID
+        }));
       }
     }
 
@@ -145,22 +150,26 @@ const AddDriverMoreInfoModal = ({
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    console.log(formData, vehicleStatus);
 
     try {
       const { data } = await axios.post(
         API_URL_Driver_Vehicle_Allotment,
         formData
       );
+
+      // console.log(data);
       if (data.success) {
         toast.success(data.message);
         fetchData();
         onClose();
-        console.log(data.savedDriverVehicleAllotment);
+        // console.log(data.savedDriverVehicleAllotment);
         const getdata = data.savedDriverVehicleAllotment;
         const newRecordData = {
           driverId: getdata.driverId, // Add your specific fields here
           driverName: getdata.driverName, // Add your specific fields here
           vehicle: getdata.vehicle, // Add your specific fields here
+          vehicleId: getdata.vehicleId, // Add your specific fields here
           startDate: getdata.startDate, // Add your specific fields here
           paymentcycle: getdata.paymentcycle, // Add your specific fields here
           payment: getdata.payment, // Add your specific fields here

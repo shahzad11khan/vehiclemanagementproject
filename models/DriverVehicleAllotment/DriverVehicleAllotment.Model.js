@@ -9,6 +9,7 @@ const DriverVehicleAllotmentInfoSchema = new mongoose.Schema(
     taxifirm: { type: String },
     taxilocalauthority: { type: String },
     vehicle: { type: String },
+    vehicleId: { type: mongoose.Schema.Types.ObjectId, ref: "Vehicle" },
     paymentcycle: { type: String },
     payment: { type: Number },
     adminCreatedBy: { type: String },

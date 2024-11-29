@@ -29,6 +29,7 @@ export const PUT = async (request, context) => {
     driverMoreInfo.totalremainingamount =
       data.totalremainingamount || driverMoreInfo.totalremainingamount;
     driverMoreInfo.vehicle = data.vehicle || driverMoreInfo.vehicle;
+    driverMoreInfo.vehicleId = data.vehicleId || driverMoreInfo.vehicleId;
     driverMoreInfo.paymentcycle =
       data.paymentcycle || driverMoreInfo.paymentcycle;
     driverMoreInfo.startDate = data.startDate || driverMoreInfo.startDate;
@@ -76,7 +77,8 @@ export async function GET(request, context) {
     console.log("driver payment id is:", id);
 
     // Find all records related to the driverId
-    const find_user_all = await DriverMoreInfo.find({ driverId: id });
+    const find_user_all = await DriverMoreInfo.find({ vehicleId: id });
+    console.log(find_user_all);
 
     // If there are records associated with driverId
     if (find_user_all.length > 0) {

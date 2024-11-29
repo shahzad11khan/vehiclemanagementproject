@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Header from "../../../Components/Header";
 import Sidebar from "../../../Components/Sidebar";
-import AddMoreInfoModal from "../AddMoreInfoModal/AddMoreInfoModal";
+// import AddMoreInfoModal from "../AddMoreInfoModal/AddMoreInfoModal";
 import {
   API_URL_DriverMoreInfo,
   // API_URL_DriverMoreupdate,
@@ -22,8 +22,8 @@ const Page = ({ params }) => {
   const [isMounted, setIsMounted] = useState(false);
   const [data, setData] = useState([]);
   const [selectedCompanyName, setSelectedCompanyName] = useState("");
-  const [isOpenDriver, setIsOpenDriver] = useState(false);
-  const [selectedUserId, setSelectedUserId] = useState(null);
+  // const [isOpenDriver, setIsOpenDriver] = useState(false);
+  // const [selectedUserId, setSelectedUserId] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemperpage, setitemperpage] = useState(5);
 
@@ -72,6 +72,7 @@ const Page = ({ params }) => {
             record.driverId, // Pass the driverId
             record.driverName, // Pass the driverName
             record.vehicle, // Pass the vehicle
+            record.vehicleId, // Pass the vehicleId
             record.startDate, // Pass the original startDate
             record.paymentcycle, // Pass the payment cycle
             record.payment, // Pass the payment amount
@@ -99,6 +100,7 @@ const Page = ({ params }) => {
     driverId,
     driverName,
     vehicle,
+    vehicleId,
     startDate,
     paymentcycle,
     payment,
@@ -171,6 +173,7 @@ const Page = ({ params }) => {
             driverId,
             driverName,
             vehicle,
+            vehicleId,
             passingDate, // Use the newly calculated date
             paymentcycle,
             payment,
@@ -188,6 +191,7 @@ const Page = ({ params }) => {
     IDD,
     driverName,
     vehicle,
+    vehicleId,
     newStartDate, // This will be the new calculated date
     paymentCycle,
     payment,
@@ -198,6 +202,7 @@ const Page = ({ params }) => {
         driverId: IDD,
         driverName: driverName,
         vehicle: vehicle,
+        vehicle: vehicleId,
         startDate: newStartDate, // Update with the new date
         paymentcycle: paymentCycle,
         payment: payment,
@@ -266,10 +271,10 @@ const Page = ({ params }) => {
   // }, [searchTerm, data, selectedCompanyName]);
 
   // Toggle the title modal
-  const OpenDriverModel = () => {
-    setSelectedUserId(id);
-    setIsOpenDriver(!isOpenDriver);
-  };
+  // const OpenDriverModel = () => {
+  //   setSelectedUserId(id);
+  //   setIsOpenDriver(!isOpenDriver);
+  // };
 
   // Ensure client-side rendering only
   if (!isMounted) return null;
@@ -384,14 +389,14 @@ const Page = ({ params }) => {
                   </select>
                 </div>
               </div>
-              <div>
+              {/* <div>
                 <button
                   onClick={OpenDriverModel}
                   className="bg-custom-bg text-white px-4 py-2 rounded hover:bg-blue-600"
                 >
                   Add Driver Info
                 </button>
-              </div>
+              </div> */}
             </div>
 
             {/* Responsive Table */}
@@ -542,12 +547,12 @@ const Page = ({ params }) => {
           </div>
         </div>
       </div>
-      <AddMoreInfoModal
+      {/* <AddMoreInfoModal
         isOpen={isOpenDriver}
         selectedUserId={selectedUserId}
         onClose={OpenDriverModel}
         fetchData={fetchData}
-      />
+      /> */}
     </>
   );
 };

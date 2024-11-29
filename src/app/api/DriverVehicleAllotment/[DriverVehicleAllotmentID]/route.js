@@ -32,6 +32,8 @@ export const PUT = async (request, context) => {
 
     driverVehicleallotment.vehicle =
       data.vehicle || driverVehicleallotment.vehicle;
+    driverVehicleallotment.vehicleId =
+      data.vehicleId || driverVehicleallotment.vehicleId;
     driverVehicleallotment.paymentcycle =
       data.paymentcycle || driverVehicleallotment.paymentcycle;
     driverVehicleallotment.startDate =

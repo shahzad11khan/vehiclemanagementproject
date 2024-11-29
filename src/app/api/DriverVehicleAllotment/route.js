@@ -29,10 +29,11 @@ export const POST = catchAsyncErrors(async (request) => {
   // Check for existing DriverVehicleAllotment by email
   const existingDriverVehicleAllotment = await DriverVehicleAllotment.findOne({
     startDate: startDate,
+    vehicleId: vehicleId,
   });
   if (existingDriverVehicleAllotment) {
     return NextResponse.json({
-      error: "DriverVehicleAllotment with this startDate already exists",
+      error: "Vehicle already Allotted.",
       status: 400,
     });
   }

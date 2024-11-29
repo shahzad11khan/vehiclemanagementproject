@@ -335,7 +335,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
         setFileInputs([]);
         setFiles([]);
       } else {
-        toast.error(response.data.error);
+        console.log(response.data);
       }
     } catch (error) {
       console.error("Error submitting vehicle data:", error);

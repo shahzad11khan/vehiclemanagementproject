@@ -111,7 +111,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
   const [imagePreview, setImagePreview] = useState([]);
   const [damagePreview, setdamagePreview] = useState([]);
   const [pdfPreview, setpdfPreview] = useState(null);
-  const [cardocumentimagePreview, setcardocumentimagePreview] = useState(null);
+  const [cardocumentimagePreview, setcardocumentimagePreview] = useState([]);
   const [transmission, setTransmission] = useState([]);
   const [type, setType] = useState([]);
   const [fueltype, setFuelType] = useState([]);
@@ -307,7 +307,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
       setImagePreview(response.data.result.images || null);
       setdamagePreview(response.data.result.damageImage || null);
       setpdfPreview(response.data.result.PDFofPolicyUrl || null);
-      setcardocumentimagePreview(response.data.result.cardocuments || null);
+      setcardocumentimagePreview(response.data.result.cardocuments || []);
     } catch (error) {
       console.error("Error fetching vehicle data:", error);
     }

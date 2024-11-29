@@ -127,6 +127,18 @@ const UpdateCombineDriverAndVehicle = ({
       [name]: value,
     }));
 
+    if (name === "vehicle") {
+      const selectedVehicle = filteredVehicles.find(
+        (vehicle) => vehicle.model === value
+      );
+      if (selectedVehicle) {
+        setVehicleStatus(selectedVehicle._id);
+        setFormData((prevFormData) => ({
+          ...prevFormData,
+          vehicleId: selectedVehicle._id, // Store the vehicle ID
+        }));
+      }
+    }
     if (name === "taxilocalauthority") {
       const matchedVehicles = vehicle.filter(
         (veh) => veh.LocalAuthority === value

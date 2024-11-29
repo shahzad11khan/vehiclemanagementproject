@@ -438,7 +438,7 @@ export async function POST(request) {
 
     // Parse the form data from the request
     const formDataObject = await request.formData();
-    console.log(formDataObject);
+    // console.log(formDataObject);
     const safetyFeature = formDataObject.getAll("safetyFeatures[]");
     const techFeature = formDataObject.getAll("techFeatures[]");
     const files = formDataObject.getAll("imageFiles[]");
@@ -672,7 +672,7 @@ export async function POST(request) {
       safetyFeatures: safetyFeature,
       fuelEfficiency,
       techFeatures: techFeature,
-      vehicleStatus,
+      vehicleStatus: vehicleStatus || "Standby",
       price,
       registrationNumber,
       warrantyInfo,

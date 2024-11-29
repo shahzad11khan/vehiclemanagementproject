@@ -24,6 +24,9 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
   const [fileInputs, setFileInputs] = useState([]); // Store each file input's ID
   const [files, setFiles] = useState([]); // Stores selected files
   const [previews, setPreviews] = useState([]);
+  // Handle navigation
+  const nextStep = () => setStep(step + 1);
+  const prevStep = () => setStep(step - 1);
   const [vehicleData, setVehicleData] = useState({
     manufacturer: "",
     model: "",
@@ -76,7 +79,6 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
     nextServiceDate: "",
     nextServiceMiles: "",
     roadTaxCost: "",
-
     listPrice: "",
     purchasePrice: "",
     insuranceValue: "",
@@ -434,12 +436,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
       isActive: false,
       imageFiles: [], // Reset to an empty array
     });
-    window.location.reload();
   };
-
-  // Handle navigation
-  const nextStep = () => setStep(step + 1);
-  const prevStep = () => setStep(step - 1);
 
   const handleSiteChange = (e) => {
     setSelectedSite(e.target.value);

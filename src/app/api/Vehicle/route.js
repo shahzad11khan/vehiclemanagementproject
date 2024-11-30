@@ -420,6 +420,7 @@
 import { connect } from "@config/db.js";
 import Vehicle from "@models/Vehicle/Vehicle.Model.js";
 import { catchAsyncErrors } from "@middlewares/catchAsyncErrors.js";
+import cloudinary from "@middlewares/cloudinary.js";
 import { NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
@@ -485,16 +486,35 @@ export async function POST(request) {
     // Upload image files
     for (const file of files) {
       // if (file instanceof File) {
+      // console.log(file);
       if (file) {
+        // const buffer = Buffer.from(await file.arrayBuffer());
+        // const fileName = `${uuidv4()}.jpg`;
+        // const filePath = path.join(UPLOAD_DIR, fileName);
+
+        // fs.writeFileSync(filePath, buffer); // Save image to disk
+
+        // images.push({
+        //   url: `/uploads/${fileName}`,
+        //   publicId: fileName,
+        // });
         const buffer = Buffer.from(await file.arrayBuffer());
-        const fileName = `${uuidv4()}.jpg`; // You can modify the extension based on file type
-        const filePath = path.join(UPLOAD_DIR, fileName);
+        const uploadResponse = await new Promise((resolve, reject) => {
+          cloudinary.uploader
+            .upload_stream({ resource_type: "auto" }, (error, result) => {
+              if (error) {
+                reject(new Error("Error uploading image: " + error.message));
+              } else {
+                resolve(result);
+              }
+            })
+            .end(buffer); // Send buffer to Cloudinary
+        });
 
-        fs.writeFileSync(filePath, buffer); // Save image to disk
-
+        // Store Cloudinary response (URL and public ID)
         images.push({
-          url: `/uploads/${fileName}`,
-          publicId: fileName,
+          url: uploadResponse.secure_url,
+          publicId: uploadResponse.public_id,
         });
       } else {
         console.log("Invalid file detected:", file); // Debug if the file is invalid
@@ -506,15 +526,32 @@ export async function POST(request) {
       // if (file instanceof File) {
       if (file) {
         const buffer = Buffer.from(await file.arrayBuffer());
-        const fileName = `${uuidv4()}_damage.jpg`;
-        const filePath = path.join(UPLOAD_DIR, fileName);
-
-        fs.writeFileSync(filePath, buffer); // Save damage image to disk
-
-        damageImage.push({
-          url: `/uploads/${fileName}`,
-          publicId: fileName,
+        const uploadResponse = await new Promise((resolve, reject) => {
+          cloudinary.uploader
+            .upload_stream({ resource_type: "auto" }, (error, result) => {
+              if (error) {
+                reject(new Error("Error uploading image: " + error.message));
+              } else {
+                resolve(result);
+              }
+            })
+            .end(buffer); // Send buffer to Cloudinary
         });
+
+        // Store Cloudinary response (URL and public ID)
+        damageImage.push({
+          url: uploadResponse.secure_url,
+          publicId: uploadResponse.public_id,
+        });
+        // const fileName = `${uuidv4()}_damage.jpg`;
+        // const filePath = path.join(UPLOAD_DIR, fileName);
+
+        // fs.writeFileSync(filePath, buffer); // Save damage image to disk
+
+        // damageImage.push({
+        //   url: `/uploads/${fileName}`,
+        //   publicId: fileName,
+        // });
       } else {
         console.log("Invalid file detected:", file); // Debug if the file is invalid
       }
@@ -525,15 +562,33 @@ export async function POST(request) {
       // if (file instanceof File) {
       if (file) {
         const buffer = Buffer.from(await file.arrayBuffer());
-        const fileName = `${uuidv4()}_cardocument.jpg`;
-        const filePath = path.join(UPLOAD_DIR, fileName);
-
-        fs.writeFileSync(filePath, buffer); // Save card document to disk
-
-        cardocuments.push({
-          url: `/uploads/${fileName}`,
-          publicId: fileName,
+        const uploadResponse = await new Promise((resolve, reject) => {
+          cloudinary.uploader
+            .upload_stream({ resource_type: "auto" }, (error, result) => {
+              if (error) {
+                reject(new Error("Error uploading image: " + error.message));
+              } else {
+                resolve(result);
+              }
+            })
+            .end(buffer); // Send buffer to Cloudinary
         });
+
+        // Store Cloudinary response (URL and public ID)
+        cardocuments.push({
+          url: uploadResponse.secure_url,
+          publicId: uploadResponse.public_id,
+        });
+        // const buffer = Buffer.from(await file.arrayBuffer());
+        // const fileName = `${uuidv4()}_cardocument.jpg`;
+        // const filePath = path.join(UPLOAD_DIR, fileName);
+
+        // fs.writeFileSync(filePath, buffer); // Save card document to disk
+
+        // cardocuments.push({
+        //   url: `/uploads/${fileName}`,
+        //   publicId: fileName,
+        // });
       } else {
         console.log("Invalid file detected:", file); // Debug if the file is invalid
       }

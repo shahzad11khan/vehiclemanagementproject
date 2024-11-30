@@ -484,7 +484,8 @@ export async function POST(request) {
 
     // Upload image files
     for (const file of files) {
-      if (file && typeof file.arrayBuffer === "function" && file.name) {
+      // if (file instanceof File) {
+      if (file) {
         const buffer = Buffer.from(await file.arrayBuffer());
         const fileName = `${uuidv4()}.jpg`; // You can modify the extension based on file type
         const filePath = path.join(UPLOAD_DIR, fileName);
@@ -503,7 +504,7 @@ export async function POST(request) {
     // Upload damage images
     for (const file of damage_image) {
       // if (file instanceof File) {
-      if (file && typeof file.arrayBuffer === "function" && file.name) {
+      if (file) {
         const buffer = Buffer.from(await file.arrayBuffer());
         const fileName = `${uuidv4()}_damage.jpg`;
         const filePath = path.join(UPLOAD_DIR, fileName);
@@ -521,7 +522,8 @@ export async function POST(request) {
 
     // Upload card documents
     for (const file of cardocument) {
-      if (file instanceof File) {
+      // if (file instanceof File) {
+      if (file) {
         const buffer = Buffer.from(await file.arrayBuffer());
         const fileName = `${uuidv4()}_cardocument.jpg`;
         const filePath = path.join(UPLOAD_DIR, fileName);

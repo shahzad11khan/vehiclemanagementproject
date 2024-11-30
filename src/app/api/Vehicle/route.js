@@ -5,6 +5,7 @@ import cloudinary from "@middlewares/cloudinary.js";
 import { NextResponse } from "next/server";
 // import fs from "fs";
 // import path from "path";
+import { v4 as uuidv4 } from "uuid";
 
 // const UPLOAD_DIR = path.join(process.cwd(), "public", "uploads");
 
@@ -46,12 +47,14 @@ export async function POST(request) {
       //   pdfofpolicyUrl = `/uploads/${pdfFileName}`; // Public URL for the file
       //   pdfofpolicyName = pdfFileName;
       // }
+      const uniqueId = `${uuidv4()}.pdf`;
       const buffer1 = Buffer.from(await pdfofpolicy.arrayBuffer());
       const uploadResponse1 = await new Promise((resolve, reject) => {
         cloudinary.uploader
           .upload_stream(
             {
               resource_type: "raw",
+              public_id: uniqueId,
             },
             (error, result) => {
               if (error) {

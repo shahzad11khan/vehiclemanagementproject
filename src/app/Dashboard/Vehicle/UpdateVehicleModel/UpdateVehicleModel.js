@@ -2150,27 +2150,26 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                   /> */}
 
                   {/* {pdfPreview.map((dimg, index) => ( */}
-                  <div className="grid grid-cols-3 md:grid-cols-6 gap-2 mb-2">
-                    <div
-                      className="cursor-pointer"
-                      onClick={() => window.open(pdfPreview, "_blank")} // Opens the PDF in a new tab
-                    >
-                      {/* <img
+                  <div className="flex flex-col gap-2 mb-2">
+                    {/* Iframe for PDF preview */}
+                    <div className="cursor-pointer">
+                      <iframe
                         src={pdfPreview}
-                        alt="Avatar Preview"
-                        className="avatar-preview w-40 h-20"
-                      />
-                      <img
-                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhkCWG2q6izXrv9oKcp53cb6dUBBoX246G0w&s"
-                        alt="Avatar Preview"
-                        className="avatar-preview w-40 h-20"
-                      /> */}
-                      <embed
-                        src={pdfPreview}
-                        // width="100%"
-                        // height="600px"
-                        type="application/pdf"
-                      />
+                        width="400px" // Adjust to fit within the container
+                        height="200px" // Set a specific height for the iframe
+                        title="PDF Preview"
+                      ></iframe>
+                    </div>
+
+                    {/* Link to open PDF in a new tab */}
+                    <div>
+                      <a
+                        href={pdfPreview}
+                        target="_blank" // Opens the PDF in a new tab
+                        rel="noopener noreferrer" // For security best practices
+                      >
+                        Open PDF
+                      </a>
                     </div>
                   </div>
                 </div>

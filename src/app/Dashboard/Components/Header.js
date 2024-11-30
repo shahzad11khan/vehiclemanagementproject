@@ -13,7 +13,7 @@ import {
   getCompanyId,
 } from "../../../../utils/storageUtils";
 import { useRouter } from "next/navigation";
-import { toast } from "react-toastify";
+// import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { API_URL_Company, API_URL_USER } from "../Components/ApiUrl/ApiUrls";
 import { isAuthenticated, clearAuthData } from "@/utils/verifytoken";
@@ -124,7 +124,7 @@ const Header = () => {
       document.cookie =
         "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
       router.push("/");
-      toast.success("Logged out successfully");
+      // toast.success("Logged out successfully");
     } else {
       console.log("User is not authenticated");
     }
@@ -239,7 +239,7 @@ const Header = () => {
                         className="hidden md:inline text-black hover:text-white"
                         style={{ backgroundColor: "transparent" }}
                       > */}
-                        Profile
+                      Profile
                       {/* </span> */}
                     </li>
                   </Link>
@@ -251,20 +251,19 @@ const Header = () => {
                         className="hidden md:inline text-black hover:text-white"
                         style={{ backgroundColor: "transparent" }}
                       > */}
-                        Profile
+                      Profile
                       {/* </span> */}
                     </li>
                   </Link>
                 )}
 
-                <li className="px-4 py-2 hover:bg-custom-bg cursor-pointer  flex hover:text-white" onClick={handleLogout}>
+                <li
+                  className="px-4 py-2 hover:bg-custom-bg cursor-pointer  flex hover:text-white"
+                  onClick={handleLogout}
+                >
                   <IoIosLogOut className="mr-2 bg-transparent text-white" />
-
-                   {/* <button > */}
-                    Logout
-
-
-            
+                  {/* <button > */}
+                  Logout
                   {/* </button> */}
                 </li>
               </ul>

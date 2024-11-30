@@ -11,6 +11,7 @@ import UpdateCompanyModel from "../Company/UpdateCompany/UpdateCompanyModel";
 import { isAuthenticated } from "@/utils/verifytoken";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import DeleteModal from "./DeleteModal";
 
 // Register Chart.js components
 ChartJS.register(ArcElement, Tooltip, Legend);
@@ -25,8 +26,10 @@ const AllCompanies = () => {
   const [isOpenCompany, setIsOpenCompany] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [isOpenDriverUpdate, setIsOpenDriverUpdate] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isDeleteModalOpenId, setIsDeleteModalOpenId] = useState(null);
 
+  const [currentPage, setCurrentPage] = useState(1);
   const [itemperpage, setitemperpage] = useState(5);
 
   useEffect(() => {
@@ -36,16 +39,21 @@ const AllCompanies = () => {
     }
   }, [router]);
 
+  const isopendeletemodel = (id) => {
+    setIsDeleteModalOpenId(id); // Set the ID of the item to be deleted
+    setIsDeleteModalOpen(true); // Open the modal
+  };
+
   const handleDelete = async (id) => {
     try {
       const { data } = await axios.delete(`${API_URL_Company}/${id}`);
       if (data.success) {
-        const updatedData = data.filter((item) => item._id !== id);
-        setData(updatedData);
-        setFilteredData(updatedData);
-        toast.success(data.message);
+        setData((prevData) => prevData.filter((item) => item._id !== id));
+        setFilteredData((prevFilteredData) =>
+          prevFilteredData.filter((item) => item._id !== id)
+        );
       } else {
-        toast.warn(data.message);
+        toast.warn(data.message || "Failed to delete the Company.");
       }
     } catch (error) {
       console.error("Error deleting company:", error);
@@ -249,7 +257,7 @@ const AllCompanies = () => {
                           <img src="/edit.png" alt="edit" />
                         </button>
                         <button
-                          onClick={() => handleDelete(item._id)}
+                          onClick={() => isopendeletemodel(item._id)}
                           className="text-red-500 hover:text-red-700"
                         >
                           <img src="/trash.png" alt="delete" />
@@ -319,7 +327,7 @@ const AllCompanies = () => {
                           : "bg-white"
                       }`}
                     >
-                      {number}
+                      {number} of {totalPages}
                     </button>
                   </li>
                 ))}
@@ -352,6 +360,12 @@ const AllCompanies = () => {
         onClose={OpenDriverUpdateModle}
         fetchData={fetchData}
         existingCompanyId={selectedUserId}
+      />
+      <DeleteModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onDelete={handleDelete}
+        Id={isDeleteModalOpenId}
       />
     </div>
   );

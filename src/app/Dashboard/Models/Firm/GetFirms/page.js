@@ -11,6 +11,7 @@ import { API_URL_Firm } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import { GetFirm } from "@/app/Dashboard/Components/ApiUrl/ShowApiDatas/ShowApiDatas";
 import { getCompanyName } from "@/utils/storageUtils";
 import axios from "axios";
+import DeleteModal from "@/app/Dashboard/Components/DeleteModal";
 
 const Page = () => {
   const [data, setData] = useState([]);
@@ -21,6 +22,8 @@ const Page = () => {
   const [selectedCompanyName, setSelectedCompanyName] = useState("");
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [isOpenDriverUpdate, setIsOpenDriverUpdate] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isDeleteModalOpenId, setIsDeleteModalOpenId] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemperpage, setitemperpage] = useState(5);
 
@@ -48,6 +51,11 @@ const Page = () => {
     fetchData();
   }, []);
 
+  const isopendeletemodel = (id) => {
+    setIsDeleteModalOpenId(id); // Set the ID of the item to be deleted
+    setIsDeleteModalOpen(true); // Open the modal
+  };
+
   const handleDelete = async (id) => {
     try {
       const response = await axios.delete(`${API_URL_Firm}/${id}`);
@@ -59,7 +67,7 @@ const Page = () => {
         setFilteredData((prevFilteredData) =>
           prevFilteredData.filter((item) => item._id !== id)
         );
-        toast.success(data.message || "Enquiry deleted successfully.");
+        // toast.success(data.message || "Enquiry deleted successfully.");
       } else {
         toast.warn(data.message || "Failed to delete the Enquiry.");
       }
@@ -186,7 +194,7 @@ const Page = () => {
                         {row.isActive ? "Active" : "InActive"}
                       </td>
                       <td className="px-4 py-2">
-                        <div className="flex gap-2">
+                        <div className="flex gap-2 justify-center">
                           <div className="relative group">
                             <button
                               onClick={() => handleEdit(row._id)}
@@ -201,7 +209,7 @@ const Page = () => {
                           </div>
                           <div className="relative group">
                             <button
-                              onClick={() => handleDelete(row._id)}
+                              onClick={() => isopendeletemodel(row._id)}
                               className="text-red-500 hover:text-red-700"
                             >
                               <img src="/trash.png" alt="delete" />
@@ -258,6 +266,12 @@ const Page = () => {
         onClose={OpenDriverUpdateModle}
         firmId={selectedUserId}
         fetchData={fetchData}
+      />
+      <DeleteModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onDelete={handleDelete}
+        Id={isDeleteModalOpenId}
       />
     </>
   );

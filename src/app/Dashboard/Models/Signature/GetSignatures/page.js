@@ -11,6 +11,7 @@ import { API_URL_Signature } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import { GetSignature } from "@/app/Dashboard/Components/ApiUrl/ShowApiDatas/ShowApiDatas";
 import { getCompanyName } from "@/utils/storageUtils";
 import axios from "axios";
+import DeleteModal from "@/app/Dashboard/Components/DeleteModal";
 
 const Page = () => {
   const [data, setData] = useState([]);
@@ -21,6 +22,8 @@ const Page = () => {
   const [selectedCompanyName, setSelectedCompanyName] = useState("");
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [isOpenVehicleUpdate, setIsOpenVehicleUpdate] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isDeleteModalOpenId, setIsDeleteModalOpenId] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemperpage, setitemperpage] = useState(5);
 
@@ -49,6 +52,11 @@ const Page = () => {
     fetchData();
   }, []);
 
+  const isopendeletemodel = (id) => {
+    setIsDeleteModalOpenId(id); // Set the ID of the item to be deleted
+    setIsDeleteModalOpen(true); // Open the modal
+  };
+
   const handleDelete = async (id) => {
     // console.log("Deleting ID:", id);
     // alert(id);
@@ -63,7 +71,7 @@ const Page = () => {
         setFilteredData((prevFilteredData) =>
           prevFilteredData.filter((item) => item._id !== id)
         );
-        toast.success(data.message);
+        // toast.success(data.message);
       } else {
         toast.warn(data.message);
       }
@@ -210,7 +218,7 @@ const Page = () => {
                           </div>
                           <div className="relative group">
                             <button
-                              onClick={() => handleDelete(row._id)}
+                              onClick={() => isopendeletemodel(row._id)}
                               className="text-red-500 hover:text-red-700"
                             >
                               <img src="/trash.png" alt="delete" />
@@ -267,6 +275,12 @@ const Page = () => {
         onClose={() => setIsOpenVehicleUpdate(false)}
         fetchData={fetchData}
         signatureData={selectedUserId}
+      />
+      <DeleteModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onDelete={handleDelete}
+        Id={isDeleteModalOpenId}
       />
     </>
   );

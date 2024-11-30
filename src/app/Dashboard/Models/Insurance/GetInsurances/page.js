@@ -11,6 +11,7 @@ import axios from "axios";
 import { API_URL_Insurence } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import { GetInsurence } from "@/app/Dashboard/Components/ApiUrl/ShowApiDatas/ShowApiDatas";
 import { getCompanyName } from "@/utils/storageUtils";
+import DeleteModal from "@/app/Dashboard/Components/DeleteModal";
 
 const Page = () => {
   const [data, setData] = useState([]);
@@ -21,6 +22,8 @@ const Page = () => {
   const [selectedCompanyName, setSelectedCompanyName] = useState("");
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [isOpenVehicleUpdate, setIsOpenVehcleUpdate] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isDeleteModalOpenId, setIsDeleteModalOpenId] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemperpage, setitemperpage] = useState(5);
 
@@ -49,6 +52,10 @@ const Page = () => {
     fetchData();
   }, []);
 
+  const isopendeletemodel = (id) => {
+    setIsDeleteModalOpenId(id); // Set the ID of the item to be deleted
+    setIsDeleteModalOpen(true); // Open the modal
+  };
   const handleDelete = async (id) => {
     try {
       const response = await axios.delete(`${API_URL_Insurence}/${id}`);
@@ -59,7 +66,7 @@ const Page = () => {
         setFilteredData((prevFilteredData) =>
           prevFilteredData.filter((item) => item._id !== id)
         );
-        toast.success(data.message || "Supplier deleted successfully.");
+        // toast.success(data.message || "Supplier deleted successfully.");
       } else {
         toast.warn(data.message || "Failed to delete the Supplier.");
       }
@@ -207,7 +214,7 @@ const Page = () => {
                         </div>
                         <div className="relative group">
                           <button
-                            onClick={() => handleDelete(item._id)}
+                            onClick={() => isopendeletemodel(item._id)}
                             className="text-red-500 hover:text-red-700"
                           >
                             <img src="/trash.png" alt="delete" />
@@ -263,6 +270,12 @@ const Page = () => {
         onClose={OpenVehicleUpdateModle}
         fetchData={fetchData}
         insurenceid={selectedUserId}
+      />
+      <DeleteModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onDelete={handleDelete}
+        Id={isDeleteModalOpenId}
       />
     </>
   );

@@ -15,7 +15,9 @@ const DeleteModal = ({ isOpen, onClose, onDelete, Id }) => {
           <h2 className="text-lg font-semibold mb-2">Are you sure?</h2>
           {/* Modal Description */}
           <p className="text-sm text-gray-600 mb-6">
-            Are you sure you want to delete? This action cannot be undone.
+            Are you absolutely sure you want to permanently delete this item?
+            Once deleted, this action cannot be undone. All associated data and
+            files will be lost, and you will not be able to recover it.
           </p>
           {/* Modal Buttons */}
           <div className="flex justify-between w-full">

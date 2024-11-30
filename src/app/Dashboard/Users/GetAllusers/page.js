@@ -15,6 +15,7 @@ import {
   getsuperadmincompanyname,
   getUserRole,
 } from "@/utils/storageUtils";
+import DeleteModal from "../../Components/DeleteModal";
 
 const Page = () => {
   const columns = [
@@ -34,6 +35,8 @@ const Page = () => {
   const [isOpenUserUpdate, setIsOpenUserUpdate] = useState(false);
   const [selectedCompanyName, setSelectedCompanyName] = useState("");
   const [selectedUserId, setSelectedUserId] = useState(null);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isDeleteModalOpenId, setIsDeleteModalOpenId] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemperpage, setitemperpage] = useState(5);
 
@@ -65,6 +68,11 @@ const Page = () => {
     setIsOpenUserUpdate(true);
   };
 
+  const isopendeletemodel = (id) => {
+    setIsDeleteModalOpenId(id); // Set the ID of the item to be deleted
+    setIsDeleteModalOpen(true); // Open the modal
+  };
+
   const handleDelete = async (id) => {
     try {
       const response = await axios.delete(`${API_URL_USER}/${id}`);
@@ -74,9 +82,9 @@ const Page = () => {
         setFilteredData((prevFilteredData) =>
           prevFilteredData.filter((item) => item._id !== id)
         );
-        toast.success(data.message);
+        // toast.success(data.message);
       } else {
-        toast.warn(data.message);
+        toast.warn(data.message || "Failed to delete the User.");
       }
     } catch (error) {
       console.error("Error deleting title:", error);
@@ -240,7 +248,7 @@ const Page = () => {
                             {/* Delete Button with Tooltip */}
                             <div className="relative group">
                               <button
-                                onClick={() => handleDelete(user._id)}
+                                onClick={() => isopendeletemodel(user._id)}
                                 className="text-red-500 hover:text-red-700"
                               >
                                 <img src="/trash.png" alt="delete" />
@@ -272,7 +280,7 @@ const Page = () => {
                     : "bg-gray-100 hover:bg-gray-300"
                 }`}
               >
-                {currentPage}
+                {currentPage} of {totalPages}
               </span>
               <button
                 onClick={() =>
@@ -297,6 +305,12 @@ const Page = () => {
         onClose={OpenUserUpdateModle}
         userId={selectedUserId}
         fetchData={fetchData}
+      />
+      <DeleteModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onDelete={handleDelete}
+        Id={isDeleteModalOpenId}
       />
     </>
   );

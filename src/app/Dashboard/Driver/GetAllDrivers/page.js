@@ -14,6 +14,7 @@ import { getCompanyName } from "@/utils/storageUtils";
 import Link from "next/link";
 import { isAuthenticated } from "@/utils/verifytoken";
 import { useRouter } from "next/navigation";
+import DeleteModal from "../../Components/DeleteModal";
 const Page = () => {
   const router = useRouter();
   const [drivers, setDrivers] = useState([]);
@@ -24,6 +25,9 @@ const Page = () => {
   const [isOpenDriverUpdate, setIsOpenDriverUpdate] = useState(false);
   const [selectedCompanyName, setSelectedCompanyName] = useState("");
   const [selectedUserId, setSelectedUserId] = useState(null);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isDeleteModalOpenId, setIsDeleteModalOpenId] = useState(null);
+
   // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
   const [itemperpage, setitemperpage] = useState(5);
@@ -57,13 +61,17 @@ const Page = () => {
     fetchData();
   }, [fetchData]);
 
+  const isopendeletemodel = (id) => {
+    setIsDeleteModalOpenId(id); // Set the ID of the item to be deleted
+    setIsDeleteModalOpen(true); // Open the modal
+  };
   const handleDelete = async (id) => {
     try {
       const response = await axios.delete(`${API_URL_Driver}/${id}`);
       const { data } = response;
       if (data.success) {
         setDrivers((prevData) => prevData.filter((item) => item._id !== id));
-        toast.success(data.message);
+        // toast.success(data.message);
       } else {
         toast.warn(data.message || "Failed to delete the driver.");
       }
@@ -258,7 +266,7 @@ const Page = () => {
                           </div>
                           <div className="relative group">
                             <button
-                              onClick={() => handleDelete(driver._id)}
+                              onClick={() => isopendeletemodel(driver._id)}
                               className="text-red-500 hover:text-red-700"
                             >
                               <img src="/trash.png" alt="delete" />
@@ -322,7 +330,7 @@ const Page = () => {
                             : "bg-white"
                         }`}
                       >
-                        {number}
+                        {number} of {totalPages}
                       </button>
                     </li>
                   ))}
@@ -356,6 +364,12 @@ const Page = () => {
             onClose={() => setIsOpenDriverUpdate(false)}
             selectedUserId={selectedUserId}
             fetchDataa={fetchData}
+          />
+          <DeleteModal
+            isOpen={isDeleteModalOpen}
+            onClose={() => setIsDeleteModalOpen(false)}
+            onDelete={handleDelete}
+            Id={isDeleteModalOpenId}
           />
         </div>
       </div>

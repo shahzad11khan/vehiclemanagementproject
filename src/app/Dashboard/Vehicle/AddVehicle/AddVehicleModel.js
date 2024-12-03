@@ -250,22 +250,22 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
       // }
 
       // Handle checkbox inputs for technology features
-      if (name === "techFeatures") {
-        const currentTechFeatures = prevData.techFeatures || [];
-        if (checked) {
-          // Add feature if checked
-          return {
-            ...prevData,
-            [name]: [...currentTechFeatures, value], // Add selected feature
-          };
-        } else {
-          // Remove feature if unchecked
-          return {
-            ...prevData,
-            [name]: currentTechFeatures.filter((feature) => feature !== value), // Remove deselected feature
-          };
-        }
-      }
+      // if (name === "techFeatures") {
+      //   const currentTechFeatures = prevData.techFeatures || [];
+      //   if (checked) {
+      //     // Add feature if checked
+      //     return {
+      //       ...prevData,
+      //       [name]: [...currentTechFeatures, value], // Add selected feature
+      //     };
+      //   } else {
+      //     // Remove feature if unchecked
+      //     return {
+      //       ...prevData,
+      //       [name]: currentTechFeatures.filter((feature) => feature !== value), // Remove deselected feature
+      //     };
+      //   }
+      // }
 
       // Handle regular checkbox inputs
       if (type === "checkbox") {
@@ -287,8 +287,13 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
     { value: "airbags", label: "Airbags" },
     { value: "abs", label: "ABS" },
   ];
+  const defaulttech = [
+    { value: "navigation", label: "Navigation" },
+    { value: "bluetooth", label: "Bluetooth" },
+  ];
 
   const [selectedOptions, setSelectedOptions] = useState(defaultOptions);
+  const [selectedOptionstech, setSelectedtech] = useState(defaulttech);
 
   const options = [
     { value: "airbags", label: "Airbags" },
@@ -306,6 +311,19 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
     },
   ];
 
+  const featurestech = [
+    { value: "navigation", label: "Navigation" },
+    { value: "bluetooth", label: "Bluetooth" },
+    { value: "backup_camera", label: "Backup Camera" },
+    { value: "adaptive_headlights", label: "Adaptive Headlights" },
+    { value: "lane_keep_assist", label: "Lane Keep Assist" },
+    { value: "parking_assist", label: "Parking Assist" },
+    { value: "smartphone_integration", label: "Smartphone Integration" },
+    { value: "voice_recognition", label: "Voice Recognition" },
+    { value: "keyless_entry", label: "Keyless Entry" },
+    { value: "rear_seat_entertainment", label: "Rear Seat Entertainment" },
+  ];
+
   const handleChangesafty = (selected) => {
     setSelectedOptions(selected);
     const selectedValues = selected.map((option) => option.value);
@@ -313,6 +331,16 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
     setVehicleData((prevData) => ({
       ...prevData,
       safetyFeatures: selectedValues, // Update the state for the specific field
+    }));
+    // saveToDatabase(selectedValues); // Save new selections to the database
+  };
+  const handleChangestech = (selected) => {
+    setSelectedtech(selected);
+    const selectedValues = selected.map((option) => option.value);
+    console.log("Selected Values:", selectedValues);
+    setVehicleData((prevData) => ({
+      ...prevData,
+      techFeatures: selectedValues, // Update the state for the specific field
     }));
     // saveToDatabase(selectedValues); // Save new selections to the database
   };
@@ -979,9 +1007,9 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                     </label>
                     <span className="text-red-600">*</span>
                   </div>
-                  <div className="grid grid-cols-2 md:grid-cols-2 gap-1.5 border border-gray-300 pl-1">
+                  <div className="">
                     {/* List of technology features as checkboxes */}
-                    {[
+                    {/* {[
                       "Navigation",
                       "Bluetooth",
                       "Backup Camera",
@@ -1004,7 +1032,17 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                         />
                         {feature}
                       </label>
-                    ))}
+                    ))} */}
+
+                    <Select
+                      isMulti
+                      options={featurestech}
+                      value={selectedOptionstech}
+                      onChange={handleChangestech}
+                      placeholder="Select Tech..."
+                      className="react-select w-full p-2 border border-gray-300 rounded"
+                      classNamePrefix="select"
+                    />
                   </div>
                 </div>
               </div>

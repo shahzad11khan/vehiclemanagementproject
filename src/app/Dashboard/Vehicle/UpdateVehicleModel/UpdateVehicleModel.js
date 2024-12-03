@@ -144,6 +144,9 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [option, setoptions] = useState([]);
 
+  const [selectedOptionstech, setSelectedtech] = useState([]);
+  const [optiontech, setoptionstech] = useState([]);
+
   const options = [
     { value: "airbags", label: "Airbags" },
     { value: "abs", label: "ABS" },
@@ -159,6 +162,19 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
       label: "Automatic Emergency Braking",
     },
   ];
+
+  const featurestech = [
+    { value: "navigation", label: "Navigation" },
+    { value: "bluetooth", label: "Bluetooth" },
+    { value: "backup_camera", label: "Backup Camera" },
+    { value: "adaptive_headlights", label: "Adaptive Headlights" },
+    { value: "lane_keep_assist", label: "Lane Keep Assist" },
+    { value: "parking_assist", label: "Parking Assist" },
+    { value: "smartphone_integration", label: "Smartphone Integration" },
+    { value: "voice_recognition", label: "Voice Recognition" },
+    { value: "keyless_entry", label: "Keyless Entry" },
+    { value: "rear_seat_entertainment", label: "Rear Seat Entertainment" },
+  ];
   const handleChangesafty = (selected) => {
     setSelectedOptions(selected);
     const selectedValues = selected.map((option) => option.value);
@@ -169,6 +185,17 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
     }));
     // saveToDatabase(selectedValues); // Save new selections to the database
   };
+  const handleChangestech = (selected) => {
+    setSelectedtech(selected);
+    const selectedValues = selected.map((option) => option.value);
+    console.log("Selected Values:", selectedValues);
+    setVehicleData((prevData) => ({
+      ...prevData,
+      techFeatures: selectedValues, // Update the state for the specific field
+    }));
+    // saveToDatabase(selectedValues); // Save new selections to the database
+  };
+
   const handleChange = (e) => {
     const { name, value, type, checked, files, options } = e.target;
 
@@ -221,22 +248,22 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
       // }
 
       // Handle checkbox inputs for technology features
-      if (name === "techFeatures") {
-        const currentTechFeatures = prevData.techFeatures || [];
-        if (checked) {
-          // Add feature if checked
-          return {
-            ...prevData,
-            [name]: [...currentTechFeatures, value], // Add selected feature
-          };
-        } else {
-          // Remove feature if unchecked
-          return {
-            ...prevData,
-            [name]: currentTechFeatures.filter((feature) => feature !== value), // Remove deselected feature
-          };
-        }
-      }
+      // if (name === "techFeatures") {
+      //   const currentTechFeatures = prevData.techFeatures || [];
+      //   if (checked) {
+      //     // Add feature if checked
+      //     return {
+      //       ...prevData,
+      //       [name]: [...currentTechFeatures, value], // Add selected feature
+      //     };
+      //   } else {
+      //     // Remove feature if unchecked
+      //     return {
+      //       ...prevData,
+      //       [name]: currentTechFeatures.filter((feature) => feature !== value), // Remove deselected feature
+      //     };
+      //   }
+      // }
 
       // Handle regular checkbox inputs
       if (type === "checkbox") {
@@ -343,6 +370,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
       setpdfPreview(response.data.result.PDFofPolicyUrl || null);
       setcardocumentimagePreview(response.data.result.cardocuments || []);
       setoptions(response.data.result.safetyFeatures || []);
+      setoptionstech(response.data.result.techFeatures || []);
     } catch (error) {
       console.error("Error fetching vehicle data:", error);
     }
@@ -545,7 +573,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
       isActive: false,
       imageFiles: [], // Reset to an empty array
     });
-    window.location.reload();
+    // window.location.reload();
   };
 
   // Handle navigation
@@ -1015,9 +1043,9 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                     </label>
                     <span className="text-red-600">*</span>
                   </div>
-                  <div className="grid grid-cols-2 md:grid-cols-2 gap-1.5 border border-gray-300 pl-1">
+                  <div className="">
                     {/* List of technology features as checkboxes */}
-                    {[
+                    {/* {[
                       "Navigation",
                       "Bluetooth",
                       "Backup Camera",
@@ -1040,7 +1068,31 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                         />
                         {feature}
                       </label>
-                    ))}
+                    ))} */}
+                    <Select
+                      isMulti
+                      options={featurestech}
+                      value={selectedOptionstech}
+                      onChange={handleChangestech}
+                      placeholder="Select features..."
+                      className="react-select w-full p-2 border border-gray-300 rounded-md"
+                      classNamePrefix="select"
+                    />
+                  </div>
+                  {/* {option} */}
+                  <div className="mt-4 flex gap-2 text-sm">
+                    {/* Map over the options and join with a comma */}
+                    {optiontech &&
+                      optiontech.map((op, index) => (
+                        <span
+                          key={op} // Add a key for each element
+                          className="bg-gray-500 text-white p-2 rounded-md text-xs"
+                        >
+                          {op}
+                          {index < option.length - 1 && " "}{" "}
+                          {/* Add comma except for the last element */}
+                        </span>
+                      ))}
                   </div>
                 </div>
               </div>

@@ -2,6 +2,7 @@
 import { API_URL_Vehicle } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import axios from "axios";
 import { toast } from "react-toastify";
+import Select from "react-select";
 import React, { useEffect, useState } from "react";
 import {
   fetchLocalAuth,
@@ -229,24 +230,24 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
       }
 
       // Handle checkbox inputs for safety features
-      if (name === "safetyFeatures") {
-        const currentSafetyFeatures = prevData[name] || [];
-        if (checked) {
-          // Add feature if checked
-          return {
-            ...prevData,
-            [name]: [...currentSafetyFeatures, value], // Add selected feature
-          };
-        } else {
-          // Remove feature if unchecked
-          return {
-            ...prevData,
-            [name]: currentSafetyFeatures.filter(
-              (feature) => feature !== value
-            ), // Remove deselected feature
-          };
-        }
-      }
+      // if (name === "safetyFeatures") {
+      //   const currentSafetyFeatures = prevData[name] || [];
+      //   if (checked) {
+      //     // Add feature if checked
+      //     return {
+      //       ...prevData,
+      //       [name]: [...currentSafetyFeatures, value], // Add selected feature
+      //     };
+      //   } else {
+      //     // Remove feature if unchecked
+      //     return {
+      //       ...prevData,
+      //       [name]: currentSafetyFeatures.filter(
+      //         (feature) => feature !== value
+      //       ), // Remove deselected feature
+      //     };
+      //   }
+      // }
 
       // Handle checkbox inputs for technology features
       if (name === "techFeatures") {
@@ -281,6 +282,39 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
         [name]: value,
       };
     });
+  };
+  const defaultOptions = [
+    { value: "airbags", label: "Airbags" },
+    { value: "abs", label: "ABS" },
+  ];
+
+  const [selectedOptions, setSelectedOptions] = useState(defaultOptions);
+
+  const options = [
+    { value: "airbags", label: "Airbags" },
+    { value: "abs", label: "ABS" },
+    { value: "stability control", label: "Stability Control" },
+    { value: "traction control", label: "Traction Control" },
+    { value: "blind spot monitoring", label: "Blind Spot Monitoring" },
+    { value: "lane departure warning", label: "Lane Departure Warning" },
+    { value: "adaptive cruise control", label: "Adaptive Cruise Control" },
+    { value: "rearview camera", label: "Rearview Camera" },
+    { value: "parking sensors", label: "Parking Sensors" },
+    {
+      value: "automatic emergency braking",
+      label: "Automatic Emergency Braking",
+    },
+  ];
+
+  const handleChangesafty = (selected) => {
+    setSelectedOptions(selected);
+    const selectedValues = selected.map((option) => option.value);
+    console.log("Selected Values:", selectedValues);
+    setVehicleData((prevData) => ({
+      ...prevData,
+      safetyFeatures: selectedValues, // Update the state for the specific field
+    }));
+    // saveToDatabase(selectedValues); // Save new selections to the database
   };
 
   const handleSubmit = async (e) => {
@@ -901,9 +935,9 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                     </label>
                     <span className="text-red-600">*</span>
                   </div>
-                  <div className="grid grid-cols-2 md:grid-cols-2 gap-1  border border-gray-300 pl-1">
+                  <div className="">
                     {/* List of safety features as checkboxes */}
-                    {[
+                    {/* {[
                       "Airbags",
                       "ABS",
                       "Stability Control",
@@ -926,7 +960,16 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                         />
                         {feature}
                       </label>
-                    ))}
+                    ))} */}
+                    <Select
+                      isMulti
+                      options={options}
+                      value={selectedOptions}
+                      onChange={handleChangesafty}
+                      placeholder="Select features..."
+                      className="react-select w-full p-2 border border-gray-300 rounded"
+                      classNamePrefix="select"
+                    />
                   </div>
                 </div>
                 <div className="">

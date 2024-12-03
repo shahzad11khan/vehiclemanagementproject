@@ -4,6 +4,7 @@ import {
   API_URL_Vehicle_For_Image,
 } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import axios from "axios";
+import Select from "react-select";
 import { toast } from "react-toastify";
 import React, { useEffect, useRef, useState } from "react";
 import {
@@ -135,6 +136,39 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
     }
   }, []);
 
+  // const defaultOptions = [
+  //   { value: "airbags", label: "Airbags" },
+  //   { value: "abs", label: "ABS" },
+  // ];
+
+  const [selectedOptions, setSelectedOptions] = useState([]);
+  const [option, setoptions] = useState([]);
+
+  const options = [
+    { value: "airbags", label: "Airbags" },
+    { value: "abs", label: "ABS" },
+    { value: "stability control", label: "Stability Control" },
+    { value: "traction control", label: "Traction Control" },
+    { value: "blind spot monitoring", label: "Blind Spot Monitoring" },
+    { value: "lane departure warning", label: "Lane Departure Warning" },
+    { value: "adaptive cruise control", label: "Adaptive Cruise Control" },
+    { value: "rearview camera", label: "Rearview Camera" },
+    { value: "parking sensors", label: "Parking Sensors" },
+    {
+      value: "automatic emergency braking",
+      label: "Automatic Emergency Braking",
+    },
+  ];
+  const handleChangesafty = (selected) => {
+    setSelectedOptions(selected);
+    const selectedValues = selected.map((option) => option.value);
+    console.log("Selected Values:", selectedValues);
+    setVehicleData((prevData) => ({
+      ...prevData,
+      safetyFeatures: selectedValues, // Update the state for the specific field
+    }));
+    // saveToDatabase(selectedValues); // Save new selections to the database
+  };
   const handleChange = (e) => {
     const { name, value, type, checked, files, options } = e.target;
 
@@ -167,24 +201,24 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
       }
 
       // Handle checkbox inputs for safety features
-      if (name === "safetyFeatures") {
-        const currentSafetyFeatures = prevData[name] || [];
-        if (checked) {
-          // Add feature if checked
-          return {
-            ...prevData,
-            [name]: [...currentSafetyFeatures, value], // Add selected feature
-          };
-        } else {
-          // Remove feature if unchecked
-          return {
-            ...prevData,
-            [name]: currentSafetyFeatures.filter(
-              (feature) => feature !== value
-            ), // Remove deselected feature
-          };
-        }
-      }
+      // if (name === "safetyFeatures") {
+      //   const currentSafetyFeatures = prevData[name] || [];
+      //   if (checked) {
+      //     // Add feature if checked
+      //     return {
+      //       ...prevData,
+      //       [name]: [...currentSafetyFeatures, value], // Add selected feature
+      //     };
+      //   } else {
+      //     // Remove feature if unchecked
+      //     return {
+      //       ...prevData,
+      //       [name]: currentSafetyFeatures.filter(
+      //         (feature) => feature !== value
+      //       ), // Remove deselected feature
+      //     };
+      //   }
+      // }
 
       // Handle checkbox inputs for technology features
       if (name === "techFeatures") {
@@ -308,6 +342,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
       setdamagePreview(response.data.result.damageImage || null);
       setpdfPreview(response.data.result.PDFofPolicyUrl || null);
       setcardocumentimagePreview(response.data.result.cardocuments || []);
+      setoptions(response.data.result.safetyFeatures || []);
     } catch (error) {
       console.error("Error fetching vehicle data:", error);
     }
@@ -920,9 +955,9 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                     </label>
                     <span className="text-red-600">*</span>
                   </div>
-                  <div className="grid grid-cols-2 md:grid-cols-2 gap-1  border border-gray-300 pl-1">
+                  <div className="">
                     {/* List of safety features as checkboxes */}
-                    {[
+                    {/* {[
                       "Airbags",
                       "ABS",
                       "Stability Control",
@@ -945,7 +980,32 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                         />
                         {feature}
                       </label>
-                    ))}
+                    ))} */}
+
+                    <Select
+                      isMulti
+                      options={options}
+                      value={selectedOptions}
+                      onChange={handleChangesafty}
+                      placeholder="Select features..."
+                      className="react-select w-full p-2 border border-gray-300 rounded-md"
+                      classNamePrefix="select"
+                    />
+                  </div>
+                  {/* {option} */}
+                  <div className="mt-4 flex gap-2 text-sm">
+                    {/* Map over the options and join with a comma */}
+                    {option &&
+                      option.map((op, index) => (
+                        <span
+                          key={op} // Add a key for each element
+                          className="bg-gray-500 text-white p-2 rounded-md text-xs"
+                        >
+                          {op}
+                          {index < option.length - 1 && " "}{" "}
+                          {/* Add comma except for the last element */}
+                        </span>
+                      ))}
                   </div>
                 </div>
                 <div className="">

@@ -12,9 +12,8 @@ export const POST = catchAsyncErrors(async (request) => {
 
   // Check for existing vehicle by name
   const existingPayment = await Payment.findOne({
-    name: name,
-    adminCompanyName: adminCompanyName,
-  });
+  $and: [{ name: name }, { adminCompanyName: adminCompanyName }],
+});
   if (existingPayment) {
     return NextResponse.json({
       error: "Payment with this name already exists",

@@ -303,7 +303,9 @@ export async function POST(request) {
     }
 
     // Check for existing vehicle with the same registration number
-    const existingVehicle = await Vehicle.findOne({ registrationNumber });
+    const existingVehicle = await Vehicle.findOne({
+  $and: [{ registrationNumber: registrationNumber }, { adminCompanyName: adminCompanyName }],
+});
     if (existingVehicle) {
       return NextResponse.json({
         error: "Vehicle with this registration number already exists",

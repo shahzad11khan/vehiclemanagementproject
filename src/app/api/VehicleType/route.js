@@ -12,9 +12,8 @@ export const POST = catchAsyncErrors(async (request) => {
 
   // Check for existing vehicle by name
   const existingVehicle = await VehicleType.findOne({
-    name: name,
-    adminCompanyName: adminCompanyName,
-  });
+  $and: [{ name: name }, { adminCompanyName: adminCompanyName }],
+});
   if (existingVehicle) {
     return NextResponse.json({
       error: "VehicleType with this name already exists",

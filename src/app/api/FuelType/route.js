@@ -12,9 +12,8 @@ export const POST = catchAsyncErrors(async (request) => {
 
   // Check for existing vehicle by name
   const existingFuelType = await FuelType.findOne({
-    name: name,
-    adminCompanyName: adminCompanyName,
-  });
+  $and: [{ name: name }, { adminCompanyName: adminCompanyName }],
+});
   if (existingFuelType) {
     return NextResponse.json({
       error: "FuelType with this name already exists",

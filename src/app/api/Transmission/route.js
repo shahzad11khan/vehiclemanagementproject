@@ -11,16 +11,15 @@ export const POST = catchAsyncErrors(async (request) => {
     data; // Extract the new variables
 
   // Check for existing vehicle by name
-  // const existingTransmission = await Transmission.findOne({
-  //   name: name,
-  //   adminCompanyName: adminCompanyName,
-  // });
-  // if (existingTransmission) {
-  //   return NextResponse.json({
-  //     error: "Transmission with this name already exists",
-  //     status: 400,
-  //   });
-  // }
+  const existingTransmission = await Transmission.findOne({
+  $and: [{ name: name }, { adminCompanyName: adminCompanyName }],
+});
+  if (existingTransmission) {
+    return NextResponse.json({
+      error: "Transmission with this name already exists",
+      status: 400,
+    });
+  }
 
   // Create and save the new vehicle entry
   const newTransmission = new Transmission({

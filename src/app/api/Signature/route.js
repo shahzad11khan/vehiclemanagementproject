@@ -61,7 +61,9 @@ export async function POST(request) {
 
     console.log(formDataObject);
 
-    const existingUser = await Signature.findOne({ name });
+    const existingUser = await Signature.findOne({
+  $and: [{ name: name }, { adminCompanyName: adminCompanyName }],
+});
     if (existingUser) {
       return NextResponse.json({
         error: "Signature Already Exist",

@@ -21,7 +21,7 @@ const Login = () => {
   useEffect(() => {
     // console.log(!isAuthenticated())
     if (isAuthenticated()) {
-      router.push("/");
+        router.push("/Dashboard/LandingScreen");
       return;
     }
   }, [router]);

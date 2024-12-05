@@ -132,7 +132,7 @@ const Page = () => {
   const indexOfLastUser = currentPage * itemperpage;
   const indexOfFirstUser = indexOfLastUser - itemperpage;
   const currentUsers = filteredData.slice(indexOfFirstUser, indexOfLastUser);
-  const totalPages = Math.ceil(filteredData.length / setitemperpage);
+  const totalPages = Math.ceil(filteredData.length / itemperpage);
 
   if (!isMounted) {
     return null;

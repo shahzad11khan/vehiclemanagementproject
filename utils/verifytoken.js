@@ -19,6 +19,7 @@ export const isAuthenticated = () => {
   return token !== null;
 };
 
+
 export const clearAuthData = () => {
   localStorage.removeItem("token");
   localStorage.removeItem("Userusername");

@@ -179,11 +179,31 @@ const Sidebar = () => {
                   <li
                     onMouseEnter={() => setIsOpenManagement(true)}
                     onMouseLeave={() => setIsOpenManagement(false)}
-                    className={`${
-                      isOpenManagement === true
-                        ? "border-l-4 border-b-2 border-red-400"
-                        : " text-blue"
-                    } flex items-center p-3 cursor-pointer hover:border-b-2 rounded-lg relative bg-transparent`}
+                    // className={`${
+                    //   isOpenManagement === true
+                    //     ? "border-l-4 border-b-2 border-red-400"
+                    //     : " text-blue"
+                    // } flex items-center p-3 cursor-pointer hover:border-b-2 rounded-lg relative bg-transparent`}
+                    
+                    // className={`${
+                    //   isOpenManagement === true
+                    //     ? "border-l-4 border-b-2 border-red-400"
+                    //     : " text-blue"
+                    // } flex items-center p-3 cursor-pointer hover:border-b-2 rounded-lg relative bg-transparent`}
+                     className={`flex items-center p-3 cursor-pointer hover:border-b-2 rounded-lg bg-transparent ${
+    isOpenManagement
+      ? "border-l-4 border-b-2 border-red-400"
+      : "text-blue"
+  } ${
+    activeLink === "/Dashboard/Models/Manufacturer/GetManufacturers" ||
+      activeLink === "/Dashboard/Models/CarModels/GetCarsModels" ||
+       activeLink === "/Dashboard/Models/Type_BodyStyle/GetTypes" ||
+       activeLink === "/Dashboard/Models/FuelType/GetFuelTypes" ||
+       activeLink === "/Dashboard/Models/Transmission/GetTransmissions" 
+      ? "border-l-4 border-b-2 border-red-400"
+      : "text-blue"
+  }`}
+                    
                   >
                     <div className="flex items-center gap-3 relative bg-transparent">
                       <img src="/setting.png" alt="superadmin" />
@@ -195,7 +215,9 @@ const Sidebar = () => {
                       {isOpenManagement && (
                         <div className="absolute left-36 mt-2 w-full sm:w-[170px] hover:bg-gray-200   border border-gray-300 rounded-md shadow-lg ">
                           <ul className=" space-y-1 p-3">
-                            <li>
+                            <li  onClick={() =>
+                      handleLinkClick("/Dashboard/Models/Manufacturer/GetManufacturers")
+                    }>
                               <Link
                                 href="/Dashboard/Models/Manufacturer/GetManufacturers"
                                 className="rounded hover:bg-gray-200"
@@ -203,7 +225,9 @@ const Sidebar = () => {
                                 All Manufacturers
                               </Link>
                             </li>
-                            <li>
+                            <li onClick={() =>
+                      handleLinkClick("/Dashboard/Models/CarModels/GetCarsModels")
+                    }>
                               <Link
                                 href="/Dashboard/Models/CarModels/GetCarsModels"
                                 className="rounded hover:bg-gray-200"
@@ -212,7 +236,9 @@ const Sidebar = () => {
                               </Link>
                             </li>
 
-                            <li>
+                            <li onClick={() =>
+                      handleLinkClick("/Dashboard/Models/Type_BodyStyle/GetTypes")
+                    }>
                               <Link
                                 href="/Dashboard/Models/Type_BodyStyle/GetTypes"
                                 className="  rounded hover:bg-gray-200"
@@ -220,7 +246,9 @@ const Sidebar = () => {
                                 Body Type
                               </Link>
                             </li>
-                            <li>
+                            <li onClick={() =>
+                      handleLinkClick("/Dashboard/Models/FuelType/GetFuelTypes")
+                    }>
                               <Link
                                 href="/Dashboard/Models/FuelType/GetFuelTypes"
                                 className="  rounded hover:bg-gray-200"
@@ -228,7 +256,9 @@ const Sidebar = () => {
                                 Fuel Type
                               </Link>
                             </li>
-                            <li>
+                            <li onClick={() =>
+                      handleLinkClick("/Dashboard/Models/Transmission/GetTransmissions")
+                    }>
                               <Link
                                 href="/Dashboard/Models/Transmission/GetTransmissions"
                                 className="  rounded hover:bg-gray-200"
@@ -324,11 +354,30 @@ const Sidebar = () => {
                   <li
                     onMouseEnter={() => setIsOpenManagement(true)}
                     onMouseLeave={() => setIsOpenManagement(false)}
-                    className={`${
-                      isOpenManagement === true
-                        ? "border-l-4 border-b-2 border-red-400"
-                        : " text-blue"
-                    } flex items-center p-3 cursor-pointer hover:border-b-2 rounded-lg relative bg-transparent`}
+                    // className={`${
+                    //   isOpenManagement === true
+                    //     ? "border-l-4 border-b-2 border-red-400"
+                    //     : " text-blue"
+                    // } flex items-center p-3 cursor-pointer hover:border-b-2 rounded-lg relative bg-transparent`}
+                       className={`flex items-center p-3 cursor-pointer hover:border-b-2 rounded-lg bg-transparent ${
+    isOpenManagement
+      ? "border-l-4 border-b-2 border-red-400"
+      : "text-blue"
+  } ${
+    activeLink === "/Dashboard/Models/Manufacturer/GetManufacturers" ||
+      activeLink === "/Dashboard/Models/CarModels/GetCarsModels" ||
+       activeLink === "/Dashboard/Models/Enquiry/GetEnquiries"  ||
+       activeLink === "/Dashboard/Models/Firm/GetFirms"  ||
+       activeLink === "/Dashboard/Models/Signature/GetSignatures"  ||
+       activeLink === "/Dashboard/Models/LocalAuthority/GetLocalAuthority"  ||
+       activeLink === "/Dashboard/Models/Supplier/GetSuppliers"  ||
+       activeLink === "/Dashboard/Models/Insurance/GetInsurances"  ||
+       activeLink === "/Dashboard/Models/Type_BodyStyle/GetTypes" ||
+       activeLink === "/Dashboard/Models/FuelType/GetFuelTypes" ||
+       activeLink === "/Dashboard/Models/Transmission/GetTransmissions"  
+      ? "border-l-4 border-b-2 border-red-400"
+      : "text-blue"
+  }`}
                   >
                     <div className="flex items-center gap-3 relative bg-transparent">
                       <img src="/setting.png" alt="superadmin" />
@@ -340,7 +389,9 @@ const Sidebar = () => {
                       {isOpenManagement && (
                         <div className="absolute left-36 mt-2 w-full sm:w-[170px] hover:bg-gray-200   border border-gray-300 rounded-md shadow-lg ">
                           <ul className=" space-y-1 p-3">
-                            <li>
+                            <li onClick={() =>
+                      handleLinkClick("/Dashboard/Models/Manufacturer/GetManufacturers")
+                    }>
                               <Link
                                 href="/Dashboard/Models/Manufacturer/GetManufacturers"
                                 className="rounded hover:bg-gray-200"
@@ -348,7 +399,9 @@ const Sidebar = () => {
                                 All Manufacturers
                               </Link>
                             </li>
-                            <li>
+                            <li onClick={() =>
+                      handleLinkClick("/Dashboard/Models/VehicleType/GetVehicleTypes")
+                    }>
                               <Link
                                 href="/Dashboard/Models/VehicleType/GetVehicleTypes"
                                 className="  rounded hover:bg-gray-200"
@@ -356,7 +409,9 @@ const Sidebar = () => {
                                 All Vehicle Types
                               </Link>
                             </li>
-                            <li>
+                            <li onClick={() =>
+                      handleLinkClick("/Dashboard/Models/Enquiry/GetEnquiries")
+                    }>
                               <Link
                                 href="/Dashboard/Models/Enquiry/GetEnquiries"
                                 className="  rounded hover:bg-gray-200"
@@ -364,7 +419,9 @@ const Sidebar = () => {
                                 All Enquiries
                               </Link>
                             </li>
-                            <li>
+                            <li onClick={() =>
+                      handleLinkClick("/Dashboard/Models/Firm/GetFirms")
+                    }>
                               <Link
                                 href="/Dashboard/Models/Firm/GetFirms"
                                 className="  rounded hover:bg-gray-200"
@@ -372,7 +429,9 @@ const Sidebar = () => {
                                 All Firms
                               </Link>
                             </li>
-                            <li>
+                            <li onClick={() =>
+                      handleLinkClick("/Dashboard/Models/Signature/GetSignatures")
+                    }>
                               <Link
                                 href="/Dashboard/Models/Signature/GetSignatures"
                                 className="  rounded hover:bg-gray-200"
@@ -380,7 +439,9 @@ const Sidebar = () => {
                                 All Signatures
                               </Link>
                             </li>
-                            <li>
+                            <li onClick={() =>
+                      handleLinkClick("/Dashboard/Models/LocalAuthority/GetLocalAuthority")
+                    }>
                               <Link
                                 href="/Dashboard/Models/LocalAuthority/GetLocalAuthority"
                                 className="  rounded hover:bg-gray-200"
@@ -388,7 +449,9 @@ const Sidebar = () => {
                                 All Local Authority
                               </Link>
                             </li>
-                            <li>
+                            <li onClick={() =>
+                      handleLinkClick("/Dashboard/Models/Supplier/GetSuppliers")
+                    }>
                               <Link
                                 href="/Dashboard/Models/Supplier/GetSuppliers"
                                 className="  rounded hover:bg-gray-200"
@@ -397,7 +460,9 @@ const Sidebar = () => {
                               </Link>
                             </li>
 
-                            <li>
+                            <li onClick={() =>
+                      handleLinkClick("/Dashboard/Models/Insurance/GetInsurances")
+                    }>
                               <Link
                                 href="/Dashboard/Models/Insurance/GetInsurances"
                                 className="  rounded hover:bg-gray-200"
@@ -405,7 +470,9 @@ const Sidebar = () => {
                                 All Insurances
                               </Link>
                             </li>
-                            <li>
+                            <li onClick={() =>
+                      handleLinkClick("/Dashboard/Models/Type_BodyStyle/GetTypes")
+                    }>
                               <Link
                                 href="/Dashboard/Models/Type_BodyStyle/GetTypes"
                                 className="  rounded hover:bg-gray-200"
@@ -500,11 +567,30 @@ const Sidebar = () => {
                   <li
                     onMouseEnter={() => setIsOpenManagement(true)}
                     onMouseLeave={() => setIsOpenManagement(false)}
-                    className={`${
-                      isOpenManagement === true
-                        ? "border-l-4 border-b-2 border-red-400"
-                        : " text-blue"
-                    } flex items-center p-3 cursor-pointer hover:border-b-2 rounded-lg relative bg-transparent`}
+                    // className={`${
+                    //   isOpenManagement === true
+                    //     ? "border-l-4 border-b-2 border-red-400"
+                    //     : " text-blue"
+                    // } flex items-center p-3 cursor-pointer hover:border-b-2 rounded-lg relative bg-transparent`}
+                      className={`flex items-center p-3 cursor-pointer hover:border-b-2 rounded-lg bg-transparent ${
+    isOpenManagement
+      ? "border-l-4 border-b-2 border-red-400"
+      : "text-blue"
+  } ${
+    activeLink === "/Dashboard/Models/Manufacturer/GetManufacturers" ||
+      activeLink === "/Dashboard/Models/CarModels/GetCarsModels" ||
+       activeLink === "/Dashboard/Models/Enquiry/GetEnquiries"  ||
+       activeLink === "/Dashboard/Models/Firm/GetFirms"  ||
+       activeLink === "/Dashboard/Models/Signature/GetSignatures"  ||
+       activeLink === "/Dashboard/Models/LocalAuthority/GetLocalAuthority"  ||
+       activeLink === "/Dashboard/Models/Supplier/GetSuppliers"  ||
+       activeLink === "/Dashboard/Models/Insurance/GetInsurances"  ||
+       activeLink === "/Dashboard/Models/Type_BodyStyle/GetTypes" ||
+       activeLink === "/Dashboard/Models/FuelType/GetFuelTypes" ||
+       activeLink === "/Dashboard/Models/Transmission/GetTransmissions"  
+      ? "border-l-4 border-b-2 border-red-400"
+      : "text-blue"
+  }`}
                   >
                     <div className="flex items-center gap-3 relative bg-transparent">
                       <img src="/setting.png" alt="superadmin" />
@@ -515,7 +601,7 @@ const Sidebar = () => {
 
                       {isOpenManagement && (
                         <div className="absolute left-36 mt-2 w-full sm:w-[170px] hover:bg-gray-200   border border-gray-300 rounded-md shadow-lg">
-                          <ul className="grid grid-cols-1 space-y-1 p-3">
+                          {/* <ul className="grid grid-cols-1 space-y-1 p-3">
                             <li>
                               <Link
                                 href="/Dashboard/Models/Manufacturer/GetManufacturers"
@@ -590,6 +676,115 @@ const Sidebar = () => {
                               </Link>
                             </li>
                             <li>
+                              <Link
+                                href="/Dashboard/Models/Type_BodyStyle/GetTypes"
+                                className="  rounded hover:bg-gray-200"
+                              >
+                                Body Type
+                              </Link>
+                            </li>
+                            <li>
+                              <Link
+                                href="/Dashboard/Models/FuelType/GetFuelTypes"
+                                className="  rounded hover:bg-gray-200"
+                              >
+                                Fuel Type
+                              </Link>
+                            </li>
+                            <li>
+                              <Link
+                                href="/Dashboard/Models/Transmission/GetTransmissions"
+                                className="  rounded hover:bg-gray-200"
+                              >
+                                Transmission
+                              </Link>
+                            </li>
+                          </ul> */}
+                            <ul className=" space-y-1 p-3">
+                            <li onClick={() =>
+                      handleLinkClick("/Dashboard/Models/Manufacturer/GetManufacturers")
+                    }>
+                              <Link
+                                href="/Dashboard/Models/Manufacturer/GetManufacturers"
+                                className="rounded hover:bg-gray-200"
+                              >
+                                All Manufacturers
+                              </Link>
+                            </li>
+                            <li onClick={() =>
+                      handleLinkClick("/Dashboard/Models/VehicleType/GetVehicleTypes")
+                    }>
+                              <Link
+                                href="/Dashboard/Models/VehicleType/GetVehicleTypes"
+                                className="  rounded hover:bg-gray-200"
+                              >
+                                All Vehicle Types
+                              </Link>
+                            </li>
+                            <li onClick={() =>
+                      handleLinkClick("/Dashboard/Models/Enquiry/GetEnquiries")
+                    }>
+                              <Link
+                                href="/Dashboard/Models/Enquiry/GetEnquiries"
+                                className="  rounded hover:bg-gray-200"
+                              >
+                                All Enquiries
+                              </Link>
+                            </li>
+                            <li onClick={() =>
+                      handleLinkClick("/Dashboard/Models/Firm/GetFirms")
+                    }>
+                              <Link
+                                href="/Dashboard/Models/Firm/GetFirms"
+                                className="  rounded hover:bg-gray-200"
+                              >
+                                All Firms
+                              </Link>
+                            </li>
+                            <li onClick={() =>
+                      handleLinkClick("/Dashboard/Models/Signature/GetSignatures")
+                    }>
+                              <Link
+                                href="/Dashboard/Models/Signature/GetSignatures"
+                                className="  rounded hover:bg-gray-200"
+                              >
+                                All Signatures
+                              </Link>
+                            </li>
+                            <li onClick={() =>
+                      handleLinkClick("/Dashboard/Models/LocalAuthority/GetLocalAuthority")
+                    }>
+                              <Link
+                                href="/Dashboard/Models/LocalAuthority/GetLocalAuthority"
+                                className="  rounded hover:bg-gray-200"
+                              >
+                                All Local Authority
+                              </Link>
+                            </li>
+                            <li onClick={() =>
+                      handleLinkClick("/Dashboard/Models/Supplier/GetSuppliers")
+                    }>
+                              <Link
+                                href="/Dashboard/Models/Supplier/GetSuppliers"
+                                className="  rounded hover:bg-gray-200"
+                              >
+                                All Suppliers
+                              </Link>
+                            </li>
+
+                            <li onClick={() =>
+                      handleLinkClick("/Dashboard/Models/Insurance/GetInsurances")
+                    }>
+                              <Link
+                                href="/Dashboard/Models/Insurance/GetInsurances"
+                                className="  rounded hover:bg-gray-200"
+                              >
+                                All Insurances
+                              </Link>
+                            </li>
+                            <li onClick={() =>
+                      handleLinkClick("/Dashboard/Models/Type_BodyStyle/GetTypes")
+                    }>
                               <Link
                                 href="/Dashboard/Models/Type_BodyStyle/GetTypes"
                                 className="  rounded hover:bg-gray-200"

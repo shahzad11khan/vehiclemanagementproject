@@ -19,6 +19,7 @@ const Login = () => {
     password: "",
   });
   useEffect(() => {
+    // console.log(!isAuthenticated())
     if (isAuthenticated()) {
       router.push("/");
       return;
@@ -35,7 +36,7 @@ const Login = () => {
         password: userlogin.password,
       });
 
-      console.log("Login successful", response);
+      // console.log("Login successful", response);
       const isVerifiedtoken = response.data.token;
       const Userusername = response.data.username;
       const companyName = response.data.company;

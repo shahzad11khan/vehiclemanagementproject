@@ -343,12 +343,20 @@ const AddDriverMoreInfoModal = ({
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
                 required
               >
-                <option value="">Select Vehicle</option>
+                {/* <option value="">Select Vehicle</option>
                 {filteredVehicles.map((vehicle) => (
                   <option key={vehicle._id} value={vehicle.model}>
                     {vehicle.model}
                   </option>
-                ))}
+                ))} */}
+                 <option value="">Select Vehicle</option>
+               {filteredVehicles
+              .filter((vehicle) => vehicle.isActive === true)
+             .map((vehicle) => (
+              <option key={vehicle._id} value={vehicle.model}>
+              {vehicle.model}
+            </option>
+            ))}
               </select>
             </div>
 

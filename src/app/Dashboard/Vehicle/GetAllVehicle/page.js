@@ -206,9 +206,9 @@ const Page = () => {
                     <th className="px-4 py-2 bg-custom-bg text-white text-sm">
                       Engine Type
                     </th>
-                    <th className="px-4 py-2 bg-custom-bg text-white text-sm">
+                    {/* <th className="px-4 py-2 bg-custom-bg text-white text-sm">
                       Company
-                    </th>
+                    </th> */}
                     <th className="px-4 py-2 bg-custom-bg text-white text-sm">
                       Status
                     </th>
@@ -226,7 +226,7 @@ const Page = () => {
                       <td className="px-4 py-2">{row.year}</td>
                       <td className="px-4 py-2">{row.type}</td>
                       <td className="px-4 py-2">{row.engineType}</td>
-                      <td className="px-4 py-2">{row.adminCompanyName}</td>
+                      {/* <td className="px-4 py-2">{row.adminCompanyName}</td> */}
                       <td className="px-4 py-2">
                         <span className="bg-gray-400 px-1 py-1 border-2 rounded-2xl">
                           {row.isActive ? "Active" : "Inactive"}

@@ -16,6 +16,7 @@ import {
   getUserRole,
 } from "@/utils/storageUtils";
 import DeleteModal from "../../Components/DeleteModal";
+// import Loading from "../../Components/Loading";
 
 const Page = () => {
   const columns = [
@@ -39,6 +40,7 @@ const Page = () => {
   const [isDeleteModalOpenId, setIsDeleteModalOpenId] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemperpage, setitemperpage] = useState(5);
+  // const [loading, setLoading] = useState(true); // Add loading state
 
   useEffect(() => {
     setIsMounted(true);
@@ -61,7 +63,11 @@ const Page = () => {
     } catch (error) {
       console.error("Error fetching data:", error);
     }
+    // finally{
+    //   setLoading(false);
+    // }
   };
+
 
   const handleEdit = (id) => {
     setSelectedUserId(id);
@@ -92,6 +98,7 @@ const Page = () => {
   };
 
   useEffect(() => {
+    
     const userrole = getUserRole();
     const filtered = users.filter((item) => {
       if (userrole === "superadmin") {
@@ -120,6 +127,9 @@ const Page = () => {
     });
     setFilteredData(filtered);
   }, [searchTerm, users, selectedCompanyName]);
+//   if (loading) {
+//   return <Loading width="6" height="6" className="w-full h-auto" />;
+// }
 
   const OpenUserModle = () => {
     setIsOpenUser(!isOpenUser);

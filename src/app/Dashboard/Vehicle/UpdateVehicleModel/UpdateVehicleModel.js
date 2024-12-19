@@ -118,7 +118,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
   const [fueltype, setFuelType] = useState([]);
   const fileInputRef = useRef(null); // Create a ref for the file input
   const [step, setStep] = useState(1);
-  const [selectedSite, setSelectedSite] = useState("");
+  // const [selectedSite, setSelectedSite] = useState("");
   const [maintenance, setMaintenance] = useState(false);
   const [selfFitSetting, setSelfFitSetting] = useState(false);
   const fileInput = useRef(null);
@@ -580,13 +580,13 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
   const nextStep = () => setStep(step + 1);
   const prevStep = () => setStep(step - 1);
 
-  const selectSiteClick = (e) => {
-    setSelectedSite(e.target.value);
-    setVehicleData((prevData) => ({
-      ...prevData,
-      vehicleSite: e.target.value,
-    }));
-  };
+  // const selectSiteClick = (e) => {
+  //   setSelectedSite(e.target.value);
+  //   setVehicleData((prevData) => ({
+  //     ...prevData,
+  //     vehicleSite: e.target.value,
+  //   }));
+  // };
 
   const handleMaintenanceToggle = (e) => {
     const { checked } = e.target;
@@ -1269,7 +1269,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                 </div> */}
                 {/* Conditionally Rendered Fleet Details */}
               </div>
-              {selectedSite && (
+              {/* {selectedSite && (
                 <>
                   <h3 className="font-semibold mt-4">Fleet Entry Details</h3>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mt-4">
@@ -1348,7 +1348,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                     </div>
                   </div>
                 </>
-              )}
+              )} */}
               <div className="grid grid-cols-3 md:grid-cols-3 gap-2 mt-4">
                 <div>
                   <div className="flex gap-1">

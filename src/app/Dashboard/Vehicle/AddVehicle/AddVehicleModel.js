@@ -19,7 +19,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
   const [type, setType] = useState([]);
   const [fueltype, setFuelType] = useState([]);
   const [step, setStep] = useState(1);
-  const [selectedSite, setSelectedSite] = useState("");
+  // const [selectedSite, setSelectedSite] = useState("");
   const [maintenance, setMaintenance] = useState(false);
   const [selfFitSetting, setSelfFitSetting] = useState(false);
   const [fileInputs, setFileInputs] = useState([]); 
@@ -587,13 +587,13 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
     });
   };
 
-  const handleSiteChange = (e) => {
-    setSelectedSite(e.target.value);
-    setVehicleData((prevData) => ({
-      ...prevData,
-      vehicleSite: e.target.value,
-    }));
-  };
+  // const handleSiteChange = (e) => {
+  //   setSelectedSite(e.target.value);
+  //   setVehicleData((prevData) => ({
+  //     ...prevData,
+  //     vehicleSite: e.target.value,
+  //   }));
+  // };
 
   const handleMaintenanceToggle = (e) => {
     const { checked } = e.target;
@@ -1325,7 +1325,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                   />
                 </div>
               </div>
-              {selectedSite && (
+              {/* {selectedSite && (
                 <>
                   <h3 className="font-semibold mt-4">Fleet Entry Details</h3>
                   <div className="grid grid-cols-2 md:grid-cols-2 gap-2 mt-4">
@@ -1404,7 +1404,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                     </div>
                   </div>
                 </>
-              )}
+              )} */}
               <div className="grid grid-cols-2 md:grid-cols-2 gap-2 mt-4">
                 {/* <div>
                   <div className="flex gap-1">

@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import {
   fetchTaxiFirms,
-  fetchLocalAuth,
+  // fetchLocalAuth,
   fetchVehicle,
 } from "../../../Components/DropdownData/taxiFirm/taxiFirmService";
 import {
@@ -42,9 +42,9 @@ const AddDriverMoreInfoModal = ({
 
   const [loading, setLoading] = useState(false);
   const [taxiFirms, setTaxiFirms] = useState([]);
-  const [localAuth, setLocalAuth] = useState([]);
+  // const [localAuth, setLocalAuth] = useState([]);
   const [vehicle, setVehicle] = useState([]);
-  const [filteredVehicles, setFilteredVehicles] = useState([]);
+  // const [filteredVehicles, setFilteredVehicles] = useState([]);
   const [superadmin, setSuperadmin] = useState(null);
   const [vehicleStatus, setVehicleStatus] = useState("");
   const [compiterdrivervehicleautority, setcompiterdrivervehicleautority] = useState("");
@@ -95,9 +95,11 @@ const AddDriverMoreInfoModal = ({
   useEffect(() => {
     const loadDropdownData = async () => {
       try {
-        const [taxiFirmsData, localAuthData, vehicleData] = await Promise.all([
+        const [taxiFirmsData,
+          //  localAuthData,
+           vehicleData] = await Promise.all([
           fetchTaxiFirms(),
-          fetchLocalAuth(),
+          // fetchLocalAuth(),
           fetchVehicle(),
         ]);
   
@@ -114,12 +116,12 @@ const AddDriverMoreInfoModal = ({
   
         // Apply the filter to the fetched data
         const filteredTaxiFirms = filterByCompany(taxiFirmsData.result);
-        const filteredLocalAuth = filterByCompany(localAuthData.Result);
+        // const filteredLocalAuth = filterByCompany(localAuthData.Result);
         const filteredVehicle = filterByCompany(vehicleData.result);
   
         // Update state with filtered data
         setTaxiFirms(filteredTaxiFirms);
-        setLocalAuth(filteredLocalAuth);
+        // setLocalAuth(filteredLocalAuth);
         setVehicle(filteredVehicle);
   
         // Optional: Debugging logs

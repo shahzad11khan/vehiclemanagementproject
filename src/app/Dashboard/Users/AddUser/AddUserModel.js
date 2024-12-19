@@ -14,6 +14,12 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
   // const [role, setrole] = useState(null);
   const [previewAvatar, setPreviewAvatar] = useState(null);
   const [showPasswords, setShowPasswords] = useState(false);
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const [validation, setValidation] = useState({
+    emailValid: null,
+    passwordMatch: null,
+  });
+
   const [formData, setFormData] = useState({
     title: "",
     firstName: "",
@@ -45,13 +51,6 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
   // Retrieve company name from local storage
   useEffect(() => {
     const storedCompanyName = getCompanyName() || getsuperadmincompanyname(); // Replace with the actual key used in localStorage
-    // const storedSuperadmin = getUserRole();
-    // setSuperadmin(storedCompanyName);
-    // console.log(storedCompanyName);
-    // if (storedSuperadmin) {
-    // setrole(storedSuperadmin);
-    // console.log(storedCompanyName);
-    // }
     if (storedCompanyName) {
       setFormData((prevData) => ({
         ...prevData,
@@ -59,50 +58,37 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
       }));
     }
 
-    // const fetchAuthData = async () => {
-    //   try {
-    //     const stored = localStorage.getItem("companyName"); // Replace with the actual key used in localStorage
-    //     // console.log(storedCompanyName);
-    //     const title = await fetchTitle(); // Await the result from fetchLocalAuth
-    //     console.log(title);
-    //     // console.log(superadmin);
-    //     // const filteredtitle = title.result;
 
-    //     const filteredTaxiFirms =
-    //       role === "superadmin"
-    //         ? title.result
-    //         : title.result.filter(
-    //             (firm) =>
-    //               firm.adminCompanyName === stored ||
-    //               firm.adminCompanyName === "superadmin"
-    //           );
-
-    //     console.log(filteredTaxiFirms);
-    //     setTitile(filteredTaxiFirms); // Set the local state with the result
-    //   } catch (error) {
-    //     console.error("Error fetching local auth data:", error);
-    //   }
-    // };
-
-    // fetchAuthData();
-    // Call the async function to fetch data
   }, []); // Run only once when the component mounts
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
+    const updatedValue = type === 'checkbox' ? checked : value;
+
     setFormData((prevData) => ({
       ...prevData,
-      [name]: type === "checkbox" ? checked : value, // Handle checkbox for isActive
+      [name]: updatedValue,
     }));
+
+    if (name === 'email') {
+      setValidation((prevValidation) => ({
+        ...prevValidation,
+        emailValid: emailRegex.test(updatedValue),
+      }));
+    } else if (name === 'confirmpassword' || name === 'password') {
+      const password = name === 'password' ? updatedValue : formData.password;
+      const confirmPassword =
+        name === 'confirmpassword' ? updatedValue : formData.confirmpassword;
+
+      setValidation((prevValidation) => ({
+        ...prevValidation,
+        passwordMatch: password === confirmPassword,
+      }));
+    }
   };
 
   const handleFileChange = (e) => {
-    // setFormData((prevData) => ({
-    //   ...prevData,
-    //   useravatar: e.target.files[0], // Store the selected file
-    // }));
-    const file = e.target.files[0];
-
+     const file = e.target.files[0];
     // Update the formData and preview avatar
     setFormData((prevData) => ({
       ...prevData,
@@ -115,6 +101,34 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
       reader.readAsDataURL(file);
     }
   };
+
+
+  const pageonerequiredfeilds = [
+    "title",
+    "firstName",
+    "lastName",
+    
+  ];
+  const pagetworequiredfeilds = [
+    "email",
+    "tel1",
+    "postcode",
+    "postalAddress",
+    "city",
+    "county",
+     ];
+  const pagethreerequiredfeilds = [
+    "position",
+    "username",
+    "password",
+    "confirmpassword",
+    "passwordExpires",
+     ];
+
+
+  const isNextDisabled1st = pageonerequiredfeilds.some((field) => !formData[field]);
+  const isNextDisabled2nd = pagetworequiredfeilds.some((field) => !formData[field]);
+  const isNextDisabled3rd = pagethreerequiredfeilds.some((field) => !formData[field]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -135,6 +149,7 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
 
       // Handle the response as needed
       const data = await response.json();
+      console.log(data)
       if (data.success) {
         toast.success(data.message);
         onClose();
@@ -269,7 +284,6 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                     />
                   </div>
                 </div>
-                {/* end of multiple images */}
                 <div className="mt-6 flex gap-2 justify-end">
                   <button
                     type="button"
@@ -283,8 +297,11 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                   </button>
                   <button
                     onClick={nextStep}
-                    className="px-6 py-2 bg-custom-bg text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
-                  >
+                    className={`px-6 py-2 rounded-lg focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 ${
+                      isNextDisabled1st
+                        ? "bg-gray-400 text-white cursor-not-allowed"
+                        : "bg-custom-bg text-white hover:bg-gray-600"
+                    }`}                  >
                     Next
                   </button>
                 </div>
@@ -315,7 +332,14 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                       name="email"
                       value={formData.email}
                       onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                      // className=" border-gray-300 rounded-lg"
+                      className={`mt-1 block w-full p-2 border rounded-lg${
+                        validation.emailValid === null
+                          ? 'border-gray-300'
+                          : validation.emailValid
+                          ? 'border-green-500'
+                          : 'border-red-500'
+                      } focus:outline-none`}
                       required
                     />
                   </div>
@@ -482,8 +506,11 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                     </button>
                     <button
                       onClick={nextStep}
-                      className="px-6 py-2 bg-custom-bg text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
-                    >
+                      className={`px-6 py-2 rounded-lg focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 ${
+                        isNextDisabled2nd
+                          ? "bg-gray-400 text-white cursor-not-allowed"
+                          : "bg-custom-bg text-white hover:bg-gray-600"
+                      }`}                           >
                       Next
                     </button>
                   </div>
@@ -497,22 +524,7 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
               <div>
                 <h3 className="text-xl font-semibold mb-4">Security</h3>
                 <div className="grid grid-cols-2 sm:grid-cols-2 gap-3">
-                  {/* <div>
-                <label
-                  htmlFor="accessLevel"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Access Level:
-                </label>
-                <input
-                  type="text"
-                  id="accessLevel"
-                  name="accessLevel"
-                  value={formData.accessLevel}
-                  onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                />
-              </div> */}
+             
 
                   <div>
                     <div className="flex gap-1">
@@ -630,9 +642,31 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                         name="confirmpassword"
                         value={formData.confirmpassword}
                         onChange={handleChange}
-                        className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                        // className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                        className={`mt-1 block w-full p-2 border rounded-lg${
+                          validation.passwordMatch === null
+                            ? 'border-gray-300'
+                            : validation.passwordMatch
+                            ? 'border-green-500'
+                            : 'border-red-500'
+                        } focus:outline-none`}
                         required
                       />
+                      <span
+    className={`text-sm ${
+      validation.passwordMatch === null
+        ? 'text-gray-500'
+        : validation.passwordMatch
+        ? 'text-green-500'
+        : 'text-red-500'
+    }`}
+  >
+    {validation.passwordMatch === null
+      ? 'ConfirmPassword must match'
+      : validation.passwordMatch
+      ? 'ConfirmPassword matched'
+      : 'ConfirmPassword not matched'}
+  </span>
                     </div>
                     <div className="mt-4">
                       <button
@@ -666,22 +700,6 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                     />
                   </div>
 
-                  {/* <div>
-                <label
-                  htmlFor="passwordExpiresEvery"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Password Expires Every:
-                </label>
-                <input
-                  type="text"
-                  id="passwordExpiresEvery"
-                  name="passwordExpiresEvery"
-                  value={formData.passwordExpiresEvery}
-                  onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                />
-              </div> */}
                 </div>
                 <div className="mt-6 flex gap-2 justify-between">
                   <div>
@@ -705,8 +723,11 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                     </button>
                     <button
                       onClick={nextStep}
-                      className="px-6 py-2 bg-custom-bg text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
-                    >
+                      className={`px-6 py-2 rounded-lg focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 ${
+                        isNextDisabled3rd
+                          ? "bg-gray-400 text-white cursor-not-allowed"
+                          : "bg-custom-bg text-white hover:bg-gray-600"
+                      }`}                        >
                       Next
                     </button>
                   </div>

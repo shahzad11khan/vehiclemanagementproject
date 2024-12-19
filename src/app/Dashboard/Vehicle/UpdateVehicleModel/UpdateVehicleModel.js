@@ -815,6 +815,19 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                 </div>
                 <div>
                   <div className="flex gap-1">
+                    <label className=" font-semibold">Editable Color</label>
+                  </div>
+                  <input
+                    type="text"
+                    name="editablecolor"
+                    value={vehicleData.editablecolor}
+                    onChange={handleChange}
+                    placeholder="Enter custom color"
+                    className="w-full p-2 border border-gray-300 rounded"
+                  />
+                </div>
+                <div>
+                  <div className="flex gap-1">
                     <label className="block font-semibold">Height</label>
                   </div>
                   <input
@@ -1233,7 +1246,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                     className="w-full p-2 border border-gray-300 rounded"
                   />
                 </div>
-                <div className="">
+                {/* <div className="">
                   <div className="flex gap-1">
                     <label className="block font-semibold">Vehicle Site</label>
                     <span className="text-red-600">*</span>
@@ -1253,7 +1266,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                     <option value="ServiceCenter">Service Center</option>
                     <option value="RemoteSite">Remote Site</option>
                   </select>
-                </div>
+                </div> */}
                 {/* Conditionally Rendered Fleet Details */}
               </div>
               {selectedSite && (
@@ -1350,7 +1363,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                     className="w-full p-2 border border-gray-300 rounded"
                   />
                 </div>
-                <div>
+                {/* <div>
                   <div className="flex gap-1">
                     <label className="block font-semibold">Colour</label>
                     <span className="text-red-600">*</span>
@@ -1370,21 +1383,9 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                     <option value="Black">Black</option>
                     <option value="White">White</option>
                   </select>
-                </div>
+                </div> */}
 
-                <div>
-                  <div className="flex gap-1">
-                    <label className=" font-semibold">Editable Color</label>
-                  </div>
-                  <input
-                    type="text"
-                    name="editablecolor"
-                    value={vehicleData.editablecolor}
-                    onChange={handleChange}
-                    placeholder="Enter custom color"
-                    className="w-full p-2 border border-gray-300 rounded"
-                  />
-                </div>
+              
               </div>
 
               <div className="grid grid-cols-3 md:grid-cols-3 gap-2 mt-4">
@@ -1444,7 +1445,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                 </div>
 
                 {/* Seats */}
-                <div>
+                {/* <div>
                   <label className="block font-semibold">Seats</label>
                   <input
                     type="number"
@@ -1454,7 +1455,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                     className="w-full p-2 border border-gray-300 rounded"
                     placeholder="Enter number of seats"
                   />
-                </div>
+                </div> */}
 
                 {/* ABI Code */}
                 <div>

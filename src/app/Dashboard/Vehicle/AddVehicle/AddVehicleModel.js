@@ -1,5 +1,5 @@
 "use client";
-import { API_URL_Vehicle } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
+import { API_URL_Vehicle, API_URL_VehicleMOT,API_URL_VehicleRoadTex,API_URL_VehicleService } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import axios from "axios";
 import { toast } from "react-toastify";
 import Select from "react-select";
@@ -22,10 +22,9 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
   const [selectedSite, setSelectedSite] = useState("");
   const [maintenance, setMaintenance] = useState(false);
   const [selfFitSetting, setSelfFitSetting] = useState(false);
-  const [fileInputs, setFileInputs] = useState([]); // Store each file input's ID
-  const [files, setFiles] = useState([]); // Stores selected files
+  const [fileInputs, setFileInputs] = useState([]); 
+  const [files, setFiles] = useState([]); 
   const [previews, setPreviews] = useState([]);
-  // Handle navigation
   const nextStep = () => setStep(step + 1);
   const prevStep = () => setStep(step - 1);
   const [vehicleData, setVehicleData] = useState({
@@ -117,6 +116,35 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
     imageFiles: [], // Store selected image files
   });
 
+  const pageonerequiredfeilds = [
+    "manufacturer",
+    "model",
+    "year",
+    "type",
+    "engineType",
+    "fuelType",
+    "transmission",
+    "drivetrain",
+    "exteriorColor",
+    "interiorColor",
+  ];
+  const pagetworequiredfeilds = [
+    "passengerCapacity",
+    "safetyFeatures",
+    "techFeatures",
+    "price",
+    "registrationNumber",
+  ];
+  const pagefiverequiredfeilds = [
+    "LocalAuthority",
+    "warrantyInfo",
+  ];
+
+  const isNextDisabled1st = pageonerequiredfeilds.some((field) => !vehicleData[field]);
+  const isNextDisabled2nd = pagetworequiredfeilds.some((field) => !vehicleData[field]);
+  const isNextDisabled5th = pagefiverequiredfeilds.some((field) => !vehicleData[field]);
+
+
   useEffect(() => {
     const storedCompanyName = localStorage.getItem("companyName");
     const storedSuperadmin = localStorage.getItem("role");
@@ -129,13 +157,13 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
 
     const fetchData = async () => {
       try {
+        const storedCompanyName = localStorage.getItem("companyName");
         const localAuthData = await fetchLocalAuth();
         const manufacturerData = await fetchManfacturer();
         const transmissionData = await fetchTransmission();
         const typeData = await fetchType();
         const fueltypeData = await fetchFuelType();
-        const currentCompanyName =
-          vehicleData.adminCompanyName || storedCompanyName;
+        const currentCompanyName = storedCompanyName;
 
         const filteredLocalAuth =
           storedSuperadmin === "superadmin"
@@ -179,6 +207,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
               );
 
         setLocal(filteredLocalAuth);
+        // console.log(filteredManufacturer);
         setManufacturer(filteredManufacturer);
         setTransmission(filteredTransmission);
         setType(filteredType);
@@ -348,19 +377,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData();
-    // for (const key in vehicleData) {
-    //   if (key === "imageFiles") {
-    //     vehicleData.imageFiles.forEach((file) => {
-    //       formData.append("imageFiles", file);
-    //     });
-    //   } else if (typeof vehicleData[key] === "object") {
-    //     for (const subKey in vehicleData[key]) {
-    //       formData.append(`${key}[${subKey}]`, vehicleData[key][subKey]);
-    //     }
-    //   } else {
-    //     formData.append(key, vehicleData[key]);
-    //   }
-    // }
+
     for (const key in vehicleData) {
       if (
         key === "imageFiles" ||
@@ -379,7 +396,8 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
       }
     }
 
-    console.log(vehicleData);
+    // console.log(vehicleData);
+
 
     try {
       const response = await axios.post(API_URL_Vehicle, vehicleData, {
@@ -388,9 +406,78 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
         },
       });
 
-      console.log(response.data);
+      // console.log(response.data.vehicle);
+      
+      
       if (response.data.success) {
         toast.success(response.data.message);
+        try {
+        const motreportis = response.data.vehicle;
+        const servicereportis = response.data.vehicle;
+        const roadtextreportis = response.data.vehicle;
+
+        const formData = {
+        VehicleName: motreportis.model,
+        registrationNumber: motreportis.registrationNumber,
+        VehicleId: motreportis._id,
+        motCurrentDate: "",
+        motDueDate: motreportis.motDueDate,
+        motCycle: motreportis.motCycle,
+        motStatus: "done",
+        VehicleStatus: motreportis.isActive,
+        asignto: "N/A",
+        motPending_Done: "0",
+        adminCreatedBy: "",
+        adminCompanyName: motreportis.adminCompanyName,
+        adminCompanyId: "",
+      };
+        const formDataservice = {
+        VehicleName: servicereportis.model,
+        registrationNumber: servicereportis.registrationNumber,
+        VehicleId: servicereportis._id,
+        serviceCurrentDate: "",
+        serviceDueDate: servicereportis.nextServiceDate,
+        motCycle: motreportis.motCycle,
+        serviceStatus: "done",
+        VehicleStatus: servicereportis.isActive,
+        servicemailes: servicereportis.nextServiceMiles,
+        asignto: "N/A",
+        servicePending_Done: "0",
+        adminCreatedBy: "",
+        adminCompanyName: servicereportis.adminCompanyName,
+        adminCompanyId: "",
+      };
+        const formDataRoadText = {
+        VehicleName: roadtextreportis.model,
+        registrationNumber: roadtextreportis.registrationNumber,
+        VehicleId: roadtextreportis._id,
+        roadtexCurrentDate: "",
+        roadtexDueDate: roadtextreportis.roadTaxDate,
+        roadtexCycle: roadtextreportis.roadTaxCycle,
+        VehicleStatus: roadtextreportis.roadTaxCost,
+        roadtexStatus: "done",
+        VehicleStatus: roadtextreportis.isActive,
+        asignto: "N/A",
+        roadtexPending_Done: "0",
+        adminCreatedBy: "",
+        adminCompanyName: roadtextreportis.adminCompanyName,
+        adminCompanyId: "",
+      };
+
+      console.log(formDataRoadText)
+          // Step 1: Send POST request to create/update VehicleMOT record
+          const res = await axios.post(`${API_URL_VehicleMOT}`, formData);
+          const resservice = await axios.post(`${API_URL_VehicleService}`, formDataservice);
+          const resroadtext = await axios.post(`${API_URL_VehicleRoadTex}`, formDataRoadText);
+
+          console.log("MOT Data sent successfully:", res.data);
+          console.log("Service Data sent successfully:", resservice.data);
+          console.log("Road text Data sent successfully:", resroadtext.data);
+        } catch (error) {
+          console.error("Error sending data:", error);
+          toast.error("Failed to send data");
+        }
+
         fetchData();
         onClose();
         resetForm();
@@ -789,6 +876,19 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                     required
                   />
                 </div>
+              <div>
+                  <div className="flex gap-1">
+                    <label className=" font-semibold">Editable Color</label>
+                  </div>
+                  <input
+                    type="text"
+                    name="editablecolor"
+                    value={vehicleData.editablecolor}
+                    onChange={handleChange}
+                    placeholder="Enter custom color"
+                    className="w-full p-2 border border-gray-300 rounded"
+                  />
+                </div>
               </div>
 
               <div className="grid grid-cols-2 md:grid-cols-2 gap-2 mt-4">
@@ -848,8 +948,11 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                 </button>
                 <button
                   onClick={nextStep}
-                  className="px-6 py-2 bg-custom-bg text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
-                >
+                  className={`px-6 py-2 rounded-lg focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 ${
+                    isNextDisabled1st
+                      ? "bg-gray-400 text-white cursor-not-allowed"
+                      : "bg-custom-bg text-white hover:bg-gray-600"
+                  }`}                   >
                   Next
                 </button>
               </div>
@@ -1143,8 +1246,11 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                   </button>
                   <button
                     onClick={nextStep}
-                    className="px-6 py-2 bg-custom-bg text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
-                  >
+                    className={`px-6 py-2 rounded-lg focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 ${
+                      isNextDisabled2nd
+                        ? "bg-gray-400 text-white cursor-not-allowed"
+                        : "bg-custom-bg text-white hover:bg-gray-600"
+                    }`}                      >
                     Next
                   </button>
                 </div>
@@ -1184,7 +1290,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                     className="w-full p-2 border border-gray-300 rounded"
                   />
                 </div>
-                <div className="">
+                {/* <div className="">
                   <div className="flex gap-1">
                     <label className="block font-semibold">Vehicle Site</label>
                     <span className="text-red-600">*</span>
@@ -1203,7 +1309,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                     <option value="ServiceCenter">Service Center</option>
                     <option value="RemoteSite">Remote Site</option>
                   </select>
-                </div>
+                </div> */}
                 {/* Conditionally Rendered Fleet Details */}
                 <div>
                   <div className="flex gap-1">
@@ -1300,7 +1406,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                 </>
               )}
               <div className="grid grid-cols-2 md:grid-cols-2 gap-2 mt-4">
-                <div>
+                {/* <div>
                   <div className="flex gap-1">
                     <label className="block font-semibold">Colour</label>
                     <span className="text-red-600">*</span>
@@ -1320,9 +1426,9 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                     <option value="Black">Black</option>
                     <option value="White">White</option>
                   </select>
-                </div>
+                </div> */}
 
-                <div>
+                {/* <div>
                   <div className="flex gap-1">
                     <label className=" font-semibold">Editable Color</label>
                   </div>
@@ -1334,7 +1440,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                     placeholder="Enter custom color"
                     className="w-full p-2 border border-gray-300 rounded"
                   />
-                </div>
+                </div> */}
               </div>
 
               <div className="grid grid-cols-2 md:grid-cols-2 gap-2 mt-4">
@@ -1394,7 +1500,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                 </div>
 
                 {/* Seats */}
-                <div>
+                {/* <div>
                   <label className="block font-semibold">Seats</label>
                   <input
                     type="number"
@@ -1404,7 +1510,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                     className="w-full p-2 border border-gray-300 rounded"
                     placeholder="Enter number of seats"
                   />
-                </div>
+                </div> */}
 
                 {/* ABI Code */}
                 <div>
@@ -2163,7 +2269,12 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                   >
                     Close
                   </button>
-                  <button className="px-6 py-2 bg-custom-bg text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50">
+                  <button
+                  className={`px-6 py-2 rounded-lg focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 ${
+              isNextDisabled5th
+                ? "bg-gray-400 text-white cursor-not-allowed"
+                  : "bg-custom-bg text-white hover:bg-gray-600"
+                  }`}                       >
                     Submit
                   </button>
                 </div>

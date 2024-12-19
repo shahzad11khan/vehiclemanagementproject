@@ -47,6 +47,7 @@ const AddDriverMoreInfoModal = ({
   const [filteredVehicles, setFilteredVehicles] = useState([]);
   const [superadmin, setSuperadmin] = useState(null);
   const [vehicleStatus, setVehicleStatus] = useState("");
+  const [compiterdrivervehicleautority, setcompiterdrivervehicleautority] = useState("");
 
   useEffect(() => {
     const storedCompanyName = getCompanyName() || getsuperadmincompanyname();
@@ -71,12 +72,14 @@ const AddDriverMoreInfoModal = ({
       setLoading(true);
       try {
         const { data } = await axios.get(`${API_URL_Driver}/${selectedUserId}`);
-        console.log(data);
+        // console.log(data);
         setFormData((prevData) => ({
           ...prevData,
           driverId: data.result._id,
           driverName: `${data.result.firstName} ${data.result.lastName}`,
         }));
+        // console.log("DriverLoaclAuth Is: ",data.result.LocalAuth);
+        setcompiterdrivervehicleautority(data.result.LocalAuth);
       } catch (err) {
         console.error(
           err.response?.data?.message || "Failed to fetch driver data"
@@ -97,8 +100,9 @@ const AddDriverMoreInfoModal = ({
           fetchLocalAuth(),
           fetchVehicle(),
         ]);
-
+  
         const storedCompanyName = getCompanyName();
+  
         const filterByCompany = (data) =>
           superadmin === "superadmin"
             ? data
@@ -107,17 +111,31 @@ const AddDriverMoreInfoModal = ({
                   item.adminCompanyName === storedCompanyName ||
                   item.adminCompanyName === "superadmin"
               );
-
-        setTaxiFirms(filterByCompany(taxiFirmsData.result));
-        setLocalAuth(filterByCompany(localAuthData.Result));
-        setVehicle(filterByCompany(vehicleData.result));
+  
+        // Apply the filter to the fetched data
+        const filteredTaxiFirms = filterByCompany(taxiFirmsData.result);
+        const filteredLocalAuth = filterByCompany(localAuthData.Result);
+        const filteredVehicle = filterByCompany(vehicleData.result);
+  
+        // Update state with filtered data
+        setTaxiFirms(filteredTaxiFirms);
+        setLocalAuth(filteredLocalAuth);
+        setVehicle(filteredVehicle);
+  
+        // Optional: Debugging logs
+        // console.log("Stored Company Name:", storedCompanyName);
+        // console.log("Filtered Taxi Firms:", filteredTaxiFirms);
+        // console.log("Filtered Local Authorities:", filteredLocalAuth);
+        console.log("Filtered Vehicles:", filteredVehicle);
       } catch (err) {
         console.error("Error loading dropdown data:", err);
       }
     };
-
+  
     loadDropdownData();
   }, [superadmin]);
+  
+ 
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -127,7 +145,7 @@ const AddDriverMoreInfoModal = ({
     }));
 
     if (name === "vehicle") {
-      const selectedVehicle = filteredVehicles.find(
+      const selectedVehicle = vehicle.find(
         (vehicle) => vehicle.model === value
       );
       if (selectedVehicle) {
@@ -138,15 +156,27 @@ const AddDriverMoreInfoModal = ({
         }));
       }
     }
+    // if (name === "vehicle") {
+    //   const selectedVehicle = filteredVehicles.find(
+    //     (vehicle) => vehicle.model === value
+    //   );
+    //   if (selectedVehicle) {
+    //     setVehicleStatus(selectedVehicle._id);
+    //     setFormData((prevFormData) => ({
+    //       ...prevFormData,
+    //       vehicleId: selectedVehicle._id, // Store the vehicle ID
+    //     }));
+    //   }
+    // }
 
-    if (name === "taxilocalauthority") {
-      const matchedVehicles = vehicle.filter(
-        (veh) => veh.LocalAuthority === value
-      );
-      setFilteredVehicles(matchedVehicles);
-    }
+    // if (name === "taxilocalauthority") {
+    //   const matchedVehicles = vehicle.filter(
+    //     (veh) => veh.LocalAuthority === value
+    //   );
+    //   setFilteredVehicles(matchedVehicles);
+    // }
   };
-
+console.log(compiterdrivervehicleautority)
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -304,7 +334,7 @@ const AddDriverMoreInfoModal = ({
               </select>
             </div>
 
-            <div className="w-full md:w-1/3 px-2 mb-4">
+            {/* <div className="w-full md:w-1/3 px-2 mb-4">
               <label
                 htmlFor="taxilocalauthority"
                 className="text-sm font-medium text-gray-700"
@@ -326,14 +356,14 @@ const AddDriverMoreInfoModal = ({
                   </option>
                 ))}
               </select>
-            </div>
+            </div> */}
 
             <div className="w-full md:w-1/3 px-2 mb-4">
               <label
                 htmlFor="vehicle"
                 className="text-sm font-medium text-gray-700"
               >
-                Vehicle:
+                Vehicles:
               </label>
               <select
                 id="vehicle"
@@ -343,20 +373,16 @@ const AddDriverMoreInfoModal = ({
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
                 required
               >
-                {/* <option value="">Select Vehicle</option>
-                {filteredVehicles.map((vehicle) => (
-                  <option key={vehicle._id} value={vehicle.model}>
-                    {vehicle.model}
-                  </option>
-                ))} */}
+        
                  <option value="">Select Vehicle</option>
-               {filteredVehicles
-              .filter((vehicle) => vehicle.isActive === true)
-             .map((vehicle) => (
-              <option key={vehicle._id} value={vehicle.model}>
-              {vehicle.model}
-            </option>
-            ))}
+                 {vehicle?.filter((v) => v.isActive && v.vehicleStatus === "Standby" && 
+    compiterdrivervehicleautority.toLocaleLowerCase() === v.LocalAuthority.toLocaleLowerCase()
+  ).map((v) => (
+    <option key={v._id} value={v.model}>
+      {v.model}
+    </option>
+  ))}
+
               </select>
             </div>
 

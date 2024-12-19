@@ -400,6 +400,16 @@ const Sidebar = () => {
                               </Link>
                             </li>
                             <li onClick={() =>
+                      handleLinkClick("/Dashboard/Models/CarModels/GetCarsModels")
+                    }>
+                              <Link
+                                href="/Dashboard/Models/CarModels/GetCarsModels"
+                                className="rounded hover:bg-gray-200"
+                              >
+                                All Models
+                              </Link>
+                            </li>
+                            <li onClick={() =>
                       handleLinkClick("/Dashboard/Models/VehicleType/GetVehicleTypes")
                     }>
                               <Link
@@ -709,6 +719,16 @@ const Sidebar = () => {
                                 className="rounded hover:bg-gray-200"
                               >
                                 All Manufacturers
+                              </Link>
+                            </li>
+                            <li onClick={() =>
+                      handleLinkClick("/Dashboard/Models/CarModels/GetCarsModels")
+                    }>
+                              <Link
+                                href="/Dashboard/Models/CarModels/GetCarsModels"
+                                className="rounded hover:bg-gray-200"
+                              >
+                                All Models
                               </Link>
                             </li>
                             <li onClick={() =>

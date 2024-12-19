@@ -73,13 +73,21 @@ const Page = ({ params }) => {
     const companyName = getCompanyName();
     const username = getUserName();
 
-    const filtered = data.filter(
-      (item) =>
+    const filtered = data.filter((item) => {
+      // Check if the company name matches (case-insensitive)
+      if (item.adminCompanyName.toLowerCase() === companyName.toLowerCase()) {
+        return true;
+      }
+      // Check if the username matches and the company name matches
+      return (
         username === item.asignto &&
         item.adminCompanyName.toLowerCase() === companyName.toLowerCase()
-    );
+      );
+    });
+    
     setFilteredData(filtered);
     setCurrentPage(1);
+    
   }, [data]);
 
   const toggleTitleModal = () => {
@@ -109,7 +117,7 @@ const Page = ({ params }) => {
     const vehicleName = filteredData[0].VehicleName || "Name Unavailable";
     doc.text(`Vehicle Name: ${vehicleName}`, 14, 20);
     const vehicleRegistration =
-      filteredData.registrationNumber || "Registration Unavailable";
+               filteredData[0].registrationNumber || "Registration Unavailable";
     doc.text(`Registration Number: ${vehicleRegistration}`, 14, 25);
     doc.text(`Company Name: ${selectedCompanyName}`, 14, 30);
 
@@ -300,7 +308,7 @@ const Page = ({ params }) => {
                         {row.motStatus || "N/A"}
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
-                        {row.VehicleStatus || "N/A"}
+                        {row.VehicleStatus  ? "True" :"False"}
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
                         {row.asignto || "N/A"}

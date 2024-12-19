@@ -71,11 +71,17 @@ const Page = ({ params }) => {
     const companyName = getCompanyName();
     const username = getUserName();
 
-    const filtered = data.filter(
-      (item) =>
+    const filtered = data.filter((item) => {
+      // Check if the company name matches (case-insensitive)
+      if (item.adminCompanyName.toLowerCase() === companyName.toLowerCase()) {
+        return true;
+      }
+      // Check if the username matches and the company name matches
+      return (
         username === item.asignto &&
-        item.adminCompanyName?.toLowerCase() === companyName.toLowerCase()
-    );
+        item.adminCompanyName.toLowerCase() === companyName.toLowerCase()
+      );
+    });
     setFilteredData(filtered);
     setCurrentPage(1);
   }, [data]);

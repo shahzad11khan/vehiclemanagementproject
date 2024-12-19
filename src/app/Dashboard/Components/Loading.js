@@ -42,6 +42,7 @@ const Loading = () => {
       </div>
         <h1 className="font-bold">Loding<span className="text-red-700">.</span><span className="text-red-600">.</span><span className="text-red-500">.</span></h1>
     </div>
+     
   );
 };
 

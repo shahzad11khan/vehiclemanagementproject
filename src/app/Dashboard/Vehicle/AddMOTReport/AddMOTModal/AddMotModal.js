@@ -117,7 +117,7 @@ const AddMotModal = ({ isOpen, onClose, fetchData, selectedid }) => {
 
       if (response.data.success) {
         // Check if the current record has motPending_Done set to "1"
-        if (formData.motPending_Done === "0") {
+        if (formData.motPending_Done === "0" && formData.motStatus === "done") {
           // Step 2: Call the PUT request to update motPending_Done from 1 to 0
           const updateResponse = await axios.put(
             `${API_URL_UpdateMostRecentPendingInMot}`,

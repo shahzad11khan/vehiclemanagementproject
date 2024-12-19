@@ -6,7 +6,7 @@ import {
   // fetchTaxiFirms,
   fetchBadge,
   fetchInsurence,
-  // fetchLocalAuth,
+  fetchLocalAuth,
   // fetchVehicle,
 } from "../../Components/DropdownData/taxiFirm/taxiFirmService";
 import {
@@ -51,12 +51,9 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
   const [loading, setLoading] = useState(false);
   const [badge, setBadge] = useState([]);
   const [insurance, setInsurance] = useState([]);
-  // const [taxiFirms, setTaxiFirms] = useState([]);
-  // const [localAuth, setLocalAuth] = useState([]);
-  // const [vehicle, setVehicle] = useState([]);
+  const [localAuth, setlocalAuth] = useState([]);
   const [superadmin, setSuperadmin] = useState(null);
-  // const [filteredVehicles, setFilteredVehicles] = useState([]);
-  // const [selectedvehicle, setselectedvehicle] = useState("");
+
   const [step, setStep] = useState(1);
   const nextStep = () => setStep(step + 1);
   const prevStep = () => setStep(step - 1);
@@ -81,28 +78,17 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
     const loadDropdownData = async () => {
       try {
         const [
-          // taxiFirmsData,
+        
           badgeData,
           insuranceData,
-          // localAuthData,
-          // vehicle,
+          localAuth,
         ] = await Promise.all([
-          // fetchTaxiFirms(),
           fetchBadge(),
           fetchInsurence(),
-          // fetchLocalAuth(),
-          // fetchVehicle(),
+          fetchLocalAuth(),
         ]);
 
         const storedCompanyName = formData.adminCompanyName;
-        // const filteredTaxiFirms =
-        //   superadmin === "superadmin"
-        //     ? taxiFirmsData.result
-        //     : taxiFirmsData.result.filter(
-        //         (firm) =>
-        //           firm.adminCompanyName === storedCompanyName ||
-        //           firm.adminCompanyName === "superadmin"
-        //       );
 
         const filteredBadges =
           superadmin === "superadmin"
@@ -121,29 +107,20 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                   insurance.adminCompanyName === storedCompanyName ||
                   insurance.adminCompanyName === "superadmin"
               );
+        const filteredlocalAuth =
+          superadmin === "superadmin"
+            ? localAuth.Result
+            : localAuth.Result.filter(
+                (localAuth) =>
+                  localAuth.adminCompanyName === storedCompanyName ||
+                localAuth.adminCompanyName === "superadmin"
+              );
 
-        // const filteredLocalAuth =
-        //   superadmin === "superadmin"
-        //     ? localAuthData.Result
-        //     : localAuthData.Result.filter(
-        //         (localAuth) =>
-        //           localAuth.adminCompanyName === storedCompanyName ||
-        //           localAuth.adminCompanyName === "superadmin"
-        //       );
-        // const filteredVehicle =
-        //   superadmin === "superadmin"
-        //     ? vehicle.result
-        //     : vehicle.result.filter(
-        //         (vehicle) =>
-        //           vehicle.adminCompanyName === storedCompanyName ||
-        //           vehicle.adminCompanyName === "superadmin"
-        //       );
 
-        // setTaxiFirms(filteredTaxiFirms);
         setBadge(filteredBadges);
         setInsurance(filteredInsurance);
-        // setLocalAuth(filteredLocalAuth);
-        // setVehicle(filteredVehicle);
+        setlocalAuth(filteredlocalAuth);
+
       } catch (err) {
         console.error("Error loading dropdown data:", err);
       }
@@ -159,13 +136,28 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
       [name]:
         type === "checkbox" ? checked : type === "file" ? files[0] : value,
     });
-    // if (name === "LocalAuth") {
-    //   const matchedVehicles = vehicle.filter(
-    //     (vehicle) => vehicle.LocalAuthority === value
-    //   );
-    //   setFilteredVehicles(matchedVehicles);
-    // }
+
   };
+
+  const pageonerequiredfeilds = [
+    "firstName",
+    "lastName",
+    "email",
+    "tel1",
+    "licenseNumber",
+    "niNumber",
+  ];
+  const pagetworequiredfeilds = [
+    "licenseExpiryDate",
+    "taxiBadgeDate",
+    "city",
+    "LocalAuth",
+    "county",
+    "postcode",
+    "postalAddress",
+  ];
+  const isNextDisabled1st = pageonerequiredfeilds.some((field) => !formData[field]);
+  const isNextDisabled2nd = pagetworequiredfeilds.some((field) => !formData[field]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -487,8 +479,11 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                 </button>
                 <button
                   onClick={nextStep}
-                  className="px-6 py-2 bg-custom-bg text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
-                >
+                  className={`px-6 py-2 rounded-lg focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 ${
+                    isNextDisabled1st
+                      ? "bg-gray-400 text-white cursor-not-allowed"
+                      : "bg-custom-bg text-white hover:bg-gray-600"
+                  }`}                  >
                   Next
                 </button>
               </div>
@@ -519,19 +514,21 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                   ))}
                 </select>
               </div> */}
-                {/* <div>
+                <div>
                 <label
                   htmlFor="taxiFirm"
                   className="text-sm font-medium text-gray-700"
                 >
-                  Taxi Localauthority:
+                  Driver Localauthority:
                 </label>
+                <span className="text-red-600">*</span>
                 <select
                   id="LocalAuth"
                   name="LocalAuth"
                   value={formData.LocalAuth}
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                  required
                 >
                   <option value="null">Select Localauthority</option>
                   {localAuth.map((local) => (
@@ -540,7 +537,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                     </option>
                   ))}
                 </select>
-              </div> */}
+              </div>
 
                 {/* <div>
                 <label
@@ -961,8 +958,11 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                   </button>
                   <button
                     type="submit"
-                    className="px-6 py-2 bg-custom-bg text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
-                  >
+                    className={`px-6 py-2 rounded-lg focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 ${
+                      isNextDisabled2nd
+                        ? "bg-gray-400 text-white cursor-not-allowed"
+                        : "bg-custom-bg text-white hover:bg-gray-600"
+                    }`}                    >
                     {loading ? "Submitting..." : "Submit"}
                   </button>
                 </div>

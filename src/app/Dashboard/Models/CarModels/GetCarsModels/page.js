@@ -10,7 +10,7 @@ import UpdateCarModel from "../UpdateCarModel/UpdateCarModel";
 import axios from "axios";
 import { API_URL_CarModel } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import { GetCarModel } from "@/app/Dashboard/Components/ApiUrl/ShowApiDatas/ShowApiDatas";
-import { getCompanyName, getsuperadmincompanyname } from "@/utils/storageUtils";
+import { getCompanyName, getsuperadmincompanyname,getUserRole } from "@/utils/storageUtils";
 
 const Page = () => {
   const [data, setData] = useState([]);
@@ -35,14 +35,29 @@ const Page = () => {
 
   const fetchData = async () => {
     try {
-      const { result } = await GetCarModel();
-      setData(result);
-      setFilteredData(result);
+      const companyName = getCompanyName(); // Get the user's company name
+      const isSuperAdmin = getUserRole(); // Function to check if the user is superadmin
+      const { result } = await GetCarModel(); // Fetch car models
+  
+      // Filter the data based on user role
+      const filtered = isSuperAdmin === "superadmin"
+        ? result // Superadmin sees all data
+        : result.filter((item) =>
+            item.adminCompanyName.toLowerCase() === companyName.toLowerCase()
+          ); // Regular user sees only their company's data
+  
+      // Update state with the filtered data
+      setData(filtered);
+      setFilteredData(filtered);
     } catch (error) {
       console.error("Error fetching data:", error);
+      // Handle the error by setting empty data
       setData([]);
+      setFilteredData([]);
     }
   };
+  
+  
 
   useEffect(() => {
     fetchData();

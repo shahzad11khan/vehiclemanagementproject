@@ -93,18 +93,45 @@ export async function POST(request) {
       });
     }
 
+    // // Hash the password
+    // const hashedPassword = await bcrypt.hash(password, 10);
+    // // Check if a user with the same email or company name already exists
+    // const existingUser = await User.findOne({
+    //    $and: [{ email: email }, { companyname: companyname }],
+    // });
+    // if (!existingUser) {
+    //   return NextResponse.json({
+    //     error: "User Email and Company is already exists",
+    //     status: 400,
+    //   });
+    // }
+    // const existingUserByEmail = await User.findOne({ email: email });
+
     // Hash the password
-    const hashedPassword = await bcrypt.hash(password, 10);
-    // Check if a user with the same email or company name already exists
-    const existingUser = await User.findOne({
-       $and: [{ email: email }, { companyname: companyname }],
+const hashedPassword = await bcrypt.hash(password, 10);
+
+// Check if a user with the same email or company name already exists
+const existingUser = await User.findOne({
+  $or: [{ email: email }, { companyname: companyname }]
+});
+
+if (existingUser) {
+  // Check if the email exists alone or the company name exists
+  if (existingUser.email === email && existingUser.companyname === companyname) {
+    return NextResponse.json({
+      error: "User with this email and company name already exists",
+      status: 400,
     });
-    if (existingUser) {
-      return NextResponse.json({
-        error: "User Email and Company is already exists",
-        status: 400,
-      });
-    }
+  } else if (existingUser.email === email) {
+    return NextResponse.json({
+      error: "User with this email already exists",
+      status: 400,
+    });
+  } 
+}
+
+// Continue with user registration logic if no conflict is found
+
 
     // Create and save the new blog entry
     const newUser = new User({

@@ -14,6 +14,8 @@ import Link from "next/link";
 import { isAuthenticated } from "@/utils/verifytoken";
 import { useRouter } from "next/navigation";
 import DeleteModal from "../../Components/DeleteModal";
+import  BackButton  from "../../Components/BackButton";
+
 
 const Page = () => {
   const router = useRouter();
@@ -174,6 +176,9 @@ const Page = () => {
                 </div>
               </div>
               <div className="justify-end">
+                <div className="flex gap-2">
+                <BackButton/>
+
                 <button
                   onClick={OpenVehicleModle}
                   className="bg-custom-bg text-white px-4 py-2 rounded hover:bg-blue-600 flex items-center justify-center gap-2"
@@ -181,6 +186,7 @@ const Page = () => {
                   <img src="/plus.png" alt="Add Company" className="w-4 h-4" />
                   Add Vehicle
                 </button>
+                </div>
               </div>
             </div>
 

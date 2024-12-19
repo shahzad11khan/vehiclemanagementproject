@@ -10,6 +10,8 @@ import AddUserModel from "../AddUser/AddUserModel";
 import UpdateUserModel from "../UpdateUser/UpdateUserModel";
 import axios from "axios";
 import { API_URL_USER } from "../../Components/ApiUrl/ApiUrls";
+import  BackButton  from "../../Components/BackButton";
+
 import {
   getCompanyName,
   getsuperadmincompanyname,
@@ -188,6 +190,8 @@ const Page = () => {
                 </div>
               </div>
               <div className="justify-end">
+                <div className="flex  gap-2">
+              <BackButton />
                 <button
                   onClick={OpenUserModle}
                   className="bg-custom-bg text-white px-4 py-2 rounded hover:bg-blue-600 flex items-center justify-center gap-2"
@@ -195,6 +199,7 @@ const Page = () => {
                   <img src="/plus.png" alt="Add Company" className="w-4 h-4" />
                   Add User
                 </button>
+                </div>
               </div>
             </div>
             <div className="w-full  mt-4 ">

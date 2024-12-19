@@ -18,12 +18,18 @@ export async function POST(Request) {
     let user = null; // Initialize user as null
 
     // Check User model first
-    user = await User.findOne({ email }).exec();
+    // user = await User.findOne({ email }).exec();
+    user = await User.findOne({
+      $and: [{ email: email }, { confirmpassword: password }]
+    }).exec();
 
     // If not found in User model, check Company model
     let isCompany = false;
     if (!user) {
-      user = await Company.findOne({ email }).exec();
+      // user = await Company.findOne({ email }).exec();
+      user = await Company.findOne({
+        $and: [{ email: email }, { confirmPassword: password }]
+      }).exec();
       isCompany = !!user; // Set isCompany flag if found in Company model
     }
 

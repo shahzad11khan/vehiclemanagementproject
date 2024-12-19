@@ -15,6 +15,8 @@ import Link from "next/link";
 import { isAuthenticated } from "@/utils/verifytoken";
 import { useRouter } from "next/navigation";
 import DeleteModal from "../../Components/DeleteModal";
+import  BackButton  from "../../Components/BackButton";
+
 const Page = () => {
   const router = useRouter();
   const [drivers, setDrivers] = useState([]);
@@ -173,13 +175,16 @@ const Page = () => {
                   </div>
                 </div>
               </div>
-              <button
+              <div className="flex gap-2">
+              <BackButton/>
+               <button
                 onClick={OpenDriverModel}
                 className="bg-custom-bg text-white px-5 py-2 rounded hover:bg-blue-600 flex items-center justify-center gap-2"
               >
                 <img src="/plus.png" alt="Add Company" className="w-4 h-4" />
                 Add Driver
               </button>
+              </div>
             </div>
 
             <div className="mt-4">

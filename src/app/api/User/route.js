@@ -108,23 +108,28 @@ export async function POST(request) {
     // const existingUserByEmail = await User.findOne({ email: email });
 
     // Hash the password
-const hashedPassword = await bcrypt.hash(password, 10);
 
 // Check if a user with the same email or company name already exists
 const existingUser = await User.findOne({
-  $or: [{ email: email }, { companyname: companyname }]
+  $or: [{ email: email }, { companyname: companyname }, {confirmpassword : password}],
 });
 
 if (existingUser) {
   // Check if the email exists alone or the company name exists
   if (existingUser.email === email && existingUser.companyname === companyname) {
     return NextResponse.json({
-      error: "User with this email and company name already exists",
+      error: "User with this email and company name already in use",
       status: 400,
     });
-  } else if (existingUser.email === email) {
+  } else if (existingUser.email === email && existingUser.companyname === companyname && existingUser.confirmpassword === password) {
     return NextResponse.json({
-      error: "User with this email already exists",
+      error: "User with this email And Password already in use",
+      status: 400,
+    });
+  } 
+  else if (existingUser.email === email) {
+    return NextResponse.json({
+      error: "User with this email already in use",
       status: 400,
     });
   } 
@@ -132,7 +137,7 @@ if (existingUser) {
 
 // Continue with user registration logic if no conflict is found
 
-
+const hashedPassword = await bcrypt.hash(password, 10);
     // Create and save the new blog entry
     const newUser = new User({
       title,

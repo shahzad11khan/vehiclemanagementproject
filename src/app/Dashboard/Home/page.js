@@ -145,6 +145,7 @@ const Page = () => {
         ...serviceResponse.data.Result,
         ...roadtaxResponse.data.Result,
       ];
+      // console.log(combinedData)
       setData(combinedData);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -176,25 +177,32 @@ const Page = () => {
   };
   useEffect(() => {
     const companyName = getCompanyName();
-    // console.log(companyName)
     const companyuser = getUserName();
     const userrole = getUserRole();
+    console.log(data)
     const filtered = data.filter((item) => {
-      console.log(item.adminCompanyName, companyName);
+      console.log(item);
+      
+      // Check for undefined values in properties before comparing
       if (companyuser && userrole === "user") {
-        return (
-          item.adminCompanyName.toLowerCase() === companyName.toLowerCase() &&
-          item.asignto.toLowerCase() === companyuser.toLowerCase()
-        );
+        if (item.adminCompanyName && item.asignto) {
+          return (
+            item.adminCompanyName.toLowerCase() === companyName.toLowerCase() &&
+            item.asignto.toLowerCase() === companyuser.toLowerCase()
+          );
+        }
       } else {
         if (userrole === "superadmin") {
           return data;
         }
-        return (
-          item.adminCompanyName.toLowerCase() === companyName.toLowerCase()
-        );
+        if (item.adminCompanyName) {
+          return item.adminCompanyName.toLowerCase() === companyName.toLowerCase();
+        }
       }
+      
+      return false; // Default return if none of the conditions are met
     });
+    
     setFilteredData(filtered);
     // console.log(filtered);
   }, [data]);

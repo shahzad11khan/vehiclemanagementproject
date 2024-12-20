@@ -110,7 +110,7 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
     
   ];
   const pagetworequiredfeilds = [
-    "email",
+    // "email",
     "tel1",
     "postcode",
     "postalAddress",
@@ -127,8 +127,8 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
 
 
   const isNextDisabled1st =  pageonerequiredfeilds.some((field) => !formData[field]);
-  const isNextDisabled2nd = !validation.emailValid && pagetworequiredfeilds.some((field) => !formData[field]);
-  const isNextDisabled3rd = !validation.passwordMatch &&pagethreerequiredfeilds.some((field) => !formData[field]);
+  const isNextDisabled2nd = !validation.emailValid || pagetworequiredfeilds.some((field) => !formData[field]);
+  const isNextDisabled3rd = !validation.passwordMatch || pagethreerequiredfeilds.some((field) => !formData[field]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

@@ -37,6 +37,11 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
     isActive: false,
     role: "user", // Default role set to "user"
   });
+    // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    // const [validation, setValidation] = useState({
+    //   emailValid: null,
+    //   passwordMatch: null,
+    // });
 
   const [imagePreview, setImagePreview] = useState(null); // Preview for the avatar image
 
@@ -80,7 +85,7 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
             passwordExpiresEvery: adminData.repopasswordExpiresEveryrtsTo, // Assuming this should be initialized empty
             companyname: "", // Assuming this should be initialized empty
             username: adminData.username,
-            email: adminData.email,
+            email: adminData.email ,
             password: adminData.confirmpassword, // Set password to confirmpassword
             confirmpassword: adminData.confirmpassword, // Ensure confirmpassword is set
             useravatar: adminData.useravatar,
@@ -117,14 +122,44 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
   }, [userId]);
 
   // Handle form field changes
+  // const handleChange = (e) => {
+  //   const { name, value, type, checked } = e.target;
+  //   setFormData((prevData) => ({
+  //     ...prevData,
+  //     [name]: type === "checkbox" ? checked : value, // Handle checkbox for isActive
+  //   }));
+  // };
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
+    const updatedValue = type === 'checkbox' ? checked : value;
+
     setFormData((prevData) => ({
       ...prevData,
-      [name]: type === "checkbox" ? checked : value, // Handle checkbox for isActive
+      [name]: updatedValue,
     }));
+
+    // if (name === 'email') {
+    //   setValidation((prevValidation) => ({
+    //     ...prevValidation,
+    //     emailValid: emailRegex.test(updatedValue),
+    //   }));
+    // } else if (name === 'confirmpassword' || name === 'password') {
+    //   const password = name === 'password' ? updatedValue : formData.password;
+    //   const confirmPassword =
+    //     name === 'confirmpassword' ? updatedValue : formData.confirmpassword;
+
+    //   setValidation((prevValidation) => ({
+    //     ...prevValidation,
+    //     passwordMatch: password === confirmPassword,
+    //   }));
+    // }
   };
 
+
+
+  // const isNextDisabled = !validation.emailValid ;
+  // const ispasswordmatch = !validation.passwordMatch;
   // Handle file input changes
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -497,8 +532,12 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                     </button>
                     <button
                       onClick={nextStep}
-                      className="px-6 py-2 bg-custom-bg text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
-                    >
+                      className={`px-6 py-2 rounded-lg focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 ${
+                        // isNextDisabled
+                        //   ? "bg-gray-400 text-white cursor-not-allowed"
+                          // :
+                          "bg-custom-bg text-white hover:bg-gray-600"
+                      }`}                    >
                       Next
                     </button>
                   </div>
@@ -720,8 +759,12 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                     </button>
                     <button
                       onClick={nextStep}
-                      className="px-6 py-2 bg-custom-bg text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
-                    >
+                      className={`px-6 py-2 rounded-lg focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 ${
+                        // ispasswordmatch
+                        //   ? "bg-gray-400 text-white cursor-not-allowed"
+                          // :
+                           "bg-custom-bg text-white hover:bg-gray-600"
+                      }`}                        >
                       Next
                     </button>
                   </div>
@@ -731,23 +774,16 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
           )}
           {step === 4 && (
             <>
-              <div>
-                <label
-                  htmlFor="useravatar"
-                  className="flex items-center justify-center w-32 h-32 bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:bg-gray-200 hover:border-gray-400 transition-all"
-                >
-                  <span className="text-gray-500 text-sm font-medium">
-                    Upload Avatar
-                  </span>
-                </label>
+            <div className="flex gap-4">
+              <div className="border-2 border-dashed border-gray-300 rounded-lg p-2 mt-2">
                 <input
                   type="file"
                   id="useravatar"
                   name="useravatar"
                   accept="image/*"
                   onChange={handleFileChange}
-                  className="hidden"
-                />
+                  className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border file:border-gray-300 file:background-gray-100 hover:file:bg-gray-200 file:text-sm"
+                  />
               </div>
               <div>
                 {imagePreview && (
@@ -759,6 +795,7 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                     />
                   </div>
                 )}
+              </div>
               </div>
               {/* <div>
                 <label>

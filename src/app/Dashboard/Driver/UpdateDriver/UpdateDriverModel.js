@@ -7,7 +7,7 @@ import {
   // fetchTaxiFirms,
   fetchBadge,
   fetchInsurence,
-  // fetchLocalAuth,
+  fetchLocalAuth,
   // fetchVehicle,
 } from "../../Components/DropdownData/taxiFirm/taxiFirmService";
 import { getCompanyName, getUserRole } from "@/utils/storageUtils";
@@ -52,7 +52,7 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, selectedUserId }) => {
   // const [taxiFirms, setTaxiFirms] = useState([]);
   const [badge, setBadge] = useState([]);
   const [insurance, setInsurance] = useState([]);
-  // const [localAuth, setLocalAuth] = useState([]);
+  const [localAuth, setLocalAuth] = useState([]);
   // const [vehicle, setVehicle] = useState([]);
   const [superadmin, setSuperadmin] = useState(null);
   const [step, setStep] = useState(1);
@@ -104,13 +104,13 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, selectedUserId }) => {
           // taxiFirmData,
           badgeData,
           insuranceData,
-          // localAuthData,
+          localAuthData,
           // vehicle
         ] = await Promise.all([
           // fetchTaxiFirms(),
           fetchBadge(),
           fetchInsurence(),
-          // fetchLocalAuth(),
+          fetchLocalAuth(),
           // fetchVehicle(),
         ]);
 
@@ -144,14 +144,14 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, selectedUserId }) => {
                   insurance.adminCompanyName === "superadmin"
               );
 
-        // const filteredLocalAuth =
-        //   superadmin === "superadmin"
-        //     ? localAuthData.Result
-        //     : localAuthData.Result.filter(
-        //         (localAuth) =>
-        //           localAuth.adminCompanyName === storedCompanyName ||
-        //           localAuth.adminCompanyName === "superadmin"
-        //       );
+        const filteredLocalAuth =
+          superadmin === "superadmin"
+            ? localAuthData.Result
+            : localAuthData.Result.filter(
+                (localAuth) =>
+                  localAuth.adminCompanyName === storedCompany ||
+                  localAuth.adminCompanyName === "superadmin"
+              );
 
         // const filteredVehicle =
         //   superadmin === "superadmin"
@@ -165,7 +165,7 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, selectedUserId }) => {
         // setTaxiFirms(filteredTaxiFirms);
         setBadge(filteredBadges);
         setInsurance(filteredInsurance);
-        // setLocalAuth(filteredLocalAuth);
+        setLocalAuth(filteredLocalAuth);
         // setVehicle(filteredVehicle);
       } catch (error) {
         console.error("Error loading taxi firms:", error);
@@ -467,12 +467,12 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, selectedUserId }) => {
                   ))}
                 </select>
               </div> */}
-                {/* <div>
+                <div>
                 <label
                   htmlFor="taxiFirm"
                   className="text-sm font-medium text-gray-700"
                 >
-                  Taxi Localauthority:
+                  Driver Localauthority:
                 </label>
                 <select
                   id="LocalAuth"
@@ -488,7 +488,7 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, selectedUserId }) => {
                     </option>
                   ))}
                 </select>
-              </div> */}
+              </div>
 
                 {/* <div>
                 <label
@@ -805,7 +805,7 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, selectedUserId }) => {
                 {/* </div> */}
                 <div className="">
                   <h3 className="text-sm font-medium text-gray-700">
-                    Upload Document
+                    Driver Image
                   </h3>
                   <div className="border-2 border-dashed border-gray-300 rounded-lg p-2 mt-2">
                     <input

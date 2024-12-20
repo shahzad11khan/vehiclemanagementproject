@@ -47,7 +47,6 @@ const Page = () => {
         if (item.adminCompanyName.toLowerCase() === companyNameFromStorage.toLowerCase()) {
           return true;
         }
-        return false;
       });
   
       // Set the filtered data to both `data` and `filteredData`

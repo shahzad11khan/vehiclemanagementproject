@@ -90,7 +90,7 @@ export async function POST(request) {
 });
     if (existingUser) {
       return NextResponse.json({
-        error: "Firm Already Exist",
+        error: "Firm Already Exist with this email And Company Name",
         status: 400,
       });
     }

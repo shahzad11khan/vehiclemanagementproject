@@ -91,12 +91,16 @@ const AddSignatureType = ({ isOpen, onClose, fetchData }) => {
           <div className="grid grid-cols-2">
             {/* Name */}
             <div className="col-span-2">
-              <label
-                htmlFor="name"
-                className="text-sm font-medium text-gray-700"
-              >
-                Name:
-              </label>
+            <div className="flex gap-1">
+                    <label
+                      htmlFor="name"
+                      className="text-sm font-medium text-gray-700"
+                    >
+                      Name:
+                    </label>
+
+                    <span className="text-red-600">*</span>
+                  </div>
               <input
                 type="text"
                 id="name"

@@ -126,7 +126,7 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
      ];
  
      const areFieldsFilled = (fields) =>
-      fields.every((field) => formData[field]?.trim() !== "");
+      fields.every((field) => formData[field] !== "");
     
   const isNextDisabled1st =  !areFieldsFilled(pageonerequiredfeilds);
   const isNextDisabled2nd = !validation.emailValid || !areFieldsFilled(pagetworequiredfeilds);
@@ -303,7 +303,9 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                       isNextDisabled1st
                         ? "bg-gray-400 text-white cursor-not-allowed"
                         : "bg-custom-bg text-white hover:bg-gray-600"
-                    }`}                  >
+                    }`}               
+                    disabled={isNextDisabled1st}
+                    >
                     Next
                   </button>
                 </div>
@@ -507,12 +509,15 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                       Close
                     </button>
                     <button
-                      onClick={nextStep}
+                      onClick={isNextDisabled2nd ? null : nextStep }
                       className={`px-6 py-2 rounded-lg focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 ${
                         isNextDisabled2nd
                           ? "bg-gray-400 text-white cursor-not-allowed"
                           : "bg-custom-bg text-white hover:bg-gray-600"
-                      }`}                           >
+                    
+                      }`}                 
+                      disabled={isNextDisabled2nd}          
+                      >
                       Next
                     </button>
                   </div>
@@ -729,7 +734,10 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                         isNextDisabled3rd
                           ? "bg-gray-400 text-white cursor-not-allowed"
                           : "bg-custom-bg text-white hover:bg-gray-600"
-                      }`}                        >
+                      }`}          
+                      
+                      disabled={isNextDisabled3rd}
+>
                       Next
                     </button>
                   </div>

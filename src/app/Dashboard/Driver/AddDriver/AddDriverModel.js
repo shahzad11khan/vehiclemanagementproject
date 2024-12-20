@@ -509,7 +509,9 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                     isNextDisabled1st
                       ? "bg-gray-400 text-white cursor-not-allowed"
                       : "bg-custom-bg text-white hover:bg-gray-600"
-                  }`}                  >
+                  }`}     
+                  disabled={isNextDisabled1st}
+                  >
                   Next
                 </button>
               </div>
@@ -988,7 +990,9 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                       isNextDisabled2nd
                         ? "bg-gray-400 text-white cursor-not-allowed"
                         : "bg-custom-bg text-white hover:bg-gray-600"
-                    }`}                    >
+                    }`}                   
+                    disabled={isNextDisabled2nd}
+                    >
                     {loading ? "Submitting..." : "Submit"}
                   </button>
                 </div>

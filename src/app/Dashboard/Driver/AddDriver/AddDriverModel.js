@@ -47,12 +47,17 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
     adminCompanyName: "",
   };
 
+
   const [formData, setFormData] = useState(initialFormData);
   const [loading, setLoading] = useState(false);
   const [badge, setBadge] = useState([]);
   const [insurance, setInsurance] = useState([]);
   const [localAuth, setlocalAuth] = useState([]);
   const [superadmin, setSuperadmin] = useState(null);
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const [validation, setValidation] = useState({
+      emailValid: null,
+    });
 
   const [step, setStep] = useState(1);
   const nextStep = () => setStep(step + 1);
@@ -137,6 +142,14 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
         type === "checkbox" ? checked : type === "file" ? files[0] : value,
     });
 
+    
+    if (name === 'email') {
+      setValidation((prevValidation) => ({
+        ...prevValidation,
+        emailValid: emailRegex.test(updatedValue),
+      }));
+    }
+
   };
 
   const pageonerequiredfeilds = [
@@ -156,7 +169,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
     "postcode",
     "postalAddress",
   ];
-  const isNextDisabled1st = pageonerequiredfeilds.some((field) => !formData[field]);
+  const isNextDisabled1st = !validation.emailValid || pageonerequiredfeilds.some((field) => !formData[field]);
   const isNextDisabled2nd = pagetworequiredfeilds.some((field) => !formData[field]);
 
   const handleSubmit = async (e) => {

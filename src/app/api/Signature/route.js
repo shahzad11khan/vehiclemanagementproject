@@ -17,7 +17,12 @@ export async function POST(request) {
     let imagepublicId = "";
 
     // Upload files to Cloudinary
-    if (file1) {
+    if (!file1) {
+      imageFile =
+        "https://static.vecteezy.com/system/resources/thumbnails/000/439/863/small/Basic_Ui__28186_29.jpg";
+        imagepublicId = "123456789";
+    } else{
+      try{
       const buffer1 = Buffer.from(await file1.arrayBuffer());
       const uploadResponse1 = await new Promise((resolve, reject) => {
         cloudinary.uploader
@@ -40,6 +45,9 @@ export async function POST(request) {
 
       imageFile = uploadResponse1.secure_url; // Cloudinary URL for display image
       imagepublicId = uploadResponse1.public_id;
+    }catch(err){
+      console.log(err)
+    }
     }
 
     // Constructing formDataObject excluding the files

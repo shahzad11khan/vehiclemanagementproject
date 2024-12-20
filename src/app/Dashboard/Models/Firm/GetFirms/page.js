@@ -37,15 +37,29 @@ const Page = () => {
 
   const fetchData = async () => {
     try {
-      const { result } = await GetFirm();
+      const companyNameFromStorage = getCompanyName(); // Get company name from storage
+      const { result } = await GetFirm(); // Fetch the data
       console.log(result);
-      setData(result);
-      setFilteredData(result);
+  
+      // Filter the data based on company name and username (if necessary)
+      const filtered = result.filter((item) => {
+        // Check if the company name matches (case-insensitive)
+        if (item.adminCompanyName.toLowerCase() === companyNameFromStorage.toLowerCase()) {
+          return true;
+        }
+        return false;
+      });
+  
+      // Set the filtered data to both `data` and `filteredData`
+      setData(filtered);
+      setFilteredData(filtered);
     } catch (error) {
       console.error("Error fetching data:", error);
       setData([]);
+      setFilteredData([]); // Optionally clear filtered data in case of error
     }
   };
+  
 
   useEffect(() => {
     fetchData();

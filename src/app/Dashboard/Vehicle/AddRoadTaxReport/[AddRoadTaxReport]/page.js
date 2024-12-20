@@ -332,9 +332,9 @@ const Page = ({ params }) => {
                       <td className="py-2 px-4 border-b border-gray-200">
                         {(() => {
                           // Check if motDueDate is null
-                          if (!row.motDueDate) return " "; // If the date is null or falsy, return an empty space
+                          if (!row.roadtexDueDate) return " "; // If the date is null or falsy, return an empty space
 
-                          const date = new Date(row.motDueDate);
+                          const date = new Date(row.roadtexDueDate);
 
                           // Check if the date is invalid (NaN)
                           if (isNaN(date.getTime())) return " "; // If the date is invalid, return an empty space
@@ -354,7 +354,7 @@ const Page = ({ params }) => {
                         {row.roadtexStatus}
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
-                        {row.VehicleStatus}
+                        {row.VehicleStatus? "True" : "False"}
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
                         {row.asignto}

@@ -95,11 +95,13 @@ const AddRoadTexModal = ({ isOpen, onClose, fetchData, selectedid }) => {
 
     // Determine motPending_Done based on motStatus value
     let roadtexPending_Done = formData.roadtexPending_Done;
-
     if (name === "roadtexStatus") {
-      roadtexPending_Done = value === "done" ? "0" : "1";
+      if (value === "done") {
+        roadtexPending_Done = "0";
+      } else {
+        roadtexPending_Done = "1";
+      }
     }
-
     setFormData({
       ...formData,
       [name]: value,
@@ -114,7 +116,7 @@ const AddRoadTexModal = ({ isOpen, onClose, fetchData, selectedid }) => {
       console.log("Data sent successfully:", response.data);
       if (response.data.success) {
         // Check if the current record has motPending_Done set to "1"
-        if (formData.roadtexPending_Done === "0") {
+        if (response.data.roadtexStatus === "done") {
           // Step 2: Call the PUT request to update motPending_Done from 1 to 0
           const updateResponse = await axios.put(
             `${API_URL_UpdateMostRecentPendingInRoadTex}`,
@@ -150,6 +152,7 @@ const AddRoadTexModal = ({ isOpen, onClose, fetchData, selectedid }) => {
       VehicleId: formData.VehicleId,
       VehicleName: formData.VehicleName,
       registrationNumber: formData.registrationNumber,
+      VehicleStatus: formData.VehicleStatus,
       roadtexCurrentDate: "",
       roadtexDueDate: "",
       roadtexCycle: "",

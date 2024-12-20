@@ -412,67 +412,66 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
       if (response.data.success) {
         toast.success(response.data.message);
         try {
-        const motreportis = response.data.vehicle;
-        const servicereportis = response.data.vehicle;
-        const roadtextreportis = response.data.vehicle;
+        const vehicleData = response.data.vehicle;
 
-        const formData = {
-        VehicleName: motreportis.model,
-        registrationNumber: motreportis.registrationNumber,
-        VehicleId: motreportis._id,
-        motCurrentDate: "",
-        motDueDate: motreportis.motDueDate,
-        motCycle: motreportis.motCycle,
-        motStatus: "done",
-        VehicleStatus: motreportis.isActive,
-        asignto: "N/A",
-        motPending_Done: "0",
-        adminCreatedBy: "",
-        adminCompanyName: motreportis.adminCompanyName,
-        adminCompanyId: "",
-      };
-        const formDataservice = {
-        VehicleName: servicereportis.model,
-        registrationNumber: servicereportis.registrationNumber,
-        VehicleId: servicereportis._id,
-        serviceCurrentDate: "",
-        serviceDueDate: servicereportis.nextServiceDate,
-        motCycle: motreportis.motCycle,
-        serviceStatus: "done",
-        VehicleStatus: servicereportis.isActive,
-        servicemailes: servicereportis.nextServiceMiles,
-        asignto: "N/A",
-        servicePending_Done: "0",
-        adminCreatedBy: "",
-        adminCompanyName: servicereportis.adminCompanyName,
-        adminCompanyId: "",
-      };
-        const formDataRoadText = {
-        VehicleName: roadtextreportis.model,
-        registrationNumber: roadtextreportis.registrationNumber,
-        VehicleId: roadtextreportis._id,
-        roadtexCurrentDate: "",
-        roadtexDueDate: roadtextreportis.roadTaxDate,
-        roadtexCycle: roadtextreportis.roadTaxCycle,
-        VehicleStatus: roadtextreportis.roadTaxCost,
-        roadtexStatus: "done",
-        VehicleStatus: roadtextreportis.isActive,
-        asignto: "N/A",
-        roadtexPending_Done: "0",
-        adminCreatedBy: "",
-        adminCompanyName: roadtextreportis.adminCompanyName,
-        adminCompanyId: "",
-      };
+        if (vehicleData.motDueDate) {
+          await sendMotData({
+            VehicleName: vehicleData.model,
+            registrationNumber: vehicleData.registrationNumber,
+            VehicleId: vehicleData._id,
+            motCurrentDate: "",
+            motDueDate: vehicleData.motDueDate,
+            motCycle: vehicleData.motCycle,
+            motStatus: "done",
+            VehicleStatus: vehicleData.isActive,
+            asignto: "N/A",
+            motPending_Done: "0",
+            adminCreatedBy: "",
+            adminCompanyName: vehicleData.adminCompanyName,
+            adminCompanyId: "",
+          });
+        }
 
-      console.log(formDataRoadText)
-          // Step 1: Send POST request to create/update VehicleMOT record
-          const res = await axios.post(`${API_URL_VehicleMOT}`, formData);
-          const resservice = await axios.post(`${API_URL_VehicleService}`, formDataservice);
-          const resroadtext = await axios.post(`${API_URL_VehicleRoadTex}`, formDataRoadText);
+        if (vehicleData.nextServiceDate && vehicleData.nextServiceMiles) {
+          await sendServiceData({
+            VehicleName: vehicleData.model,
+            registrationNumber: vehicleData.registrationNumber,
+            VehicleId: vehicleData._id,
+            serviceCurrentDate: "",
+            serviceDueDate: vehicleData.nextServiceDate,
+            serviceStatus: "done",
+            VehicleStatus: vehicleData.isActive,
+            servicemailes: vehicleData.nextServiceMiles,
+            asignto: "N/A",
+            servicePending_Done: "0",
+            adminCreatedBy: "",
+            adminCompanyName: vehicleData.adminCompanyName,
+            adminCompanyId: "",
+          });
+        }
 
-          console.log("MOT Data sent successfully:", res.data);
-          console.log("Service Data sent successfully:", resservice.data);
-          console.log("Road text Data sent successfully:", resroadtext.data);
+        if (
+          vehicleData.roadTaxDate &&
+          vehicleData.roadTaxCycle &&
+          vehicleData.roadTaxCost
+        ) {
+          await sendRoadTaxData({
+            VehicleName: vehicleData.model,
+            registrationNumber: vehicleData.registrationNumber,
+            VehicleId: vehicleData._id,
+            roadtexCurrentDate: "",
+            roadtexDueDate: vehicleData.roadTaxDate,
+            roadtexCycle: vehicleData.roadTaxCycle,
+            VehicleStatus: vehicleData.roadTaxCost,
+            roadtexStatus: "done",
+            VehicleStatus: vehicleData.isActive,
+            asignto: "N/A",
+            roadtexPending_Done: "0",
+            adminCreatedBy: "",
+            adminCompanyName: vehicleData.adminCompanyName,
+            adminCompanyId: "",
+          });
+        }
         } catch (error) {
           console.error("Error sending data:", error);
           toast.error("Failed to send data");
@@ -490,6 +489,37 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
       console.error("Error submitting vehicle data:", error);
     }
   };
+
+
+  // Function to send MOT Data
+const sendMotData = async (motData) => {
+  try {
+    const res = await axios.post(API_URL_VehicleMOT, motData);
+    console.log("MOT Data sent successfully:", res.data);
+  } catch (error) {
+    console.error("Failed to send MOT data:", error);
+  }
+};
+
+// Function to send Service Data
+const sendServiceData = async (serviceData) => {
+  try {
+    const res = await axios.post(API_URL_VehicleService, serviceData);
+    console.log("Service Data sent successfully:", res.data);
+  } catch (error) {
+    console.error("Failed to send Service data:", error);
+  }
+};
+
+// Function to send Road Tax Data
+const sendRoadTaxData = async (roadTaxData) => {
+  try {
+    const res = await axios.post(API_URL_VehicleRoadTex, roadTaxData);
+    console.log("Road Tax Data sent successfully:", res.data);
+  } catch (error) {
+    console.error("Failed to send Road Tax data:", error);
+  }
+};
 
   const resetForm = () => {
     setStep(1);
@@ -876,7 +906,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                     required
                   />
                 </div>
-              <div>
+              {/* <div>
                   <div className="flex gap-1">
                     <label className=" font-semibold">Editable Color</label>
                   </div>
@@ -888,7 +918,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                     placeholder="Enter custom color"
                     className="w-full p-2 border border-gray-300 rounded"
                   />
-                </div>
+                </div> */}
               </div>
 
               <div className="grid grid-cols-2 md:grid-cols-2 gap-2 mt-4">

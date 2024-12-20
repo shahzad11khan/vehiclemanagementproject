@@ -92,21 +92,25 @@ const AddMotModal = ({ isOpen, onClose, fetchData, selectedid }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
-    // Determine motPending_Done based on motStatus value
+  
+    // Determine motPending_Done based on the new value of motStatus
     let motPending_Done = formData.motPending_Done;
-
+  
     if (name === "motStatus") {
-      motPending_Done = value === "done" ? "0" : "1";
+      if (value === "done") {
+        motPending_Done = "0";
+      } else {
+        motPending_Done = "1";
+      }
     }
-
+  
     setFormData({
       ...formData,
       [name]: value,
       motPending_Done,
     });
   };
-
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -117,7 +121,7 @@ const AddMotModal = ({ isOpen, onClose, fetchData, selectedid }) => {
 
       if (response.data.success) {
         // Check if the current record has motPending_Done set to "1"
-        if (formData.motPending_Done === "0" && formData.motStatus === "done") {
+        if (response.data.motStatus === "done") {
           // Step 2: Call the PUT request to update motPending_Done from 1 to 0
           const updateResponse = await axios.put(
             `${API_URL_UpdateMostRecentPendingInMot}`,
@@ -154,6 +158,8 @@ const AddMotModal = ({ isOpen, onClose, fetchData, selectedid }) => {
       VehicleId: formData.VehicleId,
       VehicleName: formData.VehicleName,
       registrationNumber: formData.registrationNumber,
+      VehicleStatus: formData.VehicleStatus,
+      motCurrentDate: "",
       motCurrentDate: "",
       motDueDate: "",
       motCycle: "",

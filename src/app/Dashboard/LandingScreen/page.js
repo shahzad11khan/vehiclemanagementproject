@@ -35,13 +35,11 @@ const Page = () => {
       {role !== "superadmin" ? (
         <>
         <div className="flex bg-transparent gap-2">
-          <div className="w-6/12 border-white flex justify-center gap-4 bg-transparent">
           <div className="w-[150px] h-[150px] bg-transparent flex flex-col items-center gap-3">
             <img src="/01.png" alt="Management Icon" className="w-full h-auto" />
             <Link href="/Dashboard/StartPage" className="w-full rounded-lg">
               <button className="px-4 py-2 w-full">Management</button>
             </Link>
-          </div>
         </div>
           <div className="w-[150px] h-[150px] bg-transparent flex flex-col items-center gap-2">
             <img src="/02.png" alt="Drivers Icon" className="w-full h-auto" />

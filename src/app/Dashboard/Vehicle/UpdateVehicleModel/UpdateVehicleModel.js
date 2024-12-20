@@ -813,7 +813,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                     required
                   />
                 </div>
-                <div>
+                {/* <div>
                   <div className="flex gap-1">
                     <label className=" font-semibold">Editable Color</label>
                   </div>
@@ -825,7 +825,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                     placeholder="Enter custom color"
                     className="w-full p-2 border border-gray-300 rounded"
                   />
-                </div>
+                </div> */}
                 <div>
                   <div className="flex gap-1">
                     <label className="block font-semibold">Height</label>

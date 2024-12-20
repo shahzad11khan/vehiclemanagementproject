@@ -96,9 +96,13 @@ const AddServiceModal = ({ isOpen, onClose, fetchData, selectedid }) => {
     let servicePending_Done = formData.servicePending_Done;
 
     if (name === "serviceStatus") {
-      servicePending_Done = value === "done" ? "0" : "1";
+      if (value === "done") {
+        servicePending_Done = "0";
+      } else {
+        servicePending_Done = "1";
+      }
     }
-
+  
     setFormData({
       ...formData,
       [name]: value,
@@ -114,7 +118,7 @@ const AddServiceModal = ({ isOpen, onClose, fetchData, selectedid }) => {
       console.log("Data sent successfully:", response.data);
       if (response.data.success) {
         // Check if the current record has motPending_Done set to "1"
-        if (formData.servicePending_Done === "0") {
+        if (response.data.serviceStatus === "done") {
           // Step 2: Call the PUT request to update motPending_Done from 1 to 0
           const updateResponse = await axios.put(
             `${API_URL_UpdateMostRecentPendingInServeice}`,
@@ -150,6 +154,7 @@ const AddServiceModal = ({ isOpen, onClose, fetchData, selectedid }) => {
       VehicleId: formData.VehicleId,
       VehicleName: formData.VehicleName,
       registrationNumber: formData.registrationNumber,
+      VehicleStatus: formData.VehicleStatus,
       serviceCurrentDate: "",
       serviceDueDate: "",
       serviceStatus: "",

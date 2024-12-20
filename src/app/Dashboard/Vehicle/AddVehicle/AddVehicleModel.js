@@ -140,9 +140,12 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
     "warrantyInfo",
   ];
 
-  const isNextDisabled1st = pageonerequiredfeilds.some((field) => !vehicleData[field]);
-  const isNextDisabled2nd = pagetworequiredfeilds.some((field) => !vehicleData[field]);
-  const isNextDisabled5th = pagefiverequiredfeilds.some((field) => !vehicleData[field]);
+  const areFieldsFilled = (fields) =>
+    fields.every((field) => vehicleData[field]?.trim() !== "");
+  
+  const isNextDisabled1st = !areFieldsFilled(pageonerequiredfeilds);
+  const isNextDisabled2nd = !areFieldsFilled(pagetworequiredfeilds);
+  const isNextDisabled5th = !areFieldsFilled(pagefiverequiredfeilds);
 
 
   useEffect(() => {

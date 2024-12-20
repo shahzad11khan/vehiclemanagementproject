@@ -136,22 +136,29 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
 
   const handleChange = (e) => {
     const { name, value, type, checked, files } = e.target;
-    setFormData({
-      ...formData,
-      [name]:
-        type === "checkbox" ? checked : type === "file" ? files[0] : value,
-    });
-
     
-    if (name === 'email') {
+    // Determine the updated value based on the input type
+    const updatedValue = type === "checkbox" 
+      ? checked 
+      : type === "file" 
+        ? files[0] 
+        : value;
+  
+    // Update form data state
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: updatedValue,
+    }));
+  
+    // Handle email validation if the field name is "email"
+    if (name === "email") {
       setValidation((prevValidation) => ({
         ...prevValidation,
         emailValid: emailRegex.test(updatedValue),
       }));
     }
-
   };
-
+  
   const pageonerequiredfeilds = [
     "firstName",
     "lastName",
@@ -169,8 +176,14 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
     "postcode",
     "postalAddress",
   ];
-  const isNextDisabled1st = !validation.emailValid || pageonerequiredfeilds.some((field) => !formData[field]);
-  const isNextDisabled2nd = pagetworequiredfeilds.some((field) => !formData[field]);
+
+  const areFieldsFilled = (fields) =>
+    fields.every((field) => formData[field]?.trim() !== "");
+  
+  // Determine if the "Next" button should be disabled
+  const isNextDisabled1st =
+    !validation.emailValid || !areFieldsFilled(pageonerequiredfeilds);
+  const isNextDisabled2nd = !areFieldsFilled(pagetworequiredfeilds);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

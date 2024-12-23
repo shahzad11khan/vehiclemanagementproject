@@ -12,10 +12,11 @@ import {
 const AddUserModel = ({ isOpen, onClose, fetchData }) => {
   // const [title, setTitile] = useState([]);
   // const [role, setrole] = useState(null);
-  const [previewAvatar, setPreviewAvatar] = useState(null);
+  // const [previewAvatar, setPreviewAvatar] = useState(null);
   const [showPasswords, setShowPasswords] = useState(false);
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  const [validation, setValidation] = useState({
+  // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+    const [validation, setValidation] = useState({
     emailValid: null,
     passwordMatch: null,
   });
@@ -95,11 +96,11 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
       useravatar: file, // Store the selected file
     }));
 
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => setPreviewAvatar(reader.result); // Set preview image
-      reader.readAsDataURL(file);
-    }
+    // if (file) {
+    //   const reader = new FileReader();
+    //   reader.onload = () => setPreviewAvatar(reader.result); // Set preview image
+    //   reader.readAsDataURL(file);
+    // }
   };
 
 
@@ -320,7 +321,7 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                   Contact Information
                 </h3>
                 <div className="grid grid-cols-2 sm:grid-cols-2 gap-3">
-                  <div>
+                  {/* <div>
                     <div className="flex gap-1">
                       <label
                         htmlFor="email"
@@ -346,7 +347,40 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                       } focus:outline-none`}
                       required
                     />
-                  </div>
+                  </div> */}
+
+<div>
+      <div className="flex gap-1">
+        <label
+          htmlFor="email"
+          className="text-sm font-medium text-gray-700"
+        >
+          Email:
+        </label>
+        <span className="text-red-600">*</span>
+      </div>
+      <input
+        type="email"
+        id="email"
+        name="email"
+        value={formData.email}
+        onChange={handleChange}
+        className={`mt-1 block w-full p-2 border rounded-lg ${
+          validation.emailValid === null
+            ? 'border-gray-300'
+            : validation.emailValid
+            ? 'border-green-500'
+            : 'border-red-500'
+        } focus:outline-none`}
+        required
+      />
+      {validation.emailValid === false && (
+        <p className="text-sm text-red-600">Invalid email format</p>
+      )}
+      {validation.emailValid === true && (
+        <p className="text-sm text-green-600">Valid email format</p>
+      )}
+    </div>
 
                   <div>
                     <div className="flex gap-1">
@@ -774,9 +808,9 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                 <div className="flex items-center gap-4">
                   <label
                     htmlFor="useravatar"
-                    className="flex items-center justify-center w-32 h-32 bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:bg-gray-200 hover:border-gray-400 transition-all"
+                    className="flex items-center justify-center p-3  border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:bg-gray-200 hover:border-gray-400 transition-all"
                   >
-                    <span className="text-gray-500 text-sm font-medium">
+                    <span className="text-gray-500 text-sm font-medium bg-transparent">
                       Upload Avatar
                     </span>
                   </label>
@@ -788,11 +822,11 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                     onChange={handleFileChange}
                     className="hidden"
                   />
-                  <img
+                  {/* <img
                     src={previewAvatar || "/default-avatar.png"} // Use preview logic or a default image
                     alt="Avatar Preview"
                     className="w-32 h-32 rounded-lg border border-gray-300 object-cover"
-                  />
+                  /> */}
                 </div>
               </div>
 

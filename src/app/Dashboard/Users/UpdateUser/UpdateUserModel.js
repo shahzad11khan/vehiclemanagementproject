@@ -37,11 +37,11 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
     isActive: false,
     role: "user", // Default role set to "user"
   });
-    // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    // const [validation, setValidation] = useState({
-    //   emailValid: null,
-    //   passwordMatch: null,
-    // });
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+    const [validation, setValidation] = useState({
+      emailValid: null,
+      passwordMatch: null,
+    });
 
   const [imagePreview, setImagePreview] = useState(null); // Preview for the avatar image
 
@@ -139,27 +139,28 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
       [name]: updatedValue,
     }));
 
-    // if (name === 'email') {
-    //   setValidation((prevValidation) => ({
-    //     ...prevValidation,
-    //     emailValid: emailRegex.test(updatedValue),
-    //   }));
-    // } else if (name === 'confirmpassword' || name === 'password') {
-    //   const password = name === 'password' ? updatedValue : formData.password;
-    //   const confirmPassword =
-    //     name === 'confirmpassword' ? updatedValue : formData.confirmpassword;
+    if (name === 'email') {
+      setValidation((prevValidation) => ({
+        ...prevValidation,
+        emailValid: emailRegex.test(updatedValue),
+      }));
+    } else 
+    if (name === 'confirmpassword' || name === 'password') {
+      const password = name === 'password' ? updatedValue : formData.password;
+      const confirmPassword =
+        name === 'confirmpassword' ? updatedValue : formData.confirmpassword;
 
-    //   setValidation((prevValidation) => ({
-    //     ...prevValidation,
-    //     passwordMatch: password === confirmPassword,
-    //   }));
-    // }
+      setValidation((prevValidation) => ({
+        ...prevValidation,
+        passwordMatch: password === confirmPassword,
+      }));
+    }
   };
 
 
 
-  // const isNextDisabled = !validation.emailValid ;
-  // const ispasswordmatch = !validation.passwordMatch;
+  const isNextDisabled = !validation.emailValid ;
+  const ispasswordmatch = !validation.passwordMatch;
   // Handle file input changes
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -365,10 +366,23 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                       name="email"
                       value={formData.email}
                       onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                      className={`mt-1 block w-full p-2 border rounded-lg ${
+                        validation.emailValid === null
+                          ? 'border-gray-300'
+                          : validation.emailValid
+                          ? 'border-green-500'
+                          : 'border-red-500'
+                      } focus:outline-none`}
                       required
                     />
+                    {validation.emailValid === false && (
+                      <p className="text-sm text-red-600">Invalid email format</p>
+                    )}
+                    {validation.emailValid === true && (
+                      <p className="text-sm text-green-600">Valid email format</p>
+                    )}
                   </div>
+
 
                   <div>
                     <div className="flex gap-1">
@@ -533,9 +547,9 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                     <button
                       onClick={nextStep}
                       className={`px-6 py-2 rounded-lg focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 ${
-                        // isNextDisabled
-                        //   ? "bg-gray-400 text-white cursor-not-allowed"
-                          // :
+                        isNextDisabled
+                          ? "bg-gray-400 text-white cursor-not-allowed"
+                          :
                           "bg-custom-bg text-white hover:bg-gray-600"
                       }`}                    >
                       Next
@@ -646,7 +660,7 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                       required
                     />
                   </div>
-                  <div className="flex gap-2">
+                  {/* <div className="flex gap-2">
                     <div>
                       <div className="flex gap-1">
                         <label
@@ -697,7 +711,78 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                         {showPasswords ? "Hide" : "Show"}
                       </button>
                     </div>
-                  </div>
+                  </div> */}
+
+<div className="flex gap-2">
+        <div>
+          <div className="flex gap-1">
+            <label
+              htmlFor="password"
+              className="text-sm font-medium text-gray-700"
+            >
+              Password:
+            </label>
+            <span className="text-red-600">*</span>
+          </div>
+          <input
+            type={showPasswords ? "text" : "password"}
+            id="password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+            required
+          />
+        </div>
+
+        <div>
+          <div className="flex gap-1">
+            <label
+              htmlFor="confirmpassword"
+              className="text-sm font-medium text-gray-700"
+            >
+              Confirm Password:
+            </label>
+            <span className="text-red-600">*</span>
+          </div>
+          <input
+            type={showPasswords ? "text" : "password"}
+            id="confirmpassword"
+            name="confirmpassword"
+            value={formData.confirmpassword}
+            onChange={handleChange}
+            className={`mt-1 block w-full p-2 border rounded-lg ${
+              validation.passwordMatch === null
+                ? "border-gray-300"
+                : validation.passwordMatch
+                ? "border-green-500"
+                : "border-red-500"
+            }`}
+            required
+          />
+          {validation.passwordMatch === false ? (
+            <p className="text-red-600 text-sm mt-1">
+              Passwords do not match.
+            </p>
+          ):(
+            <p className="text-green-500 text-sm mt-1">
+            Passwords match.
+          </p>
+          )}
+        </div>
+
+        <div className="mt-4">
+          <button
+            type="button"
+            onClick={() => setShowPasswords(!showPasswords)}
+            className="px-4 py-2"
+          >
+            {showPasswords ? "Hide" : "Show"}
+          </button>
+        </div>
+      </div>
+                  
+
                   <div>
                     <div className="flex gap-1">
                       <label
@@ -760,11 +845,13 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                     <button
                       onClick={nextStep}
                       className={`px-6 py-2 rounded-lg focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 ${
-                        // ispasswordmatch
-                        //   ? "bg-gray-400 text-white cursor-not-allowed"
-                          // :
+                        ispasswordmatch
+                          ? "bg-gray-400 text-white cursor-not-allowed"
+                          :
                            "bg-custom-bg text-white hover:bg-gray-600"
-                      }`}                        >
+                      }`}         
+                        //  disabled={!validation.passwordMatch}     
+                            >
                       Next
                     </button>
                   </div>

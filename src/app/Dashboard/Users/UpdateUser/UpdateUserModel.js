@@ -838,7 +838,7 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                         onClose();
                         resetform();
                       }}
-                      className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                    className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
                     >
                       Close
                     </button>

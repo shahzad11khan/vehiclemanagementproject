@@ -2,12 +2,12 @@
 import { API_URL_Manufacturer } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { fetchCarModel } from "../../../Components/DropdownData/taxiFirm/taxiFirmService";
+// import { fetchCarModel } from "../../../Components/DropdownData/taxiFirm/taxiFirmService";
 import { toast } from "react-toastify";
 import {
   getCompanyName,
   getsuperadmincompanyname,
-  getUserRole,
+  // getUserRole,
 } from "@/utils/storageUtils";
 
 const AddManufacturerModel = ({ isOpen, onClose, fetchData }) => {
@@ -21,7 +21,7 @@ const AddManufacturerModel = ({ isOpen, onClose, fetchData }) => {
   });
 
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState([]);
+  // const [data, setData] = useState([]);
 
   useEffect(() => {
     const storedCompanyName = getCompanyName() || getsuperadmincompanyname();
@@ -31,29 +31,29 @@ const AddManufacturerModel = ({ isOpen, onClose, fetchData }) => {
         adminCompanyName: storedCompanyName,
       }));
     }
-    fetchDataa();
+    // fetchDataa();
   }, []);
 
-  const fetchDataa = async () => {
-    try {
-      const stored = getCompanyName() || getsuperadmincompanyname();
-      const role = getUserRole();
-      const title = await fetchCarModel();
-      console.log(title);
-      const filteredTaxiFirms =
-        role === "superadmin"
-          ? title.result
-          : title.result.filter(
-              (firm) =>
-                firm.adminCompanyName === stored ||
-                firm.adminCompanyName === "superadmin"
-            );
+  // const fetchDataa = async () => {
+  //   try {
+  //     const stored = getCompanyName() || getsuperadmincompanyname();
+  //     const role = getUserRole();
+  //     // const title = await fetchCarModel();
+  //     // console.log(title);
+  //     // const filteredTaxiFirms =
+  //       // role === "superadmin"
+  //         // ? title.result
+  //         // : title.result.filter(
+  //             // (firm) =>
+  //               // firm.adminCompanyName === stored ||
+  //               // firm.adminCompanyName === "superadmin"
+  //           // );
 
-      setData(filteredTaxiFirms);
-    } catch (error) {
-      console.error("Error fetching local auth data:", error);
-    }
-  };
+  //     // setData(filteredTaxiFirms);
+  //   } catch (error) {
+  //     console.error("Error fetching local auth data:", error);
+  //   }
+  // };
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -123,7 +123,7 @@ const AddManufacturerModel = ({ isOpen, onClose, fetchData }) => {
               />
             </div>
 
-            <div>
+            {/* <div>
               <div className="flex gap-1">
                 <label
                   htmlFor="carmodel"
@@ -146,7 +146,7 @@ const AddManufacturerModel = ({ isOpen, onClose, fetchData }) => {
                   </option>
                 ))}
               </select>
-            </div>
+            </div> */}
           </div>
           <div className=" w-full">
             <label

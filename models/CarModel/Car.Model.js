@@ -7,6 +7,10 @@ const CarModelSchema = new mongoose.Schema({
     type: String,
     trim: true, // Removes whitespace from the beginning and end
   },
+  makemodel: {
+    type: String,
+    trim: true, // Removes whitespace from the beginning and end
+  },
   description: {
     type: String,
     trim: true,

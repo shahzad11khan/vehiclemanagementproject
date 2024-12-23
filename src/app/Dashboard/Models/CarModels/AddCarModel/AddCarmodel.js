@@ -8,6 +8,7 @@ import { getCompanyName, getsuperadmincompanyname } from "@/utils/storageUtils";
 const AddCarModel = ({ isOpen, onClose, fetchData }) => {
   const [formData, setFormData] = useState({
     name: "",
+    makemodel: "",
     description: "",
     isActive: false,
     adminCreatedBy: "",
@@ -43,6 +44,7 @@ const AddCarModel = ({ isOpen, onClose, fetchData }) => {
       if (response.data.success) {
         setFormData({
           name: "",
+          makemodel:"",
           description: "",
           isActive: false,
           adminCreatedBy: "",
@@ -88,6 +90,27 @@ const AddCarModel = ({ isOpen, onClose, fetchData }) => {
                 id="name"
                 name="name"
                 value={formData.name}
+                onChange={handleChange}
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                required
+              />
+            </div>
+            <div className="col-span-2">
+              <div className="flex gap-1">
+                <label
+                  htmlFor="firstName"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Make Model:
+                </label>
+                <span className="text-red-600">*</span>
+              </div>
+
+              <input
+                type="text"
+                id="makemodel"
+                name="makemodel"
+                value={formData.makemodel}
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
                 required

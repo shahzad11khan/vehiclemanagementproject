@@ -7,12 +7,12 @@ export const POST = catchAsyncErrors(async (request) => {
   await connect();
   const data = await request.json();
 
-  const { name, description, isActive, adminCreatedBy, adminCompanyName } =
+  const { name,makemodel, description, isActive, adminCreatedBy, adminCompanyName } =
     data; // Extract the new variables
 
   // Check for existing vehicle by name// Check for existing CarModel by name and adminCompanyName
   const existingCarModel = await CarModel.findOne({
-  $and: [{ name: name }, { adminCompanyName: adminCompanyName }],
+  $and: [{ name: name },{ makemodel: makemodel} ,{ adminCompanyName: adminCompanyName }],
 });
   if (existingCarModel) {
     return NextResponse.json({
@@ -24,6 +24,7 @@ export const POST = catchAsyncErrors(async (request) => {
   // Create and save the new vehicle entry
   const newCarModel = new CarModel({
     name,
+    makemodel,
     description,
     isActive,
     adminCreatedBy,

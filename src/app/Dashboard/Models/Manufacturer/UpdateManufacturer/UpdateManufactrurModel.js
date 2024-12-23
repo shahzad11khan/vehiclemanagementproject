@@ -6,9 +6,9 @@ import { toast } from "react-toastify";
 import {
   getCompanyName,
   getsuperadmincompanyname,
-  getUserRole,
+  // getUserRole,
 } from "@/utils/storageUtils";
-import { fetchCarModel } from "../../../Components/DropdownData/taxiFirm/taxiFirmService";
+// import { fetchCarModel } from "../../../Components/DropdownData/taxiFirm/taxiFirmService";
 
 const UpdateManufacturerModel = ({
   isOpen,
@@ -25,7 +25,7 @@ const UpdateManufacturerModel = ({
   });
 
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState([]);
+  // const [data, setData] = useState([]);
 
   useEffect(() => {
     const storedCompanyName = getCompanyName() || getsuperadmincompanyname();
@@ -56,20 +56,20 @@ const UpdateManufacturerModel = ({
       } else {
         toast.warn("Failed to fetch manufacturer data");
       }
-      const stored = getCompanyName() || getsuperadmincompanyname();
-      const role = getUserRole();
-      const title = await fetchCarModel();
-      console.log(title);
-      const filteredTaxiFirms =
-        role === "superadmin"
-          ? title.result
-          : title.result.filter(
-              (firm) =>
-                firm.adminCompanyName === stored ||
-                firm.adminCompanyName === "superadmin"
-            );
-
-      setData(filteredTaxiFirms);
+      // const stored = getCompanyName() || getsuperadmincompanyname();
+      // const role = getUserRole();
+      // const title = await fetchCarModel();
+      // console.log(title);
+      // const filteredTaxiFirms =
+        // role === "superadmin"
+          // ? title.result
+          // : title.result.filter(
+              // (firm) =>
+                // firm.adminCompanyName === stored ||
+                // firm.adminCompanyName === "superadmin"
+            // );
+// 
+      // setData(filteredTaxiFirms);
     } catch (err) {
       console.log(err);
     } finally {
@@ -149,7 +149,7 @@ const UpdateManufacturerModel = ({
                 required
               />
             </div>
-            <div>
+            {/* <div>
               <div className="flex gap-1">
                 <label
                   htmlFor="carmodel"
@@ -172,7 +172,7 @@ const UpdateManufacturerModel = ({
                   </option>
                 ))}
               </select>
-            </div>
+            </div> */}
           </div>
           <div className="w-full">
             <label

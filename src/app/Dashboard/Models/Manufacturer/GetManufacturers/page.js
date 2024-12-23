@@ -15,7 +15,7 @@ import DeleteModal from "@/app/Dashboard/Components/DeleteModal";
 const Page = () => {
   const columns = [
     { name: "Manufacturer Name", accessor: "name" },
-    { name: "Car Model", accessor: "carmodel" },
+    { name: "Manufacturer Description", accessor: "description" },
     {
       name: "Manufacturer Status",
       accessor: (row) => (row.isActive ? "Active" : "Inactive"),

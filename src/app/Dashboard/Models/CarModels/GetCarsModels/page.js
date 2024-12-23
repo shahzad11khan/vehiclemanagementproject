@@ -173,6 +173,10 @@ const Page = () => {
                     </th>
 
                     <th className="px-4 py-2 bg-custom-bg text-white text-sm">
+                      Make Model
+                    </th>
+
+                    <th className="px-4 py-2 bg-custom-bg text-white text-sm">
                       Car Active
                     </th>
                     <th className="px-4 py-2 bg-custom-bg text-white text-sm">
@@ -185,6 +189,9 @@ const Page = () => {
                     <tr key={item._id}>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                         {item.name}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                        {item.makemodel}
                       </td>
 
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">

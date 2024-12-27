@@ -229,7 +229,7 @@ const Page = ({ params }) => {
       <Header />
       <div className="flex w-full">
         <Sidebar className="w-4/12" />
-        <div className="mx-auto w-10/12 p-4">
+        <div className="mx-auto w-10/12 py-2  h-screen">
           <div className="border-2 mt-3 w-full ">
             <div className="flex justify-between">
               {/* <input
@@ -239,7 +239,7 @@ const Page = ({ params }) => {
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="border rounded px-4 py-2 w-64"
               /> */}
-              <div className="flex gap-2">
+              <div className="flex gap-2 m-2">
                 <button
                   onClick={generatePDF}
                   className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
@@ -407,7 +407,7 @@ const Page = ({ params }) => {
               </table>
             </div>
 
-            <div className="flex justify-center text-center mt-4">
+            <div className="flex justify-center text-center mt-4 gap-1 mb-2">
               <button
                 onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                 disabled={currentPage === 1}

@@ -98,47 +98,58 @@ const Page = ({ params }) => {
     startIndex + recordsPerPage
   );
 
+
   const generatePDF = () => {
     const doc = new jsPDF();
-
+  
     // Set title and report date
-    doc.setFontSize(12); // Large font for title
-    doc.text("Road Tax Records Report", 14, 10);
-
+    doc.setFontSize(14); // Large font for title
+    doc.setFont("helvetica", "bold");
+    doc.text("Road Tax Records Report", 105, 10, { align: "center" });
+  
     const reportDate = new Date().toLocaleDateString();
     doc.setFontSize(10); // Smaller font for the report date
-    doc.text(`Report Generated: ${reportDate}`, 14, 15);
-
-    // Display the vehicle name once at the top
+    doc.setFont("helvetica", "normal");
+    doc.text(`Report Generated: ${reportDate}`, 14, 20);
+  
+    // Display vehicle name once at the top
     const vehicleName = filteredData[0]?.VehicleName || "Name Unavailable";
-    doc.text(`Vehicle Name: ${vehicleName}`, 14, 20);
     const vehicleRegistration =
       filteredData[0]?.registrationNumber || "Registration Unavailable";
-    doc.text(`Registration Number: ${vehicleRegistration}`, 14, 25);
-    doc.text(`Company Name: ${selectedCompanyName}`, 14, 30);
-
+    const companyName = selectedCompanyName || "Company Unavailable";
+  
+    doc.text(`Vehicle Name: ${vehicleName}`, 14, 25);
+    doc.text(`Registration Number: ${vehicleRegistration}`, 14, 30);
+    doc.text(`Company Name: ${companyName}`, 14, 35);
+  
     // Define table columns and their initial X positions
     const tableColumn = [
       "Current Date",
       "Due Date",
       "Tax Cycle",
-      "Asign To",
+      "Assign To",
       "Tax Status",
     ];
-
+  
     let startX = 14;
-    let startY = 42; // Adjust to leave space after the vehicle name
+    let startY = 52; // Adjust to leave space after the vehicle name
     const columnWidth = 37; // Adjusted column width to better fit the page
-    const lineHeight = 9; // Height of each row
+    const lineHeight = 5; // Height of each row
     const padding = 2; // Padding inside cells
     const pageHeight = doc.internal.pageSize.height; // Get the height of the page
-
-    // Add table header
+  
+    // Add table header (Make header bold)
+    doc.setFont("helvetica", "bold"); // Set the font to bold for the header
     tableColumn.forEach((column, index) => {
-      doc.text(column, startX + index * columnWidth + padding, startY);
-      doc.rect(startX + index * columnWidth, startY - 4, columnWidth, 8);
+      const textWidth = doc.getStringUnitWidth(column) * doc.getFontSize() / doc.internal.scaleFactor;
+      const centeredX = startX + index * columnWidth + (columnWidth - textWidth) / 2;
+      doc.text(column, centeredX, startY);
+      doc.rect(startX + index * columnWidth, startY - lineHeight, columnWidth, lineHeight);
     });
-
+  
+    // Switch back to normal font for the rows
+    doc.setFont("helvetica", "normal");
+  
     // Add table rows
     let currentY = startY + lineHeight;
     filteredData.forEach((row) => {
@@ -147,105 +158,86 @@ const Page = ({ params }) => {
         doc.addPage(); // Add a new page if the row won't fit
         currentY = 20; // Reset Y to start at the top of the new page
         // Re-add the header on the new page
+        doc.setFont("helvetica", "bold"); // Header bold on new page
         tableColumn.forEach((column, index) => {
-          doc.text(column, startX + index * columnWidth + padding, currentY);
-          doc.rect(startX + index * columnWidth, currentY - 4, columnWidth, 8);
+          const textWidth = doc.getStringUnitWidth(column) * doc.getFontSize() / doc.internal.scaleFactor;
+          const centeredX = startX + index * columnWidth + (columnWidth - textWidth) / 2;
+          doc.text(column, centeredX, currentY);
+          doc.rect(startX + index * columnWidth, currentY - lineHeight, columnWidth, lineHeight);
         });
         currentY += lineHeight; // Adjust the Y after the header
+        doc.setFont("helvetica", "normal"); // Switch back to normal font for rows
       }
+  
+      // Format each data cell to handle potential multi-line content
       const roadtexCurrentDate = doc.splitTextToSize(
         (() => {
           if (!row.roadtexCurrentDate) return "N/A";
           const date = new Date(row.roadtexCurrentDate);
-          const formattedDate = `${String(date.getMonth() + 1).padStart(
-            2,
-            "0"
-          )}/${String(date.getDate()).padStart(2, "0")}/${date.getFullYear()}`;
+          const formattedDate = `${String(date.getMonth() + 1).padStart(2, "0")}/${String(date.getDate()).padStart(2, "0")}/${date.getFullYear()}`;
           return formattedDate;
-        })() || "N/A",
+        })(),
         columnWidth - padding
       );
       const roadtexDueDate = doc.splitTextToSize(
         (() => {
           if (!row.roadtexDueDate) return "N/A"; // If roadtexDueDate is null or undefined, return "N/A"
-
           const date = new Date(row.roadtexDueDate);
-          const formattedDate = `${String(date.getMonth() + 1).padStart(
-            2,
-            "0"
-          )}/${String(date.getDate()).padStart(2, "0")}/${date.getFullYear()}`;
+          const formattedDate = `${String(date.getMonth() + 1).padStart(2, "0")}/${String(date.getDate()).padStart(2, "0")}/${date.getFullYear()}`;
           return formattedDate;
         })(),
         columnWidth - padding
       );
-
-      const roadtexCycle = doc.splitTextToSize(
-        row.roadtexCycle || "N/A",
-        columnWidth - padding
-      );
-      const asignto = doc.splitTextToSize(
-        row.asignto || "N/A",
-        columnWidth - padding
-      );
-      const roadtexStatus = doc.splitTextToSize(
-        row.roadtexStatus || "N/A",
-        columnWidth - padding
-      );
-      const maxCellHeight =
-        Math.max(
-          roadtexCurrentDate.length,
-          roadtexDueDate.length,
-          roadtexCycle.length,
-          asignto.length,
-          roadtexStatus.length
-        ) * lineHeight;
-
-      // Add the data cells with borders
-      doc.text(roadtexCurrentDate, startX + padding, currentY);
-      doc.rect(startX, currentY - 4, columnWidth, maxCellHeight);
-
-      doc.text(roadtexDueDate, startX + columnWidth + padding, currentY);
-      doc.rect(startX + columnWidth, currentY - 4, columnWidth, maxCellHeight);
-      doc.text(roadtexCycle, startX + 2 * columnWidth + padding, currentY);
-      doc.rect(
-        startX + 2 * columnWidth,
-        currentY - 4,
-        columnWidth,
-        maxCellHeight
-      );
-      doc.text(asignto, startX + 3 * columnWidth + padding, currentY);
-      doc.rect(
-        startX + 3 * columnWidth,
-        currentY - 4,
-        columnWidth,
-        maxCellHeight
-      );
-
-      doc.text(roadtexStatus, startX + 4 * columnWidth + padding, currentY);
-      doc.rect(
-        startX + 4 * columnWidth,
-        currentY - 4,
-        columnWidth,
-        maxCellHeight
-      );
-
+      const roadtexCycle = doc.splitTextToSize(row.roadtexCycle || "N/A", columnWidth - padding);
+      const asignto = doc.splitTextToSize(row.asignto || "N/A", columnWidth - padding);
+      const roadtexStatus = doc.splitTextToSize(row.roadtexStatus || "N/A", columnWidth - padding);
+  
+      const maxCellHeight = Math.max(
+        roadtexCurrentDate.length,
+        roadtexDueDate.length,
+        roadtexCycle.length,
+        asignto.length,
+        roadtexStatus.length
+      ) * lineHeight;
+  
+      // Add the data cells with borders and center the text
+      doc.text(roadtexCurrentDate, startX + padding, currentY + (maxCellHeight / 15));
+      doc.rect(startX, currentY - lineHeight, columnWidth, maxCellHeight);
+  
+      doc.text(roadtexDueDate, startX + columnWidth + padding, currentY + (maxCellHeight / 15));
+      doc.rect(startX + columnWidth, currentY - lineHeight, columnWidth, maxCellHeight);
+  
+      doc.text(roadtexCycle, startX + 2 * columnWidth + padding, currentY + (maxCellHeight / 15));
+      doc.rect(startX + 2 * columnWidth, currentY - lineHeight, columnWidth, maxCellHeight);
+  
+      doc.text(asignto, startX + 3 * columnWidth + padding, currentY + (maxCellHeight / 15));
+      doc.rect(startX + 3 * columnWidth, currentY - lineHeight, columnWidth, maxCellHeight);
+  
+      doc.text(roadtexStatus, startX + 4 * columnWidth + padding, currentY + (maxCellHeight / 15));
+      doc.rect(startX + 4 * columnWidth, currentY - lineHeight, columnWidth, maxCellHeight);
+  
       // Increment Y for the next row
-      currentY + maxCellHeight;
+      currentY += maxCellHeight;
     });
 
+
+    //////// -----------------------------
+  
     // Save the PDF
     doc.save("Road_Tax_Report.pdf");
   };
+  
+
 
   return (
     <>
       <Header />
       <div className="flex w-full">
         <Sidebar className="w-4/12" />
-        <div className="mx-auto w-10/12 p-4">
+        <div className="mx-auto w-10/12 p-4 h-screen">
           <div className="border-2 mt-3 w-full ">
             <div className="flex justify-between">
-              <div className="flex gap-2">
+              <div className="flex gap-2 m-2">
                 <button
                   onClick={generatePDF}
                   className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
@@ -354,7 +346,7 @@ const Page = ({ params }) => {
                         {row.roadtexStatus}
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
-                        {row.VehicleStatus? "True" : "False"}
+                        {row.VehicleStatus ? "True" : "False"}
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200">
                         {row.asignto}
@@ -365,7 +357,7 @@ const Page = ({ params }) => {
                           onClick={() => handleDelete(row._id)}
                           className="text-red-500 hover:text-red-700"
                         >
-                          <FaTrash />
+                          <img src="/trash.png" alt="delete" className="w-6" />
                         </button>
                       </td>
                     </tr>
@@ -374,7 +366,7 @@ const Page = ({ params }) => {
               </table>
             </div>
 
-            <div className="flex justify-center text-center mt-4">
+            <div className="flex justify-center text-center mt-4 mb-2">
               <button
                 onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                 disabled={currentPage === 1}
@@ -383,11 +375,10 @@ const Page = ({ params }) => {
                 Previous
               </button>
               <span
-                className={`px-3 py-1 mx-1 rounded ${
-                  currentPage
+                className={`px-3 py-1 mx-1 rounded ${currentPage
                     ? "bg-blue-300 text-white"
                     : "bg-gray-100 hover:bg-gray-300"
-                }`}
+                  }`}
               >
                 {currentPage} of {totalPages}
               </span>

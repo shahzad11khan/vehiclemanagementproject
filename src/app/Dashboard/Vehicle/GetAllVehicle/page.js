@@ -141,7 +141,7 @@ const Page = () => {
       <Header className="min-w-full" />
       <div className="flex gap-4">
         <Sidebar />
-        <div className="container mx-auto p-4">
+        <div className="container mx-auto p-4 h-screen">
           <div className="mx-auto items-center  mt-3 w-full">
             <div className="flex justify-between">
               <div className="flex justify-center text-center gap-3">
@@ -150,7 +150,7 @@ const Page = () => {
                   <select
                     value={itemperpage}
                     onChange={(e) => setitemperpage(e.target.value)}
-                    className="border rounded-md px-4 py-2 w-16 border-custom-bg"
+                    className="border rounded-md pl-2 py-2 w-16 border-custom-bg"
                   >
                     <option disabled>0</option>
                     {Array.from({ length: 10 }, (_, i = 1) => i + 1).map(
@@ -233,8 +233,8 @@ const Page = () => {
                       <td className="px-4 py-2">{row.type}</td>
                       <td className="px-4 py-2">{row.engineType}</td>
                       {/* <td className="px-4 py-2">{row.adminCompanyName}</td> */}
-                      <td className="px-4 py-2">
-                        <span className="bg-gray-400 px-1 py-1 border-2 rounded-2xl">
+                      <td className="">
+                        <span className="bg-gray-400  px-4 py-2 rounded-3xl text-sm">
                           {row.isActive ? "Active" : "Inactive"}
                         </span>
                       </td>
@@ -247,7 +247,7 @@ const Page = () => {
                                 onClick={() => handleEdit(row._id)}
                                 className="text-blue-500 hover:text-blue-700"
                               >
-                                <img src="/edit.png" alt="edit" />
+                                <img src="/edit.png" alt="edit" className="w-6" />
                               </button>
                               {/* Tooltip */}
                               <div className="absolute  transform translate-x-1/2  px-2 py-1 bg-gray-700 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-50">
@@ -261,7 +261,7 @@ const Page = () => {
                                 onClick={() => isopendeletemodel(row._id)}
                                 className="text-red-500 hover:text-red-700"
                               >
-                                <img src="/trash.png" alt="delete" />
+                                <img src="/trash.png" alt="delete" className="w-6" />
                               </button>
                               {/* Tooltip */}
                               <div className="absolute left-10 transform -translate-x-1/2  px-2 py-1 bg-gray-700 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-50">
@@ -273,7 +273,7 @@ const Page = () => {
                           {/* Button to toggle dropdown */}
                           <button
                             onClick={() => toggleDropdown(row._id)}
-                            className="text-gray-500 hover:text-gray-700"
+                            className="text-gray-500 hover:text-gray-700 ml-5 underline"
                           >
                             Reports
                           </button>
@@ -332,7 +332,7 @@ const Page = () => {
             </div>
 
             {/* Pagination Controls */}
-            <div className="flex justify-center text-center mt-4">
+            <div className="flex justify-center text-center mt-4 gap-1">
               <button
                 onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                 disabled={currentPage === 1}
@@ -341,7 +341,7 @@ const Page = () => {
                 Previous
               </button>
               <span
-                className={`px-3 py-1 mx-1 rounded ${
+                className={`px-3 py-1 flex items-center justify-center mx-1 rounded ${
                   currentPage
                     ? "bg-custom-bg text-white"
                     : "bg-gray-100 hover:bg-gray-300"

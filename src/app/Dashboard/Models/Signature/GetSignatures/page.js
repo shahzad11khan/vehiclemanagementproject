@@ -124,7 +124,7 @@ const Page = () => {
       <Header className="min-w-full" />
       <div className="flex gap-4">
         <Sidebar />
-        <div className="container mx-auto p-4">
+        <div className="container mx-auto p-4 h-screen">
           <div className="justify-between mx-auto items-center mt-3 w-full">
             <div className="flex justify-between">
               <div className="flex gap-2">
@@ -133,7 +133,7 @@ const Page = () => {
                   <select
                     value={itemperpage}
                     onChange={(e) => setitemperpage(e.target.value)}
-                    className="border rounded-md px-4 py-2 w-16 border-custom-bg"
+                    className="border rounded-md pl-2 py-2 w-16 border-custom-bg"
                   >
                     <option disabled>0</option>
                     {Array.from({ length: 10 }, (_, i = 1) => i + 1).map(
@@ -145,7 +145,7 @@ const Page = () => {
                     )}
                   </select>
                 </div>{" "}
-                <div className="text-custom-bg mt-2">entries</div>
+                <div className="text-custom-bg mt-2">Entries</div>
                 <input
                   type="text"
                   placeholder="Search by Name"
@@ -209,7 +209,7 @@ const Page = () => {
                               onClick={() => handleEdit(row._id)}
                               className="text-blue-500 hover:text-blue-700"
                             >
-                              <img src="/edit.png" alt="edit" />
+                              <img src="/edit.png" alt="edit" className="w-6" />
                             </button>
                             {/* Tooltip */}
                             <div className="absolute  transform translate-x-1/2  px-2 py-1 bg-gray-700 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-50">
@@ -221,7 +221,7 @@ const Page = () => {
                               onClick={() => isopendeletemodel(row._id)}
                               className="text-red-500 hover:text-red-700"
                             >
-                              <img src="/trash.png" alt="delete" />
+                              <img src="/trash.png" alt="delete"  className="w-6"/>
                             </button>
                             {/* Tooltip */}
                             <div className="absolute left-10 transform -translate-x-1/2  px-2 py-1 bg-gray-700 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-50">
@@ -235,7 +235,7 @@ const Page = () => {
                 </tbody>
               </table>
             </div>
-            <div className="flex justify-center items-center mt-4">
+            <div className="flex justify-center items-center mt-4 gap-1">
               <button
                 onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                 disabled={currentPage === 1}
@@ -244,7 +244,7 @@ const Page = () => {
                 Previous
               </button>
               <span
-                className={`px-3 py-1 mx-1 rounded ${
+                className={`px-3 py-2 mx-1 rounded ${
                   currentPage
                     ? "bg-custom-bg text-white"
                     : "bg-gray-100 hover:bg-gray-300"

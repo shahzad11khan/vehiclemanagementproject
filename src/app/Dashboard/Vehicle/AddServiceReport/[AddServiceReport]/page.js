@@ -101,156 +101,286 @@ const Page = ({ params }) => {
     startIndex + recordsPerPage
   );
 
+  // const generatePDF = () => {
+  //   const doc = new jsPDF();
+  
+  //   // Helper function to format the date in MM/DD/YYYY format
+  //   const formatDate = (date) => {
+  //     const formattedDate = new Date(date);
+  //     return `${String(formattedDate.getMonth() + 1).padStart(2, "0")}/${String(formattedDate.getDate()).padStart(2, "0")}/${formattedDate.getFullYear()}`;
+  //   };
+  
+  //   // Page setup
+  //   const pageWidth = doc.internal.pageSize.width;
+  //   const pageHeight = doc.internal.pageSize.height;
+  //   const margin = 14; // Left margin
+  //   const headerHeight = 10; // Space for the header
+  //   const footerHeight = 10; // Space for the footer
+  //   const lineHeight = 8; // Line height for rows
+  //   const padding = 2; // Padding inside cells
+  
+  //   // Column configuration
+  //   const tableColumn = [
+  //     { name: "Service Dates", width: 30 },
+  //     { name: "Due Dates", width: 25 },
+  //     { name: "Service Miles", width: 25 },
+  //     { name: "Status", width: 35 },
+  //     { name: "Service Assign", width: 50 },
+  //   ];
+  
+  //   const tableWidth = tableColumn.reduce((sum, col) => sum + col.width, 0);
+  
+  //   // Draw header and footer
+  //   const addHeader = () => {
+  //     doc.setFontSize(14);
+  //     doc.setFont("helvetica", "bold"); // Title in bold
+  //     doc.text("Services Records Report", pageWidth / 2, 10, { align: "center" });
+  
+  //     doc.setFontSize(10);
+  //     doc.setFont("helvetica", "normal"); // Regular font for the text below the title
+  //     const reportDate = new Date().toLocaleDateString();
+  //     doc.text(`Report Generated: ${reportDate}`, margin, 20);
+  
+  //     // Vehicle details
+  //     const vehicleName = filteredData[0]?.VehicleName || "Name Unavailable";
+  //     const vehicleRegistration =
+  //       filteredData[0]?.registrationNumber || "Registration Unavailable";
+  
+  //     doc.text(`Vehicle Name: ${vehicleName}`, margin, 25);
+  //     doc.text(`Registration Number: ${vehicleRegistration}`, margin, 30);
+  //     doc.text(`Company Name: ${selectedCompanyName}`, margin, 35);
+  //   };
+  
+  //   const addFooter = (pageNumber) => {
+  //     doc.setFontSize(10);
+  //     doc.text(
+  //       `Page ${pageNumber}`,
+  //       pageWidth / 2,
+  //       pageHeight - footerHeight,
+  //       { align: "center" }
+  //     );
+  //   };
+  
+  //   // Draw table header (headings in bold)
+  //   const drawTableHeader = (startY) => {
+  //     let currentX = margin;
+  //     doc.setFont("helvetica", "bold"); // Column headings in bold
+  //     tableColumn.forEach((col) => {
+  //       doc.text(col.name, currentX + padding, startY);
+  //       doc.rect(currentX, startY - lineHeight, col.width, lineHeight);
+  //       currentX += col.width;
+  //     });
+  //     return startY + lineHeight; // Return the next Y position
+  //   };
+  
+  //   // Draw table rows (content in normal font)
+  //   const drawTableRow = (row, startY) => {
+  //     let currentX = margin;
+  //     const cellData = [
+  //       row.serviceCurrentDate ? formatDate(row.serviceCurrentDate) : "N/A",  // Format serviceCurrentDate
+  //       row.serviceDueDate ? formatDate(row.serviceDueDate) : "N/A",        // Format serviceDueDate
+  //       row.servicemailes || "N/A",
+  //       row.serviceStatus || "N/A",
+  //       row.asignto || "N/A",
+  //     ];
+  
+  //     const maxCellHeight = Math.max(
+  //       ...cellData.map((text) =>
+  //         doc.splitTextToSize(text, tableColumn[0].width - padding).length
+  //       )
+  //     ) * lineHeight;
+  
+  //     doc.setFont("helvetica", "normal"); // Normal font for the rows
+  //     cellData.forEach((text, index) => {
+  //       const cellText = doc.splitTextToSize(text, tableColumn[index].width - padding);
+  //       doc.text(cellText, currentX + padding, startY);
+  //       doc.rect(
+  //         currentX,
+  //         startY - lineHeight,
+  //         tableColumn[index].width,
+  //         maxCellHeight
+  //       );
+  //       currentX += tableColumn[index].width;
+  //     });
+  
+  //     return maxCellHeight; // Return cell height for next row positioning
+  //   };
+  
+  //   // Main content rendering
+  //   let currentY = 45; // Start after vehicle details
+  //   let pageNumber = 1;
+  //   addHeader();
+  
+  //   // Add table header
+  //   currentY = drawTableHeader(currentY);
+  
+  //   filteredData.forEach((row) => {
+  //     const cellHeight = drawTableRow(row, currentY);
+  
+  //     // Check if we need a new page
+  //     if (currentY + cellHeight + footerHeight > pageHeight) {
+  //       addFooter(pageNumber);
+  //       doc.addPage();
+  //       pageNumber++;
+  //       addHeader();
+  //       currentY = 45; // Reset Y for the new page
+  //       currentY = drawTableHeader(currentY);
+  //     }
+  
+  //     currentY += cellHeight;
+  //   });
+  
+  //   addFooter(pageNumber);
+  
+  //   // Save the PDF
+  //   doc.save("Services_Records_Report.pdf");
+  // };
+  
+
+
+
   const generatePDF = () => {
     const doc = new jsPDF();
-
-    // Set title and report date
-    doc.setFontSize(12); // Large font for title
-    doc.text("Services Records Report", 14, 10);
-
-    const reportDate = new Date().toLocaleDateString();
-    doc.setFontSize(10); // Smaller font for the report date
-    doc.text(`Report Generated: ${reportDate}`, 14, 15);
-
-    // Display the vehicle name once at the top
-    const vehicleName = filteredData[0]?.VehicleName || "Name Unavailable";
-    doc.text(`Vehicle Name: ${vehicleName}`, 14, 20);
-    const vehicleRegistration =
-      filteredData[0]?.registrationNumber || "Registration Unavailable";
-    doc.text(`Registration Number: ${vehicleRegistration}`, 14, 25);
-    doc.text(`Company Name: ${selectedCompanyName}`, 14, 30);
-
-    // Define table columns and their initial X positions
-    const tableColumn = [
-      "Service Dates",
-      "Service Due Dates",
-      "Service Miles",
-      "Service Status",
-      "Service Assign",
-    ];
-
-    let startX = 14;
-    let startY = 42; // Adjust to leave space after the vehicle name
-    const columnWidth = 37; // Adjusted column width to better fit the page
-    const lineHeight = 9; // Height of each row
+  
+    // Helper function to format the date in MM/DD/YYYY format
+    const formatDate = (date) => {
+      const formattedDate = new Date(date);
+      return `${String(formattedDate.getMonth() + 1).padStart(2, "0")}/${String(formattedDate.getDate()).padStart(2, "0")}/${formattedDate.getFullYear()}`;
+    };
+  
+    // Page setup
+    const pageWidth = doc.internal.pageSize.width;
+    const pageHeight = doc.internal.pageSize.height;
+    const margin = 14; // Left margin
+    const headerHeight = 10; // Space for the header
+    const footerHeight = 10; // Space for the footer
+    const rowHeight = 10; // Fixed row height
     const padding = 2; // Padding inside cells
-    const pageHeight = doc.internal.pageSize.height; // Get the height of the page
-
-    // Add table header
-    tableColumn.forEach((column, index) => {
-      doc.text(column, startX + index * columnWidth + padding, startY);
-      doc.rect(startX + index * columnWidth, startY - 4, columnWidth, 8);
-    });
-
-    // Add table rows
-    let currentY = startY + lineHeight;
-    filteredData.forEach((row) => {
-      // Check if the next row fits within the current page
-      if (currentY + lineHeight > pageHeight - 20) {
-        doc.addPage(); // Add a new page if the row won't fit
-        currentY = 20; // Reset Y to start at the top of the new page
-        // Re-add the header on the new page
-        tableColumn.forEach((column, index) => {
-          doc.text(column, startX + index * columnWidth + padding, currentY);
-          doc.rect(startX + index * columnWidth, currentY - 4, columnWidth, 8);
-        });
-        currentY += lineHeight; // Adjust the Y after the header
-      }
-
-      const serviceCurrentDate = doc.splitTextToSize(
-        (() => {
-          const date = new Date(row.serviceCurrentDate);
-          const formattedDate = `${String(date.getMonth() + 1).padStart(
-            2,
-            "0"
-          )}/${String(date.getDate()).padStart(2, "0")}/${date.getFullYear()}`;
-          return formattedDate;
-        })() || "N/A",
-        columnWidth - padding
+  
+    // Column configuration
+    const tableColumn = [
+      { name: "Service Dates", width: 30 },
+      { name: "Due Dates", width: 25 },
+      { name: "Service Miles", width: 25 },
+      { name: "Status", width: 35 },
+      { name: "Service Assign", width: 65 },
+    ];
+  
+    const tableWidth = tableColumn.reduce((sum, col) => sum + col.width, 0);
+  
+    // Draw header and footer
+    const addHeader = () => {
+      doc.setFontSize(14);
+      doc.setFont("helvetica", "bold"); // Title in bold
+      doc.text("Services Records Report", pageWidth / 2, 10, { align: "center" });
+  
+      doc.setFontSize(10);
+      doc.setFont("helvetica", "normal"); // Regular font for the text below the title
+      const reportDate = new Date().toLocaleDateString();
+      doc.text(`Report Generated: ${reportDate}`, margin, 20);
+  
+      // Vehicle details
+      const vehicleName = filteredData[0]?.VehicleName || "Name Unavailable";
+      const vehicleRegistration = filteredData[0]?.registrationNumber || "Registration Unavailable";
+  
+      doc.text(`Vehicle Name: ${vehicleName}`, margin, 25);
+      doc.text(`Registration Number: ${vehicleRegistration}`, margin, 30);
+      doc.text(`Company Name: ${selectedCompanyName}`, margin, 35);
+    };
+  
+    const addFooter = (pageNumber) => {
+      doc.setFontSize(10);
+      doc.text(
+        `Page ${pageNumber}`,
+        pageWidth / 2,
+        pageHeight - footerHeight,
+        { align: "center" }
       );
-
-      const serviceDueDate = doc.splitTextToSize(
-        (() => {
-          const date = new Date(row.serviceDueDate);
-          const formattedDate = `${String(date.getMonth() + 1).padStart(
-            2,
-            "0"
-          )}/${String(date.getDate()).padStart(2, "0")}/${date.getFullYear()}`;
-          return formattedDate;
-        })() || "N/A",
-        columnWidth - padding
-      );
-
-      const servicemailes = doc.splitTextToSize(
+    };
+  
+    // Draw table header (headings in bold)
+    const drawTableHeader = (startY) => {
+      let currentX = margin;
+      doc.setFont("helvetica", "bold"); // Column headings in bold
+      tableColumn.forEach((col) => {
+        doc.text(col.name, currentX + padding, startY + 5 );
+        doc.rect(currentX, startY, col.width, rowHeight); // Draw table header cell
+        currentX += col.width;
+      });
+      return startY + rowHeight; // Return the next Y position
+    };
+  
+    // Draw table rows (content in normal font)
+    const drawTableRow = (row, startY) => {
+      let currentX = margin;
+      const cellData = [
+        row.serviceCurrentDate ? formatDate(row.serviceCurrentDate) : "N/A", // Format serviceCurrentDate
+        row.serviceDueDate ? formatDate(row.serviceDueDate) : "N/A",       // Format serviceDueDate
         row.servicemailes || "N/A",
-        columnWidth - padding
-      );
-
-      const serviceStatus = doc.splitTextToSize(
         row.serviceStatus || "N/A",
-        columnWidth - padding
-      );
-      const serviceAssing = doc.splitTextToSize(
         row.asignto || "N/A",
-        columnWidth - padding
-      );
-
-      const maxCellHeight =
-        Math.max(
-          serviceCurrentDate.length,
-          serviceDueDate.length,
-          servicemailes.length,
-          serviceStatus.length,
-          serviceAssing.length
-        ) * lineHeight;
-
-      // Add the data cells with borders
-      doc.text(serviceCurrentDate, startX + padding, currentY);
-      doc.rect(startX, currentY - 4, columnWidth, maxCellHeight);
-
-      doc.text(serviceDueDate, startX + columnWidth + padding, currentY);
-      doc.rect(startX + columnWidth, currentY - 4, columnWidth, maxCellHeight);
-
-      doc.text(servicemailes, startX + 2 * columnWidth + padding, currentY);
-      doc.rect(
-        startX + 2 * columnWidth,
-        currentY - 4,
-        columnWidth,
-        maxCellHeight
-      );
-
-      doc.text(serviceStatus, startX + 3 * columnWidth + padding, currentY);
-      doc.rect(
-        startX + 3 * columnWidth,
-        currentY - 4,
-        columnWidth,
-        maxCellHeight
-      );
-      doc.text(serviceAssing, startX + 4 * columnWidth + padding, currentY);
-      doc.rect(
-        startX + 4 * columnWidth,
-        currentY - 4,
-        columnWidth,
-        maxCellHeight
-      );
-
-      // Increment Y for the next row
-      currentY += maxCellHeight; // Fix the issue here by using +=
+      ];
+  
+      doc.setFont("helvetica", "normal"); // Normal font for the rows
+      cellData.forEach((text, index) => {
+        const cellText = doc.splitTextToSize(text, tableColumn[index].width - padding * 2);
+  
+        // Vertically center the text within the fixed row height
+        const verticalAlign = startY + rowHeight / 2 - (doc.getTextDimensions(cellText).h / 2);
+  
+        // Align text horizontally (left-align for dates and miles, centered for others)
+        const horizontalAlign = (index === 1 || index === 2) ? currentX + padding : currentX + (tableColumn[index].width - doc.getTextDimensions(cellText).w) / 2;
+  
+        doc.text(cellText, horizontalAlign, verticalAlign);
+        doc.rect(currentX, startY, tableColumn[index].width, rowHeight); // Draw the cell border
+        currentX += tableColumn[index].width;
+      });
+  
+      return rowHeight; // Return the fixed height for the row
+    };
+  
+    // Main content rendering
+    let currentY = 45; // Start after vehicle details
+    let pageNumber = 1;
+    addHeader();
+  
+    // Add table header
+    currentY = drawTableHeader(currentY);
+  
+    filteredData.forEach((row) => {
+      const cellHeight = drawTableRow(row, currentY);
+  
+      // Check if we need a new page
+      if (currentY + cellHeight + footerHeight > pageHeight) {
+        addFooter(pageNumber);
+        doc.addPage();
+        pageNumber++;
+        addHeader();
+        currentY = 45; // Reset Y for the new page
+        currentY = drawTableHeader(currentY);
+      }
+  
+      currentY += cellHeight;
     });
-
+  
+    addFooter(pageNumber);
+  
     // Save the PDF
-    doc.save("Road_Tax_Report.pdf");
+    doc.save("Services_Records_Report.pdf");
   };
+  
+
+
 
   return (
     <>
       <Header />
       <div className="flex w-full">
         <Sidebar className="w-4/12" />
-        <div className="mx-auto w-10/12 p-4">
+        <div className="mx-auto w-10/12 p-4 h-screen">
           <div className="border-2 mt-3 w-full ">
             <div className="flex justify-between">
-              <div className="flex gap-2">
+              <div className="flex gap-2 m-2">
                 <button
                   onClick={generatePDF}
                   className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
@@ -325,15 +455,12 @@ const Page = ({ params }) => {
                       <td className="py-2 px-4 border-b border-gray-200">
                         {(() => {
                           const date = new Date(row.serviceDueDate);
-                          const formattedDate = `${String(
-                            date.getMonth() + 1
-                          ).padStart(2, "0")}/${String(date.getDate()).padStart(
-                            2,
-                            "0"
-                          )}/${date.getFullYear()}`;
+                          // Format the date as MM/DD/YYYY
+                          const formattedDate = `${String(date.getMonth() + 1).padStart(2, "0")}/${String(date.getDate()).padStart(2, "0")}/${date.getFullYear()}`;
                           return formattedDate;
                         })() || "N/A"}
                       </td>
+
                       <td className="py-2 px-4 border-b border-gray-200">
                         {row.serviceStatus || "N/A"}
                       </td>
@@ -353,7 +480,7 @@ const Page = ({ params }) => {
                           onClick={() => handleDelete(row._id)}
                           className="text-red-500 hover:text-red-700"
                         >
-                          <FaTrash />
+                          <img src="/trash.png" alt="delete" className="w-6" />
                         </button>
                       </td>
                     </tr>
@@ -362,7 +489,7 @@ const Page = ({ params }) => {
               </table>
             </div>
 
-            <div className="flex justify-center text-center mt-4">
+            <div className="flex justify-center text-center mt-4 mb-2">
               <button
                 onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                 disabled={currentPage === 1}
@@ -371,11 +498,10 @@ const Page = ({ params }) => {
                 Previous
               </button>
               <span
-                className={`px-3 py-1 mx-1 rounded ${
-                  currentPage
+                className={`px-3 py-1 mx-1 rounded ${currentPage
                     ? "bg-blue-300 text-white"
                     : "bg-gray-100 hover:bg-gray-300"
-                }`}
+                  }`}
               >
                 {currentPage} of {totalPages}
               </span>

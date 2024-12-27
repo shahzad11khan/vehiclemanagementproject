@@ -10,7 +10,7 @@ import AddUserModel from "../AddUser/AddUserModel";
 import UpdateUserModel from "../UpdateUser/UpdateUserModel";
 import axios from "axios";
 import { API_URL_USER } from "../../Components/ApiUrl/ApiUrls";
-import  BackButton  from "../../Components/BackButton";
+import BackButton from "../../Components/BackButton";
 
 import {
   getCompanyName,
@@ -100,7 +100,7 @@ const Page = () => {
   };
 
   useEffect(() => {
-    
+
     const userrole = getUserRole();
     const filtered = users.filter((item) => {
       if (userrole === "superadmin") {
@@ -129,9 +129,9 @@ const Page = () => {
     });
     setFilteredData(filtered);
   }, [searchTerm, users, selectedCompanyName]);
-//   if (loading) {
-//   return <Loading width="6" height="6" className="w-full h-auto" />;
-// }
+  //   if (loading) {
+  //   return <Loading width="6" height="6" className="w-full h-auto" />;
+  // }
 
   const OpenUserModle = () => {
     setIsOpenUser(!isOpenUser);
@@ -153,9 +153,10 @@ const Page = () => {
   return (
     <>
       <Header className="min-w-full" />
-      <div className="flex gap-4">
+      <div className="flex gap-2">
         <Sidebar />
-        <div className="container mx-auto p-4 w-[82%]">
+        <div className="container mx-auto p-2 w-[82%] h-screen">
+          <h1 className="text-[#313342] font-medium text-2xl mb-5 underline decoration-[#AEADEB] underline-offset-8">Users</h1>
           <div className="justify-between mx-auto items-center  mt-3 p-4">
             <div className="flex justify-between">
               <div className="flex justify-center text-center gap-3">
@@ -164,12 +165,12 @@ const Page = () => {
                   <select
                     value={itemperpage}
                     onChange={(e) => setitemperpage(e.target.value)}
-                    className="border rounded-md px-4 py-2 w-16 border-custom-bg"
+                    className="border rounded-md pl-2 py-2 w-16 border-custom-bg "
                   >
                     <option disabled>0</option>
                     {Array.from({ length: 10 }, (_, i = 1) => i + 1).map(
                       (number) => (
-                        <option key={number} value={number}>
+                        <option key={number} value={number} >
                           {number}
                         </option>
                       )
@@ -177,7 +178,7 @@ const Page = () => {
                   </select>
                 </div>
                 <div className="flex justify-center text-center gap-3">
-                  <div className="text-custom-bg mt-2">entries</div>
+                  <div className="text-custom-bg mt-2">Entries</div>
                   <div>
                     <input
                       type="text"
@@ -191,14 +192,14 @@ const Page = () => {
               </div>
               <div className="justify-end">
                 <div className="flex  gap-2">
-              <BackButton />
-                <button
-                  onClick={OpenUserModle}
-                  className="bg-custom-bg text-white px-4 py-2 rounded hover:bg-blue-600 flex items-center justify-center gap-2"
-                >
-                  <img src="/plus.png" alt="Add Company" className="w-4 h-4" />
-                  Add User
-                </button>
+                  <BackButton />
+                  <button
+                    onClick={OpenUserModle}
+                    className="bg-custom-bg text-white px-4 py-2 rounded hover:bg-blue-600 flex items-center justify-center gap-2"
+                  >
+                    <img src="/plus.png" alt="Add Company" className="w-4 h-4" />
+                    Add User
+                  </button>
                 </div>
               </div>
             </div>
@@ -252,7 +253,7 @@ const Page = () => {
                                 onClick={() => handleEdit(user._id)}
                                 className="text-blue-500 hover:text-blue-700"
                               >
-                                <img src="/edit.png" alt="edit" />
+                                <img src="/edit.png" alt="edit" className="w-6" />
                               </button>
                               {/* Tooltip */}
                               <div className="absolute  transform translate-x-1/2  px-2 py-1 bg-gray-700 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-50">
@@ -266,7 +267,7 @@ const Page = () => {
                                 onClick={() => isopendeletemodel(user._id)}
                                 className="text-red-500 hover:text-red-700"
                               >
-                                <img src="/trash.png" alt="delete" />
+                                <img src="/trash.png" alt="delete" className="w-6"  />
                               </button>
                               {/* Tooltip */}
                               <div className="absolute left-10 transform -translate-x-1/2  px-2 py-1 bg-gray-700 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-50">
@@ -284,16 +285,15 @@ const Page = () => {
               <button
                 onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                 disabled={currentPage === 1}
-                className="bg-gray-200 text-gray-600 px-4 py-2 rounded-l hover:bg-gray-300"
+                className="bg-gray-200 text-gray-600 px-4 py-2 rounded-l hover:bg-gray-300 cursor-pointer"
               >
                 Previous
               </button>
               <span
-                className={`px-3 py-1 mx-1 rounded ${
-                  currentPage
-                    ? "bg-custom-bg text-white"
-                    : "bg-gray-100 hover:bg-gray-300"
-                }`}
+                className={`px-3 mx-1 flex items-center justify-center rounded ${currentPage
+                  ? "bg-custom-bg text-white"
+                  : "bg-gray-100 hover:bg-gray-300"
+                  }`}
               >
                 {currentPage} of {totalPages}
               </span>

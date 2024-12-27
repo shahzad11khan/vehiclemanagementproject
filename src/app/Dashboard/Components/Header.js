@@ -138,15 +138,16 @@ const Header = () => {
   });
 
   return (
-    <header className=" text-black flex items-center justify-between opacity-90 w-full shadow-sm shadow-custom-blue bg-custom-bg">
+    <header className=" text-black flex items-center justify-between opacity-90 w-full shadow-sm shadow-custom-blue bg-[#222434]">
       <div className="flex flex-shrink-0 py-5 px-3  bg-transparent">
-        <span className="text-sm font-sm text-white bg-transparent">
-          Vehicle Management System{" "}
+        <span className="text-3xl font-bold text-white bg-transparent">
+          {/* Vehicle Management System{" "} */}
+          Vehicle Management System
         </span>
       </div>
 
-      <div className="flex items-center bg-transparent">
-        <div className="flex gap-2 bg-transparent">
+      <div className="flex items-center bg-transparent px-5">
+        <div className="flex gap-4 bg-transparent">
           <div className="flex gap-2 relative bg-transparent">
             {role === "user" && filteredData.length > 0 ? (
               <>
@@ -174,11 +175,11 @@ const Header = () => {
             ) : (
               // Default notification icon when no pending items
               <img
-                src="/billwithoutnoti.png"
+                src="/abc.png"
                 className="bg-transparent"
                 alt="no notification"
-                height={25}
-                width={25}
+                height={19}
+                width={23}
               />
             )}
           </div>
@@ -218,8 +219,8 @@ const Header = () => {
             <div className="absolute right-10 mt-2 flex flex-col bg-white rounded shadow-lg z-10 text-black w-44 hover:text-white">
               <ul className="">
                 {(role === "superadmin" && flag === "false") ||
-                role === "admin" ||
-                role === "user" ? (
+                  role === "admin" ||
+                  role === "user" ? (
                   <Link href="/Dashboard/Profile">
                     <li className="px-4 py-2  cursor-pointer  flex items-center hover:bg-custom-bg  hover:text-white">
                       <CgProfile className="mr-2 bg-transparent text-white" />

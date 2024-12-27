@@ -126,7 +126,7 @@ const Page = () => {
       <Header className="min-w-full" />
       <div className="flex gap-4">
         <Sidebar />
-        <div className="container mx-auto p-4">
+        <div className="container mx-auto p-4 h-screen">
           <div className="justify-between mx-auto items-center  mt-3 w-full">
             <div className="flex justify-between">
               <div className="flex gap-2">
@@ -135,7 +135,7 @@ const Page = () => {
                   <select
                     value={itemperpage}
                     onChange={(e) => setitemperpage(e.target.value)}
-                    className="border rounded-md px-4 py-2 w-16 border-custom-bg"
+                    className="border rounded-md pl-2 py-2 w-16 border-custom-bg"
                   >
                     <option disabled>0</option>
                     {Array.from({ length: 10 }, (_, i = 1) => i + 1).map(
@@ -147,13 +147,13 @@ const Page = () => {
                     )}
                   </select>
                 </div>{" "}
-                <div className="text-custom-bg mt-2">entries</div>
+                <div className="text-custom-bg mt-2">Entries</div>
                 <input
                   type="text"
                   placeholder="Search by Name"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="border rounded px-4 py-2 w-64"
+                  className="border rounded pl-4 py-2 w-64"
                 />
               </div>
               <div className="justify-end">
@@ -205,13 +205,13 @@ const Page = () => {
                           onClick={() => handleEdit(item._id)}
                           className="text-blue-500 hover:text-blue-700"
                         >
-                          <img src="/edit.png" alt="edit" />
+                          <img src="/edit.png" alt="edit" className="w-6" />
                         </button>
                         <button
                           onClick={() => isopendeletemodel(item._id)}
                           className="text-red-500 hover:text-red-700"
                         >
-                          <img src="/trash.png" alt="delete" />
+                          <img src="/trash.png" alt="delete" className="w-6" />
                         </button>
                       </td>
                     </tr>

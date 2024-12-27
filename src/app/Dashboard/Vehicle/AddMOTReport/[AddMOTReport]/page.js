@@ -106,120 +106,123 @@ const Page = ({ params }) => {
     const doc = new jsPDF();
 
     // Set title and report date
-    doc.setFontSize(12); // Large font for title
-    doc.text("MOT Records Report", 14, 10);
+    doc.setFontSize(14);
+    doc.setFont("helvetica", "bold");
+    doc.text("MOT Records Report", 105, 10, { align: "center" });
 
     const reportDate = new Date().toLocaleDateString();
-    doc.setFontSize(10); // Smaller font for the report date
-    doc.text(`Report Generated: ${reportDate}`, 14, 15);
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "normal");
+    doc.text(`Report Generated: ${reportDate}`, 14, 20);
 
-    // Display the vehicle name once at the top
+    // Display vehicle details
     const vehicleName = filteredData[0].VehicleName || "Name Unavailable";
-    doc.text(`Vehicle Name: ${vehicleName}`, 14, 20);
     const vehicleRegistration =
-               filteredData[0].registrationNumber || "Registration Unavailable";
-    doc.text(`Registration Number: ${vehicleRegistration}`, 14, 25);
-    doc.text(`Company Name: ${selectedCompanyName}`, 14, 30);
+        filteredData[0].registrationNumber || "Registration Unavailable";
+    doc.text(`Vehicle Name: ${vehicleName}`, 14, 30);
+    doc.text(`Registration Number: ${vehicleRegistration}`, 14, 35);
+    doc.text(`Company Name: ${selectedCompanyName}`, 14, 40);
 
-    // Define table columns and their initial X positions (remove 'Registration Number')
+    // Define table columns and widths
     const tableColumn = [
-      "MOT Dates",
-      "MOT Cycle",
-      "Next MOT Date",
-      "MOT Status",
-      "MOT Assing",
+        "MOT Dates",
+        "MOT Cycle",
+        "Next MOT Date",
+        "MOT Status",
+        "MOT Assign",
     ];
+    const columnWidths = [30, 30, 30, 30, 60]; // Last column is double width
 
     let startX = 14;
-    let startY = 42; // Adjust to leave space after the vehicle name
-    const columnWidth = 32; // Adjusted column width to better fit the page
-    const lineHeight = 9; // Height of each row
-    const padding = 6; // Padding inside cells
-    const pageHeight = doc.internal.pageSize.height; // Get the height of the page
+    let startY = 50;
+    const lineHeight = 8;
+    const pageHeight = doc.internal.pageSize.height;
 
-    // Add table header (updated to exclude 'Registration Number')
+    // Add table header
+    doc.setFont("helvetica", "bold");
     tableColumn.forEach((column, index) => {
-      doc.text(column, startX + index * columnWidth + padding, startY);
-      doc.rect(startX + index * columnWidth, startY - 4, columnWidth, 8);
+        doc.text(
+            column,
+            startX + columnWidths.slice(0, index).reduce((a, b) => a + b, 0) + 2,
+            startY + lineHeight / 2,
+            { align: "left" }
+        );
+        doc.rect(
+            startX + columnWidths.slice(0, index).reduce((a, b) => a + b, 0),
+            startY,
+            columnWidths[index],
+            lineHeight
+        );
     });
 
-    // Add table rows (updated to exclude 'registrationNumber' column)
+    // Add table rows
     let currentY = startY + lineHeight;
+    doc.setFont("helvetica", "normal");
     filteredData.forEach((row) => {
-      // Check if the next row fits within the current page
-      if (currentY + lineHeight > pageHeight - 20) {
-        doc.addPage(); // Add a new page if the row won't fit
-        currentY = 20; // Reset Y to start at the top of the new page
-        // Re-add the header on the new page
-        tableColumn.forEach((column, index) => {
-          doc.text(column, startX + index * columnWidth + padding, currentY);
-          doc.rect(startX + index * columnWidth, currentY - 4, columnWidth, 8);
+        if (currentY + lineHeight > pageHeight - 20) {
+            doc.addPage();
+            currentY = 20;
+
+            // Re-add the header on the new page
+            doc.setFont("helvetica", "bold");
+            tableColumn.forEach((column, index) => {
+                doc.text(
+                    column,
+                    startX + columnWidths.slice(0, index).reduce((a, b) => a + b, 0) + 2,
+                    currentY + lineHeight / 2,
+                    { align: "left" }
+                );
+                doc.rect(
+                    startX + columnWidths.slice(0, index).reduce((a, b) => a + b, 0),
+                    currentY,
+                    columnWidths[index],
+                    lineHeight
+                );
+            });
+            currentY += lineHeight;
+        }
+
+        // Add data cells
+        const data = [
+            new Date(row.motCurrentDate).toLocaleDateString() || "N/A",
+            row.motCycle || "N/A",
+            new Date(row.motDueDate).toLocaleDateString() || "N/A",
+            row.motStatus || "N/A",
+            row.asignto || "N/A",
+        ];
+
+        data.forEach((cell, index) => {
+            doc.text(
+                cell,
+                startX + columnWidths.slice(0, index).reduce((a, b) => a + b, 0) + 2,
+                currentY + lineHeight / 2,
+                { align: "left" }
+            );
+            doc.rect(
+                startX + columnWidths.slice(0, index).reduce((a, b) => a + b, 0),
+                currentY,
+                columnWidths[index],
+                lineHeight
+            );
         });
-        currentY += lineHeight; // Adjust the Y after the header
-      }
 
-      // Add the remaining data cells with borders
-      doc.text(
-        (() => {
-          const date = new Date(row.motCurrentDate);
-          const formattedDate = `${String(date.getMonth() + 1).padStart(
-            2,
-            "0"
-          )}/${String(date.getDate()).padStart(2, "0")}/${date.getFullYear()}`;
-          return formattedDate;
-        })() || "N/A",
-        startX + padding,
-        currentY
-      );
-      doc.rect(startX, currentY - 4, columnWidth, lineHeight);
-
-      doc.text(row.motCycle || "N/A", startX + columnWidth + padding, currentY);
-      doc.rect(startX + columnWidth, currentY - 4, columnWidth, lineHeight);
-
-      doc.text(
-        (() => {
-          const date = new Date(row.motDueDate);
-          const formattedDate = `${String(date.getMonth() + 1).padStart(
-            2,
-            "0"
-          )}/${String(date.getDate()).padStart(2, "0")}/${date.getFullYear()}`;
-          return formattedDate;
-        })() || "N/A",
-        startX + 2 * columnWidth + padding,
-        currentY
-      );
-      doc.rect(startX + 2 * columnWidth, currentY - 4, columnWidth, lineHeight);
-
-      doc.text(
-        row.motStatus || "N/A",
-        startX + 3 * columnWidth + padding,
-        currentY
-      );
-      doc.rect(startX + 3 * columnWidth, currentY - 4, columnWidth, lineHeight);
-      doc.text(
-        row.asignto || "N/A",
-        startX + 4 * columnWidth + padding,
-        currentY
-      );
-      doc.rect(startX + 4 * columnWidth, currentY - 4, columnWidth, lineHeight);
-
-      // Increment Y for the next row
-      currentY += lineHeight;
+        currentY += lineHeight;
     });
 
     // Save the PDF
     doc.save("MOT_Records_Report.pdf");
-  };
+};
+
 
   return (
     <>
       <Header />
       <div className="flex w-full">
         <Sidebar className="w-4/12" />
-        <div className="mx-auto w-10/12 p-4">
+        <div className="mx-auto w-10/12 p-4 h-screen">
           <div className="border-2 mt-3 w-full ">
             <div className="flex justify-between">
-              <div className="flex gap-2">
+              <div className="flex gap-2 m-2">
                 <button
                   onClick={generatePDF}
                   className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
@@ -318,7 +321,7 @@ const Page = ({ params }) => {
                           onClick={() => handleDelete(row._id)}
                           className="text-red-500 hover:text-red-700"
                         >
-                          <FaTrash />
+                          <img src="/trash.png" alt="delete" className="w-6" />
                         </button>
                       </td>
                     </tr>
@@ -327,7 +330,7 @@ const Page = ({ params }) => {
               </table>
             </div>
 
-            <div className="flex justify-center text-center mt-4">
+            <div className="flex justify-center text-center mt-4 mb-2">
               <button
                 onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                 disabled={currentPage === 1}

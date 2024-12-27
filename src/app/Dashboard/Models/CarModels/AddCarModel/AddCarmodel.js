@@ -5,6 +5,9 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { getCompanyName, getsuperadmincompanyname } from "@/utils/storageUtils";
 
+
+import { GetManufacturer } from "@/app/Dashboard/Components/ApiUrl/ShowApiDatas/ShowApiDatas";
+
 const AddCarModel = ({ isOpen, onClose, fetchData }) => {
   const [formData, setFormData] = useState({
     name: "",
@@ -15,7 +18,31 @@ const AddCarModel = ({ isOpen, onClose, fetchData }) => {
     adminCompanyName: "",
   });
 
+  const [Manufacturer, setManufacturer] = useState([])
+
   const [loading, setLoading] = useState(false);
+
+  const fetchDt = async () => {
+    try {
+      const storedCompanyName = getCompanyName()?.toLowerCase() || getsuperadmincompanyname()?.toLowerCase();
+      const { result } = await GetManufacturer(); // Assuming this returns an array or object
+
+      if (!result || !Array.isArray(result)) {
+        throw new Error("Invalid data format from GetManufacturer");
+      }
+
+      const filterData = result.filter((item) =>
+        item.adminCompanyName?.toLowerCase() === "superadmin" ||
+        item.adminCompanyName?.toLowerCase() === storedCompanyName
+      );
+
+      setManufacturer(filterData); // Assuming setManufacturer expects an array
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setManufacturer([]);
+    }
+  };
+  console.log(Manufacturer);
 
   useEffect(() => {
     const storedCompanyName = getCompanyName() || getsuperadmincompanyname();
@@ -25,15 +52,28 @@ const AddCarModel = ({ isOpen, onClose, fetchData }) => {
         adminCompanyName: storedCompanyName,
       }));
     }
+    fetchDt();
+
   }, []);
+
+  // const handleChange = (e) => {
+  //   const { name, value, type, checked } = e.target;
+  //   setFormData({
+  //     ...formData,
+  //     [name]: type === "checkbox" ? checked : value,
+  //   });
+  // };
+
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData({
-      ...formData,
+
+    setFormData((prevFormData) => ({
+      ...prevFormData,
       [name]: type === "checkbox" ? checked : value,
-    });
+    }));
   };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -44,7 +84,7 @@ const AddCarModel = ({ isOpen, onClose, fetchData }) => {
       if (response.data.success) {
         setFormData({
           name: "",
-          makemodel:"",
+          makemodel: "",
           description: "",
           isActive: false,
           adminCreatedBy: "",
@@ -77,10 +117,48 @@ const AddCarModel = ({ isOpen, onClose, fetchData }) => {
             <div className="col-span-2">
               <div className="flex gap-1">
                 <label
+                  htmlFor="makemodel"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Make:
+                </label>
+                <span className="text-red-600">*</span>
+              </div>
+
+              <select
+                id="makemodel"
+                name="makemodel"
+                value={formData.makemodel}
+                onChange={handleChange}
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                required
+              >
+                <option value="" disabled>
+                  Select a make
+                </option>
+                {Manufacturer.length > 0 ? (
+                  Manufacturer.map((item, index) => (
+                    <option key={index} value={item.name}>
+                      {item.name}
+                    </option>
+                  ))
+                ) : (
+                  <option value="" disabled>
+                    No make available
+                  </option>
+                )}
+              </select>
+            </div>
+
+
+
+            <div className="col-span-2">
+              <div className="flex gap-1">
+                <label
                   htmlFor="firstName"
                   className="text-sm font-medium text-gray-700"
                 >
-                  Name:
+                  Model:
                 </label>
                 <span className="text-red-600">*</span>
               </div>
@@ -95,13 +173,13 @@ const AddCarModel = ({ isOpen, onClose, fetchData }) => {
                 required
               />
             </div>
-            <div className="col-span-2">
+            {/* <div className="col-span-2">
               <div className="flex gap-1">
                 <label
                   htmlFor="firstName"
                   className="text-sm font-medium text-gray-700"
                 >
-                  Make Model:
+                  Model:
                 </label>
                 <span className="text-red-600">*</span>
               </div>
@@ -115,7 +193,14 @@ const AddCarModel = ({ isOpen, onClose, fetchData }) => {
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
                 required
               />
-            </div>
+            </div> */}
+
+
+
+
+
+
+
             <div className="col-span-2">
               <label
                 htmlFor="description"

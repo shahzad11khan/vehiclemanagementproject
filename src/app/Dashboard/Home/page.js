@@ -87,7 +87,7 @@ const Page = () => {
       // Calculate the difference in days
       const diffInDays = Math.floor(
         (new Date(dueDateParts) - new Date(currentDateParts)) /
-          (1000 * 60 * 60 * 24)
+        (1000 * 60 * 60 * 24)
       );
 
       let daysLeft;
@@ -182,7 +182,7 @@ const Page = () => {
     console.log(data)
     const filtered = data.filter((item) => {
       console.log(item);
-      
+
       // Check for undefined values in properties before comparing
       if (companyuser && userrole === "user") {
         if (item.adminCompanyName && item.asignto) {
@@ -199,10 +199,10 @@ const Page = () => {
           return item.adminCompanyName.toLowerCase() === companyName.toLowerCase();
         }
       }
-      
+
       return false; // Default return if none of the conditions are met
     });
-    
+
     setFilteredData(filtered);
     // console.log(filtered);
   }, [data]);
@@ -282,35 +282,35 @@ const Page = () => {
       <Header className="min-w-full" />
       <div className="flex gap-4 ">
         <Sidebar />
-        <main className="w-full mt-5 min-h-screen">
+        <main className="w-full mt-5">
           <HeroSection />
 
           <section className="grid grid-cols-4  min-w-full justify-between gap-2 text-center rounded-xl">
-            <div className="w-[268px] h-[132px] shadow-md p-2 shadow-blue-200 rounded-md ">
-              <div className="flex justify-between mt-3">
-                <div>Total Cars</div>
-                <div className="bg-pink-600 rounded-md h-[41px] w-[41px] flex justify-center text-center">
+            <div className="w-[268px] h-[132px] shadow-xl rounded-xl">
+              <div className="flex justify-between mt-3 px-3 py-1">
+                <div className="font-medium">Total Cars</div>
+                <div className="bg-[#DC4E8C] rounded-md h-[41px] w-[41px] flex justify-center text-center">
                   <div className="flex bg-transparent flex-col justify-center">
-                    <img src="/vehicle.png" alt="vehicle" />
+                    <img src="/vehicle.png" alt="vehicle" className="w-6" />
                   </div>
                 </div>
               </div>
               <div className="flex">
-                <div className="border-l-4 border-red-500 h-12"></div>
-                <h2 className="text-left pl-10 font-semibold text-3xl">
+                <div className="border-l-4 border-[#DC4E8C] h-12"></div>
+                <h2 className="text-left pl-10 font-bold text-4xl">
                   {superadmin === "superadmin" && flag === "false" ? (
-                    <span className="text-red-500">{TotalCar}</span>
+                    <span className="text-[#DC4E8C]">{TotalCar}</span>
                   ) : superadmin === "superadmin" && flag === "true" ? (
-                    <span className="text-red-500">{TotalCar}</span>
+                    <span className="text-[#DC4E8C]">{TotalCar}</span>
                   ) : (
-                    <span className="text-red-500">{TotalCar}</span>
+                    <span className="text-[#DC4E8C]">{TotalCar}</span>
                   )}
                 </h2>
               </div>
             </div>
-            <div className="w-[268px] h-[132px] shadow-md p-2 shadow-blue-200 rounded-md relative">
+            <div className="w-[268px] h-[132px] shadow-md px-3 py-1  rounded-md relative">
               <div className="flex justify-between mt-3">
-                <div>Cars for Rent</div>
+                <div className="font-medium">Cars for Rent</div>
                 <div
                   className=" rounded-md h-[41px] w-[41px] flex justify-center text-center"
                   style={{
@@ -326,7 +326,7 @@ const Page = () => {
                     <img
                       src="/vehicle.png"
                       alt="vehicle"
-                      className="text-end mt-3"
+                      className="text-end mt-2 w-6"
                     />
                   </div>{" "}
                 </div>
@@ -334,10 +334,10 @@ const Page = () => {
               <div
                 className="h-12 absolute left-0 top-14"
                 style={{
-                  border: "2px solid #7D5EBA",
+                  border: "3px solid #7D5EBA",
                 }}
               ></div>
-              <h2 className="text-left pl-10 font-semibold text-3xl">
+              <h2 className="text-left pl-10 font-bold text-4xl">
                 {superadmin === "superadmin" && flag === "false" ? (
                   <span style={{ color: " #7D5EBA" }}>{standby}</span>
                 ) : superadmin === "superadmin" && flag === "true" ? (
@@ -349,7 +349,7 @@ const Page = () => {
             </div>
             <div className="w-[268px] h-[132px] shadow-md p-2 shadow-blue-200 rounded-md relative">
               <div className="flex justify-between mt-3">
-                <div>Cars on Rent</div>
+                <div className="font-medium">Cars on Rent</div>
                 <div
                   className=" rounded-md h-[41px] w-[41px] flex justify-center text-center"
                   style={{
@@ -370,7 +370,7 @@ const Page = () => {
                     <img
                       src="/vehicle.png"
                       alt="vehicle"
-                      className="text-end mt-3"
+                      className="text-end mt-3  w-6"
                     />
                   </div>{" "}
                 </div>
@@ -378,10 +378,10 @@ const Page = () => {
               <div
                 className="h-12 absolute left-0 top-14"
                 style={{
-                  border: "2px solid #53B1F1",
+                  border: "3px solid #53B1F1",
                 }}
               ></div>
-              <h2 className="text-left pl-10 font-semibold text-3xl">
+              <h2 className="text-left pl-10 font-bold text-4xl">
                 {superadmin === "superadmin" && flag === "false" ? (
                   <span style={{ color: " #53B1F1" }}>{rent}</span>
                 ) : superadmin === "superadmin" && flag === "true" ? (
@@ -393,7 +393,7 @@ const Page = () => {
             </div>
             <div className="w-[268px] h-[132px] shadow-md p-2 shadow-blue-200 rounded-md relative">
               <div className="flex justify-between mt-3">
-                <div>Cars for Sale</div>
+                <div className="font-medium">Cars for Sale</div>
                 <div
                   className=" rounded-md h-[41px] w-[41px] flex justify-center text-center"
                   style={{
@@ -404,12 +404,12 @@ const Page = () => {
                     <img
                       src="/dollar.png"
                       alt="righticon"
-                      className="h-2 w-2 text-end absolute top-1 right-0"
+                      className=" text-end absolute top-1 right-0"
                     />
                     <img
                       src="/vehicle.png"
                       alt="vehicle"
-                      className="text-end mt-3"
+                      className="text-end mt-2 w-6"
                     />
                   </div>{" "}
                 </div>
@@ -417,10 +417,10 @@ const Page = () => {
               <div
                 className="h-12 absolute left-0 top-14"
                 style={{
-                  border: "2px solid #5A58D7",
+                  border: "3px solid #5A58D7",
                 }}
               ></div>
-              <h2 className="text-left pl-10 font-semibold text-3xl">
+              <h2 className="text-left pl-10 font-bold text-4xl">
                 {superadmin === "superadmin" && flag === "false" ? (
                   <span style={{ color: " #5A58D7" }}>{sellCar}</span>
                 ) : superadmin === "superadmin" && flag === "true" ? (
@@ -432,7 +432,7 @@ const Page = () => {
             </div>
             <div className="w-[268px] h-[132px] shadow-md p-2 shadow-blue-200 rounded-md relative">
               <div className="flex justify-between mt-3">
-                <div>Cars under Maintenance</div>
+                <div  className="font-medium">Cars under Maintenance</div>
                 <div
                   className="rounded-md h-[41px] w-[41px] flex justify-center text-center"
                   style={{
@@ -443,12 +443,12 @@ const Page = () => {
                     <img
                       src="/maint.png"
                       alt="righticon"
-                      className="h-2 w-2 text-end absolute top-1 right-0"
+                      className=" text-end absolute top-1 right-0"
                     />
                     <img
                       src="/vehicle.png"
                       alt="vehicle"
-                      className="text-end mt-3"
+                      className="text-end mt-3 w-6"
                     />
                   </div>{" "}
                 </div>
@@ -456,10 +456,10 @@ const Page = () => {
               <div
                 className="h-12 absolute left-0 top-14"
                 style={{
-                  border: "2px solid #FFB52F",
+                  border: "3px solid #FFB52F",
                 }}
               ></div>
-              <h2 className="text-left pl-10 font-semibold text-3xl">
+              <h2 className="text-left pl-10 font-bold text-4xl">
                 {superadmin === "superadmin" && flag === "false" ? (
                   <span style={{ color: " #FFB52F" }}>{maintenance}</span>
                 ) : superadmin === "superadmin" && flag === "true" ? (
@@ -522,9 +522,8 @@ const Page = () => {
                   {filteredData.map((row, index) => (
                     <tr
                       key={row._id}
-                      className={`hover:bg-gray-100 ${
-                        index % 2 === 0 ? "bg-white" : "bg-gray-50"
-                      }`}
+                      className={`hover:bg-gray-100 ${index % 2 === 0 ? "bg-white" : "bg-gray-50"
+                        }`}
                     >
                       <td className="py-2 px-4 border-b border-gray-200 text-center">
                         {row.VehicleName || "N/A"}
@@ -539,8 +538,8 @@ const Page = () => {
                         {row.daysLeft > 0
                           ? `${row.daysLeft} days left`
                           : row.daysExpired > 1
-                          ? `${row.daysExpired} days expired`
-                          : "N/A"}
+                            ? `${row.daysExpired} days expired`
+                            : "N/A"}
                       </td>
                       <td className="py-2 px-4 border-b border-gray-200 text-center">
                         {row.VehicleStatus ? "Active" : "Inactive"}

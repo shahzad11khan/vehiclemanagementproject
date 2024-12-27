@@ -21,7 +21,7 @@ const Login = () => {
   useEffect(() => {
     // console.log(!isAuthenticated())
     if (isAuthenticated()) {
-        router.push("/Dashboard/LandingScreen");
+      router.push("/Dashboard/LandingScreen");
       return;
     }
   }, [router]);
@@ -83,7 +83,7 @@ const Login = () => {
   }, [userlogin]);
 
   return (
-    <div className="min-h-screen overflow-hidden  flex justify-center items-center relativ bg-custom-bg">
+    <div className="min-h-screen overflow-hidden  flex justify-center items-center relative bg-custom-bg">
       {loading && (
         <div className="absolute inset-0 bg-opacity-50 z-50 ">
           <LoadingScreen loading={loading} />
@@ -92,42 +92,46 @@ const Login = () => {
       <img
         src="/Rightvector.png"
         alt="png"
-        className="bg-transparent absolute top-0 right-0 w-[564px]"
+        className="bg-transparent absolute top-0 right-0 w-[744px] h-[601px]"
       />
       <div
-        className="absolute bottom-0 -left-40 w-[300px] h-[300px] md:w-[400px] md:h-[400px] lg:w-[500px] lg:h-[500px] opacity-70 transform translate-y-1/4 rounded-full"
+        className="absolute bottom-2 -left-60 w-[320px] h-[320px] md:w-[450px] md:h-[450px] lg:w-[550px] lg:h-[550px] opacity-70 transform translate-y-1/4 rounded-full"
         style={{ backgroundColor: "#23397D" }}
       ></div>
+
       <div
-        className="absolute bottom-0 -left-40 w-[272px] h-[272px] md:w-[372px] md:h-[372px] lg:w-[472px] lg:h-[472px]  opacity-70 transform translate-y-1/4 rounded-full"
+        className="absolute bottom-1 -left-60 w-[282px] h-[282px] md:w-[382px] md:h-[382px] lg:w-[492px] lg:h-[492px]  opacity-70 transform translate-y-1/4 rounded-full"
         style={{
           backgroundColor: "#244BC5",
         }}
       ></div>
+
       <div
-        className="absolute bottom-0 -left-40 w-[288px] h-[288px] md:w-[338px] md:h-[338px] lg:w-[438px] lg:h-[438px] opacity-70 transform translate-y-1/4 rounded-full"
+        className="absolute bottom-0 -left-60 w-[288px] h-[288px] md:w-[338px] md:h-[338px] lg:w-[438px] lg:h-[438px] opacity-70 transform translate-y-1/4 rounded-full"
         style={{
           backgroundColor: "#23397D",
         }}
       ></div>
+
       <form
-        className="bg-transparent p-10 rounded-xl -mt-32  w-[300px] h-[198px] md:w-[300px] md:h-[198px] lg:w-[300px] lg:h-[198px]"
+        // className="bg-transparent p-10 rounded-xl -mt-32  w-[300px] h-[198px] md:w-[300px] md:h-[198px] lg:w-[300px] lg:h-[198px]"
+        className="bg-transparent p-10 rounded-x"
         onSubmit={handleSubmit}
       >
         <div className=" text-center bg-transparent">
-          <h2 className="text-2xl font-bold mb-5  text-white bg-transparent ">
+          <h2 className="text-3xl font-semibold mb-5 text-white bg-transparent ">
             Sign In
           </h2>
         </div>
         <div className="mb-6 relative">
-          <span className="absolute inset-y-0 left-2 flex items-center p-2 bg-transparent">
+          <span className="absolute inset-y-0 left-2 flex items-center p-2 bg-transparent text-white">
             <FaEnvelope className="bg-transparent" />
           </span>
           <input
             type="email"
             name="email"
             placeholder="Enter your email"
-            className="w-full pl-10 pr-3 py-2 border focus:outline-none  bg-custom-bg text-white"
+            className="w-[300px] pl-10 pr-3 py-2 border rounded-4 bg-custom-bg  text-white"
             value={userlogin.email}
             onChange={(e) =>
               setuserlogin({ ...userlogin, email: e.target.value })
@@ -144,7 +148,7 @@ const Login = () => {
             type="password"
             name="password"
             placeholder="Enter your password"
-            className="w-full pl-10 pr-3 py-2 border bg-custom-bg text-white"
+            className="w-[300px] pl-10 pr-3 py-2 border  bg-custom-bg text-white"
             value={userlogin.password}
             onChange={(e) =>
               setuserlogin({ ...userlogin, password: e.target.value })
@@ -153,10 +157,10 @@ const Login = () => {
         </div>
         <button
           type="submit"
-          className="w-full  text-black py-2 px-4 rounded-md hover:bg-blue-600 transition duration-300 bg-white"
+          className="w-[300px]  font-semibold cursor-pointer text-black h-10 rounded-md hover:bg-blue-600 transition duration-300 bg-white"
           disabled={buttonDisable || loading}
         >
-          Login
+          LOGIN
         </button>
       </form>
     </div>

@@ -1,4 +1,3 @@
-
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
@@ -17,6 +16,9 @@ module.exports = {
         lg: "1024px", // Large screens
         xl: "1280px", // Extra large screens
       },
+      borderRadius: {
+        '4': '4px', // Add your custom border radius here
+      },
 
       width: {
         custom: "300px", // Define a custom width value
@@ -25,9 +27,9 @@ module.exports = {
         height: "460px",
       },
       colors: {
-        "custom-blue": "#A6CE39", // Define a custom color
+        "custom-blue": "", // Define a custom color
         "custom-color": "#454544", // Define a custom color
-        "custom-bg": "#313342", // Define a custom color
+        "custom-bg": "#27273A", // Define a custom color 222434
         custom: "#e5e5e5", // Define a custom color
       },
       // Extend background image utilities
@@ -39,7 +41,7 @@ module.exports = {
     },
   },
   plugins: [
-     require('@tailwindcss/typography'),
+    require('@tailwindcss/typography'),
     //  function ({ addUtilities }) {
     //   const newUtilities = {
     //     '.clip-custom': {

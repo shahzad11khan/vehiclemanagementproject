@@ -9,9 +9,12 @@ const Page = () => {
       <Header className="min-w-full" />
       <div className="flex gap-4 ">
         <Sidebar />
-        <main className="w-full h-full min-h-screen flex flex-col items-center justify-start mt-4 gap-4">
-          <h2 className="text-2xl underline font-bold">
-            Welcome to Management
+        <main className="w-full  h-screen flex flex-col items-center justify-start mt-16 gap-4">
+          <h2
+           className="text-6xl underline font-light mb-10 underline-offset-8"
+          // className="text-[#313342] font-medium text-6xl mb-5 underline decoration-[#AEADEB] underline-offset-4"
+          >
+            Welcome to <span className="font-medium">Management</span>
           </h2>
           <img
             src="/mangement.png"

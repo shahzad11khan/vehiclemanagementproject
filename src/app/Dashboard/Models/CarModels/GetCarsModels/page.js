@@ -16,6 +16,7 @@ import { getCompanyName, getsuperadmincompanyname, getUserRole } from "@/utils/s
 const Page = () => {
   const [data, setData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [filtersearch, setSearchfilter] = useState("");
   const [filteredData, setFilteredData] = useState([]);
   const [isMounted, setIsMounted] = useState(false);
   const [isOpenBadge, setIsOpenBadge] = useState(false);
@@ -29,6 +30,7 @@ const Page = () => {
   const [showFilter, setShowFilter] = useState(false);
     // Get a list of unique models for the filter options
     const models = [...new Set(data.map(item => item.makemodel))];
+    const [selectedModell, setSelectedModell] = useState(models);
     const filtered = selectedModel
     ? data.filter(item => item.makemodel === selectedModel)
     : data;
@@ -37,6 +39,7 @@ const Page = () => {
       setSelectedModel(model);
       setShowFilter(false); // Hide the filter dropdown after selection
     };
+
   useEffect(() => {
     setIsMounted(true);
     const companyNameFromStorage =
@@ -107,7 +110,14 @@ const Page = () => {
       return companyMatch && usernameMatch;
     });
     setFilteredData(filtered);
-  }, [searchTerm, data, selectedCompanyName]);
+
+    const filteredd = models.filter((item) =>
+      String(item).toLowerCase().includes(filtersearch.toLowerCase()) 
+    );
+    setSelectedModell(filteredd);
+  }, [searchTerm,filtersearch, data, selectedCompanyName]);
+
+
 
   const OpenBadgeModle = () => {
     setIsOpenBadge(!isOpenBadge);
@@ -256,17 +266,26 @@ const Page = () => {
       {showFilter && (
         <div className="absolute z-10 mt-2 w-48 bg-white shadow-lg rounded-md border border-gray-200">
           <ul>
+            <li>
+            <input
+                  type="text"
+                  placeholder="Search"
+                  value={filtersearch}
+                  onChange={(e) => setSearchfilter(e.target.value)}
+                  className="border rounded px-4 py-2 w-48"
+                />
+            </li>
             <li
               className="px-4 py-2 cursor-pointer hover:bg-gray-100"
               onClick={() => handleFilterChange('')}
             >
               All Models
             </li>
-            {models.map((model, index) => (
+            {selectedModell.map((model, index) => (
               <li
                 key={index}
                 className="px-4 py-2 cursor-pointer hover:bg-gray-100"
-                onClick={() => handleFilterChange(model)}
+                onClick={() => handleFilterChange(model || '')}
               >
                 {model}
               </li>

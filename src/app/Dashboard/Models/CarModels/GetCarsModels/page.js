@@ -12,6 +12,7 @@ import { API_URL_CarModel } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import { GetCarModel } from "@/app/Dashboard/Components/ApiUrl/ShowApiDatas/ShowApiDatas";
 import { getCompanyName, getsuperadmincompanyname, getUserRole } from "@/utils/storageUtils";
 
+
 const Page = () => {
   const [data, setData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -24,6 +25,18 @@ const Page = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemperpage, setitemperpage] = useState(5);
 
+  const [selectedModel, setSelectedModel] = useState('');
+  const [showFilter, setShowFilter] = useState(false);
+    // Get a list of unique models for the filter options
+    const models = [...new Set(data.map(item => item.makemodel))];
+    const filtered = selectedModel
+    ? data.filter(item => item.makemodel === selectedModel)
+    : data;
+
+    const handleFilterChange = (model) => {
+      setSelectedModel(model);
+      setShowFilter(false); // Hide the filter dropdown after selection
+    };
   useEffect(() => {
     setIsMounted(true);
     const companyNameFromStorage =
@@ -111,7 +124,7 @@ const Page = () => {
 
   const totalPages = Math.ceil(filteredData.length / itemperpage);
   const startIndex = (currentPage - 1) * itemperpage;
-  const currentRecords = filteredData.slice(
+  const currentRecords = filtered.slice(
     startIndex,
     startIndex + itemperpage
   );
@@ -164,13 +177,13 @@ const Page = () => {
               </button>
             </div>
 
-            <div className="overflow-x-auto">
+            {/* <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-gray-200 mt-4">
                 <thead className="bg-gray-50">
                   <tr>
 
 
-                    <th className="px-4 py-2 bg-custom-bg text-white text-sm">
+                    <th className="px-4 py-2 bg-custom-bg text-white text-sm" onClick={() => setShowFilter(!showFilter)}>
                       Make
                     </th>
                     <th className="px-4 py-2 bg-custom-bg text-white text-sm">
@@ -190,7 +203,7 @@ const Page = () => {
                     <tr key={item._id}>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                         {item.makemodel}
-                      </td>
+                    </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                         {item.name}
                       </td>
@@ -217,7 +230,84 @@ const Page = () => {
                   ))}
                 </tbody>
               </table>
-            </div>
+            </div> */}
+
+<div className="overflow-x-auto">
+      <table className="min-w-full divide-y divide-gray-200 mt-4">
+        <thead className="bg-gray-50">
+          <tr>
+          <th
+  className="px-4 py-2 bg-custom-bg text-white text-sm cursor-pointer"
+  onClick={() => setShowFilter(!showFilter)} // Toggle filter dropdown on click
+>
+  {showFilter ? (
+    <img src="/ufilter.png" alt="up filter" className="w-6 inline mr-2" />
+  ) : (
+    <img src="/dfilter.png" alt="down filter" className="w-6 inline mr-2" />
+  )}
+  Make
+</th>
+
+            <th className="px-4 py-2 bg-custom-bg text-white text-sm">Model</th>
+            <th className="px-4 py-2 bg-custom-bg text-white text-sm">Car Active</th>
+            <th className="px-4 py-2 bg-custom-bg text-white text-sm">Actions</th>
+          </tr>
+           {/* Show filter dropdown if `showFilter` is true */}
+      {showFilter && (
+        <div className="absolute z-10 mt-2 w-48 bg-white shadow-lg rounded-md border border-gray-200">
+          <ul>
+            <li
+              className="px-4 py-2 cursor-pointer hover:bg-gray-100"
+              onClick={() => handleFilterChange('')}
+            >
+              All Models
+            </li>
+            {models.map((model, index) => (
+              <li
+                key={index}
+                className="px-4 py-2 cursor-pointer hover:bg-gray-100"
+                onClick={() => handleFilterChange(model)}
+              >
+                {model}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+        </thead>
+        <tbody className="bg-white divide-y divide-gray-200 text-center">
+          {currentRecords.map((item) => (
+            <tr key={item._id}>
+              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                {item.makemodel}
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                {item.name}
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                {item.isActive ? 'Active' : 'Inactive'}
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                <button
+                  onClick={() => handleEdit(item._id)}
+                  className="text-blue-500 hover:text-blue-700"
+                >
+                  <img src="/edit.png" alt="edit" className="w-6" />
+                </button>
+                <button
+                  onClick={() => handleDelete(item._id)}
+                  className="text-red-500 hover:text-red-700"
+                >
+                  <img src="/trash.png" alt="delete" className="w-6" />
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+     
+    </div>
 
             <div className="flex justify-center text-center mt-4 gap-1">
               <button

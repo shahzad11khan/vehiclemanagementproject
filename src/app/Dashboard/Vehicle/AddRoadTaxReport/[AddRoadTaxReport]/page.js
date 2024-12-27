@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import { FaTrash } from "react-icons/fa";
+// import { FaTrash } from "react-icons/fa";
 import Header from "../../../Components/Header";
 import Sidebar from "../../../Components/Sidebar";
 import AddRoadTexModal from "../AddRoadTaxModal/AddRoadTaxModal";

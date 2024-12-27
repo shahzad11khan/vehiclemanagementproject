@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import { FaTrash } from "react-icons/fa";
+// import { FaTrash } from "react-icons/fa";
 import Header from "../../../Components/Header";
 import Sidebar from "../../../Components/Sidebar";
 import AddServiceModal from "../AddServiceModal/AddServiceModal";
@@ -252,7 +252,7 @@ const Page = ({ params }) => {
     const pageWidth = doc.internal.pageSize.width;
     const pageHeight = doc.internal.pageSize.height;
     const margin = 14; // Left margin
-    const headerHeight = 10; // Space for the header
+    // const headerHeight = 10; // Space for the header
     const footerHeight = 10; // Space for the footer
     const rowHeight = 10; // Fixed row height
     const padding = 2; // Padding inside cells
@@ -266,7 +266,7 @@ const Page = ({ params }) => {
       { name: "Service Assign", width: 65 },
     ];
   
-    const tableWidth = tableColumn.reduce((sum, col) => sum + col.width, 0);
+    // const tableWidth = tableColumn.reduce((sum, col) => sum + col.width, 0);
   
     // Draw header and footer
     const addHeader = () => {

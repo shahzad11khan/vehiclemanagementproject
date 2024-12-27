@@ -268,7 +268,7 @@ import { jsPDF } from "jspdf";
 import Header from "../../../Components/Header";
 import Sidebar from "../../../Components/Sidebar";
 import { API_URL_Vehicle } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
-import { getCompanyName } from "@/utils/storageUtils";
+// import { getCompanyName } from "@/utils/storageUtils";
 import { isAuthenticated } from "@/utils/verifytoken";
 import { useRouter } from "next/navigation";
 
@@ -336,7 +336,7 @@ const Page = ({ params }) => {
     ];
   
     // Table dimensions
-    const pageWidth = doc.internal.pageSize.width;
+    // const pageWidth = doc.internal.pageSize.width;
     const startX = 14;
     const startY = 45;
     const rowHeight = 10;

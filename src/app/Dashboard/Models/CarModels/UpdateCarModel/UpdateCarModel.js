@@ -4,6 +4,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { getCompanyName, getsuperadmincompanyname } from "@/utils/storageUtils";
+import { GetManufacturer } from "@/app/Dashboard/Components/ApiUrl/ShowApiDatas/ShowApiDatas";
 
 const UpdateCarModel = ({ isOpen, onClose, fetchData, updateid }) => {
   const [formData, setFormData] = useState({
@@ -16,7 +17,27 @@ const UpdateCarModel = ({ isOpen, onClose, fetchData, updateid }) => {
   });
 
   const [loading, setLoading] = useState(false);
+  const [Manufacturer, setManufacturer] = useState([])
+  const fetchDt = async () => {
+    try {
+      const storedCompanyName = getCompanyName()?.toLowerCase() || getsuperadmincompanyname()?.toLowerCase();
+      const { result } = await GetManufacturer(); // Assuming this returns an array or object
 
+      if (!result || !Array.isArray(result)) {
+        throw new Error("Invalid data format from GetManufacturer");
+      }
+
+      const filterData = result.filter((item) =>
+        item.adminCompanyName?.toLowerCase() === "superadmin" ||
+        item.adminCompanyName?.toLowerCase() === storedCompanyName
+      );
+
+      setManufacturer(filterData); // Assuming setManufacturer expects an array
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setManufacturer([]);
+    }
+  };
   useEffect(() => {
     const storedCompanyName = getCompanyName() || getsuperadmincompanyname();
     if (storedCompanyName) {
@@ -25,6 +46,7 @@ const UpdateCarModel = ({ isOpen, onClose, fetchData, updateid }) => {
         adminCompanyName: storedCompanyName,
       }));
     }
+    fetchDt();
   }, []);
 
   useEffect(() => {
@@ -37,6 +59,7 @@ const UpdateCarModel = ({ isOpen, onClose, fetchData, updateid }) => {
           if (data) {
             setFormData({
               name: data.name,
+              makemodel: data.makemodel,
               description: data.description,
               isActive: data.isActive,
             });
@@ -72,27 +95,35 @@ const UpdateCarModel = ({ isOpen, onClose, fetchData, updateid }) => {
         `${API_URL_CarModel}/${updateid}`,
         formData
       );
-      if (response.data.message) {
+      
+      if (response.data?.message) {
+        // Reset form data after successful update
         setFormData({
           name: "",
+          makemodel: "",
           description: "",
           isActive: false,
           adminCreatedBy: "",
-          adminCompanyName: "",
+          adminCompanyName: response.data.adminCompanyName || "", // Ensure this is defined
         });
+        
         toast.success(response.data.message);
         onClose();
         fetchData();
-      } else {
+      } else if (response.data?.warn) {
         toast.warn(response.data.warn);
+      } else {
+        // Handle unexpected response
+        toast.error("Unexpected response from the server.");
       }
     } catch (err) {
-      console.log(err.response?.data?.message || "Failed to update");
+      console.error("Error updating car model:", err);
+      toast.error(err.response?.data?.message || "Failed to update car model");
     } finally {
       setLoading(false);
     }
   };
-
+  
   if (!isOpen) return null;
 
   return (
@@ -103,6 +134,41 @@ const UpdateCarModel = ({ isOpen, onClose, fetchData, updateid }) => {
         </h2>
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div className="col-span-2">
+              <div className="flex gap-1">
+                <label
+                  htmlFor="makemodel"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Make:
+                </label>
+                <span className="text-red-600">*</span>
+              </div>
+
+              <select
+                id="makemodel"
+                name="makemodel"
+                value={formData.makemodel}
+                onChange={handleChange}
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                required
+              >
+                <option value="" disabled>
+                  Select a make
+                </option>
+                {Manufacturer.length > 0 ? (
+                  Manufacturer.map((item, index) => (
+                    <option key={index} value={item.name}>
+                      {item.name}
+                    </option>
+                  ))
+                ) : (
+                  <option value="" disabled>
+                    No make available
+                  </option>
+                )}
+              </select>
+            </div>
             <div className="col-span-2">
               <label
                 htmlFor="name"
@@ -124,7 +190,7 @@ const UpdateCarModel = ({ isOpen, onClose, fetchData, updateid }) => {
                 htmlFor="name"
                 className="text-sm font-medium text-gray-700"
               >
-                Make Model:
+                Model:
               </label>
               <input
                 type="text"

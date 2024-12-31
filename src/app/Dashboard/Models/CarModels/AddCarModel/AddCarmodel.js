@@ -171,33 +171,6 @@ const AddCarModel = ({ isOpen, onClose, fetchData }) => {
                 required
               />
             </div>
-            {/* <div className="col-span-2">
-              <div className="flex gap-1">
-                <label
-                  htmlFor="firstName"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Model:
-                </label>
-                <span className="text-red-600">*</span>
-              </div>
-
-              <input
-                type="text"
-                id="makemodel"
-                name="makemodel"
-                value={formData.makemodel}
-                onChange={handleChange}
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                required
-              />
-            </div> */}
-
-
-
-
-
-
 
             <div className="col-span-2">
               <label
@@ -215,22 +188,7 @@ const AddCarModel = ({ isOpen, onClose, fetchData }) => {
                 rows="3"
               ></textarea>
             </div>
-            {/* <div className="col-span-2 flex items-center">
-              <input
-                type="checkbox"
-                id="isActive"
-                name="isActive"
-                checked={formData.isActive}
-                onChange={handleChange}
-                className="mr-2 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-              />
-              <label
-                htmlFor="isActive"
-                className="text-sm font-medium text-gray-700"
-              >
-                IsActive
-              </label>
-            </div> */}
+            
             <div>
               <label className="block font-medium mb-2">Is Active:</label>
               <div className="flex gap-4">

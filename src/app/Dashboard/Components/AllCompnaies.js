@@ -125,9 +125,10 @@ const AllCompanies = () => {
 
   return (
     <div className="container mx-auto px-4 py-2">
-      <h1 className="text-2xl font-bold  mb-8 underline">
+      {/* <h1 className="text-2xl font-bold  mb-8 underline">
         Registered Companies
-      </h1>
+      </h1> */}
+      <h1 className="text-[#313342] font-medium text-2xl mb-5 underline decoration-[#AEADEB] underline-offset-8"> Registered Companies</h1>
 
       {/* Doughnut Chart */}
       <div className="flex flex-col p-4 rounded-md shadow-sm shadow-custom-blue w-[333px] h-[310px] item">
@@ -139,15 +140,15 @@ const AllCompanies = () => {
             <div className="flex flex-col w-[156.01px] h-[156.28px]">
               <Doughnut data={chartData} />
               <div className="flex  m-4 justify-between">
-                <div className="flex items-center">
-                  <div className="w-3 h-3 rounded-full bg-blue-500"></div>
-                  <h3 className="mt-2 text-center text-xs text-gray-700 ml-2">
-                    Active
+                <div className="flex items-center justify-center gap-2">
+                  <div className="w-2 h-2 rounded-full bg-blue-500"></div>
+                  <h3 className="text-center text-xs text-gray-700">
+                                        Active
                   </h3>
                 </div>
-                <div className="flex items-center">
-                  <div className="w-3 h-3 rounded-full bg-custom-bg"></div>
-                  <h3 className="mt-2 text-center text-xs text-gray-700 ml-2">
+                <div className="flex items-center justify-center gap-2">
+                  <div className="w-2 h-2 rounded-full bg-custom-bg"></div>
+                  <h3 className="text-center text-xs text-gray-700">
                     Inactive
                   </h3>
                 </div>
@@ -177,7 +178,7 @@ const AllCompanies = () => {
                 <select
                   value={itemperpage}
                   onChange={(e) => setitemperpage(e.target.value)}
-                  className="border rounded-md px-4 py-2 w-16 border-custom-bg"
+                  className="border rounded-md p-2 w-16 border-custom-bg"
                 >
                   <option disabled>0</option>
                   {Array.from({ length: 10 }, (_, i = 1) => i + 1).map(
@@ -190,7 +191,7 @@ const AllCompanies = () => {
                 </select>
               </div>
               <div className="flex justify-center text-center gap-3">
-                <div className="text-custom-bg mt-2">entries</div>
+                <div className="text-custom-bg mt-2">Entries</div>
                 <div>
                   <input
                     type="text"
@@ -244,9 +245,13 @@ const AllCompanies = () => {
                       />
                     </td>
                     <td className="py-3 px-4">
-                      <span className="bg-gray-400 px-5 py-3 border-2 rounded-2xl">
+                      {/* <span className="bg-gray-400 px-5 py-3 border-2 rounded-2xl">
                         {item.isActive ? "Active" : "Inactive"}
-                      </span>
+                      </span> */}
+
+                       <span className="bg-gray-400  px-4 py-2 rounded-3xl text-sm">
+                          {item.isActive ? "Active" : "Inactive"}
+                        </span>
                     </td>
                     <td className="py-3 px-4">
                       <div className="flex gap-2">
@@ -254,13 +259,13 @@ const AllCompanies = () => {
                           onClick={() => handleEdit(item._id)}
                           className="text-blue-500 hover:text-blue-700"
                         >
-                          <img src="/edit.png" alt="edit" />
+                          <img src="/edit.png" alt="edit"  className="w-6" />
                         </button>
                         <button
                           onClick={() => isopendeletemodel(item._id)}
                           className="text-red-500 hover:text-red-700"
                         >
-                          <img src="/trash.png" alt="delete" />
+                          <img src="/trash.png" alt="delete" className="w-6" />
                         </button>
                       </div>
                     </td>
@@ -300,7 +305,7 @@ const AllCompanies = () => {
               Next
             </button>
           </div> */}
-          <div className="flex justify-center mt-4">
+          <div className="flex justify-center mt-4 gap-1 mb-2">
             <nav>
               <ul className="flex items-center space-x-2">
                 <li>

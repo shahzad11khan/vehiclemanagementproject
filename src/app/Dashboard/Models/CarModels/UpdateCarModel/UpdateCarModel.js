@@ -174,7 +174,7 @@ const UpdateCarModel = ({ isOpen, onClose, fetchData, updateid }) => {
                 htmlFor="name"
                 className="text-sm font-medium text-gray-700"
               >
-                Name:
+                Model:
               </label>
               <input
                 type="text"
@@ -185,7 +185,7 @@ const UpdateCarModel = ({ isOpen, onClose, fetchData, updateid }) => {
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
               />
             </div>
-            <div className="col-span-2">
+            {/* <div className="col-span-2">
               <label
                 htmlFor="name"
                 className="text-sm font-medium text-gray-700"
@@ -200,7 +200,7 @@ const UpdateCarModel = ({ isOpen, onClose, fetchData, updateid }) => {
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
               />
-            </div>
+            </div> */}
             <div className="col-span-2">
               <label
                 htmlFor="description"

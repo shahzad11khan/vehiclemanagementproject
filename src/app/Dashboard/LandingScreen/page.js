@@ -66,12 +66,13 @@ const Page = () => {
         </>
       ) : (
         <div className="w-6/12 border-white flex justify-center gap-4 bg-transparent">
-          <div className="w-[150px] h-[150px] bg-transparent flex flex-col items-center gap-3">
-            <img src="/01.png" alt="Management Icon" className="w-full h-auto -mt-1" />
-            <Link href="/Dashboard/StartPage" className="w-full rounded-lg">
-              <button className="px-4 py-2 w-full">Management</button>
-            </Link>
-          </div>
+          <div className="w-[170px] h-[170px] bg-transparent flex flex-col items-center justify-center gap-5 ">
+              <img src="/01.png" alt="Management Icon" className="w-52 h-52" />
+              <Link href="/Dashboard/StartPage" className="w-full rounded-lg bg-[#EBEBEB] flex items-center justify-center">
+                <button className="w-44 h-11 text-xl font-medium">Management</button>
+              </Link>
+            </div>
+            
         </div>
       )}
     </div>

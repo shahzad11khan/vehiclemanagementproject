@@ -38,10 +38,10 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
     role: "user", // Default role set to "user"
   });
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-    const [validation, setValidation] = useState({
-      emailValid: null,
-      passwordMatch: null,
-    });
+  const [validation, setValidation] = useState({
+    emailValid: null,
+    passwordMatch: null,
+  });
 
   const [imagePreview, setImagePreview] = useState(null); // Preview for the avatar image
 
@@ -85,7 +85,7 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
             passwordExpiresEvery: adminData.repopasswordExpiresEveryrtsTo, // Assuming this should be initialized empty
             companyname: "", // Assuming this should be initialized empty
             username: adminData.username,
-            email: adminData.email ,
+            email: adminData.email,
             password: adminData.confirmpassword, // Set password to confirmpassword
             confirmpassword: adminData.confirmpassword, // Ensure confirmpassword is set
             useravatar: adminData.useravatar,
@@ -100,35 +100,12 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
         }
       };
 
-      // const loadTaxiFirms = async () => {
-      //   try {
-      //     const [title] = await Promise.all([
-      //       fetchTitle(),
-      //       // fetchPayment(),
-      //     ]);
-
-      //     settitle(title.result);
-      //     // setPayment(paymentData.Result);
-      //   } catch (error) {
-      //     console.error("Error loading taxi firms:", error);
-      //     toast.error("Failed to load dropdown data."); // Show toast on error
-      //   }
-      // };
-
       // Call fetchData to populate the form
       fetchData();
       // loadTaxiFirms();
     }
   }, [userId]);
 
-  // Handle form field changes
-  // const handleChange = (e) => {
-  //   const { name, value, type, checked } = e.target;
-  //   setFormData((prevData) => ({
-  //     ...prevData,
-  //     [name]: type === "checkbox" ? checked : value, // Handle checkbox for isActive
-  //   }));
-  // };
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -144,22 +121,20 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
         ...prevValidation,
         emailValid: emailRegex.test(updatedValue),
       }));
-    } else 
-    if (name === 'confirmpassword' || name === 'password') {
-      const password = name === 'password' ? updatedValue : formData.password;
-      const confirmPassword =
-        name === 'confirmpassword' ? updatedValue : formData.confirmpassword;
+    } else
+      if (name === 'confirmpassword' || name === 'password') {
+        const password = name === 'password' ? updatedValue : formData.password;
+        const confirmPassword =
+          name === 'confirmpassword' ? updatedValue : formData.confirmpassword;
 
-      setValidation((prevValidation) => ({
-        ...prevValidation,
-        passwordMatch: password === confirmPassword,
-      }));
-    }
+        setValidation((prevValidation) => ({
+          ...prevValidation,
+          passwordMatch: password === confirmPassword,
+        }));
+      }
   };
 
-
-
-  const isNextDisabled = !validation.emailValid ;
+  const isNextDisabled = !validation.emailValid;
   const ispasswordmatch = !validation.passwordMatch;
   // Handle file input changes
   const handleFileChange = (e) => {
@@ -320,21 +295,22 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                     />
                   </div>
                 </div>
-                {/* end of multiple images */}
-                <div className="mt-6 flex gap-2 justify-end">
+
+                <div className="mt-6 flex justify-between">
                   <button
                     type="button"
-                    onClick={() => {
-                      onClose();
-                      resetform();
-                    }}
-                    className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                    onClick={onClose}
+                    className="px-6 py-2 text-gray-700 border border-gray-400 rounded-lg hover:bg-gray-300 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
                   >
                     Close
                   </button>
                   <button
                     onClick={nextStep}
-                    className="px-6 py-2 bg-custom-bg text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                    className={`px-6 py-2 rounded-lg ${formData.firstName && formData.lastName && formData.title
+                        ? "bg-custom-bg text-white hover:bg-gray-600"
+                        : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                      }`}
+                    disabled={!formData.firstName || !formData.lastName || !formData.title}
                   >
                     Next
                   </button>
@@ -342,7 +318,7 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
               </div>
             </>
           )}
-          {/* Contact Information */}
+
           {step === 2 && (
             <>
               <div>
@@ -366,13 +342,12 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                       name="email"
                       value={formData.email}
                       onChange={handleChange}
-                      className={`mt-1 block w-full p-2 border rounded-lg ${
-                        validation.emailValid === null
+                      className={`mt-1 block w-full p-2 border rounded-lg ${validation.emailValid === null
                           ? 'border-gray-300'
                           : validation.emailValid
-                          ? 'border-green-500'
-                          : 'border-red-500'
-                      } focus:outline-none`}
+                            ? 'border-green-500'
+                            : 'border-red-500'
+                        } focus:outline-none`}
                       required
                     />
                     {validation.emailValid === false && (
@@ -382,7 +357,6 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                       <p className="text-sm text-green-600">Valid email format</p>
                     )}
                   </div>
-
 
                   <div>
                     <div className="flex gap-1">
@@ -412,7 +386,6 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                     >
                       Tel 2:
                     </label>
-
                     <input
                       type="number"
                       id="tel2"
@@ -440,6 +413,7 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                       value={formData.postcode}
                       onChange={handleChange}
                       className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                      required
                     />
                   </div>
 
@@ -471,7 +445,6 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                     >
                       Permanent Address:
                     </label>
-
                     <input
                       type="text"
                       id="permanentAddress"
@@ -524,6 +497,7 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                     />
                   </div>
                 </div>
+
                 <div className="mt-6 flex gap-2 justify-between">
                   <div>
                     <button
@@ -544,14 +518,15 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                     >
                       Close
                     </button>
+
                     <button
                       onClick={nextStep}
-                      className={`px-6 py-2 rounded-lg focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 ${
-                        isNextDisabled
-                          ? "bg-gray-400 text-white cursor-not-allowed"
-                          :
-                          "bg-custom-bg text-white hover:bg-gray-600"
-                      }`}                    >
+                      className={`px-6 py-2 rounded-lg ${formData.email && formData.tel1 && formData.postcode && formData.postalAddress && formData.city && formData.county
+                          ? "bg-custom-bg text-white hover:bg-gray-600"
+                          : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                        }`}
+                      disabled={!formData.email || !formData.tel1 || !formData.postcode || !formData.postalAddress || !formData.city || !formData.county}
+                    >
                       Next
                     </button>
                   </div>
@@ -559,28 +534,18 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
               </div>
             </>
           )}
+
+
+
+
+
           {/* Security */}
           {step === 3 && (
             <>
               <div>
                 <h3 className="text-xl font-semibold mb-4">Security</h3>
                 <div className="grid grid-cols-2 sm:grid-cols-2 gap-3">
-                  {/* <div>
-                <label
-                  htmlFor="accessLevel"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Access Level:
-                </label>
-                <input
-                  type="text"
-                  id="accessLevel"
-                  name="accessLevel"
-                  value={formData.accessLevel}
-                  onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                />
-              </div> */}
+
 
                   <div>
                     <div className="flex gap-1">
@@ -660,7 +625,8 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                       required
                     />
                   </div>
-                  {/* <div className="flex gap-2">
+
+                  <div className="flex gap-2">
                     <div>
                       <div className="flex gap-1">
                         <label
@@ -698,10 +664,25 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                         name="confirmpassword"
                         value={formData.confirmpassword}
                         onChange={handleChange}
-                        className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                        className={`mt-1 block w-full p-2 border rounded-lg ${validation.passwordMatch === null
+                            ? "border-gray-300"
+                            : validation.passwordMatch
+                              ? "border-green-500"
+                              : "border-red-500"
+                          }`}
                         required
                       />
+                      {validation.passwordMatch === false ? (
+                        <p className="text-red-600 text-sm mt-1">
+                          Passwords do not match.
+                        </p>
+                      ) : (
+                        <p className="text-green-500 text-sm mt-1">
+                          Passwords match.
+                        </p>
+                      )}
                     </div>
+
                     <div className="mt-4">
                       <button
                         type="button"
@@ -711,77 +692,8 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                         {showPasswords ? "Hide" : "Show"}
                       </button>
                     </div>
-                  </div> */}
+                  </div>
 
-<div className="flex gap-2">
-        <div>
-          <div className="flex gap-1">
-            <label
-              htmlFor="password"
-              className="text-sm font-medium text-gray-700"
-            >
-              Password:
-            </label>
-            <span className="text-red-600">*</span>
-          </div>
-          <input
-            type={showPasswords ? "text" : "password"}
-            id="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-            required
-          />
-        </div>
-
-        <div>
-          <div className="flex gap-1">
-            <label
-              htmlFor="confirmpassword"
-              className="text-sm font-medium text-gray-700"
-            >
-              Confirm Password:
-            </label>
-            <span className="text-red-600">*</span>
-          </div>
-          <input
-            type={showPasswords ? "text" : "password"}
-            id="confirmpassword"
-            name="confirmpassword"
-            value={formData.confirmpassword}
-            onChange={handleChange}
-            className={`mt-1 block w-full p-2 border rounded-lg ${
-              validation.passwordMatch === null
-                ? "border-gray-300"
-                : validation.passwordMatch
-                ? "border-green-500"
-                : "border-red-500"
-            }`}
-            required
-          />
-          {validation.passwordMatch === false ? (
-            <p className="text-red-600 text-sm mt-1">
-              Passwords do not match.
-            </p>
-          ):(
-            <p className="text-green-500 text-sm mt-1">
-            Passwords match.
-          </p>
-          )}
-        </div>
-
-        <div className="mt-4">
-          <button
-            type="button"
-            onClick={() => setShowPasswords(!showPasswords)}
-            className="px-4 py-2"
-          >
-            {showPasswords ? "Hide" : "Show"}
-          </button>
-        </div>
-      </div>
-                  
 
                   <div>
                     <div className="flex gap-1">
@@ -805,22 +717,7 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                     />
                   </div>
 
-                  {/* <div>
-                <label
-                  htmlFor="passwordExpiresEvery"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Password Expires Every:
-                </label>
-                <input
-                  type="text"
-                  id="passwordExpiresEvery"
-                  name="passwordExpiresEvery"
-                  value={formData.passwordExpiresEvery}
-                  onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                />
-              </div> */}
+
                 </div>
                 <div className="mt-6 flex gap-2 justify-between">
                   <div>
@@ -838,20 +735,19 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                         onClose();
                         resetform();
                       }}
-                    className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                      className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
                     >
                       Close
                     </button>
+
                     <button
                       onClick={nextStep}
-                      className={`px-6 py-2 rounded-lg focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 ${
-                        ispasswordmatch
-                          ? "bg-gray-400 text-white cursor-not-allowed"
-                          :
-                           "bg-custom-bg text-white hover:bg-gray-600"
-                      }`}         
-                        //  disabled={!validation.passwordMatch}     
-                            >
+                      className={`px-6 py-2 rounded-lg ${formData.position && formData.username && formData.password && formData.confirmpassword && formData.passwordExpires && formData.password === formData.confirmpassword
+                          ? "bg-custom-bg text-white hover:bg-gray-600"
+                          : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                        }`}
+                      disabled={!formData.position || !formData.username || !formData.password || !formData.confirmpassword || !formData.passwordExpires || formData.password !== formData.confirmpassword}
+                    >
                       Next
                     </button>
                   </div>
@@ -859,42 +755,33 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
               </div>
             </>
           )}
+
           {step === 4 && (
             <>
-            <div className="flex gap-4">
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-2 mt-2">
-                <input
-                  type="file"
-                  id="useravatar"
-                  name="useravatar"
-                  accept="image/*"
-                  onChange={handleFileChange}
-                  className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border file:border-gray-300 file:background-gray-100 hover:file:bg-gray-200 file:text-sm"
-                  />
-              </div>
-              <div>
-                {imagePreview && (
-                  <div>
-                    <img
-                      src={imagePreview}
-                      alt="Avatar Preview"
-                      className="avatar-preview w-32 h-20"
-                    />
-                  </div>
-                )}
-              </div>
-              </div>
-              {/* <div>
-                <label>
-                  Is Active:
+              <div className="flex gap-4">
+                <div className="border-2 border-dashed border-gray-300 rounded-lg p-2 mt-2">
                   <input
-                    type="checkbox"
-                    name="isActive"
-                    checked={formData.isActive}
-                    onChange={handleChange}
+                    type="file"
+                    id="useravatar"
+                    name="useravatar"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                    className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border file:border-gray-300 file:background-gray-100 hover:file:bg-gray-200 file:text-sm"
                   />
-                </label>
-              </div> */}
+                </div>
+                <div>
+                  {imagePreview && (
+                    <div>
+                      <img
+                        src={imagePreview}
+                        alt="Avatar Preview"
+                        className="avatar-preview w-32 h-20"
+                      />
+                    </div>
+                  )}
+                </div>
+              </div>
+
               <div>
                 <label className="block font-medium mb-2">Is Active:</label>
                 <div className="flex gap-4">
@@ -933,19 +820,7 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                   </label>
                 </div>
               </div>
-              {/* <div>
-                <label>
-                  Role:
-                  <select
-                    name="role"
-                    value={formData.role}
-                    onChange={handleChange}
-                  >
-                    <option value="user">User</option>
-                    <option value="admin">Admin</option>
-                  </select>
-                </label>
-              </div> */}
+
               <div>
                 <label className="block font-medium mb-2">Role</label>
                 <div className="flex gap-4">

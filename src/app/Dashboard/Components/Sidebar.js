@@ -116,9 +116,9 @@ const Sidebar = () => {
                   <li
                     onClick={() => handleLinkClick("/Dashboard/Superadmin")}
                     className={`${activeLink === "/Dashboard/Superadmin"
-                      ? "border-l-4 border-b-2 border-red-400"
+                      ? "border-b-2"
                       : " text-blue"
-                      } flex items-center p-3 cursor-pointer hover:border-b-2 rounded-lg bg-transparent`}
+                      } flex items-center p-3 cursor-pointer hover:border-b-2 bg-transparent mx-2`}
                   >
                     <div className="flex items-center gap-3 bg-transparent">
                       <img src="/register.png" alt="regitstercompany" className="w-5" />
@@ -128,6 +128,8 @@ const Sidebar = () => {
                     </div>
                   </li>
                 </Link>
+
+                
 
                 {/* <Link passHref href="/Dashboard/Title/GetAllTitles">
                   <li
@@ -159,9 +161,9 @@ const Sidebar = () => {
                       handleLinkClick("/Dashboard/Users/GetAllusers")
                     }
                     className={`${activeLink === "/Dashboard/Users/GetAllusers"
-                      ? "border-l-4 border-b-2 border-red-400"
+                      ? "border-b-2"
                       : " text-blue"
-                      } flex items-center p-3 cursor-pointer hover:border-b-2 rounded-lg bg-transparent`}
+                      } flex items-center p-3 cursor-pointer hover:border-b-2 bg-transparent mx-2`}
                   >
                     <div className="flex items-center gap-3 bg-transparent">
                       <img src="/superadmin.png" alt="superadmin" />
@@ -188,17 +190,17 @@ const Sidebar = () => {
                     //     ? "border-l-4 border-b-2 border-red-400"
                     //     : " text-blue"
                     // } flex items-center p-3 cursor-pointer hover:border-b-2 rounded-lg relative bg-transparent`}
-                    className={`flex items-center p-3 cursor-pointer hover:border-b-2 rounded-lg bg-transparent ${isOpenManagement
-                      ? "border-l-4 border-b-2 border-red-400"
+                    className={`flex items-center p-3 cursor-pointer hover:border-b-2  bg-transparent ${isOpenManagement
+                      ? "border-b-2"
                       : "text-blue"
                       } ${activeLink === "/Dashboard/Models/Manufacturer/GetManufacturers" ||
                         activeLink === "/Dashboard/Models/CarModels/GetCarsModels" ||
                         activeLink === "/Dashboard/Models/Type_BodyStyle/GetTypes" ||
                         activeLink === "/Dashboard/Models/FuelType/GetFuelTypes" ||
                         activeLink === "/Dashboard/Models/Transmission/GetTransmissions"
-                        ? "border-l-4 border-b-2 border-red-400"
+                        ? " border-b-2 "
                         : "text-blue"
-                      }`}
+                      } flex items-center p-3 cursor-pointer hover:border-b-2 bg-transparent mx-2`}
 
                   >
                     <div className="flex items-center gap-3 relative bg-transparent">

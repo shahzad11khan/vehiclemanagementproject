@@ -287,6 +287,7 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                     />
                   </div>
                 </div>
+                
                 <div className="mt-6 flex gap-2 justify-end">
                   <button
                     type="button"

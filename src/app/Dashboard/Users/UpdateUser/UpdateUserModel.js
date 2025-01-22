@@ -134,8 +134,8 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
       }
   };
 
-  const isNextDisabled = !validation.emailValid;
-  const ispasswordmatch = !validation.passwordMatch;
+  // const isNextDisabled = !validation.emailValid;
+  // const ispasswordmatch = !validation.passwordMatch;
   // Handle file input changes
   const handleFileChange = (e) => {
     const file = e.target.files[0];

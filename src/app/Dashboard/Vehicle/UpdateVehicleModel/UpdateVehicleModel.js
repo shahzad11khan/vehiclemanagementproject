@@ -197,20 +197,20 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
   };
 
   const handleChange = (e) => {
-    const { name, value, type, checked, files, options } = e.target;
+    const { name, value, type, checked, files } = e.target;
 
     setVehicleData((prevData) => {
       // Handle multi-select dropdown
-      if (type === "select-multiple") {
-        const selectedValues = Array.from(options)
-          .filter((option) => option.selected)
-          .map((option) => option.value);
+      // if (type === "select-multiple") {
+      //   const selectedValues = Array.from(options)
+      //     .filter((option) => option.selected)
+      //     .map((option) => option.value);
 
-        return {
-          ...prevData,
-          [name]: selectedValues,
-        };
-      }
+      //   return {
+      //     ...prevData,
+      //     [name]: selectedValues,
+      //   };
+      // }
 
       // Handle file inputs
       if (type === "file") {
@@ -910,9 +910,9 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                     <option value="" disabled>
                       Select Capacity
                     </option>
-                    {[...Array(10)].map((_, index) => (
-                      <option key={index + 1} value={index + 1}>
-                        {index + 1}
+                    {["1","2","3","4","5","6","7","8","9","10"].map((val,i) => (
+                      <option key={i} value={val}>
+                        {val}
                       </option>
                     ))}
                   </select>

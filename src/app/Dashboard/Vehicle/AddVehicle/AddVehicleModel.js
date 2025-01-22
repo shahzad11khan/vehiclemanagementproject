@@ -129,7 +129,6 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
     "interiorColor",
   ];
   const pagetworequiredfeilds = [
-    "passengerCapacity",
     "safetyFeatures",
     "techFeatures",
     "price",
@@ -141,8 +140,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
   ];
 
   const areFieldsFilled = (fields) =>
-    fields.every((field) => vehicleData[field]?.trim() !== "");
-  
+   fields.every((field) => vehicleData[field] !== "");
   const isNextDisabled1st = !areFieldsFilled(pageonerequiredfeilds);
   const isNextDisabled2nd = !areFieldsFilled(pagetworequiredfeilds);
   const isNextDisabled5th = !areFieldsFilled(pagefiverequiredfeilds);
@@ -224,21 +222,21 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
   }, [vehicleData.adminCompanyName]);
 
   const handleChange = (e) => {
-    const { name, value, type, checked, files, options } = e.target;
+    const { name, value, type, checked, files } = e.target;
 
     setVehicleData((prevData) => {
       // Handle multi-select dropdown
-      if (type === "select-multiple") {
-        const selectedValues = Array.from(options)
-          .filter((option) => option.selected)
-          .map((option) => option.value);
+      // if (type === "select-multiple") {
+      //   const selectedValues = Array.from(options)
+      //     .filter((option) => option.selected)
+      //     .map((option) => option.value);
 
-        return {
-          ...prevData,
-          [name]: selectedValues,
-        };
-      }
-
+      //   return {
+      //     ...prevData,
+      //     [name]: selectedValues,
+      //   };
+      // }
+     
       // Handle file inputs
       if (type === "file") {
         return {
@@ -620,11 +618,10 @@ const sendRoadTaxData = async (roadTaxData) => {
     });
   };
 
-  // const handleSiteChange = (e) => {
-  //   setSelectedSite(e.target.value);
+  // const handlepassengerChange = (e) => {
   //   setVehicleData((prevData) => ({
   //     ...prevData,
-  //     vehicleSite: e.target.value,
+  //     passengerCapacity: e.target.value,
   //   }));
   // };
 
@@ -1013,12 +1010,16 @@ const sendRoadTaxData = async (roadTaxData) => {
                     <option value="" disabled>
                       Select Capacity
                     </option>
-                    {[...Array(10)].map((_, index) => (
-                      <option key={index + 1} value={index + 1}>
-                        {index + 1}
+                    
+                    {["1","2","3","4","5","6","7","8","9","10"].map((val,i) => (
+                      <option key={i} value={val}>
+                        {val}
                       </option>
                     ))}
                   </select>
+
+
+
                 </div>
 
                 <div>

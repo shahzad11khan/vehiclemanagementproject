@@ -16,10 +16,38 @@ const CompanySchema = new mongoose.Schema(
     password: {
       type: String,
       //   required: true,
+      validate: {
+        validator: function (value) {
+          // Regex pattern explanation:
+          // ^              : Start of string
+          // [A-Z]          : First character must be an uppercase letter
+          // \d{2}          : Followed by exactly two digits
+          // .*[\W_].*      : Must include at least one special character
+          // .{5,}          : Minimum length of 5 characters
+          // $              : End of string
+          return /^(?=.*[\W_])[A-Z]\d{2}.{2,}$/.test(value);
+        },
+        message:
+          "Password must start with an uppercase letter, followed by two digits, and include at least one special character.",
+      },
     },
     confirmPassword: {
       type: String,
       //   required: true,
+      validate: {
+        validator: function (value) {
+          // Regex pattern explanation:
+          // ^              : Start of string
+          // [A-Z]          : First character must be an uppercase letter
+          // \d{2}          : Followed by exactly two digits
+          // .*[\W_].*      : Must include at least one special character
+          // .{5,}          : Minimum length of 5 characters
+          // $              : End of string
+          return /^(?=.*[\W_])[A-Z]\d{2}.{2,}$/.test(value);
+        },
+        message:
+          "Password must start with an uppercase letter, followed by two digits, and include at least one special character.",
+      },
     },
     isActive: {
       type: Boolean,

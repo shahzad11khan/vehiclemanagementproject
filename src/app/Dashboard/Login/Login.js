@@ -64,7 +64,7 @@ const Login = () => {
         // router.push("/Dashboard/Home");
         router.push("/Dashboard/LandingScreen");
       } else {
-        toast.warning(response.data.error);
+        toast.warning(response.data.message);
         router.push("/");
       }
     } catch (error) {

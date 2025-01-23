@@ -22,17 +22,11 @@ export async function POST(Request) {
       user = await Company.findOne({
         $and: [{ email: email }, { confirmPassword: password }]
       }).exec();
-      isCompany = !!user; 
-    }
-    const isPasswordValid = await bcryptjs.compare(password, user.password);
-    if (!user && !isPasswordValid) {
-      return NextResponse.json({
-        message: "Email and Password are InCorrect"
-      });
+      isCompany = !!user;
     }
     if (!user) {
       return NextResponse.json({
-        message: "Email is InCorrect"
+        message: "User Or Company Not Found"
       });
     }
     if (isCompany && !user.password) {
@@ -40,6 +34,7 @@ export async function POST(Request) {
         message: "Company does not have this password"
       });
     }
+    const isPasswordValid = await bcryptjs.compare(password, user.password);
 
     if (!isPasswordValid) {
       return NextResponse.json({

@@ -24,6 +24,12 @@ export async function POST(Request) {
       }).exec();
       isCompany = !!user; 
     }
+    const isPasswordValid = await bcryptjs.compare(password, user.password);
+    if (!user && !isPasswordValid) {
+      return NextResponse.json({
+        message: "Email and Password are InCorrect"
+      });
+    }
     if (!user) {
       return NextResponse.json({
         message: "Email is InCorrect"
@@ -31,17 +37,15 @@ export async function POST(Request) {
     }
     if (isCompany && !user.password) {
       return NextResponse.json({
-        message: "Company does not have a password set"
+        message: "Company does not have this password"
       });
     }
-    const isPasswordValid = await bcryptjs.compare(password, user.password);
 
     if (!isPasswordValid) {
       return NextResponse.json({
         message: "Password Incorrect"
       });
     }
-    console.log(user);
     // Generate JWT token with appropriate user data
     const token = jwt.sign(
       {

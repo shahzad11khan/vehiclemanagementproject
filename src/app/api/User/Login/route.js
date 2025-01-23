@@ -13,6 +13,7 @@ export async function POST(Request) {
     // Extract email and password from request body
     const { email, password } = await Request.json();
     // console.log(email, password);
+    if(!email || !password) return NextResponse.json({error: "Email or Password is Missing"}, {status: 401});
 
     // Attempt to find user by email in User model
     let user = null; // Initialize user as null
@@ -32,7 +33,9 @@ export async function POST(Request) {
       }).exec();
       isCompany = !!user; // Set isCompany flag if found in Company model
     }
-
+    if(user.isActive === false) return NextResponse.json({error: "User is InActive"}, {status: 401});
+    if(user.email !== email) return NextResponse.json({error: "Email is InCorrect"}, {status: 401});
+    if(user.password !== password) return NextResponse.json({error: "Password is InCorrect"}, {status: 401});
     // If user not found in either User or Company models
     if (!user) {
       return NextResponse.json({

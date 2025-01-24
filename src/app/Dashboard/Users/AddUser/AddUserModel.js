@@ -8,17 +8,18 @@ import {
   getsuperadmincompanyname,
   // getUserRole,
 } from "@/utils/storageUtils";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+
 
 const AddUserModel = ({ isOpen, onClose, fetchData }) => {
-  // const [title, setTitile] = useState([]);
-  // const [role, setrole] = useState(null);
-  // const [previewAvatar, setPreviewAvatar] = useState(null);
   const [showPasswords, setShowPasswords] = useState(false);
-  // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+  // const passwordRegex = /^[A-Z][@#$%^&*!]\d[a-z]{6,}$/;
+  const passwordRegex = /^[A-Z][a-z]+[@#$%^&*!]\d[a-z]+$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
     const [validation, setValidation] = useState({
-    emailValid: null,
-    passwordMatch: null,
+    emailValid: false,
+    passwordMatch: false,
+    passwordValid: false,
   });
 
   const [formData, setFormData] = useState({
@@ -62,45 +63,69 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
 
   }, []); // Run only once when the component mounts
 
+  // const handleChange = (e) => {
+  //   const { name, value, type, checked } = e.target;
+  //   const updatedValue = type === 'checkbox' ? checked : value;
+
+  //   setFormData((prevData) => ({
+  //     ...prevData,
+  //     [name]: updatedValue,
+  //   }));
+
+  //   if (name === 'email') {
+  //     setValidation((prevValidation) => ({
+  //       ...prevValidation,
+  //       emailValid: emailRegex.test(updatedValue),
+  //     }));
+  //   } else if (name === 'confirmpassword' || name === 'password') {
+  //     const password = name === 'password' ? updatedValue : formData.password;
+  //     const confirmPassword =
+  //       name === 'confirmpassword' ? updatedValue : formData.confirmpassword;
+
+  //     setValidation((prevValidation) => ({
+  //       ...prevValidation,
+  //       passwordMatch: password === confirmPassword,
+  //     }));
+  //   }
+  // };
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     const updatedValue = type === 'checkbox' ? checked : value;
-
+  
     setFormData((prevData) => ({
       ...prevData,
       [name]: updatedValue,
     }));
-
+  
+    // Validation logic
     if (name === 'email') {
       setValidation((prevValidation) => ({
         ...prevValidation,
         emailValid: emailRegex.test(updatedValue),
       }));
-    } else if (name === 'confirmpassword' || name === 'password') {
+    }
+  
+    if (name === 'password' || name === 'confirmpassword') {
       const password = name === 'password' ? updatedValue : formData.password;
       const confirmPassword =
         name === 'confirmpassword' ? updatedValue : formData.confirmpassword;
-
+  
       setValidation((prevValidation) => ({
         ...prevValidation,
-        passwordMatch: password === confirmPassword,
+        passwordValid: passwordRegex.test(password), // Validate password with regex
+        passwordMatch: password === confirmPassword, // Check if passwords match
       }));
     }
   };
-
+  
   const handleFileChange = (e) => {
      const file = e.target.files[0];
-    // Update the formData and preview avatar
     setFormData((prevData) => ({
       ...prevData,
-      useravatar: file, // Store the selected file
+      useravatar: file, 
     }));
 
-    // if (file) {
-    //   const reader = new FileReader();
-    //   reader.onload = () => setPreviewAvatar(reader.result); // Set preview image
-    //   reader.readAsDataURL(file);
-    // }
+
   };
 
 
@@ -322,33 +347,7 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                   Contact Information
                 </h3>
                 <div className="grid grid-cols-2 sm:grid-cols-2 gap-3">
-                  {/* <div>
-                    <div className="flex gap-1">
-                      <label
-                        htmlFor="email"
-                        className="text-sm font-medium text-gray-700"
-                      >
-                        Email:
-                      </label>
-                      <span className="text-red-600">*</span>
-                    </div>
-                    <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      // className=" border-gray-300 rounded-lg"
-                      className={`mt-1 block w-full p-2 border rounded-lg${
-                        validation.emailValid === null
-                          ? 'border-gray-300'
-                          : validation.emailValid
-                          ? 'border-green-500'
-                          : 'border-red-500'
-                      } focus:outline-none`}
-                      required
-                    />
-                  </div> */}
+              
 
 <div>
       <div className="flex gap-1">
@@ -647,7 +646,7 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                     />
                   </div>
                   <div className="flex gap-2">
-                    <div>
+                  <div className="relative">
                       <div className="flex gap-1">
                         <label
                           htmlFor="password"
@@ -666,9 +665,20 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                         className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
                         required
                       />
+                       <button
+                                            type="button"
+                                            onClick={() => setShowPasswords((prev) => !prev)}
+                                            className="absolute right-2 top-10"
+                                          >
+                                            {showPasswords ? (
+                                              <AiOutlineEye size={20} />
+                                            ) : (
+                                              <AiOutlineEyeInvisible size={20} />
+                                            )}
+                                          </button>
                     </div>
 
-                    <div>
+                    <div className="relative">
                       <div className="flex gap-1">
                         <label
                           htmlFor="confirmpassword"
@@ -685,32 +695,47 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                         value={formData.confirmpassword}
                         onChange={handleChange}
                         // className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                        className={`mt-1 block w-full p-2 border rounded-lg${
+                        className={`mt-1 block w-full p-2 ${
                           validation.passwordMatch === null
                             ? 'border-gray-300'
                             : validation.passwordMatch
                             ? 'border-green-500'
                             : 'border-red-500'
-                        } focus:outline-none`}
+                        } focus:outline-none border rounded-lg`}
                         required
                       />
-                      <span
+                       <button
+                                            type="button"
+                                            onClick={() => setShowPasswords((prev) => !prev)}
+                                            className="absolute right-2 top-10"
+                                          >
+                                            {showPasswords ? (
+                                              <AiOutlineEye size={20} />
+                                            ) : (
+                                              <AiOutlineEyeInvisible size={20} />
+                                            )}
+                                          </button>
+                                          <span
     className={`text-sm ${
       validation.passwordMatch === null
-        ? 'text-gray-500'
+        ? "text-gray-500"
         : validation.passwordMatch
-        ? 'text-green-500'
-        : 'text-red-500'
+        ? passwordRegex.test(formData.password)
+          ? "text-green-500"
+          : "text-red-500"
+        : "text-red-500"
     }`}
   >
     {validation.passwordMatch === null
-      ? 'ConfirmPassword must match'
-      : validation.passwordMatch
-      ? 'ConfirmPassword matched'
-      : 'ConfirmPassword not matched'}
+      ? "Confirm Password must be entered i.e Shah@1anything 6 characters"
+      : !validation.passwordMatch
+      ? "Confirm Password does not match i.e Shah@1anything 6 characters"
+      : !passwordRegex.test(formData.password)
+      ? "Password is not strong i.e Shah@1anything 6 characters"
+      : "Confirm Password matched Pattern Match"}
   </span>
                     </div>
-                    <div className="mt-4">
+                    {/* <div className="mt-4">
                       <button
                         type="button"
                         onClick={() => setShowPasswords(!showPasswords)}
@@ -718,7 +743,7 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                       >
                         {showPasswords ? "Hide" : "Show"}
                       </button>
-                    </div>
+                    </div> */}
                   </div>
                   <div>
                     <div className="flex gap-1">

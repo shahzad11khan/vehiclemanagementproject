@@ -19,34 +19,8 @@ const userSchema = new mongoose.Schema(
     position: { type: String, default: "" },
     reportsTo: { type: String, default: "" },
     username: { type: String, default: "" },
-    password: { type: String, default: "", validate: {
-      validator: function (value) {
-        // Regex pattern explanation:
-        // ^                : Start of string
-        // [A-Z]            : First character must be an uppercase letter
-        // [\W_]            : Second character must be a special symbol (non-alphanumeric)
-        // (?=(.*\d){3})     : Ensure there are at least 3 digits in the password
-        // .{3,}            : Minimum length of 3 characters after special symbol
-        // $                : End of string
-        return /^[A-Z][\W_](?=(.*\d){3}).{3,}$/.test(value);
-      },
-      message:
-        "Password must start with an uppercase letter, followed by a special symbol, and contain at least three digits.",
-    }, },
-    confirmpassword: { type: String, default: "",validate: {
-      validator: function (value) {
-        // Regex pattern explanation:
-        // ^                : Start of string
-        // [A-Z]            : First character must be an uppercase letter
-        // [\W_]            : Second character must be a special symbol (non-alphanumeric)
-        // (?=(.*\d){3})     : Ensure there are at least 3 digits in the password
-        // .{3,}            : Minimum length of 3 characters after special symbol
-        // $                : End of string
-        return /^[A-Z][\W_](?=(.*\d){3}).{3,}$/.test(value);
-      },
-      message:
-        "Password must start with an uppercase letter, followed by a special symbol, and contain at least three digits.",
-    }, },
+    password: { type: String, default: "" },
+    confirmpassword: { type: String, default: "" },
     useravatar: { type: String, default: "" },
     userPublicId: { type: String, default: "" },
     passwordExpires: { type: String, default: "" }, // Use Date type for date fields

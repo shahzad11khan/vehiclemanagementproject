@@ -4,6 +4,8 @@ import axios from "axios"; // Ensure axios is imported
 import { API_URL_USER } from "../../Components/ApiUrl/ApiUrls";
 // import { fetchTitle } from "../../Components/DropdownData/taxiFirm/taxiFirmService";
 import { toast } from "react-toastify";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+
 
 const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
   const [step, setStep] = useState(1);
@@ -37,10 +39,12 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
     isActive: false,
     role: "user", // Default role set to "user"
   });
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-  const [validation, setValidation] = useState({
-    emailValid: null,
-    passwordMatch: null,
+  const passwordRegex = /^[A-Z][a-z]+[@#$%^&*!]\d[a-z]+$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+    const [validation, setValidation] = useState({
+    emailValid: false,
+    passwordMatch: false,
+    passwordValid: false,
   });
 
   const [imagePreview, setImagePreview] = useState(null); // Preview for the avatar image
@@ -121,17 +125,30 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
         ...prevValidation,
         emailValid: emailRegex.test(updatedValue),
       }));
-    } else
-      if (name === 'confirmpassword' || name === 'password') {
-        const password = name === 'password' ? updatedValue : formData.password;
-        const confirmPassword =
-          name === 'confirmpassword' ? updatedValue : formData.confirmpassword;
+    } 
+    // else
+    //   if (name === 'confirmpassword' || name === 'password') {
+    //     const password = name === 'password' ? updatedValue : formData.password;
+    //     const confirmPassword =
+    //       name === 'confirmpassword' ? updatedValue : formData.confirmpassword;
 
-        setValidation((prevValidation) => ({
-          ...prevValidation,
-          passwordMatch: password === confirmPassword,
-        }));
-      }
+    //     setValidation((prevValidation) => ({
+    //       ...prevValidation,
+    //       passwordMatch: password === confirmPassword,
+    //     }));
+    //   }
+
+    if (name === 'password' || name === 'confirmpassword') {
+      const password = name === 'password' ? updatedValue : formData.password;
+      const confirmPassword =
+        name === 'confirmpassword' ? updatedValue : formData.confirmpassword;
+  
+      setValidation((prevValidation) => ({
+        ...prevValidation,
+        passwordValid: passwordRegex.test(password), // Validate password with regex
+        passwordMatch: password === confirmPassword, // Check if passwords match
+      }));
+    }
   };
 
   // const isNextDisabled = !validation.emailValid;
@@ -626,73 +643,106 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                     />
                   </div>
 
-                  <div className="flex gap-2">
-                    <div>
-                      <div className="flex gap-1">
-                        <label
-                          htmlFor="password"
-                          className="text-sm font-medium text-gray-700"
-                        >
-                          Password:
-                        </label>
-                        <span className="text-red-600">*</span>
-                      </div>
-                      <input
-                        type={showPasswords ? "text" : "password"}
-                        id="password"
-                        name="password"
-                        value={formData.password}
-                        onChange={handleChange}
-                        className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                        required
-                      />
-                    </div>
-
-                    <div>
-                      <div className="flex gap-1">
-                        <label
-                          htmlFor="confirmpassword"
-                          className="text-sm font-medium text-gray-700"
-                        >
-                          Confirm Password:
-                        </label>
-                        <span className="text-red-600">*</span>
-                      </div>
-                      <input
-                        type={showPasswords ? "text" : "password"}
-                        id="confirmpassword"
-                        name="confirmpassword"
-                        value={formData.confirmpassword}
-                        onChange={handleChange}
-                        className={`mt-1 block w-full p-2 border rounded-lg ${validation.passwordMatch === null
-                            ? "border-gray-300"
-                            : validation.passwordMatch
-                              ? "border-green-500"
-                              : "border-red-500"
-                          }`}
-                        required
-                      />
-                      {validation.passwordMatch === false ? (
-                        <p className="text-red-600 text-sm mt-1">
-                          Passwords do not match.
-                        </p>
-                      ) : (
-                        <p className="text-green-500 text-sm mt-1">
-                          Passwords match.
-                        </p>
-                      )}
-                    </div>
-
-                    <div className="mt-4">
-                      <button
-                        type="button"
-                        onClick={() => setShowPasswords(!showPasswords)}
-                        className="px-4 py-2"
-                      >
-                        {showPasswords ? "Hide" : "Show"}
-                      </button>
-                    </div>
-                  </div>
+                   <div className="flex gap-2">
+                                  <div className="relative">
+                                      <div className="flex gap-1">
+                                        <label
+                                          htmlFor="password"
+                                          className="text-sm font-medium text-gray-700"
+                                        >
+                                          Password:
+                                        </label>
+                                        <span className="text-red-600">*</span>
+                                      </div>
+                                      <input
+                                        type={showPasswords ? "text" : "password"}
+                                        id="password"
+                                        name="password"
+                                        value={formData.password}
+                                        onChange={handleChange}
+                                        className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                                        required
+                                      />
+                                       <button
+                                                            type="button"
+                                                            onClick={() => setShowPasswords((prev) => !prev)}
+                                                            className="absolute right-2 top-10"
+                                                          >
+                                                            {showPasswords ? (
+                                                              <AiOutlineEye size={20} />
+                                                            ) : (
+                                                              <AiOutlineEyeInvisible size={20} />
+                                                            )}
+                                                          </button>
+                                    </div>
+                
+                                    <div className="relative">
+                                      <div className="flex gap-1">
+                                        <label
+                                          htmlFor="confirmpassword"
+                                          className="text-sm font-medium text-gray-700"
+                                        >
+                                          Confirm Password:
+                                        </label>
+                                        <span className="text-red-600">*</span>
+                                      </div>
+                                      <input
+                                        type={showPasswords ? "text" : "password"}
+                                        id="confirmpassword"
+                                        name="confirmpassword"
+                                        value={formData.confirmpassword}
+                                        onChange={handleChange}
+                                        // className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                                        className={`mt-1 block w-full p-2 ${
+                                          validation.passwordMatch === null
+                                            ? 'border-gray-300'
+                                            : validation.passwordMatch
+                                            ? 'border-green-500'
+                                            : 'border-red-500'
+                                        } focus:outline-none border rounded-lg`}
+                                        required
+                                      />
+                                       <button
+                                                            type="button"
+                                                            onClick={() => setShowPasswords((prev) => !prev)}
+                                                            className="absolute right-2 top-10"
+                                                          >
+                                                            {showPasswords ? (
+                                                              <AiOutlineEye size={20} />
+                                                            ) : (
+                                                              <AiOutlineEyeInvisible size={20} />
+                                                            )}
+                                                          </button>
+                                                          <span
+                    className={`text-sm ${
+                      validation.passwordMatch === null
+                        ? "text-gray-500"
+                        : validation.passwordMatch
+                        ? passwordRegex.test(formData.password)
+                          ? "text-green-500"
+                          : "text-red-500"
+                        : "text-red-500"
+                    }`}
+                  >
+                    {validation.passwordMatch === null
+                      ? "Confirm Password must be entered i.e Shah@1anything 6 characters"
+                      : !validation.passwordMatch
+                      ? "Confirm Password does not match i.e Shah@1anything 6 characters"
+                      : !passwordRegex.test(formData.password)
+                      ? "Password is not strong i.e Shah@1anything 6 characters"
+                      : "Confirm Password matched Pattern Match"}
+                  </span>
+                                    </div>
+                                    {/* <div className="mt-4">
+                                      <button
+                                        type="button"
+                                        onClick={() => setShowPasswords(!showPasswords)}
+                                        className="px-4 py-2"
+                                      >
+                                        {showPasswords ? "Hide" : "Show"}
+                                      </button>
+                                    </div> */}
+                                  </div>
 
 
                   <div>

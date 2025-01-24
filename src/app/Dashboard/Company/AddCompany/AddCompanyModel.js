@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import { API_URL_Company } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+
 
 const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
   const [formData, setFormData] = useState({
@@ -41,20 +43,86 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
   const prevStep = () => setStep(step - 1);
   const [showPassword, setShowPassword] = useState(false);
 
+  const strongPasswordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@#$%^&*!?])[A-Za-z\d@#$%^&*!?]{8,}$/;
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+  const [validation, setValidation] = useState({
+    emailValid: false,
+    passwordMatch: false,
+    passwordValid: false,
+  });
+
+  // const handleChange = (e) => {
+  //   const { name, value, type, checked, files } = e.target;
+  //   const updatedValue = type === 'checkbox' ? checked : value;
+
+  //   setFormData((prevData) => ({
+  //     ...prevData,
+  //     [name]: updatedValue,
+  //   }));
+  //   if (name === 'email') {
+  //     setValidation((prevValidation) => ({
+  //       ...prevValidation,
+  //       emailValid: emailRegex.test(updatedValue),
+  //     }));
+  //   }
+  //   if (name === 'password' || name === 'confirmPassword') {
+  //     const password = name === 'password' ? updatedValue : formData.password;
+  //     const confirmPassword =
+  //       name === 'confirmPassword' ? updatedValue : formData.confirmPassword;
+  //       setValidation((prevValidation) => ({
+  //       ...prevValidation,
+  //       passwordValid: strongPasswordRegex.test(password), // Validate password with regex
+  //       passwordMatch: password === confirmPassword, // Check if passwords match
+  //     }));
+  //   }
+  //   setFormData((prevData) => ({
+  //     ...prevData,
+  //     [name]:
+  //       type === "checkbox" ? checked : type === "file" ? files[0] : value,
+  //     ...(name === "mailingAddress" && autoFillAll
+  //       ? {
+  //           billingAddress: value,
+  //           bankingInformationBankAddress: value,
+  //           physical_Address: value,
+  //         }
+  //       : {}),
+  //   }));
+  // };
   const handleChange = (e) => {
     const { name, value, type, checked, files } = e.target;
+    const updatedValue = type === 'checkbox' ? checked : type === 'file' ? files[0] : value;
+
+    // Update form data
     setFormData((prevData) => ({
       ...prevData,
-      [name]:
-        type === "checkbox" ? checked : type === "file" ? files[0] : value,
-      ...(name === "mailingAddress" && autoFillAll
+      [name]: updatedValue,
+      ...(name === 'mailingAddress' && autoFillAll
         ? {
-            billingAddress: value,
-            bankingInformationBankAddress: value,
-            physical_Address: value,
-          }
+          billingAddress: value,
+          bankingInformationBankAddress: value,
+          physical_Address: value,
+        }
         : {}),
     }));
+
+    // Validation logic
+    if (name === 'email') {
+      setValidation((prevValidation) => ({
+        ...prevValidation,
+        emailValid: emailRegex.test(updatedValue),
+      }));
+    }
+
+    if (name === 'password' || name === 'confirmPassword') {
+      const password = name === 'password' ? updatedValue : formData.password;
+      const confirmPassword = name === 'confirmPassword' ? updatedValue : formData.confirmPassword;
+
+      setValidation((prevValidation) => ({
+        ...prevValidation,
+        passwordValid: strongPasswordRegex.test(password), // Validate password strength
+        passwordMatch: password === confirmPassword, // Check if passwords match
+      }));
+    }
   };
 
   const handleCheckboxChange = (e) => {
@@ -64,25 +132,20 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
       ...prevData,
       ...(checked
         ? {
-            billingAddress: prevData.mailingAddress,
-            bankingInformationBankAddress: prevData.mailingAddress,
-            physical_Address: prevData.mailingAddress,
-          }
+          billingAddress: prevData.mailingAddress,
+          bankingInformationBankAddress: prevData.mailingAddress,
+          physical_Address: prevData.mailingAddress,
+        }
         : {
-            billingAddress: "",
-            bankingInformationBankAddress: "",
-            physical_Address: "",
-          }),
+          billingAddress: "",
+          bankingInformationBankAddress: "",
+          physical_Address: "",
+        }),
     }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match!");
-      return;
-    }
-
     const data = new FormData();
     Object.keys(formData).forEach((key) => {
       data.append(key, formData[key]);
@@ -162,13 +225,25 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                    // className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                    className={`mt-1 block w-full p-2 border rounded-lg ${validation.emailValid === null
+                        ? 'border-gray-300'
+                        : validation.emailValid
+                          ? 'border-green-500'
+                          : 'border-red-500'
+                      } focus:outline-none`}
                     required
                   />
+                  {validation.emailValid === false && (
+                    <p className="text-sm text-red-600">Invalid email format</p>
+                  )}
+                  {validation.emailValid === true && (
+                    <p className="text-sm text-green-600">Valid email format</p>
+                  )}
                 </div>
                 <div className="flex gap-2">
                   {/* Password */}
-                  <div>
+                  <div className="relative">
                     <div className="flex gap-1">
                       <label
                         htmlFor="password"
@@ -184,9 +259,20 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
                       name="password"
                       value={formData.password}
                       onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                      className="mt-1 block w-full p-2 pr-10 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
                       required
                     />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword((prev) => !prev)}
+                      className="absolute right-2 top-10"
+                    >
+                      {showPassword ? (
+                        <AiOutlineEye size={20} />
+                      ) : (
+                        <AiOutlineEyeInvisible size={20} />
+                      )}
+                    </button>
                   </div>
 
                   {/* Confirm Password */}
@@ -201,15 +287,52 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
                       <span className="text-red-600">*</span>
                     </div>
 
-                    <input
-                      type={showPassword ? "text" : "password"}
-                      id="confirmPassword"
-                      name="confirmPassword"
-                      value={formData.confirmPassword}
-                      onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                      required
-                    />
+                    <div className="relative">
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        id="confirmPassword"
+                        name="confirmPassword"
+                        value={formData.confirmPassword}
+                        onChange={handleChange}
+                        className={`mt-1 block w-full p-2 pr-10 ${validation.passwordMatch === null
+                            ? "border-gray-300"
+                            : validation.passwordMatch
+                              ? "border-green-500"
+                              : "border-red-500"
+                          } focus:outline-none border border-gray-300 rounded-lg`}
+                        required
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword((prev) => !prev)}
+                        className="absolute inset-y-0 right-2 flex items-center text-gray-500"
+                      >
+                        {showPassword ? (
+                          <AiOutlineEye size={20} />
+                        ) : (
+                          <AiOutlineEyeInvisible size={20} />
+                        )}
+                      </button>
+                    </div>
+
+                    <span
+                      className={`text-sm ${validation.passwordMatch === null
+                          ? "text-gray-500"
+                          : validation.passwordMatch
+                            ? strongPasswordRegex.test(formData.password)
+                              ? "text-green-500"
+                              : "text-red-500"
+                            : "text-red-500"
+                        }`}
+                    >
+                      {validation.passwordMatch === null
+                        ? "Confirm Password must be entered i.e Abc@1234"
+                        : !validation.passwordMatch
+                          ? "Confirm Password does not match i.e Abc@1234"
+                          : !strongPasswordRegex.test(formData.password)
+                            ? "Password is not strong i.e Abc@1234"
+                            : "Confirm Password matched"}
+                    </span>
                   </div>
                 </div>
                 {/* CompanyRegistrationNumber*/}
@@ -232,13 +355,13 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
                     className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
-                <button
+                {/* <button
                   type="button"
                   className="border-2 h-10 mt-6 p-2 rounded-lg"
                   onClick={() => setShowPassword(!showPassword)}
                 >
                   {showPassword ? "Hide" : "Show"}
-                </button>
+                </button> */}
                 {/* vatnumber*/}
                 <div>
                   <div className="flex gap-1">

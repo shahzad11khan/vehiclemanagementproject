@@ -13,6 +13,7 @@ export async function POST(Request) {
     const { email, password } = await Request.json();
     if(!email || !password) return NextResponse.json({message: "Email and Password are required"});
     
+    
     let user = null;
     user = await User.findOne({
       $and: [{ email: email }, { confirmpassword: password }]

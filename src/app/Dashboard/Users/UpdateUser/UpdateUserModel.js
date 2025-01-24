@@ -40,11 +40,15 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
     role: "user", // Default role set to "user"
   });
   const passwordRegex = /^[A-Z][a-z]+[@#$%^&*!]\d[a-z]+$/;
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-    const [validation, setValidation] = useState({
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+  const [validation, setValidation] = useState({
     emailValid: false,
     passwordMatch: false,
     passwordValid: false,
+    dateOfBirthValid: true,
+    passwordExpiresvalid : false
+
+
   });
 
   const [imagePreview, setImagePreview] = useState(null); // Preview for the avatar image
@@ -125,28 +129,38 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
         ...prevValidation,
         emailValid: emailRegex.test(updatedValue),
       }));
-    } 
-    // else
-    //   if (name === 'confirmpassword' || name === 'password') {
-    //     const password = name === 'password' ? updatedValue : formData.password;
-    //     const confirmPassword =
-    //       name === 'confirmpassword' ? updatedValue : formData.confirmpassword;
-
-    //     setValidation((prevValidation) => ({
-    //       ...prevValidation,
-    //       passwordMatch: password === confirmPassword,
-    //     }));
-    //   }
+    }
 
     if (name === 'password' || name === 'confirmpassword') {
       const password = name === 'password' ? updatedValue : formData.password;
       const confirmPassword =
         name === 'confirmpassword' ? updatedValue : formData.confirmpassword;
-  
+
       setValidation((prevValidation) => ({
         ...prevValidation,
         passwordValid: passwordRegex.test(password), // Validate password with regex
         passwordMatch: password === confirmPassword, // Check if passwords match
+      }));
+    }
+
+    if (name === 'dateOfBirth') {
+      const selectedDate = new Date(value);
+      const currentDate = new Date();
+
+      const isValid = selectedDate <= currentDate;
+      setValidation((prevValidation) => ({
+        ...prevValidation,
+        dateOfBirthValid: isValid,
+      }));
+    }
+    if(name === 'passwordExpires'){
+      const selectedDate = new Date(value);
+      const currentDate = new Date();
+
+      const isValid = selectedDate >= currentDate;
+      setValidation((prevValidation) => ({
+        ...prevValidation,
+        passwordExpiresvalid: isValid,
       }));
     }
   };
@@ -324,8 +338,8 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                   <button
                     onClick={nextStep}
                     className={`px-6 py-2 rounded-lg ${formData.firstName && formData.lastName && formData.title
-                        ? "bg-custom-bg text-white hover:bg-gray-600"
-                        : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                      ? "bg-custom-bg text-white hover:bg-gray-600"
+                      : "bg-gray-300 text-gray-500 cursor-not-allowed"
                       }`}
                     disabled={!formData.firstName || !formData.lastName || !formData.title}
                   >
@@ -360,10 +374,10 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                       value={formData.email}
                       onChange={handleChange}
                       className={`mt-1 block w-full p-2 border rounded-lg ${validation.emailValid === null
-                          ? 'border-gray-300'
-                          : validation.emailValid
-                            ? 'border-green-500'
-                            : 'border-red-500'
+                        ? 'border-gray-300'
+                        : validation.emailValid
+                          ? 'border-green-500'
+                          : 'border-red-500'
                         } focus:outline-none`}
                       required
                     />
@@ -539,8 +553,8 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                     <button
                       onClick={nextStep}
                       className={`px-6 py-2 rounded-lg ${formData.email && formData.tel1 && formData.postcode && formData.postalAddress && formData.city && formData.county
-                          ? "bg-custom-bg text-white hover:bg-gray-600"
-                          : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                        ? "bg-custom-bg text-white hover:bg-gray-600"
+                        : "bg-gray-300 text-gray-500 cursor-not-allowed"
                         }`}
                       disabled={!formData.email || !formData.tel1 || !formData.postcode || !formData.postalAddress || !formData.city || !formData.county}
                     >
@@ -582,6 +596,9 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                       onChange={handleChange}
                       className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
                     />
+                    {!validation.dateOfBirthValid && (
+                      <span className="text-sm text-red-500">Date of Birth cannot be in the future.</span>
+                    )}
                   </div>
 
                   <div>
@@ -643,97 +660,95 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                     />
                   </div>
 
-                   <div className="flex gap-2">
-                                  <div className="relative">
-                                      <div className="flex gap-1">
-                                        <label
-                                          htmlFor="password"
-                                          className="text-sm font-medium text-gray-700"
-                                        >
-                                          Password:
-                                        </label>
-                                        <span className="text-red-600">*</span>
-                                      </div>
-                                      <input
-                                        type={showPasswords ? "text" : "password"}
-                                        id="password"
-                                        name="password"
-                                        value={formData.password}
-                                        onChange={handleChange}
-                                        className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                                        required
-                                      />
-                                       <button
-                                                            type="button"
-                                                            onClick={() => setShowPasswords((prev) => !prev)}
-                                                            className="absolute right-2 top-10"
-                                                          >
-                                                            {showPasswords ? (
-                                                              <AiOutlineEye size={20} />
-                                                            ) : (
-                                                              <AiOutlineEyeInvisible size={20} />
-                                                            )}
-                                                          </button>
-                                    </div>
-                
-                                    <div className="relative">
-                                      <div className="flex gap-1">
-                                        <label
-                                          htmlFor="confirmpassword"
-                                          className="text-sm font-medium text-gray-700"
-                                        >
-                                          Confirm Password:
-                                        </label>
-                                        <span className="text-red-600">*</span>
-                                      </div>
-                                      <input
-                                        type={showPasswords ? "text" : "password"}
-                                        id="confirmpassword"
-                                        name="confirmpassword"
-                                        value={formData.confirmpassword}
-                                        onChange={handleChange}
-                                        // className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                                        className={`mt-1 block w-full p-2 ${
-                                          validation.passwordMatch === null
-                                            ? 'border-gray-300'
-                                            : validation.passwordMatch
-                                            ? 'border-green-500'
-                                            : 'border-red-500'
-                                        } focus:outline-none border rounded-lg`}
-                                        required
-                                      />
-                                       <button
-                                                            type="button"
-                                                            onClick={() => setShowPasswords((prev) => !prev)}
-                                                            className="absolute right-2 top-10"
-                                                          >
-                                                            {showPasswords ? (
-                                                              <AiOutlineEye size={20} />
-                                                            ) : (
-                                                              <AiOutlineEyeInvisible size={20} />
-                                                            )}
-                                                          </button>
-                                                          <span
-                    className={`text-sm ${
-                      validation.passwordMatch === null
-                        ? "text-gray-500"
-                        : validation.passwordMatch
-                        ? passwordRegex.test(formData.password)
-                          ? "text-green-500"
-                          : "text-red-500"
-                        : "text-red-500"
-                    }`}
-                  >
-                    {validation.passwordMatch === null
-                      ? "Confirm Password must be entered i.e Shah@1anything 6 characters"
-                      : !validation.passwordMatch
-                      ? "Confirm Password does not match i.e Shah@1anything 6 characters"
-                      : !passwordRegex.test(formData.password)
-                      ? "Password is not strong i.e Shah@1anything 6 characters"
-                      : "Confirm Password matched Pattern Match"}
-                  </span>
-                                    </div>
-                                    {/* <div className="mt-4">
+                  <div className="flex gap-2">
+                    <div className="relative">
+                      <div className="flex gap-1">
+                        <label
+                          htmlFor="password"
+                          className="text-sm font-medium text-gray-700"
+                        >
+                          Password:
+                        </label>
+                        <span className="text-red-600">*</span>
+                      </div>
+                      <input
+                        type={showPasswords ? "text" : "password"}
+                        id="password"
+                        name="password"
+                        value={formData.password}
+                        onChange={handleChange}
+                        className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                        required
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPasswords((prev) => !prev)}
+                        className="absolute right-2 top-10"
+                      >
+                        {showPasswords ? (
+                          <AiOutlineEye size={20} />
+                        ) : (
+                          <AiOutlineEyeInvisible size={20} />
+                        )}
+                      </button>
+                    </div>
+
+                    <div className="relative">
+                      <div className="flex gap-1">
+                        <label
+                          htmlFor="confirmpassword"
+                          className="text-sm font-medium text-gray-700"
+                        >
+                          Confirm Password:
+                        </label>
+                        <span className="text-red-600">*</span>
+                      </div>
+                      <input
+                        type={showPasswords ? "text" : "password"}
+                        id="confirmpassword"
+                        name="confirmpassword"
+                        value={formData.confirmpassword}
+                        onChange={handleChange}
+                        // className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                        className={`mt-1 block w-full p-2 ${validation.passwordMatch === null
+                            ? 'border-gray-300'
+                            : validation.passwordMatch
+                              ? 'border-green-500'
+                              : 'border-red-500'
+                          } focus:outline-none border rounded-lg`}
+                        required
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPasswords((prev) => !prev)}
+                        className="absolute right-2 top-10"
+                      >
+                        {showPasswords ? (
+                          <AiOutlineEye size={20} />
+                        ) : (
+                          <AiOutlineEyeInvisible size={20} />
+                        )}
+                      </button>
+                      <span
+                        className={`text-sm ${validation.passwordMatch === null
+                            ? "text-gray-500"
+                            : validation.passwordMatch
+                              ? passwordRegex.test(formData.password)
+                                ? "text-green-500"
+                                : "text-red-500"
+                              : "text-red-500"
+                          }`}
+                      >
+                        {validation.passwordMatch === null
+                          ? "Confirm Password must be entered i.e Shah@1anything 6 characters"
+                          : !validation.passwordMatch
+                            ? "Confirm Password does not match i.e Shah@1anything 6 characters"
+                            : !passwordRegex.test(formData.password)
+                              ? "Password is not strong i.e Shah@1anything 6 characters"
+                              : "Confirm Password matched Pattern Match"}
+                      </span>
+                    </div>
+                    {/* <div className="mt-4">
                                       <button
                                         type="button"
                                         onClick={() => setShowPasswords(!showPasswords)}
@@ -742,7 +757,7 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                                         {showPasswords ? "Hide" : "Show"}
                                       </button>
                                     </div> */}
-                                  </div>
+                  </div>
 
 
                   <div>
@@ -792,11 +807,11 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
 
                     <button
                       onClick={nextStep}
-                      className={`px-6 py-2 rounded-lg ${formData.position && formData.username && formData.password && formData.confirmpassword && formData.passwordExpires && formData.password === formData.confirmpassword
-                          ? "bg-custom-bg text-white hover:bg-gray-600"
-                          : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                      className={`px-6 py-2 rounded-lg ${formData.position && formData.username && validation.dateOfBirthValid && formData.password && formData.confirmpassword && formData.passwordExpires && formData.passwordExpires && formData.password === formData.confirmpassword
+                        ? "bg-custom-bg text-white hover:bg-gray-600"
+                        : "bg-gray-300 text-gray-500 cursor-not-allowed"
                         }`}
-                      disabled={!formData.position || !formData.username || !formData.password || !formData.confirmpassword || !formData.passwordExpires || formData.password !== formData.confirmpassword}
+                      disabled={!formData.position || !formData.username || !validation.dateOfBirthValid || !formData.password || !formData.confirmpassword ||  !validation.passwordExpiresvalid ||!formData.passwordExpires || formData.password !== formData.confirmpassword}
                     >
                       Next
                     </button>

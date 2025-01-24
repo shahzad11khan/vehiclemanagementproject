@@ -13,6 +13,7 @@ import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 
 const AddUserModel = ({ isOpen, onClose, fetchData }) => {
   const [showPasswords, setShowPasswords] = useState(false);
+  // const [dobvalidation, setdobValidation] = useState({ dateOfBirthValid: true });
   // const passwordRegex = /^[A-Z][@#$%^&*!]\d[a-z]{6,}$/;
   const passwordRegex = /^[A-Z][a-z]+[@#$%^&*!]\d[a-z]+$/;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
@@ -20,6 +21,8 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
     emailValid: false,
     passwordMatch: false,
     passwordValid: false,
+    dateOfBirthValid: true,
+    passwordExpiresvalid : false
   });
 
   const [formData, setFormData] = useState({
@@ -116,6 +119,30 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
         passwordMatch: password === confirmPassword, // Check if passwords match
       }));
     }
+
+    if (name === 'dateOfBirth') {
+      const selectedDate = new Date(value);
+      const currentDate = new Date();
+
+      const isValid = selectedDate <= currentDate;
+      setValidation((prevValidation) => ({
+        ...prevValidation,
+        dateOfBirthValid: isValid,
+      }));
+    }
+
+    if(name === 'passwordExpires'){
+      const selectedDate = new Date(value);
+      const currentDate = new Date();
+
+      const isValid = selectedDate >= currentDate;
+      setValidation((prevValidation) => ({
+        ...prevValidation,
+        passwordExpiresvalid: isValid,
+      }));
+    }
+      
+
   };
   
   const handleFileChange = (e) => {
@@ -155,8 +182,8 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
       fields.every((field) => formData[field] !== "");
     
   const isNextDisabled1st =  !areFieldsFilled(pageonerequiredfeilds);
-  const isNextDisabled2nd = !validation.emailValid || !areFieldsFilled(pagetworequiredfeilds);
-  const isNextDisabled3rd = !validation.passwordMatch || !areFieldsFilled(pagethreerequiredfeilds);
+  const isNextDisabled2nd = !validation.emailValid ||  !areFieldsFilled(pagetworequiredfeilds);
+  const isNextDisabled3rd = !validation.passwordMatch || !validation.dateOfBirthValid || !validation.passwordExpiresvalid || !areFieldsFilled(pagethreerequiredfeilds);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -585,6 +612,9 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                       onChange={handleChange}
                       className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
                     />
+                  {!validation.dateOfBirthValid && (
+                  <span className="text-sm text-red-500">Date of Birth cannot be in the future.</span>
+                   )}
                   </div>
 
                   <div>
@@ -765,6 +795,9 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                       className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
                       required
                     />
+                     {!validation.passwordExpiresvalid && (
+                  <span className="text-sm text-red-500">Password Expires cannot be in the past.</span>
+                   )}
                   </div>
 
                 </div>

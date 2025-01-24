@@ -11,7 +11,7 @@ import { isAuthenticated } from "@/utils/verifytoken";
 
 const Login = () => {
   const router = useRouter();
-  const [buttonDisable, setbuttondisable] = useState(true);
+  // const [buttonDisable, setbuttondisable] = useState(true);
   const [loading, setloading] = useState(false);
 
   const [passwordEye,setpasswordEye]=useState(true);
@@ -28,19 +28,29 @@ const Login = () => {
     }
   }, [router]);
 
+   
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setloading(true);
-
-    
-
     try {
+      if (!userlogin.email || !userlogin.password) {
+        if (!userlogin.email && !userlogin.password) {
+          toast.warn("Email and Password are required");
+        } else if (!userlogin.email) {
+          toast.warn("Email is required");
+        } else if (!userlogin.password) {
+          toast.warn("Password is required");
+        }
+        return;
+      }
+      
       const response = await axios.post(`${API_URL_Login}`, {
         email: userlogin.email,
         password: userlogin.password,
       });
 
-      // console.log("Login successful", response);
+      console.log("Login successful", response);
       const isVerifiedtoken = response.data.token;
       const Userusername = response.data.username;
       const companyName = response.data.company;
@@ -78,13 +88,6 @@ const Login = () => {
     }
   };
 
-  useEffect(() => {
-    if (userlogin.email.length > 0 && userlogin.password.length > 0) {
-      setbuttondisable(false);
-    } else {
-      setbuttondisable(true);
-    }
-  }, [userlogin]);
 
   return (
     <div className="min-h-screen overflow-hidden  flex justify-center items-center relative bg-custom-bg">
@@ -170,8 +173,8 @@ const Login = () => {
         <button
         
           type="submit"
-          className="w-[300px]  font-semibold font-sans cursor-pointer text-black h-10 rounded-md hover:bg-blue-600 hover:text-white  transition duration-300 bg-white"
-          disabled={buttonDisable || loading}
+          className="w-[300px]  font-semibold cursor-pointer text-black h-10 rounded-md hover:bg-blue-600 transition duration-300 bg-white"
+          // disabled={buttonDisable || loading}
         >
           LOGIN
         </button>

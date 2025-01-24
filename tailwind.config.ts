@@ -9,6 +9,11 @@ module.exports = {
   // darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
+      // Font Family(ali).
+      fontFamily: {
+        sans: ['DM Sans', 'sans-serif'],  // Default sans-serif font
+        montserrat: ['Montserrat', 'sans-serif'],  // Add Montserrat font
+      },
       // Define custom classes for different screen sizes
       screens: {
         sm: "640px", // Small screens

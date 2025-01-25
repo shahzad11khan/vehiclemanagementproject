@@ -11,31 +11,21 @@ export async function POST(Request) {
     await connect();
 
     const { email, password } = await Request.json();
-    if(!email || !password) return NextResponse.json({message: "Email and Password are required"});
-    
-    
-    let user = null;
-    user = await User.findOne({
+    if (!email || !password) return NextResponse.json({ message: "Email and Password are required" });
+    let user = await User.findOne({
       $and: [{ email: email }, { confirmpassword: password }]
     }).exec();
-    let isCompany = false;
-    if (!user) {
-      user = await Company.findOne({
-        $and: [{ email: email }, { confirmPassword: password }]
-      }).exec();
-      isCompany = !!user;
+    if ((!user)) {
+      const isCompany = await Company.findOne({ email: email  });
+      if (!isCompany) {
+        return NextResponse.json({
+          message: "Email Incorrect",
+        });
+      } else {
+          user = isCompany;
+      }
     }
-    if (!user) {
-      return NextResponse.json({
-        message: "User Or Company Not Found"
-      });
-    }
-    if (isCompany && !user.password) {
-      return NextResponse.json({
-        message: "Company does not have this password"
-      });
-    }
-    const isPasswordValid = await bcryptjs.compare(password, user.password);
+    const isPasswordValid = await bcryptjs.compare(password, user.password)
 
     if (!isPasswordValid) {
       return NextResponse.json({

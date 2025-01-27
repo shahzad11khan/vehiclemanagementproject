@@ -14,6 +14,8 @@ const Login = () => {
   // const [buttonDisable, setbuttondisable] = useState(true);
   const [loading, setloading] = useState(false);
 
+  const [passwordEye,setpasswordEye]=useState(true);
+
   const [userlogin, setuserlogin] = useState({
     email: "",
     password: "",
@@ -120,11 +122,11 @@ const Login = () => {
 
       <form
         // className="bg-transparent p-10 rounded-xl -mt-32  w-[300px] h-[198px] md:w-[300px] md:h-[198px] lg:w-[300px] lg:h-[198px]"
-        className="bg-transparent p-10 rounded-x"
+        className="bg-transparent p-10 rounded-x absolute z-10 "
         onSubmit={handleSubmit}
       >
         <div className=" text-center bg-transparent">
-          <h2 className="text-3xl font-semibold mb-5 text-white bg-transparent ">
+          <h2 className="text-3xl font-semibold font-sans mb-5 text-white bg-transparent ">
             Sign In
           </h2>
         </div>
@@ -136,7 +138,7 @@ const Login = () => {
             type="email"
             name="email"
             placeholder="Enter your email"
-            className="w-[300px] pl-10 pr-3 py-2 border rounded-4 bg-custom-bg  text-white"
+            className="w-[300px] pl-10 pr-3 py-2 font-sans font-light border rounded-4 bg-custom-bg  text-white"
             value={userlogin.email}
             onChange={(e) =>
               setuserlogin({ ...userlogin, email: e.target.value })
@@ -150,17 +152,26 @@ const Login = () => {
             <FaLock className="bg-transparent" />
           </span>
           <input
-            type="password"
+            type={`${passwordEye?"password":"text"}`}
             name="password"
             placeholder="Enter your password"
-            className="w-[300px] pl-10 pr-3 py-2 border  bg-custom-bg text-white"
+            className="w-[300px] pl-10 pr-3 py-2 border font-sans font-light bg-custom-bg text-white"
             value={userlogin.password}
             onChange={(e) =>
               setuserlogin({ ...userlogin, password: e.target.value })
             }
           />
+          <button type="button"
+          onClick={()=>{
+            setpasswordEye(!passwordEye);
+          }}
+          >
+        
+            <img className="absolute top-[9.665px] right-3 object-cover object-center"src={`../../../eyeIcon${passwordEye?"On":"Off"}.png`}></img>
+            </button>
         </div>
         <button
+        
           type="submit"
           className="w-[300px]  font-semibold cursor-pointer text-black h-10 rounded-md hover:bg-blue-600 transition duration-300 bg-white"
           // disabled={buttonDisable || loading}

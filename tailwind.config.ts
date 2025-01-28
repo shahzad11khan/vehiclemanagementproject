@@ -13,6 +13,13 @@ module.exports = {
       fontFamily: {
         sans: ['DM Sans', 'sans-serif'],  // Default sans-serif font
         montserrat: ['Montserrat', 'sans-serif'],  // Add Montserrat font
+        poppins:['Poppins','sans-serif'] // Add Poppins
+      },
+      dropShadow: {
+        custom: '0 5.08px 5.08px #00000040', // Custom drop shadow
+        custom2: '0 1px 4px #00000040', // Custom2 drop shadow
+        custom3: '0 4px 4px #0000001A', // Custom3 for the dasheboard cards
+
       },
       // Define custom classes for different screen sizes
       screens: {
@@ -35,6 +42,8 @@ module.exports = {
         "custom-blue": "", // Define a custom color
         "custom-color": "#454544", // Define a custom color
         "custom-bg": "#27273A", // Define a custom color 222434
+        "drop-custom-bg":"#313342",  //For the header dropdown
+        "modal-bg":"#D9D9D999",
         custom: "#e5e5e5", // Define a custom color
       },
       // Extend background image utilities

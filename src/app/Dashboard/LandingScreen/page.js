@@ -69,7 +69,7 @@ const Page = () => {
           <div className="w-[170px] h-[170px] bg-transparent flex flex-col items-center justify-center gap-5 ">
               <img src="/01.png" alt="Management Icon" className="w-52 h-52" />
               <Link href="/Dashboard/StartPage" className="w-full rounded-lg bg-[#EBEBEB] flex items-center justify-center">
-                <button className="w-44 h-11 text-xl font-medium">Management</button>
+                <button className="w-44 h-11 text-xl font-medium rounded-[8px]  hover:bg-blue-600 hover:text-white  transition duration-300">Management</button>
               </Link>
             </div>
             

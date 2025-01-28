@@ -5,7 +5,6 @@ import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { API_URL_Login } from "../Components/ApiUrl/ApiUrls";
-import { FaEnvelope, FaLock } from "react-icons/fa";
 import LoadingScreen from "../Components/LoadingScreen";
 import { isAuthenticated } from "@/utils/verifytoken";
 
@@ -33,6 +32,9 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setloading(true);
+
+    
+
     try {
       if (!userlogin.email || !userlogin.password) {
         if (!userlogin.email && !userlogin.password) {
@@ -122,7 +124,7 @@ const Login = () => {
 
       <form
         // className="bg-transparent p-10 rounded-xl -mt-32  w-[300px] h-[198px] md:w-[300px] md:h-[198px] lg:w-[300px] lg:h-[198px]"
-        className="bg-transparent p-10 rounded-x absolute z-10 "
+        className="bg-transparent p-10 rounded-x absolute z-10 flex flex-col justify-between gap-5 "
         onSubmit={handleSubmit}
       >
         <div className=" text-center bg-transparent">
@@ -130,36 +132,56 @@ const Login = () => {
             Sign In
           </h2>
         </div>
-        <div className="mb-6 relative">
-          <span className="absolute inset-y-0 left-2 flex items-center p-2 bg-transparent text-white">
-            <FaEnvelope className="bg-transparent" />
+        <div className=" relative rounded-4">
+          <span className="absolute inset-y-0 left-1 top-[-2px] flex items-center p-2 bg-transparent text-white">
+            {/* <FiUser className="bg-transparent font-bold text-white" style={{
+              height:"20px",
+              width:"20px"
+            }} /> */}
+            <img style={{
+              height:"20px",
+              width:"20px"
+            }} src="./userIcon.svg"></img>
           </span>
           <input
             type="email"
             name="email"
+            required
             placeholder="Enter your email"
-            className="w-[300px] pl-10 pr-3 py-2 font-sans font-light border rounded-4 bg-custom-bg  text-white"
+            className="w-[300px] pl-10 pr-3 py-2 font-sans font-light border  rounded-4 bg-custom-bg  focus:outline-[1px] focus:outline-white  text-white"
             value={userlogin.email}
             onChange={(e) =>
               setuserlogin({ ...userlogin, email: e.target.value })
             }
+            onInvalid={(e) => e.target.setCustomValidity("Email is required!")}
+            onInput={(e) => e.target.setCustomValidity("")}
           />
         </div>
 
         {/* Password Input with Icon */}
-        <div className="mb-6 relative">
-          <span className="absolute inset-y-0 left-2 flex items-center p-2 bg-transparent">
-            <FaLock className="bg-transparent" />
+        <div className=" relative rounded-4">
+          <span className="absolute inset-y-0 left-1 top-[-2px] flex items-center p-2 bg-transparent">
+            {/* <FaLock className="bg-transparent" /> */}
+            <img style={{
+              height:"20px",
+              width:"20px"
+            }} src="./lockIcon.svg"></img>
           </span>
           <input
             type={`${passwordEye?"password":"text"}`}
             name="password"
             placeholder="Enter your password"
-            className="w-[300px] pl-10 pr-3 py-2 border font-sans font-light bg-custom-bg text-white"
+            required
+          
+            className="w-[300px] pl-10 pr-3 py-2 border rounded-4 font-sans font-light bg-custom-bg focus:outline-[1px] focus:outline-white  text-white"
             value={userlogin.password}
             onChange={(e) =>
               setuserlogin({ ...userlogin, password: e.target.value })
             }
+
+            onInvalid={(e) => e.target.setCustomValidity("Password is required!")}
+            onInput={(e) => e.target.setCustomValidity("")}
+
           />
           <button type="button"
           onClick={()=>{
@@ -167,14 +189,17 @@ const Login = () => {
           }}
           >
         
-            <img className="absolute top-[9.665px] right-3 object-cover object-center"src={`../../../eyeIcon${passwordEye?"On":"Off"}.png`}></img>
+            <img className="absolute top-[9.665px] right-3 object-cover object-center"src={`./eyeIcon${passwordEye?"On":"Off"}.svg`}></img>
             </button>
+        </div>
+        <div className="relative align-middle bg-transparent flex justify-end">
+          <span className="  text-[13px] text-white font-normal font-montserrat bg-transparent">Forgot password?</span>
         </div>
         <button
         
           type="submit"
-          className="w-[300px]  font-semibold cursor-pointer text-black h-10 rounded-md hover:bg-blue-600 transition duration-300 bg-white"
-          // disabled={buttonDisable || loading}
+          onSubmit={handleSubmit}
+          className="w-[300px]  font-semibold font-sans cursor-pointer text-black h-10 rounded-md hover:bg-blue-600 hover:text-white  transition duration-300 bg-white"
         >
           LOGIN
         </button>

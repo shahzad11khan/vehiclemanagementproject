@@ -51,23 +51,23 @@ const Sidebar = () => {
     localStorage.removeItem("companyName");
   };
   return (
-    <div className="relative">
-      <button
+    <div className="relative h-[100%]">
+      {/* <button
         className="fixed top-3 left-4 z-50 block lg:hidden text-sm"
         onClick={handleToggleSidebar}
       >
         {isSidebarOpen ? "✖" : "☰"}
-      </button>
+      </button> */}
       {/* <aside
         className={` text-black  min-h-screen lg:w-52 w-20 transition-transform duration-300 ease-in-out ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
         } lg:translate-x-0 fixed lg:relative top-0 left-0 flex flex-col shadow-2xl shadow-custom-blue `}
       > */}
       <aside
-        className={`bg-white-800 text-black h-[100%] lg:w-52 w-20 sm:w-48  flex flex-col relative `}
+        className={`bg-white-800 text-black h-[100vh] lg:w-52 w-20 sm:w-48  flex flex-col relative `}
       >
         <nav
-          className="flex-1 "
+          className="flex-1  "
           style={{
             backgroundImage: "url('/bgSideBar.png')",
             backgroundSize: "cover",

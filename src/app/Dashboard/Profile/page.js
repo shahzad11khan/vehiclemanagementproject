@@ -116,23 +116,24 @@ const Page = () => {
       <div className="flex gap-4 ">
         <Sidebar />
         <main className="w-full mt-5 min-h-screen">
+        <h1 className="text-[#313342] font-medium text-2xl mb-5 underline decoration-[#AEADEB] underline-offset-8">Profile</h1>
           <section>
-            <div className="flex justify-center items-center m-auto">
-              <div className="bg-white rounded-xl p-8 max-w-lg mx-auto shadow-xl shadow-custom-blue">
-                <h2 className="text-2xl font-semibold mb-6 text-center">
+            <div className="flex justify-center items-center m-auto bg-transparent">
+              <div className="bg-transparent rounded-xl p-8 w-full mx-auto ">
+                {/* <h2 className="text-2xl font-semibold mb-6 text-center">
                   Edit User
-                </h2>
+                </h2> */}
                 {loading && <p>Loading...</p>}
-                <form onSubmit={handleSubmit}>
-                  <div className="mb-4 flex flex-col items-center">
-                    <div className="w-24 h-24 mb-4">
+                <form onSubmit={handleSubmit} className="w-full flex flex-col gap-32 bg-transparent">
+                  <div className=" flex gap-10 px-3  bg-white shadow-2xl py-5">
+                    <div className=" flex items-center w-[50%] sm:w-[30%]">
                       {imagePreview ? (
                         <img
                           src={imagePreview}
                           alt="User Avatar"
-                          className="w-full h-full object-cover rounded-full"
-                          width={200}
-                          height={200}
+                          className="object-cover object-center rounded-full"
+                          width={155}
+                          height={155}
                         />
                       ) : (
                         <div className="w-full h-full bg-gray-200 rounded-full flex items-center justify-center">
@@ -146,13 +147,12 @@ const Page = () => {
                         </div>
                       )}
                     </div>
-                  </div>
-                  <div className="mt-1 px-3 py-1.5 w-full rounded-md border-gray-400 border focus:outline-none focus:border-indigo-500 text-black">
+                    <div className="mt-1 px-3 py-1.5 w-[50%] sm:w-[70%] rounded-md border-gray-400 border focus:outline-none focus:border-indigo-500 text-black">
                     <label className="block">
                       <span className="text-gray-950">Upload file</span>
                       <input
                         type="file"
-                        className="mt-1 block w-full text-sm text-gray-500 
+                        className="block w-full text-sm text-gray-500 
                         file:mr-4 file:py-2 file:px-4 file:rounded-full
                         file:border-0 file:text-sm file:font-semibold
                         file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
@@ -163,6 +163,9 @@ const Page = () => {
                       />
                     </label>
                   </div>
+                  </div>
+                  
+                  <div className="w-full">
                   <div className="flex gap-3">
                     <div className="mb-4">
                       <label
@@ -242,6 +245,7 @@ const Page = () => {
                     >
                       Update User
                     </button>
+                  </div>
                   </div>
                 </form>
               </div>

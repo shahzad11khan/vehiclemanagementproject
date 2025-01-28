@@ -2,8 +2,12 @@
 import axios from "axios";
 import Link from "next/link";
 import React, { useState, useCallback, useEffect } from "react";
-import { CgProfile } from "react-icons/cg";
-import { IoIosLogOut } from "react-icons/io";
+// import { CgProfile } from "react-icons/cg";
+// import { IoIosLogOut } from "react-icons/io";
+//ali
+
+import LogoutModal from './LogoutModal';
+
 import {
   getCompanyName,
   getUserId,
@@ -35,6 +39,9 @@ const Header = () => {
   const [imagePreview, setImagePreview] = useState("");
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
+
+  //ali
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
   const fetchAllData = async () => {
     try {
@@ -138,15 +145,16 @@ const Header = () => {
   });
 
   return (
-    <header className=" text-black flex items-center justify-between opacity-90 w-full shadow-sm shadow-custom-blue bg-[#222434]">
+    <header className=" relative z-50 text-black px-3  flex items-center font-sans justify-between  w-full drop-shadow-custom2 bg-[#222434ED]">
       <div className="flex flex-shrink-0 py-5 px-3  bg-transparent">
-        <span className="text-3xl font-bold text-white bg-transparent">
+        <span className=" hidden sm:block lg:text-3xl md:text-2xl sm:text-lg font-bold text-white bg-transparent">
           {/* Vehicle Management System{" "} */}
           Vehicle Management System
         </span>
+        <span className="sm:hidden text-xl font-bold bg-transparent text-white">VMS</span>
       </div>
 
-      <div className="flex items-center bg-transparent px-5">
+      <div className="flex items-center bg-transparent px-5 relative">
         <div className="flex gap-4 bg-transparent">
           <div className="flex gap-2 relative bg-transparent">
             {role === "user" && filteredData.length > 0 ? (
@@ -156,7 +164,7 @@ const Header = () => {
                   onClick={pendingDropdown}
                 >
                   <img
-                    src="/bill.png"
+                    src="/bell.png"
                     alt="notification"
                     height={25}
                     width={25}
@@ -173,19 +181,18 @@ const Header = () => {
                 )}
               </>
             ) : (
+              
               // Default notification icon when no pending items
               <img
-                src="/abc.png"
-                className="bg-transparent"
+                src="/bell.svg"
+                className="bg-transparent  "
                 alt="no notification"
-                height={19}
-                width={23}
               />
             )}
           </div>
 
           <div className="bg-transparent">
-            <h6 className="mr-4 hidden md:block bg-transparent text-white">
+            <h6 className="mr-4 font-sans text-lg font-medium hidden md:block bg-transparent text-white">
               {role === "superadmin" && flag === "false" ? (
                 <div className="bg-transparent">
                   <p className="bg-transparent text-white">{username}</p>
@@ -203,66 +210,77 @@ const Header = () => {
 
         <div className="relative bg-transparent">
           <div
-            className="h-8 w-8 cursor-pointer bg-transparent"
+            className=" h-[36px] w-[36px] md:h-[46px] md:w-[46px] cursor-pointer bg-transparent"
             onClick={toggleDropdown}
           >
             <img
               src={imagePreview}
               alt="Profile"
-              height={40}
-              width={40}
-              className="rounded-full"
+              className="rounded-full h-full w-full object-cover object-center"
             />
           </div>
 
+          {/* Dropdown */}
+
           {typeof window !== "undefined" && isDropdownOpen && (
-            <div className="absolute right-10 mt-2 flex flex-col bg-white rounded shadow-lg z-10 text-black w-44 hover:text-white">
-              <ul className="">
+            <div className=" border-[1px] border-white  absolute right-[2px]  h-[60px] top-6 mt-2 flex rounded-bl-[9px] rounded-tl-[9px] rounded-br-[9px] flex-col ] drop-shadow-custom  z-100 w-44">
+              <ul className="rounded-tl-[9px] h-[60px] rounded-bl-[9px] rounded-br-[9px]  ">
                 {(role === "superadmin" && flag === "false") ||
                   role === "admin" ||
                   role === "user" ? (
                   <Link href="/Dashboard/Profile">
-                    <li className="px-4 py-2  cursor-pointer  flex items-center hover:bg-custom-bg  hover:text-white">
-                      <CgProfile className="mr-2 bg-transparent text-white" />
-                      <span
-                        className="hidden md:inline text-black hover:text-white"
+                    <li className="px-4 font-sans text-sm font-semibold py-2 rounded-tl-[9px] h-[50%]  cursor-pointer  flex gap-2 items-center  hover:bg-drop-custom-bg  hover:text-white group">
+                      {/* <CgProfile className="mr-2 bg-transparent text-white" /> */}
+                      <img src="/profile.svg" className="h-[17px] w-[17px]  group-hover:invert "></img>
+                      
+                      {/* <span
+                        className="hidden font-sans text-sm md:inlineh-full w-full text-black hover:text-white"
                         style={{ backgroundColor: "transparent" }}
-                      >
-                        Profile
-                      </span>
+                      > */}
+                       Profile 
+                      {/* </span> */}
                     </li>
                   </Link>
                 ) : role === "superadmin" && flag === "true" ? (
                   <Link href="/Dashboard/CompanyProfile">
-                    <li className="px-4 py-2  cursor-pointer  flex items-center hover:bg-custom-bg  hover:text-white">
-                      <CgProfile className="mr-2 bg-transparent text-white" />
+                    <li className="px-4 font-sans text-sm font-semibold py-2 rounded-tl-[9px] h-[50%]  cursor-pointer  flex gap-2 items-center  hover:bg-drop-custom-bg  hover:text-white group">
+                      {/* <CgProfile className="mr-2 bg-transparent text-white" /> */}
+                      <img src="/profile.svg" className="h-[17px] w-[17px]  group-hover:invert "></img>
+                      
                       {/* <span
-                        className="hidden md:inline text-black hover:text-white"
+                        className="hidden font-sans text-sm md:inlineh-full w-full text-black hover:text-white"
                         style={{ backgroundColor: "transparent" }}
                       > */}
-                      Profile
+                       Profile 
                       {/* </span> */}
                     </li>
                   </Link>
                 ) : (
                   <Link href="/Dashboard/CompanyProfile">
-                    <li className="px-4 py-2  cursor-pointer  flex items-center hover:bg-custom-bg  hover:text-white">
-                      <CgProfile className="mr-2 bg-transparent text-white" />
+                    <li className="px-4 font-sans text-sm font-semibold py-2 rounded-tl-[9px] h-[50%]  cursor-pointer  flex gap-2 items-center  hover:bg-drop-custom-bg  hover:text-white group">
+                      {/* <CgProfile className="mr-2 bg-transparent text-white" /> */}
+                      <img src="/profile.svg" className="h-[17px] w-[17px]  group-hover:invert "></img>
+                      
                       {/* <span
-                        className="hidden md:inline text-black hover:text-white"
+                        className="hidden font-sans text-sm md:inlineh-full w-full text-black hover:text-white"
                         style={{ backgroundColor: "transparent" }}
                       > */}
-                      Profile
+                       Profile 
                       {/* </span> */}
                     </li>
                   </Link>
                 )}
 
                 <li
-                  className="px-4 py-2 hover:bg-custom-bg cursor-pointer  flex hover:text-white"
-                  onClick={handleLogout}
+                  className="px-4 py-2 rounded-bl-[9px] w-full h-[50%] font-semibold font-sans text-sm rounded-br-[9px] hover:bg-drop-custom-bg cursor-pointer items-center gap-2  flex hover:text-white group"
+                  onClick={
+                    ()=>{
+                      setIsLogoutModalOpen(true)
+                  }
+                }
                 >
-                  <IoIosLogOut className="mr-2 bg-transparent text-white" />
+                  {/* <IoIosLogOut className="mr-2 bg-transparent text-white" /> */}
+                  <img className="h-[17px] w-[17px] group-hover:invert" src="/signOut.svg"></img>
                   {/* <button > */}
                   Logout
                   {/* </button> */}
@@ -273,7 +291,7 @@ const Header = () => {
         </div>
       </div>
 
-      <div className="block md:hidden">
+      {/* <div className="block md:hidden">
         <button onClick={toggleDropdown} className="text-white">
           <svg
             className="w-6 h-6"
@@ -290,7 +308,14 @@ const Header = () => {
             ></path>
           </svg>
         </button>
-      </div>
+      </div> */}
+
+      {/*  here it works as a logoutconfirmationmodal */}
+      <LogoutModal 
+        isOpen={isLogoutModalOpen} 
+        onClose={() => setIsLogoutModalOpen(false)} 
+        onLogout={handleLogout} 
+      />
     </header>
   );
 };

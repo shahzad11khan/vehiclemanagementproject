@@ -1,6 +1,6 @@
 import React from "react";
 
-const LoadingScreen = ({ loading }) => {
+const LoadingScreen = ({ loading, }) => {
   return (
     <div
       className="min-h-screen overflow-hidden flex flex-col justify-center gap-10 items-center relative"

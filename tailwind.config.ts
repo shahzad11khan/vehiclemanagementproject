@@ -19,6 +19,7 @@ module.exports = {
         custom: '0 5.08px 5.08px #00000040', // Custom drop shadow
         custom2: '0 1px 4px #00000040', // Custom2 drop shadow
         custom3: '0 4px 4px #0000001A', // Custom3 for the dasheboard cards
+        custom4:"0 4px 4px #00000040" // profile updation form
 
       },
       // Define custom classes for different screen sizes
@@ -39,6 +40,7 @@ module.exports = {
         height: "460px",
       },
       colors: {
+        "button-bg":"#313342", // for buttons
         "custom-blue": "", // Define a custom color
         "custom-color": "#454544", // Define a custom color
         "custom-bg": "#27273A", // Define a custom color 222434

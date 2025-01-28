@@ -113,38 +113,35 @@ const Page = () => {
   return (
     <>
       <Header className="min-w-full" />
-      <div className="flex gap-4 ">
+      <div className="flex gap-4 w-full ">
         <Sidebar />
         <main className="w-full mt-5 min-h-screen">
-        <h1 className="text-[#313342] font-medium text-2xl mb-5 underline decoration-[#AEADEB] underline-offset-8">Profile</h1>
-          <section>
-            <div className="flex justify-center items-center m-auto bg-transparent">
-              <div className="bg-transparent rounded-xl p-8 w-full mx-auto ">
+        <h1 className="text-[#313342] font-medium text-2xl mb-5 underline decoration-[#AEADEB] underline-offset-8 w-full">Profile</h1>
+
+          <section className="w-[98%] bg-white">
+            <div className="flex flex-col justify-between w-full drop-shadow-custom4 rounded-[10px] ">
+              <div className="text-black  border-b-2 border-[#31334266] py-2 px-6 font-sans font-medium text-2xl">Information</div>
+              <div className="bg-transparent  rounded-xl p-8 w-full mx-auto ">
                 {/* <h2 className="text-2xl font-semibold mb-6 text-center">
                   Edit User
                 </h2> */}
                 {loading && <p>Loading...</p>}
-                <form onSubmit={handleSubmit} className="w-full flex flex-col gap-32 bg-transparent">
-                  <div className=" flex gap-10 px-3  bg-white shadow-2xl py-5">
-                    <div className=" flex items-center w-[50%] sm:w-[30%]">
+                <form onSubmit={handleSubmit} className="w-full flex flex-col gap-20">
+                    {/* image */}
+                  <div className=" flex justify-center">
+                    <div className=" flex items-center h-[140px] w-[140px] sm:h-[203px] sm:w-[203px] rounded-full border-2 border-black">
                       {imagePreview ? (
                         <img
                           src={imagePreview}
                           alt="User Avatar"
-                          className="object-cover object-center rounded-full"
-                          width={155}
-                          height={155}
+                          className="object-cover object-center rounded-full h-[100%] w-[100%]"
                         />
                       ) : (
-                        <div className="w-full h-full bg-gray-200 rounded-full flex items-center justify-center">
                           <img
                             src="https://static.thenounproject.com/png/363639-200.png"
                             alt="Default Avatar"
-                            className="w-full h-full object-cover rounded-full"
-                            width={200}
-                            height={200}
+                            className="object-cover object-center rounded-full h-[100%] w-[100%]"
                           />
-                        </div>
                       )}
                     </div>
                     {/* <div className="mt-1 px-3 py-1.5 w-[50%] sm:w-[70%] rounded-md border-gray-400 border focus:outline-none focus:border-indigo-500 text-black">
@@ -165,9 +162,10 @@ const Page = () => {
                   </div> */}
                   </div>
                   
-                  <div className="w-full">
-                  <div className="flex gap-3">
-                    <div className="mb-4">
+                  {/* input fields */}
+                  <div className="w-full  flex flex-col gap-10">
+                  <div className="flex gap-3  flex-col md:flex-row">
+                    <div className="w-full md:w-[50%]">
                       <label
                         className="block text-gray-700 text-sm font-bold mb-2"
                         htmlFor="username"
@@ -180,10 +178,10 @@ const Page = () => {
                         name="username"
                         value={formData.username}
                         onChange={handleChange}
-                        className="w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring focus:ring-indigo-200"
+                        className="w-full px-3 py-2 border border-[#42506666] rounded-4 shadow-sm focus:outline-none focus:ring focus:ring-indigo-200"
                       />
                     </div>
-                    <div className="mb-4">
+                    <div className=" w-full md:w-[50%]">
                       <label
                         className="block text-gray-700 text-sm font-bold mb-2"
                         htmlFor="email"
@@ -196,12 +194,13 @@ const Page = () => {
                         name="email"
                         value={formData.email}
                         onChange={handleChange}
-                        className="w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring focus:ring-indigo-200"
+                        className="w-full px-3 py-2 border  border-[#42506666] rounded-4  focus:outline-none focus:ring focus:ring-indigo-200"
                       />
                     </div>
                   </div>
-                  <div className="flex gap-3">
-                    <div className="relative mb-4">
+
+                  <div className="flex gap-3  flex-col md:flex-row">
+                    <div className="w-full md:w-[50%]">
                       <label htmlFor="password" className="text-gray-950">
                         Password:
                       </label>
@@ -209,12 +208,12 @@ const Page = () => {
                         type={showPassword ? "text" : "password"}
                         id="password"
                         name="password"
-                        className="mt-1 px-3 py-1.5 w-full rounded-md border-gray-400 border focus:outline-none focus:border-indigo-500 text-black"
+                        className="w-full px-3 py-2 border  border-[#42506666] rounded-4  focus:outline-none focus:ring focus:ring-indigo-200"
                         value={formData.password}
                         onChange={handleChange}
                       />
                     </div>
-                    <div className="relative mb-4">
+                    <div className="w-full md:w-[50%]">
                       <label
                         htmlFor="confirmpassword"
                         className="text-gray-950"
@@ -225,26 +224,30 @@ const Page = () => {
                         type={showPassword ? "text" : "password"}
                         id="confirmpassword"
                         name="confirmpassword"
-                        className="mt-1 px-3 py-1.5 w-full rounded-md border-gray-400 border focus:outline-none focus:border-indigo-500 text-black"
+                        className="w-full px-3 py-2 border  border-[#42506666] rounded-4  focus:outline-none focus:ring focus:ring-indigo-200"
                         value={formData.confirmpassword}
                         onChange={handleChange}
                       />
                     </div>
-                    <button
+                    {/* <button
                       type="button"
                       className="border-2 h-10 mt-6 p-2 rounded-lg"
                       onClick={() => setShowPassword(!showPassword)}
                     >
                       {showPassword ? "Hide" : "Show"}
-                    </button>
+                    </button> */}
                   </div>
-                  <div className="flex justify-center">
+                  <div className=" w-full flex justify-center sm:justify-end ">
+                    <div className=" w-full sm:w-auto flex gap-6 flex-col  sm:flex-row ">
+                    <button className="py-1 px-5 w-full sm:w-auto border-[1px] rounded-4 border-[#313342] bg-white text-[#313342] hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500"
+                    >Cancel</button>
                     <button
                       type="submit"
-                      className="w-full bg-indigo-600 text-white py-2 rounded-md hover:bg-indigo-500"
+                      className="bg-[#313342] text-white rounded-4 hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500 py-1 px-8"
                     >
-                      Update User
+                     Save
                     </button>
+                    </div>
                   </div>
                   </div>
                 </form>

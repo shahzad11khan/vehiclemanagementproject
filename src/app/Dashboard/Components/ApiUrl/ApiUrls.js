@@ -1,5 +1,5 @@
 // apiUrls.js
-export const url = "http://localhost:3001";
+export const url = "http://localhost:3000";
 // export const url = "https://vmsp.netlify.app";
 export const API_URL_Login = `${url}/api/User/Login`;
 export const API_URL_Company = `${url}/api/Company`;

@@ -118,7 +118,7 @@ const Page = () => {
       <div className="flex gap-4 w-full ">
         <Sidebar />
         <main className="w-full mt-5 ">
-        <h1 className="text-[#313342] font-medium text-2xl mb-5 underline decoration-[#AEADEB] underline-offset-8 w-full">Profile</h1>
+        <h1 className="text-[#313342] font-medium font-sans text-2xl mb-5 underline decoration-[#AEADEB] underline-offset-8 w-full">Profile</h1>
 
           <section className="w-[98%] bg-white">
             <div className="flex flex-col justify-between w-full drop-shadow-custom4 rounded-[10px] ">
@@ -173,7 +173,7 @@ const Page = () => {
                   <div className="flex gap-6  flex-col md:flex-row">
                     <div className="w-full md:w-[50%]">
                       <label
-                        className="block text-gray-700 text-sm font-bold mb-2"
+                        className="block font-sans text-sm font-medium mb-2"
                         htmlFor="username"
                       >
                         Username
@@ -184,12 +184,12 @@ const Page = () => {
                         name="username"
                         value={formData.username}
                         onChange={handleChange}
-                        className="w-full px-3 py-2 border border-[#42506666] rounded-4 shadow-sm focus:outline-none focus:ring focus:ring-indigo-200"
+                        className=" font-sans font-medium text-sm w-full px-3 py-2 border border-[#42506666] rounded-4 shadow-sm focus:outline-none focus:ring focus:ring-indigo-200"
                       />
                     </div>
                     <div className=" w-full md:w-[50%]">
                       <label
-                        className="block text-gray-700 text-sm font-bold mb-2"
+                        className="block font-sans text-sm font-medium mb-2"
                         htmlFor="email"
                       >
                         Email
@@ -200,15 +200,15 @@ const Page = () => {
                         name="email"
                         value={formData.email}
                         onChange={handleChange}
-                        className="w-full px-3 py-2 border  border-[#42506666] rounded-4  focus:outline-none focus:ring focus:ring-indigo-200"
+                        className="w-full px-3 py-2 border font-sans font-medium text-sm  border-[#42506666] rounded-4  focus:outline-none focus:ring focus:ring-indigo-200"
                       />
                     </div>
                   </div>
 
                   <div className="flex gap-6   flex-col md:flex-row ">
                     <div className="w-full md:w-[50%] relative">
-                      <label htmlFor="password" className="text-gray-950">
-                        Password:
+                      <label htmlFor="password" className=" block font-sans text-sm font-medium mb-2">
+                        Password
                       </label>
 
                       <div className="relative">
@@ -216,7 +216,7 @@ const Page = () => {
                         type={showPassword ? "password":"text" }
                         id="password"
                         name="password"
-                        className="w-full px-3 py-2 border  border-[#42506666] rounded-4  focus:outline-none focus:ring focus:ring-indigo-200"
+                        className="w-full px-3 py-2 border font-sans font-medium text-sm  border-[#42506666] rounded-4  focus:outline-none focus:ring focus:ring-indigo-200"
                         value={formData.password}
                         onChange={handleChange}
                       />
@@ -226,23 +226,23 @@ const Page = () => {
           }}
           >
         
-            <img className="absolute top-[9.665px]  right-3 object-cover object-center"src={`/eyeIcon${showPassword?"On":"Off"}.svg`}></img>
+            <img className="absolute top-[8px]  right-3 object-cover object-center"src={`/eyeIcon${showPassword?"On":"Off"}.svg`}></img>
             </button>
             </div>
                     </div>
                     <div className="w-full md:w-[50%]">
                       <label
                         htmlFor="confirmpassword"
-                        className="text-gray-950"
+                        className=" block font-sans text-sm font-medium mb-2"
                       >
-                        Confirm Password:
+                        Confirm Password
                       </label>
                       <div className="relative">
                       <input
                         type={showConfirmPassword ? "password":"text"}
                         id="confirmpassword"
                         name="confirmpassword"
-                        className="w-full px-3 py-2 border  border-[#42506666] rounded-4  focus:outline-none focus:ring focus:ring-indigo-200"
+                        className=" font-sans font-medium text-sm w-full px-3 py-2 border  border-[#42506666] rounded-4  focus:outline-none focus:ring focus:ring-indigo-200"
                         value={formData.confirmpassword}
                         onChange={handleChange}
                       />
@@ -252,7 +252,7 @@ const Page = () => {
           }}
           >
         
-            <img className="absolute top-[9.665px]  right-3 object-cover object-center"src={`/eyeIcon${showConfirmPassword?"On":"Off"}.svg`}></img>
+            <img className="absolute top-[8px]  right-3 object-cover object-center"src={`/eyeIcon${showConfirmPassword?"On":"Off"}.svg`}></img>
             </button>
                       </div>
                     </div>

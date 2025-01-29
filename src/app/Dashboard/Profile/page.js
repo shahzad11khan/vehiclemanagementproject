@@ -129,7 +129,6 @@ const Page = () => {
                 </h2> */}
                 {loading?(<p>Loading...</p>):(
                 <form onSubmit={handleSubmit} className="w-full flex flex-col gap-10 sm:gap-20">
-                    {/ image /}
                   <div className=" flex justify-center">
                     <div className=" overflow-hidden relative flex items-center h-[140px] w-[140px] sm:h-[203px] sm:w-[203px] rounded-full border-2 ">
                     <input
@@ -168,7 +167,6 @@ const Page = () => {
                   </div> */}
                   </div>
                   
-                  {/ input fields /}
                   <div className="w-full  flex flex-col gap-5 sm:gap-10">
                   <div className="flex gap-6  flex-col md:flex-row">
                     <div className="w-full md:w-[50%]">
@@ -256,13 +254,7 @@ const Page = () => {
             </button>
                       </div>
                     </div>
-                    {/* <button
-                      type="button"
-                      className="border-2 h-10 mt-6 p-2 rounded-lg"
-                      onClick={() => setShowPassword(!showPassword)}
-                    >
-                      {showPassword ? "Hide" : "Show"}
-                    </button> */}
+                   
                   </div>
                   <div className=" w-full flex justify-center sm:justify-end ">
                     <div className=" w-full sm:w-auto flex gap-6 flex-col  sm:flex-row ">

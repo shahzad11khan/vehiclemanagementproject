@@ -4,6 +4,7 @@ import bcryptjs from "bcryptjs";
 import User from "@models/User/User.Model.js";
 import Company from "@models/Company/Company.Model";
 import { NextResponse } from "next/server";
+import DriverModel from "@models/Driver/Driver.Model";
 
 export async function POST(Request) {
   try {
@@ -18,11 +19,15 @@ export async function POST(Request) {
     if ((!user)) {
       const isCompany = await Company.findOne({ email: email  });
       if (!isCompany) {
-        return NextResponse.json({
-          message: "Email Incorrect",
-        });
+        const isDriver = await DriverModel.findOne({ email: email });
+        if (!isDriver) {
+          return NextResponse.json({
+            message: "Email Incorrect",
+          })
+        }
+         user = isDriver;
       } else {
-          user = isCompany;
+         user = isCompany;
       }
     }
     const isPasswordValid = await bcryptjs.compare(password, user.password)

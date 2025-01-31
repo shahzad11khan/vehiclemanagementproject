@@ -154,7 +154,7 @@ const Header = () => {
         <span className="sm:hidden text-xl font-bold bg-transparent text-white">VMS</span>
       </div>
 
-      <div className="flex items-center bg-transparent px-5 relative">
+      <div className="flex items-center bg-transparent px-2 sm:px-5 relative">
         <div className="flex gap-4 bg-transparent">
           <div className="flex gap-2 relative bg-transparent">
             {role === "user" && filteredData.length > 0 ? (
@@ -223,7 +223,7 @@ const Header = () => {
           {/* Dropdown */}
 
           {typeof window !== "undefined" && isDropdownOpen && (
-            <div className=" border-[1px] border-white  absolute right-[2px]  h-[60px] top-6 mt-2 flex rounded-bl-[9px] rounded-tl-[9px] rounded-br-[9px] flex-col ] drop-shadow-custom  z-100 w-44">
+            <div className=" border-[1px] border-white  absolute right-[3px] sm:right-[2px]  h-[60px] top-5 sm:top-6 mt-2 flex rounded-bl-[9px] rounded-tl-[9px] rounded-br-[9px] flex-col ] drop-shadow-custom  z-100 w-44">
               <ul className="rounded-tl-[9px] h-[60px] rounded-bl-[9px] rounded-br-[9px]  ">
                 {(role === "superadmin" && flag === "false") ||
                   role === "admin" ||

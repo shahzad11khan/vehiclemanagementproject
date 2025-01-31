@@ -101,6 +101,7 @@ const Page = () => {
 
       if (response.status === 200) {
         toast.success("Admin updated successfully");
+        router.back();
       } else {
         throw new Error("Network response was not ok");
       }
@@ -115,9 +116,9 @@ const Page = () => {
   return (
     <>
       <Header className="min-w-full" />
-      <div className="flex gap-4 w-full ">
+      <div className="flex gap-4 w-full overflow-hidden" style={{height:"calc(100vh - 76px)"}}>
         <Sidebar />
-        <main className="w-full mt-5 ">
+        <main className="w-full mt-5 overflow-auto ">
         <h1 className="text-[#313342] font-medium font-sans text-2xl mb-5 underline decoration-[#AEADEB] underline-offset-8 w-full">Profile</h1>
 
           <section className="w-[98%] bg-white">

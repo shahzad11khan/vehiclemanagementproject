@@ -12,6 +12,7 @@ import { isAuthenticated } from "@/utils/verifytoken";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import DeleteModal from "./DeleteModal";
+import AdminDashBDoughnut from "../Components/AdminDashBDoughnut"
 
 // Register Chart.js components
 ChartJS.register(ArcElement, Tooltip, Legend);
@@ -107,8 +108,7 @@ const AllCompanies = () => {
         datasets: [
           {
             data: [activeCompanies, inactiveCompanies], // Dynamic data
-            backgroundColor: ["#4A90E2", "#D0021B"], // Active/Inactive colors
-            hoverBackgroundColor: ["#4A90E2AA", "#D0021BAA"], // Hover effects
+            backgroundColor: ["#404CA0", "#27273AEB"], // Active/Inactive colors
           },
         ],
       });
@@ -117,25 +117,37 @@ const AllCompanies = () => {
       setData([]);
     }
   };
+
   useEffect(() => {
     fetchData();
   }, []);
 
+  const options={
+    responsive:true,
+    plugins: {
+        legend: {
+          display: false, // Hide the default legend
+        },
+}}
+
+
   if (!chartData) return <p>Loading...</p>;
 
   return (
-    <div className="container mx-auto px-4 py-2">
+    <div className=" overflow-y-auto overflow-x-hidden flex flex-col gap-10" style={{
+      height:"calc(100vh - 90px)"
+    }}>
       {/* <h1 className="text-2xl font-bold  mb-8 underline">
         Registered Companies
       </h1> */}
-      <h1 className="text-[#313342] font-medium text-2xl mb-5 underline decoration-[#AEADEB] underline-offset-8"> Registered Companies</h1>
+      <h1 className="text-[#313342] font-medium text-2xl py-5 underline decoration-[#AEADEB] underline-offset-8"> Registered Companies</h1>
 
+      <AdminDashBDoughnut link={"/Dashboard/Company/AllCompanies"} title="Companies" data={chartData} option={options}/>
       {/* Doughnut Chart */}
-      <div className="flex flex-col p-4 rounded-md shadow-sm shadow-custom-blue w-[333px] h-[310px] item">
+      {/* <div className="flex flex-col p-4 rounded-md shadow-sm shadow-custom-blue w-[333px] h-[310px] item">
         <h3 className="text-lg font-semibold mb-2 flex justify-center">
           Total Companies: {totalCompanies}
         </h3>
-        <Link href="/Dashboard/Company/AllCompanies">
           <div className="flex  items-center justify-center mt-6">
             <div className="flex flex-col w-[156.01px] h-[156.28px]">
               <Doughnut data={chartData} />
@@ -155,8 +167,9 @@ const AllCompanies = () => {
               </div>
             </div>
           </div>
-        </Link>
-      </div>
+      </div> */}
+
+        
 
       {/* Cards Section */}
       {/* <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
@@ -169,92 +182,106 @@ const AllCompanies = () => {
           />
         ))}
       </div> */}
-      <div className="container ">
-        <div className="border-2 mt-3 w-full">
-          <div className="flex justify-between p-4">
-            <div className="flex justify-center text-center gap-3">
-              <div className="text-custom-bg mt-2">Show</div>
+      <div className="w-full ">
+        <div className="  ">
+
+          {/* Add,search section */}
+          
+          <div className="flex justify-between w-full py-2 px-2">
+            
+            <div className="flex flex-wrap justify-between flex-col  sm:flex-row sm:items-center  gap-3 w-full">
+
+            <div className="flex justify-between gap-7 items-center">
+          <div className="md:flex gap-3 hidden items-center">
+              <div className="font-sans font-medium text-sm">Show</div>
               <div>
                 <select
                   value={itemperpage}
-                  onChange={(e) => setitemperpage(e.target.value)}
-                  className="border rounded-md p-2 w-16 border-custom-bg"
+                  onChange={(e) =>{
+                     setitemperpage(e.target.value)
+                     setCurrentPage(1)
+                    }}
+                  className=" rounded-lg w-12  px-1  h-8 bg-[#E0E0E0]  focus:outline-none"
                 >
-                  <option disabled>0</option>
+                  <option disabled >0</option>
                   {Array.from({ length: 10 }, (_, i = 1) => i + 1).map(
                     (number) => (
-                      <option key={number} value={number}>
+                      <option key={number} value={number} >
                         {number}
                       </option>
                     )
                   )}
                 </select>
               </div>
-              <div className="flex justify-center text-center gap-3">
-                <div className="text-custom-bg mt-2">Entries</div>
-                <div>
+                <div className="font-sans font-medium text-sm">Entries</div>
+                </div>
+
+
+              <div className="flex justify-center">
+                <div className="relative">
+                  <img src="/search.svg" className="absolute left-3 top-2" ></img>
                   <input
                     type="text"
                     placeholder="Search by email"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="border rounded-md px-4 py-2 w-64 border-custom-bg"
+                    className="border rounded-lg pl-10 sm:px-10 py-1 border-[#9E9E9E] text-[#9E9E9E]  focus:outline-none focus:ring focus:ring-indigo-200"
                   />
                 </div>
               </div>
-            </div>
-
-            <div className="flex items-center gap-2">
+              </div>
               <button
                 onClick={OpenCompanyModle}
-                className="bg-custom-bg text-white px-4 py-2 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 flex items-center justify-center gap-2"
+                className=" w-[132px] font-sans font-bold text-xs bg-[#313342] text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500 px-3 flex py-[10px] gap-2"
               >
-                <img src="/plus.png" alt="Add Company" className="w-4 h-4" />
+                <img src="/plus.svg" alt="Add Company" className="" />
                 Add Company
               </button>
             </div>
+         
+            {/* <div className="flex items-center gap-2">
+              
+            </div> */}
           </div>
 
-          <div className="overflow-x-auto">
-            <table className="min-w-full bg-white border">
-              <thead>
-                <tr className="text-white bg-custom-bg text-left text-sm">
-                  <th className="py-3 px-4 text-white bg-custom-bg">
+
+         {/* table starts here */}
+          <div className=" overflow-x-auto  custom-scrollbar">
+            <table className="w-full bg-white border table-auto ">
+              <thead className="font-sans font-bold text-sm text-left" >
+                <tr className="   text-white bg-[#38384A]   ">
+                  <th className="py-3 px-4 min-w-[150px] w-[150px] md:w-[16.66%] text-center text-white bg-custom-bg whitespace-normal break-all overflow-hidden">
                     Company Name
                   </th>
-                  <th className="py-3 px-4 text-white bg-custom-bg">Email</th>
-                  <th className="py-3 px-4 text-white bg-custom-bg">
+                  <th className=" py-3 px-4 min-w-[150px] md:min-w-[16.66%] text-center text-white bg-custom-bg whitespace-normal break-all  overflow-hidden">Image</th>
+                  <th className=" py-3 px-4 min-w-[150px] w-[150px] md:w-[16.66%]  text-white bg-custom-bg whitespace-normal break-all overflow-hidden">Email</th>
+                  <th className=" py-3 px-4 min-w-[150px] w-[150px] md:w-[16.66%]  text-white bg-custom-bg whitespace-normal break-all overflow-hidden">
                     Password
                   </th>
-                  <th className="py-3 px-4 text-white bg-custom-bg">Image</th>
-                  <th className="py-3 px-4 text-white bg-custom-bg">Status</th>
-                  <th className="py-3 px-4 text-white bg-custom-bg">Actions</th>
+                  <th className=" py-3 px-4 min-w-[150px] w-[150px] md:w-[16.66%] text-center text-white bg-custom-bg whitespace-normal break-all overflow-hidden ">Status</th>
+                  <th className=" py-3 px-4 min-w-[180px] w-[180px] md:w-[16.66%] text-center text-white bg-custom-bg whitespace-normal break-all overflow-hidden ">Actions</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className=" font-sans font-medium text-sm" >
                 {currentcompany.map((item) => (
                   <tr key={item._id} className="border-b">
-                    <td className="py-3 px-4">{item.CompanyName}</td>
-                    <td className="py-3 px-4">{item.email}</td>
-                    <td className="py-3 px-4">{item.confirmPassword}</td>
-                    <td className="py-3 px-4">
+                    <td className=" py-3 px-4 min-w-[150px] w-[150px] md:w-[16.66%] text-center whitespace-normal break-all overflow-hidden">{item.CompanyName}</td>
+                    <td className="py-3 px-4 min-w-[150px] w-[150px] md:w-[16.66%] text-centerr">
                       <img
                         src={item.image}
                         alt="Company"
-                        className="w-12 h-12 rounded"
+                        className="w-8 h-8 block mx-auto rounded-lg object-cover object-center"
                       />
                     </td>
-                    <td className="py-3 px-4">
-                      {/* <span className="bg-gray-400 px-5 py-3 border-2 rounded-2xl">
-                        {item.isActive ? "Active" : "Inactive"}
-                      </span> */}
-
-                       <span className="bg-gray-400  px-4 py-2 rounded-3xl text-sm">
+                    <td className="py-3 px-4 min-w-[150px] w-[150px] md:w-[16.66%] whitespace-normal break-all overflow-hidden">{item.email}</td>
+                    <td className="py-3 px-4 min-w-[150px] w-[150px] md:w-[16.66%] whitespace-normal break-all overflow-hidden">{item.confirmPassword}</td>
+                    <td className="py-3 px-4 min-w-[150px] w-[150px] md:w-[16.66%] whitespace-normal break-all overflow-hidden text-center">
+                       <span className="bg-[#38384A33]  px-4 py-2 rounded-[22px] text-xs">
                           {item.isActive ? "Active" : "Inactive"}
                         </span>
                     </td>
-                    <td className="py-3 px-4">
-                      <div className="flex gap-2">
+                    <td className=" py-3 px-4 min-w-[180px] w-[180px] md:w-[16.66%] whitespace-normal break-all overflow-hidden text-center">
+                      <div className="flex gap-4 justify-center">
                         <button
                           onClick={() => handleEdit(item._id)}
                           className="text-blue-500 hover:text-blue-700"
@@ -274,6 +301,8 @@ const AllCompanies = () => {
               </tbody>
             </table>
           </div>
+
+          {/* table ends here */}
 
           {/* Pagination Controls */}
           {/* <div className="flex justify-center mt-4">
@@ -305,54 +334,97 @@ const AllCompanies = () => {
               Next
             </button>
           </div> */}
-          <div className="flex justify-center mt-4 gap-1 mb-2">
-            <nav>
-              <ul className="flex items-center space-x-2">
-                <li>
-                  <button
-                    onClick={() => paginate(currentPage - 1)}
-                    disabled={currentPage === 1}
-                    className={`px-4 py-2 border rounded ${
-                      currentPage === 1
-                        ? "opacity-50 cursor-not-allowed"
-                        : "bg-white"
-                    }`}
-                  >
-                    Previous
-                  </button>
-                </li>
 
-                {pageNumbers.map((number) => (
-                  <li key={number}>
+
+
+            {/* pagination */}
+            <div className="flex justify-center py-5 font-montserrat font-medium text-[12px]">
+              <nav>
+                <ul className="flex items-center gap-3">
+                  {/* Previous Button */}
+                  <li>
                     <button
-                      onClick={() => paginate(number)}
-                      className={`px-4 py-2 border rounded ${
-                        currentPage === number
-                          ? "bg-custom-bg text-white"
-                          : "bg-white"
+                      onClick={() => paginate(currentPage - 1)}
+                      disabled={currentPage === 1}
+                      className={`h-8 px-2 border rounded-lg ${
+                        currentPage === 1 ? "opacity-50 cursor-not-allowed" : "bg-white"
                       }`}
                     >
-                      {number} of {totalPages}
+                      Previous
                     </button>
                   </li>
-                ))}
 
-                <li>
-                  <button
-                    onClick={() => paginate(currentPage + 1)}
-                    disabled={currentPage === totalPages}
-                    className={`px-4 py-2 border rounded ${
-                      currentPage === totalPages
-                        ? "opacity-50 cursor-not-allowed"
-                        : "bg-white"
-                    }`}
-                  >
-                    Next
-                  </button>
-                </li>
-              </ul>
-            </nav>
-          </div>
+                  {/* Pagination Logic */}
+                  {totalPages > 1 && (
+                    <>
+                      {/* Case 1: If on the first page, show "1 ... last" */}
+                      {currentPage === 1 && (
+                        <>
+                          <li className="" >
+                            <button className="h-8 w-8 border rounded-lg bg-custom-bg text-white">
+                              1
+                            </button>
+                          </li>
+                          <li>
+                            <span className="px-2">...</span>
+                          </li>
+                          <li>
+                            <button onClick={() => paginate(totalPages)} className="h-8 w-8 border rounded-lg bg-white">
+                              {totalPages}
+                            </button>
+                          </li>
+                        </>
+                      )}
+
+                      {/* Case 2: If in between, show "current ... last" */}
+                      {currentPage > 1 && currentPage < totalPages && (
+                        <>
+                          <li>
+                            <button className="h-8 w-8 border rounded-lg bg-custom-bg text-white">
+                              {currentPage}
+                            </button>
+                          </li>
+                          <li>
+                            <span className="px-2">...</span>
+                          </li>
+                          <li>
+                            <button onClick={() => paginate(totalPages)} className="h-8 w-8 border rounded-lg bg-white">
+                              {totalPages}
+                            </button>
+                          </li>
+                        </>
+                      )}
+
+                      {/* Case 3: If on the last page, show only "last" */}
+                      {currentPage === totalPages && (
+                        <li>
+                          <button className="h-8 w-8 border rounded-lg bg-custom-bg text-white">
+                            {totalPages}
+                          </button>
+                        </li>
+                      )}
+                    </>
+                  )}
+
+                  {/* Next Button */}
+                  <li>
+                    <button
+                      onClick={() => paginate(currentPage + 1)}
+                      disabled={currentPage === totalPages}
+                      className={`h-8 px-2 border rounded-lg ${
+                        currentPage === totalPages ? "opacity-50 cursor-not-allowed" : "bg-white"
+                      }`}
+                    >
+                      Next
+                    </button>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+
+            {/* pagination ends here */}
+
+
         </div>
       </div>
       <AddCompanymodel

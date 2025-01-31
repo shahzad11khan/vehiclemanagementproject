@@ -51,7 +51,7 @@ const Sidebar = () => {
     localStorage.removeItem("companyName");
   };
   return (
-    <div className="relative h-[100%]">
+    <div className="relative h-[100%]  w-[20%] xl:[15%] ">
       {/* <button
         className="fixed top-3 left-4 z-50 block lg:hidden text-sm"
         onClick={handleToggleSidebar}
@@ -64,7 +64,7 @@ const Sidebar = () => {
         } lg:translate-x-0 fixed lg:relative top-0 left-0 flex flex-col shadow-2xl shadow-custom-blue `}
       > */}
       <aside
-        className={`bg-white-800 text-black h-[100vh] lg:w-52 w-20 sm:w-48  flex flex-col relative `}
+        className={`bg-white-800 text-black h-[100vh]  w-full flex flex-col relative `}
       >
         <nav
           className="flex-1  "
@@ -177,8 +177,8 @@ const Sidebar = () => {
 
                 <div className="bg-transparent">
                   <li
-                    onMouseEnter={() => setIsOpenManagement(true)}
-                    onMouseLeave={() => setIsOpenManagement(false)}
+                    onClick={() => setIsOpenManagement(!isOpenManagement)}
+                    // onMouseLeave={() => setIsOpenManagement(false)}
                     // className={`${
                     //   isOpenManagement === true
                     //     ? "border-l-4 border-b-2 border-red-400"
@@ -211,9 +211,9 @@ const Sidebar = () => {
                       </span>
 
                       {isOpenManagement && (
-                        <div className="absolute left-36 mt-2 w-full sm:w-[170px] hover:bg-gray-200   border border-gray-300 rounded-md shadow-lg ">
-                          <ul className=" space-y-1 p-3">
-                            <li onClick={() =>
+                        <div className="absolute top-10 bg-transparent w-full sm:w-[170px] hover:bg-gray-200   border border-gray-300 rounded-md shadow-lg ">
+                          <ul className=" space-y-1 p-3 bg-transparent w-full list-disc">
+                            <li  onClick={() =>
                               handleLinkClick("/Dashboard/Models/Manufacturer/GetManufacturers")
                             }>
                               <Link
@@ -347,8 +347,8 @@ const Sidebar = () => {
 
                 <div className="bg-transparent">
                   <li
-                    onMouseEnter={() => setIsOpenManagement(true)}
-                    onMouseLeave={() => setIsOpenManagement(false)}
+                    onClick={() => setIsOpenManagement(!isOpenManagement)}
+                    // onClick={() => setIsOpenManagement(false)}
                     // className={`${
                     //   isOpenManagement === true
                     //     ? "border-l-4 border-b-2 border-red-400"
@@ -372,7 +372,7 @@ const Sidebar = () => {
                         : "text-blue"
                       }`}
                   >
-                    <div className="flex items-center gap-3 relative bg-transparent">
+                    <div className="flex items-center gap-3 relative bg-transparent ">
                       <img src="/setting.png" alt="superadmin" className="w-5" />
 
                       <span className="hidden sm:block text-sm bg-transparent text-white">
@@ -565,8 +565,8 @@ const Sidebar = () => {
                 </Link>
                 <div className="bg-transparent">
                   <li
-                    onMouseEnter={() => setIsOpenManagement(true)}
-                    onMouseLeave={() => setIsOpenManagement(false)}
+                    onClick={() => setIsOpenManagement(!isOpenManagement)}
+                    // onMouseLeave={() => setIsOpenManagement(false)}
                     // className={`${
                     //   isOpenManagement === true
                     //     ? "border-l-4 border-b-2 border-red-400"

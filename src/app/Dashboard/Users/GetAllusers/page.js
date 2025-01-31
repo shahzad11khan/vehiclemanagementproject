@@ -103,10 +103,12 @@ const Page = () => {
 
     const userrole = getUserRole();
     const filtered = users.filter((item) => {
+      // console.log(item.companyname)
+      // console.log(selectedCompanyName)
       if (userrole === "superadmin") {
         return users;
       }
-      let companyMatch =
+      const companyMatch =
         item &&
         item.companyname &&
         selectedCompanyName &&
@@ -119,7 +121,7 @@ const Page = () => {
         item?.username &&
         searchTerm
           .toLowerCase()
-          .split("") // Split searchTerm into individual characters
+          .split("")
           .every(
             (char) =>
               item.username.toLowerCase().includes(char) || // Check in username
@@ -129,6 +131,7 @@ const Page = () => {
     });
     setFilteredData(filtered);
   }, [searchTerm, users, selectedCompanyName]);
+
   //   if (loading) {
   //   return <Loading width="6" height="6" className="w-full h-auto" />;
   // }

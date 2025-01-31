@@ -16,13 +16,13 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
   // const [dobvalidation, setdobValidation] = useState({ dateOfBirthValid: true });
   // const passwordRegex = /^[A-Z][@#$%^&*!]\d[a-z]{6,}$/;
   const passwordRegex = /^[A-Z][a-z]+[@#$%^&*!]\d[a-z]+$/;
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-    const [validation, setValidation] = useState({
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+  const [validation, setValidation] = useState({
     emailValid: false,
     passwordMatch: false,
     passwordValid: false,
     dateOfBirthValid: true,
-    passwordExpiresvalid : false
+    passwordExpiresvalid: false
   });
 
   const [formData, setFormData] = useState({
@@ -94,12 +94,12 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     const updatedValue = type === 'checkbox' ? checked : value;
-  
+
     setFormData((prevData) => ({
       ...prevData,
       [name]: updatedValue,
     }));
-  
+
     // Validation logic
     if (name === 'email') {
       setValidation((prevValidation) => ({
@@ -107,12 +107,12 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
         emailValid: emailRegex.test(updatedValue),
       }));
     }
-  
+
     if (name === 'password' || name === 'confirmpassword') {
       const password = name === 'password' ? updatedValue : formData.password;
       const confirmPassword =
         name === 'confirmpassword' ? updatedValue : formData.confirmpassword;
-  
+
       setValidation((prevValidation) => ({
         ...prevValidation,
         passwordValid: passwordRegex.test(password), // Validate password with regex
@@ -131,7 +131,7 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
       }));
     }
 
-    if(name === 'passwordExpires'){
+    if (name === 'passwordExpires') {
       const selectedDate = new Date(value);
       const currentDate = new Date();
 
@@ -141,15 +141,15 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
         passwordExpiresvalid: isValid,
       }));
     }
-      
+
 
   };
-  
+
   const handleFileChange = (e) => {
-     const file = e.target.files[0];
+    const file = e.target.files[0];
     setFormData((prevData) => ({
       ...prevData,
-      useravatar: file, 
+      useravatar: file,
     }));
 
 
@@ -160,29 +160,29 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
     "title",
     "firstName",
     "lastName",
-    
+
   ];
   const pagetworequiredfeilds = [
-    "email",
-    "tel1",
-    "postcode",
-    "postalAddress",
-    "city",
+    // "email",
+    // "tel1",
+    // "postcode",
+    // "postalAddress",
+    // "city",
     "county",
-     ];
+  ];
   const pagethreerequiredfeilds = [
     "position",
     "username",
     "password",
     "confirmpassword",
     "passwordExpires",
-     ];
- 
-     const areFieldsFilled = (fields) =>
-      fields.every((field) => formData[field] !== "");
-    
-  const isNextDisabled1st =  !areFieldsFilled(pageonerequiredfeilds);
-  const isNextDisabled2nd = !validation.emailValid ||  !areFieldsFilled(pagetworequiredfeilds);
+  ];
+
+  const areFieldsFilled = (fields) =>
+    fields.every((field) => formData[field] !== "");
+
+  const isNextDisabled1st = !areFieldsFilled(pageonerequiredfeilds);
+  const isNextDisabled2nd = !validation.emailValid || !areFieldsFilled(pagetworequiredfeilds);
   const isNextDisabled3rd = !validation.passwordMatch || !validation.dateOfBirthValid || !validation.passwordExpiresvalid || !areFieldsFilled(pagethreerequiredfeilds);
 
   const handleSubmit = async (e) => {
@@ -256,27 +256,34 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-4xl overflow-y-auto max-h-screen">
-        <h2 className="text-3xl font-semibold text-center mb-8">
-          Add New User
-        </h2>
+      <div className="bg-white p-6 rounded-xl shadow-lg w-full max-w-4xl overflow-y-auto max-h-screen">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-2xl font-bold">
+            Add New User
+          </h2>
+
+          <img src="/crossIcon.svg" onClick={() => {
+            onClose();
+            setStep(1);
+          }} />
+
+        </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* User Details */}
           {step === 1 && (
             <>
               <div>
-                <h3 className="text-xl font-semibold mb-2">User Details</h3>
-                <div className="grid grid-cols-2 sm:grid-cols-2 gap-3">
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 ">
                   <div>
-                    <div className="flex gap-1">
+                    <div className="flex gap-1 items-center justify-start">
                       <label
                         htmlFor="taxiFirm"
-                        className="text-sm font-medium text-gray-700"
+                        className="text-[10px]"
                       >
-                        Title:
+                        Title <span className="text-red-600">*</span>
                       </label>
-                      <span className="text-red-600">*</span>
                     </div>
 
                     <select
@@ -284,7 +291,7 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                       name="title"
                       value={formData.title}
                       onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
                       required
                     >
                       <option value="">Select Title</option>
@@ -296,14 +303,13 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                   </div>
 
                   <div>
-                    <div className="flex gap-1">
+                    <div className="flex gap-1 items-center justify-start">
                       <label
                         htmlFor="firstName"
-                        className="text-sm font-medium text-gray-700"
+                        className="text-[10px]"
                       >
-                        First Name:
+                        First Name <span className="text-red-600">*</span>
                       </label>
-                      <span className="text-red-600">*</span>
                     </div>
 
                     <input
@@ -312,20 +318,20 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                       name="firstName"
                       value={formData.firstName}
                       onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
                       required
+                      placeholder="First name"
                     />
                   </div>
 
                   <div>
-                    <div className="flex gap-1">
+                    <div className="flex gap-1 items-center justify-start">
                       <label
                         htmlFor="lastName"
-                        className="text-sm font-medium text-gray-700"
+                        className="text-[10px]"
                       >
-                        Last Name:
+                        Last Name <span className="text-red-600">*</span>
                       </label>
-                      <span className="text-red-600">*</span>
                     </div>
 
                     <input
@@ -334,32 +340,209 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                       name="lastName"
                       value={formData.lastName}
                       onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                      required
+                      placeholder="Last name"
+                    />
+                  </div>
+
+                  <div>
+                    <div className="flex gap-1 items-center justify-start">
+                      <label
+                        htmlFor="email"
+                        className="text-[10px]"
+                      >
+                        Email <span className="text-red-600">*</span>
+                      </label>
+                    </div>
+
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      className={`mt-1 block w-full p-2 border border-[#42506666] rounded-[4px] ${validation.emailValid === null
+                        ? 'border-gray-300'
+                        : validation.emailValid
+                          ? 'border-green-700'
+                          : 'border-red-700'
+                        } focus:outline-none`}
+                      required
+                    />
+                    {validation.emailValid === false && (
+                      <p className="text-[8px] text-red-700">Invalid email format</p>
+                    )}
+                    {validation.emailValid === true && (
+                      <p className="text-[8px] text-green-700">Valid email format</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <div className="flex gap-1 items-center justify-start">
+                      <label
+                        htmlFor="tel1"
+                        className="text-[10px]"
+                      >
+                        Phone number <span className="text-red-600">*</span>
+                      </label>
+                    </div>
+
+                    <input
+                      type="number"
+                      id="tel1"
+                      name="tel1"
+                      value={formData.tel1}
+                      onChange={handleChange}
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
                       required
                     />
                   </div>
                 </div>
-                
-                <div className="mt-6 flex gap-2 justify-end">
+                <h2 className="font-bold mt-4">Address</h2>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+                  {/*  Building and Street (Line 1of 2) */}
+                  <div>
+                    <div className="flex gap-1 items-center justify-start">
+                      <label
+                        htmlFor="Building&Street"
+                        className="text-[10px] "
+                      >
+                        Building and Street (Line 1of 2)
+                      </label>
+                    </div>
+
+                    <input
+                      type="text"
+                      id="Building&Street"
+                      name="Building&Street"
+                      // value={formData.CompanyName}
+                      // onChange={handleChange}
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px] shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                      required placeholder="Building and street"
+                    />
+                  </div>
+
+                  {/*  Building and Street (Line 2of 2) */}
+                  <div>
+                    <div className="flex gap-1">
+                      <label
+                        htmlFor="Building&Street2"
+                        className="text-[10px] "
+                      >
+                        Building and Street (Line 2 of 2)
+                      </label>
+                    </div>
+
+                    <input
+                      type="text"
+                      id="Building&Street2"
+                      name="Building&Street2"
+                      // value={formData.CompanyName}
+                      // onChange={handleChange}
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px] shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                      required placeholder="Building and street"
+                    />
+                  </div>
+
+                  {/*  Town/City */}
+                  <div>
+                    <div className="flex gap-1">
+                      <label
+                        htmlFor="CompanyName"
+                        className="text-[10px] "
+                      >
+                        Town/City
+                      </label>
+                    </div>
+
+                    <input
+                      type="text"
+                      id="Building&Street"
+                      name="Building&Street"
+                      // value={formData.CompanyName}
+                      // onChange={handleChange}
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px] shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                      required placeholder="Town/City"
+                    />
+                  </div>
+
+                  {/* Country */}
+                  <div>
+                    <div className="flex gap-1">
+                      <label
+                        htmlFor="CompanyName"
+                        className="text-[10px] "
+                      >
+                        Country
+                      </label>
+                    </div>
+
+                    <input
+                      type="text"
+                      id="Building&Street"
+                      name="Building&Street"
+                      // value={formData.CompanyName}
+                      // onChange={handleChange}
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px] shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                      required placeholder="Country"
+                    />
+                  </div>
+
+                  {/* Postcode */}
+                  <div>
+                    <div className="flex gap-1">
+                      <label
+                        htmlFor="CompanyName"
+                        className="text-[10px] "
+                      >
+                        Postcode
+                      </label>
+                    </div>
+
+                    <input
+                      type="text"
+                      id="Building&Street"
+                      name="Building&Street"
+                      // value={formData.CompanyName}
+                      // onChange={handleChange}
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px] shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                      required placeholder="Postcode"
+                    />
+                  </div>
+
+                  {/* <button
+                  type="button"
+                  className="border-2 h-10 mt-6 p-2 rounded-lg"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? "Hide" : "Show"}
+                </button> */}
+
+
+
+                </div>
+
+                <div className="flex gap-[10px] justify-end">
                   <button
                     type="button"
                     onClick={() => {
                       onClose();
                       resetform();
                     }}
-                    className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                    className="px-6 py-2 ml-2 text-custom-bg rounded-[4px] text-xs font-bold border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
                   >
-                    Close
+                    Cancel
                   </button>
                   <button
                     onClick={nextStep}
-                    className={`px-6 py-2 rounded-lg focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 ${
-                      isNextDisabled1st
-                        ? "bg-gray-400 text-white cursor-not-allowed"
-                        : "bg-custom-bg text-white hover:bg-gray-600"
-                    }`}               
+                    className={`px-6 py-2 rounded-[4px] text-xs font-bold focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 ${isNextDisabled1st
+                      ? "bg-gray-400 text-white cursor-not-allowed"
+                      : "bg-custom-bg text-white hover:bg-gray-600"
+                      }`}
                     disabled={isNextDisabled1st}
-                    >
+                  >
                     Next
                   </button>
                 </div>
@@ -374,40 +557,39 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                   Contact Information
                 </h3>
                 <div className="grid grid-cols-2 sm:grid-cols-2 gap-3">
-              
 
-<div>
-      <div className="flex gap-1">
-        <label
-          htmlFor="email"
-          className="text-sm font-medium text-gray-700"
-        >
-          Email:
-        </label>
-        <span className="text-red-600">*</span>
-      </div>
-      <input
-        type="email"
-        id="email"
-        name="email"
-        value={formData.email}
-        onChange={handleChange}
-        className={`mt-1 block w-full p-2 border rounded-lg ${
-          validation.emailValid === null
-            ? 'border-gray-300'
-            : validation.emailValid
-            ? 'border-green-500'
-            : 'border-red-500'
-        } focus:outline-none`}
-        required
-      />
-      {validation.emailValid === false && (
-        <p className="text-sm text-red-600">Invalid email format</p>
-      )}
-      {validation.emailValid === true && (
-        <p className="text-sm text-green-600">Valid email format</p>
-      )}
-    </div>
+
+                  {/* <div>
+                    <div className="flex gap-1">
+                      <label
+                        htmlFor="email"
+                        className="text-sm font-medium text-gray-700"
+                      >
+                        Email:
+                      </label>
+                      <span className="text-red-600">*</span>
+                    </div>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      className={`mt-1 block w-full p-2 border rounded-lg ${validation.emailValid === null
+                        ? 'border-gray-300'
+                        : validation.emailValid
+                          ? 'border-green-500'
+                          : 'border-red-500'
+                        } focus:outline-none`}
+                      required
+                    />
+                    {validation.emailValid === false && (
+                      <p className="text-sm text-red-600">Invalid email format</p>
+                    )}
+                    {validation.emailValid === true && (
+                      <p className="text-sm text-green-600">Valid email format</p>
+                    )}
+                  </div>
 
                   <div>
                     <div className="flex gap-1">
@@ -428,7 +610,7 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                       className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
                       required
                     />
-                  </div>
+                  </div> */}
 
                   <div>
                     <label
@@ -570,15 +752,14 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                       Close
                     </button>
                     <button
-                      onClick={isNextDisabled2nd ? null : nextStep }
-                      className={`px-6 py-2 rounded-lg focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 ${
-                        isNextDisabled2nd
-                          ? "bg-gray-400 text-white cursor-not-allowed"
-                          : "bg-custom-bg text-white hover:bg-gray-600"
-                    
-                      }`}                 
-                      disabled={isNextDisabled2nd}          
-                      >
+                      onClick={isNextDisabled2nd ? null : nextStep}
+                      className={`px-6 py-2 rounded-lg focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 ${isNextDisabled2nd
+                        ? "bg-gray-400 text-white cursor-not-allowed"
+                        : "bg-custom-bg text-white hover:bg-gray-600"
+
+                        }`}
+                      disabled={isNextDisabled2nd}
+                    >
                       Next
                     </button>
                   </div>
@@ -592,7 +773,7 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
               <div>
                 <h3 className="text-xl font-semibold mb-4">Security</h3>
                 <div className="grid grid-cols-2 sm:grid-cols-2 gap-3">
-             
+
 
                   <div>
                     <div className="flex gap-1">
@@ -612,9 +793,9 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                       onChange={handleChange}
                       className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
                     />
-                  {!validation.dateOfBirthValid && (
-                  <span className="text-sm text-red-500">Date of Birth cannot be in the future.</span>
-                   )}
+                    {!validation.dateOfBirthValid && (
+                      <span className="text-sm text-red-500">Date of Birth cannot be in the future.</span>
+                    )}
                   </div>
 
                   <div>
@@ -676,7 +857,7 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                     />
                   </div>
                   <div className="flex gap-2">
-                  <div className="relative">
+                    <div className="relative">
                       <div className="flex gap-1">
                         <label
                           htmlFor="password"
@@ -695,17 +876,17 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                         className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
                         required
                       />
-                       <button
-                                            type="button"
-                                            onClick={() => setShowPasswords((prev) => !prev)}
-                                            className="absolute right-2 top-10"
-                                          >
-                                            {showPasswords ? (
-                                              <AiOutlineEye size={20} />
-                                            ) : (
-                                              <AiOutlineEyeInvisible size={20} />
-                                            )}
-                                          </button>
+                      <button
+                        type="button"
+                        onClick={() => setShowPasswords((prev) => !prev)}
+                        className="absolute right-2 top-10"
+                      >
+                        {showPasswords ? (
+                          <AiOutlineEye size={20} />
+                        ) : (
+                          <AiOutlineEyeInvisible size={20} />
+                        )}
+                      </button>
                     </div>
 
                     <div className="relative">
@@ -725,45 +906,43 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                         value={formData.confirmpassword}
                         onChange={handleChange}
                         // className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                        className={`mt-1 block w-full p-2 ${
-                          validation.passwordMatch === null
-                            ? 'border-gray-300'
-                            : validation.passwordMatch
+                        className={`mt-1 block w-full p-2 ${validation.passwordMatch === null
+                          ? 'border-gray-300'
+                          : validation.passwordMatch
                             ? 'border-green-500'
                             : 'border-red-500'
-                        } focus:outline-none border rounded-lg`}
+                          } focus:outline-none border rounded-lg`}
                         required
                       />
-                       <button
-                                            type="button"
-                                            onClick={() => setShowPasswords((prev) => !prev)}
-                                            className="absolute right-2 top-10"
-                                          >
-                                            {showPasswords ? (
-                                              <AiOutlineEye size={20} />
-                                            ) : (
-                                              <AiOutlineEyeInvisible size={20} />
-                                            )}
-                                          </button>
-                                          <span
-    className={`text-sm ${
-      validation.passwordMatch === null
-        ? "text-gray-500"
-        : validation.passwordMatch
-        ? passwordRegex.test(formData.password)
-          ? "text-green-500"
-          : "text-red-500"
-        : "text-red-500"
-    }`}
-  >
-    {validation.passwordMatch === null
-      ? "Confirm Password must be entered i.e Shah@1anything 6 characters"
-      : !validation.passwordMatch
-      ? "Confirm Password does not match i.e Shah@1anything 6 characters"
-      : !passwordRegex.test(formData.password)
-      ? "Password is not strong i.e Shah@1anything 6 characters"
-      : "Confirm Password matched Pattern Match"}
-  </span>
+                      <button
+                        type="button"
+                        onClick={() => setShowPasswords((prev) => !prev)}
+                        className="absolute right-2 top-10"
+                      >
+                        {showPasswords ? (
+                          <AiOutlineEye size={20} />
+                        ) : (
+                          <AiOutlineEyeInvisible size={20} />
+                        )}
+                      </button>
+                      <span
+                        className={`text-sm ${validation.passwordMatch === null
+                          ? "text-gray-500"
+                          : validation.passwordMatch
+                            ? passwordRegex.test(formData.password)
+                              ? "text-green-500"
+                              : "text-red-500"
+                            : "text-red-500"
+                          }`}
+                      >
+                        {validation.passwordMatch === null
+                          ? "Confirm Password must be entered i.e Shah@1anything 6 characters"
+                          : !validation.passwordMatch
+                            ? "Confirm Password does not match i.e Shah@1anything 6 characters"
+                            : !passwordRegex.test(formData.password)
+                              ? "Password is not strong i.e Shah@1anything 6 characters"
+                              : "Confirm Password matched Pattern Match"}
+                      </span>
                     </div>
                     {/* <div className="mt-4">
                       <button
@@ -795,9 +974,9 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                       className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
                       required
                     />
-                     {!validation.passwordExpiresvalid && (
-                  <span className="text-sm text-red-500">Password Expires cannot be in the past.</span>
-                   )}
+                    {!validation.passwordExpiresvalid && (
+                      <span className="text-sm text-red-500">Password Expires cannot be in the past.</span>
+                    )}
                   </div>
 
                 </div>
@@ -823,14 +1002,13 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                     </button>
                     <button
                       onClick={nextStep}
-                      className={`px-6 py-2 rounded-lg focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 ${
-                        isNextDisabled3rd
-                          ? "bg-gray-400 text-white cursor-not-allowed"
-                          : "bg-custom-bg text-white hover:bg-gray-600"
-                      }`}          
-                      
+                      className={`px-6 py-2 rounded-lg focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 ${isNextDisabled3rd
+                        ? "bg-gray-400 text-white cursor-not-allowed"
+                        : "bg-custom-bg text-white hover:bg-gray-600"
+                        }`}
+
                       disabled={isNextDisabled3rd}
->
+                    >
                       Next
                     </button>
                   </div>

@@ -348,15 +348,15 @@ const options={
   return (
     <>
       <Header className="min-w-full" />
-      <div className="flex gap-4 ">
+      <div className="flex gap-4 overflow-hidden" style={{height:"calc(100vh - 76px)"}}>
         <Sidebar />
           {/* ali */}
           {
             (superadmin==="superadmin" && flag==="false")?(
-              <div className="w-full mt-5">
+              <div className=" mt-5 overflow-auto w-[80%] xl:w-[85%]">
           <h1 className="text-[#313342] font-medium text-2xl mb-5 underline decoration-[#AEADEB] underline-offset-8">Dashboard</h1>
           <div className="flex w-full gap-5 flex-wrap">
-          <AdminDashBDoughnut title="Companies" data={companiesData} option={options}  ></AdminDashBDoughnut>
+          <AdminDashBDoughnut link={"/Dashboard/Company/AllCompanies"} title="Companies" data={companiesData} option={options}  ></AdminDashBDoughnut>
           <AdminDashBDoughnut title="Cars" data={carsData} option={options}  ></AdminDashBDoughnut>
           </div>
           </div>

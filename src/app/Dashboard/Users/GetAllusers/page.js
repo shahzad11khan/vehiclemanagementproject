@@ -5,12 +5,14 @@ import Header from "../../Components/Header";
 import Sidebar from "../../Components/Sidebar";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
+// import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 import AddUserModel from "../AddUser/AddUserModel";
 import UpdateUserModel from "../UpdateUser/UpdateUserModel";
 import axios from "axios";
 import { API_URL_USER } from "../../Components/ApiUrl/ApiUrls";
-import BackButton from "../../Components/BackButton";
+import { getAuthData } from "@/utils/verifytoken";
+
+// import BackButton from "../../Components/BackButton";
 
 import {
   getCompanyName,
@@ -21,14 +23,13 @@ import DeleteModal from "../../Components/DeleteModal";
 // import Loading from "../../Components/Loading";
 
 const Page = () => {
-  const columns = [
-    "Username",
-    "Email",
-    "User Avatar",
-    "User Active",
-    "Role",
-    "Actions",
-  ];
+  // const columns = [
+  //   "Username",
+  //   "Email",
+  //   "Role",
+  //   "Status",
+  //   "Actions",
+  // ];
 
   const [users, setUsers] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
@@ -36,21 +37,23 @@ const Page = () => {
   const [isMounted, setIsMounted] = useState(false);
   const [isOpenUser, setIsOpenUser] = useState(false);
   const [isOpenUserUpdate, setIsOpenUserUpdate] = useState(false);
-  const [selectedCompanyName, setSelectedCompanyName] = useState("");
+  // const [selectedCompanyName, setSelectedCompanyName] = useState("");
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isDeleteModalOpenId, setIsDeleteModalOpenId] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemperpage, setitemperpage] = useState(5);
+    const [flag, setflag] = useState("");
+
   // const [loading, setLoading] = useState(true); // Add loading state
 
   useEffect(() => {
     setIsMounted(true);
-    const companyNameFromStorage =
-      getCompanyName() || getsuperadmincompanyname();
-    if (companyNameFromStorage) {
-      setSelectedCompanyName(companyNameFromStorage);
-    }
+    // const companyNameFromStorage =
+    //   getCompanyName() || getsuperadmincompanyname();
+    // if (companyNameFromStorage) {
+    //   setSelectedCompanyName(companyNameFromStorage);
+    // }
   }, []);
 
   useEffect(() => {
@@ -99,43 +102,76 @@ const Page = () => {
     }
   };
 
-  useEffect(() => {
+  // useEffect(() => {
 
-    const userrole = getUserRole();
-    const filtered = users.filter((item) => {
-      // console.log(item.companyname)
-      // console.log(selectedCompanyName)
-      if (userrole === "superadmin") {
-        return users;
-      }
-      const companyMatch =
-        item &&
-        item.companyname &&
-        selectedCompanyName &&
-        item.companyname.toLowerCase() === selectedCompanyName.toLowerCase();
-      // const usernameMatch =
-      //   item &&
-      //   item.username &&
-      //   item.username.toLowerCase().includes(searchTerm.toLowerCase());
-      const usernameMatch =
-        item?.username &&
-        searchTerm
-          .toLowerCase()
-          .split("")
-          .every(
-            (char) =>
-              item.username.toLowerCase().includes(char) || // Check in username
-              item.email?.toLowerCase().includes(char)
-          );
-      return companyMatch && usernameMatch;
-    });
-    setFilteredData(filtered);
-  }, [searchTerm, users, selectedCompanyName]);
+  //   const userrole = getUserRole();
+  //   const filtered = users.filter((item) => {
+  //     // console.log(item.companyname)
+  //     // console.log(selectedCompanyName)
+  //     if (userrole === "superadmin") return users;
+  //     const companyMatch =
+  //       item &&
+  //       item.companyname &&
+  //       selectedCompanyName &&
+  //       item.companyname.toLowerCase() === selectedCompanyName.toLowerCase();
+  //     // const usernameMatch =
+  //     //   item &&
+  //     //   item.username &&
+  //     //   item.username.toLowerCase().includes(searchTerm.toLowerCase());
+  //     const usernameMatch =
+  //       item.username &&
+  //       searchTerm
+  //         .toLowerCase()
+  //         .split("")
+  //         .every(
+  //           (char) =>
+  //             item.username.toLowerCase().includes(char) || // Check in username
+  //             item.email.toLowerCase().includes(char)
+  //         );
+  //     return companyMatch && usernameMatch;
+  //   });
+  //   setFilteredData(filtered);
+  // }, [searchTerm, users, selectedCompanyName]);
 
   //   if (loading) {
   //   return <Loading width="6" height="6" className="w-full h-auto" />;
   // }
 
+  
+    useEffect(() => {
+      const userRole = getUserRole(); // Get the current user's role
+      const companyName = getCompanyName() || getsuperadmincompanyname(); // Get the logged-in user's company name
+      const authData = getAuthData();
+      setflag(authData.flag);
+      let filteredUsers = users;
+    
+      // Filter users based on role
+      if (userRole !== "superadmin") {
+        // If the user is not a superadmin, filter by company name
+        filteredUsers = users.filter(
+          (item) => item.companyname.toLowerCase() === companyName.toLowerCase()
+        );
+      }
+
+      if(userRole === "superadmin" && flag === "true"){
+        filteredUsers = users.filter(
+          (item) => item.companyname.toLowerCase() === companyName.toLowerCase()
+        );
+      }
+
+
+    
+      // Apply search term filtering
+      if (searchTerm) {
+        filteredUsers = filteredUsers.filter((item) =>
+          item?.email?.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+      }
+    
+      // Update the filtered data
+      setFilteredData(filteredUsers);
+      setCurrentPage(1); // Reset to the first page on new search or filter
+    }, [searchTerm, users]);
   const OpenUserModle = () => {
     setIsOpenUser(!isOpenUser);
   };
@@ -154,59 +190,85 @@ const Page = () => {
   }
 
   return (
-    <>
+    <div className="h-[100vh] overflow-hidden">
       <Header className="min-w-full" />
-      <div className="flex gap-2">
+      <div className="flex gap-4">
         <Sidebar />
-        <div className="container mx-auto p-2 w-[82%] h-screen">
-          <h1 className="text-[#313342] font-medium text-2xl mb-5 underline decoration-[#AEADEB] underline-offset-8">Users</h1>
-          <div className="justify-between mx-auto items-center  mt-3 p-4">
-            <div className="flex justify-between">
-              <div className="flex justify-center text-center gap-3">
-                <div className="text-custom-bg mt-2">Show</div>
-                <div>
-                  <select
-                    value={itemperpage}
-                    onChange={(e) => setitemperpage(e.target.value)}
-                    className="border rounded-md pl-2 py-2 w-16 border-custom-bg "
-                  >
-                    <option disabled>0</option>
-                    {Array.from({ length: 10 }, (_, i = 1) => i + 1).map(
-                      (number) => (
-                        <option key={number} value={number} >
-                          {number}
-                        </option>
-                      )
-                    )}
-                  </select>
-                </div>
-                <div className="flex justify-center text-center gap-3">
-                  <div className="text-custom-bg mt-2">Entries</div>
-                  <div>
-                    <input
-                      type="text"
-                      placeholder="Search by Username / Email"
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                      className="border rounded-md px-4 py-2 w-64 border-custom-bg"
-                    />
+        <div className="w-[80%] xl:w-[85%] h-screen flex flex-col gap-4 justify-start overflow-y-auto" style={{
+      height:"calc(100vh - 90px)"}}>
+          <h1 className="text-[#313342] font-medium text-2xl py-5 underline decoration-[#AEADEB] underline-offset-8">Superadmin</h1>
+          <div className="">
+            {/* top */}
+
+          
+
+                <div className="flex justify-between w-full py-2 px-2">
+                  <div className="flex flex-wrap justify-between flex-col sm:flex-row sm:items-center gap-3 w-full">
+                    
+                    {/* Left Section - Show Entries & Search */}
+                    <div className="flex justify-between gap-7 items-center">
+                      
+                      {/* Show Entries Dropdown */}
+                      <div className="md:flex gap-3 hidden items-center">
+                        <div className="font-sans font-medium text-sm">Show</div>
+                        <div>
+                          <select
+                            value={itemperpage}
+                            onChange={(e) => {
+                              setitemperpage(e.target.value);
+                              setCurrentPage(1);
+                            }}
+                            className="rounded-lg w-12 px-1 h-8 bg-[#E0E0E0] focus:outline-none"
+                          >
+                            <option disabled>0</option>
+                            {Array.from({ length: 10 }, (_, i = 1) => i + 1).map((number) => (
+                              <option key={number} value={number}>
+                                {number}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                        <div className="font-sans font-medium text-sm">Entries</div>
+                      </div>
+
+                      {/* Search Box */}
+                      <div className="flex justify-center">
+                        <div className="relative">
+                          <img src="/search.svg" className="absolute left-3 top-2" alt="Search Icon" />
+                          <input
+                            type="text"
+                            placeholder="Search by email"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            className="border rounded-lg pl-10 sm:px-10 py-1 border-[#9E9E9E] text-[#9E9E9E] focus:outline-none focus:ring focus:ring-indigo-200"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Right Section - Buttons */}
+                    <div className="flex gap-2">
+                      {/* <BackButton /> */}
+                      <button
+                        onClick={OpenUserModle}
+                        className="w-[125px] font-sans font-bold text-xs bg-[#313342] text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500 px-3 flex py-[10px] gap-2"
+                      >
+                        <img src="/plus.svg" alt="Add User" />
+                        Add User
+                      </button>
+                    </div>
+                    
                   </div>
                 </div>
-              </div>
-              <div className="justify-end">
-                <div className="flex  gap-2">
-                  <BackButton />
-                  <button
-                    onClick={OpenUserModle}
-                    className="bg-custom-bg text-white px-4 py-2 rounded hover:bg-blue-600 flex items-center justify-center gap-2"
-                  >
-                    <img src="/plus.png" alt="Add Company" className="w-4 h-4" />
-                    Add User
-                  </button>
-                </div>
-              </div>
-            </div>
-            <div className="w-full  mt-4 ">
+
+
+            {/* top section ends */}
+
+
+
+   {/* table */}
+
+            {/* <div className="w-full  mt-4 ">
               <table className="w-full border-collapse border border-gray-200  overflow-x-auto">
                 <thead>
                   <tr className="">
@@ -250,7 +312,7 @@ const Page = () => {
                         <td className="py-2 px-4 border-b">{user.role}</td>
                         <td className="py-2 px-4 border-b">
                           <div className="flex gap-2">
-                            {/* Edit Button with Tooltip */}
+
                             <div className="relative group">
                               <button
                                 onClick={() => handleEdit(user._id)}
@@ -258,13 +320,12 @@ const Page = () => {
                               >
                                 <img src="/edit.png" alt="edit" className="w-6" />
                               </button>
-                              {/* Tooltip */}
+
                               <div className="absolute  transform translate-x-1/2  px-2 py-1 bg-gray-700 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-50">
                                 Edit
                               </div>
                             </div>
 
-                            {/* Delete Button with Tooltip */}
                             <div className="relative group">
                               <button
                                 onClick={() => isopendeletemodel(user._id)}
@@ -272,7 +333,7 @@ const Page = () => {
                               >
                                 <img src="/trash.png" alt="delete" className="w-6"  />
                               </button>
-                              {/* Tooltip */}
+                              
                               <div className="absolute left-10 transform -translate-x-1/2  px-2 py-1 bg-gray-700 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-50">
                                 Delete
                               </div>
@@ -283,8 +344,72 @@ const Page = () => {
                     ))}
                 </tbody>
               </table>
-            </div>
-            <div className="flex justify-center mt-4">
+            </div> */}
+
+
+              <div className="overflow-x-auto custom-scrollbar">
+                <table className="w-full bg-white border table-auto">
+                  <thead className="font-sans font-bold text-sm text-left">
+                    <tr className="text-white bg-[#38384A]">
+                      <th className="py-3 px-4 min-w-[150px] w-[150px] md:w-[16.66%] text-center text-white bg-custom-bg whitespace-normal break-all overflow-hidden">
+                        Username
+                      </th>
+                      <th className="py-3 px-4 min-w-[150px] w-[150px] md:w-[16.66%]  text-white bg-custom-bg whitespace-normal break-all overflow-hidden">
+                        Email
+                      </th>
+                      <th className="py-3 px-4 min-w-[150px] w-[150px] md:w-[16.66%] text-center  text-white bg-custom-bg whitespace-normal break-all overflow-hidden">
+                        Role
+                      </th>
+                      <th className="py-3 px-4 min-w-[150px] w-[150px] md:w-[16.66%] text-center  text-white bg-custom-bg whitespace-normal break-all overflow-hidden">
+                        Status
+                      </th>
+                      <th className="py-3 px-4 min-w-[180px] w-[180px] md:w-[16.66%] text-center text-white bg-custom-bg whitespace-normal break-all overflow-hidden">
+                        Action
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="font-sans font-medium text-sm">
+                    {currentUsers
+                      .filter((user) => user.username !== "superadmin")
+                      .map((user) => (
+                        <tr key={user._id} className="border-b">
+                          <td className="py-3 px-4 min-w-[150px] w-[150px] md:w-[16.66%] text-center whitespace-normal break-all overflow-hidden">{user.username}</td>
+                          <td className="py-3 px-4 min-w-[150px] w-[150px] md:w-[16.66%]  whitespace-normal break-all overflow-hidden">{user.email}</td>
+                          <td className="py-3 px-4 min-w-[150px] w-[150px] md:w-[16.66%] text-center  whitespace-normal break-all overflow-hidden">{user.role}</td>
+                          <td className="py-3 px-4 min-w-[150px] w-[150px] md:w-[16.66%] text-center  whitespace-normal break-all overflow-hidden">
+                            <span className="bg-[#38384A33] px-4 py-2 rounded-[22px] text-xs ">
+                                {user.isActive ? "Active" : "Inactive"}
+                            </span>
+                          </td>
+                          <td className="py-3 px-4 min-w-[180px] w-[180px] md:w-[16.66%] whitespace-normal break-all overflow-hidden text-center">
+                            <div className="flex gap-4 justify-center">
+                              <button
+                                onClick={() => handleEdit(user._id)}
+                                className="text-blue-500 hover:text-blue-700"
+                              >
+                                <img src="/edit.png" alt="edit" className="w-6" />
+                              </button>
+                              <button
+                                onClick={() => isopendeletemodel(user._id)}
+                                className="text-red-500 hover:text-red-700"
+                              >
+                                <img src="/trash.png" alt="delete" className="w-6" />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
+              </div>
+
+
+            {/* table ends here */}
+
+            {/* pagination */}
+
+
+            {/* <div className="flex justify-center mt-4">
               <button
                 onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                 disabled={currentPage === 1}
@@ -309,7 +434,103 @@ const Page = () => {
               >
                 Next
               </button>
-            </div>
+            </div> */}
+
+
+              <div className="flex justify-center py-5 font-montserrat font-medium text-[12px]">
+                <nav>
+                  <ul className="flex items-center gap-3">
+                    {/* Previous Button */}
+                    <li>
+                      <button
+                        onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                        disabled={currentPage === 1}
+                        className={`h-8 px-2 border rounded-lg ${
+                          currentPage === 1 ? "opacity-50 cursor-not-allowed" : "bg-white"
+                        }`}
+                      >
+                        Previous
+                      </button>
+                    </li>
+
+                    {/* Pagination Logic */}
+                    {totalPages > 1 && (
+                      <>
+                        {/* Case 1: If on the first page, show "1 ... last" */}
+                        {currentPage === 1 && (
+                          <>
+                            <li>
+                              <button className="h-8 w-8 border rounded-lg bg-custom-bg text-white">
+                                1
+                              </button>
+                            </li>
+                            <li>
+                              <span className="px-2">...</span>
+                            </li>
+                            <li>
+                              <button
+                                onClick={() => setCurrentPage(totalPages)}
+                                className="h-8 w-8 border rounded-lg bg-white"
+                              >
+                                {totalPages}
+                              </button>
+                            </li>
+                          </>
+                        )}
+
+                        {/* Case 2: If in between, show "current ... last" */}
+                        {currentPage > 1 && currentPage < totalPages && (
+                          <>
+                            <li>
+                              <button className="h-8 w-8 border rounded-lg bg-custom-bg text-white">
+                                {currentPage}
+                              </button>
+                            </li>
+                            <li>
+                              <span className="px-2">...</span>
+                            </li>
+                            <li>
+                              <button
+                                onClick={() => setCurrentPage(totalPages)}
+                                className="h-8 w-8 border rounded-lg bg-white"
+                              >
+                                {totalPages}
+                              </button>
+                            </li>
+                          </>
+                        )}
+
+                        {/* Case 3: If on the last page, show only "last" */}
+                        {currentPage === totalPages && (
+                          <li>
+                            <button className="h-8 w-8 border rounded-lg bg-custom-bg text-white">
+                              {totalPages}
+                            </button>
+                          </li>
+                        )}
+                      </>
+                    )}
+
+                    {/* Next Button */}
+                    <li>
+                      <button
+                        onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                        disabled={currentPage === totalPages}
+                        className={`h-8 px-2 border rounded-lg ${
+                          currentPage === totalPages ? "opacity-50 cursor-not-allowed" : "bg-white"
+                        }`}
+                      >
+                        Next
+                      </button>
+                    </li>
+                  </ul>
+                </nav>
+              </div>
+
+
+
+            {/* pagination ends here */}
+
           </div>
         </div>
       </div>
@@ -330,7 +551,7 @@ const Page = () => {
         onDelete={handleDelete}
         Id={isDeleteModalOpenId}
       />
-    </>
+    </div>
   );
 };
 

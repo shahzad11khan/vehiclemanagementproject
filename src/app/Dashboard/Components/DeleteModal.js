@@ -9,29 +9,36 @@ const DeleteModal = ({ isOpen, onClose, onDelete, Id }) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-      <div className="bg-white rounded-lg shadow-lg p-6 w-96">
-        <div className="flex flex-col items-center">
+      <div className="bg-white rounded-xl shadow-lg px-4 py-5 w-[343px] h-[264px]">
+        <div className="flex flex-col items-center ">
           {/* Modal Title */}
-          <h2 className="text-lg font-semibold mb-2">Are you sure?</h2>
+
+          <div className="flex items-center justify-between w-full mb-2">
+            <h2 className="text-lg font-semibold">Delete</h2>
+            <img src="/crossIcon.svg" onClick={() => {
+              onClose();
+
+            }} />
+
+          </div>
           {/* Modal Description */}
-          <p className="text-sm text-gray-600 mb-6">
-            Are you absolutely sure you want to permanently delete this item?
-            Once deleted, this action cannot be undone. All associated data and
-            files will be lost, and you will not be able to recover it.
+          <p className="text-sm text-[#535862] mb-6">
+            Are you sure you want to delete? This action cannot be undone.
           </p>
           {/* Modal Buttons */}
-          <div className="flex justify-between w-full">
-            <button
-              onClick={onClose}
-              className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
-            >
-              Cancel
-            </button>
+          <div className="flex justify-between w-full flex-col gap-3">
             <button
               onClick={handleConfirmDelete}
-              className="px-6 py-2 bg-custom-bg text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+              className="px-6 py-2 bg-custom-bg text-white font-semibold h-11 rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 w-[311px]"
             >
-              Confirm Delete
+              Delete
+            </button>
+
+            <button
+              onClick={onClose}
+              className="px-6 py-2  text-custom-bg rounded-lg font-semibold border-2 border-[#D5D7DA] hover:bg-custom-bg hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 w-[311px] h-11"
+            >
+              Cancel
             </button>
           </div>
         </div>

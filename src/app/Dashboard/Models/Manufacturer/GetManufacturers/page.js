@@ -154,7 +154,7 @@ const Page = () => {
                 <div className="text-custom-bg mt-2">Entries</div>
                 <input
                   type="text"
-                  placeholder="Search by Name"
+                  placeholder="Search by Manufacturer"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="border rounded px-4 py-2 w-64"
@@ -165,11 +165,11 @@ const Page = () => {
                 className="bg-custom-bg text-white px-4 py-2 rounded hover:bg-blue-600  flex items-center justify-center gap-2"
               >
                 <img src="/plus.png" alt="Add Company" className="w-4 h-4" />
-                Add New Manufacturer
+                Add Manufacturer
               </button>
             </div>
 
-            <div className=" mt-4">
+            <div className="mt-4">
               <table className="min-w-full divide-y divide-gray-200 overflow-x-auto">
                 <thead className="bg-gray-50">
                   <tr>
@@ -188,7 +188,7 @@ const Page = () => {
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
                   {currentData.map((row) => (
-                    <tr key={row._id} className="text-center">
+                    <tr key={row._id} className="">
                       {columns.map((column) => (
                         <td
                           key={column.name}

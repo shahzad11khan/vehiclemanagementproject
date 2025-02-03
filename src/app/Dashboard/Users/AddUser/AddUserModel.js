@@ -160,16 +160,17 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
     "title",
     "firstName",
     "lastName",
+    "email",
 
   ];
-  const pagetworequiredfeilds = [
-    // "email",
-    // "tel1",
-    // "postcode",
-    // "postalAddress",
-    // "city",
-    "county",
-  ];
+  // const pagetworequiredfeilds = [
+  //   // "email",
+  //   // "tel1",
+  //   // "postcode",
+  //   // "postalAddress",
+  //   // "city",
+  //   "county",
+  // ];
   const pagethreerequiredfeilds = [
     "position",
     "username",
@@ -182,7 +183,7 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
     fields.every((field) => formData[field] !== "");
 
   const isNextDisabled1st = !areFieldsFilled(pageonerequiredfeilds);
-  const isNextDisabled2nd = !validation.emailValid || !areFieldsFilled(pagetworequiredfeilds);
+  // const isNextDisabled2nd = !validation.emailValid || !areFieldsFilled(pagetworequiredfeilds);
   const isNextDisabled3rd = !validation.passwordMatch || !validation.dateOfBirthValid || !validation.passwordExpiresvalid || !areFieldsFilled(pagethreerequiredfeilds);
 
   const handleSubmit = async (e) => {
@@ -274,8 +275,7 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
           {step === 1 && (
             <>
               <div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 ">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
                   <div>
                     <div className="flex gap-1 items-center justify-start">
                       <label
@@ -399,6 +399,7 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                     />
                   </div>
                 </div>
+
                 <h2 className="font-bold mt-4">Address</h2>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
@@ -407,7 +408,7 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                     <div className="flex gap-1 items-center justify-start">
                       <label
                         htmlFor="Building&Street"
-                        className="text-[10px] "
+                        className="text-[10px]"
                       >
                         Building and Street (Line 1of 2)
                       </label>
@@ -495,7 +496,7 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                     <div className="flex gap-1">
                       <label
                         htmlFor="CompanyName"
-                        className="text-[10px] "
+                        className="text-[10px]"
                       >
                         Postcode
                       </label>
@@ -519,9 +520,6 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                 >
                   {showPassword ? "Hide" : "Show"}
                 </button> */}
-
-
-
                 </div>
 
                 <div className="flex gap-[10px] justify-end">
@@ -549,8 +547,8 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
               </div>
             </>
           )}
-          {/* Contact Information */}
-          {step === 2 && (
+
+          {/* {step === 2 && (
             <>
               <div>
                 <h3 className="text-xl font-semibold mb-4">
@@ -559,7 +557,7 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                 <div className="grid grid-cols-2 sm:grid-cols-2 gap-3">
 
 
-                  {/* <div>
+                  <div>
                     <div className="flex gap-1">
                       <label
                         htmlFor="email"
@@ -610,7 +608,7 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                       className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
                       required
                     />
-                  </div> */}
+                  </div>
 
                   <div>
                     <label
@@ -766,22 +764,21 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                 </div>
               </div>
             </>
-          )}
+          )} */}
           {/* Security */}
-          {step === 3 && (
+          {step === 2 && (
             <>
               <div>
-                <h3 className="text-xl font-semibold mb-4">Security</h3>
-                <div className="grid grid-cols-2 sm:grid-cols-2 gap-3">
-
+                <h3 className="font-bold mb-4">Security</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
 
                   <div>
                     <div className="flex gap-1">
                       <label
                         htmlFor="county"
-                        className="text-sm font-medium text-gray-700"
+                        className="text-[10px]"
                       >
-                        Date Of Birth:
+                        Date Of Birth
                       </label>
                     </div>
 
@@ -791,7 +788,7 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                       name="dateOfBirth"
                       value={formData.dateOfBirth}
                       onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px] shadow-sm focus:ring-blue-500 focus:border-blue-500"
                     />
                     {!validation.dateOfBirthValid && (
                       <span className="text-sm text-red-500">Date of Birth cannot be in the future.</span>
@@ -799,14 +796,13 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                   </div>
 
                   <div>
-                    <div className="flex gap-1">
+                    <div className="flex gap-1 items-center justify-start">
                       <label
-                        htmlFor="position"
-                        className="text-sm font-medium text-gray-700"
+                        htmlFor="taxiFirm"
+                        className="text-[10px]"
                       >
-                        Position:
+                        Position <span className="text-red-600">*</span>
                       </label>
-                      <span className="text-red-600">*</span>
                     </div>
                     <input
                       type="text"
@@ -814,37 +810,39 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                       name="position"
                       value={formData.position}
                       onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                      required
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px] shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                      required placeholder="Building and street"
                     />
                   </div>
 
                   <div>
-                    <label
-                      htmlFor="reportsTo"
-                      className="text-sm font-medium text-gray-700"
-                    >
-                      Reports To:
-                    </label>
+                    <div className="flex gap-1 items-center justify-start">
+                      <label
+                        htmlFor="reportsTo"
+                        className="text-[10px]"
+                      >
+                        Reports To
+                      </label>
+                    </div>
                     <input
                       type="text"
                       id="reportsTo"
                       name="reportsTo"
                       value={formData.reportsTo}
                       onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px] shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                      placeholder="Reports To"
                     />
                   </div>
 
                   <div>
-                    <div className="flex gap-1">
+                    <div className="flex gap-1 items-center justify-start">
                       <label
-                        htmlFor="username"
-                        className="text-sm font-medium text-gray-700"
+                        htmlFor="taxiFirm"
+                        className="text-[10px]"
                       >
-                        Username:
+                        Username <span className="text-red-600">*</span>
                       </label>
-                      <span className="text-red-600">*</span>
                     </div>
                     <input
                       type="text"
@@ -852,53 +850,58 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                       name="username"
                       value={formData.username}
                       onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                      required
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px] shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                      required placeholder="Username"
                     />
                   </div>
-                  <div className="flex gap-2">
+
+                  <div>
                     <div className="relative">
-                      <div className="flex gap-1">
+                      <div className="flex gap-1 items-center justify-start">
                         <label
                           htmlFor="password"
-                          className="text-sm font-medium text-gray-700"
+                          className="text-[10px]"
                         >
-                          Password:
+                          Password <span className="text-red-600">*</span>
                         </label>
-                        <span className="text-red-600">*</span>
                       </div>
+
+
                       <input
                         type={showPasswords ? "text" : "password"}
                         id="password"
                         name="password"
                         value={formData.password}
                         onChange={handleChange}
-                        className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                        className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
                         required
+                        placeholder="Password"
                       />
-                      <button
+                      {/* <button
                         type="button"
                         onClick={() => setShowPasswords((prev) => !prev)}
-                        className="absolute right-2 top-10"
+                        className="absolute right-2 top-1/2"
                       >
                         {showPasswords ? (
                           <AiOutlineEye size={20} />
                         ) : (
                           <AiOutlineEyeInvisible size={20} />
                         )}
-                      </button>
+                      </button> */}
                     </div>
+                  </div>
 
+                  <div>
                     <div className="relative">
-                      <div className="flex gap-1">
+                      <div className="flex gap-1 items-center justify-start">
                         <label
                           htmlFor="confirmpassword"
-                          className="text-sm font-medium text-gray-700"
+                          className="text-[10px]"
                         >
-                          Confirm Password:
+                          Confirm Password <span className="text-red-600">*</span>
                         </label>
-                        <span className="text-red-600">*</span>
                       </div>
+
                       <input
                         type={showPasswords ? "text" : "password"}
                         id="confirmpassword"
@@ -907,32 +910,32 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                         onChange={handleChange}
                         // className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
                         className={`mt-1 block w-full p-2 ${validation.passwordMatch === null
-                          ? 'border-gray-300'
+                          ? 'border-[#42506666]'
                           : validation.passwordMatch
                             ? 'border-green-500'
                             : 'border-red-500'
-                          } focus:outline-none border rounded-lg`}
-                        required
+                          } focus:outline-none border border-[#42506666] rounded-[4px]`}
+                        required placeholder="Confirm Password"
                       />
-                      <button
+                      {/* <button
                         type="button"
                         onClick={() => setShowPasswords((prev) => !prev)}
-                        className="absolute right-2 top-10"
+                        className="absolute right-2 top-1/2"
                       >
                         {showPasswords ? (
                           <AiOutlineEye size={20} />
                         ) : (
                           <AiOutlineEyeInvisible size={20} />
                         )}
-                      </button>
+                      </button> */}
                       <span
-                        className={`text-sm ${validation.passwordMatch === null
+                        className={`text-[9px] ${validation.passwordMatch === null
                           ? "text-gray-500"
                           : validation.passwordMatch
                             ? passwordRegex.test(formData.password)
-                              ? "text-green-500"
-                              : "text-red-500"
-                            : "text-red-500"
+                              ? "text-green-700"
+                              : "text-red-700"
+                            : "text-red-700"
                           }`}
                       >
                         {validation.passwordMatch === null
@@ -944,25 +947,16 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                               : "Confirm Password matched Pattern Match"}
                       </span>
                     </div>
-                    {/* <div className="mt-4">
-                      <button
-                        type="button"
-                        onClick={() => setShowPasswords(!showPasswords)}
-                        className="px-4 py-2"
-                      >
-                        {showPasswords ? "Hide" : "Show"}
-                      </button>
-                    </div> */}
                   </div>
+
                   <div>
-                    <div className="flex gap-1">
+                    <div className="flex gap-1 items-center justify-start">
                       <label
                         htmlFor="passwordExpires"
-                        className="text-sm font-medium text-gray-700"
+                        className="text-[10px]"
                       >
-                        Password Expires:
+                        Password Expires <span className="text-red-600">*</span>
                       </label>
-                      <span className="text-red-600">*</span>
                     </div>
 
                     <input
@@ -971,20 +965,107 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                       name="passwordExpires"
                       value={formData.passwordExpires}
                       onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
                       required
                     />
                     {!validation.passwordExpiresvalid && (
-                      <span className="text-sm text-red-500">Password Expires cannot be in the past.</span>
+                      <span className="text-[9px] text-red-700">Password Expires cannot be in the past.</span>
                     )}
                   </div>
 
+
+
+                  <div>
+                    <label className="text-[10px]">Status</label>
+                    <div className="flex gap-4 p-2">
+                      <label className="flex items-center gap-2">
+                        <input
+                          type="radio"
+                          name="isActive"
+                          value="true"
+                          checked={formData.isActive === true}
+                          onChange={() =>
+                            handleChange({
+                              target: { name: "isActive", value: true },
+                            })
+                          }
+                          className="accent-green-500"
+                        />
+                        <span className="text-xs">Active</span>
+                      </label>
+
+                      <label className="flex items-center gap-2">
+                        <input
+                          type="radio"
+                          name="isActive"
+                          value="false"
+                          checked={formData.isActive === false}
+                          onChange={() =>
+                            handleChange({
+                              target: { name: "isActive", value: false },
+                            })
+                          }
+                          className="accent-red-500"
+                        />
+                        <span className="text-xs">Inactive</span>
+                      </label>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <label
+                      htmlFor="useravatar"
+                      className="text-[10px]"
+                    >
+                      Upload Image:
+                    </label>
+                    <input
+                      type="file"
+                      id="useravatar"
+                      name="useravatar"
+                      accept="image/*"
+                      onChange={handleFileChange}
+                      className="mt-1 block w-48 text-[8px] text-gray-400 file:mr-4 file:py-1 p-2 file:px-4 file:rounded-lg file:border file:text-[10px] file:font-semibold file:bg-white hover:file:bg-blue-100 border border-[#0885864D] rounded-[10px] border-dashed "
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[10px]">Role</label>
+                    <div className="flex gap-4">
+                      <label className="flex items-center gap-2">
+                        <input
+                          type="radio"
+                          name="role"
+                          value="admin"
+                          checked={formData.role === "admin"}
+                          onChange={handleChange}
+                          className="accent-blue-500"
+                        />
+                        <span className="text-xs">Admin</span>
+                      </label>
+
+                      <label className="flex items-center gap-2">
+                        <input
+                          type="radio"
+                          name="role"
+                          value="user"
+                          checked={formData.role === "user"}
+                          onChange={handleChange}
+                          className="accent-blue-500"
+                        />
+                        <span className="text-xs">User</span>
+                      </label>
+                    </div>
+                  </div>
+
                 </div>
+
+
                 <div className="mt-6 flex gap-2 justify-between">
                   <div>
                     <button
                       onClick={prevStep}
-                      className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                      className="px-6 py-2 ml-2 text-custom-bg rounded-[4px] text-xs font-bold border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
                     >
                       Back
                     </button>
@@ -996,13 +1077,13 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                         onClose();
                         resetform();
                       }}
-                      className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                      className="px-6 py-2 ml-2 text-custom-bg rounded-[4px] text-xs font-bold border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
                     >
                       Close
                     </button>
                     <button
                       onClick={nextStep}
-                      className={`px-6 py-2 rounded-lg focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 ${isNextDisabled3rd
+                      className={`px-6 py-2 rounded-[4px] text-xs font-bold focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 ${isNextDisabled3rd
                         ? "bg-gray-400 text-white cursor-not-allowed"
                         : "bg-custom-bg text-white hover:bg-gray-600"
                         }`}
@@ -1013,28 +1094,14 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                     </button>
                   </div>
                 </div>
+
               </div>
             </>
           )}
           {/* User Avatar */}
-          {step === 4 && (
+          {/* {step === 3 && (
             <>
-              {/* <div>
-                <label
-                  htmlFor="useravatar"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  User Avatar:
-                </label>
-                <input
-                  type="file"
-                  id="useravatar"
-                  name="useravatar"
-                  accept="image/*"
-                  onChange={handleFileChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                />
-              </div> */}
+             
               <div className="mb-4">
                 <label
                   htmlFor="useravatar"
@@ -1059,29 +1126,14 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                     onChange={handleFileChange}
                     className="hidden"
                   />
-                  {/* <img
-                    src={previewAvatar || "/default-avatar.png"} // Use preview logic or a default image
-                    alt="Avatar Preview"
-                    className="w-32 h-32 rounded-lg border border-gray-300 object-cover"
-                  /> */}
+                
                 </div>
               </div>
 
-              {/* <div>
-                <label>
-                  Is Active:
-                  <input
-                    type="checkbox"
-                    name="isActive"
-                    checked={formData.isActive}
-                    onChange={handleChange}
-                  />
-                </label>
-              </div> */}
+              
               <div>
                 <label className="block font-medium mb-2">Is Active:</label>
                 <div className="flex gap-4">
-                  {/* Yes Option */}
                   <label className="flex items-center gap-2">
                     <input
                       type="radio"
@@ -1097,8 +1149,7 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                     />
                     <span>Active</span>
                   </label>
-
-                  {/* No Option */}
+                
                   <label className="flex items-center gap-2">
                     <input
                       type="radio"
@@ -1116,20 +1167,7 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                   </label>
                 </div>
               </div>
-
-              {/* <div>
-                <label>
-                  Role:
-                  <select
-                    name="role"
-                    value={formData.role}
-                    onChange={handleChange}
-                  >
-                    <option value="user">User</option>
-                    <option value="admin">Admin</option>
-                  </select>
-                </label>
-              </div> */}
+          
               <div>
                 <label className="block font-medium mb-2">Role</label>
                 <div className="flex gap-4">
@@ -1144,8 +1182,7 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                     />
                     <span>User</span>
                   </label>
-
-                  {/* Admin Role */}
+                  
                   <label className="flex items-center gap-2">
                     <input
                       type="radio"
@@ -1189,7 +1226,7 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                 </div>
               </div>
             </>
-          )}
+          )} */}
         </form>
       </div>
     </div>

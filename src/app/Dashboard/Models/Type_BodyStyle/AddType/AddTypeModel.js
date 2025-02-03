@@ -68,10 +68,19 @@ const AddTypeModel = ({ isOpen, onClose, fetchData }) => {
   if (!isOpen) return null;
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-xl">
-        <h2 className="text-3xl font-semibold text-center mb-8">
-          Add Body Type
-        </h2>
+      <div className="bg-white p-[50px] w-[528px] rounded-xl shadow-lg h-[428px]">
+
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-2xl font-bold">
+            Add Body Type
+          </h2>
+
+          <img src="/crossIcon.svg" onClick={() => {
+            onClose();
+
+          }} />
+
+        </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -80,11 +89,10 @@ const AddTypeModel = ({ isOpen, onClose, fetchData }) => {
               <div className="flex gap-1">
                 <label
                   htmlFor="firstName"
-                  className="text-sm font-medium text-gray-700"
+                  className="text-[10px]"
                 >
-                  Name:
+                  Name <span className="text-red-600">*</span>
                 </label>
-                <span className="text-red-600">*</span>
               </div>
               <input
                 type="text"
@@ -92,7 +100,7 @@ const AddTypeModel = ({ isOpen, onClose, fetchData }) => {
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px] shadow-sm focus:ring-blue-500 focus:border-blue-500"
                 required
               />
             </div>
@@ -110,8 +118,8 @@ const AddTypeModel = ({ isOpen, onClose, fetchData }) => {
                 name="description"
                 value={formData.description}
                 onChange={handleChange}
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                rows="3"
+                className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px] shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                rows="2"
               ></textarea>
             </div>
 
@@ -133,7 +141,7 @@ const AddTypeModel = ({ isOpen, onClose, fetchData }) => {
               </label>
             </div> */}
             <div>
-              <label className="block font-medium mb-2">Is Active:</label>
+              {/* <label className="block font-medium mb-2">Is Active:</label> */}
               <div className="flex gap-4">
                 {/* Yes Option */}
                 <label className="flex items-center gap-2">
@@ -149,7 +157,7 @@ const AddTypeModel = ({ isOpen, onClose, fetchData }) => {
                     }
                     className="accent-green-500"
                   />
-                  <span>Active</span>
+                  <span className="text-xs">Active</span>
                 </label>
 
                 {/* No Option */}
@@ -166,24 +174,24 @@ const AddTypeModel = ({ isOpen, onClose, fetchData }) => {
                     }
                     className="accent-red-500"
                   />
-                  <span>InActive</span>
+                  <span className="text-xs">InActive</span>
                 </label>
               </div>
             </div>
           </div>
 
           {/* Button Group */}
-          <div className="flex gap-4 justify-center">
+          <div className="flex gap-[10px] justify-end">
             <button
               type="button"
               onClick={onClose}
-              className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+              className="px-6 py-1 ml-2 text-custom-bg rounded-[4px] text-xs font-bold border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
             >
-              Close
+              Cancel
             </button>
             <button
               type="submit"
-              className="px-6 py-2 bg-custom-bg text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+              className="px-6 py-2 bg-custom-bg text-white text-xs font-bold rounded-[4px] hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
             >
               {loading ? "Submitting..." : "Submit"}
             </button>

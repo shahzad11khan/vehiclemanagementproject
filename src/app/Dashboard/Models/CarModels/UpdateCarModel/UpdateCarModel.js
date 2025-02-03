@@ -9,7 +9,7 @@ import { GetManufacturer } from "@/app/Dashboard/Components/ApiUrl/ShowApiDatas/
 const UpdateCarModel = ({ isOpen, onClose, fetchData, updateid }) => {
   const [formData, setFormData] = useState({
     name: "",
-    makemodel:"",
+    makemodel: "",
     description: "",
     isActive: false,
     adminCreatedBy: "",
@@ -95,7 +95,7 @@ const UpdateCarModel = ({ isOpen, onClose, fetchData, updateid }) => {
         `${API_URL_CarModel}/${updateid}`,
         formData
       );
-      
+
       if (response.data?.message) {
         // Reset form data after successful update
         setFormData({
@@ -106,7 +106,7 @@ const UpdateCarModel = ({ isOpen, onClose, fetchData, updateid }) => {
           adminCreatedBy: "",
           adminCompanyName: response.data.adminCompanyName || "", // Ensure this is defined
         });
-        
+
         toast.success(response.data.message);
         onClose();
         fetchData();
@@ -123,26 +123,60 @@ const UpdateCarModel = ({ isOpen, onClose, fetchData, updateid }) => {
       setLoading(false);
     }
   };
-  
+
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-xl">
-        <h2 className="text-3xl font-semibold text-center mb-8">
+      <div className="bg-white p-[50px] w-[528px] rounded-xl shadow-lg h-[428px]">
+        {/* <h2 className="text-3xl font-semibold text-center mb-8">
           Update Car Model
-        </h2>
+        </h2> */}
+
+        {/* <h2 className="text-2xl font-bold mb-8">
+          Update Car Model
+        </h2> */}
+
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-2xl font-bold">
+          Update Car Model
+          </h2>
+
+          <img src="/crossIcon.svg" onClick={() => {
+            onClose();
+          }} />
+
+        </div>
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          <div className="col-span-2">
+          {/* <div className="grid grid-cols-1 sm:grid-cols-2 gap-6"> */}
+          <div className="flex  gap-2">
+            <div className="col-span-2 flex-1">
+              <div className="flex gap-1">
+                <label
+                  htmlFor="firstName"
+                  className="text-[10px]"
+                >
+                  Model <span className="text-red-600">*</span>
+                </label>
+              </div>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px] shadow-sm focus:ring-blue-500 focus:border-blue-500"
+              />
+            </div>
+
+            <div className="col-span-2  flex-1">
               <div className="flex gap-1">
                 <label
                   htmlFor="makemodel"
-                  className="text-sm font-medium text-gray-700"
+                  className="text-[10px]"
                 >
-                  Make:
+                  Manufacturer <span className="text-red-600">*</span>
                 </label>
-                <span className="text-red-600">*</span>
               </div>
 
               <select
@@ -150,7 +184,7 @@ const UpdateCarModel = ({ isOpen, onClose, fetchData, updateid }) => {
                 name="makemodel"
                 value={formData.makemodel}
                 onChange={handleChange}
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px] shadow-sm focus:ring-blue-500 focus:border-blue-500"
                 required
               >
                 <option value="" disabled>
@@ -169,23 +203,8 @@ const UpdateCarModel = ({ isOpen, onClose, fetchData, updateid }) => {
                 )}
               </select>
             </div>
-            <div className="col-span-2">
-              <label
-                htmlFor="name"
-                className="text-sm font-medium text-gray-700"
-              >
-                Model:
-              </label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
-            {/* <div className="col-span-2">
+          </div>
+          {/* <div className="col-span-2">
               <label
                 htmlFor="name"
                 className="text-sm font-medium text-gray-700"
@@ -201,23 +220,23 @@ const UpdateCarModel = ({ isOpen, onClose, fetchData, updateid }) => {
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
               />
             </div> */}
-            <div className="col-span-2">
-              <label
-                htmlFor="description"
-                className="text-sm font-medium text-gray-700"
-              >
-                Description:
-              </label>
-              <textarea
-                id="description"
-                name="description"
-                value={formData.description}
-                onChange={handleChange}
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                rows="3"
-              ></textarea>
-            </div>
-            {/* <div className="col-span-2 flex items-center">
+          <div className="col-span-2">
+            <label
+              htmlFor="description"
+              className="text-[10px]"
+            >
+              Description:
+            </label>
+            <textarea
+              id="description"
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+              className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px] shadow-sm focus:ring-blue-500 focus:border-blue-500"
+              rows="2"
+            ></textarea>
+          </div>
+          {/* <div className="col-span-2 flex items-center">
               <input
                 type="checkbox"
                 id="isActive"
@@ -233,56 +252,56 @@ const UpdateCarModel = ({ isOpen, onClose, fetchData, updateid }) => {
                 IsActive
               </label>
             </div> */}
-            <div>
-              <label className="block font-medium mb-2">Is Active:</label>
-              <div className="flex gap-4">
-                {/* Yes Option */}
-                <label className="flex items-center gap-2">
-                  <input
-                    type="radio"
-                    name="isActive"
-                    value="true"
-                    checked={formData.isActive === true}
-                    onChange={() =>
-                      handleChange({
-                        target: { name: "isActive", value: true },
-                      })
-                    }
-                    className="accent-green-500"
-                  />
-                  <span>Active</span>
-                </label>
+          <div>
+            {/* <label className="block font-medium mb-2">Is Active:</label> */}
+            <div className="flex gap-4">
+              {/* Yes Option */}
+              <label className="flex items-center gap-2">
+                <input
+                  type="radio"
+                  name="isActive"
+                  value="true"
+                  checked={formData.isActive === true}
+                  onChange={() =>
+                    handleChange({
+                      target: { name: "isActive", value: true },
+                    })
+                  }
+                  className="accent-green-500"
+                />
+                <span className="text-xs">Active</span>
+              </label>
 
-                {/* No Option */}
-                <label className="flex items-center gap-2">
-                  <input
-                    type="radio"
-                    name="isActive"
-                    value="false"
-                    checked={formData.isActive === false}
-                    onChange={() =>
-                      handleChange({
-                        target: { name: "isActive", value: false },
-                      })
-                    }
-                    className="accent-red-500"
-                  />
-                  <span>InActive</span>
-                </label>
-              </div>
+              {/* No Option */}
+              <label className="flex items-center gap-2">
+                <input
+                  type="radio"
+                  name="isActive"
+                  value="false"
+                  checked={formData.isActive === false}
+                  onChange={() =>
+                    handleChange({
+                      target: { name: "isActive", value: false },
+                    })
+                  }
+                  className="accent-red-500"
+                />
+                <span className="text-xs">InActive</span>
+              </label>
             </div>
           </div>
-          <div className="flex gap-4 justify-center">
+          {/* </div> */}
+          <div className="flex gap-[10px] justify-end">
             <button
               type="button"
               onClick={onClose}
-              className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+              className="px-6 py-1 ml-2 text-custom-bg rounded-[4px] text-xs font-bold border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
             >
-              Close
+              Cancel
             </button>
             <button
               type="submit"
-              className="px-6 py-2 bg-custom-bg text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+              className="px-6 py-2 bg-custom-bg text-white text-xs font-bold rounded-[4px] hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
               disabled={loading}
             >
               {loading ? "Submitting..." : "Update"}

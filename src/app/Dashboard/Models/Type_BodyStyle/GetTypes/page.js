@@ -148,7 +148,7 @@ const Page = () => {
                 <div className="text-custom-bg mt-2">Entries</div>
                 <input
                   type="text"
-                  placeholder="Search by Name"
+                  placeholder="Search by body type"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="border rounded px-4 py-2 w-64"
@@ -161,7 +161,7 @@ const Page = () => {
                   className="bg-custom-bg text-white px-4 py-2 rounded hover:bg-blue-600  flex items-center justify-center gap-2"
                 >
                   <img src="/plus.png" alt="Add Company" className="w-4 h-4" />
-                  Add Type
+                  Add Body Type
                 </button>
               </div>
             </div>

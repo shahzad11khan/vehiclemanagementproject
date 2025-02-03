@@ -3,9 +3,13 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { IoIosArrowBack } from "react-icons/io";
 import { getAuthData, isAuthenticated } from "@/utils/verifytoken";
+import { usePathname } from "next/navigation";
+
 const Sidebar = () => {
   const [role, setrole] = useState("");
   const [flag, setflag] = useState("");
+
+  const pathname = usePathname();
 
   useEffect(() => {
     if (isAuthenticated()) {
@@ -40,9 +44,9 @@ const Sidebar = () => {
   //   setOpenDropdown(null);
   // };
 
-  const handleToggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
-  };
+  // const handleToggleSidebar = () => {
+  //   setIsSidebarOpen(!isSidebarOpen);
+  // };
 
   const handleCardClick = () => {
     window.location.reload();
@@ -203,70 +207,38 @@ const Sidebar = () => {
                       } flex items-center p-3 cursor-pointer hover:border-b-2 bg-transparent mx-2`}
 
                   >
-                    <div className="flex items-center gap-3 relative bg-transparent">
+                    <div className="flex items-center gap-3 relative bg-transparent w-full">
                       <img src="/setting.png" alt="superadmin" className="w-5" />
 
                       <span className="hidden sm:block text-sm bg-transparent text-white">
                         Settings
                       </span>
-
-                      {isOpenManagement && (
-                        <div className="absolute top-10 bg-transparent w-full sm:w-[170px] hover:bg-gray-200   border border-gray-300 rounded-md shadow-lg ">
-                          <ul className=" space-y-1 p-3 bg-transparent w-full list-disc">
-                            <li  onClick={() =>
-                              handleLinkClick("/Dashboard/Models/Manufacturer/GetManufacturers")
-                            }>
-                              <Link
-                                href="/Dashboard/Models/Manufacturer/GetManufacturers"
-                                className="rounded hover:bg-gray-200"
-                              >
-                                All Manufacturers
-                              </Link>
-                            </li>
-                            <li onClick={() =>
-                              handleLinkClick("/Dashboard/Models/CarModels/GetCarsModels")
-                            }>
-                              <Link
-                                href="/Dashboard/Models/CarModels/GetCarsModels"
-                                className="rounded hover:bg-gray-200"
-                              >
-                                All Models
-                              </Link>
-                            </li>
-
-                            <li onClick={() =>
-                              handleLinkClick("/Dashboard/Models/Type_BodyStyle/GetTypes")
-                            }>
-                              <Link
-                                href="/Dashboard/Models/Type_BodyStyle/GetTypes"
-                                className="  rounded hover:bg-gray-200"
-                              >
-                                Body Type
-                              </Link>
-                            </li>
-                            <li onClick={() =>
-                              handleLinkClick("/Dashboard/Models/FuelType/GetFuelTypes")
-                            }>
-                              <Link
-                                href="/Dashboard/Models/FuelType/GetFuelTypes"
-                                className="  rounded hover:bg-gray-200"
-                              >
-                                Fuel Type
-                              </Link>
-                            </li>
-                            <li onClick={() =>
-                              handleLinkClick("/Dashboard/Models/Transmission/GetTransmissions")
-                            }>
-                              <Link
-                                href="/Dashboard/Models/Transmission/GetTransmissions"
-                                className="  rounded hover:bg-gray-200"
-                              >
-                                Transmission
-                              </Link>
-                            </li>
-                          </ul>
-                        </div>
-                      )}
+ 
+                      {/* ali */}
+                      {isOpenManagement &&(
+                                <div className="absolute top-12  bg-black md:bg-transparent  w-40 md:w-full z-50 ">
+                                  <ul className="space-y-2 pl-6 bg-transparent text-white w-full list-disc lg:marker:text-[#D9D9D9] marker:text-lg lg:marker:text-xl">
+                                    {[
+                                      { path: "/Dashboard/Models/Manufacturer/GetManufacturers", label: "All Manufacturers" },
+                                      { path: "/Dashboard/Models/CarModels/GetCarsModels", label: "All Models" },
+                                      { path: "/Dashboard/Models/Type_BodyStyle/GetTypes", label: "Body Type" },
+                                      { path: "/Dashboard/Models/FuelType/GetFuelTypes", label: "Fuel Type" },
+                                      { path: "/Dashboard/Models/Transmission/GetTransmissions", label: "Transmission" }
+                                    ].map((item) => (
+                                      <li key={item.path} className=" font-medium  text-xs lg:text-sm w-full bg-transparent text-white">
+                                        <Link
+                                          href={item.path}
+                                          className={`w-full block bg-transparent ${
+                                            pathname === item.path ? "opacity-100" : "opacity-65"
+                                          }`}
+                                        >
+                                          {item.label}
+                                        </Link>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                </div>
+                              )}
                     </div>
                   </li>
                 </div>

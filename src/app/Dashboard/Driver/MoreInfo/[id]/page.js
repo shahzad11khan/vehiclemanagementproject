@@ -235,7 +235,7 @@ const Page = ({ params }) => {
 
   useEffect(() => {
     fetchData();
-  }, [router]);
+  }, []);
 
   // useEffect(() => {
   //   // console.log(data);

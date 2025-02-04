@@ -5,12 +5,14 @@ import Header from "../../Components/Header";
 import Sidebar from "../../Components/Sidebar";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
+// import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 import AddUserModel from "../AddUser/AddUserModel";
 import UpdateUserModel from "../UpdateUser/UpdateUserModel";
 import axios from "axios";
 import { API_URL_USER } from "../../Components/ApiUrl/ApiUrls";
-import BackButton from "../../Components/BackButton";
+import { getAuthData } from "@/utils/verifytoken";
+
+// import BackButton from "../../Components/BackButton";
 
 import {
   getCompanyName,
@@ -21,13 +23,13 @@ import DeleteModal from "../../Components/DeleteModal";
 // import Loading from "../../Components/Loading";
 
 const Page = () => {
-  const columns = [
-    "Username",
-    "Email",
-    "Role",
-    "Status",
-    "Actions",
-  ];
+  // const columns = [
+  //   "Username",
+  //   "Email",
+  //   "Role",
+  //   "Status",
+  //   "Actions",
+  // ];
 
   const [users, setUsers] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
@@ -35,21 +37,23 @@ const Page = () => {
   const [isMounted, setIsMounted] = useState(false);
   const [isOpenUser, setIsOpenUser] = useState(false);
   const [isOpenUserUpdate, setIsOpenUserUpdate] = useState(false);
-  const [selectedCompanyName, setSelectedCompanyName] = useState("");
+  // const [selectedCompanyName, setSelectedCompanyName] = useState("");
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isDeleteModalOpenId, setIsDeleteModalOpenId] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemperpage, setitemperpage] = useState(5);
+    const [flag, setflag] = useState("");
+
   // const [loading, setLoading] = useState(true); // Add loading state
 
   useEffect(() => {
     setIsMounted(true);
-    const companyNameFromStorage =
-      getCompanyName() || getsuperadmincompanyname();
-    if (companyNameFromStorage) {
-      setSelectedCompanyName(companyNameFromStorage);
-    }
+    // const companyNameFromStorage =
+    //   getCompanyName() || getsuperadmincompanyname();
+    // if (companyNameFromStorage) {
+    //   setSelectedCompanyName(companyNameFromStorage);
+    // }
   }, []);
 
   useEffect(() => {
@@ -98,40 +102,76 @@ const Page = () => {
     }
   };
 
-  useEffect(() => {
+  // useEffect(() => {
 
-    const userrole = getUserRole();
-    const filtered = users.filter((item) => {
-      if (userrole === "superadmin") {
-        return users;
-      }
-      let companyMatch =
-        item &&
-        item.companyname &&
-        selectedCompanyName &&
-        item.companyname.toLowerCase() === selectedCompanyName.toLowerCase();
-      // const usernameMatch =
-      //   item &&
-      //   item.username &&
-      //   item.username.toLowerCase().includes(searchTerm.toLowerCase());
-      const usernameMatch =
-        item.username &&
-        searchTerm
-          .toLowerCase()
-          .split("") // Split searchTerm into individual characters
-          .every(
-            (char) =>
-              item.username.toLowerCase().includes(char) || // Check in username
-              item.email.toLowerCase().includes(char)
-          );
-      return companyMatch && usernameMatch;
-    });
-    setFilteredData(filtered);
-  }, [searchTerm, users, selectedCompanyName]);
+  //   const userrole = getUserRole();
+  //   const filtered = users.filter((item) => {
+  //     // console.log(item.companyname)
+  //     // console.log(selectedCompanyName)
+  //     if (userrole === "superadmin") return users;
+  //     const companyMatch =
+  //       item &&
+  //       item.companyname &&
+  //       selectedCompanyName &&
+  //       item.companyname.toLowerCase() === selectedCompanyName.toLowerCase();
+  //     // const usernameMatch =
+  //     //   item &&
+  //     //   item.username &&
+  //     //   item.username.toLowerCase().includes(searchTerm.toLowerCase());
+  //     const usernameMatch =
+  //       item.username &&
+  //       searchTerm
+  //         .toLowerCase()
+  //         .split("")
+  //         .every(
+  //           (char) =>
+  //             item.username.toLowerCase().includes(char) || // Check in username
+  //             item.email.toLowerCase().includes(char)
+  //         );
+  //     return companyMatch && usernameMatch;
+  //   });
+  //   setFilteredData(filtered);
+  // }, [searchTerm, users, selectedCompanyName]);
+
   //   if (loading) {
   //   return <Loading width="6" height="6" className="w-full h-auto" />;
   // }
 
+  
+    useEffect(() => {
+      const userRole = getUserRole(); // Get the current user's role
+      const companyName = getCompanyName() || getsuperadmincompanyname(); // Get the logged-in user's company name
+      const authData = getAuthData();
+      setflag(authData.flag);
+      let filteredUsers = users;
+    
+      // Filter users based on role
+      if (userRole !== "superadmin") {
+        // If the user is not a superadmin, filter by company name
+        filteredUsers = users.filter(
+          (item) => item.companyname.toLowerCase() === companyName.toLowerCase()
+        );
+      }
+
+      if(userRole === "superadmin" && flag === "true"){
+        filteredUsers = users.filter(
+          (item) => item.companyname.toLowerCase() === companyName.toLowerCase()
+        );
+      }
+
+
+    
+      // Apply search term filtering
+      if (searchTerm) {
+        filteredUsers = filteredUsers.filter((item) =>
+          item?.email?.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+      }
+    
+      // Update the filtered data
+      setFilteredData(filteredUsers);
+      setCurrentPage(1); // Reset to the first page on new search or filter
+    }, [searchTerm, users]);
   const OpenUserModle = () => {
     setIsOpenUser(!isOpenUser);
   };
@@ -160,51 +200,7 @@ const Page = () => {
           <div className="">
             {/* top */}
 
-            {/* <div className="flex justify-between">
-              <div className="flex justify-center text-center gap-3">
-                <div className="text-custom-bg mt-2">Show</div>
-                <div>
-                  <select
-                    value={itemperpage}
-                    onChange={(e) => setitemperpage(e.target.value)}
-                    className="border rounded-md pl-2 py-2 w-16 border-custom-bg "
-                  >
-                    <option disabled>0</option>
-                    {Array.from({ length: 10 }, (_, i = 1) => i + 1).map(
-                      (number) => (
-                        <option key={number} value={number} >
-                          {number}
-                        </option>
-                      )
-                    )}
-                  </select>
-                </div>
-                <div className="flex justify-center text-center gap-3">
-                  <div className="text-custom-bg mt-2">Entries</div>
-                  <div>
-                    <input
-                      type="text"
-                      placeholder="Search by Username / Email"
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                      className="border rounded-md px-4 py-2 w-64 border-custom-bg"
-                    />
-                  </div>
-                </div>
-              </div>
-              <div className="justify-end">
-                <div className="flex  gap-2">
-                  <BackButton />
-                  <button
-                    onClick={OpenUserModle}
-                    className="bg-custom-bg text-white px-4 py-2 rounded hover:bg-blue-600 flex items-center justify-center gap-2"
-                  >
-                    <img src="/plus.png" alt="Add Company" className="w-4 h-4" />
-                    Add User
-                  </button>
-                </div>
-              </div>
-            </div> */}
+          
 
                 <div className="flex justify-between w-full py-2 px-2">
                   <div className="flex flex-wrap justify-between flex-col sm:flex-row sm:items-center gap-3 w-full">

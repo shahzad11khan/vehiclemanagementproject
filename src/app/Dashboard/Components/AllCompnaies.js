@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { GetCompany } from "../Components/ApiUrl/ShowApiDatas/ShowApiDatas";
-import { Doughnut } from "react-chartjs-2";
+// import { Doughnut } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 // import Card from "./Card";
 import AddCompanymodel from "../Company/AddCompany/AddCompanyModel";
@@ -10,7 +10,7 @@ import axios from "axios";
 import UpdateCompanyModel from "../Company/UpdateCompany/UpdateCompanyModel";
 import { isAuthenticated } from "@/utils/verifytoken";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
+// import Link from "next/link";
 import DeleteModal from "./DeleteModal";
 import AdminDashBDoughnut from "../Components/AdminDashBDoughnut"
 
@@ -22,7 +22,7 @@ const AllCompanies = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [data, setData] = useState([]);
   const [chartData, setChartData] = useState(null);
-  const [totalCompanies, setTotalCompanies] = useState(0);
+  // const [totalCompanies, setTotalCompanies] = useState(0);
   const [filteredData, setFilteredData] = useState([]);
   const [isOpenCompany, setIsOpenCompany] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState(null);
@@ -89,7 +89,7 @@ const AllCompanies = () => {
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const totalPages = Math.ceil(filteredData.length / itemperpage);
-  const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1); // Create an array of page numbers
+  // const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1); // Create an array of page numbers
 
   const fetchData = async () => {
     try {
@@ -101,7 +101,7 @@ const AllCompanies = () => {
 
       // Set company data
       setData(result || []);
-      setTotalCompanies(result.length);
+      // setTotalCompanies(result.length);
 
       // Prepare data for Doughnut chart
       setChartData({

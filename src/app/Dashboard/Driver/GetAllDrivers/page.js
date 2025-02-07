@@ -93,10 +93,19 @@ const Page = () => {
         driver.adminCompanyName.toLowerCase() ===
           selectedCompanyName.toLowerCase();
 
-      const nameMatch =
-        driver.firstName &&
-        driver.firstName.toLowerCase().includes(searchTerm.toLowerCase());
-
+      // const nameMatch =
+      //   driver.firstName &&
+      //   driver.firstName.toLowerCase().includes(searchTerm.toLowerCase());
+        const nameMatch =
+        driver?.firstName &&
+        searchTerm
+          .toLowerCase()
+          .split("") 
+          .every(
+            (char) =>
+              driver.firstName.toLowerCase().includes(char) || // Check in username
+            driver.email?.toLowerCase().includes(char)
+          );
       return companyMatch && nameMatch;
     });
     setFilteredDrivers(filtered);

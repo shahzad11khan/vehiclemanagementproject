@@ -3,6 +3,7 @@ import Driver from "@models/Driver/Driver.Model.js";
 import cloudinary from "@middlewares/cloudinary.js";
 import { catchAsyncErrors } from "@middlewares/catchAsyncErrors.js";
 import { NextResponse } from "next/server";
+import bycrypt from "bcryptjs";
 
 export async function POST(request) {
   try {
@@ -72,6 +73,8 @@ export async function POST(request) {
       tel1,
       tel2,
       email,
+      password,
+      confirmPassword,
       licenseNumber,
       niNumber,
       driverNumber,
@@ -100,6 +103,7 @@ export async function POST(request) {
 
     console.log(formDataObject);
 
+
     const existingDriver = await Driver.findOne({
       $and: [{ email: email }, { adminCompanyName: adminCompanyName }],
     });
@@ -110,6 +114,8 @@ export async function POST(request) {
       });
     }
 
+    const hashPassword = await bycrypt.hash(password, 10);
+
     // Create and save the new blog entry
     const newDriver = new Driver({
       firstName,
@@ -118,6 +124,8 @@ export async function POST(request) {
       tel1,
       tel2,
       email,
+      password:hashPassword,
+      confirmPassword,
       licenseNumber,
       niNumber,
       driverNumber,

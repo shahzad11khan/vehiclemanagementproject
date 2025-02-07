@@ -22,8 +22,21 @@ const Sidebar = () => {
     }
   }, []);
 
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [isOpenManagement, setIsOpenManagement] = useState(false);
+  // const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isOpenManagement, setIsOpenManagement] = useState(() => {
+    const savedValue = localStorage.getItem("isOpenManagement");
+    return savedValue ? JSON.parse(savedValue) : false;
+  });
+
+  useEffect(() => {
+    localStorage.setItem("isOpenManagement", JSON.stringify(isOpenManagement));
+    
+  }, [isOpenManagement]);
+
+  const toggleValue = () => {
+    setIsOpenManagement((prev) => !prev);
+  };
+
   // const [isOpen, setIsOpen] = useState(false);
   // const [openDropdown, setOpenDropdown] = useState(null);
   const [activeLink, setActiveLink] = useState("/Dashboard/Home");
@@ -173,15 +186,15 @@ const Sidebar = () => {
                       <img src="/superadmin.png" alt="superadmin" />
 
                       <span className="hidden sm:block text-sm text-white bg-transparent">
-                        Superadmin Users
+                        Super Admins 
                       </span>
                     </div>
                   </li>
                 </Link>
 
-                <div className="bg-transparent">
+                <div className="bg-transparent" >
                   <li
-                    onClick={() => setIsOpenManagement(!isOpenManagement)}
+                   
                     // onMouseLeave={() => setIsOpenManagement(false)}
                     // className={`${
                     //   isOpenManagement === true
@@ -208,22 +221,23 @@ const Sidebar = () => {
 
                   >
                     <div className="flex items-center gap-3 relative bg-transparent w-full">
+                      <div className="flex bg-transparent gap-3 w-full" onClick={toggleValue}>
                       <img src="/setting.png" alt="superadmin" className="w-5" />
-
-                      <span className="hidden sm:block text-sm bg-transparent text-white">
-                        Settings
-                      </span>
- 
+                      <p className="hidden sm:block text-sm bg-transparent text-white w-full"  >
+                       Vehicle Settings
+                      </p>
+                      </div>
+                      
                       {/* ali */}
                       {isOpenManagement &&(
-                                <div className="absolute top-12  bg-black md:bg-transparent  w-40 md:w-full z-50 ">
+                                <div className="absolute md:top-12  rounded-4 py-2 top-9 md:py-0 bg-[#38384A]  text-white md:bg-transparent  w-40 md:w-full z-50 ">
                                   <ul className="space-y-2 pl-6 bg-transparent text-white w-full list-disc lg:marker:text-[#D9D9D9] marker:text-lg lg:marker:text-xl">
                                     {[
-                                      { path: "/Dashboard/Models/Manufacturer/GetManufacturers", label: "All Manufacturers" },
-                                      { path: "/Dashboard/Models/CarModels/GetCarsModels", label: "All Models" },
+                                      { path: "/Dashboard/Models/Manufacturer/GetManufacturers", label: "Manufacturers" },
+                                      { path: "/Dashboard/Models/CarModels/GetCarsModels", label: "Models" },
                                       { path: "/Dashboard/Models/Type_BodyStyle/GetTypes", label: "Body Type" },
                                       { path: "/Dashboard/Models/FuelType/GetFuelTypes", label: "Fuel Type" },
-                                      { path: "/Dashboard/Models/Transmission/GetTransmissions", label: "Transmission" }
+                                      { path: "/Dashboard/Models/Transmission/GetTransmissions", label: "Transmission Type" }
                                     ].map((item) => (
                                       <li key={item.path} className=" font-medium  text-xs lg:text-sm w-full bg-transparent text-white">
                                         <Link
@@ -238,7 +252,7 @@ const Sidebar = () => {
                                     ))}
                                   </ul>
                                 </div>
-                              )}
+                               )}
                     </div>
                   </li>
                 </div>
@@ -319,7 +333,7 @@ const Sidebar = () => {
 
                 <div className="bg-transparent">
                   <li
-                    onClick={() => setIsOpenManagement(!isOpenManagement)}
+                  
                     // onClick={() => setIsOpenManagement(false)}
                     // className={`${
                     //   isOpenManagement === true
@@ -345,12 +359,12 @@ const Sidebar = () => {
                       }`}
                   >
                     <div className="flex items-center gap-3 relative bg-transparent ">
+                      
                       <img src="/setting.png" alt="superadmin" className="w-5" />
-
-                      <span className="hidden sm:block text-sm bg-transparent text-white">
+                      <p className="hidden sm:block text-sm bg-transparent text-white"   onClick={toggleValue}>
                         Settings
-                      </span>
-
+                      </p>
+                      <div/>
                       {isOpenManagement && (
                         <div className="absolute left-36 mt-2 w-full sm:w-[170px] hover:bg-gray-200   border border-gray-300 rounded-md shadow-lg ">
                           <ul className=" space-y-1 p-3">
@@ -537,7 +551,7 @@ const Sidebar = () => {
                 </Link>
                 <div className="bg-transparent">
                   <li
-                    onClick={() => setIsOpenManagement(!isOpenManagement)}
+                 
                     // onMouseLeave={() => setIsOpenManagement(false)}
                     // className={`${
                     //   isOpenManagement === true
@@ -565,9 +579,9 @@ const Sidebar = () => {
                     <div className="flex items-center gap-3 relative bg-transparent">
                       <img src="/setting.png" alt="superadmin" className="w-5" />
 
-                      <span className="hidden sm:block text-sm bg-transparent text-white">
+                      <p className="hidden sm:block text-sm bg-transparent text-white"    onClick={toggleValue}>
                         Settings
-                      </span>
+                      </p>
 
                       {isOpenManagement && (
                         <div className="absolute left-36 mt-2 w-full sm:w-[170px] hover:bg-gray-200   border border-gray-300 shadow-lg">

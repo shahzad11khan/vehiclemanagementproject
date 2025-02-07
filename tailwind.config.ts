@@ -20,6 +20,7 @@ module.exports = {
         custom2: '0 1px 4px #00000040', // Custom2 drop shadow
         custom3: '0 4px 4px #0000001A', // Custom3 for the dasheboard cards
         custom4:"0 4px 4px #00000040" // profile updation form
+    
 
       },
       // Define custom classes for different screen sizes

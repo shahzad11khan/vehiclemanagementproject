@@ -84,3 +84,59 @@ img {
 .custom-scrollbar:active::-webkit-scrollbar-thumb {
   background-color: #58586a;
 }
+
+
+/* for vertical */
+.custom-scrollbary {
+  overflow-y: auto; /* Enables horizontal scrolling */
+  scrollbar-width: thin; /* Makes it look custom */
+  scrollbar-color: #38384A transparent;
+}
+
+/* WebKit-based browsers */
+.custom-scrollbary::-webkit-scrollbar {
+  width: 20px; /* Ensures 20px width */
+  height: 20px; /* Ensures 20px height for horizontal scrolling */
+  position: absolute; /* Prevents affecting layout */
+}
+
+/* Scrollbar track */
+.custom-scrollbary::-webkit-scrollbar-track {
+  background: transparent; /* Keeps it invisible */
+  border-radius: 10px;
+}
+
+/* Scrollbar thumb (the draggable part) */
+.custom-scrollbary::-webkit-scrollbar-thumb {
+  background-color: #38384A;
+  border-radius: 10px; /* Ensures rounded corners */
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Scrollbar thumb on hover */
+.custom-scrollbary::-webkit-scrollbar-thumb:hover {
+  background-color: #48485a;
+}
+
+/* Scrollbar thumb when active (dragged) */
+.custom-scrollbary:active::-webkit-scrollbar-thumb {
+  background-color: #58586a;
+}
+
+.myborder{
+  border-bottom: 2px solid #AEADEB;
+}
+
+.myborder2{
+  border-bottom: none;
+}
+
+@media screen and (max-width:500px) {
+  .myborder2{
+    border-bottom: 2px solid #AEADEB;
+}  
+.myborder{
+  border-bottom: none;
+  flex-direction: column;
+}
+}

@@ -2,8 +2,8 @@
 import axios from "axios";
 import Link from "next/link";
 import React, { useState, useCallback, useEffect } from "react";
-import { CgProfile } from "react-icons/cg";
-import { IoIosLogOut } from "react-icons/io";
+// import { CgProfile } from "react-icons/cg";
+// import { IoIosLogOut } from "react-icons/io";
 //ali
 
 import LogoutModal from './LogoutModal';

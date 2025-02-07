@@ -4,6 +4,7 @@ import DriverVehicleAllotment from "@models/DriverVehicleAllotment/DriverVehicle
 import DriverMoreInfo from "@models/DriverMoreInfo/DriverMoreInfo.model.js";
 import cloudinary from "@middlewares/cloudinary.js";
 import { NextResponse } from "next/server";
+import bycrypt from "bcryptjs";
 
 // PUT handler for updating driver details
 // export async function PUT(request, context) {
@@ -138,6 +139,16 @@ export async function PUT(request, context) {
     }
 
     const formDataObject = Object.fromEntries(data.entries());
+
+    const hashPassword = async (password) => {
+      const salt = await bycrypt.genSalt(10);
+      return await bycrypt.hash(password, salt);
+    };  
+
+    if (formDataObject.password) {
+      formDataObject.password = await hashPassword(formDataObject.password);
+    }
+
 
     // Fetch the driver document
     const driver = await Driver.findById(id);

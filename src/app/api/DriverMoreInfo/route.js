@@ -27,16 +27,29 @@ export const POST = catchAsyncErrors(async (request) => {
   } = data; // Extract the new variables
 
   console.log(data);
-
-  // Check for existing DriverMoreInfo by email
-  const existingDriverMoreInfo = await DriverMoreInfo.findOne({
-    startDate: startDate,
+  const normalizeDate = (date) => {
+    const normalizedDate = new Date(date);
+    normalizedDate.setHours(0, 0, 0, 0); // Set time to 00:00:00 to ignore time
+    return normalizedDate;
+  };
+  
+  // Check for existing DriverMoreInfo by driverId, vehicleId, and adminCompanyName
+  const findStartDate = await DriverMoreInfo.findOne({
+    driverId: driverId,
+    vehicleId: vehicleId,
+    adminCompanyName: adminCompanyName // You can also add other conditions like vehicleId or driverId
   });
-  if (existingDriverMoreInfo) {
-    return NextResponse.json({
-      error: "DriverMoreInfo with this startDate already exists",
-      status: 400,
-    });
+  if (findStartDate) {
+    const normalizedStartDate = normalizeDate(startDate); // Normalize the incoming date
+    const storedStartDate = normalizeDate(findStartDate?.startDate); // Normalize the stored date
+  
+    // If the dates (ignoring time) are the same, do not add the new record
+    if (normalizedStartDate.getTime() === storedStartDate.getTime()) {
+      return NextResponse.json({
+        error: "DriverMoreInfo with this startDate already exists (ignoring time)",
+        status: 400,
+      });
+    }
   }
 
   // Create and save the new DriverMoreInfo entry

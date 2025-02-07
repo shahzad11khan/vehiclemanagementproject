@@ -41,25 +41,25 @@ const Page = () => {
       {/* Conditional Content */}
       {role !== "superadmin" ? (
         <>
-          <div className="flex bg-transparent gap-7">
-            <div className="w-[170px] h-[170px] bg-transparent flex flex-col items-center justify-center gap-5 ">
+          <div className="flex flex-col sm:flex-row bg-transparent gap-16 sm:gap-7 font-sans font-bold sm:font-medium sm:text-2xl">
+            <div className=" w-28 h-28 sm:w-[170px] sm:h-[170px] bg-transparent flex flex-col items-center justify-center gap-5 ">
               <img src="/01.png" alt="Management Icon" className="w-52 h-52" />
               <Link href="/Dashboard/StartPage" className="w-full rounded-lg bg-[#EBEBEB] flex items-center justify-center">
-                <button className="w-44 h-11 text-xl font-medium">Management</button>
+                <button className=" py-1 sm:w-44 sm:h-11 sm:text-xl font-medium rounded-[8px]  hover:bg-blue-600 hover:text-white  transition duration-300">Management</button>
               </Link>
             </div>
 
-            <div className="w-[170px] h-[170px] bg-transparent flex flex-col items-center justify-center gap-5 ">
+            <div className=" w-28 h-28 sm:w-[170px] sm:h-[170px] bg-transparent flex flex-col items-center justify-center gap-5 ">
               <img src="/driverl.png" alt="Management Icon" className="w-full h-auto" />
               <Link href="/Dashboard/Driver/GetAllDrivers" className="w-full rounded-lg bg-[#EBEBEB] flex items-center justify-center">
-                <button className="w-44 h-11 text-xl font-medium">Drivers</button>
+                <button className=" py-1 sm:w-44 sm:h-11 sm:text-xl font-medium rounded-[8px]  hover:bg-blue-600 hover:text-white  transition duration-300">Drivers</button>
               </Link>
             </div>
 
-            <div className="w-[170px] h-[170px] bg-transparent flex flex-col items-center justify-center gap-2 ">
+            <div className=" w-28 h-28 sm:w-[170px] sm:h-[170px] bg-transparent flex flex-col items-center justify-center gap-2 ">
               <img src="/v.png" alt="Management Icon" className="w-full h-auto" />
               <Link href="/Dashboard/Vehicle/GetAllVehicle" className="w-full rounded-lg bg-[#EBEBEB] flex items-center justify-center">
-                <button className="w-44 h-11 text-xl font-medium">Vehicles</button>
+                <button className=" py-1 sm:w-44 sm:h-11 sm:text-xl font-medium rounded-[8px]  hover:bg-blue-600 hover:text-white  transition duration-300">Vehicles</button>
               </Link>
             </div>
           </div>

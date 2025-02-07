@@ -9,6 +9,8 @@ const driverSchema = new mongoose.Schema(
     tel1: { type: String },
     tel2: { type: String, default: "" },
     email: { type: String },
+    password: { type: String },
+    confirmPassword: { type: String },
     licenseNumber: { type: String, default: "" },
     niNumber: { type: String, default: "" },
     driverNumber: { type: String, default: "" },

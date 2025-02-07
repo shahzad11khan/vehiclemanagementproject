@@ -120,17 +120,16 @@ const Page = () => {
         <Sidebar />
         <main className="w-full mt-5 overflow-auto ">
         <h1 className="text-[#313342] font-medium font-sans text-2xl mb-5 underline decoration-[#AEADEB] underline-offset-8 w-full">Profile</h1>
-
-          <section className="w-[98%] bg-white">
+        <div className="py-5">
+          <section className="w-[98%] bg-white rounded-[10px]">
             <div className="flex flex-col justify-between w-full drop-shadow-custom4 rounded-[10px] ">
-              <div className="text-black text-center sm:text-start border-b-2 border-[#31334266] py-2 px-6 font-sans font-medium text-2xl">Information</div>
+              <div className="text-black text-center sm:text-start border-b-2 border-[#31334266] py-2 px-6 font-sans font-medium text-2xl rounded-t-[10px]">Information</div>
               <div className="bg-transparent  rounded-xl p-8 w-full mx-auto ">
                 {/* <h2 className="text-2xl font-semibold mb-6 text-center">
                   Edit User
                 </h2> */}
                 {loading?(<p>Loading...</p>):(
                 <form onSubmit={handleSubmit} className="w-full flex flex-col gap-10 sm:gap-20">
-                    {/* image */}
                   <div className=" flex justify-center">
                     <div className=" overflow-hidden relative flex items-center h-[140px] w-[140px] sm:h-[203px] sm:w-[203px] rounded-full border-2 ">
                     <input
@@ -169,7 +168,6 @@ const Page = () => {
                   </div> */}
                   </div>
                   
-                  {/* input fields */}
                   <div className="w-full  flex flex-col gap-5 sm:gap-10">
                   <div className="flex gap-6  flex-col md:flex-row">
                     <div className="w-full md:w-[50%]">
@@ -257,13 +255,7 @@ const Page = () => {
             </button>
                       </div>
                     </div>
-                    {/* <button
-                      type="button"
-                      className="border-2 h-10 mt-6 p-2 rounded-lg"
-                      onClick={() => setShowPassword(!showPassword)}
-                    >
-                      {showPassword ? "Hide" : "Show"}
-                    </button> */}
+                   
                   </div>
                   <div className=" w-full flex justify-center sm:justify-end ">
                     <div className=" w-full sm:w-auto flex gap-6 flex-col  sm:flex-row ">
@@ -286,6 +278,7 @@ const Page = () => {
               </div>
             </div>
           </section>
+          </div>
         </main>
       </div>
     </>

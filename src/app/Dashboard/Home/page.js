@@ -353,19 +353,21 @@ const options={
           {/* ali */}
           {
             (superadmin==="superadmin" && flag==="false")?(
-              <div className=" mt-5 overflow-auto w-[80%] xl:w-[85%]">
+            <div className=" mt-5 overflow-auto w-[80%] xl:w-[85%]">
           <h1 className="text-[#313342] font-medium text-2xl mb-5 underline decoration-[#AEADEB] underline-offset-8">Dashboard</h1>
           <div className="flex w-full gap-5 flex-wrap">
           <AdminDashBDoughnut link={"/Dashboard/Company/AllCompanies"} title="Companies" data={companiesData} option={options}  ></AdminDashBDoughnut>
           <AdminDashBDoughnut title="Cars" data={carsData} option={options}  ></AdminDashBDoughnut>
           </div>
           </div>
-            ):<main className="w-full mt-5">
+            ):
+            <main className=" mt-5 overflow-auto w-[80%] xl:w-[85%]">
+              <div className="w-full pr-4 flex flex-col gap-8">
             <HeroSection />
             <section className="grid grid-cols-4  min-w-full justify-between gap-2 text-center rounded-xl">
-              <div className="w-[268px] h-[132px] shadow-xl rounded-xl">
-                <div className="flex justify-between mt-3 px-3 py-1">
-                  <div className="font-medium">Total Cars</div>
+              <div className="w-[268px] h-[132px] drop-shadow-custom3 rounded-xl">
+                <div className="flex justify-between px-3 pt-4">
+                  <div className="font-medium text-base font-sans">Total Cars</div>
                   <div className="bg-[#DC4E8C] rounded-md h-[41px] w-[41px] flex justify-center text-center">
                     <div className="flex bg-transparent flex-col justify-center">
                       <img src="/vehicle.png" alt="vehicle" className="w-6" />
@@ -374,7 +376,7 @@ const options={
                 </div>
                 <div className="flex">
                   <div className="border-l-4 border-[#DC4E8C] h-12"></div>
-                  <h2 className="text-left pl-10 font-bold text-4xl">
+                  <h2 className="text-left px-2 font-bold text-[40px]">
                     {superadmin === "superadmin" && flag === "false" ? (
                       <span className="text-[#DC4E8C]">{TotalCar}</span>
                     ) : superadmin === "superadmin" && flag === "true" ? (
@@ -548,14 +550,14 @@ const options={
               </div>
             </section>
   
-            <section className="flex flex-col gap-4 min-w-full mt-4 ">
-              {/* Dropdown to switch between tabs above the table */}
-              {/* Table to display data */}
+            {/* <section className="flex flex-col gap-4 min-w-full mt-4 ">
+              Dropdown to switch between tabs above the table
+              Table to display data
               <div className="overflow-auto max-h-[400px] min-w-full">
                 <table className="min-w-full  border border-gray-200">
                   <thead>
                     <tr className="">
-                      {/* Header with Select Dropdown */}
+                      Header with Select Dropdown
                       <th className="py-2 px-4 border-b border-gray-300 text-white bg-custom-bg">
                         <div className="flex items-center justify-center gap-2 text-white bg-custom-bg">
                           <select
@@ -572,7 +574,7 @@ const options={
                         </div>
                       </th>
   
-                      {/* Table Headers */}
+                      Table Headers
                       <th className="py-2 px-4 border-b border-gray-300 text-center text-white bg-custom-bg">
                         R. Number
                       </th>
@@ -594,7 +596,7 @@ const options={
                     </tr>
                   </thead>
   
-                  {/* Table Body */}
+                  Table Body
                   <tbody>
                     {filteredData.map((row, index) => (
                       <tr
@@ -629,7 +631,7 @@ const options={
                             href={`${getPath()}${row.VehicleId}`}
                             className="bg-transparent"
                           >
-                            {/* <CiWarning className="text-red-500 text-lg cursor-pointer" /> */}
+                            <CiWarning className="text-red-500 text-lg cursor-pointer" />
                             <img src="/warning.png" alt="linkgoto" />
                           </Link>
                         </td>
@@ -638,7 +640,8 @@ const options={
                   </tbody>
                 </table>
               </div>
-            </section>
+            </section> */}
+            </div>
           </main>
           }
           

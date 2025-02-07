@@ -120,10 +120,10 @@ const Page = () => {
         <Sidebar />
         <main className="w-full mt-5 overflow-auto ">
         <h1 className="text-[#313342] font-medium font-sans text-2xl mb-5 underline decoration-[#AEADEB] underline-offset-8 w-full">Profile</h1>
-
-          <section className="w-[98%] bg-white">
+        <div className="py-5">
+          <section className="w-[98%] bg-white rounded-[10px]">
             <div className="flex flex-col justify-between w-full drop-shadow-custom4 rounded-[10px] ">
-              <div className="text-black text-center sm:text-start border-b-2 border-[#31334266] py-2 px-6 font-sans font-medium text-2xl">Information</div>
+              <div className="text-black text-center sm:text-start border-b-2 border-[#31334266] py-2 px-6 font-sans font-medium text-2xl rounded-t-[10px]">Information</div>
               <div className="bg-transparent  rounded-xl p-8 w-full mx-auto ">
                 {/* <h2 className="text-2xl font-semibold mb-6 text-center">
                   Edit User
@@ -278,6 +278,7 @@ const Page = () => {
               </div>
             </div>
           </section>
+          </div>
         </main>
       </div>
     </>

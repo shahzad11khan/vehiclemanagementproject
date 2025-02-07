@@ -1,4 +1,5 @@
 "use client";
+import AdminDashBDoughnut from "../Components/AdminDashBDoughnut.jsx"
 import React, {
   useState,
   // useCallback  ,
@@ -161,24 +162,45 @@ const HeroSection = () => {
     },
   };
 
-  const options = {
-    responsive: true,
+  
+
+  const carsDetails={
+    labels:["Hired Cars","Ready for Hiring","Cars in Repair"],
+    datasets:[
+        {
+        label:"Cars Status",
+        data:[5,20,10],
+        backgroundColor:["#7483F3","#404CA0","#27273AEB"],
+        borderWidth:1
+        },
+    ]
+};
+
+const Data={
+  labels:["Total Number of cars","Rented Cars"],
+    datasets:[
+        {
+        label:"Cars Status",
+        data:[20,10],
+        backgroundColor:["#27273AEB","#404CA0"],
+        borderWidth:1
+        },
+    ]
+};
+  
+const options={
+    responsive:true,
     plugins: {
-      legend: {
-        position: "top",
-      },
-      tooltip: {
-        enabled: true,
-      },
-    },
-  };
+        legend: {
+          display: false, // Hide the default legend
+        },
+}
+}
 
   return (
     <>
       {/* <h1 className="text-[#313342] font-medium text-2xl mb-5 underline">Dashboard</h1> */}
       <h1 className="text-[#313342] font-medium text-2xl mb-5 underline decoration-[#AEADEB] underline-offset-8">Dashboard</h1>
-
-      <div className="flex space-x-4 flex-col sm:flex-row pb-5 justify-evenly">
         {/* <div className="flex-1 p-4 rounded-md shadow-sm shadow-custom-blue h-[260px]">
         <h2 className="text-lg font-semibold mb-2">Data</h2>
         <ul className="ml-5 list-none">
@@ -212,7 +234,7 @@ const HeroSection = () => {
           </button>
         </ul>
       </div> */}
-        <div className="flex flex-col p-4 rounded-lg shadow-sm outline-none shadow-custom-blue w-[333px] h-[310px] ">
+        {/* <div className="flex flex-col p-4 rounded-lg shadow-sm outline-none shadow-custom-blue w-[333px] h-[310px] ">
           <h3 className="text-lg font-semibold mb-2">Car Details</h3>
           <div className="flex items-center justify-center mt-6">
             <div className="w-[156.01px] h-[156.28px] ">
@@ -220,57 +242,33 @@ const HeroSection = () => {
               <img src="/values.png" className="mt-2 h-[40px] w-[210px]" />
             </div>
           </div>
-        </div>
-
-
-        <div className="flex flex-col p-4 rounded-lg shadow-sm shadow-custom-blue w-[333px] h-[310px]">
-          <div className="flex justify-between mb-14">
-            <h3 className="text-lg font-semibold mb-2">Statistics</h3>
-            <select
-              value={timeRange}
-              onChange={(e) => setTimeRange(e.target.value)}
-              className="rounded-2xl px-2 text-xs outline-none bg-[#F8F8FF] w-[91px] h-[30px]"
-            >
-              <option value="weekly">Weekly</option>
-              <option value="monthly">Monthly</option>
-              <option value="yearly">Yearly</option>
-            </select>
-          </div>
-          <div className="flex items-center justify-center ">
-            <Bar data={chartData[timeRange]} options={options} />
-          </div>
-        </div>
-
-        <div className="flex flex-col p-4 rounded-lg shadow-sm shadow-custom-blue w-[333px] h-[310px] item ">
-          <h3 className="text-lg font-semibold mb-2">Data</h3>
-          <div className="flex items-center justify-center mt-6">
-            <div className=" flex items-center justify-center flex-col ">
-              <img src="/data.png" />
-              <div className="flex justify-center items-center rounded-md  my-3 w-full max-w-md mx-auto gap-10 mt-4">
-                {/* Total Number of Cars */}
-                <div className="flex justify-center gap-2 items-center">
-                  <div className="w-2 h-2 rounded-full bg-custom-bg flex items-center justify-center">
-                    {/* <span className="text-white text-lg font-bold">150</span> */}
+        </div> */}
+         <div className="flex w-full  gap-10 flex-wrap">
+                  <AdminDashBDoughnut  title="Car Details" data={carsDetails} option={options} extra={"Car Deatils"}  ></AdminDashBDoughnut>
+                <div className="flex flex-col h-[310px] sm:h-[250px] md:h-auto sm:max-w-[386px] max-w-full w-full drop-shadow-custom3 rounded-[10px] bg-white justify-between">
+                  <div className="flex justify-between py-2 sm:py-3 px-3 items-center rounded-[10px]">
+                      <h3 className="text-base sm:text-lg font-semibold">Statistics</h3>
+                      <select
+                        value={timeRange}
+                        onChange={(e) => setTimeRange(e.target.value)}
+                        className="rounded-2xl px-2 text-xs sm:text-sm outline-none bg-[#F8F8FF] w-[80px] sm:w-[91px] h-[28px] sm:h-[30px]"
+                      >
+                        <option value="weekly">Weekly</option>
+                        <option value="monthly">Monthly</option>
+                        <option value="yearly">Yearly</option>
+                      </select>
                   </div>
-                  <h3 className=" text-center text-xs text-gray-700">
-                    Total Number of Cars
-                  </h3>
+                  <div className="flex items-center justify-center px-2 sm:px-3 py-2 sm:py-3 rounded-[10px]">
+                      <Bar data={chartData[timeRange]} options={options} />
+                  </div>
                 </div>
 
-                {/* Rented Cars */}
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full bg-blue-800 flex items-center justify-center">
-                    {/* <span className="text-white text-lg font-bold">45</span> */}
+
+        <AdminDashBDoughnut title="Data" data={Data} option={options} extra={"Data"}  ></AdminDashBDoughnut>
                   </div>
-                  <h3 className=" text-center text-xs  text-gray-700">
-                    Rented Cars
-                  </h3>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+        
+
+        
     </>
   );
 };

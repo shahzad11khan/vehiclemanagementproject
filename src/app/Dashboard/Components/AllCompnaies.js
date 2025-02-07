@@ -134,7 +134,7 @@ const AllCompanies = () => {
   if (!chartData) return <p>Loading...</p>;
 
   return (
-    <div className=" overflow-y-auto overflow-x-hidden flex flex-col gap-10" style={{
+    <div className=" overflow-y-auto overflow-x-hidden flex flex-col gap-10 pr-4" style={{
       height:"calc(100vh - 90px)"
     }}>
       {/* <h1 className="text-2xl font-bold  mb-8 underline">
@@ -182,8 +182,9 @@ const AllCompanies = () => {
           />
         ))}
       </div> */}
-      <div className="w-full ">
-        <div className="  ">
+      {/* xyz */}
+      <div className="w-full py-5">
+        <div className="drop-shadow-custom4 ">
 
           {/* Add,search section */}
           
@@ -222,7 +223,7 @@ const AllCompanies = () => {
                   <img src="/search.svg" className="absolute left-3 top-2" ></img>
                   <input
                     type="text"
-                    placeholder="Search by email"
+                    placeholder="Search by email..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="border rounded-lg pl-10 sm:px-10 py-1 border-[#9E9E9E] text-[#9E9E9E]  focus:outline-none focus:ring focus:ring-indigo-200"
@@ -339,89 +340,96 @@ const AllCompanies = () => {
 
             {/* pagination */}
             <div className="flex justify-center py-5 font-montserrat font-medium text-[12px]">
-              <nav>
-                <ul className="flex items-center gap-3">
-                  {/* Previous Button */}
-                  <li>
-                    <button
-                      onClick={() => paginate(currentPage - 1)}
-                      disabled={currentPage === 1}
-                      className={`h-8 px-2 border rounded-lg ${
-                        currentPage === 1 ? "opacity-50 cursor-not-allowed" : "bg-white"
-                      }`}
-                    >
-                      Previous
-                    </button>
-                  </li>
+                  <nav>
+                    <ul className="flex items-center gap-3">
+                      {/* Previous Button */}
+                      <li>
+                        <button
+                          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                          disabled={currentPage === 1}
+                          className={`h-8 px-2 border rounded-lg ${
+                            currentPage === 1 ? "opacity-50 cursor-not-allowed" : "bg-white"
+                          }`}
+                        >
+                          Previous
+                        </button>
+                      </li>
 
-                  {/* Pagination Logic */}
-                  {totalPages > 1 && (
-                    <>
-                      {/* Case 1: If on the first page, show "1 ... last" */}
-                      {currentPage === 1 && (
+                      {/* Pagination Logic */}
+                      {totalPages > 1 && (
                         <>
-                          <li className="" >
-                            <button className="h-8 w-8 border rounded-lg bg-custom-bg text-white">
-                              1
-                            </button>
-                          </li>
-                          <li>
-                            <span className="px-2">...</span>
-                          </li>
-                          <li>
-                            <button onClick={() => paginate(totalPages)} className="h-8 w-8 border rounded-lg bg-white">
-                              {totalPages}
-                            </button>
-                          </li>
+                          {totalPages <= 3 ? (
+                            // Show all pages if total pages are 3 or fewer
+                            Array.from({ length: totalPages }, (_, index) => index + 1).map((page) => (
+                              <li key={page}>
+                                <button
+                                  onClick={() => setCurrentPage(page)}
+                                  className={`h-8 w-8 border rounded-lg ${
+                                    currentPage === page ? "bg-custom-bg text-white" : "bg-white"
+                                  }`}
+                                >
+                                  {page}
+                                </button>
+                              </li>
+                            ))
+                          ) : (
+                            // Handle cases where total pages > 3
+                            <>
+                              {currentPage === 1 && (
+                                <>
+                                  <li>
+                                    <button className="h-8 w-8 border rounded-lg bg-custom-bg text-white">1</button>
+                                  </li>
+                                  <li><span className="px-2">...</span></li>
+                                  <li>
+                                    <button onClick={() => setCurrentPage(totalPages)} className="h-8 w-8 border rounded-lg bg-white">
+                                      {totalPages}
+                                    </button>
+                                  </li>
+                                </>
+                              )}
+                              {currentPage > 1 && currentPage < totalPages && (
+                                <>
+                                  <li>
+                                    <button className="h-8 w-8 border rounded-lg bg-custom-bg text-white">
+                                      {currentPage}
+                                    </button>
+                                  </li>
+                                  <li><span className="px-2">...</span></li>
+                                  <li>
+                                    <button onClick={() => setCurrentPage(totalPages)} className="h-8 w-8 border rounded-lg bg-white">
+                                      {totalPages}
+                                    </button>
+                                  </li>
+                                </>
+                              )}
+                              {currentPage === totalPages && (
+                                <li>
+                                  <button className="h-8 w-8 border rounded-lg bg-custom-bg text-white">
+                                    {totalPages}
+                                  </button>
+                                </li>
+                              )}
+                            </>
+                          )}
                         </>
                       )}
 
-                      {/* Case 2: If in between, show "current ... last" */}
-                      {currentPage > 1 && currentPage < totalPages && (
-                        <>
-                          <li>
-                            <button className="h-8 w-8 border rounded-lg bg-custom-bg text-white">
-                              {currentPage}
-                            </button>
-                          </li>
-                          <li>
-                            <span className="px-2">...</span>
-                          </li>
-                          <li>
-                            <button onClick={() => paginate(totalPages)} className="h-8 w-8 border rounded-lg bg-white">
-                              {totalPages}
-                            </button>
-                          </li>
-                        </>
-                      )}
-
-                      {/* Case 3: If on the last page, show only "last" */}
-                      {currentPage === totalPages && (
-                        <li>
-                          <button className="h-8 w-8 border rounded-lg bg-custom-bg text-white">
-                            {totalPages}
-                          </button>
-                        </li>
-                      )}
-                    </>
-                  )}
-
-                  {/* Next Button */}
-                  <li>
-                    <button
-                      onClick={() => paginate(currentPage + 1)}
-                      disabled={currentPage === totalPages}
-                      className={`h-8 px-2 border rounded-lg ${
-                        currentPage === totalPages ? "opacity-50 cursor-not-allowed" : "bg-white"
-                      }`}
-                    >
-                      Next
-                    </button>
-                  </li>
-                </ul>
-              </nav>
-            </div>
-
+                      {/* Next Button */}
+                      <li>
+                        <button
+                          onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                          disabled={currentPage === totalPages}
+                          className={`h-8 px-2 border rounded-lg ${
+                            currentPage === totalPages ? "opacity-50 cursor-not-allowed" : "bg-white"
+                          }`}
+                        >
+                          Next
+                        </button>
+                      </li>
+                    </ul>
+                  </nav>
+                </div>
             {/* pagination ends here */}
 
 

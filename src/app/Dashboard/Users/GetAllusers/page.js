@@ -194,10 +194,11 @@ const Page = () => {
       <Header className="min-w-full" />
       <div className="flex gap-4">
         <Sidebar />
-        <div className="w-[80%] xl:w-[85%] h-screen flex flex-col gap-4 justify-start overflow-y-auto" style={{
+        <div className="w-[80%] xl:w-[85%] h-screen flex flex-col gap-4 justify-start overflow-y-auto pr-4" style={{
       height:"calc(100vh - 90px)"}}>
           <h1 className="text-[#313342] font-medium text-2xl py-5 underline decoration-[#AEADEB] underline-offset-8">Superadmin</h1>
-          <div className="">
+         <div className="py-5">
+          <div className="drop-shadow-custom4">
             {/* top */}
 
           
@@ -436,101 +437,102 @@ const Page = () => {
               </button>
             </div> */}
 
+                <div className="flex justify-center py-5 font-montserrat font-medium text-[12px]">
+                  <nav>
+                    <ul className="flex items-center gap-3">
+                      {/* Previous Button */}
+                      <li>
+                        <button
+                          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                          disabled={currentPage === 1}
+                          className={`h-8 px-2 border rounded-lg ${
+                            currentPage === 1 ? "opacity-50 cursor-not-allowed" : "bg-white"
+                          }`}
+                        >
+                          Previous
+                        </button>
+                      </li>
 
-              <div className="flex justify-center py-5 font-montserrat font-medium text-[12px]">
-                <nav>
-                  <ul className="flex items-center gap-3">
-                    {/* Previous Button */}
-                    <li>
-                      <button
-                        onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                        disabled={currentPage === 1}
-                        className={`h-8 px-2 border rounded-lg ${
-                          currentPage === 1 ? "opacity-50 cursor-not-allowed" : "bg-white"
-                        }`}
-                      >
-                        Previous
-                      </button>
-                    </li>
+                      {/* Pagination Logic */}
+                      {totalPages > 1 && (
+                        <>
+                          {totalPages <= 3 ? (
+                            // Show all pages if total pages are 3 or fewer
+                            Array.from({ length: totalPages }, (_, index) => index + 1).map((page) => (
+                              <li key={page}>
+                                <button
+                                  onClick={() => setCurrentPage(page)}
+                                  className={`h-8 w-8 border rounded-lg ${
+                                    currentPage === page ? "bg-custom-bg text-white" : "bg-white"
+                                  }`}
+                                >
+                                  {page}
+                                </button>
+                              </li>
+                            ))
+                          ) : (
+                            // Handle cases where total pages > 3
+                            <>
+                              {currentPage === 1 && (
+                                <>
+                                  <li>
+                                    <button className="h-8 w-8 border rounded-lg bg-custom-bg text-white">1</button>
+                                  </li>
+                                  <li><span className="px-2">...</span></li>
+                                  <li>
+                                    <button onClick={() => setCurrentPage(totalPages)} className="h-8 w-8 border rounded-lg bg-white">
+                                      {totalPages}
+                                    </button>
+                                  </li>
+                                </>
+                              )}
+                              {currentPage > 1 && currentPage < totalPages && (
+                                <>
+                                  <li>
+                                    <button className="h-8 w-8 border rounded-lg bg-custom-bg text-white">
+                                      {currentPage}
+                                    </button>
+                                  </li>
+                                  <li><span className="px-2">...</span></li>
+                                  <li>
+                                    <button onClick={() => setCurrentPage(totalPages)} className="h-8 w-8 border rounded-lg bg-white">
+                                      {totalPages}
+                                    </button>
+                                  </li>
+                                </>
+                              )}
+                              {currentPage === totalPages && (
+                                <li>
+                                  <button className="h-8 w-8 border rounded-lg bg-custom-bg text-white">
+                                    {totalPages}
+                                  </button>
+                                </li>
+                              )}
+                            </>
+                          )}
+                        </>
+                      )}
 
-                    {/* Pagination Logic */}
-                    {totalPages > 1 && (
-                      <>
-                        {/* Case 1: If on the first page, show "1 ... last" */}
-                        {currentPage === 1 && (
-                          <>
-                            <li>
-                              <button className="h-8 w-8 border rounded-lg bg-custom-bg text-white">
-                                1
-                              </button>
-                            </li>
-                            <li>
-                              <span className="px-2">...</span>
-                            </li>
-                            <li>
-                              <button
-                                onClick={() => setCurrentPage(totalPages)}
-                                className="h-8 w-8 border rounded-lg bg-white"
-                              >
-                                {totalPages}
-                              </button>
-                            </li>
-                          </>
-                        )}
-
-                        {/* Case 2: If in between, show "current ... last" */}
-                        {currentPage > 1 && currentPage < totalPages && (
-                          <>
-                            <li>
-                              <button className="h-8 w-8 border rounded-lg bg-custom-bg text-white">
-                                {currentPage}
-                              </button>
-                            </li>
-                            <li>
-                              <span className="px-2">...</span>
-                            </li>
-                            <li>
-                              <button
-                                onClick={() => setCurrentPage(totalPages)}
-                                className="h-8 w-8 border rounded-lg bg-white"
-                              >
-                                {totalPages}
-                              </button>
-                            </li>
-                          </>
-                        )}
-
-                        {/* Case 3: If on the last page, show only "last" */}
-                        {currentPage === totalPages && (
-                          <li>
-                            <button className="h-8 w-8 border rounded-lg bg-custom-bg text-white">
-                              {totalPages}
-                            </button>
-                          </li>
-                        )}
-                      </>
-                    )}
-
-                    {/* Next Button */}
-                    <li>
-                      <button
-                        onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-                        disabled={currentPage === totalPages}
-                        className={`h-8 px-2 border rounded-lg ${
-                          currentPage === totalPages ? "opacity-50 cursor-not-allowed" : "bg-white"
-                        }`}
-                      >
-                        Next
-                      </button>
-                    </li>
-                  </ul>
-                </nav>
-              </div>
-
+                      {/* Next Button */}
+                      <li>
+                        <button
+                          onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                          disabled={currentPage === totalPages}
+                          className={`h-8 px-2 border rounded-lg ${
+                            currentPage === totalPages ? "opacity-50 cursor-not-allowed" : "bg-white"
+                          }`}
+                        >
+                          Next
+                        </button>
+                      </li>
+                    </ul>
+                  </nav>
+                </div>
 
 
             {/* pagination ends here */}
 
+          </div>
           </div>
         </div>
       </div>

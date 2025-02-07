@@ -182,6 +182,7 @@ const AllCompanies = () => {
           />
         ))}
       </div> */}
+      {/* xyz */}
       <div className="w-full py-5">
         <div className="drop-shadow-custom4 ">
 

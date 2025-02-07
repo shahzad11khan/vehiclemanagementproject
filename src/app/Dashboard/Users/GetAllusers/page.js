@@ -237,7 +237,7 @@ const Page = () => {
                           <img src="/search.svg" className="absolute left-3 top-2" alt="Search Icon" />
                           <input
                             type="text"
-                            placeholder="Search by email"
+                            placeholder="Search by email..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             className="border rounded-lg pl-10 sm:px-10 py-1 border-[#9E9E9E] text-[#9E9E9E] focus:outline-none focus:ring focus:ring-indigo-200"
@@ -251,7 +251,7 @@ const Page = () => {
                       {/* <BackButton /> */}
                       <button
                         onClick={OpenUserModle}
-                        className="w-[125px] font-sans font-bold text-xs bg-[#313342] text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500 px-3 flex py-[10px] gap-2"
+                        className="w-[102px] font-sans font-bold text-xs bg-[#313342] text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500 px-3 flex py-[10px] gap-2"
                       >
                         <img src="/plus.svg" alt="Add User" />
                         Add User

@@ -82,33 +82,50 @@ const AddSignatureType = ({ isOpen, onClose, fetchData }) => {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg max-w-xl max-h-screen overflow-y-auto">
-        <h2 className="text-3xl font-semibold text-center mb-8">
+      <div className="bg-white p-12 rounded-xl shadow-lg max-w-xl max-h-screen overflow-y-auto">
+        {/* <h2 className="text-3xl font-semibold text-center mb-8">
           Add Signature
-        </h2>
+        </h2> */}
+
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-2xl font-bold">
+            Add Signature
+          </h2>
+
+          <img src="/crossIcon.svg" className="cursor-pointer" onClick={() => {
+            onClose();
+            // setStep(1);
+          }} />
+        </div>
 
         <form onSubmit={handleSubmit} className="overflow-y-auto">
           <div className="grid grid-cols-2">
             {/* Name */}
             <div className="col-span-2">
-            <div className="flex gap-1">
-                    <label
-                      htmlFor="name"
-                      className="text-sm font-medium text-gray-700"
-                    >
-                      Name:
-                    </label>
+              <div className="flex gap-1">
+                {/* <label
+                  htmlFor="name"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Name:
+                </label>
 
-                    <span className="text-red-600">*</span>
-                  </div>
+                <span className="text-red-600">*</span> */}
+                <label
+                  htmlFor="name"
+                  className="text-[10px]"
+                >
+                  Name <span className="text-red-600">*</span>
+                </label>
+              </div>
               <input
                 type="text"
                 id="name"
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                required
+                className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px] shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                required placeholder="Name"
               />
             </div>
 
@@ -116,17 +133,17 @@ const AddSignatureType = ({ isOpen, onClose, fetchData }) => {
             <div className="col-span-2">
               <label
                 htmlFor="description"
-                className="text-sm font-medium text-gray-700"
+                className="text-[10px]"
               >
-                Description:
+                Description
               </label>
               <textarea
                 id="description"
                 name="description"
                 value={formData.description}
                 onChange={handleChange}
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                rows="3"
+                className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px] shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                rows="2"
               ></textarea>
             </div>
 
@@ -148,51 +165,15 @@ const AddSignatureType = ({ isOpen, onClose, fetchData }) => {
               </label>
             </div> */}
 
-            <div>
-              <label className="block font-medium mb-2">Is Active:</label>
-              <div className="flex gap-4">
-                <label className="flex items-center gap-2">
-                  <input
-                    type="radio"
-                    name="isActive"
-                    value="true"
-                    checked={formData.isActive === true}
-                    onChange={() =>
-                      handleChange({
-                        target: { name: "isActive", value: true },
-                      })
-                    }
-                    className="accent-green-500"
-                  />
-                  <span>Active</span>
-                </label>
 
-                {/* No Option */}
-                <label className="flex items-center gap-2">
-                  <input
-                    type="radio"
-                    name="isActive"
-                    value="false"
-                    checked={formData.isActive === false}
-                    onChange={() =>
-                      handleChange({
-                        target: { name: "isActive", value: false },
-                      })
-                    }
-                    className="accent-red-500"
-                  />
-                  <span>InActive</span>
-                </label>
-              </div>
-            </div>
-
+            <h2 className="font-bold mb-0">Image Details</h2>
             {/* Image Name */}
             <div className="col-span-2">
               <label
                 htmlFor="imageName"
-                className="text-sm font-medium text-gray-700"
+                className="text-[10px]"
               >
-                Image Name:
+                Image Name
               </label>
               <input
                 type="text"
@@ -201,6 +182,7 @@ const AddSignatureType = ({ isOpen, onClose, fetchData }) => {
                 value={formData.imageName}
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                placeholder="Image name "
               />
             </div>
 
@@ -220,26 +202,64 @@ const AddSignatureType = ({ isOpen, onClose, fetchData }) => {
                 className="mt-1 block w-full border border-gray-300 rounded-lg shadow-sm"
                 accept=".jpg, .jpeg, .gif, .png"
               />
-              <p className="mt-2 text-sm text-gray-500">
+              {/* <p className="mt-2 text-sm text-gray-500">
                 Supported file formats are jpg, jpeg, gif, png. File size should
                 be less than 500kb. Preferred size of an image is Unlimited x
                 Unlimited (aspect ratio 1:1).
-              </p>
+              </p> */}
+            </div>
+
+            <div>
+              <label className="mb-2 text-[10px]">Status</label>
+              <div className="flex gap-4">
+                <label className="flex items-center gap-2">
+                  <input
+                    type="radio"
+                    name="isActive"
+                    value="true"
+                    checked={formData.isActive === true}
+                    onChange={() =>
+                      handleChange({
+                        target: { name: "isActive", value: true },
+                      })
+                    }
+                    className="accent-green-500"
+                  />
+                  <span className="text-xs">Active</span>
+                </label>
+
+                {/* No Option */}
+                <label className="flex items-center gap-2">
+                  <input
+                    type="radio"
+                    name="isActive"
+                    value="false"
+                    checked={formData.isActive === false}
+                    onChange={() =>
+                      handleChange({
+                        target: { name: "isActive", value: false },
+                      })
+                    }
+                    className="accent-red-500"
+                  />
+                  <span className="text-xs">InActive</span>
+                </label>
+              </div>
             </div>
           </div>
 
           {/* Button Group */}
-          <div className="flex gap-4 justify-center">
+          <div className="flex gap-[10px] justify-end">
             <button
               type="button"
               onClick={onClose}
-              className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+              className="px-6 py-2 ml-2 text-custom-bg rounded-[4px] text-xs font-bold border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
             >
-              Close
+              Cancel
             </button>
             <button
               type="submit"
-              className="px-6 py-2 bg-custom-bg text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+              className="px-6 py-2 bg-custom-bg text-white rounded-[4px] text-xs font-bold hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
             >
               Submit
             </button>

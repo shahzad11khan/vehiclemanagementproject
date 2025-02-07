@@ -133,7 +133,7 @@ const UpdateManufacturerModel = ({
             Edit Manufacturer
           </h2>
 
-          <img src="/crossIcon.svg" onClick={() => {
+          <img src="/crossIcon.svg" className="cursor-pointer" onClick={() => {
             onClose();
 
           }} />
@@ -267,7 +267,6 @@ const UpdateManufacturerModel = ({
             </button>
             <button
               type="submit"
-
               className="px-6 py-2 bg-custom-bg text-white text-xs font-bold rounded-[4px] hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
               disabled={loading}
             >

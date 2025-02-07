@@ -75,7 +75,7 @@ const AddTypeModel = ({ isOpen, onClose, fetchData }) => {
             Add Body Type
           </h2>
 
-          <img src="/crossIcon.svg" onClick={() => {
+          <img src="/crossIcon.svg" className="cursor-pointer" onClick={() => {
             onClose();
 
           }} />

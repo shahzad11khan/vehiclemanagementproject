@@ -103,7 +103,7 @@ const AddManufacturerModel = ({ isOpen, onClose, fetchData }) => {
             Add Manufacturer
           </h2>
 
-          <img src="/crossIcon.svg" onClick={() => {
+          <img src="/crossIcon.svg" className="cursor-pointer" onClick={() => {
             onClose();
 
           }} />

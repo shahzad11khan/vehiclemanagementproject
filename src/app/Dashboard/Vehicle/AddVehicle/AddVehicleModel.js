@@ -1,5 +1,5 @@
 "use client";
-import { API_URL_Vehicle, API_URL_VehicleMOT,API_URL_VehicleRoadTex,API_URL_VehicleService } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
+import { API_URL_Vehicle, API_URL_VehicleMOT, API_URL_VehicleRoadTex, API_URL_VehicleService } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import axios from "axios";
 import { toast } from "react-toastify";
 import Select from "react-select";
@@ -22,8 +22,8 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
   // const [selectedSite, setSelectedSite] = useState("");
   const [maintenance, setMaintenance] = useState(false);
   const [selfFitSetting, setSelfFitSetting] = useState(false);
-  const [fileInputs, setFileInputs] = useState([]); 
-  const [files, setFiles] = useState([]); 
+  const [fileInputs, setFileInputs] = useState([]);
+  const [files, setFiles] = useState([]);
   const [previews, setPreviews] = useState([]);
   const nextStep = () => setStep(step + 1);
   const prevStep = () => setStep(step - 1);
@@ -140,7 +140,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
   ];
 
   const areFieldsFilled = (fields) =>
-   fields.every((field) => vehicleData[field] !== "");
+    fields.every((field) => vehicleData[field] !== "");
   const isNextDisabled1st = !areFieldsFilled(pageonerequiredfeilds);
   const isNextDisabled2nd = !areFieldsFilled(pagetworequiredfeilds);
   const isNextDisabled5th = !areFieldsFilled(pagefiverequiredfeilds);
@@ -170,42 +170,42 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
           storedSuperadmin === "superadmin"
             ? localAuthData.Result
             : localAuthData.Result.filter(
-                (localAuth) =>
-                  localAuth.adminCompanyName === currentCompanyName ||
-                  localAuth.adminCompanyName === "superadmin"
-              );
+              (localAuth) =>
+                localAuth.adminCompanyName === currentCompanyName ||
+                localAuth.adminCompanyName === "superadmin"
+            );
         const filteredManufacturer =
           storedSuperadmin === "superadmin"
             ? manufacturerData.Result
             : manufacturerData.Result.filter(
-                (manufacturer) =>
-                  manufacturer.adminCompanyName === currentCompanyName ||
-                  manufacturer.adminCompanyName === "superadmin"
-              );
+              (manufacturer) =>
+                manufacturer.adminCompanyName === currentCompanyName ||
+                manufacturer.adminCompanyName === "superadmin"
+            );
         const filteredTransmission =
           storedSuperadmin === "superadmin"
             ? transmissionData.Result
             : transmissionData.Result.filter(
-                (transmission) =>
-                  transmission.adminCompanyName === currentCompanyName ||
-                  transmission.adminCompanyName === "superadmin"
-              );
+              (transmission) =>
+                transmission.adminCompanyName === currentCompanyName ||
+                transmission.adminCompanyName === "superadmin"
+            );
         const filteredType =
           storedSuperadmin === "superadmin"
             ? typeData.Result
             : typeData.Result.filter(
-                (type) =>
-                  type.adminCompanyName === currentCompanyName ||
-                  type.adminCompanyName === "superadmin"
-              );
+              (type) =>
+                type.adminCompanyName === currentCompanyName ||
+                type.adminCompanyName === "superadmin"
+            );
         const filteredFuelType =
           storedSuperadmin === "superadmin"
             ? fueltypeData.Result
             : fueltypeData.Result.filter(
-                (fueltype) =>
-                  fueltype.adminCompanyName === currentCompanyName ||
-                  fueltype.adminCompanyName === "superadmin"
-              );
+              (fueltype) =>
+                fueltype.adminCompanyName === currentCompanyName ||
+                fueltype.adminCompanyName === "superadmin"
+            );
 
         setLocal(filteredLocalAuth);
         // console.log(filteredManufacturer);
@@ -236,7 +236,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
       //     [name]: selectedValues,
       //   };
       // }
-     
+
       // Handle file inputs
       if (type === "file") {
         return {
@@ -408,71 +408,71 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
       });
 
       // console.log(response.data.vehicle);
-      
-      
+
+
       if (response.data.success) {
         toast.success(response.data.message);
         try {
-        const vehicleData = response.data.vehicle;
+          const vehicleData = response.data.vehicle;
 
-        if (vehicleData.motDueDate) {
-          await sendMotData({
-            VehicleName: vehicleData.model,
-            registrationNumber: vehicleData.registrationNumber,
-            VehicleId: vehicleData._id,
-            motCurrentDate: "",
-            motDueDate: vehicleData.motDueDate,
-            motCycle: vehicleData.motCycle,
-            motStatus: "done",
-            VehicleStatus: vehicleData.isActive,
-            asignto: "N/A",
-            motPending_Done: "0",
-            adminCreatedBy: "",
-            adminCompanyName: vehicleData.adminCompanyName,
-            adminCompanyId: "",
-          });
-        }
+          if (vehicleData.motDueDate) {
+            await sendMotData({
+              VehicleName: vehicleData.model,
+              registrationNumber: vehicleData.registrationNumber,
+              VehicleId: vehicleData._id,
+              motCurrentDate: "",
+              motDueDate: vehicleData.motDueDate,
+              motCycle: vehicleData.motCycle,
+              motStatus: "done",
+              VehicleStatus: vehicleData.isActive,
+              asignto: "N/A",
+              motPending_Done: "0",
+              adminCreatedBy: "",
+              adminCompanyName: vehicleData.adminCompanyName,
+              adminCompanyId: "",
+            });
+          }
 
-        if (vehicleData.nextServiceDate && vehicleData.nextServiceMiles) {
-          await sendServiceData({
-            VehicleName: vehicleData.model,
-            registrationNumber: vehicleData.registrationNumber,
-            VehicleId: vehicleData._id,
-            serviceCurrentDate: "",
-            serviceDueDate: vehicleData.nextServiceDate,
-            serviceStatus: "done",
-            VehicleStatus: vehicleData.isActive,
-            servicemailes: vehicleData.nextServiceMiles,
-            asignto: "N/A",
-            servicePending_Done: "0",
-            adminCreatedBy: "",
-            adminCompanyName: vehicleData.adminCompanyName,
-            adminCompanyId: "",
-          });
-        }
+          if (vehicleData.nextServiceDate && vehicleData.nextServiceMiles) {
+            await sendServiceData({
+              VehicleName: vehicleData.model,
+              registrationNumber: vehicleData.registrationNumber,
+              VehicleId: vehicleData._id,
+              serviceCurrentDate: "",
+              serviceDueDate: vehicleData.nextServiceDate,
+              serviceStatus: "done",
+              VehicleStatus: vehicleData.isActive,
+              servicemailes: vehicleData.nextServiceMiles,
+              asignto: "N/A",
+              servicePending_Done: "0",
+              adminCreatedBy: "",
+              adminCompanyName: vehicleData.adminCompanyName,
+              adminCompanyId: "",
+            });
+          }
 
-        if (
-          vehicleData.roadTaxDate &&
-          vehicleData.roadTaxCycle &&
-          vehicleData.roadTaxCost
-        ) {
-          await sendRoadTaxData({
-            VehicleName: vehicleData.model,
-            registrationNumber: vehicleData.registrationNumber,
-            VehicleId: vehicleData._id,
-            roadtexCurrentDate: "",
-            roadtexDueDate: vehicleData.roadTaxDate,
-            roadtexCycle: vehicleData.roadTaxCycle,
-            VehicleStatus: vehicleData.roadTaxCost,
-            roadtexStatus: "done",
-            VehicleStatus: vehicleData.isActive,
-            asignto: "N/A",
-            roadtexPending_Done: "0",
-            adminCreatedBy: "",
-            adminCompanyName: vehicleData.adminCompanyName,
-            adminCompanyId: "",
-          });
-        }
+          if (
+            vehicleData.roadTaxDate &&
+            vehicleData.roadTaxCycle &&
+            vehicleData.roadTaxCost
+          ) {
+            await sendRoadTaxData({
+              VehicleName: vehicleData.model,
+              registrationNumber: vehicleData.registrationNumber,
+              VehicleId: vehicleData._id,
+              roadtexCurrentDate: "",
+              roadtexDueDate: vehicleData.roadTaxDate,
+              roadtexCycle: vehicleData.roadTaxCycle,
+              VehicleStatus: vehicleData.roadTaxCost,
+              roadtexStatus: "done",
+              VehicleStatus: vehicleData.isActive,
+              asignto: "N/A",
+              roadtexPending_Done: "0",
+              adminCreatedBy: "",
+              adminCompanyName: vehicleData.adminCompanyName,
+              adminCompanyId: "",
+            });
+          }
         } catch (error) {
           console.error("Error sending data:", error);
           toast.error("Failed to send data");
@@ -493,34 +493,34 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
 
 
   // Function to send MOT Data
-const sendMotData = async (motData) => {
-  try {
-    const res = await axios.post(API_URL_VehicleMOT, motData);
-    console.log("MOT Data sent successfully:", res.data);
-  } catch (error) {
-    console.error("Failed to send MOT data:", error);
-  }
-};
+  const sendMotData = async (motData) => {
+    try {
+      const res = await axios.post(API_URL_VehicleMOT, motData);
+      console.log("MOT Data sent successfully:", res.data);
+    } catch (error) {
+      console.error("Failed to send MOT data:", error);
+    }
+  };
 
-// Function to send Service Data
-const sendServiceData = async (serviceData) => {
-  try {
-    const res = await axios.post(API_URL_VehicleService, serviceData);
-    console.log("Service Data sent successfully:", res.data);
-  } catch (error) {
-    console.error("Failed to send Service data:", error);
-  }
-};
+  // Function to send Service Data
+  const sendServiceData = async (serviceData) => {
+    try {
+      const res = await axios.post(API_URL_VehicleService, serviceData);
+      console.log("Service Data sent successfully:", res.data);
+    } catch (error) {
+      console.error("Failed to send Service data:", error);
+    }
+  };
 
-// Function to send Road Tax Data
-const sendRoadTaxData = async (roadTaxData) => {
-  try {
-    const res = await axios.post(API_URL_VehicleRoadTex, roadTaxData);
-    console.log("Road Tax Data sent successfully:", res.data);
-  } catch (error) {
-    console.error("Failed to send Road Tax data:", error);
-  }
-};
+  // Function to send Road Tax Data
+  const sendRoadTaxData = async (roadTaxData) => {
+    try {
+      const res = await axios.post(API_URL_VehicleRoadTex, roadTaxData);
+      console.log("Road Tax Data sent successfully:", res.data);
+    } catch (error) {
+      console.error("Failed to send Road Tax data:", error);
+    }
+  };
 
   const resetForm = () => {
     setStep(1);
@@ -704,24 +704,40 @@ const sendRoadTaxData = async (roadTaxData) => {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50 ">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-4xl overflow-y-auto max-h-screen">
+      <div className="bg-white p-12 rounded-xl shadow-lg w-full max-w-4xl overflow-y-auto max-h-screen">
         <form onSubmit={handleSubmit} className="max-w-4xl mx-auto p-6 ">
           {step === 1 && (
             <>
-              <h2 className="text-2xl font-bold mb-6">Vehicle Form</h2>
+              {/* <h2 className="text-2xl font-bold mb-6">Vehicle Form</h2> */}
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-2xl font-bold">
+                  Vehicle Form
+                </h2>
 
-              <div className="grid grid-cols-2 md:grid-cols-2 gap-2">
+                <img src="/crossIcon.svg" className="cursor-pointer" onClick={() => {
+                  onClose();
+                  setStep(1);
+                }} />
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
                 <div>
                   <div className="flex gap-1">
-                    <label className="block font-semibold">Manufacturer</label>
-                    <span className="text-red-600">*</span>
+                    {/* <label className="block font-semibold">Manufacturer</label>
+                    <span className="text-red-600">*</span> */}
+                    <label
+                      htmlFor="manufacturer"
+                      className="text-[10px]"
+                    >
+                      Manufacturer <span className="text-red-600">*</span>
+                    </label>
                   </div>
                   <select
                     id="manufacturer"
                     name="manufacturer"
                     value={vehicleData.manufacturer}
                     onChange={handleChange}
-                    className="w-full p-2 border border-gray-300 rounded"
+                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
                     required
                   >
                     <option value="">Select Manufacturer</option>
@@ -734,45 +750,63 @@ const sendRoadTaxData = async (roadTaxData) => {
                 </div>
                 <div>
                   <div className="flex gap-1">
-                    <label className="block font-semibold">Model</label>
-                    <span className="text-red-600">*</span>
+                    {/* <label className="block font-semibold">Model</label>
+                    <span className="text-red-600">*</span> */}
+                    <label
+                      htmlFor="model"
+                      className="text-[10px]"
+                    >
+                      Model <span className="text-red-600">*</span>
+                    </label>
                   </div>
                   <input
                     type="text"
                     name="model"
                     value={vehicleData.model}
                     onChange={handleChange}
-                    className="w-full p-2 border border-gray-300 rounded"
+                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
                     placeholder="e.g., Camry, Mustang"
                     required
                   />
                 </div>
                 <div>
                   <div className="flex gap-1">
-                    <label className="block font-semibold">Year</label>
-                    <span className="text-red-600">*</span>
+                    {/* <label className="block font-semibold">Year</label>
+                    <span className="text-red-600">*</span> */}
+                    <label
+                      htmlFor="year"
+                      className="text-[10px]"
+                    >
+                      Year <span className="text-red-600">*</span>
+                    </label>
                   </div>
                   <input
                     type="number"
                     name="year"
                     value={vehicleData.year}
                     onChange={handleChange}
-                    className="w-full p-2 border border-gray-300 rounded"
+                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
                     placeholder="e.g., 2024"
                     required
                   />
                 </div>
                 <div className="">
                   <div className="flex gap-1">
-                    <label className="block font-semibold">Body Type</label>
-                    <span className="text-red-600">*</span>
+                    {/* <label className="block font-semibold">Body Type</label>
+                    <span className="text-red-600">*</span> */}
+                    <label
+                      htmlFor="body_Type"
+                      className="text-[10px]"
+                    >
+                      Body Type <span className="text-red-600">*</span>
+                    </label>
                   </div>
 
                   <select
                     name="type"
                     value={vehicleData.type}
                     onChange={handleChange}
-                    className="w-full p-2 border border-gray-300 rounded"
+                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
                     required
                   >
                     <option value="" disabled>
@@ -787,32 +821,44 @@ const sendRoadTaxData = async (roadTaxData) => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 md:grid-cols-2 gap-2 mt-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
                 <div>
                   <div className="flex gap-1">
-                    <label className="block font-semibold">Engine Type</label>
-                    <span className="text-red-600">*</span>
+                    {/* <label className="block font-semibold">Engine Type</label>
+                    <span className="text-red-600">*</span> */}
+                    <label
+                      htmlFor="body_Type"
+                      className="text-[10px]"
+                    >
+                      Engine Type <span className="text-red-600">*</span>
+                    </label>
                   </div>
                   <input
                     type="text"
                     name="engineType"
                     value={vehicleData.engineType}
                     onChange={handleChange}
-                    className="w-full p-2 border border-gray-300 rounded"
+                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
                     placeholder="e.g., 2.5L 4-Cylinder"
                     required
                   />
                 </div>
                 <div className="">
                   <div className="flex gap-1">
-                    <label className="block font-semibold">Fuel Type</label>
-                    <span className="text-red-600">*</span>
+                    {/* <label className="block font-semibold">Fuel Type</label>
+                    <span className="text-red-600">*</span> */}
+                    <label
+                      htmlFor="Fuel_Type"
+                      className="text-[10px]"
+                    >
+                      Fuel Type <span className="text-red-600">*</span>
+                    </label>
                   </div>
                   <select
                     name="fuelType"
                     value={vehicleData.fuelType}
                     onChange={handleChange}
-                    className="w-full p-2 border border-gray-300 rounded"
+                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
                     required
                   >
                     <option value="" disabled>
@@ -827,17 +873,23 @@ const sendRoadTaxData = async (roadTaxData) => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-2 mt-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
                 <div>
                   <div className="flex gap-1">
-                    <label className="block font-semibold">Transmission</label>
-                    <span className="text-red-600">*</span>
+                    {/* <label className="block font-semibold">Transmission</label>
+                    <span className="text-red-600">*</span> */}
+                    <label
+                      // htmlFor="Fuel_Type"
+                      className="text-[10px]"
+                    >
+                      Transmission <span className="text-red-600">*</span>
+                    </label>
                   </div>
                   <select
                     name="transmission"
                     value={vehicleData.transmission}
                     onChange={handleChange}
-                    className="w-full p-2 border border-gray-300 rounded"
+                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
                     placeholder="e.g., Automatic"
                     required
                   >
@@ -853,14 +905,20 @@ const sendRoadTaxData = async (roadTaxData) => {
                 </div>
                 <div className="">
                   <div className="flex gap-1">
-                    <label className="block font-semibold">Drivetrain</label>
-                    <span className="text-red-600">*</span>
+                    {/* <label className="block font-semibold">Drivetrain</label>
+                    <span className="text-red-600">*</span> */}
+                    <label
+                      // htmlFor="Fuel_Type"
+                      className="text-[10px]"
+                    >
+                      Drivetrain <span className="text-red-600">*</span>
+                    </label>
                   </div>
                   <select
                     name="drivetrain"
                     value={vehicleData.drivetrain}
                     onChange={handleChange}
-                    className="w-full p-2 border border-gray-300 rounded"
+                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
                     required
                   >
                     <option value="" disabled>
@@ -874,39 +932,51 @@ const sendRoadTaxData = async (roadTaxData) => {
                 </div>
                 <div>
                   <div className="flex gap-1">
-                    <label className="block font-semibold">
+                    {/* <label className="block font-semibold">
                       Exterior Color
                     </label>
-                    <span className="text-red-600">*</span>
+                    <span className="text-red-600">*</span> */}
+                    <label
+                      // htmlFor="Fuel_Type"
+                      className="text-[10px]"
+                    >
+                      Exterior Color <span className="text-red-600">*</span>
+                    </label>
                   </div>
                   <input
                     type="text"
                     name="exteriorColor"
                     value={vehicleData.exteriorColor}
                     onChange={handleChange}
-                    className="w-full p-2 border border-gray-300 rounded"
+                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
                     placeholder="e.g., Red, Blue"
                     required
                   />
                 </div>
                 <div>
                   <div className="flex gap-1">
-                    <label className="block font-semibold">
+                    {/* <label className="block font-semibold">
                       Interior Color
                     </label>
-                    <span className="text-red-600">*</span>
+                    <span className="text-red-600">*</span> */}
+                    <label
+                      // htmlFor="Fuel_Type"
+                      className="text-[10px]"
+                    >
+                      Interior Color <span className="text-red-600">*</span>
+                    </label>
                   </div>
                   <input
                     type="text"
                     name="interiorColor"
                     value={vehicleData.interiorColor}
                     onChange={handleChange}
-                    className="w-full p-2 border border-gray-300 rounded"
+                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
                     placeholder="e.g., Black, Beige"
                     required
                   />
                 </div>
-              {/* <div>
+                {/* <div>
                   <div className="flex gap-1">
                     <label className=" font-semibold">Editable Color</label>
                   </div>
@@ -921,10 +991,10 @@ const sendRoadTaxData = async (roadTaxData) => {
                 </div> */}
               </div>
 
-              <div className="grid grid-cols-2 md:grid-cols-2 gap-2 mt-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
                 <div>
                   <div className="flex gap-1">
-                    <label className="block font-semibold">Height</label>
+                    <label className="text-[10px]">Height</label>
                   </div>
                   <input
                     type="number"
@@ -932,32 +1002,32 @@ const sendRoadTaxData = async (roadTaxData) => {
                     value={vehicleData.height}
                     onChange={handleChange}
                     placeholder="0.001"
-                    className="w-full p-2 border border-gray-300 rounded"
+                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
                   />
                 </div>
                 <div>
                   <div className="flex gap-1">
-                    <label className="block font-semibold">Width</label>
+                    <label className="text-[10px]">Width</label>
                   </div>
                   <input
                     type="number"
                     name="width"
                     value={vehicleData.width}
                     onChange={handleChange}
-                    className="w-full p-2 border border-gray-300 rounded"
+                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
                     placeholder="0.001"
                   />
                 </div>
                 <div>
                   <div className="flex gap-1">
-                    <label className="block font-semibold">Length</label>
+                    <label className="text-[10px]">Length</label>
                   </div>
                   <input
                     type="number"
                     name="length"
                     value={vehicleData.length}
                     onChange={handleChange}
-                    className="w-full p-2 border border-gray-300 rounded"
+                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
                     placeholder="0.001"
                   />
                 </div>
@@ -972,17 +1042,16 @@ const sendRoadTaxData = async (roadTaxData) => {
                     resetForm();
                     cancleimages();
                   }}
-                  className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                  className="px-6 py-2 ml-2 text-custom-bg rounded-[4px] text-xs font-bold border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
                 >
-                  Close
+                  Cancel
                 </button>
                 <button
                   onClick={nextStep}
-                  className={`px-6 py-2 rounded-lg focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 ${
-                    isNextDisabled1st
-                      ? "bg-gray-400 text-white cursor-not-allowed"
-                      : "bg-custom-bg text-white hover:bg-gray-600"
-                  }`}        disabled={isNextDisabled1st}           >
+                  className={`px-6 py-2 rounded-[4px] text-xs font-bold focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 ${isNextDisabled1st
+                    ? "bg-gray-400 text-white cursor-not-allowed"
+                    : "bg-custom-bg text-white hover:bg-gray-600"
+                    }`} disabled={isNextDisabled1st}           >
                   Next
                 </button>
               </div>
@@ -995,10 +1064,16 @@ const sendRoadTaxData = async (roadTaxData) => {
               <div className="grid grid-cols-2 md:grid-cols-2 gap-2 mt-4">
                 <div>
                   <div className="flex gap-1">
-                    <label className="block font-semibold">
+                    {/* <label className="block font-semibold">
                       Passenger Capacity
                     </label>
-                    <span className="text-red-600">*</span>
+                    <span className="text-red-600">*</span> */}
+                    <label
+                      // htmlFor="Fuel_Type"
+                      className="text-[10px]"
+                    >
+                      Passenger Capacity <span className="text-red-600">*</span>
+                    </label>
                   </div>
                   <select
                     name="passengerCapacity"
@@ -1010,8 +1085,8 @@ const sendRoadTaxData = async (roadTaxData) => {
                     <option value="" disabled>
                       Select Capacity
                     </option>
-                    
-                    {["1","2","3","4","5","6","7","8","9","10"].map((val,i) => (
+
+                    {["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"].map((val, i) => (
                       <option key={i} value={val}>
                         {val}
                       </option>
@@ -1024,8 +1099,14 @@ const sendRoadTaxData = async (roadTaxData) => {
 
                 <div>
                   <div className="flex gap-1">
-                    <label className="block font-semibold">
+                    {/* <label className="block font-semibold">
                       Cargo Capacity
+                    </label> */}
+                    <label
+                      // htmlFor="Fuel_Type"
+                      className="text-[10px]"
+                    >
+                      Cargo Capacity <span className="text-red-600">*</span>
                     </label>
                   </div>
                   <input
@@ -1034,11 +1115,19 @@ const sendRoadTaxData = async (roadTaxData) => {
                     value={vehicleData.cargoCapacity}
                     onChange={handleChange}
                     className="w-full p-2 border border-gray-300 rounded"
+                    placeholder="Cargo Capacity"
                   />
                 </div>
                 <div>
                   <div className="flex gap-1">
-                    <label className="block font-semibold">Horsepower</label>
+                    {/* <label className="block font-semibold">Horsepower</label> */}
+
+                    <label
+                      // htmlFor="Fuel_Type"
+                      className="text-[10px]"
+                    >
+                      Horsepower
+                    </label>
                   </div>
                   <input
                     type="number"
@@ -1050,7 +1139,13 @@ const sendRoadTaxData = async (roadTaxData) => {
                 </div>
                 <div>
                   <div className="flex gap-1">
-                    <label className="block font-semibold">Torque</label>
+                    {/* <label className="block font-semibold">Torque</label> */}
+                    <label
+                      // htmlFor="Fuel_Type"
+                      className="text-[10px]"
+                    >
+                      Torque
+                    </label>
                   </div>
                   <input
                     type="number"
@@ -1064,7 +1159,14 @@ const sendRoadTaxData = async (roadTaxData) => {
               <div className="grid grid-cols-2 md:grid-cols-2 gap-2 mt-4">
                 <div>
                   <div className="flex gap-1">
-                    <label className="block font-semibold">
+                    {/* <label className="block font-semibold">
+                      Top Speed (mph)
+                    </label> */}
+
+                    <label
+                      // htmlFor="Fuel_Type"
+                      className="text-[10px]"
+                    >
                       Top Speed (mph)
                     </label>
                   </div>
@@ -1078,9 +1180,9 @@ const sendRoadTaxData = async (roadTaxData) => {
                 </div>
                 <div>
                   <div className="flex gap-1">
-                    <label className="block font-semibold">
+                    <label className="text-[10px]">
                       Towing Capacity (lbs)
-                    </label>{" "}
+                    </label>
                   </div>
 
                   <input
@@ -1095,10 +1197,17 @@ const sendRoadTaxData = async (roadTaxData) => {
               <div className="grid grid-cols-2 md:grid-cols-2 gap-2 mt-4">
                 <div>
                   <div className="flex gap-1">
-                    <label className="block font-semibold">
+                    {/* <label className="block font-semibold">
                       Safety Features
                     </label>
-                    <span className="text-red-600">*</span>
+                    <span className="text-red-600">*</span> */}
+
+                    <label
+                      // htmlFor="Fuel_Type"
+                      className="text-[10px]"
+                    >
+                      Safety Features <span className="text-red-600">*</span>
+                    </label>
                   </div>
                   <div className="">
                     {/* List of safety features as checkboxes */}
@@ -1139,10 +1248,16 @@ const sendRoadTaxData = async (roadTaxData) => {
                 </div>
                 <div className="">
                   <div className="flex gap-1 ">
-                    <label className="block font-semibold">
+                    {/* <label className="block font-semibold">
                       Technology Features
+                    </label> */}
+                    <label
+                      // htmlFor="Fuel_Type"
+                      className="text-[10px]"
+                    >
+                      Technology Features <span className="text-red-600">*</span>
                     </label>
-                    <span className="text-red-600">*</span>
+                    {/* <span className="text-red-600">*</span> */}
                   </div>
                   <div className="">
                     {/* List of technology features as checkboxes */}
@@ -1186,7 +1301,7 @@ const sendRoadTaxData = async (roadTaxData) => {
               <div className="grid grid-cols-2 md:grid-cols-2 gap-2 mt-4">
                 <div>
                   <div className="flex gap-1">
-                    <label className="block font-semibold">
+                    <label className="text-[10px]">
                       Fuel Efficiency
                     </label>
                   </div>
@@ -1202,9 +1317,15 @@ const sendRoadTaxData = async (roadTaxData) => {
                 </div>
                 <div>
                   <div className="flex gap-1">
-                    <label className="block font-semibold">Price (£)</label>
+                    {/* <label className="block font-semibold">Price (£)</label>
 
-                    <span className="text-red-600">*</span>
+                    <span className="text-red-600">*</span> */}
+                    <label
+                      // htmlFor="Fuel_Type"
+                      className="text-[10px]"
+                    >
+                      Price (£) <span className="text-red-600">*</span>
+                    </label>
                   </div>
                   <input
                     type="number"
@@ -1219,11 +1340,17 @@ const sendRoadTaxData = async (roadTaxData) => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-4">
                 <div>
                   <div className="flex gap-1">
-                    <label className="block font-semibold">
+                    {/* <label className="block font-semibold">
                       Registration Number
+                    </label> */}
+                      <label
+                      // htmlFor="Fuel_Type"
+                      className="text-[10px]"
+                    >
+                      Registration Number<span className="text-red-600">*</span>
                     </label>
 
-                    <span className="text-red-600">*</span>
+                    {/* <span className="text-red-600">*</span> */}
                   </div>
                   <input
                     type="text"
@@ -1262,7 +1389,7 @@ const sendRoadTaxData = async (roadTaxData) => {
               <div className="mt-6 flex gap-2 justify-between">
                 <button
                   onClick={prevStep}
-                  className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                  className="px-6 py-2 ml-2 text-custom-bg rounded-[4px] text-xs font-bold border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
                 >
                   Back
                 </button>
@@ -1274,17 +1401,16 @@ const sendRoadTaxData = async (roadTaxData) => {
                       resetForm();
                       cancleimages();
                     }}
-                    className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                   className="px-6 py-2 ml-2 text-custom-bg rounded-[4px] text-xs font-bold border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
                   >
-                    Close
+                    Cancel
                   </button>
                   <button
                     onClick={nextStep}
-                    className={`px-6 py-2 rounded-lg focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 ${
-                      isNextDisabled2nd
-                        ? "bg-gray-400 text-white cursor-not-allowed"
-                        : "bg-custom-bg text-white hover:bg-gray-600"
-                    }`}       disabled={isNextDisabled2nd}               >
+                    className={`px-6 py-2 rounded-[4px] text-xs font-bold focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 ${isNextDisabled2nd
+                      ? "bg-gray-400 text-white cursor-not-allowed"
+                      : "bg-custom-bg text-white hover:bg-gray-600"
+                      }`} disabled={isNextDisabled2nd}               >
                     Next
                   </button>
                 </div>
@@ -2304,11 +2430,10 @@ const sendRoadTaxData = async (roadTaxData) => {
                     Close
                   </button>
                   <button
-                  className={`px-6 py-2 rounded-lg focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 ${
-              isNextDisabled5th
-                ? "bg-gray-400 text-white cursor-not-allowed"
-                  : "bg-custom-bg text-white hover:bg-gray-600"
-                  }`}            disabled={isNextDisabled5th}           >
+                    className={`px-6 py-2 rounded-lg focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 ${isNextDisabled5th
+                      ? "bg-gray-400 text-white cursor-not-allowed"
+                      : "bg-custom-bg text-white hover:bg-gray-600"
+                      }`} disabled={isNextDisabled5th}           >
                     Submit
                   </button>
                 </div>

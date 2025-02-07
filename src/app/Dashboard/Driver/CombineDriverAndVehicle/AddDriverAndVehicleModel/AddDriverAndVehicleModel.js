@@ -97,33 +97,33 @@ const AddDriverMoreInfoModal = ({
       try {
         const [taxiFirmsData,
           //  localAuthData,
-           vehicleData] = await Promise.all([
-          fetchTaxiFirms(),
-          // fetchLocalAuth(),
-          fetchVehicle(),
-        ]);
-  
+          vehicleData] = await Promise.all([
+            fetchTaxiFirms(),
+            // fetchLocalAuth(),
+            fetchVehicle(),
+          ]);
+
         const storedCompanyName = getCompanyName();
-  
+
         const filterByCompany = (data) =>
           superadmin === "superadmin"
             ? data
             : data.filter(
-                (item) =>
-                  item.adminCompanyName === storedCompanyName ||
-                  item.adminCompanyName === "superadmin"
-              );
-  
+              (item) =>
+                item.adminCompanyName === storedCompanyName ||
+                item.adminCompanyName === "superadmin"
+            );
+
         // Apply the filter to the fetched data
         const filteredTaxiFirms = filterByCompany(taxiFirmsData.result);
         // const filteredLocalAuth = filterByCompany(localAuthData.Result);
         const filteredVehicle = filterByCompany(vehicleData.result);
-  
+
         // Update state with filtered data
         setTaxiFirms(filteredTaxiFirms);
         // setLocalAuth(filteredLocalAuth);
         setVehicle(filteredVehicle);
-  
+
         // Optional: Debugging logs
         // console.log("Stored Company Name:", storedCompanyName);
         // console.log("Filtered Taxi Firms:", filteredTaxiFirms);
@@ -133,11 +133,11 @@ const AddDriverMoreInfoModal = ({
         console.error("Error loading dropdown data:", err);
       }
     };
-  
+
     loadDropdownData();
   }, [superadmin]);
-  
- 
+
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -178,7 +178,7 @@ const AddDriverMoreInfoModal = ({
     //   setFilteredVehicles(matchedVehicles);
     // }
   };
-console.log(compiterdrivervehicleautority)
+  console.log(compiterdrivervehicleautority)
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -246,19 +246,26 @@ console.log(compiterdrivervehicleautority)
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-4xl">
-        <h2 className="text-3xl font-semibold text-center mb-8">
-          Add Car Allotment
-        </h2>
+      <div className="bg-white p-12 rounded-xl shadow-lg w-full max-w-4xl">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-2xl font-bold">
+            Car Allotment
+          </h2>
+
+          <img src="/crossIcon.svg" className="cursor-pointer" onClick={() => {
+            onClose();
+            setStep(1);
+          }} />
+        </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="flex flex-wrap -mx-2">
             <div className="w-full md:w-1/3 px-2 mb-4">
               <label
                 htmlFor="driverName"
-                className="text-sm font-medium text-gray-700"
+                className="text-[10px]"
               >
-                Driver Name:
+                Driver Name
               </label>
               <input
                 type="text"
@@ -266,7 +273,7 @@ console.log(compiterdrivervehicleautority)
                 name="driverName"
                 value={formData.driverName}
                 onChange={handleChange}
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px] shadow-sm focus:ring-blue-500 focus:border-blue-500"
                 readOnly
               />
             </div>
@@ -274,16 +281,16 @@ console.log(compiterdrivervehicleautority)
             <div className="w-full md:w-1/3 px-2 mb-4">
               <label
                 htmlFor="paymentcycle"
-                className="text-sm font-medium text-gray-700"
+                className="text-[10px]"
               >
-                Rent Payment Cycle:
+                Rent Payment Cycle
               </label>
               <select
                 id="paymentcycle"
                 name="paymentcycle"
                 value={formData.paymentcycle}
                 onChange={handleChange}
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
                 required
               >
                 <option value="">Select Payment</option>
@@ -298,9 +305,9 @@ console.log(compiterdrivervehicleautority)
             <div className="w-full md:w-1/3 px-2 mb-4">
               <label
                 htmlFor="startDate"
-                className="text-sm font-medium text-gray-700"
+                className="text-[10px]"
               >
-                Start Date:
+                Start Date
               </label>
               <input
                 type="date"
@@ -308,7 +315,7 @@ console.log(compiterdrivervehicleautority)
                 name="startDate"
                 value={formData.startDate}
                 onChange={handleChange}
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]   shadow-sm focus:ring-blue-500 focus:border-blue-500"
                 required
               />
             </div>
@@ -316,16 +323,42 @@ console.log(compiterdrivervehicleautority)
             <div className="w-full md:w-1/3 px-2 mb-4">
               <label
                 htmlFor="taxifirm"
-                className="text-sm font-medium text-gray-700"
+                // className="text-sm font-medium text-gray-700"
+                className="text-[10px]"
               >
-                Taxi Firm:
+                Taxi Firm
               </label>
               <select
                 id="taxifirm"
                 name="taxifirm"
                 value={formData.taxifirm}
                 onChange={handleChange}
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+              >
+                <option value="null">Select Taxi Firm</option>
+                {taxiFirms.map((firm) => (
+                  <option key={firm._id} value={firm.name}>
+                    {firm.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* added  */}
+            <div className="w-full md:w-1/3 px-2 mb-4">
+              <label
+                htmlFor="taxifirm"
+                // className="text-sm font-medium text-gray-700"
+                className="text-[10px]"
+              >
+                Taxi Local Authourity
+              </label>
+              <select
+                // id="taxifirm"
+                // name="taxifirm"
+                // value={formData.taxifirm}
+                // onChange={handleChange}
+                className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
               >
                 <option value="null">Select Taxi Firm</option>
                 {taxiFirms.map((firm) => (
@@ -352,7 +385,7 @@ console.log(compiterdrivervehicleautority)
                 required
               >
                 <option value="null">Select Local Authority</option>
-                {localAuth.map((local) => (
+                {localAut.map((local) => (
                   <option key={local._id} value={local.name}>
                     {local.name}
                   </option>
@@ -363,27 +396,28 @@ console.log(compiterdrivervehicleautority)
             <div className="w-full md:w-1/3 px-2 mb-4">
               <label
                 htmlFor="vehicle"
-                className="text-sm font-medium text-gray-700"
+                // className="text-sm font-medium text-gray-700"
+                className="text-[10px]"
               >
-                Vehicles:
+                Vehicles
               </label>
               <select
                 id="vehicle"
                 name="vehicle"
                 value={formData.vehicle}
                 onChange={handleChange}
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
                 required
               >
-        
-                 <option value="">Select Vehicle</option>
-                 {vehicle?.filter((v) => v.isActive && v.vehicleStatus === "Standby" && 
-    compiterdrivervehicleautority.toLocaleLowerCase() === v.LocalAuthority.toLocaleLowerCase()
-  ).map((v) => (
-    <option key={v._id} value={v.model}>
-      {v.model}
-    </option>
-  ))}
+
+                <option value="">Select Vehicle</option>
+                {vehicle?.filter((v) => v.isActive && v.vehicleStatus === "Standby" &&
+                  compiterdrivervehicleautority.toLocaleLowerCase() === v.LocalAuthority.toLocaleLowerCase()
+                ).map((v) => (
+                  <option key={v._id} value={v.model}>
+                    {v.model}
+                  </option>
+                ))}
 
               </select>
             </div>
@@ -391,9 +425,10 @@ console.log(compiterdrivervehicleautority)
             <div className="w-full md:w-1/3 px-2 mb-4">
               <label
                 htmlFor="payment"
-                className="text-sm font-medium text-gray-700"
+                // className="text-sm font-medium text-gray-700"
+                className="text-[10px]"
               >
-                Rent Payment Amount:
+                Rent Payment Amount
               </label>
               <input
                 type="number"
@@ -401,7 +436,7 @@ console.log(compiterdrivervehicleautority)
                 name="payment"
                 value={formData.payment}
                 onChange={handleChange}
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px] shadow-sm focus:ring-blue-500 focus:border-blue-500"
               />
             </div>
           </div>
@@ -410,13 +445,13 @@ console.log(compiterdrivervehicleautority)
             <button
               type="button"
               onClick={onClose}
-              className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+             className="px-6 py-2 ml-2 text-custom-bg rounded-[4px] text-xs font-bold border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-6 py-2 bg-custom-bg text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+              className="px-6 py-2 bg-custom-bg text-white rounded-[4px] text-xs font-bold hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
               disabled={loading}
             >
               {loading ? "Saving..." : "Save"}

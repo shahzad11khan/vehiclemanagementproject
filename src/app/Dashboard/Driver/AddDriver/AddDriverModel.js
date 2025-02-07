@@ -54,10 +54,10 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
   const [insurance, setInsurance] = useState([]);
   const [localAuth, setlocalAuth] = useState([]);
   const [superadmin, setSuperadmin] = useState(null);
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const [validation, setValidation] = useState({
-      emailValid: null,
-    });
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const [validation, setValidation] = useState({
+    emailValid: null,
+  });
 
   const [step, setStep] = useState(1);
   const nextStep = () => setStep(step + 1);
@@ -83,7 +83,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
     const loadDropdownData = async () => {
       try {
         const [
-        
+
           badgeData,
           insuranceData,
           localAuth,
@@ -99,27 +99,27 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
           superadmin === "superadmin"
             ? badgeData.result
             : badgeData.result.filter(
-                (badge) =>
-                  badge.adminCompanyName === storedCompanyName ||
-                  badge.adminCompanyName === "superadmin"
-              );
+              (badge) =>
+                badge.adminCompanyName === storedCompanyName ||
+                badge.adminCompanyName === "superadmin"
+            );
 
         const filteredInsurance =
           superadmin === "superadmin"
             ? insuranceData.Result
             : insuranceData.Result.filter(
-                (insurance) =>
-                  insurance.adminCompanyName === storedCompanyName ||
-                  insurance.adminCompanyName === "superadmin"
-              );
+              (insurance) =>
+                insurance.adminCompanyName === storedCompanyName ||
+                insurance.adminCompanyName === "superadmin"
+            );
         const filteredlocalAuth =
           superadmin === "superadmin"
             ? localAuth.Result
             : localAuth.Result.filter(
-                (localAuth) =>
-                  localAuth.adminCompanyName === storedCompanyName ||
+              (localAuth) =>
+                localAuth.adminCompanyName === storedCompanyName ||
                 localAuth.adminCompanyName === "superadmin"
-              );
+            );
 
 
         setBadge(filteredBadges);
@@ -136,20 +136,20 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
 
   const handleChange = (e) => {
     const { name, value, type, checked, files } = e.target;
-    
+
     // Determine the updated value based on the input type
-    const updatedValue = type === "checkbox" 
-      ? checked 
-      : type === "file" 
-        ? files[0] 
+    const updatedValue = type === "checkbox"
+      ? checked
+      : type === "file"
+        ? files[0]
         : value;
-  
+
     // Update form data state
     setFormData((prevData) => ({
       ...prevData,
       [name]: updatedValue,
     }));
-  
+
     // Handle email validation if the field name is "email"
     if (name === "email") {
       setValidation((prevValidation) => ({
@@ -158,10 +158,10 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
       }));
     }
   };
-  
+
   const pageonerequiredfeilds = [
     "firstName",
-    "lastName",
+    // "lastName",
     "email",
     "tel1",
     "licenseNumber",
@@ -179,7 +179,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
 
   const areFieldsFilled = (fields) =>
     fields.every((field) => formData[field]?.trim() !== "");
-  
+
   // Determine if the "Next" button should be disabled
   const isNextDisabled1st =
     !validation.emailValid || !areFieldsFilled(pageonerequiredfeilds);
@@ -305,25 +305,38 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-4xl overflow-y-auto max-h-screen">
-        <h2 className="text-3xl font-semibold text-center mb-8">
-          Add a Driver
-        </h2>
-
+      <div className="bg-white p-12 rounded-xl shadow-lg w-full max-w-4xl overflow-y-auto max-h-screen">
         <form onSubmit={handleSubmit} className="space-y-6">
-          <h3 className="text-xl font-semibold mb-2">Driver Details</h3>
+          {/* <h3 className="text-xl font-semibold mb-2">Driver Details</h3> */}
+
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-2xl font-bold">
+              Add Driver
+            </h2>
+
+            <img src="/crossIcon.svg" className="cursor-pointer" onClick={() => {
+              onClose();
+              setStep(1);
+            }} />
+          </div>
           {step === 1 && (
             <>
-              <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
                 <div>
-                  <div className="flex gap-1">
-                    <label
+                  {/* <label
                       htmlFor="firstName"
                       className="text-sm font-medium text-gray-700"
                     >
                       First Name:
                     </label>
-                    <span className="text-red-600">*</span>
+                    <span className="text-red-600">*</span> */}
+                  <div className="flex gap-1 items-center justify-start">
+                    <label
+                      htmlFor="firstName"
+                      className="text-[10px]"
+                    >
+                      First Name <span className="text-red-600">*</span>
+                    </label>
                   </div>
 
                   <input
@@ -332,93 +345,110 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                     name="firstName"
                     value={formData.firstName}
                     onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
                     required
                   />
                 </div>
+
                 <div>
-                  <div className="flex gap-1">
-                    <label
-                      htmlFor="lastName"
+                  {/* <label
+                      htmlFor="firstName"
                       className="text-sm font-medium text-gray-700"
                     >
-                      Last Name:
+                      First Name:
                     </label>
-                    <span className="text-red-600">*</span>
+                    <span className="text-red-600">*</span> */}
+                  <div className="flex gap-1 items-center justify-start">
+                    <label
+                      htmlFor="dateOfBirth"
+                      className="text-[10px]"
+                    >
+                      Date of Birth
+                      {/* <span className="text-red-600">*</span> */}
+                    </label>
                   </div>
 
-                  <input
-                    type="text"
-                    id="lastName"
-                    name="lastName"
-                    value={formData.lastName}
-                    onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                    required
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor="dateOfBirth"
-                    className="text-sm font-medium text-gray-700"
-                  >
-                    Date of Birth:
-                  </label>
                   <input
                     type="date"
                     id="dateOfBirth"
                     name="dateOfBirth"
                     value={formData.dateOfBirth}
                     onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                  />
-                </div>
-                <div>
-                  <div className="flex gap-1">
-                    <label
-                      htmlFor="tel1"
-                      className="text-sm font-medium text-gray-700"
-                    >
-                      Tel 1:
-                    </label>
-                    <span className="text-red-600">*</span>
-                  </div>
-
-                  <input
-                    type="tel"
-                    id="tel1"
-                    name="tel1"
-                    value={formData.tel1}
-                    onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
                     required
                   />
                 </div>
-                <div>
-                  <label
-                    htmlFor="tel2"
-                    className="text-sm font-medium text-gray-700"
-                  >
-                    Tel 2:
-                  </label>
-                  <input
-                    type="tel"
-                    id="tel2"
-                    name="tel2"
-                    value={formData.tel2}
-                    onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                  />
-                </div>
+
                 <div>
                   <div className="flex gap-1">
-                    <label
-                      htmlFor="email"
+                    {/* <label
+                      htmlFor="niNumber"
                       className="text-sm font-medium text-gray-700"
                     >
-                      Email Address:
+                      NI Number:
                     </label>
-                    <span className="text-red-600">*</span>
+
+                    <span className="text-red-600">*</span> */}
+                    <label
+                      htmlFor="niNumber"
+                      className="text-[10px]"
+                    >
+                      NI Number <span className="text-red-600">*</span>
+                    </label>
+                  </div>
+                  <input
+                    type="text"
+                    id="niNumber"
+                    name="niNumber"
+                    value={formData.niNumber}
+                    onChange={handleChange}
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                    required
+                    placeholder="Ni Number"
+                  />
+                </div>
+
+                <div>
+                  <div className="flex gap-1">
+                    {/* <label
+                      htmlFor="licenseNumber"
+                      className="text-sm font-medium text-gray-700"
+                    >
+                      License Number:
+                    </label>
+
+                    <span className="text-red-600">*</span> */}
+                    <label
+                      htmlFor="licenseNumber"
+                      className="text-[10px]"
+                    >
+                      License Number <span className="text-red-600">*</span>
+                    </label>
+
+                  </div>
+                  <input
+                    type="text"
+                    id="licenseNumber"
+                    name="licenseNumber"
+                    value={formData.licenseNumber}
+                    onChange={handleChange}
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                    required
+                    placeholder="License Number"
+                  />
+                </div>
+
+                <div>
+                  <div className="flex gap-1">
+                    <div className="flex gap-1">
+                      <label
+                        htmlFor="email"
+                        className="text-[10px]"
+                      >
+                        Email
+                        {/* <span className="text-red-600">*</span> */}
+                      </label>
+                    </div>
                   </div>
 
                   <input
@@ -427,59 +457,67 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
                     required
+                    placeholder="Email"
                   />
                 </div>
+
+                {/* added new */}
                 <div>
                   <div className="flex gap-1">
                     <label
-                      htmlFor="licenseNumber"
-                      className="text-sm font-medium text-gray-700"
+                      htmlFor="password"
+                      className="text-[10px]"
                     >
-                      License Number:
+                      Password
+                      {/* <span className="text-red-600">*</span> */}
                     </label>
-
-                    <span className="text-red-600">*</span>
                   </div>
+
                   <input
-                    type="text"
-                    id="licenseNumber"
-                    name="licenseNumber"
-                    value={formData.licenseNumber}
-                    onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                    type="password"
+                    // id="password"
+                    // name=""
+                    // value={formData.lastName}
+                    // onChange={handleChange}
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
                     required
+                    placeholder="Password"
                   />
                 </div>
+
                 <div>
                   <div className="flex gap-1">
-                    <label
-                      htmlFor="niNumber"
-                      className="text-sm font-medium text-gray-700"
-                    >
-                      NI Number:
-                    </label>
-
-                    <span className="text-red-600">*</span>
+                    <div className="flex gap-1">
+                      <label
+                        htmlFor="tel1"
+                        className="text-[10px]"
+                      >
+                        Phone number
+                        {/* <span className="text-red-600">*</span> */}
+                      </label>
+                    </div>
                   </div>
+
                   <input
-                    type="text"
-                    id="niNumber"
-                    name="niNumber"
-                    value={formData.niNumber}
+                    type="tel"
+                    id="tel1"
+                    name="tel1"
+                    value={formData.tel1}
                     onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
                     required
                   />
                 </div>
+
                 <div>
                   <div className="flex gap-1">
                     <label
                       htmlFor="driverNumber"
-                      className="text-sm font-medium text-gray-700"
+                      className="text-[10px]"
                     >
-                      Driver Number:
+                      Driver Number
                     </label>
                   </div>
                   <input
@@ -488,30 +526,150 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                     name="driverNumber"
                     value={formData.driverNumber}
                     onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
                   />
                 </div>
+
+                {/* <div>
+                  <label
+                    htmlFor="tel2"
+                    className="text-[10px]"
+                  >
+                    Tel 2
+                  </label>
+                  <input
+                    type="tel"
+                    id="tel2"
+                    name="tel2"
+                    value={formData.tel2}
+                    onChange={handleChange}
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                  />
+                </div> */}
+
+
+
+                {/* <div>
+                  <div className="flex gap-1">
+                    <label
+                      htmlFor="licenseNumber"
+                      className="text-[10px]"
+                    >
+                      License Number <span className="text-red-600">*</span>
+                    </label>
+
+                  </div>
+                  <input
+                    type="text"
+                    id="licenseNumber"
+                    name="licenseNumber"
+                    value={formData.licenseNumber}
+                    onChange={handleChange}
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                    required
+                  />
+                </div> */}
+
+
+
+
+                <div>
+                  <label
+                    htmlFor="badgeType"
+                    className="text-[10px]"
+                  >
+                    Badge Type
+                  </label>
+                  <select
+                    id="badgeType"
+                    name="badgeType"
+                    value={formData.badgeType}
+                    onChange={handleChange}
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                  >
+                    <option value="null">Select badgeType </option>
+                    {badge.map((badge) => (
+                      <option key={badge._id} value={badge.name}>
+                        {badge.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="insurance"
+                    className="text-[10px]"
+                  >
+                    Insurance
+                  </label>
+                  <select
+                    id="insurance"
+                    name="insurance"
+                    value={formData.insurance}
+                    onChange={handleChange}
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                  >
+                    <option value="null">Select insurance </option>
+
+                    {insurance.map((insurence) => (
+                      <option key={insurence._id} value={insurence.name}>
+                        {insurence.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+
+
+                <div>
+                  <div className="flex gap-1">
+                    <label
+                      htmlFor="licenseExpiryDate"
+                      className="text-[10px]"
+                    >
+                      License Expiry Date
+                    </label>
+                  </div>
+
+                  <input
+                    type="date"
+                    id="licenseExpiryDate"
+                    name="licenseExpiryDate"
+                    value={formData.licenseExpiryDate}
+                    onChange={handleChange}
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                    required
+                  />
+                </div>
+
+
+
+
+
+
               </div>
-              <div className="mt-6 flex gap-2 justify-end">
+
+              {/* buttons */}
+              <div className="mt-6 flex gap-[10px] justify-end">
                 <button
                   type="button"
                   onClick={() => {
                     onClose();
                     // resetform();
                   }}
-                  className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                  className="px-6 py-2 ml-2 text-custom-bg rounded-[4px] text-xs font-bold border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
                 >
-                  Close
+                  Cancel
                 </button>
                 <button
                   onClick={nextStep}
-                  className={`px-6 py-2 rounded-lg focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 ${
-                    isNextDisabled1st
-                      ? "bg-gray-400 text-white cursor-not-allowed"
-                      : "bg-custom-bg text-white hover:bg-gray-600"
-                  }`}     
+                  className={`px-6 py-2 rounded-[4px] text-xs font-bold focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 ${isNextDisabled1st
+                    ? "bg-gray-400 text-white cursor-not-allowed"
+                    : "bg-custom-bg text-white hover:bg-gray-600"
+                    }`}
                   disabled={isNextDisabled1st}
-                  >
+                >
                   Next
                 </button>
               </div>
@@ -519,7 +677,8 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
           )}
           {step === 2 && (
             <>
-              <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-4">
+              <h2 className="font-bold">Address</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
                 {/* <div>
                 <label
                   htmlFor="taxiFirm"
@@ -542,30 +701,30 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                   ))}
                 </select>
               </div> */}
-                <div>
-                <label
-                  htmlFor="taxiFirm"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Driver Localauthority:
-                </label>
-                <span className="text-red-600">*</span>
-                <select
-                  id="LocalAuth"
-                  name="LocalAuth"
-                  value={formData.LocalAuth}
-                  onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                  required
-                >
-                  <option value="null">Select Localauthority</option>
-                  {localAuth.map((local) => (
-                    <option key={local._id} value={local.name}>
-                      {local.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
+                {/* <div>
+                  <label
+                    htmlFor="taxiFirm"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Driver Localauthority:
+                  </label>
+                  <span className="text-red-600">*</span>
+                  <select
+                    id="LocalAuth"
+                    name="LocalAuth"
+                    value={formData.LocalAuth}
+                    onChange={handleChange}
+                    className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                    required
+                  >
+                    <option value="null">Select Localauthority</option>
+                    {localAuth.map((local) => (
+                      <option key={local._id} value={local.name}>
+                        {local.name}
+                      </option>
+                    ))}
+                  </select>
+                </div> */}
 
                 {/* <div>
                 <label
@@ -605,51 +764,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                   ))}
                 </select>
               </div> */}
-                <div>
-                  <label
-                    htmlFor="badgeType"
-                    className="text-sm font-medium text-gray-700"
-                  >
-                    Badge Type:
-                  </label>
-                  <select
-                    id="badgeType"
-                    name="badgeType"
-                    value={formData.badgeType}
-                    onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                  >
-                    <option value="null">Select badgeType </option>
-                    {badge.map((badge) => (
-                      <option key={badge._id} value={badge.name}>
-                        {badge.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div>
-                  <label
-                    htmlFor="insurance"
-                    className="text-sm font-medium text-gray-700"
-                  >
-                    Insurance:
-                  </label>
-                  <select
-                    id="insurance"
-                    name="insurance"
-                    value={formData.insurance}
-                    onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                  >
-                    <option value="null">Select insurance </option>
 
-                    {insurance.map((insurence) => (
-                      <option key={insurence._id} value={insurence.name}>
-                        {insurence.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
                 {/* <div>
                 <div className="flex gap-1">
                   <label
@@ -690,29 +805,8 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                   required
                 />
               </div> */}
-                <div>
-                  <div className="flex gap-1">
-                    <label
-                      htmlFor="licenseExpiryDate"
-                      className="text-sm font-medium text-gray-700"
-                    >
-                      License Expiry Date:
-                    </label>
 
-                    <span className="text-red-600">*</span>
-                  </div>
-
-                  <input
-                    type="date"
-                    id="licenseExpiryDate"
-                    name="licenseExpiryDate"
-                    value={formData.licenseExpiryDate}
-                    onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                    required
-                  />
-                </div>
-                <div>
+                {/* <div>
                   <div className="flex gap-1">
                     <label
                       htmlFor="taxiBadgeDate"
@@ -732,7 +826,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                     className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
                     required
                   />
-                </div>
+                </div> */}
                 {/* <div>
                 <div className="flex gap-1">
                   <label
@@ -776,16 +870,64 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                   required
                 />
               </div> */}
+
+                {/* added new */}
+                <div>
+                  <div className="flex gap-1">
+                    <label
+                      // htmlFor="postalAddress"
+                        className="text-[10px]"
+                    >
+                      Building and Street (Line 1 of 2)
+                    </label>
+
+                    {/* <span className="text-red-600">*</span> */}
+                  </div>
+                  <input
+                    // type="text"
+                    // id="postalAddress"
+                    // name="postalAddress"
+                    // value={formData.postalAddress}
+                    // onChange={handleChange}
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                    required
+                    placeholder="Building and Street"
+                  />
+                </div>
+
+                <div>
+                  <div className="flex gap-1">
+                    <label
+                      // htmlFor="postalAddress"
+                      className="text-[10px]"
+                    >
+                      Building and Street (Line 2 of 2)
+                    </label>
+
+                    {/* <span className="text-red-600">*</span> */}
+                  </div>
+                  <input
+                    // type="text"
+                    // id="postalAddress"
+                    // name="postalAddress"
+                    // value={formData.postalAddress}
+                    // onChange={handleChange}
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                    required
+                    placeholder="Building and Street"
+                  />
+                </div>
+
                 <div>
                   <div className="flex gap-1">
                     <label
                       htmlFor="city"
-                      className="text-sm font-medium text-gray-700"
+                      className="text-[10px]"
                     >
-                      City:
+                      Town/City
                     </label>
 
-                    <span className="text-red-600">*</span>
+                    {/* <span className="text-red-600">*</span> */}
                   </div>
                   <input
                     type="text"
@@ -793,20 +935,20 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                     name="city"
                     value={formData.city}
                     onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                    required
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                    required placeholder="Town/City"
                   />
                 </div>
                 <div>
                   <div className="flex gap-1">
                     <label
                       htmlFor="county"
-                      className="text-sm font-medium text-gray-700"
+                      className="text-[10px]"
                     >
-                      Country:
+                      Country
                     </label>
 
-                    <span className="text-red-600">*</span>
+                    {/* <span className="text-red-600">*</span> */}
                   </div>
                   <input
                     type="text"
@@ -814,7 +956,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                     name="county"
                     value={formData.county}
                     onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
                     required
                   />
                 </div>
@@ -822,12 +964,12 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                   <div className="flex gap-1">
                     <label
                       htmlFor="postcode"
-                      className="text-sm font-medium text-gray-700"
+                      className="text-[10px]"
                     >
-                      Postcode:
+                      Postcode
                     </label>
 
-                    <span className="text-red-600">*</span>
+                    {/* <span className="text-red-600">*</span> */}
                   </div>
 
                   <input
@@ -836,11 +978,50 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                     name="postcode"
                     value={formData.postcode}
                     onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
                     required
                   />
                 </div>
+
                 <div>
+                  <label className="text-[10px]">Status</label>
+                  <div className="flex gap-4 mt-2">
+                    {/* Yes Option */}
+                    <label className="flex items-center gap-2">
+                      <input
+                        type="radio"
+                        name="isActive"
+                        value="true"
+                        checked={formData.isActive === true}
+                        onChange={() =>
+                          handleChange({
+                            target: { name: "isActive", value: true },
+                          })
+                        }
+                        className="accent-green-500"
+                      />
+                      <span className="text-xs">Active</span>
+                    </label>
+
+                    {/* No Option */}
+                    <label className="flex items-center gap-2">
+                      <input
+                        type="radio"
+                        name="isActive"
+                        value="false"
+                        checked={formData.isActive === false}
+                        onChange={() =>
+                          handleChange({
+                            target: { name: "isActive", value: false },
+                          })
+                        }
+                        className="accent-red-500"
+                      />
+                      <span className="text-xs">InActive</span>
+                    </label>
+                  </div>
+                </div>
+                {/* <div>
                   <div className="flex gap-1">
                     <label
                       htmlFor="postalAddress"
@@ -860,7 +1041,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                     className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
                     required
                   />
-                </div>
+                </div> */}
                 {/* <div>
                 <label
                   htmlFor="permanentAddress"
@@ -881,7 +1062,23 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                 {/* </div> */}
                 {/* </div> */}
                 <div className="">
-                  <h3 className="text-sm font-medium text-gray-700">
+                  <div className="flex items-center gap-2">
+                    <label
+                      htmlFor="image"
+                      className="text-[10px]"
+                    >
+                      Upload Image:
+                    </label>
+                    <input
+                      type="file"
+                      id="image"
+                      name="image"
+                      accept="image/*"
+                      onChange={handleChange}
+                      className="mt-1 block w-48 text-[8px] text-gray-400 file:mr-4 file:py-1 p-2 file:px-4 file:rounded-lg file:border file:text-[10px] file:font-semibold file:bg-white hover:file:bg-blue-100 border border-[#0885864D] rounded-[10px] border-dashed "
+                    />
+                  </div>
+                  {/* <h3 className="text-sm font-medium text-gray-700">
                     Upload Document
                   </h3>
                   <div className="border-2 border-dashed border-gray-300 rounded-lg p-2 mt-2">
@@ -892,7 +1089,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                       onChange={handleChange}
                       className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border file:border-gray-300 file:background-gray-100 hover:file:bg-gray-200 file:text-sm"
                     />
-                  </div>
+                  </div> */}
                   {/* <div>
               <h3 className="text-sm font-medium text-gray-700">
                 Document Name
@@ -925,74 +1122,38 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                     </label>
                   </div> */}
                 </div>
-                <div>
-                  <label className="block font-medium mb-2">Is Active:</label>
-                  <div className="flex gap-4">
-                    {/* Yes Option */}
-                    <label className="flex items-center gap-2">
-                      <input
-                        type="radio"
-                        name="isActive"
-                        value="true"
-                        checked={formData.isActive === true}
-                        onChange={() =>
-                          handleChange({
-                            target: { name: "isActive", value: true },
-                          })
-                        }
-                        className="accent-green-500"
-                      />
-                      <span>Active</span>
-                    </label>
 
-                    {/* No Option */}
-                    <label className="flex items-center gap-2">
-                      <input
-                        type="radio"
-                        name="isActive"
-                        value="false"
-                        checked={formData.isActive === false}
-                        onChange={() =>
-                          handleChange({
-                            target: { name: "isActive", value: false },
-                          })
-                        }
-                        className="accent-red-500"
-                      />
-                      <span>InActive</span>
-                    </label>
-                  </div>
-                </div>
               </div>
-              <div className="mt-6 flex gap-2 justify-between">
+
+
+              <div className="mt-10 flex gap-2 justify-between">
                 <div>
                   <button
                     onClick={prevStep}
-                    className="px-6 py-2 bg-custom-bg text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                    className="px-6 py-2 ml-2 text-custom-bg rounded-[4px] text-xs font-bold border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
                   >
                     Back
                   </button>
                 </div>
-                <div className="flex gap-2">
+                <div className="flex gap-[10px]">
                   <button
                     type="button"
                     onClick={() => {
                       onClose();
                       // resetform();
                     }}
-                    className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                    className="px-6 py-2 ml-2 text-custom-bg rounded-[4px] text-xs font-bold border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
                   >
-                    Close
+                    Cancel
                   </button>
                   <button
                     type="submit"
-                    className={`px-6 py-2 rounded-lg focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 ${
-                      isNextDisabled2nd
-                        ? "bg-gray-400 text-white cursor-not-allowed"
-                        : "bg-custom-bg text-white hover:bg-gray-600"
-                    }`}                   
+                    className={`px-6 py-2 rounded-[4px] text-xs font-bold focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 ${isNextDisabled2nd
+                      ? "bg-gray-400 text-white cursor-not-allowed"
+                      : "bg-custom-bg text-white hover:bg-gray-600"
+                      }`}
                     disabled={isNextDisabled2nd}
-                    >
+                  >
                     {loading ? "Submitting..." : "Submit"}
                   </button>
                 </div>

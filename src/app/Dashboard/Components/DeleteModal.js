@@ -15,7 +15,7 @@ const DeleteModal = ({ isOpen, onClose, onDelete, Id }) => {
 
           <div className="flex items-center justify-between w-full mb-2">
             <h2 className="text-lg font-semibold">Delete</h2>
-            <img src="/crossIcon.svg" onClick={() => {
+            <img src="/crossIcon.svg" className="cursor-pointer" onClick={() => {
               onClose();
 
             }} />

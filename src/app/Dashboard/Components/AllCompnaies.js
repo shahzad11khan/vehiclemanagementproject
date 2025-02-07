@@ -239,10 +239,10 @@ const AllCompanies = () => {
               </button>
             </div>
          
+          </div>
             {/* <div className="flex items-center gap-2">
               
             </div> */}
-          </div>
 
 
          {/* table starts here */}
@@ -284,13 +284,13 @@ const AllCompanies = () => {
                       <div className="flex gap-4 justify-center">
                         <button
                           onClick={() => handleEdit(item._id)}
-                          className="text-blue-500 hover:text-blue-700"
+                          // className="text-blue-500 hover:text-blue-700"
                         >
                           <img src="/edit.png" alt="edit"  className="w-6" />
                         </button>
                         <button
                           onClick={() => isopendeletemodel(item._id)}
-                          className="text-red-500 hover:text-red-700"
+                          // className="text-red-500 hover:text-red-700"
                         >
                           <img src="/trash.png" alt="delete" className="w-6" />
                         </button>

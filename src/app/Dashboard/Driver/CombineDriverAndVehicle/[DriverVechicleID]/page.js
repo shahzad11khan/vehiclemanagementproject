@@ -239,20 +239,20 @@ const Page = ({ params }) => {
                             onClick={() => handleEdit(item._id)}
                             className="text-blue-500 hover:text-blue-700"
                           >
-                            <img src="/edit.png" alt="edit" />
+                            <img src="/edit.png" alt="edit" className="w-5" />
                           </button>
                           <button
                             onClick={() => handleDelete(item._id)}
                             className="text-red-500 hover:text-red-700"
                           >
-                            <img src="/trash.png" alt="delete" />
+                            <img src="/trash.png" alt="delete"  className="w-5" />
                           </button>
                           <Link
                             passHref
                             href={`/Dashboard/Driver/MoreInfo/${item.vehicleId}`}
                           >
                             <button className="text-blue-500 hover:text-blue-700">
-                              <img src="/info.png" alt="delete" />
+                              <img src="/info.png" alt="delete"  className="w-5" />
                             </button>
                           </Link>
                         </div>

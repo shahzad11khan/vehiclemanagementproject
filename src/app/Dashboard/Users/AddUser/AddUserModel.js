@@ -263,11 +263,10 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
             Add New User
           </h2>
 
-          <img src="/crossIcon.svg" onClick={() => {
+          <img src="/crossIcon.svg" className="cursor-pointer" onClick={() => {
             onClose();
             setStep(1);
           }} />
-
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">

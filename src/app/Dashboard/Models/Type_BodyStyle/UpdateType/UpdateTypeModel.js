@@ -108,10 +108,10 @@ const UpdateTypeModel = ({ isOpen, onClose, fetchData, typeid }) => {
 
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-2xl font-bold">
-            Update BodyType
+            Update Body Type
           </h2>
 
-          <img src="/crossIcon.svg" onClick={() => {
+          <img src="/crossIcon.svg" className="cursor-pointer" onClick={() => {
             onClose();
 
           }} />
@@ -127,7 +127,7 @@ const UpdateTypeModel = ({ isOpen, onClose, fetchData, typeid }) => {
             <div className="col-span-2">
               <label
                 htmlFor="name"
-                className="text-sm font-medium text-gray-700"
+                className="text-[10px]"
               >
                 Name
               </label>
@@ -146,7 +146,7 @@ const UpdateTypeModel = ({ isOpen, onClose, fetchData, typeid }) => {
             <div className="col-span-2">
               <label
                 htmlFor="description"
-                className="text-sm font-medium text-gray-700"
+                className="text-[10px]"
               >
                 Description
               </label>
@@ -156,7 +156,7 @@ const UpdateTypeModel = ({ isOpen, onClose, fetchData, typeid }) => {
                 value={formData.description}
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px] shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                rows="3"
+                rows="2"
               ></textarea>
             </div>
 

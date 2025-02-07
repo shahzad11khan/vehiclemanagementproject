@@ -28,17 +28,17 @@ const Page = () => {
 
   const [selectedModel, setSelectedModel] = useState('');
   const [showFilter, setShowFilter] = useState(false);
-    // Get a list of unique models for the filter options
-    const models = [...new Set(data.map(item => item.makemodel))];
-    const [selectedModell, setSelectedModell] = useState(models);
-    const filtered = selectedModel
+  // Get a list of unique models for the filter options
+  const models = [...new Set(data.map(item => item.makemodel))];
+  const [selectedModell, setSelectedModell] = useState(models);
+  const filtered = selectedModel
     ? data.filter(item => item.makemodel === selectedModel)
     : data;
 
-    const handleFilterChange = (model) => {
-      setSelectedModel(model);
-      setShowFilter(false); // Hide the filter dropdown after selection
-    };
+  const handleFilterChange = (model) => {
+    setSelectedModel(model);
+    setShowFilter(false); // Hide the filter dropdown after selection
+  };
 
   useEffect(() => {
     setIsMounted(true);
@@ -112,10 +112,10 @@ const Page = () => {
     setFilteredData(filtered);
 
     const filteredd = models.filter((item) =>
-      String(item).toLowerCase().includes(filtersearch.toLowerCase()) 
+      String(item).toLowerCase().includes(filtersearch.toLowerCase())
     );
     setSelectedModell(filteredd);
-  }, [searchTerm,filtersearch, data, selectedCompanyName]);
+  }, [searchTerm, filtersearch, data, selectedCompanyName]);
 
 
 
@@ -169,20 +169,40 @@ const Page = () => {
                     )}
                   </select>
                 </div>{" "}
-                <div className="text-custom-bg mt-2">entries</div>
-                <input
+                <div className="font-sans font-medium text-sm">Entries</div>
+                {/* <input
                   type="text"
                   placeholder="Search"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="border rounded px-4 py-2 w-64"
-                />
+                /> */}
+                <div className="flex justify-center">
+                  <div className="relative">
+                    <img src="/search.svg" className="absolute left-3 top-2" alt="Search Icon" />
+                    <input
+                      type="text"
+                      placeholder="Search by Model..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="border rounded-lg pl-10 sm:px-10 py-1 border-[#9E9E9E] text-[#9E9E9E] focus:outline-none focus:ring focus:ring-indigo-200"
+                    />
+                  </div>
+                </div>
               </div>
-              <button
+              {/* <button
                 onClick={OpenBadgeModle}
                 className="bg-custom-bg text-white px-4 py-2 rounded hover:bg-blue-600 flex items-center justify-center gap-2"
               >
                 <img src="/plus.png" alt="Add Company" className="w-4 h-4" />
+                Add Model
+              </button> */}
+
+              <button
+                onClick={OpenBadgeModle}
+                className="w-[152px] md:w-auto font-sans font-bold text-xs bg-[#313342] text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500 px-3 flex py-[10px] gap-2"
+              >
+                <img src="/plus.svg" alt="Add Company" className="" />
                 Add Model
               </button>
             </div>
@@ -242,91 +262,91 @@ const Page = () => {
               </table>
             </div> */}
 
-<div className="overflow-x-auto">
-      <table className="min-w-full divide-y divide-gray-200 mt-4">
-        <thead className="bg-gray-50">
-          <tr>
-          <th
-  className="px-4 py-2 bg-custom-bg text-white text-sm cursor-pointer"
-  onClick={() => setShowFilter(!showFilter)} // Toggle filter dropdown on click
->
-  {showFilter ? (
-    <img src="/ufilter.png" alt="up filter" className="w-6 inline mr-2" />
-  ) : (
-    <img src="/dfilter.png" alt="down filter" className="w-6 inline mr-2" />
-  )}
-  Make
-</th>
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200 mt-4">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th
+                      className="px-4 py-2 bg-custom-bg text-white text-sm cursor-pointer"
+                      onClick={() => setShowFilter(!showFilter)} // Toggle filter dropdown on click
+                    >
+                      {showFilter ? (
+                        <img src="/ufilter.png" alt="up filter" className="w-6 inline mr-2" />
+                      ) : (
+                        <img src="/dfilter.png" alt="down filter" className="w-6 inline mr-2" />
+                      )}
+                      Make
+                    </th>
 
-            <th className="px-4 py-2 bg-custom-bg text-white text-sm">Model</th>
-            <th className="px-4 py-2 bg-custom-bg text-white text-sm">Car Active</th>
-            <th className="px-4 py-2 bg-custom-bg text-white text-sm">Actions</th>
-          </tr>
-           {/* Show filter dropdown if `showFilter` is true */}
-      {showFilter && (
-        <div className="absolute z-10 mt-2 w-48 bg-white shadow-lg rounded-md border border-gray-200">
-          <ul>
-            <li>
-            <input
-                  type="text"
-                  placeholder="Search"
-                  value={filtersearch}
-                  onChange={(e) => setSearchfilter(e.target.value)}
-                  className="border rounded px-4 py-2 w-48"
-                />
-            </li>
-            <li
-              className="px-4 py-2 cursor-pointer hover:bg-gray-100"
-              onClick={() => handleFilterChange('')}
-            >
-              All Models
-            </li>
-            {selectedModell.map((model, index) => (
-              <li
-                key={index}
-                className="px-4 py-2 cursor-pointer hover:bg-gray-100"
-                onClick={() => handleFilterChange(model || '')}
-              >
-                {model}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-        </thead>
-        <tbody className="bg-white divide-y divide-gray-200 text-center">
-          {currentRecords.map((item) => (
-            <tr key={item._id}>
-              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                {item.makemodel}
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                {item.name}
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                {item.isActive ? 'Active' : 'Inactive'}
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                <button
-                  onClick={() => handleEdit(item._id)}
-                  className="text-blue-500 hover:text-blue-700"
-                >
-                  <img src="/edit.png" alt="edit" className="w-6" />
-                </button>
-                <button
-                  onClick={() => handleDelete(item._id)}
-                  className="text-red-500 hover:text-red-700"
-                >
-                  <img src="/trash.png" alt="delete" className="w-6" />
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+                    <th className="px-4 py-2 bg-custom-bg text-white text-sm">Model</th>
+                    <th className="px-4 py-2 bg-custom-bg text-white text-sm">Car Active</th>
+                    <th className="px-4 py-2 bg-custom-bg text-white text-sm">Actions</th>
+                  </tr>
+                  {/* Show filter dropdown if `showFilter` is true */}
+                  {showFilter && (
+                    <div className="absolute z-10 mt-2 w-48 bg-white shadow-lg rounded-md border border-gray-200">
+                      <ul>
+                        <li>
+                          <input
+                            type="text"
+                            placeholder="Search"
+                            value={filtersearch}
+                            onChange={(e) => setSearchfilter(e.target.value)}
+                            className="border rounded px-4 py-2 w-48"
+                          />
+                        </li>
+                        <li
+                          className="px-4 py-2 cursor-pointer hover:bg-gray-100"
+                          onClick={() => handleFilterChange('')}
+                        >
+                          All Models
+                        </li>
+                        {selectedModell.map((model, index) => (
+                          <li
+                            key={index}
+                            className="px-4 py-2 cursor-pointer hover:bg-gray-100"
+                            onClick={() => handleFilterChange(model || '')}
+                          >
+                            {model}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200 text-center">
+                  {currentRecords.map((item) => (
+                    <tr key={item._id}>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                        {item.makemodel}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                        {item.name}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {item.isActive ? 'Active' : 'Inactive'}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <button
+                          onClick={() => handleEdit(item._id)}
+                          className="text-blue-500 hover:text-blue-700"
+                        >
+                          <img src="/edit.png" alt="edit" className="w-6" />
+                        </button>
+                        <button
+                          onClick={() => handleDelete(item._id)}
+                          className="text-red-500 hover:text-red-700"
+                        >
+                          <img src="/trash.png" alt="delete" className="w-6" />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
 
-     
-    </div>
+
+            </div>
 
             <div className="flex justify-center text-center mt-4 gap-1">
               <button
@@ -338,8 +358,8 @@ const Page = () => {
               </button>
               <span
                 className={`px-3 py-1 mx-1 rounded ${currentPage
-                    ? "bg-custom-bg text-white"
-                    : "bg-gray-100 hover:bg-gray-300"
+                  ? "bg-custom-bg text-white"
+                  : "bg-gray-100 hover:bg-gray-300"
                   }`}
               >
                 {currentPage} of {totalPages}

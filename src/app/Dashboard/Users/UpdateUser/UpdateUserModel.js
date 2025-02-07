@@ -46,7 +46,7 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
     passwordMatch: false,
     passwordValid: false,
     dateOfBirthValid: true,
-    passwordExpiresvalid : false
+    passwordExpiresvalid: false
 
 
   });
@@ -153,7 +153,7 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
         dateOfBirthValid: isValid,
       }));
     }
-    if(name === 'passwordExpires'){
+    if (name === 'passwordExpires') {
       const selectedDate = new Date(value);
       const currentDate = new Date();
 
@@ -246,24 +246,34 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-4xl overflow-y-auto max-h-screen">
-        <h2 className="text-3xl font-semibold text-center mb-8">Update User</h2>
+      <div className="bg-white p-6 rounded-xl shadow-lg w-full max-w-3xl overflow-y-auto max-h-screen">
+        {/* <h2 className="text-3xl font-semibold text-center mb-8">Update User</h2> */}
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-2xl font-bold">
+            Update User
+          </h2>
+
+          <img src="/crossIcon.svg" className="cursor-pointer" onClick={() => {
+            onClose();
+
+          }} />
+
+        </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           {step === 1 && (
             <>
               <div>
-                <h3 className="text-xl font-semibold mb-2">User Details</h3>
+                {/* <h3 className="text-xl font-semibold mb-2">User Details</h3> */}
                 <div className="grid grid-cols-2 sm:grid-cols-2 gap-3">
                   <div>
                     <div className="flex gap-1">
                       <label
                         htmlFor="taxiFirm"
-                        className="text-sm font-medium text-gray-700"
+                        className="text-[10px]"
                       >
-                        Title:
+                        Title <span className="text-red-600">*</span>
                       </label>
-                      <span className="text-red-600">*</span>
                     </div>
 
                     <select
@@ -271,7 +281,7 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                       name="title"
                       value={formData.title}
                       onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
                       required
                     >
                       <option value="">Select Title</option>
@@ -286,11 +296,10 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                     <div className="flex gap-1">
                       <label
                         htmlFor="firstName"
-                        className="text-sm font-medium text-gray-700"
+                        className="text-[10px]"
                       >
-                        First Name:
+                        First Name <span className="text-red-600">*</span>
                       </label>
-                      <span className="text-red-600">*</span>
                     </div>
 
                     <input
@@ -299,7 +308,7 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                       name="firstName"
                       value={formData.firstName}
                       onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
                       required
                     />
                   </div>
@@ -308,11 +317,10 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                     <div className="flex gap-1">
                       <label
                         htmlFor="lastName"
-                        className="text-sm font-medium text-gray-700"
+                        className="text-[10px]"
                       >
-                        Last Name:
+                        Last Name <span className="text-red-600">*</span>
                       </label>
-                      <span className="text-red-600">*</span>
                     </div>
 
                     <input
@@ -321,7 +329,7 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                       name="lastName"
                       value={formData.lastName}
                       onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
                       required
                     />
                   </div>
@@ -331,13 +339,13 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                   <button
                     type="button"
                     onClick={onClose}
-                    className="px-6 py-2 text-gray-700 border border-gray-400 rounded-lg hover:bg-gray-300 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                    className="px-6 py-1 ml-2 text-custom-bg rounded-[4px] text-xs font-bold border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
                   >
-                    Close
+                    Cancel
                   </button>
                   <button
                     onClick={nextStep}
-                    className={`px-6 py-2 rounded-lg ${formData.firstName && formData.lastName && formData.title
+                    className={`px-6 py-2 rounded-[4px] text-xs font-bold ${formData.firstName && formData.lastName && formData.title
                       ? "bg-custom-bg text-white hover:bg-gray-600"
                       : "bg-gray-300 text-gray-500 cursor-not-allowed"
                       }`}
@@ -359,13 +367,19 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                 <div className="grid grid-cols-2 sm:grid-cols-2 gap-3">
                   <div>
                     <div className="flex gap-1">
-                      <label
+                      {/* <label
                         htmlFor="email"
                         className="text-sm font-medium text-gray-700"
                       >
                         Email:
                       </label>
-                      <span className="text-red-600">*</span>
+                      <span className="text-red-600">*</span> */}
+                      <label
+                        htmlFor="email"
+                        className="text-[10px]"
+                      >
+                        Email <span className="text-red-600">*</span>
+                      </label>
                     </div>
                     <input
                       type="email"
@@ -373,31 +387,37 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                       name="email"
                       value={formData.email}
                       onChange={handleChange}
-                      className={`mt-1 block w-full p-2 border rounded-lg ${validation.emailValid === null
-                        ? 'border-gray-300'
+                      className={`mt-1 block w-full p-2 border rounded-[4px] ${validation.emailValid === null
+                        ? 'border-[#42506666]'
                         : validation.emailValid
-                          ? 'border-green-500'
-                          : 'border-red-500'
+                          ? 'border-green-700'
+                          : 'border-red-700'
                         } focus:outline-none`}
                       required
                     />
                     {validation.emailValid === false && (
-                      <p className="text-sm text-red-600">Invalid email format</p>
+                      <p className="text-[10px] text-red-700">Invalid email format</p>
                     )}
                     {validation.emailValid === true && (
-                      <p className="text-sm text-green-600">Valid email format</p>
+                      <p className="text-[10px] text-green-700">Valid email format</p>
                     )}
                   </div>
 
                   <div>
                     <div className="flex gap-1">
-                      <label
+                      {/* <label
                         htmlFor="tel1"
                         className="text-sm font-medium text-gray-700"
                       >
                         Tel 1:
                       </label>
-                      <span className="text-red-600">*</span>
+                      <span className="text-red-600">*</span> */}
+                      <label
+                        htmlFor="tel1"
+                        className="text-[10px]"
+                      >
+                        Tel 1 <span className="text-red-600">*</span>
+                      </label>
                     </div>
                     <input
                       type="number"
@@ -405,17 +425,17 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                       name="tel1"
                       value={formData.tel1}
                       onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
                       required
                     />
                   </div>
 
-                  <div>
+                  <div className="">
                     <label
                       htmlFor="tel2"
-                      className="text-sm font-medium text-gray-700"
+                      className="text-[10px]"
                     >
-                      Tel 2:
+                      Tel 2
                     </label>
                     <input
                       type="number"
@@ -423,19 +443,25 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                       name="tel2"
                       value={formData.tel2}
                       onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
                     />
                   </div>
 
-                  <div>
+                  <div className="mt-2">
                     <div className="flex gap-1">
-                      <label
+                      {/* <label
                         htmlFor="postcode"
                         className="text-sm font-medium text-gray-700"
                       >
                         Postcode:
                       </label>
-                      <span className="text-red-600">*</span>
+                      <span className="text-red-600">*</span> */}
+                      <label
+                        htmlFor="postcode"
+                        className="text-[10px]"
+                      >
+                        Postcode <span className="text-red-600">*</span>
+                      </label>
                     </div>
                     <input
                       type="text"
@@ -443,20 +469,26 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                       name="postcode"
                       value={formData.postcode}
                       onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
                       required
                     />
                   </div>
 
                   <div>
                     <div className="flex gap-1">
-                      <label
+                      {/* <label
                         htmlFor="postalAddress"
                         className="text-sm font-medium text-gray-700"
                       >
                         Postal Address:
                       </label>
-                      <span className="text-red-600">*</span>
+                      <span className="text-red-600">*</span> */}
+                      <label
+                        htmlFor="postalAddress"
+                        className="text-[10px]"
+                      >
+                        Postal Address <span className="text-red-600">*</span>
+                      </label>
                     </div>
                     <input
                       type="text"
@@ -464,7 +496,7 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                       name="postalAddress"
                       value={formData.postalAddress}
                       onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
                       required
                     />
                   </div>
@@ -472,9 +504,9 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                   <div>
                     <label
                       htmlFor="permanentAddress"
-                      className="text-sm font-medium text-gray-700"
+                      className="text-[10px]"
                     >
-                      Permanent Address:
+                      Permanent Address
                     </label>
                     <input
                       type="text"
@@ -482,7 +514,7 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                       name="permanentAddress"
                       value={formData.permanentAddress}
                       onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
                     />
                   </div>
 
@@ -490,9 +522,9 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                     <div className="flex gap-1">
                       <label
                         htmlFor="city"
-                        className="text-sm font-medium text-gray-700"
+                        className="text-[10px]"
                       >
-                        City:
+                        City
                       </label>
                       <span className="text-red-600">*</span>
                     </div>
@@ -502,20 +534,27 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                       name="city"
                       value={formData.city}
                       onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
                       required
                     />
                   </div>
 
                   <div>
                     <div className="flex gap-1">
-                      <label
+                      {/* <label
                         htmlFor="county"
                         className="text-sm font-medium text-gray-700"
                       >
                         Country:
                       </label>
-                      <span className="text-red-600">*</span>
+                      <span className="text-red-600">*</span> */}
+                      <label
+                        htmlFor="county"
+                        className="text-[10px]"
+                      >
+                        Country <span className="text-red-600">*</span>
+                      </label>
+
                     </div>
                     <input
                       type="text"
@@ -523,7 +562,7 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                       name="county"
                       value={formData.county}
                       onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
                       required
                     />
                   </div>
@@ -533,7 +572,7 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                   <div>
                     <button
                       onClick={prevStep}
-                      className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                      className="px-6 py-2 ml-2 text-custom-bg rounded-[4px] text-xs font-bold border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
                     >
                       Back
                     </button>
@@ -545,14 +584,14 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                         onClose();
                         resetform();
                       }}
-                      className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                      className="px-6 py-2 ml-2 text-custom-bg rounded-[4px] text-xs font-bold border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
                     >
                       Close
                     </button>
 
                     <button
                       onClick={nextStep}
-                      className={`px-6 py-2 rounded-lg ${formData.email && formData.tel1 && formData.postcode && formData.postalAddress && formData.city && formData.county
+                      className={`px-6 py-2 rounded-[4px] text-xs ${formData.email && formData.tel1 && formData.postcode && formData.postalAddress && formData.city && formData.county
                         ? "bg-custom-bg text-white hover:bg-gray-600"
                         : "bg-gray-300 text-gray-500 cursor-not-allowed"
                         }`}
@@ -567,9 +606,6 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
           )}
 
 
-
-
-
           {/* Security */}
           {step === 3 && (
             <>
@@ -582,9 +618,9 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                     <div className="flex gap-1">
                       <label
                         htmlFor="county"
-                        className="text-sm font-medium text-gray-700"
+                        className="text-[10px]"
                       >
-                        Date Of Birth:
+                        Date Of Birth
                       </label>
                     </div>
 
@@ -594,22 +630,29 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                       name="dateOfBirth"
                       value={formData.dateOfBirth}
                       onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
                     />
                     {!validation.dateOfBirthValid && (
-                      <span className="text-sm text-red-500">Date of Birth cannot be in the future.</span>
+                      <span className="text-[9px] text-red-700">Date of Birth cannot be in the future.</span>
                     )}
                   </div>
 
                   <div>
                     <div className="flex gap-1">
-                      <label
+                      {/* <label
                         htmlFor="position"
                         className="text-sm font-medium text-gray-700"
                       >
-                        Position:
+                        Position
+                        :
                       </label>
-                      <span className="text-red-600">*</span>
+                      <span className="text-red-600">*</span> */}
+                      <label
+                        htmlFor="position"
+                        className="text-[10px]"
+                      >
+                        Position <span className="text-red-600">*</span>
+                      </label>
                     </div>
                     <input
                       type="text"
@@ -617,7 +660,7 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                       name="position"
                       value={formData.position}
                       onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
                       required
                     />
                   </div>
@@ -625,9 +668,9 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                   <div>
                     <label
                       htmlFor="reportsTo"
-                      className="text-sm font-medium text-gray-700"
+                      className="text-[10px]"
                     >
-                      Reports To:
+                      Reports To
                     </label>
                     <input
                       type="text"
@@ -635,19 +678,25 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                       name="reportsTo"
                       value={formData.reportsTo}
                       onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
                     />
                   </div>
 
                   <div>
                     <div className="flex gap-1">
-                      <label
+                      {/* <label
                         htmlFor="username"
                         className="text-sm font-medium text-gray-700"
                       >
                         Username:
                       </label>
-                      <span className="text-red-600">*</span>
+                      <span className="text-red-600">*</span> */}
+                      <label
+                        htmlFor="username"
+                        className="text-[10px]"
+                      >
+                        Username <span className="text-red-600">*</span>
+                      </label>
                     </div>
                     <input
                       type="text"
@@ -655,7 +704,7 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                       name="username"
                       value={formData.username}
                       onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
                       required
                     />
                   </div>
@@ -663,13 +712,19 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                   <div className="flex gap-2">
                     <div className="relative">
                       <div className="flex gap-1">
+                        {/* <label
+                          htmlFor="password"
+                          Username
+                        >
+                          Password
+                        </label>
+                        <span className="text-red-600">*</span> */}
                         <label
                           htmlFor="password"
-                          className="text-sm font-medium text-gray-700"
+                          className="text-[10px]"
                         >
-                          Password:
+                          Password <span className="text-red-600">*</span>
                         </label>
-                        <span className="text-red-600">*</span>
                       </div>
                       <input
                         type={showPasswords ? "text" : "password"}
@@ -677,13 +732,13 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                         name="password"
                         value={formData.password}
                         onChange={handleChange}
-                        className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                        className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
                         required
                       />
                       <button
                         type="button"
                         onClick={() => setShowPasswords((prev) => !prev)}
-                        className="absolute right-2 top-10"
+                        className="absolute right-2 top-7"
                       >
                         {showPasswords ? (
                           <AiOutlineEye size={20} />
@@ -695,13 +750,19 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
 
                     <div className="relative">
                       <div className="flex gap-1">
-                        <label
+                        {/* <label
                           htmlFor="confirmpassword"
                           className="text-sm font-medium text-gray-700"
                         >
                           Confirm Password:
                         </label>
-                        <span className="text-red-600">*</span>
+                        <span className="text-red-600">*</span> */}
+                        <label
+                          htmlFor="confirmpassword"
+                          className="text-[10px]"
+                        >
+                          Confirm Password <span className="text-red-600">*</span>
+                        </label>
                       </div>
                       <input
                         type={showPasswords ? "text" : "password"}
@@ -710,18 +771,18 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                         value={formData.confirmpassword}
                         onChange={handleChange}
                         // className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                        className={`mt-1 block w-full p-2 ${validation.passwordMatch === null
-                            ? 'border-gray-300'
-                            : validation.passwordMatch
-                              ? 'border-green-500'
-                              : 'border-red-500'
-                          } focus:outline-none border rounded-lg`}
+                        className={`mt-1 block w-full  p-2 ${validation.passwordMatch === null
+                          ? 'border-[#42506666] '
+                          : validation.passwordMatch
+                            ? 'border-green-500'
+                            : 'border-red-500'
+                          } focus:outline-none border rounded-[4px]`}
                         required
                       />
                       <button
                         type="button"
                         onClick={() => setShowPasswords((prev) => !prev)}
-                        className="absolute right-2 top-10"
+                        className="absolute right-2 top-7"
                       >
                         {showPasswords ? (
                           <AiOutlineEye size={20} />
@@ -730,19 +791,19 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                         )}
                       </button>
                       <span
-                        className={`text-sm ${validation.passwordMatch === null
-                            ? "text-gray-500"
-                            : validation.passwordMatch
-                              ? passwordRegex.test(formData.password)
-                                ? "text-green-500"
-                                : "text-red-500"
+                        className={`text-[10px] ${validation.passwordMatch === null
+                          ? "text-gray-500"
+                          : validation.passwordMatch
+                            ? passwordRegex.test(formData.password)
+                              ? "text-green-500"
                               : "text-red-500"
+                            : "text-red-500"
                           }`}
                       >
                         {validation.passwordMatch === null
-                          ? "Confirm Password must be entered i.e Shah@1anything 6 characters"
+                          ? "Confirm Password must be entered "
                           : !validation.passwordMatch
-                            ? "Confirm Password does not match i.e Shah@1anything 6 characters"
+                            ? "Confirm Password does not match "
                             : !passwordRegex.test(formData.password)
                               ? "Password is not strong i.e Shah@1anything 6 characters"
                               : "Confirm Password matched Pattern Match"}
@@ -762,13 +823,19 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
 
                   <div>
                     <div className="flex gap-1">
-                      <label
+                      {/* <label
                         htmlFor="passwordExpires"
                         className="text-sm font-medium text-gray-700"
                       >
                         Password Expires:
                       </label>
-                      <span className="text-red-600">*</span>
+                      <span className="text-red-600">*</span> */}
+                      <label
+                        htmlFor="passwordExpires"
+                        className="text-[10px]"
+                      >
+                        Password Expires <span className="text-red-600">*</span>
+                      </label>
                     </div>
 
                     <input
@@ -777,7 +844,7 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                       name="passwordExpires"
                       value={formData.passwordExpires}
                       onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
                       required
                     />
                   </div>
@@ -788,7 +855,7 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                   <div>
                     <button
                       onClick={prevStep}
-                      className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                      className="px-6 py-2 ml-2 text-custom-bg rounded-[4px] text-xs font-bold border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
                     >
                       Back
                     </button>
@@ -800,18 +867,18 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                         onClose();
                         resetform();
                       }}
-                      className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                      className="px-6 py-2 ml-2 text-custom-bg rounded-[4px] text-xs font-bold border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
                     >
                       Close
                     </button>
 
                     <button
                       onClick={nextStep}
-                      className={`px-6 py-2 rounded-lg ${formData.position && formData.username && validation.dateOfBirthValid && formData.password && formData.confirmpassword && formData.passwordExpires && formData.passwordExpires && formData.password === formData.confirmpassword
+                      className={`px-6 py-2 rounded-[4px] text-xs ${formData.email && formData.tel1 && formData.postcode && formData.postalAddress && formData.city && formData.county
                         ? "bg-custom-bg text-white hover:bg-gray-600"
                         : "bg-gray-300 text-gray-500 cursor-not-allowed"
                         }`}
-                      disabled={!formData.position || !formData.username || !validation.dateOfBirthValid || !formData.password || !formData.confirmpassword ||  !validation.passwordExpiresvalid ||!formData.passwordExpires || formData.password !== formData.confirmpassword}
+                      disabled={!formData.email || !formData.tel1 || !formData.postcode || !formData.postalAddress || !formData.city || !formData.county}
                     >
                       Next
                     </button>
@@ -919,7 +986,7 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                 <div>
                   <button
                     onClick={prevStep}
-                    className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                   className="px-6 py-2 ml-2 text-custom-bg rounded-[4px] text-xs font-bold border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
                   >
                     Back
                   </button>
@@ -931,13 +998,13 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                       onClose();
                       resetform();
                     }}
-                    className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                     className="px-6 py-2 ml-2 text-custom-bg rounded-[4px] text-xs font-bold border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
                   >
                     Close
                   </button>
                   <button
                     type="submit"
-                    className="px-6 py-2 bg-custom-bg text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                    className="px-6 py-2 bg-custom-bg text-white rounded-[4px] text-xs hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
                   >
                     Submit
                   </button>

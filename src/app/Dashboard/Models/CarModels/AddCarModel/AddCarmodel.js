@@ -118,10 +118,9 @@ const AddCarModel = ({ isOpen, onClose, fetchData }) => {
             Add Model
           </h2>
 
-          <img src="/crossIcon.svg" onClick={() => {
+          <img src="/crossIcon.svg" className="cursor-pointer" onClick={() => {
             onClose();
           }} />
-
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">

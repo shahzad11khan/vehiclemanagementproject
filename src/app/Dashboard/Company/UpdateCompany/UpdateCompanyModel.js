@@ -52,13 +52,13 @@ const UpdateCompanyModel = ({
   const nextStep = () => setStep(step + 1);
   const prevStep = () => setStep(step - 1);
   const [showPassword, setShowPassword] = useState(false);
-    const strongPasswordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@#$%^&*!?])[A-Za-z\d@#$%^&*!?]{8,}$/;
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-      const [validation, setValidation] = useState({
-      emailValid: false,
-      passwordMatch: false,
-      passwordValid: false,
-    });
+  const strongPasswordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@#$%^&*!?])[A-Za-z\d@#$%^&*!?]{8,}$/;
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+  const [validation, setValidation] = useState({
+    emailValid: false,
+    passwordMatch: false,
+    passwordValid: false,
+  });
 
   useEffect(() => {
     const fetchCompanyDetails = async () => {
@@ -146,20 +146,20 @@ const UpdateCompanyModel = ({
   const handleChange = (e) => {
     const { name, value, type, checked, files } = e.target;
     const updatedValue = type === 'checkbox' ? checked : type === 'file' ? files[0] : value;
-  
+
     // Update form data
     setFormData((prevData) => ({
       ...prevData,
       [name]: updatedValue,
       ...(name === 'mailingAddress' && autoFillAll
         ? {
-            billingAddress: value,
-            bankingInformationBankAddress: value,
-            physical_Address: value,
-          }
+          billingAddress: value,
+          bankingInformationBankAddress: value,
+          physical_Address: value,
+        }
         : {}),
     }));
-  
+
     // Validation logic
     if (name === 'email') {
       setValidation((prevValidation) => ({
@@ -167,11 +167,11 @@ const UpdateCompanyModel = ({
         emailValid: emailRegex.test(updatedValue),
       }));
     }
-  
+
     if (name === 'password' || name === 'confirmPassword') {
       const password = name === 'password' ? updatedValue : formData.password;
       const confirmPassword = name === 'confirmPassword' ? updatedValue : formData.confirmPassword;
-  
+
       setValidation((prevValidation) => ({
         ...prevValidation,
         passwordValid: strongPasswordRegex.test(password), // Validate password strength
@@ -179,7 +179,7 @@ const UpdateCompanyModel = ({
       }));
     }
   };
-  
+
   const handleCheckboxChange = (e) => {
     const { checked } = e.target;
     setAutoFillAll(checked);
@@ -187,15 +187,15 @@ const UpdateCompanyModel = ({
       ...prevData,
       ...(checked
         ? {
-            billingAddress: prevData.mailingAddress,
-            bankingInformationBankAddress: prevData.mailingAddress,
-            physical_Address: prevData.mailingAddress,
-          }
+          billingAddress: prevData.mailingAddress,
+          bankingInformationBankAddress: prevData.mailingAddress,
+          physical_Address: prevData.mailingAddress,
+        }
         : {
-            billingAddress: "",
-            bankingInformationBankAddress: "",
-            physical_Address: "",
-          }),
+          billingAddress: "",
+          bankingInformationBankAddress: "",
+          physical_Address: "",
+        }),
     }));
   };
   const handleSubmit = async (e) => {
@@ -299,10 +299,21 @@ const UpdateCompanyModel = ({
   if (!isOpen) return null;
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-4xl  overflow-y-auto">
-        <h2 className="text-3xl font-semibold text-center mb-8">
+      <div className="bg-white p-6 rounded-xl shadow-lg w-full max-w-4xl  overflow-y-auto">
+        {/* <h2 className="text-3xl font-semibold text-center mb-8">
           Update Company
-        </h2>
+        </h2> */}
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-2xl font-bold">
+            Update Company
+          </h2>
+
+          <img src="/crossIcon.svg" className="cursor-pointer" onClick={() => {
+            onClose();
+            setStep(1);
+          }} />
+
+        </div>
 
         <form
           onSubmit={handleSubmit}
@@ -317,11 +328,10 @@ const UpdateCompanyModel = ({
                   <div className="flex gap-1">
                     <label
                       htmlFor="CompanyName"
-                      className="block text-sm font-medium text-gray-700"
+                      className="text-[10px] "
                     >
-                      Company Name
+                      Company Name <span className="text-red-600">*</span>
                     </label>
-                    <span className="text-red-600">*</span>
                   </div>
 
                   <input
@@ -330,7 +340,7 @@ const UpdateCompanyModel = ({
                     name="CompanyName"
                     value={formData.CompanyName}
                     onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]  shadow-sm focus:ring-blue-500 focus:border-blue-500"
                     required
                   />
                 </div>
@@ -340,11 +350,10 @@ const UpdateCompanyModel = ({
                   <div className="flex gap-1">
                     <label
                       htmlFor="email"
-                      className="block text-sm font-medium text-gray-700"
+                      className="text-[10px] "
                     >
-                      Email
+                      Email <span className="text-red-600">*</span>
                     </label>
-                    <span className="text-red-600">*</span>
                   </div>
 
                   <input
@@ -353,123 +362,133 @@ const UpdateCompanyModel = ({
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    className={`mt-1 block w-full p-2 border rounded-lg ${
-                      validation.emailValid === null
-                        ? 'border-gray-300'
-                        : validation.emailValid
-                        ? 'border-green-500'
-                        : 'border-red-500'
-                    } focus:outline-none`}
+                    className={`mt-1 block w-full p-2 border  rounded-[4px]  ${validation.emailValid === null
+                      ? 'border-[#42506666]'
+                      : validation.emailValid
+                        ? 'border-green-700'
+                        : 'border-red-700'
+                      } focus:outline-none`}
                     required
                   />
                   {validation.emailValid === false && (
-        <p className="text-sm text-red-600">Invalid email format</p>
-      )}
-      {validation.emailValid === true && (
-        <p className="text-sm text-green-600">Valid email format</p>
-      )}
+                    <p className="text-[8px] text-red-700">Invalid email format</p>
+                  )}
+                  {validation.emailValid === true && (
+                    <p className="text-[8px] text-green-700">Valid email format</p>
+                  )}
                 </div>
                 <div className="flex gap-2">
                   {/* Password */}
                   <div className="relative">
-                                     <div className="flex gap-1">
-                                       <label
-                                         htmlFor="password"
-                                         className="block text-sm font-medium text-gray-700"
-                                       >
-                                         Password
-                                       </label>
-                                       <span className="text-red-600">*</span>
-                                     </div>
-                                     <input
-                                       type={showPassword ? "text" : "password"}
-                                       id="password"
-                                       name="password"
-                                       value={formData.password}
-                                       onChange={handleChange}
-                                       className="mt-1 block w-full p-2 pr-10 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                                       required
-                                     />
-                                     <button
-                                       type="button"
-                                       onClick={() => setShowPassword((prev) => !prev)}
-                                       className="absolute right-2 top-10"
-                                     >
-                                       {showPassword ? (
-                                         <AiOutlineEye size={20} />
-                                       ) : (
-                                         <AiOutlineEyeInvisible size={20} />
-                                       )}
-                                     </button>
-                                   </div>
+                    <div className="flex gap-1">
+                      {/* <label
+                        htmlFor="password"
+                        className="block text-sm font-medium text-gray-700"
+                      >
+                        Password
+                      </label>
+                      <span className="text-red-600">*</span> */}
+                      <label
+                        htmlFor="password"
+                        className="text-[10px] "
+                      >
+                        Password <span className="text-red-600">*</span>
+                      </label>
+                    </div>
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      id="password"
+                      name="password"
+                      value={formData.password}
+                      onChange={handleChange}
+                      className="mt-1 block w-full p-2 pr-10 border border-[#42506666] rounded-[4px] shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                      required
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword((prev) => !prev)}
+                      className="absolute right-2 top-1/3"
+                    >
+                      {showPassword ? (
+                        <AiOutlineEye size={20} />
+                      ) : (
+                        <AiOutlineEyeInvisible size={20} />
+                      )}
+                    </button>
+                  </div>
                   {/* Confirm Password */}
-                     <div>
-                 <div className="flex gap-1">
-                   <label
-                     htmlFor="confirmPassword"
-                     className="block text-sm font-medium text-gray-700"
-                   >
-                     Confirm Password
-                   </label>
-                   <span className="text-red-600">*</span>
-                 </div>
-               
-                 <div className="relative">
-                   <input
-                     type={showPassword ? "text" : "password"}
-                     id="confirmPassword"
-                     name="confirmPassword"
-                     value={formData.confirmPassword}
-                     onChange={handleChange}
-                     className={`mt-1 block w-full p-2 pr-10 ${
-                       validation.passwordMatch === null
-                         ? "border-gray-300"
-                         : validation.passwordMatch
-                         ? "border-green-500"
-                         : "border-red-500"
-                     } focus:outline-none border border-gray-300 rounded-lg`}
-                     required
-                   />
-                   <button
-                     type="button"
-                     onClick={() => setShowPassword((prev) => !prev)}
-                     className="absolute inset-y-0 right-2 flex items-center text-gray-500"
-                   >
-                     {showPassword ? (
-                       <AiOutlineEye size={20} />
-                     ) : (
-                       <AiOutlineEyeInvisible size={20} />
-                     )}
-                   </button>
-                 </div>
-               
-                 <span
-                   className={`text-sm ${
-                     validation.passwordMatch === null
-                       ? "text-gray-500"
-                       : validation.passwordMatch
-                       ? strongPasswordRegex.test(formData.password)
-                         ? "text-green-500"
-                         : "text-red-500"
-                       : "text-red-500"
-                   }`}
-                 >
-                   {validation.passwordMatch === null
-                     ? "Confirm Password must be entered i.e Abc@1234"
-                     : !validation.passwordMatch
-                     ? "Confirm Password does not match i.e Abc@1234"
-                     : !strongPasswordRegex.test(formData.password)
-                     ? "Password is not strong i.e Abc@1234"
-                     : "Confirm Password matched"}
-                 </span>
-               </div>
+                  <div>
+                    <div className="flex gap-1">
+                      {/* <label
+                        htmlFor="confirmPassword"
+                        className="block text-sm font-medium text-gray-700"
+                      >
+                        Confirm Password
+                      </label>
+                      <span className="text-red-600">*</span> */}
+                      <label
+                        htmlFor="confirmPassword"
+                        className="text-[10px] "
+                      >
+                        Confirm Password <span className="text-red-600">*</span>
+                      </label>
+
+                    </div>
+
+                    <div className="relative">
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        id="confirmPassword"
+                        name="confirmPassword"
+                        value={formData.confirmPassword}
+                        onChange={handleChange}
+                        className={`mt-1 block w-full p-2 pr-10 ${validation.passwordMatch === null
+                          ? "border-gray-300"
+                          : validation.passwordMatch
+                            ? "border-green-500"
+                            : "border-red-500"
+                          } focus:outline-none border border-[#42506666] rounded-[4px]`}
+                        required
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword((prev) => !prev)}
+                        className="absolute inset-y-0 right-2 flex items-center text-gray-500"
+                      >
+                        {showPassword ? (
+                          <AiOutlineEye size={20} />
+                        ) : (
+                          <AiOutlineEyeInvisible size={20} />
+                        )}
+                      </button>
+                    </div>
+
+                    <span
+                      className={`text-[8px] ${validation.passwordMatch === null
+                        ? "text-gray-500"
+                        : validation.passwordMatch
+                          ? strongPasswordRegex.test(formData.password)
+                            ? "text-green-700"
+                            : "text-red-700"
+                          : "text-red-700"
+                        }`}
+                    >
+                      {validation.passwordMatch === null
+                        ? "Confirm Password must be entered i.e Abc@1234"
+                        : !validation.passwordMatch
+                          ? "Confirm Password does not match i.e Abc@1234"
+                          : !strongPasswordRegex.test(formData.password)
+                            ? "Password is not strong i.e Abc@1234"
+                            : "Confirm Password matched"}
+                    </span>
+                  </div>
                 </div>
                 {/* CompanyRegistrationNumber*/}
                 <div>
                   <div className="flex gap-1">
                     <label
                       htmlFor="CompanyRegistrationNumber"
-                      className="block text-sm font-medium text-gray-700"
+                      className="text-[10px] "
                     >
                       Company Registration Number
                     </label>
@@ -481,7 +500,7 @@ const UpdateCompanyModel = ({
                     name="CompanyRegistrationNumber"
                     value={formData.CompanyRegistrationNumber}
                     onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]  shadow-sm focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
                 {/* <button
@@ -496,7 +515,7 @@ const UpdateCompanyModel = ({
                   <div className="flex gap-1">
                     <label
                       htmlFor="vatnumber"
-                      className="block text-sm font-medium text-gray-700"
+                      className="text-[10px] "
                     >
                       Vat Number
                     </label>
@@ -508,7 +527,7 @@ const UpdateCompanyModel = ({
                     name="vatnumber"
                     value={formData.vatnumber}
                     onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]  shadow-sm focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
               </div>
@@ -518,13 +537,13 @@ const UpdateCompanyModel = ({
                   onClick={() => {
                     onClose();
                   }}
-                  className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                  className="px-6 py-2 ml-2 text-custom-bg rounded-[4px] text-xs font-bold border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
                 >
-                  Close
+                  Cancel
                 </button>
                 <button
                   onClick={nextStep}
-                  className="px-6 py-2 bg-custom-bg text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                  className="px-6 py-2 bg-custom-bg text-white text-xs font-bold rounded-[4px] hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
                 >
                   Next
                 </button>
@@ -542,11 +561,10 @@ const UpdateCompanyModel = ({
                     <div className="flex gap-1">
                       <label
                         htmlFor="CompanyName"
-                        className="block text-sm font-medium text-gray-700"
+                        className="text-[10px] "
                       >
-                        Mailing Address
+                        Mailing Address <span className="text-red-600">*</span>
                       </label>
-                      <span className="text-red-600">*</span>
                     </div>
                     <input
                       type="text"
@@ -554,18 +572,18 @@ const UpdateCompanyModel = ({
                       name="mailingAddress"
                       value={formData.mailingAddress}
                       onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px] shadow-sm focus:ring-blue-500 focus:border-blue-500"
                       required
                     />
                   </div>
-                  <label className="inline-flex items-center mt-4">
+                  <label className="inline-flex items-center mt-2">
                     <input
                       type="checkbox"
                       checked={autoFillAll}
                       onChange={handleCheckboxChange}
                       className="form-checkbox"
                     />
-                    <span className="ml-2 text-sm text-gray-700">
+                    <span className="ml-2 text-[10px] text-gray-700">
                       Same as Mailing Address for all addresses
                     </span>
                   </label>
@@ -573,13 +591,19 @@ const UpdateCompanyModel = ({
                 {/*     physical_Address: "", info */}
                 <div>
                   <div className="flex gap-1">
-                    <label
+                    {/* <label
                       htmlFor="physical_Address"
                       className="block text-sm font-medium text-gray-700"
                     >
                       Physical Address
                     </label>
-                    <span className="text-red-600">*</span>
+                    <span className="text-red-600">*</span> */}
+                    <label
+                      htmlFor="physical_Address"
+                      className="text-[10px] "
+                    >
+                      Physical Address <span className="text-red-600">*</span>
+                    </label>
                   </div>
                   <input
                     type="text"
@@ -587,7 +611,7 @@ const UpdateCompanyModel = ({
                     name="physical_Address"
                     value={formData.physical_Address}
                     onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]  shadow-sm focus:ring-blue-500 focus:border-blue-500"
                     required
                   />
                 </div>
@@ -596,11 +620,10 @@ const UpdateCompanyModel = ({
                   <div className="flex gap-1">
                     <label
                       htmlFor="phoneNumber"
-                      className="block text-sm font-medium text-gray-700"
+                      className="text-[10px] "
                     >
-                      Phone Number
+                      Phone Number <span className="text-red-600">*</span>
                     </label>
-                    <span className="text-red-600">*</span>
                   </div>
                   <input
                     type="text"
@@ -608,7 +631,7 @@ const UpdateCompanyModel = ({
                     name="phoneNumber"
                     value={formData.phoneNumber}
                     onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]  shadow-sm focus:ring-blue-500 focus:border-blue-500"
                     required
                   />
                 </div>
@@ -618,7 +641,7 @@ const UpdateCompanyModel = ({
                   <div className="flex gap-1">
                     <label
                       htmlFor="generalEmail"
-                      className="block text-sm font-medium text-gray-700"
+                      className="text-[10px] "
                     >
                       General Email
                     </label>
@@ -629,7 +652,7 @@ const UpdateCompanyModel = ({
                     name="generalEmail"
                     value={formData.generalEmail}
                     onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]  shadow-sm focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
                 {/*     accountsPayableEmail :*/}
@@ -637,7 +660,7 @@ const UpdateCompanyModel = ({
                   <div className="flex gap-1">
                     <label
                       htmlFor="accountsPayableEmail"
-                      className="block text-sm font-medium text-gray-700"
+                      className="text-[10px] "
                     >
                       Accounts Payable Email
                     </label>
@@ -648,7 +671,7 @@ const UpdateCompanyModel = ({
                     name="accountsPayableEmail"
                     value={formData.accountsPayableEmail}
                     onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]  shadow-sm focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
                 {/*     specificContactEmail :*/}
@@ -656,11 +679,10 @@ const UpdateCompanyModel = ({
                   <div className="flex gap-1">
                     <label
                       htmlFor="specificContactEmail"
-                      className="block text-sm font-medium text-gray-700"
+                      className="text-[10px] "
                     >
-                      Specific Contact Email
+                      Specific Contact Email<span className="text-red-600">*</span>
                     </label>
-                    <span className="text-red-600">*</span>
                   </div>
                   <input
                     type="email"
@@ -668,44 +690,47 @@ const UpdateCompanyModel = ({
                     name="specificContactEmail"
                     value={formData.specificContactEmail}
                     onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]  shadow-sm focus:ring-blue-500 focus:border-blue-500"
                     required
                   />
                 </div>
               </div>
-              <div className="mt-6 flex gap-2 justify-end">
-                <button
-                  type="button"
-                  onClick={prevStep}
-                  className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
-                >
-                  Back
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    onClose();
-                    setStep(1);
-                  }}
-                  className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
-                >
-                  Close
-                </button>
-                <button
-                  onClick={nextStep}
-                  className="px-6 py-2 bg-custom-bg text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
-                >
-                  Next
-                </button>
+              <div className="mt-6 flex gap-2 justify-between">
+                <div>
+                  <button
+                    type="button"
+                    onClick={prevStep}
+                    className="px-6 py-2 ml-2 text-custom-bg rounded-[4px] text-xs font-bold border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                  >
+                    Back
+                  </button>
+                </div>
+                <div className="flex gap-[10px]">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onClose();
+                      setStep(1);
+                    }}
+                    className="px-6 py-2 ml-2 text-custom-bg rounded-[4px] text-xs font-bold border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={nextStep}
+                    className="px-6 py-2 bg-custom-bg text-white text-xs font-bold rounded-[4px] hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                  >
+                    Next
+                  </button></div>
               </div>
             </>
           )}
           {/* Billing and Invoicing Information */}
           {step === 3 && (
             <>
-              <h2 className="text-md font-semibold">
+              {/* <h2 className="text-md font-semibold">
                 Billing and Invoicing Information
-              </h2>
+              </h2> */}
 
               {/*  Accounts Payable Contact: */}
               <div className="">
@@ -713,13 +738,13 @@ const UpdateCompanyModel = ({
                   Accounts Payable Contact:
                 </h2>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-6">
                   {/* Name*/}
                   <div>
                     <div className="flex gap-1">
                       <label
                         htmlFor="accountsPayableContactName"
-                        className="block text-sm font-medium text-gray-700"
+                        className="text-[10px] "
                       >
                         Name
                       </label>
@@ -730,7 +755,7 @@ const UpdateCompanyModel = ({
                       name="accountsPayableContactName"
                       value={formData.accountsPayableContactName}
                       onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px] shadow-sm focus:ring-blue-500 focus:border-blue-500"
                     />
                   </div>
                   {/*     Phone Number and Email */}
@@ -738,7 +763,7 @@ const UpdateCompanyModel = ({
                     <div className="flex gap-1">
                       <label
                         htmlFor="accountsPayableContactPhoneNumberandEmail"
-                        className="block text-sm font-medium text-gray-700"
+                        className="text-[10px] "
                       >
                         Phone Number and Email
                       </label>
@@ -749,7 +774,7 @@ const UpdateCompanyModel = ({
                       name="accountsPayableContactPhoneNumberandEmail"
                       value={formData.accountsPayableContactPhoneNumberandEmail}
                       onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px] shadow-sm focus:ring-blue-500 focus:border-blue-500"
                     />
                   </div>
                 </div>
@@ -759,7 +784,7 @@ const UpdateCompanyModel = ({
                     <div className="flex gap-1">
                       <label
                         htmlFor="billingAddress"
-                        className="block text-sm font-medium text-gray-700"
+                        className="text-[10px] "
                       >
                         Billing Address
                       </label>
@@ -770,7 +795,7 @@ const UpdateCompanyModel = ({
                       name="billingAddress"
                       value={formData.billingAddress}
                       onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px] shadow-sm focus:ring-blue-500 focus:border-blue-500"
                     />
                   </div>
                   {/*     Agreed Payment Schedule:*/}
@@ -778,7 +803,7 @@ const UpdateCompanyModel = ({
                     <div className="flex gap-1">
                       <label
                         htmlFor="paymentTermsAgreedPaymentSchedule"
-                        className="block text-sm font-medium text-gray-700"
+                        className="text-[10px] "
                       >
                         Agreed Payment Schedule
                       </label>
@@ -788,7 +813,7 @@ const UpdateCompanyModel = ({
                       name="paymentTermsAgreedPaymentSchedule"
                       value={formData.paymentTermsAgreedPaymentSchedule}
                       onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px] shadow-sm focus:ring-blue-500 focus:border-blue-500"
                     >
                       <option value="">Select Payment Schedule</option>
                       <option value="30">30 days</option>
@@ -803,7 +828,7 @@ const UpdateCompanyModel = ({
                     <div className="flex gap-1">
                       <label
                         htmlFor="paymentTermsPreferredPaymentMethod"
-                        className="block text-sm font-medium text-gray-700"
+                        className="text-[10px] "
                       >
                         Preferred Payment Method
                       </label>
@@ -813,7 +838,7 @@ const UpdateCompanyModel = ({
                       name="paymentTermsPreferredPaymentMethod"
                       value={formData.paymentTermsPreferredPaymentMethod}
                       onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px] shadow-sm focus:ring-blue-500 focus:border-blue-500"
                     >
                       <option value="">Select Payment Method</option>
                       <option value="Bank A">Bank A</option>
@@ -828,7 +853,7 @@ const UpdateCompanyModel = ({
               </div>
               {/* Banking Information */}
 
-              <div className="mt-6 flex gap-2 justify-end">
+              {/* <div className="mt-6 flex gap-2 justify-end">
                 <button
                   type="button"
                   onClick={prevStep}
@@ -852,6 +877,34 @@ const UpdateCompanyModel = ({
                 >
                   Next
                 </button>
+              </div> */}
+              <div className="mt-6 flex gap-2 justify-between">
+                <div>
+                  <button
+                    type="button"
+                    onClick={prevStep}
+                    className="px-6 py-2 ml-2 text-custom-bg rounded-[4px] text-xs font-bold border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                  >
+                    Back
+                  </button>
+                </div>
+                <div className="flex gap-[10px]">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onClose();
+                      setStep(1);
+                    }}
+                    className="px-6 py-2 ml-2 text-custom-bg rounded-[4px] text-xs font-bold border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={nextStep}
+                    className="px-6 py-2 bg-custom-bg text-white text-xs font-bold rounded-[4px] hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                  >
+                    Next
+                  </button></div>
               </div>
             </>
           )}
@@ -866,7 +919,7 @@ const UpdateCompanyModel = ({
                     <div className="flex gap-1">
                       <label
                         htmlFor="bankingInformationBankName"
-                        className="block text-sm font-medium text-gray-700"
+                        className="text-[10px] "
                       >
                         Bank Name
                       </label>
@@ -877,7 +930,7 @@ const UpdateCompanyModel = ({
                       name="bankingInformationBankName"
                       value={formData.bankingInformationBankName}
                       onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px] shadow-sm focus:ring-blue-500 focus:border-blue-500"
                     />
                   </div>
                   {/*     Bank Account Number*/}
@@ -885,7 +938,7 @@ const UpdateCompanyModel = ({
                     <div className="flex gap-1">
                       <label
                         htmlFor="bankingInformationBankAccountNumber"
-                        className="block text-sm font-medium text-gray-700"
+                        className="text-[10px] "
                       >
                         Bank Account Number
                       </label>
@@ -896,7 +949,7 @@ const UpdateCompanyModel = ({
                       name="bankingInformationBankAccountNumber"
                       value={formData.bankingInformationBankAccountNumber}
                       onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px] shadow-sm focus:ring-blue-500 focus:border-blue-500"
                     />
                   </div>
 
@@ -905,7 +958,7 @@ const UpdateCompanyModel = ({
                     <div className="flex gap-1">
                       <label
                         htmlFor="bankingInformationBankIBANSWIFTCode"
-                        className="block text-sm font-medium text-gray-700"
+                        className="text-[10px] "
                       >
                         IBAN / SWIFT Code
                       </label>
@@ -916,7 +969,7 @@ const UpdateCompanyModel = ({
                       name="bankingInformationBankIBANSWIFTCode"
                       value={formData.bankingInformationBankIBANSWIFTCode}
                       onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px] shadow-sm focus:ring-blue-500 focus:border-blue-500"
                     />
                   </div>
                   {/*     Bank Address*/}
@@ -924,7 +977,7 @@ const UpdateCompanyModel = ({
                     <div className="flex gap-1">
                       <label
                         htmlFor="bankingInformationBankAddress"
-                        className="block text-sm font-medium text-gray-700"
+                        className="text-[10px] "
                       >
                         Bank Address
                       </label>
@@ -935,12 +988,12 @@ const UpdateCompanyModel = ({
                       name="bankingInformationBankAddress"
                       value={formData.bankingInformationBankAddress}
                       onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px] shadow-sm focus:ring-blue-500 focus:border-blue-500"
                     />
                   </div>
                 </div>
               </div>
-              <h2 className="text-xl font-semibold mb-8">
+              <h2 className="text-lg font-semibold mb-5">
                 Specific Department Contact Information
               </h2>
 
@@ -950,7 +1003,7 @@ const UpdateCompanyModel = ({
                   <div className="flex gap-1">
                     <label
                       htmlFor="specificDepartmentContactInformationBillingFinanceDepartment"
-                      className="block text-sm font-medium text-gray-700"
+                      className="text-[10px] "
                     >
                       Billing / Finance Department
                     </label>
@@ -963,7 +1016,7 @@ const UpdateCompanyModel = ({
                       formData.specificDepartmentContactInformationBillingFinanceDepartment
                     }
                     onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px] shadow-sm focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
                 {/*     Procurement/Purchasing Contact*/}
@@ -971,7 +1024,7 @@ const UpdateCompanyModel = ({
                   <div className="flex gap-1">
                     <label
                       htmlFor="specificDepartmentContactInformationProcurementPurchasingContact"
-                      className="block text-sm font-medium text-gray-700"
+                      className="text-[10px] "
                     >
                       Procurement/Purchasing Contact
                     </label>
@@ -984,7 +1037,7 @@ const UpdateCompanyModel = ({
                       formData.specificDepartmentContactInformationProcurementPurchasingContact
                     }
                     onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px] shadow-sm focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
 
@@ -993,7 +1046,7 @@ const UpdateCompanyModel = ({
                   <div className="flex gap-1">
                     <label
                       htmlFor="specificDepartmentContactInformationPrimaryContactfortheProject"
-                      className="block text-sm font-medium text-gray-700"
+                      className="text-[10px] "
                     >
                       Primary Contact for the Project
                     </label>
@@ -1006,34 +1059,37 @@ const UpdateCompanyModel = ({
                       formData.specificDepartmentContactInformationPrimaryContactfortheProject
                     }
                     onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px] shadow-sm focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
               </div>
-              <div className="mt-6 flex gap-2 justify-end">
-                <button
-                  type="button"
-                  onClick={prevStep}
-                  className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
-                >
-                  Back
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    onClose();
-                    setStep(1);
-                  }}
-                  className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
-                >
-                  Close
-                </button>
-                <button
-                  onClick={nextStep}
-                  className="px-6 py-2 bg-custom-bg text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
-                >
-                  Next
-                </button>
+              <div className="mt-6 flex gap-2 justify-between">
+                <div>
+                  <button
+                    type="button"
+                    onClick={prevStep}
+                    className="px-6 py-2 ml-2 text-custom-bg rounded-[4px] text-xs font-bold border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                  >
+                    Back
+                  </button>
+                </div>
+                <div className="flex gap-[10px]">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onClose();
+                      setStep(1);
+                    }}
+                    className="px-6 py-2 ml-2 text-custom-bg rounded-[4px] text-xs font-bold border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={nextStep}
+                    className="px-6 py-2 bg-custom-bg text-white text-xs font-bold rounded-[4px] hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                  >
+                    Next
+                  </button></div>
               </div>
             </>
           )}
@@ -1097,7 +1153,7 @@ const UpdateCompanyModel = ({
               </div>
 
               {/* Upload Image */}
-              <div>
+              {/* <div>
                 <label
                   htmlFor="image"
                   className="block text-sm font-medium text-gray-700"
@@ -1112,6 +1168,22 @@ const UpdateCompanyModel = ({
                   onChange={handleChange}
                   className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
                 />
+              </div> */}
+              <div className="flex items-center gap-2">
+                <label
+                  htmlFor="image"
+                  className="text-[10px]"
+                >
+                  Upload Image:
+                </label>
+                <input
+                  type="file"
+                  id="image"
+                  name="image"
+                  accept="image/*"
+                  onChange={handleChange}
+                  className="mt-1 block w-48 text-[8px] text-gray-400 file:mr-4 file:py-1 p-2 file:px-4 file:rounded-lg file:border file:text-[10px] file:font-semibold file:bg-white hover:file:bg-blue-100 border border-[#0885864D] rounded-[10px] border-dashed "
+                />
               </div>
               <div>
                 {imagePreview && (
@@ -1124,7 +1196,7 @@ const UpdateCompanyModel = ({
               </div>
 
               {/* Button Group */}
-              <div className="flex justify-end gap-4">
+              {/* <div className="flex justify-end gap-4">
                 <button
                   type="button"
                   onClick={prevStep}
@@ -1148,6 +1220,34 @@ const UpdateCompanyModel = ({
                 >
                   Update
                 </button>
+              </div> */}
+              <div className="mt-6 flex gap-2 justify-between">
+                <div>
+                  <button
+                    type="button"
+                    onClick={prevStep}
+                    className="px-6 py-2 ml-2 text-custom-bg rounded-[4px] text-xs font-bold border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                  >
+                    Back
+                  </button>
+                </div>
+                <div className="flex gap-[10px]">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onClose();
+                      setStep(1);
+                    }}
+                    className="px-6 py-2 ml-2 text-custom-bg rounded-[4px] text-xs font-bold border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={nextStep}
+                    className="px-6 py-2 bg-custom-bg text-white text-xs font-bold rounded-[4px] hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                  >
+                    Next
+                  </button></div>
               </div>
             </>
           )}

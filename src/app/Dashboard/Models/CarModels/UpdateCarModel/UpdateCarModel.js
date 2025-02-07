@@ -142,7 +142,7 @@ const UpdateCarModel = ({ isOpen, onClose, fetchData, updateid }) => {
           Update Car Model
           </h2>
 
-          <img src="/crossIcon.svg" onClick={() => {
+          <img src="/crossIcon.svg" className="cursor-pointer" onClick={() => {
             onClose();
           }} />
 
@@ -225,7 +225,7 @@ const UpdateCarModel = ({ isOpen, onClose, fetchData, updateid }) => {
               htmlFor="description"
               className="text-[10px]"
             >
-              Description:
+              Description
             </label>
             <textarea
               id="description"

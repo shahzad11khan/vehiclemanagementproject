@@ -263,7 +263,7 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
                 <div>
                   <div className="flex gap-1 items-center justify-start">
                     <label
-                      htmlFor="CompanyName"
+                      htmlFor="email"
                       className="text-[10px] "
                     >
                       Email <span className="text-red-600">*</span>

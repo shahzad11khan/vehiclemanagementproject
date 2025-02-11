@@ -166,58 +166,80 @@ const AddRoadTexModal = ({ isOpen, onClose, fetchData, selectedid }) => {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
-      <div className="p-4 sm:p-6 rounded-lg shadow-lg w-full bg-white max-w-lg sm:max-w-2xl md:max-w-3xl max-h-[80vh] overflow-y-auto">
-        <h2 className="text-2xl sm:text-3xl font-semibold text-center mb-4">
+      <div className="p-12 rounded-xl shadow-lg w-full bg-white max-w-lg sm:max-w-2xl md:max-w-3xl max-h-[80vh] overflow-y-auto">
+        {/* <h2 className="text-2xl sm:text-3xl font-semibold text-center mb-4">
           Add Road Tex
-        </h2>
+        </h2> */}
+
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-2xl font-bold">
+            Vehicle Road Tax
+          </h2>
+
+          <img src="/crossIcon.svg" className="cursor-pointer" onClick={() => {
+            onClose();
+          }} />
+        </div>
+
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="flex flex-col sm:flex-row sm:justify-between sm:space-x-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-x-2 gap-y-4">
             <div className="flex flex-col flex-1 mb-4 sm:mb-0">
-              <label className="text-sm font-medium">Vehicle Name:</label>
+              <label className="text-[10px]">Vehicle</label>
               <input
                 type="text"
                 name="VehicleName"
                 value={formData.VehicleName}
                 onChange={handleChange}
-                className="mt-1 p-2 border border-gray-300 rounded"
+                className="mt-1 p-2 border border-[#42506666] rounded-[4px] shadow"
                 readOnly
               />
             </div>
+
             <div className="flex flex-col flex-1 mb-4 sm:mb-0">
-              <label className="text-sm font-medium">
-                Vehicle Registration Number:
+              <label className="text-[10px]">
+                Vehicle Registration No
               </label>
               <input
                 type="text"
                 name="registrationNumber"
                 value={formData.registrationNumber}
                 onChange={handleChange}
-                className="mt-1 p-2 border border-gray-300 rounded"
+                className="mt-1 p-2 border border-[#42506666] rounded-[4px] shadow"
                 readOnly
               />
             </div>
-          </div>
 
-          <div className="flex flex-col sm:flex-row sm:justify-between sm:space-x-4">
             <div className="flex flex-col flex-1 mb-4 sm:mb-0">
-              <label className="text-sm font-medium">
-                Road Tax Current Date:
+              <label className="text-[10px]">
+                Road Tax Date
               </label>
               <input
                 type="date"
                 name="roadtexCurrentDate"
                 value={formData.roadtexCurrentDate}
                 onChange={handleChange}
-                className="mt-1 p-2 border border-gray-300 rounded"
+                className="mt-1 p-2 border border-[#42506666] rounded-[4px] shadow"
               />
             </div>
+
+            <div className="flex flex-col flex-1 mb-4 sm:mb-0">
+              <label className="text-[10px]">Next Road Tax Date</label>
+              <input
+                type="date"
+                name="roadtexDueDate"
+                value={formData.roadtexDueDate}
+                onChange={handleChange}
+                className="mt-1 p-2 border border-[#42506666] rounded-[4px] shadow"
+              />
+            </div>
+
             <div className="flex flex-col flex-1">
-              <label className="text-sm font-medium">Road Tax Cycle:</label>
+              <label className="text-[10px]">Road Tax Cycle</label>
               <select
                 name="roadtexCycle"
                 value={formData.roadtexCycle}
                 onChange={handleChange}
-                className="mt-1 p-2 border border-gray-300 rounded"
+                className="mt-1 p-2 border border-[#42506666] rounded-[4px] shadow"
               >
                 <option value="">Select Road Tax Cycle</option>
                 <option value="3month">3 Months</option>
@@ -225,39 +247,31 @@ const AddRoadTexModal = ({ isOpen, onClose, fetchData, selectedid }) => {
                 <option value="1year">1 Year</option>
               </select>
             </div>
-          </div>
 
-          <div className="flex flex-col sm:flex-row sm:justify-between sm:space-x-4">
-            <div className="flex flex-col flex-1 mb-4 sm:mb-0">
-              <label className="text-sm font-medium">Next Road Tax Date:</label>
-              <input
-                type="date"
-                name="roadtexDueDate"
-                value={formData.roadtexDueDate}
-                onChange={handleChange}
-                className="mt-1 p-2 border border-gray-300 rounded"
-              />
-            </div>
+
+
             <div className="flex flex-col flex-1">
-              <label className="text-sm font-medium">Road Tax Status:</label>
+              <label className="text-[10px]">Road Tax Status</label>
               <select
                 name="roadtexStatus"
                 value={formData.roadtexStatus}
                 onChange={handleChange}
-                className="mt-1 p-2 border border-gray-300 rounded"
+                className="mt-1 p-2 border border-[#42506666] rounded-[4px] shadow"
               >
                 <option value="">Select Road Tax Cycle</option>
                 <option value="pending">Pending</option>
                 <option value="done">Done</option>
               </select>
             </div>
+
+
             <div className="flex flex-col flex-1">
-              <label className="text-sm font-medium">Asign To:</label>
+              <label className="text-[10px]">Assigned To</label>
               <select
                 name="asignto"
                 value={formData.asignto}
                 onChange={handleChange}
-                className="mt-1 p-2 border border-gray-300 rounded"
+                className="mt-1 p-2 border border-[#42506666] rounded-[4px] shadow"
               >
                 <option value="">Select User</option>
                 {filtered.map((user) => (
@@ -268,19 +282,19 @@ const AddRoadTexModal = ({ isOpen, onClose, fetchData, selectedid }) => {
               </select>
             </div>
           </div>
-          <div className="flex flex-col sm:flex-row sm:justify-between sm:space-x-4">
+
+          <div className="mt-6 flex gap-2 justify-end">
             <button
               onClick={onClose}
               type="submit"
-              className="w-full py-2 mt-4 bg-gray-400  text-white rounded hover:bg-black transition"
+              className="py-1 px-5 w-full sm:w-auto border-[1px] rounded-4 border-[#313342] bg-white text-[#313342] hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500"
             >
-              Close
+              Cancel
             </button>
             <button
               type="submit"
-              className="w-full py-2 mt-4 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
-            >
-              Submit
+              className={`bg-[#313342] text-white rounded-4 hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500 py-1 px-8 $`}>
+              Next
             </button>
           </div>
         </form>

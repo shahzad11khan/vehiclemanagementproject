@@ -139,7 +139,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleid }) => {
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
-                className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px] shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px] shadow focus:ring-blue-500 focus:border-blue-500"
                 required
               />
             </div>
@@ -157,7 +157,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleid }) => {
                 name="description"
                 value={formData.description}
                 onChange={handleChange}
-                className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px] shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px] shadow focus:ring-blue-500 focus:border-blue-500"
                 rows="2"
               ></textarea>
             </div>
@@ -224,13 +224,13 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleid }) => {
             <button
               type="button"
               onClick={onClose}
-              className="px-6 py-2 ml-2 text-custom-bg rounded-[4px] text-xs font-bold border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+              className="py-1 px-5 w-full sm:w-auto border-[1px] rounded-4 border-[#313342] bg-white text-[#313342] hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500"
             >
               Cancel
             </button>
             <button
               type="submit"
-               className="px-6 py-2 bg-custom-bg text-white rounded-[4px] text-xs font-bold hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+               className="bg-[#313342] text-white rounded-4 hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500 py-1 px-8"
               disabled={loading}
             >
               {loading ? "Submitting..." : "Update"}

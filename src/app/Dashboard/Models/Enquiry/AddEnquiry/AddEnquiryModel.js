@@ -60,19 +60,19 @@ const AddEnquiryModal = ({ isOpen, onClose, fetchData }) => {
           superadmin === "superadmin"
             ? badgeData.result
             : badgeData.result.filter(
-                (badge) =>
-                  badge.adminCompanyName === storedCompanyName ||
-                  badge.adminCompanyName === "superadmin"
-              );
+              (badge) =>
+                badge.adminCompanyName === storedCompanyName ||
+                badge.adminCompanyName === "superadmin"
+            );
 
         const filteredLocalAuth =
           superadmin === "superadmin"
             ? localAuthData.Result
             : localAuthData.Result.filter(
-                (localAuth) =>
-                  localAuth.adminCompanyName === storedCompanyName ||
-                  localAuth.adminCompanyName === "superadmin"
-              );
+              (localAuth) =>
+                localAuth.adminCompanyName === storedCompanyName ||
+                localAuth.adminCompanyName === "superadmin"
+            );
 
         setBadge(filteredBadges);
         setLocalAuth(filteredLocalAuth);
@@ -134,23 +134,32 @@ const AddEnquiryModal = ({ isOpen, onClose, fetchData }) => {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-4xl overflow-y-auto max-h-screen">
-        <h2 className="text-3xl font-semibold text-center mb-8">Add Enquiry</h2>
+      <div className="bg-white px-12 py-6 rounded-xl shadow-lg w-full max-w-4xl overflow-y-auto max-h-screen">
+        {/* <h2 className="text-3xl font-semibold text-center mb-8">Add Enquiry</h2> */}
+        <div className="flex items-center justify-between mb-4 bg-slate-400">
+          <h2 className="text-2xl font-bold">
+            Add Enquiry
+          </h2>
+
+          <img src="/crossIcon.svg" className="cursor-pointer" onClick={() => {
+            onClose();
+
+          }} />
+        </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <h3 className="text-xl font-semibold mb-2">Enquiry</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
               <div>
                 <div className="flex gap-1">
                   <label
                     htmlFor="firstName"
-                    className="text-sm font-medium text-gray-700"
+                    className="text-[10px]"
                   >
-                    First Name:
+                    First Name <span className="text-red-600">*</span>
                   </label>
 
-                  <span className="text-red-600">*</span>
+
                 </div>
                 <input
                   type="text"
@@ -158,8 +167,8 @@ const AddEnquiryModal = ({ isOpen, onClose, fetchData }) => {
                   name="firstName"
                   value={formData.firstName}
                   onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                  required
+                  className="mt-1 block w-full p-2 border border-[#42506666] shadow rounded-[4px]"
+                  required placeholder="First Name"
                 />
               </div>
 
@@ -167,12 +176,10 @@ const AddEnquiryModal = ({ isOpen, onClose, fetchData }) => {
                 <div className="flex gap-1">
                   <label
                     htmlFor="lastName"
-                    className="text-sm font-medium text-gray-700"
+                    className="text-[10px]"
                   >
-                    Last Name:
+                    Last Name <span className="text-red-600">*</span>
                   </label>
-
-                  <span className="text-red-600">*</span>
                 </div>
                 <input
                   type="text"
@@ -180,8 +187,30 @@ const AddEnquiryModal = ({ isOpen, onClose, fetchData }) => {
                   name="lastName"
                   value={formData.lastName}
                   onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                  required
+                  className="mt-1 block w-full p-2 border border-[#42506666] shadow rounded-[4px]"
+                  required placeholder="Last Name"
+                />
+              </div>
+
+              <div>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="niNumber"
+                    className="text-[10px]"
+                  >
+                    NI Number <span className="text-red-600">*</span>
+                  </label>
+
+
+                </div>
+                <input
+                  type="text"
+                  id="niNumber"
+                  name="niNumber"
+                  value={formData.niNumber}
+                  onChange={handleChange}
+                  className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                  required placeholder="NI Number"
                 />
               </div>
 
@@ -189,12 +218,11 @@ const AddEnquiryModal = ({ isOpen, onClose, fetchData }) => {
                 <div className="flex gap-1">
                   <label
                     htmlFor="email"
-                    className="text-sm font-medium text-gray-700"
+                    className="text-[10px]"
                   >
-                    Email:
+                    Email <span className="text-red-600">*</span>
                   </label>
 
-                  <span className="text-red-600">*</span>
                 </div>
                 <input
                   type="email"
@@ -202,21 +230,64 @@ const AddEnquiryModal = ({ isOpen, onClose, fetchData }) => {
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                  className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                  required placeholder="Email"
+                />
+              </div>
+
+              <div>
+                <div>
+                  <label
+                    htmlFor="dateOfBirth"
+                    className="text-[10px]"
+                  >
+                    Date of Birth <span className="text-red-600">*</span>
+                  </label>
+
+                </div>
+                <input
+                  type="date"
+                  id="dateOfBirth"
+                  name="dateOfBirth"
+                  value={formData.dateOfBirth}
+                  onChange={handleChange}
+                  className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
                   required
                 />
               </div>
 
               <div>
-                <div className="flex gap-1">
+                <label
+                  htmlFor="badgeType"
+                  className="text-[10px]"
+                >
+                  Badge Type
+                </label>
+                <select
+                  id="badgeType"
+                  name="badgeType"
+                  value={formData.badgeType}
+                  onChange={handleChange}
+                  className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                >
+                  <option value="">Select Badge Type</option>
+                  {badgeTypeOptions.map((option) => (
+                    <option key={option._id} value={option.name}>
+                      {option.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <div>
                   <label
                     htmlFor="tel1"
-                    className="text-sm font-medium text-gray-700"
+                    className="text-[10px]"
                   >
-                    Telephone 1:
+                    Phone Number <span className="text-red-600">*</span>
                   </label>
 
-                  <span className="text-red-600">*</span>
                 </div>
                 <input
                   type="tel"
@@ -224,11 +295,39 @@ const AddEnquiryModal = ({ isOpen, onClose, fetchData }) => {
                   name="tel1"
                   value={formData.tel1}
                   onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                  className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
                   required
                 />
               </div>
+
               <div>
+                <label
+                  htmlFor="localAuthority"
+                  className="text-[10px]"
+                >
+                  Local Authority
+                </label>
+                <select
+                  id="localAuthority"
+                  name="localAuthority"
+                  value={formData.localAuthority}
+                  onChange={handleChange}
+                  className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                >
+                  <option value="">Select Local Authority</option>
+                  {localAuthorityOptions.map((option) => (
+                    <option key={option._id} value={option.name}>
+                      {option.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            <h2 className="">Address</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
+
+              {/* <div>
                 <label
                   htmlFor="tel2"
                   className="text-sm font-medium text-gray-700"
@@ -243,75 +342,57 @@ const AddEnquiryModal = ({ isOpen, onClose, fetchData }) => {
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
                 />
-              </div>
-              <div>
-                <div className="flex gap-1">
-                  <label
-                    htmlFor="postcode"
-                    className="text-sm font-medium text-gray-700"
-                  >
-                    Postcode:
-                  </label>
+              </div> */}
 
-                  <span className="text-red-600">*</span>
-                </div>
-                <input
-                  type="number"
-                  id="postcode"
-                  name="postcode"
-                  value={formData.postcode}
-                  onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                  required
-                />
-              </div>
+
+
               <div>
-                <div className="flex gap-1">
+                <div>
                   <label
                     htmlFor="postalAddress"
-                    className="text-sm font-medium text-gray-700"
+                    className="text-[10px]"
                   >
-                    Postal Address:
+                    Building and Street (Line 1of 2)
                   </label>
 
-                  <span className="text-red-600">*</span>
                 </div>
                 <input
                   type="text"
-                  id="postalAddress"
-                  name="postalAddress"
-                  value={formData.postalAddress}
-                  onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                  required
+                  // id="postalAddress"
+                  // name="postalAddress"
+                  // value={formData.postalAddress}
+                  // onChange={handleChange}
+                  className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                  required placeholder="Building and street"
                 />
               </div>
+
               <div>
                 <label
                   htmlFor="permanentAddress"
-                  className="text-sm font-medium text-gray-700"
+                  className="text-[10px]"
                 >
-                  Permanent Address:
+                Building and Street (Line 2 of 2)
                 </label>
                 <input
                   type="text"
-                  id="permanentAddress"
-                  name="permanentAddress"
-                  value={formData.permanentAddress}
-                  onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                  // id="permanentAddress"
+                  // name="permanentAddress"
+                  // value={formData.permanentAddress}
+                  // onChange={handleChange}
+                  className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]" placeholder="Building and street"
                 />
               </div>
+
               <div>
                 <div className="flex gap-1">
                   <label
                     htmlFor="city"
-                    className="text-sm font-medium text-gray-700"
+                    className="text-[10px]"
                   >
-                    City:
+                    Town/City <span className="text-red-600">*</span>
                   </label>
 
-                  <span className="text-red-600">*</span>
                 </div>
                 <input
                   type="text"
@@ -319,20 +400,20 @@ const AddEnquiryModal = ({ isOpen, onClose, fetchData }) => {
                   name="city"
                   value={formData.city}
                   onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                  required
+                  className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                  required placeholder="Town/City"
                 />
               </div>
+
               <div>
                 <div className="flex gap-1">
                   <label
                     htmlFor="county"
-                    className="text-sm font-medium text-gray-700"
+                    className="text-[10px]"
                   >
-                    Country:
+                    Country <span className="text-red-600">*</span>
                   </label>
 
-                  <span className="text-red-600">*</span>
                 </div>
                 <input
                   type="text"
@@ -340,96 +421,32 @@ const AddEnquiryModal = ({ isOpen, onClose, fetchData }) => {
                   name="county"
                   value={formData.county}
                   onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                  required
+                  className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                  required placeholder="Country"
                 />
               </div>
+
               <div>
                 <div className="flex gap-1">
                   <label
-                    htmlFor="dateOfBirth"
-                    className="text-sm font-medium text-gray-700"
+                    htmlFor="postcode"
+                    className="text-[10px]"
                   >
-                    Date of Birth:
+                    Postcode <span className="text-red-600">*</span>
                   </label>
 
-                  <span className="text-red-600">*</span>
                 </div>
                 <input
-                  type="date"
-                  id="dateOfBirth"
-                  name="dateOfBirth"
-                  value={formData.dateOfBirth}
+                  type="number"
+                  id="postcode"
+                  name="postcode"
+                  value={formData.postcode}
                   onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                  required
+                  className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                  required placeholder="Postcode"
                 />
               </div>
-              <div>
-                <div className="flex gap-1">
-                  <label
-                    htmlFor="niNumber"
-                    className="text-sm font-medium text-gray-700"
-                  >
-                    NI Number:
-                  </label>
 
-                  <span className="text-red-600">*</span>
-                </div>
-                <input
-                  type="text"
-                  id="niNumber"
-                  name="niNumber"
-                  value={formData.niNumber}
-                  onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                  required
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="badgeType"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Badge Type:
-                </label>
-                <select
-                  id="badgeType"
-                  name="badgeType"
-                  value={formData.badgeType}
-                  onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                >
-                  <option value="">Select Badge Type</option>
-                  {badgeTypeOptions.map((option) => (
-                    <option key={option._id} value={option.name}>
-                      {option.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label
-                  htmlFor="localAuthority"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Local Authority:
-                </label>
-                <select
-                  id="localAuthority"
-                  name="localAuthority"
-                  value={formData.localAuthority}
-                  onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                >
-                  <option value="">Select Local Authority</option>
-                  {localAuthorityOptions.map((option) => (
-                    <option key={option._id} value={option.name}>
-                      {option.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
               {/* <div className="col-span-1">
                 <label
                   htmlFor="isActive"
@@ -447,7 +464,7 @@ const AddEnquiryModal = ({ isOpen, onClose, fetchData }) => {
                 />
               </div> */}
               <div>
-                <label className="block font-medium mb-2">Is Active:</label>
+                <label className="text-[10px] mb-2">Status</label>
                 <div className="flex gap-4">
                   {/* Yes Option */}
                   <label className="flex items-center gap-2">
@@ -463,7 +480,7 @@ const AddEnquiryModal = ({ isOpen, onClose, fetchData }) => {
                       }
                       className="accent-green-500"
                     />
-                    <span>Active</span>
+                    <span className="text-xs">Active</span>
                   </label>
 
                   {/* No Option */}
@@ -480,7 +497,7 @@ const AddEnquiryModal = ({ isOpen, onClose, fetchData }) => {
                       }
                       className="accent-red-500"
                     />
-                    <span>InActive</span>
+                    <span className="text-xs">InActive</span>
                   </label>
                 </div>
               </div>
@@ -490,13 +507,13 @@ const AddEnquiryModal = ({ isOpen, onClose, fetchData }) => {
             <button
               type="button"
               onClick={onClose}
-              className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+              className="py-1 px-5 w-full sm:w-auto border-[1px] rounded-4 border-[#313342] bg-white text-[#313342] hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500"
             >
               Close
             </button>
             <button
               type="submit"
-              className="px-6 py-2 bg-custom-bg text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+              className="bg-[#313342] text-white rounded-4 hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500 py-1 px-8"
             >
               Submit
             </button>

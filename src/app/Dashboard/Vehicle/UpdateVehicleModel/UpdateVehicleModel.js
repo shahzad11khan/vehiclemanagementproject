@@ -312,42 +312,42 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
           superadmin === "superadmin"
             ? manufacturerResponse.Result
             : manufacturerResponse.Result.filter(
-                (manufacturer) =>
-                  manufacturer.adminCompanyName === storedCompanyName ||
-                  manufacturer.adminCompanyName === "superadmin"
-              );
+              (manufacturer) =>
+                manufacturer.adminCompanyName === storedCompanyName ||
+                manufacturer.adminCompanyName === "superadmin"
+            );
         const filteredLocalAuth =
           superadmin === "superadmin"
             ? localauthResponse.Result
             : localauthResponse.Result.filter(
-                (localauth) =>
-                  localauth.adminCompanyName === storedCompanyName ||
-                  localauth.adminCompanyName === "superadmin"
-              );
+              (localauth) =>
+                localauth.adminCompanyName === storedCompanyName ||
+                localauth.adminCompanyName === "superadmin"
+            );
         const filteredtransmission =
           superadmin === "superadmin"
             ? transmission.Result
             : transmission.Result.filter(
-                (transmission) =>
-                  transmission.adminCompanyName === storedCompanyName ||
-                  transmission.adminCompanyName === "superadmin"
-              );
+              (transmission) =>
+                transmission.adminCompanyName === storedCompanyName ||
+                transmission.adminCompanyName === "superadmin"
+            );
         const filteredtype =
           superadmin === "superadmin"
             ? type.Result
             : type.Result.filter(
-                (type) =>
-                  type.adminCompanyName === storedCompanyName ||
-                  type.adminCompanyName === "superadmin"
-              );
+              (type) =>
+                type.adminCompanyName === storedCompanyName ||
+                type.adminCompanyName === "superadmin"
+            );
         const filteredfueltype =
           superadmin === "superadmin"
             ? fueltype.Result
             : fueltype.Result.filter(
-                (fueltype) =>
-                  fueltype.adminCompanyName === storedCompanyName ||
-                  fueltype.adminCompanyName === "superadmin"
-              );
+              (fueltype) =>
+                fueltype.adminCompanyName === storedCompanyName ||
+                fueltype.adminCompanyName === "superadmin"
+            );
 
         setManufacturer(filteredManufacturer);
         setLocalAuth(filteredLocalAuth);
@@ -611,24 +611,34 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
   };
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50 ">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-4xl overflow-y-auto max-h-screen">
+      <div className="bg-white p-12 rounded-xl shadow-lg w-full max-w-4xl overflow-y-auto max-h-screen">
+
+        <div className="flex items-center justify-between mb-2">
+          <h2 className="text-2xl font-bold">
+            Vehicle Form
+          </h2>
+
+          <img src="/crossIcon.svg" className="cursor-pointer" onClick={() => {
+            onClose();
+            setStep(1);
+          }} />
+        </div>
+
         <form onSubmit={handleSubmit} className="max-w-4xl mx-auto p-6">
           {step === 1 && (
             <>
-              <h2 className="text-2xl font-bold mb-6">Vehicle Form</h2>
-
-              <div className="grid grid-cols-3 md:grid-cols-2 gap-2">
+              <div className="grid grid-cols-3 md:grid-cols-3 gap-2">
                 <div>
                   <div className="flex gap-1">
-                    <label className="block font-semibold">Manufacturer</label>
-                    <span className="text-red-600">*</span>
+                    <label className="text-[10px]">Manufacturer <span className="text-red-600">*</span>
+                    </label>
                   </div>
                   <select
                     id="manufacturer"
                     name="manufacturer"
                     value={vehicleData.manufacturer}
                     onChange={handleChange}
-                    className="w-full p-2 border border-gray-300 rounded"
+                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
                     required
                   >
                     <option value="">Select Manufacturer</option>
@@ -639,47 +649,52 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                     ))}
                   </select>
                 </div>
+
                 <div>
                   <div className="flex gap-1">
-                    <label className="block font-semibold">Model</label>
-                    <span className="text-red-600">*</span>
+                    <label className="text-[10px]">Model <span className="text-red-600">*</span>
+
+                    </label>
                   </div>
                   <input
                     type="text"
                     name="model"
                     value={vehicleData.model}
                     onChange={handleChange}
-                    className="w-full p-2 border border-gray-300 rounded"
+                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
                     placeholder="e.g., Camry, Mustang"
                     required
                   />
                 </div>
+
                 <div>
                   <div className="flex gap-1">
-                    <label className="block font-semibold">Year</label>
-                    <span className="text-red-600">*</span>
+                    <label className="text-[10px]">Year <span className="text-red-600">*</span>
+
+                    </label>
                   </div>
                   <input
                     type="number"
                     name="year"
                     value={vehicleData.year}
                     onChange={handleChange}
-                    className="w-full p-2 border border-gray-300 rounded"
+                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
                     placeholder="e.g., 2024"
                     required
                   />
                 </div>
+
                 <div>
                   <div className="flex gap-1">
-                    <label className="block font-semibold">Body Type</label>
-                    <span className="text-red-600">*</span>
+                    <label className="text-[10px]">Body Type <span className="text-red-600">*</span>
+                    </label>
                   </div>
 
                   <select
                     name="type"
                     value={vehicleData.type}
                     onChange={handleChange}
-                    className="w-full p-2 border border-gray-300 rounded"
+                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
                     required
                   >
                     <option value="" disabled>
@@ -692,34 +707,33 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                     ))}
                   </select>
                 </div>
-              </div>
-
-              <div className="grid grid-cols-2 md:grid-cols-2 gap-2 mt-4">
                 <div>
                   <div className="flex gap-1">
-                    <label className="block font-semibold">Engine Type</label>
-                    <span className="text-red-600">*</span>
+                    <label className="text-[10px]">Engine Type <span className="text-red-600">*</span>
+
+                    </label>
                   </div>
                   <input
                     type="text"
                     name="engineType"
                     value={vehicleData.engineType}
                     onChange={handleChange}
-                    className="w-full p-2 border border-gray-300 rounded"
+                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
                     placeholder="e.g., 2.5L 4-Cylinder"
                     required
                   />
                 </div>
                 <div>
                   <div className="flex gap-1">
-                    <label className="block font-semibold">Fuel Type</label>
-                    <span className="text-red-600">*</span>
+                    <label className="text-[10px]">Fuel Type <span className="text-red-600">*</span>
+
+                    </label>
                   </div>
                   <select
                     name="fuelType"
                     value={vehicleData.fuelType}
                     onChange={handleChange}
-                    className="w-full p-2 border border-gray-300 rounded"
+                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
                     required
                   >
                     <option value="" disabled>
@@ -734,14 +748,15 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                 </div>
                 <div>
                   <div className="flex gap-1">
-                    <label className="block font-semibold">Transmission</label>
-                    <span className="text-red-600">*</span>
+                    <label className="text-[10px]">Transmission <span className="text-red-600">*</span>
+
+                    </label>
                   </div>
                   <select
                     name="transmission"
                     value={vehicleData.transmission}
                     onChange={handleChange}
-                    className="w-full p-2 border border-gray-300 rounded"
+                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
                     placeholder="e.g., Automatic"
                     required
                   >
@@ -757,14 +772,15 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                 </div>
                 <div>
                   <div className="flex gap-1">
-                    <label className="block font-semibold">Drivetrain</label>
-                    <span className="text-red-600">*</span>
+                    <label className="text-[10px]">Drivetrain <span className="text-red-600">*</span>
+
+                    </label>
                   </div>
                   <select
                     name="drivetrain"
                     value={vehicleData.drivetrain}
                     onChange={handleChange}
-                    className="w-full p-2 border border-gray-300 rounded"
+                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
                     required
                   >
                     <option value="" disabled>
@@ -776,44 +792,81 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                     <option value="4WD">Four-wheel drive (4WD)</option>
                   </select>
                 </div>
-              </div>
 
-              <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-2 mt-4">
                 <div>
                   <div className="flex gap-1">
-                    <label className="block font-semibold">
-                      Exterior Color
+                    <label className="text-[10px]"> Exterior Color <span className="text-red-600">*</span>
                     </label>
-                    <span className="text-red-600">*</span>
                   </div>
                   <input
                     type="text"
                     name="exteriorColor"
                     value={vehicleData.exteriorColor}
                     onChange={handleChange}
-                    className="w-full p-2 border border-gray-300 rounded"
+                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
                     placeholder="e.g., Red, Blue"
                     required
                   />
                 </div>
                 <div>
                   <div className="flex gap-1">
-                    <label className="block font-semibold">
-                      Interior Color
+                    <label className="text-[10px]">
+                      Interior Color  <span className="text-red-600">*</span>
                     </label>
-                    <span className="text-red-600">*</span>
                   </div>
                   <input
                     type="text"
                     name="interiorColor"
                     value={vehicleData.interiorColor}
                     onChange={handleChange}
-                    className="w-full p-2 border border-gray-300 rounded"
+                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
                     placeholder="e.g., Black, Beige"
                     required
                   />
                 </div>
-                {/* <div>
+
+                <div>
+                  <div className="flex gap-1">
+                    <label className="text-[10px]">Height</label>
+                  </div>
+                  <input
+                    type="number"
+                    name="height"
+                    value={vehicleData.height}
+                    onChange={handleChange}
+                    className="w-full p-2 border border-[#42506666] rounded-[4px]" placeholder="Height"
+                  />
+                </div>
+                <div>
+                  <div className="flex gap-1">
+                    <label className="text-[10px]">Width</label>
+                  </div>
+                  <input
+                    type="number"
+                    name="width"
+                    value={vehicleData.width}
+                    onChange={handleChange}
+                    className="w-full p-2 border border-[#42506666] rounded-[4px]" placeholder="Width"
+                  />
+                </div>
+
+                <div>
+                  <div className="flex gap-1">
+                    <label className="text-[10px]">Length</label>
+                  </div>
+                  <input
+                    type="number"
+                    name="length"
+                    value={vehicleData.length}
+                    onChange={handleChange}
+                    className="w-full p-2 border border-[#42506666] rounded-[4px]" placeholder="Length"
+                  />
+                </div>
+              </div>
+
+              {/* <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-2 mt-4"> */}
+
+              {/* <div>
                   <div className="flex gap-1">
                     <label className=" font-semibold">Editable Color</label>
                   </div>
@@ -823,49 +876,11 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                     value={vehicleData.editablecolor}
                     onChange={handleChange}
                     placeholder="Enter custom color"
-                    className="w-full p-2 border border-gray-300 rounded"
+                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
                   />
                 </div> */}
-                <div>
-                  <div className="flex gap-1">
-                    <label className="block font-semibold">Height</label>
-                  </div>
-                  <input
-                    type="number"
-                    name="height"
-                    value={vehicleData.height}
-                    onChange={handleChange}
-                    className="w-full p-2 border border-gray-300 rounded"
-                  />
-                </div>
-                <div>
-                  <div className="flex gap-1">
-                    <label className="block font-semibold">Width</label>
-                  </div>
-                  <input
-                    type="number"
-                    name="width"
-                    value={vehicleData.width}
-                    onChange={handleChange}
-                    className="w-full p-2 border border-gray-300 rounded"
-                  />
-                </div>
-              </div>
 
-              <div className="grid grid-cols-2 md:grid-cols-2 gap-2 mt-4">
-                <div>
-                  <div className="flex gap-1">
-                    <label className="block font-semibold">Length</label>
-                  </div>
-                  <input
-                    type="number"
-                    name="length"
-                    value={vehicleData.length}
-                    onChange={handleChange}
-                    className="w-full p-2 border border-gray-300 rounded"
-                  />
-                </div>
-              </div>
+              {/* </div> */}
 
               {/* end of multiple images */}
               <div className="mt-6 flex gap-2 justify-end">
@@ -875,13 +890,13 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                     onClose();
                     resetForm();
                   }}
-                  className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                  className="py-1 px-5 w-full sm:w-auto border-[1px] rounded-4 border-[#313342] bg-white text-[#313342] hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500"
                 >
-                  Close
+                  Cancel
                 </button>
                 <button
                   onClick={nextStep}
-                  className="px-6 py-2 bg-custom-bg text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                  className="bg-[#313342] text-white rounded-4 hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500 py-1 px-8"
                 >
                   Next
                 </button>
@@ -891,26 +906,24 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
 
           {step === 2 && (
             <>
-              {" "}
-              <div className="grid grid-cols-2 md:grid-cols-2 gap-2 mt-4">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mt-4">
                 <div>
                   <div className="flex gap-1">
-                    <label className="block font-semibold">
-                      Passenger Capacity
+                    <label className="text-[10px]">
+                      Passenger Capacity <span className="text-red-600">*</span>
                     </label>
-                    <span className="text-red-600">*</span>
                   </div>
                   <select
                     name="passengerCapacity"
                     value={vehicleData.passengerCapacity}
                     onChange={handleChange}
-                    className="w-full p-2 border border-gray-300 rounded"
+                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
                     required
                   >
                     <option value="" disabled>
                       Select Capacity
                     </option>
-                    {["1","2","3","4","5","6","7","8","9","10"].map((val,i) => (
+                    {["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"].map((val, i) => (
                       <option key={i} value={val}>
                         {val}
                       </option>
@@ -920,7 +933,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
 
                 <div>
                   <div className="flex gap-1">
-                    <label className="block font-semibold">
+                    <label className="text-[10px]">
                       Cargo Capacity
                     </label>
                   </div>
@@ -929,38 +942,39 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                     name="cargoCapacity"
                     value={vehicleData.cargoCapacity}
                     onChange={handleChange}
-                    className="w-full p-2 border border-gray-300 rounded"
+                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
                   />
                 </div>
+
                 <div>
                   <div className="flex gap-1">
-                    <label className="block font-semibold">Horsepower</label>
+                    <label className="text-[10px]">Horsepower</label>
                   </div>
                   <input
                     type="number"
                     name="horsepower"
                     value={vehicleData.horsepower}
                     onChange={handleChange}
-                    className="w-full p-2 border border-gray-300 rounded"
+                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
                   />
                 </div>
+
                 <div>
                   <div className="flex gap-1">
-                    <label className="block font-semibold">Torque</label>
+                    <label className="text-[10px]">Torque</label>
                   </div>
                   <input
                     type="number"
                     name="torque"
                     value={vehicleData.torque}
                     onChange={handleChange}
-                    className="w-full p-2 border border-gray-300 rounded"
+                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
                   />
                 </div>
-              </div>
-              <div className="grid grid-cols-2 md:grid-cols-2 gap-2 mt-4">
+
                 <div>
                   <div className="flex gap-1">
-                    <label className="block font-semibold">
+                    <label className="text-[10px]">
                       Top Speed (mph)
                     </label>
                   </div>
@@ -969,12 +983,13 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                     name="topSpeed"
                     value={vehicleData.topSpeed}
                     onChange={handleChange}
-                    className="w-full p-2 border border-gray-300 rounded"
+                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
                   />
                 </div>
+
                 <div>
                   <div className="flex gap-1">
-                    <label className="block font-semibold">
+                    <label className="text-[10px]">
                       Towing Capacity (lbs)
                     </label>{" "}
                   </div>
@@ -984,17 +999,16 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                     name="towingCapacity"
                     value={vehicleData.towingCapacity}
                     onChange={handleChange}
-                    className="w-full p-2 border border-gray-300 rounded"
+                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
                   />
                 </div>
-              </div>
-              <div className="grid grid-cols-2 md:grid-cols-2 gap-2 mt-4">
+
                 <div>
                   <div className="flex gap-1">
-                    <label className="block font-semibold">
-                      Safety Features
+                    <label className="text-[10px]">
+                      Safety Features  <span className="text-red-600">*</span>
                     </label>
-                    <span className="text-red-600">*</span>
+
                   </div>
                   <div className="">
                     {/* List of safety features as checkboxes */}
@@ -1029,7 +1043,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                       value={selectedOptions}
                       onChange={handleChangesafty}
                       placeholder="Select features..."
-                      className="react-select w-full p-2 border border-gray-300 rounded-md"
+                      className="react-select w-full p-2 border border-[#42506666] rounded-[4px]-md"
                       classNamePrefix="select"
                     />
                   </div>
@@ -1049,12 +1063,13 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                       ))}
                   </div>
                 </div>
+
                 <div className="">
                   <div className="flex gap-1 ">
-                    <label className="block font-semibold">
-                      Technology Features
+                    <label className="text-[10px]">
+                      Technology Features <span className="text-red-600">*</span>
+
                     </label>
-                    <span className="text-red-600">*</span>
                   </div>
                   <div className="">
                     {/* List of technology features as checkboxes */}
@@ -1088,7 +1103,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                       value={selectedOptionstech}
                       onChange={handleChangestech}
                       placeholder="Select features..."
-                      className="react-select w-full p-2 border border-gray-300 rounded-md"
+                      className="react-select w-full p-2 border border-[#42506666] rounded-[4px]-md"
                       classNamePrefix="select"
                     />
                   </div>
@@ -1108,11 +1123,10 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                       ))}
                   </div>
                 </div>
-              </div>
-              <div className="grid grid-cols-2 md:grid-cols-2 gap-2 mt-4">
+
                 <div>
-                  <div className="flex gap-1">
-                    <label className="block font-semibold">
+                  <div className="flex">
+                    <label className="text-[10px]">
                       Fuel Efficiency
                     </label>
                   </div>
@@ -1122,44 +1136,57 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                     name="fuelEfficiency"
                     value={vehicleData.fuelEfficiency}
                     onChange={handleChange}
-                    className="w-full p-2 border border-gray-300 rounded"
+                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
                     placeholder="e.g., 25 MPG"
                   />
                 </div>
                 <div>
                   <div className="flex gap-1">
-                    <label className="block font-semibold">Price (£)</label>
+                    <label className="text-[10px]">Price (£) <span className="text-red-600">*</span>
+                    </label>
 
-                    <span className="text-red-600">*</span>
                   </div>
                   <input
                     type="number"
                     name="price"
                     value={vehicleData.price}
                     onChange={handleChange}
-                    className="w-full p-2 border border-gray-300 rounded"
+                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
                     required
                   />
                 </div>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-4">
+
                 <div>
                   <div className="flex gap-1">
-                    <label className="block font-semibold">
-                      Registration Number
+                    <label className="text-[10px]">
+                      Registration Number <span className="text-red-600">*</span>
                     </label>
-
-                    <span className="text-red-600">*</span>
                   </div>
                   <input
                     type="text"
                     name="registrationNumber"
                     value={vehicleData.registrationNumber}
                     onChange={handleChange}
-                    className="w-full p-2 border border-gray-300 rounded"
+                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
                     required
                   />
                 </div>
+              </div>
+
+              {/* <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mt-4">
+
+              </div> */}
+
+              {/* <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mt-4">
+
+              </div> */}
+
+              {/* <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mt-4">
+               
+              </div> */}
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-4">
+
 
                 {/* Vehicle Status Section */}
                 {/* <div className="">
@@ -1171,7 +1198,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                 name="vehicleStatus" // Change the name to match the new purpose
                 value={vehicleData.vehicleStatus}
                 onChange={handleChange}
-                className="w-full p-2 border border-gray-300 rounded"
+                className="w-full p-2 border border-[#42506666] rounded-[4px]"
                 required
               >
                 <option value="" disabled>
@@ -1188,7 +1215,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
               <div className="mt-6 flex gap-2 justify-between">
                 <button
                   onClick={prevStep}
-                  className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                  className="py-1 px-5 w-full sm:w-auto border-[1px] rounded-4 border-[#313342] bg-white text-[#313342] hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500"
                 >
                   Back
                 </button>
@@ -1199,13 +1226,13 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                       onClose();
                       resetForm();
                     }}
-                    className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                    className="py-1 px-5 w-full sm:w-auto border-[1px] rounded-4 border-[#313342] bg-white text-[#313342] hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500"
                   >
                     Close
                   </button>
                   <button
                     onClick={nextStep}
-                    className="px-6 py-2 bg-custom-bg text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                    className="bg-[#313342] text-white rounded-4 hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500 py-1 px-8"
                   >
                     Next
                   </button>
@@ -1219,7 +1246,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
               <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mt-4">
                 <div>
                   <div className="flex gap-1">
-                    <label className="block font-semibold">Engine Size</label>
+                    <label className="text-[10px]">Engine Size</label>
                   </div>
                   <input
                     type="number"
@@ -1227,13 +1254,13 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                     value={vehicleData.enginesize}
                     onChange={handleChange}
                     placeholder="Enter Engine Size"
-                    className="w-full p-2 border border-gray-300 rounded"
+                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
                   />
                 </div>
 
                 <div>
                   <div className="flex gap-1">
-                    <label className="block font-semibold">
+                    <label className="text-[10px]">
                       Vin / Chasis Number
                     </label>
                   </div>
@@ -1243,7 +1270,21 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                     value={vehicleData.chasisnumber}
                     onChange={handleChange}
                     placeholder="Enter Engine Size"
-                    className="w-full p-2 border border-gray-300 rounded"
+                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
+                  />
+                </div>
+
+                <div>
+                  <div className="flex gap-1">
+                    <label className="text-[10px]">Doors</label>
+                  </div>
+                  <input
+                    type="number"
+                    name="doors"
+                    value={vehicleData.doors}
+                    onChange={handleChange}
+                    placeholder="Enter Engine Size"
+                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
                   />
                 </div>
                 {/* <div className="">
@@ -1256,7 +1297,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                     value={vehicleData.vehicleSite}
                     onChange={handleChange}
                     onClick={selectSiteClick}
-                    className="w-full p-2 border border-gray-300 rounded"
+                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
                     required
                   >
                     <option value="">Select vehicle site</option>
@@ -1268,6 +1309,116 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                   </select>
                 </div> */}
                 {/* Conditionally Rendered Fleet Details */}
+
+                <div>
+                  <label className="text-[10px]">Road Tax Date</label>
+                  <input
+                    type="date"
+                    name="roadTaxDate"
+                    value={vehicleData.roadTaxDate}
+                    onChange={handleChange}
+                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
+                  />
+                </div>
+
+                {/* Road Tax Cycle */}
+                <div>
+                  <label className="text-[10px]">Road Tax Cycle</label>
+                  <select
+                    name="roadTaxCycle"
+                    value={vehicleData.roadTaxCycle}
+                    onChange={handleChange}
+                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
+                  >
+                    <option value="">Select Cycle</option>
+                    <option value="3months">3 Months</option>
+                    <option value="6months">6 Months</option>
+                    <option value="1year">1 Year</option>
+                  </select>
+                </div>
+
+                {/* MOT Due Date */}
+                <div>
+                  <label className="text-[10px]">MOT Due Date</label>
+                  <input
+                    type="date"
+                    name="motDueDate"
+                    value={vehicleData.motDueDate}
+                    onChange={handleChange}
+                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
+                  />
+                </div>
+
+                {/* MOT Cycle */}
+                <div>
+                  <label className="text-[10px]">MOT Cycle</label>
+                  <select
+                    name="motCycle"
+                    value={vehicleData.motCycle}
+                    onChange={handleChange}
+                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
+                  >
+                    <option value="">Select Cycle</option>
+                    <option value="3months">3 Months</option>
+                    <option value="6months">6 Months</option>
+                    <option value="1year">1 Year</option>
+                  </select>
+                </div>
+
+                {/* ABI Code */}
+                <div>
+                  <label className="text-[10px]">ABI Code</label>
+                  <input
+                    type="text"
+                    name="abiCode"
+                    value={vehicleData.abiCode}
+                    onChange={handleChange}
+                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
+                    placeholder="Enter ABI Code"
+                  />
+                </div>
+
+                {/* Next Service Date */}
+                <div>
+                  <label className="text-[10px]">
+                    Next Service Date
+                  </label>
+                  <input
+                    type="date"
+                    name="nextServiceDate"
+                    value={vehicleData.nextServiceDate}
+                    onChange={handleChange}
+                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
+                  />
+                </div>
+
+                {/* Next Service Miles */}
+                <div>
+                  <label className="text-[10px]">
+                    Next Service Miles
+                  </label>
+                  <input
+                    type="number"
+                    name="nextServiceMiles"
+                    value={vehicleData.nextServiceMiles}
+                    onChange={handleChange}
+                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
+                    placeholder="Enter miles for next service"
+                  />
+                </div>
+
+                {/* Road Tax Cost */}
+                <div>
+                  <label className="text-[10px]">Road Tax Cost</label>
+                  <input
+                    type="number"
+                    name="roadTaxCost"
+                    value={vehicleData.roadTaxCost}
+                    onChange={handleChange}
+                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
+                    placeholder="Enter road tax cost"
+                  />
+                </div>
               </div>
               {/* {selectedSite && (
                 <>
@@ -1281,7 +1432,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                         value={vehicleData.fleetEntryDate}
                         onChange={handleChange}
                         placeholder="Enter fleet entry date"
-                        className="w-full p-2 border border-gray-300 rounded"
+                        className="w-full p-2 border border-[#42506666] rounded-[4px]"
                       />
                     </div>
 
@@ -1293,7 +1444,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                         value={vehicleData.milesOnFleetEntry}
                         onChange={handleChange}
                         placeholder="Enter miles on fleet entry"
-                        className="w-full p-2 border border-gray-300 rounded"
+                        className="w-full p-2 border border-[#42506666] rounded-[4px]"
                       />
                     </div>
 
@@ -1305,7 +1456,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                         value={vehicleData.plannedFleetExit}
                         onChange={handleChange}
                         placeholder="Enter planned fleet exit"
-                        className="w-full p-2 border border-gray-300 rounded"
+                        className="w-full p-2 border border-[#42506666] rounded-[4px]"
                       />
                     </div>
 
@@ -1317,7 +1468,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                         value={vehicleData.milesOnFleetExit}
                         onChange={handleChange}
                         placeholder="Enter miles on fleet exit"
-                        className="w-full p-2 border border-gray-300 rounded"
+                        className="w-full p-2 border border-[#42506666] rounded-[4px]"
                       />
                     </div>
 
@@ -1331,7 +1482,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                         value={vehicleData.actualExitDate}
                         onChange={handleChange}
                         placeholder="Enter actual exit date"
-                        className="w-full p-2 border border-gray-300 rounded"
+                        className="w-full p-2 border border-[#42506666] rounded-[4px]"
                       />
                     </div>
 
@@ -1343,27 +1494,15 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                         value={vehicleData.milesAtActualExit}
                         onChange={handleChange}
                         placeholder="Enter miles at actual exit"
-                        className="w-full p-2 border border-gray-300 rounded"
+                        className="w-full p-2 border border-[#42506666] rounded-[4px]"
                       />
                     </div>
                   </div>
                 </>
               )} */}
-              <div className="grid grid-cols-3 md:grid-cols-3 gap-2 mt-4">
-                <div>
-                  <div className="flex gap-1">
-                    <label className="block font-semibold">Doors</label>
-                  </div>
-                  <input
-                    type="number"
-                    name="doors"
-                    value={vehicleData.doors}
-                    onChange={handleChange}
-                    placeholder="Enter Engine Size"
-                    className="w-full p-2 border border-gray-300 rounded"
-                  />
-                </div>
-                {/* <div>
+              {/* <div className="grid grid-cols-3 md:grid-cols-3 gap-2 mt-4"> */}
+
+              {/* <div>
                   <div className="flex gap-1">
                     <label className="block font-semibold">Colour</label>
                     <span className="text-red-600">*</span>
@@ -1373,7 +1512,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                     name="color"
                     value={vehicleData.color}
                     onChange={handleChange}
-                    className="w-full p-2 border border-gray-300 rounded"
+                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
                     required
                   >
                     <option value="">Select color</option>
@@ -1385,155 +1524,49 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                   </select>
                 </div> */}
 
-              
-              </div>
 
-              <div className="grid grid-cols-3 md:grid-cols-3 gap-2 mt-4">
-                <div>
-                  <label className="block font-semibold">Road Tax Date</label>
-                  <input
-                    type="date"
-                    name="roadTaxDate"
-                    value={vehicleData.roadTaxDate}
-                    onChange={handleChange}
-                    className="w-full p-2 border border-gray-300 rounded"
-                  />
-                </div>
+              {/* </div> */}
 
-                {/* Road Tax Cycle */}
-                <div>
-                  <label className="block font-semibold">Road Tax Cycle</label>
-                  <select
-                    name="roadTaxCycle"
-                    value={vehicleData.roadTaxCycle}
-                    onChange={handleChange}
-                    className="w-full p-2 border border-gray-300 rounded"
-                  >
-                    <option value="">Select Cycle</option>
-                    <option value="3months">3 Months</option>
-                    <option value="6months">6 Months</option>
-                    <option value="1year">1 Year</option>
-                  </select>
-                </div>
+              {/* <div className="grid grid-cols-3 md:grid-cols-3 gap-2 mt-4"> */}
 
-                {/* MOT Due Date */}
-                <div>
-                  <label className="block font-semibold">MOT Due Date</label>
-                  <input
-                    type="date"
-                    name="motDueDate"
-                    value={vehicleData.motDueDate}
-                    onChange={handleChange}
-                    className="w-full p-2 border border-gray-300 rounded"
-                  />
-                </div>
 
-                {/* MOT Cycle */}
-                <div>
-                  <label className="block font-semibold">MOT Cycle</label>
-                  <select
-                    name="motCycle"
-                    value={vehicleData.motCycle}
-                    onChange={handleChange}
-                    className="w-full p-2 border border-gray-300 rounded"
-                  >
-                    <option value="">Select Cycle</option>
-                    <option value="3months">3 Months</option>
-                    <option value="6months">6 Months</option>
-                    <option value="1year">1 Year</option>
-                  </select>
-                </div>
-
-                {/* Seats */}
-                {/* <div>
+              {/* Seats */}
+              {/* <div>
                   <label className="block font-semibold">Seats</label>
                   <input
                     type="number"
                     name="seats"
                     value={vehicleData.seats}
                     onChange={handleChange}
-                    className="w-full p-2 border border-gray-300 rounded"
+                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
                     placeholder="Enter number of seats"
                   />
                 </div> */}
 
-                {/* ABI Code */}
-                <div>
-                  <label className="block font-semibold">ABI Code</label>
-                  <input
-                    type="text"
-                    name="abiCode"
-                    value={vehicleData.abiCode}
-                    onChange={handleChange}
-                    className="w-full p-2 border border-gray-300 rounded"
-                    placeholder="Enter ABI Code"
-                  />
-                </div>
 
-                {/* Next Service Date */}
-                <div>
-                  <label className="block font-semibold">
-                    Next Service Date
-                  </label>
-                  <input
-                    type="date"
-                    name="nextServiceDate"
-                    value={vehicleData.nextServiceDate}
-                    onChange={handleChange}
-                    className="w-full p-2 border border-gray-300 rounded"
-                  />
-                </div>
-
-                {/* Next Service Miles */}
-                <div>
-                  <label className="block font-semibold">
-                    Next Service Miles
-                  </label>
-                  <input
-                    type="number"
-                    name="nextServiceMiles"
-                    value={vehicleData.nextServiceMiles}
-                    onChange={handleChange}
-                    className="w-full p-2 border border-gray-300 rounded"
-                    placeholder="Enter miles for next service"
-                  />
-                </div>
-
-                {/* Road Tax Cost */}
-                <div>
-                  <label className="block font-semibold">Road Tax Cost</label>
-                  <input
-                    type="number"
-                    name="roadTaxCost"
-                    value={vehicleData.roadTaxCost}
-                    onChange={handleChange}
-                    className="w-full p-2 border border-gray-300 rounded"
-                    placeholder="Enter road tax cost"
-                  />
-                </div>
-              </div>
+              {/* </div> */}
 
               <div className="mt-6 flex gap-2 justify-between">
                 <button
                   onClick={prevStep}
-                  className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                  className="py-1 px-5 w-full sm:w-auto border-[1px] rounded-4 border-[#313342] bg-white text-[#313342] hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500"
                 >
                   Back
                 </button>
-                <div className="flex justify-end gap-2">
+                <div className="flex justify-end gap-[10px]">
                   <button
                     type="button"
                     onClick={() => {
                       onClose();
                       resetForm();
                     }}
-                    className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                    className="py-1 px-5 w-full sm:w-auto border-[1px] rounded-4 border-[#313342] bg-white text-[#313342] hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500"
                   >
-                    Close
+                    Cancel
                   </button>
                   <button
                     onClick={nextStep}
-                    className="px-6 py-2 bg-custom-bg text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                    className="bg-[#313342] text-white rounded-4 hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500 py-1 px-8"
                   >
                     Next
                   </button>
@@ -1544,12 +1577,12 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
 
           {step === 4 && (
             <>
-              <h2 className="text-2xl font-bold mb-4">
+              <h2 className="font-bold mb-4">
                 Financials Information
               </h2>
-              <div className="grid grid-cols-2 md:grid-cols-2 gap-2 mt-4 mb-2">
-                <div className="mb-4">
-                  <label className="block text-gray-700 font-semibold mb-1">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mt-4 mb-2">
+                <div className="mb-1">
+                  <label className="text-[10px]">
                     List Price (P11D)
                   </label>
                   <input
@@ -1557,13 +1590,13 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                     name="listPrice"
                     value={vehicleData.listPrice}
                     onChange={handleChange}
-                    placeholder="Enter List Price"
-                    className="w-full p-2 border border-gray-300 rounded"
+                    placeholder="List Price"
+                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
                   />
                 </div>
 
-                <div className="mb-4">
-                  <label className="block text-gray-700 font-semibold mb-1">
+                <div className="mb-1">
+                  <label className="text-[10px]">
                     Purchase Price
                   </label>
                   <input
@@ -1571,13 +1604,13 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                     name="purchasePrice"
                     value={vehicleData.purchasePrice}
                     onChange={handleChange}
-                    placeholder="Enter Purchase Price"
-                    className="w-full p-2 border border-gray-300 rounded"
+                    placeholder="Purchase Price"
+                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
                   />
                 </div>
 
-                <div className="mb-4">
-                  <label className="block text-gray-700 font-semibold mb-1">
+                <div className="mb-1">
+                  <label className="text-[10px]">
                     Insurance Value
                   </label>
                   <input
@@ -1585,13 +1618,13 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                     name="insuranceValue"
                     value={vehicleData.insuranceValue}
                     onChange={handleChange}
-                    placeholder="Enter Insurance Value"
-                    className="w-full p-2 border border-gray-300 rounded"
+                    placeholder="Insurance Value"
+                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
                   />
                 </div>
 
-                <div className="mb-4">
-                  <label className="block text-gray-700 font-semibold mb-1">
+                <div className="mb-1">
+                  <label className="text-[10px]">
                     Department Code
                   </label>
                   <input
@@ -1599,8 +1632,8 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                     name="departmentCode"
                     value={vehicleData.departmentCode}
                     onChange={handleChange}
-                    placeholder="Enter Department Code"
-                    className="w-full p-2 border border-gray-300 rounded"
+                    placeholder="Department Code"
+                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
                   />
                 </div>
               </div>
@@ -1613,30 +1646,31 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                     onChange={handleMaintenanceToggle}
                     className="mr-2"
                   />
-                  Maintenance Record (if any notable maintenance done till date)
+                  Maintenance Record (if any)
                 </label>
               </div>
               {maintenance && (
                 <>
-                  <div className="grid grid-cols-2 md:grid-cols-2 gap-2 mt-4 mb-2">
-                    <div className="mb-4">
-                      <label className="text-gray-700 font-semibold mb-1">
-                        Issues/Damage
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mt-4">
+                    <div className="mb-4 col-span-2">
+                      <label className="text-[10px]">
+                        Issues / Damage
                       </label>
-                      <textarea
+                      <input
+                        type="text"
                         name="issues_damage"
                         value={vehicleData.issues_damage}
                         onChange={handleChange}
-                        placeholder="Describe any issues or damage"
-                        className="w-full p-2 border border-gray-300 rounded"
+                        placeholder="Describe"
+                        className="w-full p-2 border border-[#42506666] rounded-[4px]"
                       />
                     </div>
 
-                    <div className="mb-4">
-                      <label className="block text-gray-700 font-semibold mb-1">
+                    <div className="mb-4 col-span-1">
+                      <label className="text-[10px]">
                         Damage Image
                       </label>
-                      <div className="border-2 border-dashed border-gray-300 rounded-lg p-2">
+                      <div className="border-2 border-dashed border-[#42506666] rounded-[4px]-lg p-2">
                         <input
                           type="file"
                           id="damage_image"
@@ -1649,7 +1683,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                     </div>
 
                     <div className="mb-4">
-                      <label className="block text-gray-700 font-semibold mb-1">
+                      <label className="text-[10px]">
                         Recovery
                       </label>
                       <input
@@ -1657,20 +1691,48 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                         name="recovery"
                         value={vehicleData.recovery}
                         onChange={handleChange}
-                        placeholder="Describe recovery actions"
-                        className="w-full p-2 border border-gray-300 rounded"
+                        placeholder="Recovery"
+                        className="w-full p-2 border border-[#42506666] rounded-[4px]"
                       />
                     </div>
 
                     <div className="mb-4">
-                      <label className="block text-gray-700 font-semibold mb-1">
+                      <label className="text-[10px]">
+                        Repair Status
+                      </label>
+                      <input
+                        type="text"
+                        name="repairStatus"
+                        value={vehicleData.repairStatus}
+                        onChange={handleChange}
+                        placeholder="Repair status"
+                        className="w-full p-2 border border-[#42506666] rounded-[4px]"
+                      />
+                    </div>
+
+                    <div className="mb-4">
+                      <label className="text-[10px]">
+                        Job Number
+                      </label>
+                      <input
+                        type="text"
+                        name="jobNumber"
+                        value={vehicleData.jobNumber}
+                        onChange={handleChange}
+                        placeholder="Job number"
+                        className="w-full p-2 border border-[#42506666] rounded-[4px]"
+                      />
+                    </div>
+
+                    <div className="mb-4">
+                      <label className="text-[10px]">
                         Organization
                       </label>
                       <select
                         name="organization"
                         value={vehicleData.organization}
                         onChange={handleChange}
-                        className="w-full p-2 border border-gray-300 rounded"
+                        className="w-full p-2 border border-[#42506666] rounded-[4px]"
                       >
                         <option value="">Select Organization</option>
                         <option value="Organization1">Organization 1</option>
@@ -1679,43 +1741,16 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                     </div>
 
                     <div className="mb-4">
-                      <label className="block text-gray-700 font-semibold mb-1">
-                        Repair Status
-                      </label>
-                      <input
-                        type="text"
-                        name="repairStatus"
-                        value={vehicleData.repairStatus}
-                        onChange={handleChange}
-                        placeholder="Enter repair status"
-                        className="w-full p-2 border border-gray-300 rounded"
-                      />
-                    </div>
-
-                    <div className="mb-4">
-                      <label className="block text-gray-700 font-semibold mb-1">
-                        Job Number
-                      </label>
-                      <input
-                        type="text"
-                        name="jobNumber"
-                        value={vehicleData.jobNumber}
-                        onChange={handleChange}
-                        placeholder="Enter job number"
-                        className="w-full p-2 border border-gray-300 rounded"
-                      />
-                    </div>
-
-                    <div className="mb-4">
-                      <label className="block text-gray-700 font-semibold mb-1">
+                      <label className="text-[10px]">
                         Memo
                       </label>
-                      <textarea
+                      <input
+                        type="text"
                         name="memo"
                         value={vehicleData.memo}
                         onChange={handleChange}
-                        placeholder="Memo for the repair"
-                        className="w-full p-2 border border-gray-300 rounded"
+                        placeholder="Memo for repair"
+                        className="w-full p-2 border border-[#42506666] rounded-[4px]"
                       />
                     </div>
                   </div>
@@ -1728,7 +1763,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                         value={vehicleData.partNumber}
                         onChange={handleChange}
                         placeholder="Part Number"
-                        className="w-full p-2 border border-gray-300 rounded mb-2"
+                        className="w-full p-2 border border-[#42506666] rounded-[4px] mb-2"
                       />
                     </div>
 
@@ -1739,7 +1774,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                         value={vehicleData.partName}
                         onChange={handleChange}
                         placeholder="Part Name"
-                        className="w-full p-2 border border-gray-300 rounded mb-2"
+                        className="w-full p-2 border border-[#42506666] rounded-[4px] mb-2"
                       />
                     </div>
 
@@ -1750,7 +1785,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                         value={vehicleData.partprice}
                         onChange={handleChange}
                         placeholder="Price"
-                        className="w-full p-2 border border-gray-300 rounded mb-2"
+                        className="w-full p-2 border border-[#42506666] rounded-[4px] mb-2"
                       />
                     </div>
 
@@ -1759,7 +1794,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                         name="partsupplier"
                         value={vehicleData.partsupplier}
                         onChange={handleChange}
-                        className="w-full p-2 border border-gray-300 rounded mb-2"
+                        className="w-full p-2 border border-[#42506666] rounded-[4px] mb-2"
                       >
                         <option value="">Select Supplier</option>
                         <option value="Supplier1">Supplier 1</option>
@@ -1769,21 +1804,21 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                   </div>
                 </>
               )}
-              <h2 className="text-2xl font-bold mb-4">Commercial Vehicles</h2>
-              <div className="grid grid-cols-2 md:grid-cols-2 gap-2 mt-4 mb-2">
+              <h2 className="font-bold mb-4">Commercial Vehicles</h2>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mt-4 mb-2">
                 <div>
-                  <label className="block font-semibold">RPC Expiry Date</label>
+                  <label className="text-[10px]">RPC Expiry Date</label>
                   <input
                     type="date"
                     name="RPCExpiryDate"
                     value={vehicleData.RPCExpiryDate}
                     onChange={handleChange}
-                    className="w-full border border-gray-300 p-2 rounded-md"
+                    className="w-full border border-[#42506666] rounded-[4px] p-2"
                   />
                 </div>
 
                 <div>
-                  <label className="block font-semibold">
+                  <label className="text-[10px]">
                     Tail-Lift Expiry Date
                   </label>
                   <input
@@ -1791,12 +1826,12 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                     name="TailLiftExpiryDate"
                     value={vehicleData.tailLiftExpirydate}
                     onChange={handleChange}
-                    className="w-full border border-gray-300 p-2 rounded-md"
+                    className="w-full border border-[#42506666] rounded-[4px] p-2"
                   />
                 </div>
 
                 <div>
-                  <label className="block font-semibold">
+                  <label className="text-[10px]">
                     Fork Lift Inspection Date
                   </label>
                   <input
@@ -1804,12 +1839,12 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                     name="ForkLiftInspectionDate"
                     value={vehicleData.ForkLiftInspectionDate}
                     onChange={handleChange}
-                    className="w-full border border-gray-300 p-2 rounded-md"
+                    className="w-full border border-[#42506666] rounded-[4px] p-2"
                   />
                 </div>
 
                 <div>
-                  <label className="block font-semibold">
+                  <label className="text-[10px]">
                     Fork Lift Inspection Number/Notes
                   </label>
                   <input
@@ -1818,13 +1853,13 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                     value={vehicleData.forkLiftNumber}
                     onChange={handleChange}
                     placeholder="Enter inspection number or notes"
-                    className="w-full border border-gray-300 p-2 rounded-md"
+                    className="w-full border border-[#42506666] rounded-[4px] p-2"
                   />
                 </div>
               </div>
               {/* Toggle for self-fit setting */}
               <div className="flex items-center space-x-2">
-                <label className="block text-gray-700 font-semibold mb-1">
+                <label className="text-[10px]">
                   <input
                     type="checkbox"
                     name="selfFitSetting"
@@ -1839,14 +1874,14 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
               {selfFitSetting && (
                 <div>
                   <label className="block font-semibold">
-                    Additional Info:
+                    Additional Info
                   </label>
                   <textarea
                     value={vehicleData.additionalInfo}
                     onChange={handleChange}
                     placeholder="Enter any additional info"
-                    className="w-full border border-gray-300 p-2 rounded-md"
-                    rows="3"
+                    className="w-full border border-[#42506666] rounded-[4px] p-2"
+                    rows="2"
                   />
                 </div>
               )}
@@ -1854,7 +1889,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
               <div className="mt-6 flex gap-2 justify-between">
                 <button
                   onClick={prevStep}
-                  className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                  className="py-1 px-5 w-full sm:w-auto border-[1px] rounded-4 border-[#313342] bg-white text-[#313342] hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500"
                 >
                   Back
                 </button>
@@ -1865,13 +1900,13 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                       onClose();
                       resetForm();
                     }}
-                    className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                    className="py-1 px-5 w-full sm:w-auto border-[1px] rounded-4 border-[#313342] bg-white text-[#313342] hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500"
                   >
                     Close
                   </button>
                   <button
                     onClick={nextStep}
-                    className="px-6 py-2 bg-custom-bg text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                    className="bg-[#313342] text-white rounded-4 hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500 py-1 px-8"
                   >
                     Next
                   </button>
@@ -1881,22 +1916,21 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
           )}
           {step === 5 && (
             <>
-              <h2 className="text-2xl font-bold mb-4">Local Authority</h2>
-              <div className="grid grid-cols-2 md:grid-cols-2 gap-2 mt-4 mb-2">
+              <h2 className="font-bold mb-4">Local Authority</h2>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mt-2">
                 <div>
-                  <div className="flex gap-1">
-                    <label htmlFor="taxiFirm" className="block font-semibold">
-                      Taxi Local Authority:
+                  <div>
+                    <label htmlFor="taxiFirm" className="text-[10px]">
+                      Taxi Local Authority <span className="text-red-600">*</span>
                     </label>
 
-                    <span className="text-red-600">*</span>
                   </div>
                   <select
                     id="LocalAuthority"
                     name="LocalAuthority"
                     value={vehicleData.LocalAuthority}
                     onChange={handleChange}
-                    className="w-full p-2 border border-gray-300 rounded"
+                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
                     required
                   >
                     <option value="">Select Local Authority</option>
@@ -1908,18 +1942,18 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                   </select>
                 </div>
                 <div>
-                  <label className="block font-semibold">Test Date</label>
+                  <label className="text-[10px]">Test Date</label>
                   <input
                     type="date"
                     name="TestDate"
                     value={vehicleData.TestDate}
                     onChange={handleChange}
-                    className="w-full border border-gray-300 p-2 rounded-md"
+                    className="w-full border border-[#42506666] rounded-[4px] p-2"
                   />
                 </div>
 
                 <div>
-                  <label className="block font-semibold">
+                  <label className="text-[10px]">
                     Plate Expiry Date
                   </label>
                   <input
@@ -1927,25 +1961,25 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                     name="PlateExpiryDate"
                     value={vehicleData.PlateExpiryDate}
                     onChange={handleChange}
-                    className="w-full border border-gray-300 p-2 rounded-md"
+                    className="w-full border border-[#42506666] rounded-[4px] p-2"
                   />
                 </div>
 
                 <div>
-                  <label className="block font-semibold">Insurance</label>
+                  <label className="text-[10px]">Insurance</label>
                   <input
                     type="text"
                     name="Insurance"
                     value={vehicleData.Insurance}
                     onChange={handleChange}
                     placeholder="Enter insurance details"
-                    className="w-full border border-gray-300 p-2 rounded-md"
+                    className="w-full border border-[#42506666] rounded-[4px] p-2"
                   />
                 </div>
 
                 <div>
-                  <label className="block font-semibold">
-                    Insurance Policy Number:
+                  <label className="text-[10px]">
+                    Insurance Policy Number
                   </label>
                   <input
                     type="text"
@@ -1953,54 +1987,55 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                     value={vehicleData.insurancePolicyNumber}
                     onChange={handleChange}
                     placeholder="Enter policy number"
-                    className="w-full border border-gray-300 p-2 rounded-md"
+                    className="w-full border border-[#42506666] rounded-[4px] p-2"
                   />
                 </div>
 
                 <div>
-                  <label className="block font-semibold">
+                  <label className="text-[10px]">
                     Add PDF/Picture of Policy:
                   </label>
                   <input
                     type="file"
                     name="PDFofPolicy"
                     onChange={handleChange}
-                    className="w-full border border-gray-300 p-2 rounded-md"
+                    className="w-full border border-[#42506666] rounded-[4px] p-2"
                   />
                 </div>
               </div>
-              <h2 className="text-2xl font-bold mb-4">Defect Details</h2>
+
+              <h2 className="font-bold mb-2">Defect Details</h2>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mt-4 mb-2">
                 <div>
-                  <label className="block font-semibold">Defect</label>
+                  <label className="text-[10px]">Defect</label>
                   <input
                     type="text"
                     name="defect"
                     value={vehicleData.defect}
                     onChange={handleChange}
                     placeholder="Enter defect name"
-                    className="w-full border border-gray-300 p-2 rounded-md"
+                    className="w-full border border-[#42506666] rounded-[4px] p-2"
                   />
                 </div>
 
                 <div>
-                  <label className="block font-semibold">Date</label>
+                  <label className="text-[10px]">Date</label>
                   <input
                     type="date"
                     name="Defectdate"
                     value={vehicleData.Defectdate}
                     onChange={handleChange}
-                    className="w-full border border-gray-300 p-2 rounded-md"
+                    className="w-full border border-[#42506666] rounded-[4px] p-2"
                   />
                 </div>
 
                 <div>
-                  <label className="block font-semibold">Status</label>
+                  <label className="text-[10px]">Status</label>
                   <select
                     name="defectstatus"
                     value={vehicleData.defectstatus}
                     onChange={handleChange}
-                    className="w-full border border-gray-300 p-2 rounded-md"
+                    className="w-full border border-[#42506666] rounded-[4px] p-2"
                   >
                     <option value="" disabled>
                       Select status
@@ -2013,29 +2048,30 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                 </div>
 
                 <div>
-                  <label className="block font-semibold">Description</label>
+                  <label className="text-[10px]">Description</label>
                   <textarea
                     name="defectdescription"
                     value={vehicleData.defectdescription}
                     onChange={handleChange}
                     placeholder="Enter a brief description of the defect"
-                    className="w-full border border-gray-300 p-2 rounded-md resize-none"
-                    rows="3"
+                    className="w-full border border-[#42506666] rounded-[4px] p-2 resize-none"
+                    rows="2"
                   />
                 </div>
 
                 <div>
-                  <label className="block font-semibold">Action</label>
+                  <label className="text-[10px]">Action</label>
                   <textarea
                     name="defectaction"
                     value={vehicleData.defectaction}
                     onChange={handleChange}
                     placeholder="Describe the action taken or needed"
-                    className="w-full border border-gray-300 p-2 rounded-md resize-none"
-                    rows="3"
+                    className="w-full border border-[#42506666] rounded-[4px] p-2 resize-none"
+                    rows="2"
                   />
                 </div>
               </div>
+
               <div>
                 {/* multiple images  */}
                 <h2 className="block font-semibold">Update Car Documents</h2>
@@ -2095,6 +2131,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                   </div>
                 </div>
               </div>
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-4 mb-2">
                 {/* Warranty Information Section */}
                 <div className="flex flex-col">
@@ -2108,14 +2145,14 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                     name="warrantyInfo"
                     value={vehicleData.warrantyInfo}
                     onChange={handleChange}
-                    className="border-2 border-dashed border-gray-300 rounded-lg p-5 resize-none" // Added 'resize-none' for better layout control
+                    className="border-2 border-dashed border-[#42506666] rounded-[4px]-lg p-5 resize-none" // Added 'resize-none' for better layout control
                     placeholder="e.g., 3 years or 36,000 miles"
                     required
                   />
                 </div>
                 <div className="">
                   <label className="block font-semibold">Vehicle Images</label>
-                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-2">
+                  <div className="border-2 border-dashed border-[#42506666] rounded-[4px]-lg p-2">
                     <input
                       type="file"
                       id="imageFiles"
@@ -2291,7 +2328,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
               <div className="mt-6 flex gap-2 justify-between">
                 <button
                   onClick={prevStep}
-                  className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                  className="py-1 px-5 w-full sm:w-auto border-[1px] rounded-4 border-[#313342] bg-white text-[#313342] hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500"
                 >
                   Back
                 </button>
@@ -2302,11 +2339,11 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                       onClose();
                       resetForm();
                     }}
-                    className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                    className="py-1 px-5 w-full sm:w-auto border-[1px] rounded-4 border-[#313342] bg-white text-[#313342] hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500"
                   >
                     Close
                   </button>
-                  <button className="px-6 py-2 bg-custom-bg text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50">
+                  <button className="bg-[#313342] text-white rounded-4 hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500 py-1 px-8">
                     Submit
                   </button>
                 </div>

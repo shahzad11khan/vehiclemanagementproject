@@ -339,13 +339,13 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                   <button
                     type="button"
                     onClick={onClose}
-                    className="px-6 py-1 ml-2 text-custom-bg rounded-[4px] text-xs font-bold border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                    className="py-1 px-5 w-full sm:w-auto border-[1px] rounded-4 border-[#313342] bg-white text-[#313342] hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500"
                   >
                     Cancel
                   </button>
                   <button
                     onClick={nextStep}
-                    className={`px-6 py-2 rounded-[4px] text-xs font-bold ${formData.firstName && formData.lastName && formData.title
+                    className={`bg-[#313342] text-white rounded-4 hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500 py-1 px-8 ${formData.firstName && formData.lastName && formData.title
                       ? "bg-custom-bg text-white hover:bg-gray-600"
                       : "bg-gray-300 text-gray-500 cursor-not-allowed"
                       }`}
@@ -572,7 +572,7 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                   <div>
                     <button
                       onClick={prevStep}
-                      className="px-6 py-2 ml-2 text-custom-bg rounded-[4px] text-xs font-bold border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                      className="py-1 px-5 w-full sm:w-auto border-[1px] rounded-4 border-[#313342] bg-white text-[#313342] hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500"
                     >
                       Back
                     </button>
@@ -584,14 +584,14 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                         onClose();
                         resetform();
                       }}
-                      className="px-6 py-2 ml-2 text-custom-bg rounded-[4px] text-xs font-bold border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                      className="py-1 px-5 w-full sm:w-auto border-[1px] rounded-4 border-[#313342] bg-white text-[#313342] hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500"
                     >
                       Close
                     </button>
 
                     <button
                       onClick={nextStep}
-                      className={`px-6 py-2 rounded-[4px] text-xs ${formData.email && formData.tel1 && formData.postcode && formData.postalAddress && formData.city && formData.county
+                      className={`bg-[#313342] text-white rounded-4 hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500 py-1 px-8 ${formData.email && formData.tel1 && formData.postcode && formData.postalAddress && formData.city && formData.county
                         ? "bg-custom-bg text-white hover:bg-gray-600"
                         : "bg-gray-300 text-gray-500 cursor-not-allowed"
                         }`}
@@ -855,7 +855,7 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                   <div>
                     <button
                       onClick={prevStep}
-                      className="px-6 py-2 ml-2 text-custom-bg rounded-[4px] text-xs font-bold border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                      className="py-1 px-5 w-full sm:w-auto border-[1px] rounded-4 border-[#313342] bg-white text-[#313342] hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500"
                     >
                       Back
                     </button>
@@ -867,14 +867,14 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                         onClose();
                         resetform();
                       }}
-                      className="px-6 py-2 ml-2 text-custom-bg rounded-[4px] text-xs font-bold border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                      className="py-1 px-5 w-full sm:w-auto border-[1px] rounded-4 border-[#313342] bg-white text-[#313342] hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500"
                     >
                       Close
                     </button>
 
                     <button
                       onClick={nextStep}
-                      className={`px-6 py-2 rounded-[4px] text-xs ${formData.email && formData.tel1 && formData.postcode && formData.postalAddress && formData.city && formData.county
+                      className={`bg-[#313342] text-white rounded-4 hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500 py-1 px-8 ${formData.email && formData.tel1 && formData.postcode && formData.postalAddress && formData.city && formData.county
                         ? "bg-custom-bg text-white hover:bg-gray-600"
                         : "bg-gray-300 text-gray-500 cursor-not-allowed"
                         }`}
@@ -890,7 +890,7 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
 
           {step === 4 && (
             <>
-              <div className="flex gap-4">
+              {/* <div className="flex gap-4">
                 <div className="border-2 border-dashed border-gray-300 rounded-lg p-2 mt-2">
                   <input
                     type="file"
@@ -912,10 +912,39 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                     </div>
                   )}
                 </div>
+              </div> */}
+
+              <div className="flex items-center gap-2">
+                <label
+                  htmlFor="useravatar"
+                  className="text-[10px]"
+                >
+                  Upload Image:
+                </label>
+                <input
+                  type="file"
+                  id="useravatar"
+                  name="useravatar"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  className="mt-1 block w-48 text-[8px] text-gray-400 file:mr-4 file:py-1 p-2 file:px-4 file:rounded-lg file:border file:text-[10px] file:font-semibold file:bg-white hover:file:bg-blue-100 border border-[#0885864D] rounded-[10px] border-dashed "
+                />
+
+                <div>
+                  {imagePreview && (
+                    <div>
+                      <img
+                        src={imagePreview}
+                        alt="Avatar Preview"
+                        className="avatar-preview w-32 h-20"
+                      />
+                    </div>
+                  )}
+                </div>
               </div>
 
               <div>
-                <label className="block font-medium mb-2">Is Active:</label>
+                <label className="text-[10px] mb-2">Status</label>
                 <div className="flex gap-4">
                   {/* Yes Option */}
                   <label className="flex items-center gap-2">
@@ -931,7 +960,7 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                       }
                       className="accent-green-500"
                     />
-                    <span>Yes</span>
+                    <span className="text-xs">Yes</span>
                   </label>
 
                   {/* No Option */}
@@ -948,13 +977,13 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                       }
                       className="accent-red-500"
                     />
-                    <span>No</span>
+                    <span className="text-xs">No</span>
                   </label>
                 </div>
               </div>
 
               <div>
-                <label className="block font-medium mb-2">Role</label>
+                <label className="text-[10px] mb-2">Role</label>
                 <div className="flex gap-4">
                   <label className="flex items-center gap-2">
                     <input
@@ -965,7 +994,7 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                       onChange={handleChange}
                       className="accent-blue-500"
                     />
-                    <span>User</span>
+                    <span className="text-xs">User</span>
                   </label>
 
                   {/* Admin Role */}
@@ -978,7 +1007,7 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                       onChange={handleChange}
                       className="accent-blue-500"
                     />
-                    <span>Admin</span>
+                    <span className="text-xs">Admin</span>
                   </label>
                 </div>
               </div>
@@ -986,25 +1015,25 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                 <div>
                   <button
                     onClick={prevStep}
-                   className="px-6 py-2 ml-2 text-custom-bg rounded-[4px] text-xs font-bold border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                    className="py-1 px-5 w-full sm:w-auto border-[1px] rounded-4 border-[#313342] bg-white text-[#313342] hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500"
                   >
                     Back
                   </button>
                 </div>
-                <div className="flex gap-2">
+                <div className="flex gap-[10px]">
                   <button
                     type="button"
                     onClick={() => {
                       onClose();
                       resetform();
                     }}
-                     className="px-6 py-2 ml-2 text-custom-bg rounded-[4px] text-xs font-bold border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                    className="py-1 px-5 w-full sm:w-auto border-[1px] rounded-4 border-[#313342] bg-white text-[#313342] hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500"
                   >
                     Close
                   </button>
                   <button
                     type="submit"
-                    className="px-6 py-2 bg-custom-bg text-white rounded-[4px] text-xs hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                    className="bg-[#313342] text-white rounded-4 hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500 py-1 px-8"
                   >
                     Submit
                   </button>

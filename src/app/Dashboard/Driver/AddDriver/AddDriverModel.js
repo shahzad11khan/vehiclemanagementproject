@@ -658,13 +658,13 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                     onClose();
                     // resetform();
                   }}
-                  className="px-6 py-2 ml-2 text-custom-bg rounded-[4px] text-xs font-bold border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                  className="py-1 px-5 w-full sm:w-auto border-[1px] rounded-4 border-[#313342] bg-white text-[#313342] hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={nextStep}
-                  className={`px-6 py-2 rounded-[4px] text-xs font-bold focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 ${isNextDisabled1st
+                  className={`bg-[#313342] text-white rounded-4 hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500 py-1 px-8 ${isNextDisabled1st
                     ? "bg-gray-400 text-white cursor-not-allowed"
                     : "bg-custom-bg text-white hover:bg-gray-600"
                     }`}
@@ -876,7 +876,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                   <div className="flex gap-1">
                     <label
                       // htmlFor="postalAddress"
-                        className="text-[10px]"
+                      className="text-[10px]"
                     >
                       Building and Street (Line 1 of 2)
                     </label>
@@ -1130,7 +1130,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                 <div>
                   <button
                     onClick={prevStep}
-                    className="px-6 py-2 ml-2 text-custom-bg rounded-[4px] text-xs font-bold border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                    className="py-1 px-5 w-full sm:w-auto border-[1px] rounded-4 border-[#313342] bg-white text-[#313342] hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500"
                   >
                     Back
                   </button>
@@ -1142,13 +1142,13 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                       onClose();
                       // resetform();
                     }}
-                    className="px-6 py-2 ml-2 text-custom-bg rounded-[4px] text-xs font-bold border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                    className="py-1 px-5 w-full sm:w-auto border-[1px] rounded-4 border-[#313342] bg-white text-[#313342] hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    className={`px-6 py-2 rounded-[4px] text-xs font-bold focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 ${isNextDisabled2nd
+                    className={`bg-[#313342] text-white rounded-4 hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500 py-1 px-8 ${isNextDisabled2nd
                       ? "bg-gray-400 text-white cursor-not-allowed"
                       : "bg-custom-bg text-white hover:bg-gray-600"
                       }`}

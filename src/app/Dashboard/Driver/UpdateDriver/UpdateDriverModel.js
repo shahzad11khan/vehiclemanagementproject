@@ -1094,7 +1094,7 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, selectedUserId }) => {
                     onClose();
                     // resetform();
                   }}
-                  className="px-6 py-2 ml-2 text-custom-bg rounded-[4px] text-xs font-bold border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                  className="py-1 px-5 w-full sm:w-auto border-[1px] rounded-4 border-[#313342] bg-white text-[#313342] hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500"
                 >
                   Cancel
                 </button>
@@ -1105,7 +1105,7 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, selectedUserId }) => {
                   //   : "bg-custom-bg text-white hover:bg-gray-600"
                   //   }`}
                   // disabled={isNextDisabled1st}
-                  className="px-6 py-2 rounded-[4px] text-xs font-bold focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 bg-gray-400 text-white"
+                  className="bg-[#313342] text-white rounded-4 hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500 py-1 px-8"
                 >
                   Next
                 </button>
@@ -1567,7 +1567,7 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, selectedUserId }) => {
                 <div>
                   <button
                     onClick={prevStep}
-                    className="px-6 py-2 ml-2 text-custom-bg rounded-[4px] text-xs font-bold border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                    className="py-1 px-5 w-full sm:w-auto border-[1px] rounded-4 border-[#313342] bg-white text-[#313342] hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500"
                   >
                     Back
                   </button>
@@ -1579,7 +1579,7 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, selectedUserId }) => {
                       onClose();
                       // resetform();
                     }}
-                    className="px-6 py-2 ml-2 text-custom-bg rounded-[4px] text-xs font-bold border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                    className="py-1 px-5 w-full sm:w-auto border-[1px] rounded-4 border-[#313342] bg-white text-[#313342] hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500"
                   >
                     Cancel
                   </button>
@@ -1590,7 +1590,7 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, selectedUserId }) => {
                     //   : "bg-custom-bg text-white hover:bg-gray-600"
                     //   }`}
                     // disabled={isNextDisabled2nd}
-                    className="px-6 py-2 ml-2 text-custom-bg rounded-[4px] text-xs font-bold border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                    className="bg-[#313342] text-white rounded-4 hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500 py-1 px-8"
                   >
                     Submit
                     {/* {loading ? "Submitting..." : "Submit"} */}

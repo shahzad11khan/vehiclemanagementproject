@@ -98,7 +98,7 @@ const UpdateSignatureModel = ({
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
-      <div className="bg-white p-12 rounded-xl shadow-lg max-w-xl max-h-screen overflow-y-auto">
+      <div className="bg-white px-12 py-7 rounded-xl shadow-lg w-[531px] overflow-y-auto">
         {/* <h2 className="text-3xl font-semibold text-center mb-8">
           {signatureData ? "Update Signature" : "Add Signature"}
         </h2> */}
@@ -135,7 +135,7 @@ const UpdateSignatureModel = ({
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
-                className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px] shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow focus:ring-blue-500 focus:border-blue-500"
                 required
               />
             </div>
@@ -153,7 +153,7 @@ const UpdateSignatureModel = ({
                 name="description"
                 value={formData.description}
                 onChange={handleChange}
-                className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px] shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow focus:ring-blue-500 focus:border-blue-500"
                 rows="2"
                 required
               ></textarea>
@@ -176,7 +176,7 @@ const UpdateSignatureModel = ({
                 IsActive
               </label>
             </div> */}
-            <h2 className="font-bold mb-0">Image Details</h2>
+            <h2 className="font-bold mb-0 mt-4">Image Details</h2>
 
             {/* Image Name */}
             <div className="col-span-2">
@@ -192,12 +192,12 @@ const UpdateSignatureModel = ({
                 name="imageName"
                 value={formData.imageName}
                 onChange={handleChange}
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow focus:ring-blue-500 focus:border-blue-500"
               />
             </div>
 
             {/* Image File */}
-            <div className="col-span-2">
+            {/* <div className="col-span-2">
               <label
                 htmlFor="imageFile"
                 className="text-[10px]"
@@ -212,16 +212,28 @@ const UpdateSignatureModel = ({
                 className="mt-1 block w-full border border-gray-300 rounded-lg shadow-sm"
                 accept=".jpg, .jpeg, .gif, .png"
               />
-              {/* <p className="mt-2 text-sm text-gray-500">
-                Supported file formats are jpg, jpeg, gif, png. File size should
-                be less than 500kb. Preferred size of an image is Unlimited x
-                Unlimited (aspect ratio 1:1).
-              </p> */}
+            </div> */}
+
+            <div className="flex items-center gap-2 col-span-2 mt-5">
+              <label
+                htmlFor="imageFile"
+                className="text-[10px]"
+              >
+                Update Image
+              </label>
+              <input
+                type="file"
+                id="imageFile"
+                name="imageFile"
+                onChange={handleChange}
+                accept="image/*"
+                className="mt-1 block w-48 text-[8px] text-gray-400 file:mr-4 file:py-1 p-2 file:px-4 file:rounded-lg file:border file:text-[10px] file:font-semibold file:bg-white hover:file:bg-blue-100 border border-[#0885864D] rounded-[10px] border-dashed "
+              />
             </div>
 
             <div>
               <label className="mb-2 text-[10px]">Status</label>
-              <div className="flex gap-4">
+              <div className="flex gap-4 mt-4">
                 {/* Yes Option */}
                 <label className="flex items-center gap-2">
                   <input
@@ -271,17 +283,17 @@ const UpdateSignatureModel = ({
           </div>
 
           {/* Button Group */}
-          <div className="flex gap-[10px] justify-end">
+          <div className="flex gap-[10px] justify-end mt-8">
             <button
               type="button"
               onClick={onClose}
-              className="px-6 py-2 ml-2 text-custom-bg rounded-[4px] text-xs font-bold border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+              className="py-1 px-5 w-full sm:w-auto border-[1px] rounded-4 border-[#313342] bg-white text-[#313342] hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-6 py-2 bg-custom-bg text-white rounded-[4px] text-xs font-bold hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+              className="bg-[#313342] text-white rounded-4 hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500 py-1 px-8"
             >
               {signatureData ? "Update" : "Submit"} {/* Dynamic button text */}
             </button>

@@ -136,7 +136,7 @@ const AddEnquiryModal = ({ isOpen, onClose, fetchData }) => {
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
       <div className="bg-white px-12 py-6 rounded-xl shadow-lg w-full max-w-4xl overflow-y-auto max-h-screen">
         {/* <h2 className="text-3xl font-semibold text-center mb-8">Add Enquiry</h2> */}
-        <div className="flex items-center justify-between mb-4 bg-slate-400">
+        <div className="flex items-center justify-between mb-4">
           <h2 className="text-2xl font-bold">
             Add Enquiry
           </h2>
@@ -158,8 +158,6 @@ const AddEnquiryModal = ({ isOpen, onClose, fetchData }) => {
                   >
                     First Name <span className="text-red-600">*</span>
                   </label>
-
-
                 </div>
                 <input
                   type="text"
@@ -200,8 +198,6 @@ const AddEnquiryModal = ({ isOpen, onClose, fetchData }) => {
                   >
                     NI Number <span className="text-red-600">*</span>
                   </label>
-
-
                 </div>
                 <input
                   type="text"
@@ -222,7 +218,6 @@ const AddEnquiryModal = ({ isOpen, onClose, fetchData }) => {
                   >
                     Email <span className="text-red-600">*</span>
                   </label>
-
                 </div>
                 <input
                   type="email"
@@ -251,7 +246,7 @@ const AddEnquiryModal = ({ isOpen, onClose, fetchData }) => {
                   name="dateOfBirth"
                   value={formData.dateOfBirth}
                   onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                  className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow"
                   required
                 />
               </div>
@@ -268,7 +263,7 @@ const AddEnquiryModal = ({ isOpen, onClose, fetchData }) => {
                   name="badgeType"
                   value={formData.badgeType}
                   onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                  className="mt-1 block w-full p-2 border shadow border-[#42506666] rounded-[4px]"
                 >
                   <option value="">Select Badge Type</option>
                   {badgeTypeOptions.map((option) => (
@@ -296,7 +291,7 @@ const AddEnquiryModal = ({ isOpen, onClose, fetchData }) => {
                   value={formData.tel1}
                   onChange={handleChange}
                   className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
-                  required
+                  required placeholder="Phone Number"
                 />
               </div>
 
@@ -312,7 +307,7 @@ const AddEnquiryModal = ({ isOpen, onClose, fetchData }) => {
                   name="localAuthority"
                   value={formData.localAuthority}
                   onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                  className="mt-1 block w-full p-2 border border-[#42506666] shadow rounded-[4px]"
                 >
                   <option value="">Select Local Authority</option>
                   {localAuthorityOptions.map((option) => (
@@ -324,7 +319,7 @@ const AddEnquiryModal = ({ isOpen, onClose, fetchData }) => {
               </div>
             </div>
 
-            <h2 className="">Address</h2>
+            <h2 className="font-bold mt-6">Address</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
 
               {/* <div>
@@ -372,7 +367,7 @@ const AddEnquiryModal = ({ isOpen, onClose, fetchData }) => {
                   htmlFor="permanentAddress"
                   className="text-[10px]"
                 >
-                Building and Street (Line 2 of 2)
+                  Building and Street (Line 2 of 2)
                 </label>
                 <input
                   type="text"
@@ -380,7 +375,7 @@ const AddEnquiryModal = ({ isOpen, onClose, fetchData }) => {
                   // name="permanentAddress"
                   // value={formData.permanentAddress}
                   // onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]" placeholder="Building and street"
+                  className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow" placeholder="Building and street"
                 />
               </div>
 
@@ -390,9 +385,8 @@ const AddEnquiryModal = ({ isOpen, onClose, fetchData }) => {
                     htmlFor="city"
                     className="text-[10px]"
                   >
-                    Town/City <span className="text-red-600">*</span>
+                    Town / City <span className="text-red-600">*</span>
                   </label>
-
                 </div>
                 <input
                   type="text"
@@ -400,7 +394,7 @@ const AddEnquiryModal = ({ isOpen, onClose, fetchData }) => {
                   name="city"
                   value={formData.city}
                   onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                  className="mt-1 block w-full p-2 border border-[#42506666] shadow rounded"
                   required placeholder="Town/City"
                 />
               </div>
@@ -413,7 +407,6 @@ const AddEnquiryModal = ({ isOpen, onClose, fetchData }) => {
                   >
                     Country <span className="text-red-600">*</span>
                   </label>
-
                 </div>
                 <input
                   type="text"
@@ -421,7 +414,7 @@ const AddEnquiryModal = ({ isOpen, onClose, fetchData }) => {
                   name="county"
                   value={formData.county}
                   onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                  className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow"
                   required placeholder="Country"
                 />
               </div>
@@ -434,7 +427,6 @@ const AddEnquiryModal = ({ isOpen, onClose, fetchData }) => {
                   >
                     Postcode <span className="text-red-600">*</span>
                   </label>
-
                 </div>
                 <input
                   type="number"
@@ -465,7 +457,7 @@ const AddEnquiryModal = ({ isOpen, onClose, fetchData }) => {
               </div> */}
               <div>
                 <label className="text-[10px] mb-2">Status</label>
-                <div className="flex gap-4">
+                <div className="flex gap-4 mt-2">
                   {/* Yes Option */}
                   <label className="flex items-center gap-2">
                     <input
@@ -495,7 +487,7 @@ const AddEnquiryModal = ({ isOpen, onClose, fetchData }) => {
                           target: { name: "isActive", value: false },
                         })
                       }
-                      className="accent-red-500"
+                      className="accent-red-700"
                     />
                     <span className="text-xs">InActive</span>
                   </label>
@@ -503,7 +495,8 @@ const AddEnquiryModal = ({ isOpen, onClose, fetchData }) => {
               </div>
             </div>
           </div>
-          <div className="flex justify-end gap-2">
+
+          <div className="flex justify-end gap-[10px]">
             <button
               type="button"
               onClick={onClose}

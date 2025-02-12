@@ -345,7 +345,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                     name="firstName"
                     value={formData.firstName}
                     onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow"
                     required
                   />
                 </div>
@@ -374,7 +374,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                     name="dateOfBirth"
                     value={formData.dateOfBirth}
                     onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow"
                     required
                   />
                 </div>
@@ -402,7 +402,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                     name="niNumber"
                     value={formData.niNumber}
                     onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow"
                     required
                     placeholder="Ni Number"
                   />
@@ -432,7 +432,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                     name="licenseNumber"
                     value={formData.licenseNumber}
                     onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow"
                     required
                     placeholder="License Number"
                   />
@@ -457,7 +457,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow"
                     required
                     placeholder="Email"
                   />
@@ -481,7 +481,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                     // name=""
                     // value={formData.lastName}
                     // onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow"
                     required
                     placeholder="Password"
                   />
@@ -506,7 +506,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                     name="tel1"
                     value={formData.tel1}
                     onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow"
                     required
                   />
                 </div>
@@ -526,7 +526,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                     name="driverNumber"
                     value={formData.driverNumber}
                     onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow"
                   />
                 </div>
 
@@ -585,7 +585,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                     name="badgeType"
                     value={formData.badgeType}
                     onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow"
                   >
                     <option value="null">Select badgeType </option>
                     {badge.map((badge) => (
@@ -608,7 +608,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                     name="insurance"
                     value={formData.insurance}
                     onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow"
                   >
                     <option value="null">Select insurance </option>
 
@@ -638,16 +638,10 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                     name="licenseExpiryDate"
                     value={formData.licenseExpiryDate}
                     onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow"
                     required
                   />
                 </div>
-
-
-
-
-
-
               </div>
 
               {/* buttons */}
@@ -889,7 +883,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                     // name="postalAddress"
                     // value={formData.postalAddress}
                     // onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow"
                     required
                     placeholder="Building and Street"
                   />
@@ -912,7 +906,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                     // name="postalAddress"
                     // value={formData.postalAddress}
                     // onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow"
                     required
                     placeholder="Building and Street"
                   />
@@ -935,7 +929,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                     name="city"
                     value={formData.city}
                     onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow"
                     required placeholder="Town/City"
                   />
                 </div>
@@ -956,7 +950,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                     name="county"
                     value={formData.county}
                     onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow"
                     required
                   />
                 </div>
@@ -978,7 +972,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                     name="postcode"
                     value={formData.postcode}
                     onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow"
                     required
                   />
                 </div>

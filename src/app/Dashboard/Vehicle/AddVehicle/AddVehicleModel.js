@@ -738,7 +738,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                     name="manufacturer"
                     value={vehicleData.manufacturer}
                     onChange={handleChange}
-                    className="w-full p-2 border border-[#42506666] rounded-[4px] shadow"
+                    className="w-full p-2 border border-[#42506666] rounded shadow"
                     required
                   >
                     <option value="">Select Manufacturer</option>
@@ -766,7 +766,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                     name="model"
                     value={vehicleData.model}
                     onChange={handleChange}
-                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="w-full p-2 border border-[#42506666] rounded shadow"
                     placeholder="e.g., Camry, Mustang"
                     required
                   />
@@ -788,7 +788,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                     name="year"
                     value={vehicleData.year}
                     onChange={handleChange}
-                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="w-full p-2 border border-[#42506666] rounded shadow"
                     placeholder="e.g., 2024"
                     required
                   />
@@ -810,7 +810,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                     name="type"
                     value={vehicleData.type}
                     onChange={handleChange}
-                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="w-full p-2 border border-[#42506666] rounded shadow"
                     required
                   >
                     <option value="" disabled>
@@ -840,7 +840,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                     name="engineType"
                     value={vehicleData.engineType}
                     onChange={handleChange}
-                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="w-full p-2 border border-[#42506666] rounded shadow"
                     placeholder="e.g., 2.5L 4-Cylinder"
                     required
                   />
@@ -861,7 +861,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                     name="fuelType"
                     value={vehicleData.fuelType}
                     onChange={handleChange}
-                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="w-full p-2 border border-[#42506666] rounded shadow"
                     required
                   >
                     <option value="" disabled>
@@ -891,7 +891,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                     name="transmission"
                     value={vehicleData.transmission}
                     onChange={handleChange}
-                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="w-full p-2 border border-[#42506666] rounded shadow"
                     placeholder="e.g., Automatic"
                     required
                   >
@@ -921,7 +921,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                     name="drivetrain"
                     value={vehicleData.drivetrain}
                     onChange={handleChange}
-                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="w-full p-2 border border-[#42506666] rounded shadow"
                     required
                   >
                     <option value="" disabled>
@@ -952,7 +952,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                     name="exteriorColor"
                     value={vehicleData.exteriorColor}
                     onChange={handleChange}
-                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="w-full p-2 border border-[#42506666] rounded shadow"
                     placeholder="e.g., Red, Blue"
                     required
                   />
@@ -976,7 +976,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                     name="interiorColor"
                     value={vehicleData.interiorColor}
                     onChange={handleChange}
-                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="w-full p-2 border border-[#42506666] rounded shadow"
                     placeholder="e.g., Black, Beige"
                     required
                   />
@@ -992,7 +992,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                     value={vehicleData.height}
                     onChange={handleChange}
                     placeholder="0.001"
-                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="w-full p-2 border border-[#42506666] rounded shadow"
                   />
                 </div>
                 <div>
@@ -1004,7 +1004,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                     name="width"
                     value={vehicleData.width}
                     onChange={handleChange}
-                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="w-full p-2 border border-[#42506666] rounded shadow"
                     placeholder="0.001"
                   />
                 </div>
@@ -1017,7 +1017,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                     name="length"
                     value={vehicleData.length}
                     onChange={handleChange}
-                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="w-full p-2 border border-[#42506666] rounded shadow"
                     placeholder="0.001"
                   />
                 </div>
@@ -1069,7 +1069,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
           {step === 2 && (
             <>
               {" "}
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mt-4">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">
                 <div>
                   <div className="flex gap-1">
                     {/* <label className="block font-semibold">
@@ -1087,7 +1087,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                     name="passengerCapacity"
                     value={vehicleData.passengerCapacity}
                     onChange={handleChange}
-                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="w-full p-2 border border-[#42506666] rounded shadow"
                     required
                   >
                     <option value="" disabled>
@@ -1122,10 +1122,11 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                     name="cargoCapacity"
                     value={vehicleData.cargoCapacity}
                     onChange={handleChange}
-                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="w-full p-2 border border-[#42506666] rounded shadow"
                     placeholder="Cargo Capacity"
                   />
                 </div>
+
                 <div>
                   <div className="flex gap-1">
                     {/* <label className="block font-semibold">Horsepower</label> */}
@@ -1142,10 +1143,10 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                     name="horsepower"
                     value={vehicleData.horsepower}
                     onChange={handleChange}
-                    className="w-full p-2 border border-[#42506666] rounded-[4px]" placeholder="Horsepower"
+                    className="w-full p-2 border border-[#42506666] rounded shadow" placeholder="Horsepower"
                   />
                 </div>
-              
+
                 <div>
                   <div className="flex gap-1">
                     <label className="text-[10px]">
@@ -1158,7 +1159,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                     name="fuelEfficiency"
                     value={vehicleData.fuelEfficiency}
                     onChange={handleChange}
-                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="w-full p-2 border border-[#42506666] rounded shadow"
                     placeholder="e.g., 25 MPG"
                   />
                 </div>
@@ -1180,7 +1181,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                     name="price"
                     value={vehicleData.price}
                     onChange={handleChange}
-                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="w-full p-2 border border-[#42506666] rounded shadow"
                     required placeholder="Price"
                   />
                 </div>
@@ -1204,7 +1205,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                     name="registrationNumber"
                     value={vehicleData.registrationNumber}
                     onChange={handleChange}
-                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="w-full p-2 border border-[#42506666] rounded shadow"
                     required placeholder="Registration Number"
                   />
                 </div>
@@ -1221,7 +1222,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                     name="LocalAuthority"
                     value={vehicleData.LocalAuthority}
                     onChange={handleChange}
-                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="w-full p-2 border border-[#42506666] rounded shadow"
                     required
                   >
                     <option value="">Select Local Authority</option>
@@ -1234,7 +1235,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                 </div>
 
                 <div>
-                  <div className="flex gap-1">
+                  <div>
                     {/* <label className="block font-semibold">
                       Safety Features
                     </label>
@@ -1279,7 +1280,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                       value={selectedOptions}
                       onChange={handleChangesafty}
                       placeholder="Select features..."
-                      className="react-select w-full p-2 border border-[#42506666] rounded-[4px]"
+                      className="react-select w-full border border-[#42506666] rounded shadow"
                       classNamePrefix="select"
                     />
                   </div>
@@ -1287,7 +1288,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
 
 
                 <div className="">
-                  <div className="flex gap-1 ">
+                  <div>
                     {/* <label className="block font-semibold">
                       Technology Features
                     </label> */}
@@ -1332,7 +1333,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                       value={selectedOptionstech}
                       onChange={handleChangestech}
                       placeholder="Select Tech..."
-                      className="react-select w-full p-2 border border-[#42506666] rounded-[4px]"
+                      className="react-select w-full border border-[#42506666] rounded  shadow"
                       classNamePrefix="select"
                     />
                   </div>
@@ -1348,7 +1349,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                     value={vehicleData.enginesize}
                     onChange={handleChange}
                     placeholder="Enter Engine Size"
-                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="w-full p-2 border border-[#42506666] rounded shadow"
                   />
                 </div>
 
@@ -1364,7 +1365,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                     value={vehicleData.chasisnumber}
                     onChange={handleChange}
                     placeholder="Enter Engine Size"
-                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="w-full p-2 border border-[#42506666] rounded shadow"
                   />
                 </div>
 
@@ -1377,7 +1378,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                     // name="vehicleSite"
                     // value={selectedSite}
                     // onChange={handleSiteChange}
-                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="w-full p-2 border border-[#42506666] rounded shadow"
                     required
                   >
                     <option value="">Select vehicle site</option>
@@ -1484,7 +1485,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                     value={vehicleData.doors}
                     onChange={handleChange}
                     placeholder="2"
-                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="w-full p-2 border border-[#42506666] rounded shadow"
                   />
                 </div>
 
@@ -1499,7 +1500,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                     // name="color"
                     // value={vehicleData.color}
                     // onChange={handleChange}
-                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="w-full p-2 border border-[#42506666] rounded shadow"
                     required
                   >
                     <option value="">Select color</option>
@@ -1521,23 +1522,9 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                     // value={vehicleData.editablecolor}
                     onChange={handleChange}
                     placeholder="Custom Color"
-                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="w-full p-2 border border-[#42506666] rounded shadow"
                   />
                 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1548,7 +1535,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                     name="roadTaxDate"
                     value={vehicleData.roadTaxDate}
                     onChange={handleChange}
-                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="w-full p-2 border border-[#42506666] rounded shadow"
                   />
                 </div>
 
@@ -1559,7 +1546,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                     name="roadTaxCycle"
                     value={vehicleData.roadTaxCycle}
                     onChange={handleChange}
-                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="w-full p-2 border border-[#42506666] rounded shadow"
                   >
                     <option value="">Select Cycle</option>
                     <option value="3months">3 Months</option>
@@ -1576,7 +1563,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                     name="motDueDate"
                     value={vehicleData.motDueDate}
                     onChange={handleChange}
-                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="w-full p-2 border border-[#42506666] rounded shadow"
                   />
                 </div>
 
@@ -1587,7 +1574,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                     name="motCycle"
                     value={vehicleData.motCycle}
                     onChange={handleChange}
-                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="w-full p-2 border border-[#42506666] rounded shadow"
                   >
                     <option value="">Select Cycle</option>
                     <option value="3months">3 Months</option>
@@ -1604,7 +1591,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                     name="abiCode"
                     value={vehicleData.abiCode}
                     onChange={handleChange}
-                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="w-full p-2 border border-[#42506666] rounded shadow"
                     placeholder="Enter ABI Code"
                   />
                 </div>
@@ -1619,7 +1606,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                     name="nextServiceDate"
                     value={vehicleData.nextServiceDate}
                     onChange={handleChange}
-                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="w-full p-2 border border-[#42506666] rounded shadow"
                   />
                 </div>
 
@@ -1633,7 +1620,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                     name="nextServiceMiles"
                     value={vehicleData.nextServiceMiles}
                     onChange={handleChange}
-                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="w-full p-2 border border-[#42506666] rounded shadow"
                     placeholder="Enter miles for next service"
                   />
                 </div>
@@ -1646,7 +1633,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                     name="roadTaxCost"
                     value={vehicleData.roadTaxCost}
                     onChange={handleChange}
-                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="w-full p-2 border border-[#42506666] rounded shadow"
                     placeholder="Enter road tax cost"
                   />
                 </div>
@@ -1813,7 +1800,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                     value={vehicleData.listPrice}
                     onChange={handleChange}
                     placeholder="List Price"
-                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="w-full p-2 border border-[#42506666] rounded  shadow"
                   />
                 </div>
 
@@ -1827,7 +1814,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                     value={vehicleData.purchasePrice}
                     onChange={handleChange}
                     placeholder="Purchase Price"
-                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="w-full p-2 border border-[#42506666] rounded shadow"
                   />
                 </div>
 
@@ -1841,7 +1828,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                     value={vehicleData.insuranceValue}
                     onChange={handleChange}
                     placeholder="Insurance Value"
-                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="w-full p-2 border border-[#42506666] rounded shadow"
                   />
                 </div>
 
@@ -1855,7 +1842,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                     value={vehicleData.departmentCode}
                     onChange={handleChange}
                     placeholder="Department Code"
-                    className="w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="w-full p-2 border border-[#42506666] rounded shadow"
                   />
                 </div>
               </div>
@@ -1873,7 +1860,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
               </div>
               {maintenance && (
                 <>
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mt-4">
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">
                     <div className="mb-4 col-span-2">
                       <label className="text-[10px]">
                         Issues / Damages
@@ -1884,15 +1871,15 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                         value={vehicleData.issues_damage}
                         onChange={handleChange}
                         placeholder="Describe"
-                        className="w-full p-2 border border-[#42506666] rounded-[4px]"
+                        className="w-full p-2 border border-[#42506666] rounded shadow"
                       />
                     </div>
 
-                    <div className="mb-4 col-span-1">
+                    {/* <div className="mb-4 col-span-1">
                       <label className="text-[10px]">
                         Damage Image
                       </label>
-                      <div className="border-2 border-dashed border-[#42506666] rounded-[4px]-lg p-2">
+                      <div className="border-2 border-dashed border-[#42506666] rounded shadow p-2">
                         <input
                           type="file"
                           id="damage_image"
@@ -1902,6 +1889,22 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                           multiple
                         />
                       </div>
+                    </div> */}
+                    <div className="mb-4 col-span-1">
+                      <label
+                        htmlFor="useravatar"
+                        className="text-[10px]"
+                      >
+                        Damage Image
+                      </label>
+                      <input
+                        type="file"
+                       id="damage_image"
+                          name="damage_image"
+                        accept="image/*"
+                        onChange={handleChange}
+                        className=" block w-48 text-[8px] text-gray-400 file:mr-4 file:py-1 p-2 file:px-4 file:rounded-lg file:border file:text-[10px] file:font-semibold file:bg-white hover:file:bg-blue-100 border border-[#0885864D] rounded-[10px] border-dashed "
+                      />
                     </div>
                   </div>
 
@@ -1917,7 +1920,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                         value={vehicleData.recovery}
                         onChange={handleChange}
                         placeholder="Recovery"
-                        className="w-full p-2 border border-[#42506666] rounded-[4px]"
+                        className="w-full p-2 border border-[#42506666] rounded shadow"
                       />
                     </div>
 
@@ -1931,7 +1934,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                         value={vehicleData.repairStatus}
                         onChange={handleChange}
                         placeholder="Repair status"
-                        className="w-full p-2 border border-[#42506666] rounded-[4px]"
+                        className="w-full p-2 border border-[#42506666] rounded shadow"
                       />
                     </div>
 
@@ -1945,7 +1948,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                         value={vehicleData.jobNumber}
                         onChange={handleChange}
                         placeholder="Job number"
-                        className="w-full p-2 border border-[#42506666] rounded-[4px]"
+                        className="w-full p-2 border border-[#42506666] rounded shadow"
                       />
                     </div>
 
@@ -1957,7 +1960,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                         name="organization"
                         value={vehicleData.organization}
                         onChange={handleChange}
-                        className="w-full p-2 border border-[#42506666] rounded-[4px]"
+                        className="w-full p-2 border border-[#42506666] rounded shadow"
                       >
                         <option value="">Select Organization</option>
                         <option value="Organization1">Organization 1</option>
@@ -1979,7 +1982,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                         value={vehicleData.memo}
                         onChange={handleChange}
                         placeholder="Memo for repair"
-                        className="w-full p-2 border border-[#42506666] rounded-[4px]"
+                        className="w-full p-2 border border-[#42506666] rounded shadow"
                       />
                     </div>
                   </div>
@@ -1992,7 +1995,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                         value={vehicleData.partNumber}
                         onChange={handleChange}
                         placeholder="Part Number"
-                        className="w-full p-2 border border-[#42506666] rounded-[4px] mb-2"
+                        className="w-full p-2 border border-[#42506666] rounded shadow mb-2"
                       />
                     </div>
 
@@ -2003,7 +2006,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                         value={vehicleData.partName}
                         onChange={handleChange}
                         placeholder="Part Name"
-                        className="w-full p-2 border border-[#42506666] rounded-[4px] mb-2"
+                        className="w-full p-2 border border-[#42506666] rounded shadow mb-2"
                       />
                     </div>
 
@@ -2014,7 +2017,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                         value={vehicleData.partprice}
                         onChange={handleChange}
                         placeholder="Price"
-                        className="w-full p-2 border border-[#42506666] rounded-[4px] mb-2"
+                        className="w-full p-2 border border-[#42506666] rounded shadow mb-2"
                       />
                     </div>
 
@@ -2023,7 +2026,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                         name="partsupplier"
                         value={vehicleData.partsupplier}
                         onChange={handleChange}
-                        className="w-full p-2 border border-[#42506666] rounded-[4px] mb-2"
+                        className="w-full p-2 border border-[#42506666] rounded shadow mb-2"
                       >
                         <option value="">Select Supplier</option>
                         <option value="Supplier1">Supplier 1</option>
@@ -2043,7 +2046,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                     name="RPCExpiryDate"
                     value={vehicleData.RPCExpiryDate}
                     onChange={handleChange}
-                    className="w-full border border-[#42506666] rounded-[4px] p-2"
+                    className="w-full border border-[#42506666] rounded shadow p-2"
                   />
                 </div>
 
@@ -2056,7 +2059,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                     name="TailLiftExpiryDate"
                     value={vehicleData.tailLiftExpirydate}
                     onChange={handleChange}
-                    className="w-full border border-[#42506666] rounded-[4px] p-2"
+                    className="w-full border border-[#42506666] rounded shadow p-2"
                   />
                 </div>
 
@@ -2069,7 +2072,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                     name="ForkLiftInspectionDate"
                     value={vehicleData.ForkLiftInspectionDate}
                     onChange={handleChange}
-                    className="w-full border border-[#42506666] rounded-[4px] p-2"
+                    className="w-full border border-[#42506666] rounded shadow p-2"
                   />
                 </div>
 
@@ -2083,7 +2086,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                     value={vehicleData.forkLiftNumber}
                     onChange={handleChange}
                     placeholder="Inspection number or notes"
-                    className="w-full border border-[#42506666] rounded-[4px] p-2"
+                    className="w-full border border-[#42506666] rounded shadow p-2"
                   />
                 </div>
               </div>
@@ -2110,7 +2113,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                     value={vehicleData.additionalInfo}
                     onChange={handleChange}
                     placeholder="Enter any additional info"
-                    className="w-full border border-[#42506666] rounded-[4px] p-2"
+                    className="w-full border border-[#42506666] rounded shadow p-2"
                     rows="2"
                   />
                 </div>

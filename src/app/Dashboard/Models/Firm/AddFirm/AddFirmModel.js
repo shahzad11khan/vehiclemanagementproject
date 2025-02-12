@@ -170,7 +170,7 @@ const AddFirmModal = ({ isOpen, onClose, fetchData }) => {
                     name="name"
                     value={formData.name}
                     onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow"
                     required placeholder="Name"
                   />
                 </div>
@@ -188,7 +188,7 @@ const AddFirmModal = ({ isOpen, onClose, fetchData }) => {
                     name="description"
                     value={formData.description}
                     onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow"
                     placeholder="Description"
                   />
                 </div>
@@ -227,7 +227,7 @@ const AddFirmModal = ({ isOpen, onClose, fetchData }) => {
                     name="vatNo"
                     value={formData.vatNo}
                     onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow"
                     placeholder="VAT number"
                   />
                 </div>
@@ -247,7 +247,7 @@ const AddFirmModal = ({ isOpen, onClose, fetchData }) => {
                     name="insurancePolicyNo"
                     value={formData.insurancePolicyNo}
                     onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow "
                     required
                     placeholder="Insurance policy number"
                   />
@@ -266,7 +266,7 @@ const AddFirmModal = ({ isOpen, onClose, fetchData }) => {
                     name="website"
                     value={formData.website}
                     onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow"
                     placeholder="Website"
 
                   />
@@ -287,7 +287,7 @@ const AddFirmModal = ({ isOpen, onClose, fetchData }) => {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow"
                     required
                     placeholder="Email"
                   />
@@ -310,7 +310,7 @@ const AddFirmModal = ({ isOpen, onClose, fetchData }) => {
                     name="tel1"
                     value={formData.tel1}
                     onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow"
                     required placeholder="Phone Number"
                   />
                 </div>
@@ -337,7 +337,7 @@ const AddFirmModal = ({ isOpen, onClose, fetchData }) => {
                     // name="city"
                     // value={formData.city}
                     // onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow"
                     required placeholder="Building and street"
                   />
                 </div>
@@ -358,7 +358,7 @@ const AddFirmModal = ({ isOpen, onClose, fetchData }) => {
                     // name="city"
                     // value={formData.city}
                     // onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow"
                     required placeholder="Building and street"
                   />
                 </div>
@@ -379,7 +379,7 @@ const AddFirmModal = ({ isOpen, onClose, fetchData }) => {
                     name="city"
                     value={formData.city}
                     onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow"
                     required placeholder="Town/City"
                   />
                 </div>
@@ -399,7 +399,7 @@ const AddFirmModal = ({ isOpen, onClose, fetchData }) => {
                     name="country"
                     value={formData.country}
                     onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow"
                     required placeholder="Country"
                   />
                 </div>
@@ -419,7 +419,7 @@ const AddFirmModal = ({ isOpen, onClose, fetchData }) => {
                     name="postcode"
                     value={formData.postcode}
                     onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow"
                     required placeholder="Postcode"
                   />
                 </div>
@@ -432,19 +432,21 @@ const AddFirmModal = ({ isOpen, onClose, fetchData }) => {
                   onClick={() => {
                     onClose();
                   }}
-                  className="px-6 py-2 ml-2 text-custom-bg rounded-[4px] text-xs font-bold border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                  className="py-1 px-5 w-full sm:w-auto border-[1px] rounded-4 border-[#313342] bg-white text-[#313342] hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={nextStep}
-                  className="px-6 py-2 bg-custom-bg text-white rounded-[4px] text-xs font-bold hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                  className="bg-[#313342] text-white rounded-4 hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500 py-1 px-8"
                 >
                   Next
                 </button>
               </div>
             </>
           )}
+
+          
           {step === 2 && (
             <>
               {/* <div>
@@ -564,7 +566,7 @@ const AddFirmModal = ({ isOpen, onClose, fetchData }) => {
                   name="signature"
                   value={formData.signature}
                   onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                  className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow"
                 >
                   <option value="">Select signature</option>
                   {signature.map((option) => (
@@ -581,9 +583,9 @@ const AddFirmModal = ({ isOpen, onClose, fetchData }) => {
                   <div>
                     <label
                       htmlFor="imageName"
-                      className="text-sm font-medium text-gray-700"
+                      className="text-[10px]"
                     >
-                      Image Name:
+                      Image Name
                     </label>
                     <input
                       type="text"
@@ -591,13 +593,14 @@ const AddFirmModal = ({ isOpen, onClose, fetchData }) => {
                       name="imageName"
                       value={formData.imageName}
                       onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow"
+                      placeholder="Image Name"
                     />
                   </div>
                 </div>
               </div>
 
-              <div>
+              {/* <div>
                 <label
                   htmlFor="imageFile"
                   className="text-sm font-medium text-gray-700"
@@ -610,13 +613,30 @@ const AddFirmModal = ({ isOpen, onClose, fetchData }) => {
                   name="imageFile"
                   accept=".jpg, .jpeg, .gif, .png"
                   onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                  className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow"
                 />
                 <p className="text-xs text-gray-500 mt-1">
                   Supported file formats are jpg, jpeg, gif, png. File size
                   should be less than 2000kb. Preferred size of an image is
                   Unlimited x Unlimited (aspect ratio 1:1).
                 </p>
+              </div> */}
+
+              <div className="flex items-center gap-2">
+                <label
+                  htmlFor="useravatar"
+                  className="text-[10px]"
+                >
+                  Image File:
+                </label>
+                <input
+                  type="file"
+                  id="useravatar"
+                  name="useravatar"
+                  accept="image/*"
+                  onChange={handleChange}
+                  className="mt-1 block w-48 text-[8px] text-gray-400 file:mr-4 file:py-1 p-2 file:px-4 file:rounded-lg file:border file:text-[10px] file:font-semibold file:bg-white hover:file:bg-blue-100 border border-[#0885864D] rounded-[10px] border-dashed "
+                />
               </div>
 
               <div>
@@ -660,17 +680,13 @@ const AddFirmModal = ({ isOpen, onClose, fetchData }) => {
 
 
 
-
-
-
-
               {/* <h2>dd </h2> */}
 
               <div className="mt-36  flex justify-between gap-2">
                 <button
                   type="button"
                   onClick={prevStep}
-                  className="px-6 py-2 ml-2 text-custom-bg rounded-[4px] text-xs font-bold border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                  className="py-1 px-5 w-full sm:w-auto border-[1px] rounded-4 border-[#313342] bg-white text-[#313342] hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500"
                 >
                   Back
                 </button>
@@ -679,13 +695,13 @@ const AddFirmModal = ({ isOpen, onClose, fetchData }) => {
                   <button
                     type="button"
                     onClick={onClose}
-                    className="px-6 py-2 ml-2 text-custom-bg rounded-[4px] text-xs font-bold border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                    className="py-1 px-5 w-full sm:w-auto border-[1px] rounded-4 border-[#313342] bg-white text-[#313342] hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    className="px-6 py-2 bg-custom-bg text-white rounded-[4px] text-xs font-bold hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                    className="bg-[#313342] text-white rounded-4 hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500 py-1 px-8"
                   >
                     Submit
                   </button>

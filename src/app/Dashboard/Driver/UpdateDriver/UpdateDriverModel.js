@@ -781,7 +781,7 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, selectedUserId }) => {
                     name="firstName"
                     value={formData.firstName}
                     onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow"
                     required
                   />
                 </div>
@@ -810,7 +810,7 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, selectedUserId }) => {
                     name="dateOfBirth"
                     value={formData.dateOfBirth}
                     onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow"
                     required
                   />
                 </div>
@@ -838,7 +838,7 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, selectedUserId }) => {
                     name="niNumber"
                     value={formData.niNumber}
                     onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow"
                     required
                     placeholder="Ni Number"
                   />
@@ -868,7 +868,7 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, selectedUserId }) => {
                     name="licenseNumber"
                     value={formData.licenseNumber}
                     onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow"
                     required
                     placeholder="License Number"
                   />
@@ -893,7 +893,7 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, selectedUserId }) => {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow"
                     required
                     placeholder="Email"
                   />
@@ -917,7 +917,7 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, selectedUserId }) => {
                     // name=""
                     // value={formData.lastName}
                     // onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow"
                     required
                     placeholder="Password"
                   />
@@ -942,7 +942,7 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, selectedUserId }) => {
                     name="tel1"
                     value={formData.tel1}
                     onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow"
                     required
                   />
                 </div>
@@ -962,7 +962,7 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, selectedUserId }) => {
                     name="driverNumber"
                     value={formData.driverNumber}
                     onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow"
                   />
                 </div>
 
@@ -1021,7 +1021,7 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, selectedUserId }) => {
                     name="badgeType"
                     value={formData.badgeType}
                     onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow"
                   >
                     <option value="null">Select badgeType </option>
                     {badge.map((badge) => (
@@ -1044,7 +1044,7 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, selectedUserId }) => {
                     name="insurance"
                     value={formData.insurance}
                     onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow"
                   >
                     <option value="null">Select insurance </option>
 
@@ -1074,7 +1074,7 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, selectedUserId }) => {
                     name="licenseExpiryDate"
                     value={formData.licenseExpiryDate}
                     onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow"
                     required
                   />
                 </div>
@@ -1326,7 +1326,7 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, selectedUserId }) => {
                     // name="postalAddress"
                     // value={formData.postalAddress}
                     // onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow"
                     required
                     placeholder="Building and Street"
                   />
@@ -1349,7 +1349,7 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, selectedUserId }) => {
                     // name="postalAddress"
                     // value={formData.postalAddress}
                     // onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow"
                     required
                     placeholder="Building and Street"
                   />
@@ -1372,7 +1372,7 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, selectedUserId }) => {
                     name="city"
                     value={formData.city}
                     onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow"
                     required placeholder="Town/City"
                   />
                 </div>
@@ -1393,7 +1393,7 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, selectedUserId }) => {
                     name="county"
                     value={formData.county}
                     onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow"
                     required
                   />
                 </div>
@@ -1415,7 +1415,7 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, selectedUserId }) => {
                     name="postcode"
                     value={formData.postcode}
                     onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow"
                     required
                   />
                 </div>

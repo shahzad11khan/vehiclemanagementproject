@@ -233,33 +233,6 @@
 
 // export default Page;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -271,6 +244,7 @@ import { API_URL_Vehicle } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 // import { getCompanyName } from "@/utils/storageUtils";
 import { isAuthenticated } from "@/utils/verifytoken";
 import { useRouter } from "next/navigation";
+import BackButton from "@/app/Dashboard/Components/BackButton";
 
 const Page = ({ params }) => {
   const router = useRouter();
@@ -306,25 +280,25 @@ const Page = ({ params }) => {
 
   const handleDownloadReport = () => {
     const doc = new jsPDF();
-  
+
     // Title and report metadata
     doc.setFontSize(14);
     doc.setFont("helvetica", "bold");
     doc.text("Vehicle Report", 105, 10, { align: "center" });
-  
+
     const reportDate = "12/26/2024";
     doc.setFontSize(10);
     doc.setFont("helvetica", "normal");
     doc.text(`Report Generated: ${reportDate}`, 14, 20);
-  
+
     const vehicleName = "camry";
     const registrationNumber = "21";
     const companyName = "Encoderbytes";
-  
+
     doc.text(`Vehicle Name: ${vehicleName}`, 14, 25);
     doc.text(`Registration No: ${registrationNumber}`, 14, 30);
     doc.text(`Company Name: ${companyName}`, 14, 35);
-  
+
     // Define table headers
     const headers = [
       "Vehicle Name",
@@ -334,26 +308,27 @@ const Page = ({ params }) => {
       "Drive Train",
       "Status",
     ];
-  
+
     // Table dimensions
     // const pageWidth = doc.internal.pageSize.width;
     const startX = 14;
     const startY = 45;
     const rowHeight = 10;
     const columnWidths = [30, 35, 40, 27, 27, 25]; // Adjusted widths
-  
+
     let currentY = startY;
-  
+
     // Render table headers
     doc.setFont("helvetica", "bold");
     headers.forEach((header, index) => {
-      const x = startX + columnWidths.slice(0, index).reduce((a, b) => a + b, 0);
+      const x =
+        startX + columnWidths.slice(0, index).reduce((a, b) => a + b, 0);
       doc.text(header, x + 2, currentY);
       doc.rect(x, currentY - 6, columnWidths[index], rowHeight);
     });
-  
+
     currentY += rowHeight;
-  
+
     // Render table rows
     const renderRow = (row) => {
       doc.setFont("helvetica", "normal");
@@ -365,9 +340,10 @@ const Page = ({ params }) => {
         row.drivetrain || "N/A",
         row.isActive ? "Active" : "Inactive",
       ];
-  
+
       rowData.forEach((cell, index) => {
-        const x = startX + columnWidths.slice(0, index).reduce((a, b) => a + b, 0);
+        const x =
+          startX + columnWidths.slice(0, index).reduce((a, b) => a + b, 0);
         const wrappedText = doc.splitTextToSize(cell, columnWidths[index] - 2);
         doc.text(wrappedText, x + 2, currentY);
         doc.rect(
@@ -377,110 +353,138 @@ const Page = ({ params }) => {
           rowHeight * wrappedText.length
         );
       });
-  
+
       currentY += rowHeight;
-  
+
       // Handle page break
       if (currentY + rowHeight > doc.internal.pageSize.height - 10) {
         doc.addPage();
         currentY = startY;
         // Re-render headers on new page
         headers.forEach((header, index) => {
-          const x = startX + columnWidths.slice(0, index).reduce((a, b) => a + b, 0);
+          const x =
+            startX + columnWidths.slice(0, index).reduce((a, b) => a + b, 0);
           doc.text(header, x + 2, currentY);
           doc.rect(x, currentY - 6, columnWidths[index], rowHeight);
         });
         currentY += rowHeight;
       }
     };
-  
+
     if (Array.isArray(data)) {
       data.forEach(renderRow);
     } else {
       renderRow(data);
     }
-  
+
     // Save the PDF
     doc.save("Vehicle_Report.pdf");
   };
-  
-  
-  
 
   if (!isMounted) return null;
 
   return (
-    <>
+    <div className="h-[100vh] overflow-hidden">
       <Header className="min-w-full" />
       <div className="flex gap-4">
         <Sidebar />
-        <div className="container mx-auto p-4 h-screen">
-          <div className="justify-between mx-auto items-center border-2 mt-3 w-full">
-            <div className="flex justify-between m-2">
-              <button
-                onClick={handleDownloadReport}
-                className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
-              >
-                Download Report
-              </button>
+        <div
+          className="w-[80%] xl:w-[85%] h-screen flex flex-col justify-start overflow-y-auto pr-4"
+          style={{
+            height: "calc(100vh - 90px)",
+          }}
+        >
+          <h1 className="text-[#313342] font-medium text-2xl py-5 pb-8  flex gap-2 items-center">
+            <div className="myborder flex gap-3 border-2 border-t-0 border-l-0 border-r-0">
+              <span className="opacity-65">Vehicle</span>
+              <div className="flex items-center gap-3 myborder2">
+                <span>
+                  <img
+                    src="/setting_arrow.svg"
+                    className="w-2 h-4 object-cover object-center  "
+                  ></img>
+                </span>
+                <span>Car Details</span>
+              </div>
             </div>
+          </h1>
+          <div className="py-5">
+            <div className="drop-shadow-custom4">
 
-            <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="text-left px-4 py-2">Vehicle Name</th>
-                    <th className="text-left px-4 py-2">Registration Number</th>
-                    <th className="text-left px-4 py-2">
-                      Vehicle Local Authority
-                    </th>
-                    <th className="text-left px-4 py-2">Engine Type</th>
-                    <th className="text-left px-4 py-2">Drive Train</th>
-                    <th className="text-left px-4 py-2">Status</th>
-                  </tr>
-                </thead>
-
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {data ? (
-                    <tr
-                      key={data._id}
-                      className={
-                        data._id % 2 === 0 ? "bg-gray-200" : "bg-white"
-                      }
-                    >
-                      <td className="text-left px-4 py-2">
-                        {data.model || "N/A"}
-                      </td>
-                      <td className="text-left px-4 py-2">
-                        {data.registrationNumber || "N/A"}
-                      </td>
-                      <td className="text-left px-4 py-2">
-                        {data.LocalAuthority || "N/A"}
-                      </td>
-                      <td className="text-left px-4 py-2">
-                        {data.engineType || "N/A"}
-                      </td>
-                      <td className="text-left px-4 py-2">
-                        {data.drivetrain || "N/A"}
-                      </td>
-                      <td className="text-left px-4 py-2">
-                        {data.isActive ? "Active" : "Inactive"}
-                      </td>
+          {/* top */}
+              <div className="w-full flex justify-end py-4">
+                <div className="flex gap-4 items-center">
+                  <BackButton/>
+                <button
+                  onClick={handleDownloadReport}
+                  className="bg-[#38384A] text-white px-4 py-2 rounded-lg hover:bg-[#4f4f66]"
+                >
+                  Download Report
+                </button>
+                </div>
+              </div>
+              {/* table */}
+              <div className="overflow-x-auto custom-scrollbar">
+                <table className="w-full bg-white border table-auto">
+                  <thead className="font-sans font-bold text-sm text-left">
+                    <tr className="text-white bg-[#38384A]">
+                      <th className="py-3 px-4 min-w-[150px] w-[150px] md:w-[16.66%] text-center text-white bg-custom-bg whitespace-normal break-all overflow-hidden">
+                        Vehicle Name
+                      </th>
+                      <th className="py-3 px-4 min-w-[150px] w-[150px] md:w-[16.66%] text-center text-white bg-custom-bg whitespace-normal break-all overflow-hidden">
+                        Registration N0
+                      </th>
+                      <th className="py-3 px-4 min-w-[150px] w-[150px] md:w-[16.66%] text-center text-white bg-custom-bg whitespace-normal break-all overflow-hidden">
+                      Local Authority
+                      </th>
+                      <th className="py-3 px-4 min-w-[150px] w-[150px] md:w-[16.66%] text-center text-white bg-custom-bg whitespace-normal break-all overflow-hidden">
+                        Engine Type
+                      </th>
+                      <th className="py-3 px-4 min-w-[150px] w-[150px] md:w-[16.66%] text-center text-white bg-custom-bg whitespace-normal break-all overflow-hidden">
+                        Drive Train
+                      </th>
+                      <th className="py-3 px-4 min-w-[150px] w-[150px] md:w-[16.66%] text-center text-white bg-custom-bg whitespace-normal break-all overflow-hidden">
+                        Status
+                      </th>
                     </tr>
-                  ) : (
-                    <tr>
-                      <td colSpan="6" className="text-center py-4">
-                        No data available
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody className="font-sans font-medium text-sm">
+                    {data ? (
+                      <tr key={data._id} className="border-b">
+                        <td className="py-3 px-4 min-w-[150px] w-[150px] md:w-[16.66%] text-center whitespace-normal break-all overflow-hidden">
+                          {data.model || "N/A"}
+                        </td>
+                        <td className="py-3 px-4 min-w-[150px] w-[150px] md:w-[16.66%] whitespace-normal break-all overflow-hidden">
+                          {data.registrationNumber || "N/A"}
+                        </td>
+                        <td className="py-3 px-4 min-w-[150px] w-[150px] md:w-[16.66%] whitespace-normal break-all overflow-hidden">
+                          {data.LocalAuthority || "N/A"}
+                        </td>
+                        <td className="py-3 px-4 min-w-[150px] w-[150px] md:w-[16.66%] whitespace-normal break-all overflow-hidden">
+                          {data.engineType || "N/A"}
+                        </td>
+                        <td className="py-3 px-4 min-w-[150px] w-[150px] md:w-[16.66%] whitespace-normal break-all overflow-hidden">
+                          {data.drivetrain || "N/A"}
+                        </td>
+                        <td className="py-3 px-4 min-w-[150px] w-[150px] md:w-[16.66%] whitespace-normal break-all overflow-hidden">
+                          {data.isActive ? "Active" : "Inactive"}
+                        </td>
+                      </tr>
+                    ) : (
+                      <tr>
+                        <td colSpan="6" className="text-center py-4">
+                          No data available
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

@@ -6,7 +6,7 @@ import {
   // fetchTaxiFirms,
   fetchBadge,
   fetchInsurence,
-  fetchLocalAuth,
+  // fetchLocalAuth,
   // fetchVehicle,
 } from "../../Components/DropdownData/taxiFirm/taxiFirmService";
 import {
@@ -39,7 +39,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
     rentPaymentCycle: "",
     isActive: false,
     imageFile: null,
-    LocalAuth: "",
+    // LocalAuth: "",
     vehicle: "",
     // pay: "",
     calculation: 0,
@@ -52,12 +52,14 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
   const [loading, setLoading] = useState(false);
   const [badge, setBadge] = useState([]);
   const [insurance, setInsurance] = useState([]);
-  const [localAuth, setlocalAuth] = useState([]);
+  // const [localAuth, setlocalAuth] = useState([]);
   const [superadmin, setSuperadmin] = useState(null);
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const [validation, setValidation] = useState({
     emailValid: null,
   });
+
+
 
   const [step, setStep] = useState(1);
   const nextStep = () => setStep(step + 1);
@@ -86,11 +88,11 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
 
           badgeData,
           insuranceData,
-          localAuth,
+          // localAuth,
         ] = await Promise.all([
           fetchBadge(),
           fetchInsurence(),
-          fetchLocalAuth(),
+          // fetchLocalAuth(),
         ]);
 
         const storedCompanyName = formData.adminCompanyName;
@@ -112,19 +114,19 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                 insurance.adminCompanyName === storedCompanyName ||
                 insurance.adminCompanyName === "superadmin"
             );
-        const filteredlocalAuth =
-          superadmin === "superadmin"
-            ? localAuth.Result
-            : localAuth.Result.filter(
-              (localAuth) =>
-                localAuth.adminCompanyName === storedCompanyName ||
-                localAuth.adminCompanyName === "superadmin"
-            );
+        // const filteredlocalAuth =
+        //   superadmin === "superadmin"
+        //     ? localAuth.Result
+        //     : localAuth.Result.filter(
+        //       (localAuth) =>
+        //         localAuth.adminCompanyName === storedCompanyName ||
+        //         localAuth.adminCompanyName === "superadmin"
+        //     );
 
 
         setBadge(filteredBadges);
         setInsurance(filteredInsurance);
-        setlocalAuth(filteredlocalAuth);
+        // setlocalAuth(filteredlocalAuth);
 
       } catch (err) {
         console.error("Error loading dropdown data:", err);

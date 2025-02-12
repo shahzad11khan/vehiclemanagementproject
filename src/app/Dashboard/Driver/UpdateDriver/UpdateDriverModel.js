@@ -60,6 +60,9 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, selectedUserId }) => {
   const prevStep = () => setStep(step - 1);
   // const [filteredVehicles, setFilteredVehicles] = useState([]);
 
+  console.log(localAuth);
+  console.log(imagePreview);
+  
   useEffect(() => {
     const storedCompanyName = getCompanyName();
     const storedSuperadmin = getUserRole();

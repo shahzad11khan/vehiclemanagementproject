@@ -86,7 +86,7 @@ const AllCompanies = () => {
     indexOfLastDriver
   );
 
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  // const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const totalPages = Math.ceil(filteredData.length / itemperpage);
   // const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1); // Create an array of page numbers

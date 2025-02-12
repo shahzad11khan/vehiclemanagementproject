@@ -22,7 +22,7 @@ import {
   Legend,
 } from "chart.js";
 ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
-const HeroSection = () => {
+const HeroSection = ({TotalCar,carsOnRent}) => {
   const router = useRouter();
   // const [superadmin, setsuperadmin] = useState("");
   // const [companyname, setcompnayname] = useState("");
@@ -116,7 +116,7 @@ const HeroSection = () => {
       datasets: [
         {
           label: "Weekly Data",
-          data: [12, 19, 3, 5, 2, 3, 7],
+          data: [12, 30, 3, 5, 2, 3, 7],
           backgroundColor: "rgba(54, 162, 235, 0.5)",
           borderColor: "rgba(54, 162, 235, 1)",
           borderWidth: 1,
@@ -181,7 +181,7 @@ const Data={
     datasets:[
         {
         label:"Cars Status",
-        data:[20,10],
+        data:[TotalCar,carsOnRent],
         backgroundColor:["#27273AEB","#404CA0"],
         borderWidth:1
         },

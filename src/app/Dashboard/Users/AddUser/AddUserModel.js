@@ -8,11 +8,11 @@ import {
   getsuperadmincompanyname,
   // getUserRole,
 } from "@/utils/storageUtils";
-import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+// import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 
 
-const AddUserModel = ({ isOpen, onClose, fetchData }) => {
-  const [showPasswords, setShowPasswords] = useState(false);
+const AddUserModel = ({ isOpen, onClose, fetchData,}) => {
+  // const [showPasswords, setShowPasswords] = useState(false);
   // const [dobvalidation, setdobValidation] = useState({ dateOfBirthValid: true });
   // const passwordRegex = /^[A-Z][@#$%^&*!]\d[a-z]{6,}$/;
   const passwordRegex = /^[A-Z][a-z]+[@#$%^&*!]\d[a-z]+$/;
@@ -211,6 +211,7 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
         onClose();
         resetform();
         fetchData();
+        // setTrigger(!trigger);
         // console.log(data);
       } else {
         toast.success(data.error);

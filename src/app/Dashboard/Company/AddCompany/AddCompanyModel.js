@@ -51,6 +51,8 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
     passwordValid: false,
   });
 
+  setAutoFillAll(false);
+
   // const handleChange = (e) => {
   //   const { name, value, type, checked, files } = e.target;
   //   const updatedValue = type === 'checkbox' ? checked : value;
@@ -125,24 +127,24 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
     }
   };
 
-  const handleCheckboxChange = (e) => {
-    const { checked } = e.target;
-    setAutoFillAll(checked);
-    setFormData((prevData) => ({
-      ...prevData,
-      ...(checked
-        ? {
-          billingAddress: prevData.mailingAddress,
-          bankingInformationBankAddress: prevData.mailingAddress,
-          physical_Address: prevData.mailingAddress,
-        }
-        : {
-          billingAddress: "",
-          bankingInformationBankAddress: "",
-          physical_Address: "",
-        }),
-    }));
-  };
+  // const handleCheckboxChange = (e) => {
+  //   const { checked } = e.target;
+  //   setAutoFillAll(checked);
+  //   setFormData((prevData) => ({
+  //     ...prevData,
+  //     ...(checked
+  //       ? {
+  //         billingAddress: prevData.mailingAddress,
+  //         bankingInformationBankAddress: prevData.mailingAddress,
+  //         physical_Address: prevData.mailingAddress,
+  //       }
+  //       : {
+  //         billingAddress: "",
+  //         bankingInformationBankAddress: "",
+  //         physical_Address: "",
+  //       }),
+  //   }));
+  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -179,7 +181,7 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
             Register Company
           </h2>
 
-          <img src="/crossIcon.svg" onClick={() => {
+          <img src="/crossIcon.svg" alt="crossIcon" onClick={() => {
             onClose();
             setStep(1);
           }} />

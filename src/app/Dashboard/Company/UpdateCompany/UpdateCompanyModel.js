@@ -46,7 +46,7 @@ const UpdateCompanyModel = ({
   });
 
   // Fetch company details when the modal opens
-  const [autoFillAll, setAutoFillAll] = useState(false);
+  const autoFillAll=false;
   const [imagePreview, setImagePreview] = useState(null);
   const [step, setStep] = useState(1);
   const nextStep = () => setStep(step + 1);
@@ -180,24 +180,24 @@ const UpdateCompanyModel = ({
     }
   };
 
-  const handleCheckboxChange = (e) => {
-    const { checked } = e.target;
-    setAutoFillAll(checked);
-    setFormData((prevData) => ({
-      ...prevData,
-      ...(checked
-        ? {
-          billingAddress: prevData.mailingAddress,
-          bankingInformationBankAddress: prevData.mailingAddress,
-          physical_Address: prevData.mailingAddress,
-        }
-        : {
-          billingAddress: "",
-          bankingInformationBankAddress: "",
-          physical_Address: "",
-        }),
-    }));
-  };
+  // const handleCheckboxChange = (e) => {
+  //   const { checked } = e.target;
+  //   setAutoFillAll(checked);
+  //   setFormData((prevData) => ({
+  //     ...prevData,
+  //     ...(checked
+  //       ? {
+  //         billingAddress: prevData.mailingAddress,
+  //         bankingInformationBankAddress: prevData.mailingAddress,
+  //         physical_Address: prevData.mailingAddress,
+  //       }
+  //       : {
+  //         billingAddress: "",
+  //         bankingInformationBankAddress: "",
+  //         physical_Address: "",
+  //       }),
+  //   }));
+  // };
   const handleSubmit = async (e) => {
     e.preventDefault();
 

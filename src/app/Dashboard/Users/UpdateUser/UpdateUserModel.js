@@ -214,33 +214,7 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
 
   const resetform = () => {
     setStep(1);
-    // setFormData({
-    //   title: "",
-    //   firstName: "",
-    //   lastName: "",
-    //   email: "",
-    //   tel1: "",
-    //   tel2: 0,
-    //   postcode: "",
-    //   postalAddress: "",
-    //   permanentAddress: "",
-    //   city: "",
-    //   county: "",
-    //   // accessLevel: "",
-    //   dateOfBirth: "",
-    //   position: "",
-    //   reportsTo: "",
-    //   username: "",
-    //   password: "",
-    //   passwordExpires: "",
-    //   // passwordExpiresEvery: "",
-    //   confirmpassword: "",
-    //   companyname: formData.companyname,
-    //   CreatedBy: "",
-    //   useravatar: null,
-    //   isActive: false,
-    //   role: "user", // Default role set to "user"
-    // });
+   
   };
   if (!isOpen) return null; // Don't render modal if it's not open
 
@@ -638,7 +612,7 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                         required
                         placeholder="Password"
                       />
-                      {/* <button
+                      <button
                         type="button"
                         onClick={() => setShowPasswords((prev) => !prev)}
                         className="absolute right-2 top-1/2"
@@ -648,7 +622,7 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                         ) : (
                           <AiOutlineEyeInvisible size={20} />
                         )}
-                      </button> */}
+                      </button> 
                     </div>
                   </div>
 

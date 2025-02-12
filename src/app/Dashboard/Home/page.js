@@ -15,7 +15,7 @@ import {
 } from "../Components/ApiUrl/ApiUrls";
 import { getCompanyName, getUserName, getUserRole } from "@/utils/storageUtils";
 import axios from "axios";
-// import Link from "next/link.js";
+import Link from "next/link.js";
 // import { Doughnut } from "react-chartjs-2";
 
 import AdminDashBDoughnut from "../Components/AdminDashBDoughnut.jsx";

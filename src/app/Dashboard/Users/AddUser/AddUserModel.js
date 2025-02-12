@@ -258,7 +258,7 @@ const AddUserModel = ({ isOpen, onClose, fetchData,}) => {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
-      <div className="bg-white p-6 rounded-xl shadow-lg w-full max-w-4xl overflow-y-auto max-h-screen">
+      <div className="bg-white px-12 py-7 rounded-xl shadow-lg w-full max-w-4xl overflow-y-auto max-h-screen">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-2xl font-bold">
             Add New User
@@ -291,7 +291,7 @@ const AddUserModel = ({ isOpen, onClose, fetchData,}) => {
                       name="title"
                       value={formData.title}
                       onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow"
                       required
                     >
                       <option value="">Select Title</option>
@@ -318,7 +318,7 @@ const AddUserModel = ({ isOpen, onClose, fetchData,}) => {
                       name="firstName"
                       value={formData.firstName}
                       onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow"
                       required
                       placeholder="First name"
                     />
@@ -340,7 +340,7 @@ const AddUserModel = ({ isOpen, onClose, fetchData,}) => {
                       name="lastName"
                       value={formData.lastName}
                       onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow"
                       required
                       placeholder="Last name"
                     />
@@ -362,7 +362,7 @@ const AddUserModel = ({ isOpen, onClose, fetchData,}) => {
                       name="email"
                       value={formData.email}
                       onChange={handleChange}
-                      className={`mt-1 block w-full p-2 border border-[#42506666] rounded-[4px] ${validation.emailValid === null
+                      className={`mt-1 block w-full p-2 border border-[#42506666] rounded shadow ${validation.emailValid === null
                         ? 'border-gray-300'
                         : validation.emailValid
                           ? 'border-green-700'
@@ -394,7 +394,7 @@ const AddUserModel = ({ isOpen, onClose, fetchData,}) => {
                       name="tel1"
                       value={formData.tel1}
                       onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded"
                       required
                     />
                   </div>
@@ -420,7 +420,7 @@ const AddUserModel = ({ isOpen, onClose, fetchData,}) => {
                       name="Building&Street"
                       // value={formData.CompanyName}
                       // onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px] shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow focus:ring-blue-500 focus:border-blue-500"
                       required placeholder="Building and street"
                     />
                   </div>
@@ -442,7 +442,7 @@ const AddUserModel = ({ isOpen, onClose, fetchData,}) => {
                       name="Building&Street2"
                       // value={formData.CompanyName}
                       // onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px] shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow focus:ring-blue-500 focus:border-blue-500"
                       required placeholder="Building and street"
                     />
                   </div>
@@ -464,7 +464,7 @@ const AddUserModel = ({ isOpen, onClose, fetchData,}) => {
                       name="Building&Street"
                       // value={formData.CompanyName}
                       // onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px] shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow focus:ring-blue-500 focus:border-blue-500"
                       required placeholder="Town/City"
                     />
                   </div>
@@ -486,7 +486,7 @@ const AddUserModel = ({ isOpen, onClose, fetchData,}) => {
                       name="Building&Street"
                       // value={formData.CompanyName}
                       // onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px] shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow focus:ring-blue-500 focus:border-blue-500"
                       required placeholder="Country"
                     />
                   </div>
@@ -508,7 +508,7 @@ const AddUserModel = ({ isOpen, onClose, fetchData,}) => {
                       name="Building&Street"
                       // value={formData.CompanyName}
                       // onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px] shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow focus:ring-blue-500 focus:border-blue-500"
                       required placeholder="Postcode"
                     />
                   </div>
@@ -529,13 +529,13 @@ const AddUserModel = ({ isOpen, onClose, fetchData,}) => {
                       onClose();
                       resetform();
                     }}
-                    className="px-6 py-2 ml-2 text-custom-bg rounded-[4px] text-xs font-bold border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                    className="py-1 px-5 w-full sm:w-auto border-[1px] rounded-4 border-[#313342] bg-white text-[#313342] hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500"
                   >
                     Cancel
                   </button>
                   <button
                     onClick={nextStep}
-                    className={`px-6 py-2 rounded-[4px] text-xs font-bold focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 ${isNextDisabled1st
+                    className={`bg-[#313342] text-white rounded-4 hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500 py-1 px-8 ${isNextDisabled1st
                       ? "bg-gray-400 text-white cursor-not-allowed"
                       : "bg-custom-bg text-white hover:bg-gray-600"
                       }`}
@@ -788,7 +788,7 @@ const AddUserModel = ({ isOpen, onClose, fetchData,}) => {
                       name="dateOfBirth"
                       value={formData.dateOfBirth}
                       onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px] shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow-sm focus:ring-blue-500 focus:border-blue-500"
                     />
                     {!validation.dateOfBirthValid && (
                       <span className="text-sm text-red-500">Date of Birth cannot be in the future.</span>
@@ -810,7 +810,7 @@ const AddUserModel = ({ isOpen, onClose, fetchData,}) => {
                       name="position"
                       value={formData.position}
                       onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px] shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow-sm focus:ring-blue-500 focus:border-blue-500"
                       required placeholder="Building and street"
                     />
                   </div>
@@ -830,7 +830,7 @@ const AddUserModel = ({ isOpen, onClose, fetchData,}) => {
                       name="reportsTo"
                       value={formData.reportsTo}
                       onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px] shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow-sm focus:ring-blue-500 focus:border-blue-500"
                       placeholder="Reports To"
                     />
                   </div>
@@ -850,7 +850,7 @@ const AddUserModel = ({ isOpen, onClose, fetchData,}) => {
                       name="username"
                       value={formData.username}
                       onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px] shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow-sm focus:ring-blue-500 focus:border-blue-500"
                       required placeholder="Username"
                     />
                   </div>
@@ -873,7 +873,7 @@ const AddUserModel = ({ isOpen, onClose, fetchData,}) => {
                         name="password"
                         value={formData.password}
                         onChange={handleChange}
-                        className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                        className="mt-1 block w-full p-2 border border-[#42506666] rounded"
                         required
                         placeholder="Password"
                       />
@@ -914,7 +914,7 @@ const AddUserModel = ({ isOpen, onClose, fetchData,}) => {
                           : validation.passwordMatch
                             ? 'border-green-500'
                             : 'border-red-500'
-                          } focus:outline-none border border-[#42506666] rounded-[4px]`}
+                          } focus:outline-none border border-[#42506666] rounded`}
                         required placeholder="Confirm Password"
                       />
                       {/* <button
@@ -965,7 +965,7 @@ const AddUserModel = ({ isOpen, onClose, fetchData,}) => {
                       name="passwordExpires"
                       value={formData.passwordExpires}
                       onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded"
                       required
                     />
                     {!validation.passwordExpiresvalid && (
@@ -1065,7 +1065,7 @@ const AddUserModel = ({ isOpen, onClose, fetchData,}) => {
                   <div>
                     <button
                       onClick={prevStep}
-                      className="px-6 py-2 ml-2 text-custom-bg rounded-[4px] text-xs font-bold border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                      className="py-1 px-5 w-full sm:w-auto border-[1px] rounded-4 border-[#313342] bg-white text-[#313342] hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500"
                     >
                       Back
                     </button>
@@ -1077,13 +1077,13 @@ const AddUserModel = ({ isOpen, onClose, fetchData,}) => {
                         onClose();
                         resetform();
                       }}
-                      className="px-6 py-2 ml-2 text-custom-bg rounded-[4px] text-xs font-bold border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                      className="py-1 px-5 w-full sm:w-auto border-[1px] rounded-4 border-[#313342] bg-white text-[#313342] hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500"
                     >
                       Close
                     </button>
                     <button
                       onClick={nextStep}
-                      className={`px-6 py-2 rounded-[4px] text-xs font-bold focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 ${isNextDisabled3rd
+                      className={`bg-[#313342] text-white rounded-4 hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500 py-1 px-8 ${isNextDisabled3rd
                         ? "bg-gray-400 text-white cursor-not-allowed"
                         : "bg-custom-bg text-white hover:bg-gray-600"
                         }`}

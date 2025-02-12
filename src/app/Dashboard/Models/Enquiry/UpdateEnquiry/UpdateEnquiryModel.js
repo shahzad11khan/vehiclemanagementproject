@@ -61,19 +61,19 @@ const UpdateEnquiryModal = ({ isOpen, onClose, fetchData, enquiryId }) => {
           superadmin === "superadmin"
             ? badgesdata.result
             : badgesdata.result.filter(
-                (badge) =>
-                  badge.adminCompanyName === storedCompanyName ||
-                  badge.adminCompanyName === "superadmin"
-              );
+              (badge) =>
+                badge.adminCompanyName === storedCompanyName ||
+                badge.adminCompanyName === "superadmin"
+            );
 
         const filteredAuthorities =
           superadmin === "superadmin"
             ? authoritiesdata.Result
             : authoritiesdata.Result.filter(
-                (authority) =>
-                  authority.adminCompanyName === storedCompanyName ||
-                  authority.adminCompanyName === "superadmin"
-              );
+              (authority) =>
+                authority.adminCompanyName === storedCompanyName ||
+                authority.adminCompanyName === "superadmin"
+            );
 
         setBadgeTypeOptions(filteredbadges);
         setLocalAuthorityOptions(filteredAuthorities);
@@ -135,23 +135,33 @@ const UpdateEnquiryModal = ({ isOpen, onClose, fetchData, enquiryId }) => {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-4xl overflow-y-auto max-h-screen">
-        <h2 className="text-3xl font-semibold text-center mb-8">Add Enquiry</h2>
+      <div className="bg-white p-12 rounded-xl shadow-lg w-full max-w-4xl overflow-y-auto max-h-screen">
+        {/* <h2 className="text-3xl font-semibold text-center mb-8">Add Enquiry</h2> */}
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-2xl font-bold">
+            Edit Enquiry
+          </h2>
+
+          <img src="/crossIcon.svg" className="cursor-pointer" onClick={() => {
+            onClose();
+
+          }} />
+        </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <h3 className="text-xl font-semibold mb-2">Enquiry</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {/* <h3 className="text-xl font-semibold mb-2">Enquiry</h3> */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
               <div>
                 <div className="flex gap-1">
-                  <label
-                    htmlFor="firstName"
-                    className="text-sm font-medium text-gray-700"
-                  >
-                    First Name:
-                  </label>
-
-                  <span className="text-red-600">*</span>
+                  <div className="flex gap-1">
+                    <label
+                      htmlFor="firstName"
+                      className="text-[10px]"
+                    >
+                      First Name <span className="text-red-600">*</span>
+                    </label>
+                  </div>
                 </div>
                 <input
                   type="text"
@@ -159,20 +169,19 @@ const UpdateEnquiryModal = ({ isOpen, onClose, fetchData, enquiryId }) => {
                   name="firstName"
                   value={formData.firstName}
                   onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                  className="mt-1 block w-full p-2 border border-[#42506666] shadow rounded"
                   required
                 />
               </div>
+
               <div>
                 <div className="flex gap-1">
                   <label
                     htmlFor="lastName"
-                    className="text-sm font-medium text-gray-700"
+                    className="text-[10px]"
                   >
-                    Last Name:
+                    Last Name <span className="text-red-600">*</span>
                   </label>
-
-                  <span className="text-red-600">*</span>
                 </div>
                 <input
                   type="text"
@@ -180,20 +189,39 @@ const UpdateEnquiryModal = ({ isOpen, onClose, fetchData, enquiryId }) => {
                   name="lastName"
                   value={formData.lastName}
                   onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                  className="mt-1 block w-full p-2 border border-[#42506666] shadow rounded"
                   required
                 />
               </div>
+
+              <div>
+                <div className="flex gap-1">
+                  <label
+                    htmlFor="niNumber"
+                    className="text-[10px]"
+                  >
+                    NI Number <span className="text-red-600">*</span>
+                  </label>
+                </div>
+                <input
+                  type="text"
+                  id="niNumber"
+                  name="niNumber"
+                  value={formData.niNumber}
+                  onChange={handleChange}
+                  className="mt-1 block w-full p-2 border border-[#42506666] shadow rounded"
+                  required
+                />
+              </div>
+
               <div>
                 <div className="flex gap-1">
                   <label
                     htmlFor="email"
-                    className="text-sm font-medium text-gray-700"
+                    className="text-[10px]"
                   >
-                    Email:
+                    Email <span className="text-red-600">*</span>
                   </label>
-
-                  <span className="text-red-600">*</span>
                 </div>
                 <input
                   type="email"
@@ -201,21 +229,62 @@ const UpdateEnquiryModal = ({ isOpen, onClose, fetchData, enquiryId }) => {
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                  className="mt-1 block w-full p-2 border border-[#42506666] shadow rounded"
                   required
                 />
               </div>
 
               <div>
-                <div className="flex gap-1">
+                <div>
+                  <label
+                    htmlFor="dateOfBirth"
+                    className="text-[10px]"
+                  >
+                    Date of Birth <span className="text-red-600">*</span>
+                  </label>
+                </div>
+                <input
+                  type="date"
+                  id="dateOfBirth"
+                  name="dateOfBirth"
+                  value={formData.dateOfBirth}
+                  onChange={handleChange}
+                  className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow"
+                  required
+                />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="badgeType"
+                  className="text-[10px]"
+                >
+                  Badge Type
+                </label>
+                <select
+                  id="badgeType"
+                  name="badgeType"
+                  value={formData.badgeType}
+                  onChange={handleChange}
+                  className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow"
+                >
+                  <option value="">Select Badge Type</option>
+                  {badgeType.map((option) => (
+                    <option key={option._id} value={option.name}>
+                      {option.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <div>
                   <label
                     htmlFor="tel1"
-                    className="text-sm font-medium text-gray-700"
+                    className="text-[10px]"
                   >
-                    Telephone 1:
+                    Phone Number <span className="text-red-600">*</span>
                   </label>
-
-                  <span className="text-red-600">*</span>
                 </div>
                 <input
                   type="tel"
@@ -223,12 +292,37 @@ const UpdateEnquiryModal = ({ isOpen, onClose, fetchData, enquiryId }) => {
                   name="tel1"
                   value={formData.tel1}
                   onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                  required
+                  className="mt-1 block w-full p-2 border border-[#42506666] shadow rounded"
+                  required placeholder="Phone Number"
                 />
               </div>
 
               <div>
+                <label
+                  htmlFor="localAuthority"
+                  className="text-[10px]"
+                >
+                  Local Authority
+                </label>
+                <select
+                  id="localAuthority"
+                  name="localAuthority"
+                  value={formData.localAuthority}
+                  onChange={handleChange}
+                  className="mt-1 block w-full p-2 border border-[#42506666] shadow rounded"
+                >
+                  <option value="">Select Local Authority</option>
+                  {localAuthority.map((option) => (
+                    <option key={option._id} value={option.name}>
+                      {option.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+
+
+              {/* <div>
                 <label
                   htmlFor="tel2"
                   className="text-sm font-medium text-gray-700"
@@ -241,79 +335,60 @@ const UpdateEnquiryModal = ({ isOpen, onClose, fetchData, enquiryId }) => {
                   name="tel2"
                   value={formData.tel2}
                   onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                  className="mt-1 block w-full p-2 border border-[#42506666] shadow rounded"
                 />
-              </div>
+              </div> */}
+
+            </div>
+            <h2 className="font-bold mt-6">Address</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
 
               <div>
-                <div className="flex gap-1">
-                  <label
-                    htmlFor="postcode"
-                    className="text-sm font-medium text-gray-700"
-                  >
-                    Postcode:
-                  </label>
-
-                  <span className="text-red-600">*</span>
-                </div>
-                <input
-                  type="number"
-                  id="postcode"
-                  name="postcode"
-                  value={formData.postcode}
-                  onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                />
-              </div>
-
-              <div>
-                <div className="flex gap-1">
+                <div>
                   <label
                     htmlFor="postalAddress"
-                    className="text-sm font-medium text-gray-700"
+                    className="text-[10px]"
                   >
-                    Postal Address:
+                    Building and Street (Line 1of 2)
                   </label>
-
-                  <span className="text-red-600">*</span>
                 </div>
                 <input
-                  type="text"
-                  id="postalAddress"
-                  name="postalAddress"
-                  value={formData.postalAddress}
-                  onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                  // type="text"
+                  // id="postalAddress"
+                  // name="postalAddress"
+                  // value={formData.postalAddress}
+                  // onChange={handleChange}
+                  className="mt-1 block w-full p-2 border border-[#42506666] shadow rounded"
                   required
                 />
               </div>
+
               <div>
                 <label
                   htmlFor="permanentAddress"
-                  className="text-sm font-medium text-gray-700"
+                  className="text-[10px]"
                 >
-                  Permanent Address:
+                  Building and Street (Line 2 of 2)
                 </label>
                 <input
-                  type="text"
-                  id="permanentAddress"
-                  name="permanentAddress"
-                  value={formData.permanentAddress}
-                  onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
+                  // type="text"
+                  // id="permanentAddress"
+                  // name="permanentAddress"
+                  // value={formData.permanentAddress}
+                  // onChange={handleChange}
+                  className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow"
                 />
               </div>
 
+              {/* Town / City */}
               <div>
                 <div className="flex gap-1">
                   <label
                     htmlFor="city"
-                    className="text-sm font-medium text-gray-700"
+                    className="text-[10px]"
                   >
-                    City:
+                    Town / City <span className="text-red-600">*</span>
                   </label>
-
-                  <span className="text-red-600">*</span>
                 </div>
                 <input
                   type="text"
@@ -321,20 +396,20 @@ const UpdateEnquiryModal = ({ isOpen, onClose, fetchData, enquiryId }) => {
                   name="city"
                   value={formData.city}
                   onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                  required
+                  className="mt-1 block w-full p-2 border border-[#42506666] shadow rounded"
+                  required placeholder="Town/City"
                 />
               </div>
+
+              {/* Country */}
               <div>
                 <div className="flex gap-1">
                   <label
                     htmlFor="county"
-                    className="text-sm font-medium text-gray-700"
+                    className="text-[10px]"
                   >
-                    Country:
+                    Country <span className="text-red-600">*</span>
                   </label>
-
-                  <span className="text-red-600">*</span>
                 </div>
                 <input
                   type="text"
@@ -342,97 +417,34 @@ const UpdateEnquiryModal = ({ isOpen, onClose, fetchData, enquiryId }) => {
                   name="county"
                   value={formData.county}
                   onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                  required
+                  className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow"
+                  required placeholder="Country"
                 />
               </div>
 
+              {/* postcode */}
               <div>
-                <div className="flex gap-1">
+                <div>
                   <label
-                    htmlFor="dateOfBirth"
-                    className="text-sm font-medium text-gray-700"
+                    htmlFor="postcode"
+                    className="text-[10px]"
                   >
-                    Date of Birth:
+                    Postcode <span className="text-red-600">*</span>
                   </label>
-
-                  <span className="text-red-600">*</span>
                 </div>
                 <input
-                  type="date"
-                  id="dateOfBirth"
-                  name="dateOfBirth"
-                  value={formData.dateOfBirth}
+                  type="number"
+                  id="postcode"
+                  name="postcode"
+                  value={formData.postcode}
                   onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                  required
+                  className="mt-1 block w-full p-2 border border-[#42506666] shadow rounded"
                 />
               </div>
-              <div>
-                <div className="flex gap-1">
-                  <label
-                    htmlFor="niNumber"
-                    className="text-sm font-medium text-gray-700"
-                  >
-                    NI Number:
-                  </label>
 
-                  <span className="text-red-600">*</span>
-                </div>
-                <input
-                  type="text"
-                  id="niNumber"
-                  name="niNumber"
-                  value={formData.niNumber}
-                  onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                  required
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="badgeType"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Badge Type:
-                </label>
-                <select
-                  id="badgeType"
-                  name="badgeType"
-                  value={formData.badgeType}
-                  onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                >
-                  <option value="">Select Badge Type</option>
-                  {badgeType.map((option) => (
-                    <option key={option._id} value={option.name}>
-                      {option.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label
-                  htmlFor="localAuthority"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Local Authority:
-                </label>
-                <select
-                  id="localAuthority"
-                  name="localAuthority"
-                  value={formData.localAuthority}
-                  onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                >
-                  <option value="">Select Local Authority</option>
-                  {localAuthority.map((option) => (
-                    <option key={option._id} value={option.name}>
-                      {option.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
+
+
+
 
               {/* <div>
                 <label htmlFor="isActive" className="text-sm font-medium">
@@ -447,9 +459,10 @@ const UpdateEnquiryModal = ({ isOpen, onClose, fetchData, enquiryId }) => {
                   className="mt-1 block"
                 />
               </div> */}
+              {/* Status */}
               <div>
-                <label className="block font-medium mb-2">Is Active:</label>
-                <div className="flex gap-4">
+                <label className="text-[10px] mb-2">Status</label>
+                <div className="flex gap-4 mt-2">
                   {/* Yes Option */}
                   <label className="flex items-center gap-2">
                     <input
@@ -464,7 +477,7 @@ const UpdateEnquiryModal = ({ isOpen, onClose, fetchData, enquiryId }) => {
                       }
                       className="accent-green-500"
                     />
-                    <span>Active</span>
+                    <span className="text-xs">Active</span>
                   </label>
 
                   {/* No Option */}
@@ -479,26 +492,26 @@ const UpdateEnquiryModal = ({ isOpen, onClose, fetchData, enquiryId }) => {
                           target: { name: "isActive", value: false },
                         })
                       }
-                      className="accent-red-500"
+                      className="accent-red-700"
                     />
-                    <span>InActive</span>
+                    <span className="text-xs">InActive</span>
                   </label>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="flex justify-end mt-8 gap-2">
+          <div className="flex justify-end mt-8 gap-[10px]">
             <button
               type="button"
               onClick={onClose}
-              className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+              className="py-1 px-5 w-full sm:w-auto border-[1px] rounded-4 border-[#313342] bg-white text-[#313342] hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-6 py-2 bg-custom-bg text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+              className="bg-[#313342] text-white rounded-4 hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500 py-1 px-8"
             >
               Submit
             </button>

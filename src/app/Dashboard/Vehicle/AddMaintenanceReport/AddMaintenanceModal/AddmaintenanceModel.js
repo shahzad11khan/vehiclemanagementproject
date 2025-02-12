@@ -224,14 +224,26 @@ const AddMaintenanceModal = ({ isOpen, onClose, fetchData, selectedid }) => {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
-      <div className="p-6 rounded-lg shadow-lg w-full bg-white max-w-3xl max-h-[600px] overflow-y-auto">
-        <h2 className="text-3xl font-semibold text-center mb-2">
+      <div className="p-12 rounded-xl shadow-lg w-full bg-white max-w-3xl max-h-[800px] overflow-y-auto">
+        {/* <h2 className="text-3xl font-semibold text-center mb-2">
           Add Maintenance
-        </h2>
-        <form className="space-y-4" onSubmit={handleSubmit}>
-          <div className="flex gap-2">
+        </h2> */}
+
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-2xl font-bold">
+            Vehicle Maintenance
+          </h2>
+
+          <img src="/crossIcon.svg" className="cursor-pointer" onClick={() => {
+            onClose();
+            // setStep(1);
+          }} />
+        </div>
+        <form onSubmit={handleSubmit}>
+          <h1 className="font-bold">General Information</h1>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-2 gap-y-4">
             <div className="w-full">
-              <label className="text-sm font-medium text-gray-700">
+              <label className="text-[10px]">
                 Vehicle Name
               </label>
               <input
@@ -239,58 +251,77 @@ const AddMaintenanceModal = ({ isOpen, onClose, fetchData, selectedid }) => {
                 value={repaitformData.vehicleName}
                 name="VehicleName"
                 onChange={handleInputChange}
-                className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+                className="mt-1 block w-full border border-[#42506666] rounded p-2 shadow"
                 readOnly
               />
             </div>
+
             <div className="w-full">
-              <label className="text-sm font-medium text-gray-700">
-                Vehicle Registration Number
+              <label className="text-[10px]">
+                Registration Number
               </label>
               <input
                 type="text"
                 value={repaitformData.registrationNumber}
                 name="VehicleRegistrationNumber"
                 onChange={handleInputChange}
-                className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+                className="mt-1 block w-full border border-[#42506666] rounded p-2 shadow"
                 readOnly
               />
             </div>
+
+            <div className="w-full">
+              <label className="text-[10px]">
+                Assigned To
+              </label>
+              <input
+                type="text"
+                // value={repaitformData.registrationNumber}
+                name="VehicleRegistrationNumber"
+                // onChange={handleInputChange}
+                className="mt-1 block w-full border border-[#42506666] rounded p-2 shadow"
+                placeholder="Assigned To"
+              />
+            </div>
           </div>
-          <div>
-            <label className="text-sm font-medium text-gray-700">
-              Issues/Damage
-            </label>
-            <textarea
-              value={repaitformData.issues}
-              name="issues"
-              onChange={handleInputChange}
-              className="mt-1 block w-full border border-gray-300 rounded-md p-2"
-              required
-            />
-          </div>
+
 
           {repaitformData.repairHistory.map((history, index) => (
-            <div key={index} className="border border-gray-300 rounded-md p-4">
-              <h3 className="text-lg font-semibold">Repair History</h3>
 
-              <div className="flex flex-wrap gap-2">
+
+            <div key={index} className="">
+              <h3 className="text-lg font-semibold">Maintenance Record</h3>
+
+              <div >
+                <label className="text-[10px]">
+                  Issues / Damage
+                </label>
+                <input
+                  // value={repaitformData.issues}
+                  name="issues"
+                  // onChange={handleInputChange}
+                  className="mt-1 block w-full border border-[#42506666] rounded p-2 shadow"
+                  required
+                />
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-x-2 gap-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Organisation
+                  <label className="text-[10px]">
+                    Recovery
                   </label>
                   <input
                     type="text"
-                    name="organisation"
-                    value={history.organisation}
-                    onChange={(e) => handleRepairHistoryChange(index, e)}
-                    className="mt-1 block w-full border border-gray-300 rounded-md p-2"
-                    required
+                    // name="organisation"
+                    // value={history.organisation}
+                    // onChange={(e) => handleRepairHistoryChange(index, e)}
+                    className="mt-1 block w-full border border-[#42506666] rounded p-2 shadow"
+                    required placeholder="Recovery"
                   />
                 </div>
 
+
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="text-[10px]">
                     Repair Status
                   </label>
                   <input
@@ -298,13 +329,14 @@ const AddMaintenanceModal = ({ isOpen, onClose, fetchData, selectedid }) => {
                     name="repairStatus"
                     value={history.repairStatus}
                     onChange={(e) => handleRepairHistoryChange(index, e)}
-                    className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+                    className="mt-1 block w-full border border-[#42506666] rounded p-2 shadow" placeholder="Repair Status"
                     required
                   />
                 </div>
 
+
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="text-[10px]">
                     Job Number
                   </label>
                   <input
@@ -312,30 +344,47 @@ const AddMaintenanceModal = ({ isOpen, onClose, fetchData, selectedid }) => {
                     name="jobNumber"
                     value={history.jobNumber}
                     onChange={(e) => handleRepairHistoryChange(index, e)}
-                    className="mt-1 block w-full border border-gray-300 rounded-md p-2"
-                    required
+                    className="mt-1 block w-full border border-[#42506666] rounded p-2 shadow"
+                    required placeholder="Job Number"
                   />
                 </div>
+
+                <div>
+                  <label className="text-[10px]">
+                    Organization
+                  </label>
+                  <input
+                    type="text"
+                    name="organisation"
+                    value={history.organisation}
+                    onChange={(e) => handleRepairHistoryChange(index, e)}
+                    className="mt-1 block w-full border border-[#42506666] rounded p-2 shadow"
+                    required placeholder="Organization"
+                  />
+                </div>
+
+
+
+                <div className="w-full">
+                  <label className="text-[10px]">
+                    Memo
+                  </label>
+                  <input
+                    // value={history.memo}
+                    name="memo"
+                    onChange={(e) => handleRepairHistoryChange(index, e)}
+                    className="mt-1 block w-full border border-[#42506666] rounded p-2 shadow" placeholder="Memo for repair"
+                  />
+                </div>
+
               </div>
 
-              <div className="w-full">
-                <label className="block text-sm font-medium text-gray-700">
-                  Memo
-                </label>
-                <textarea
-                  value={history.memo}
-                  name="memo"
-                  onChange={(e) => handleRepairHistoryChange(index, e)}
-                  className="mt-1 block w-full border border-gray-300 rounded-md p-2"
-                />
-              </div>
-
-              <h4 className="font-semibold mt-4">Parts</h4>
+              <h4 className="font-semibold mt-4">Parts (Add Multiple parts for repair)</h4>
               {history.parts.map((part, partIndex) => (
-                <div key={partIndex} className="border p-2 mb-2">
-                  <div className="flex flex-wrap gap-2">
+                <div key={partIndex}>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-x-2 gap-y-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700">
+                      <label className="text-[10px]">
                         Part Number
                       </label>
                       <input
@@ -343,13 +392,13 @@ const AddMaintenanceModal = ({ isOpen, onClose, fetchData, selectedid }) => {
                         name="partNumber"
                         value={part.partNumber}
                         onChange={(e) => handlePartChange(index, partIndex, e)}
-                        className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+                        className="mt-1 block w-full border border-[#42506666] rounded p-2 shadow"
                         required
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700">
+                      <label className="text-[10px]">
                         Part Name
                       </label>
                       <input
@@ -357,13 +406,13 @@ const AddMaintenanceModal = ({ isOpen, onClose, fetchData, selectedid }) => {
                         name="partName"
                         value={part.partName}
                         onChange={(e) => handlePartChange(index, partIndex, e)}
-                        className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+                        className="mt-1 block w-full border border-[#42506666] rounded p-2 shadow"
                         required
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700">
+                      <label className="text-[10px]">
                         Price
                       </label>
                       <input
@@ -371,13 +420,13 @@ const AddMaintenanceModal = ({ isOpen, onClose, fetchData, selectedid }) => {
                         name="price"
                         value={part.price}
                         onChange={(e) => handlePartChange(index, partIndex, e)}
-                        className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+                        className="mt-1 block w-full border border-[#42506666] rounded p-2 shadow"
                         required
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700">
+                      <label className="text-[10px]">
                         Supplier
                       </label>
                       <input
@@ -385,7 +434,8 @@ const AddMaintenanceModal = ({ isOpen, onClose, fetchData, selectedid }) => {
                         name="supplier"
                         value={part.supplier}
                         onChange={(e) => handlePartChange(index, partIndex, e)}
-                        className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+                        className="mt-1 block w-full border border-[#42506666] rounded p-2 shadow"
+                        placeholder="Supplier"
                       />
                     </div>
                   </div>
@@ -398,76 +448,84 @@ const AddMaintenanceModal = ({ isOpen, onClose, fetchData, selectedid }) => {
               >
                 Add Part
               </button>
-              <div className="mt-4">
-                <label className="text-sm font-medium text-gray-700">
-                  Labour Hours
-                </label>
-                <input
-                  type="number"
-                  name="labourHours"
-                  value={history.labourHours}
-                  onChange={(e) => handleRepairHistoryChange(index, e)}
-                  className="mt-1 block w-full border border-gray-300 rounded-md p-2"
-                  required
-                />
+
+              <h4 className="font-semibold mt-4">Labour Cost</h4>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-x-2 gap-y-4">
+                <div className="mt-4">
+                  <label className="text-[10px]">
+                    Labour Hours
+                  </label>
+                  <input
+                    type="number"
+                    name="labourHours"
+                    value={history.labourHours}
+                    onChange={(e) => handleRepairHistoryChange(index, e)}
+                    className="mt-1 block w-full border border-[#42506666] rounded p-2 shadow"
+                    required
+                    placeholder="Labour Hours"
+                  />
+                </div>
+
+                <div className="mt-4">
+                  <label className="text-[10px]">
+                    Cost
+                  </label>
+                  <input
+                    type="number"
+                    name="cost"
+                    value={history.cost}
+                    onChange={(e) => handleRepairHistoryChange(index, e)}
+                    className="mt-1 block w-full border border-[#42506666] rounded p-2 shadow"
+                    required placeholder="Cost"
+                  />
+                </div>
+
+                <div className="mt-4">
+                  <label className="text-[10px]">
+                    Signed Off By
+                  </label>
+                  <input
+                    type="text"
+                    name="signedOffBy"
+                    value={history.signedOffBy}
+                    onChange={(e) => handleRepairHistoryChange(index, e)}
+                    className="mt-1 block w-full border border-[#42506666] rounded p-2 shadow"
+                    required placeholder="Signed Off By"
+                  />
+                </div>
+
+                <div className="mt-4">
+                  <label className="text-[10px]">
+                    Road Tax Date
+                  </label>
+                  <input
+                    type="date"
+                    name="date"
+                    value={history.date}
+                    onChange={(e) => handleRepairHistoryChange(index, e)}
+                    className="mt-1 block w-full border border-[#42506666] rounded p-2 shadow"
+                    required
+                  />
+                </div>
+
+                <div className="mt-4">
+                  <label className="text-[10px]">
+                    Upload Images
+                  </label>
+                  <input
+                    type="file"
+                    multiple
+                    onChange={(e) => handleImageChange(index, e)}
+                    className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+                  />
+                </div>
               </div>
 
-              <div className="mt-4">
-                <label className="text-sm font-medium text-gray-700">
-                  Cost
-                </label>
-                <input
-                  type="number"
-                  name="cost"
-                  value={history.cost}
-                  onChange={(e) => handleRepairHistoryChange(index, e)}
-                  className="mt-1 block w-full border border-gray-300 rounded-md p-2"
-                  required
-                />
-              </div>
-
-              <div className="mt-4">
-                <label className="text-sm font-medium text-gray-700">
-                  Signed Off By
-                </label>
-                <input
-                  type="text"
-                  name="signedOffBy"
-                  value={history.signedOffBy}
-                  onChange={(e) => handleRepairHistoryChange(index, e)}
-                  className="mt-1 block w-full border border-gray-300 rounded-md p-2"
-                  required
-                />
-              </div>
-
-              <div className="mt-4">
-                <label className="text-sm font-medium text-gray-700">
-                  Date
-                </label>
-                <input
-                  type="date"
-                  name="date"
-                  value={history.date}
-                  onChange={(e) => handleRepairHistoryChange(index, e)}
-                  className="mt-1 block w-full border border-gray-300 rounded-md p-2"
-                  required
-                />
-              </div>
-              <div className="mt-4">
-                <label className="text-sm font-medium text-gray-700">
-                  Upload Images
-                </label>
-                <input
-                  type="file"
-                  multiple
-                  onChange={(e) => handleImageChange(index, e)}
-                  className="mt-1 block w-full border border-gray-300 rounded-md p-2"
-                />
-              </div>
             </div>
           ))}
 
-          <button
+          {/* <button
             type="submit"
             disabled={loading}
             className="mt-6 bg-blue-500 text-white py-2 px-4 rounded-md"
@@ -480,7 +538,24 @@ const AddMaintenanceModal = ({ isOpen, onClose, fetchData, selectedid }) => {
             className="mt-6 bg-gray-300 text-gray-700 py-2 px-4 rounded-md ml-2"
           >
             Cancel
-          </button>
+          </button> */}
+
+          <div className="mt-6 flex gap-2 justify-end">
+            <button
+              type="button"
+              onClick={onClose}
+              className="py-1 px-5 w-full sm:w-auto border-[1px] rounded-4 border-[#313342] bg-white text-[#313342] hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={loading}
+              className={`bg-[#313342] text-white rounded-4 hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500 py-1 px-8 $`}
+            >
+              {loading ? "Saving..." : "Next"}
+            </button>
+          </div>
         </form>
       </div>
     </div>

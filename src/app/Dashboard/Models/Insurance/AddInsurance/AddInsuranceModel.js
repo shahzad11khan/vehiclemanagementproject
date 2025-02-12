@@ -67,10 +67,16 @@ const AddInsuranceModel = ({ isOpen, onClose, fetchData }) => {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-xl">
-        <h2 className="text-3xl font-semibold text-center mb-8">
-          Add Insurance
-        </h2>
+      <div className="bg-white p-12 rounded-xl shadow-lg w-full max-w-xl">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-2xl font-bold">
+            Add Insurance
+          </h2>
+
+          <img src="/crossIcon.svg" className="cursor-pointer" onClick={() => {
+            onClose();
+          }} />
+        </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -78,9 +84,9 @@ const AddInsuranceModel = ({ isOpen, onClose, fetchData }) => {
             <div className="col-span-2">
               <label
                 htmlFor="name"
-                className="text-sm font-medium text-gray-700"
+                className="text-[10px]"
               >
-                Name:
+                Name <span className="text-red-600">*</span>
               </label>
               <input
                 type="text"
@@ -88,7 +94,7 @@ const AddInsuranceModel = ({ isOpen, onClose, fetchData }) => {
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow focus:ring-blue-500 focus:border-blue-500"
                 required
               />
             </div>
@@ -97,17 +103,17 @@ const AddInsuranceModel = ({ isOpen, onClose, fetchData }) => {
             <div className="col-span-2">
               <label
                 htmlFor="description"
-                className="text-sm font-medium text-gray-700"
+                className="text-[10px]"
               >
-                Description:
+                Description
               </label>
               <textarea
                 id="description"
                 name="description"
                 value={formData.description}
                 onChange={handleChange}
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                rows="3"
+                className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow focus:ring-blue-500 focus:border-blue-500"
+                rows="2"
               ></textarea>
             </div>
 
@@ -129,7 +135,7 @@ const AddInsuranceModel = ({ isOpen, onClose, fetchData }) => {
               </label>
             </div> */}
             <div>
-              <label className="block font-medium mb-2">Is Active:</label>
+              {/* <label className="block font-medium mb-2">Is Active:</label> */}
               <div className="flex gap-4">
                 {/* Yes Option */}
                 <label className="flex items-center gap-2">
@@ -145,7 +151,7 @@ const AddInsuranceModel = ({ isOpen, onClose, fetchData }) => {
                     }
                     className="accent-green-500"
                   />
-                  <span>Active</span>
+                  <span className="text-xs">Active</span>
                 </label>
 
                 {/* No Option */}
@@ -162,24 +168,24 @@ const AddInsuranceModel = ({ isOpen, onClose, fetchData }) => {
                     }
                     className="accent-red-500"
                   />
-                  <span>InActive</span>
+                  <span className="text-xs">InActive</span>
                 </label>
               </div>
             </div>
           </div>
 
           {/* Button Group */}
-          <div className="flex gap-4 justify-center">
+          <div className="flex gap-[10px] justify-end">
             <button
               type="button"
               onClick={onClose}
-              className="px-6 py-2 ml-2 text-custom-bg rounded-lg border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+              className="py-1 px-5 w-full sm:w-auto border-[1px] rounded-4 border-[#313342] bg-white text-[#313342] hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500"
             >
-              Close
+              Cancel
             </button>
             <button
               type="submit"
-              className="px-6 py-2 bg-custom-bg text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+              className="bg-[#313342] text-white rounded-4 hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500 py-1 px-8"
             >
               {loading ? "Submitting..." : "Submit"}
             </button>

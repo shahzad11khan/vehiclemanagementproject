@@ -246,7 +246,7 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
-      <div className="bg-white p-6 rounded-xl shadow-lg w-full max-w-3xl overflow-y-auto max-h-screen">
+      <div className="bg-white px-12 py-7 rounded-xl shadow-lg w-full max-w-3xl overflow-y-auto max-h-screen">
         {/* <h2 className="text-3xl font-semibold text-center mb-8">Update User</h2> */}
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-2xl font-bold">
@@ -267,7 +267,7 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                 {/* <h3 className="text-xl font-semibold mb-2">User Details</h3> */}
                 <div className="grid grid-cols-2 sm:grid-cols-2 gap-3">
                   <div>
-                    <div className="flex gap-1">
+                    <div className="flex gap-1 items-center justify-start">
                       <label
                         htmlFor="taxiFirm"
                         className="text-[10px]"
@@ -281,7 +281,7 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                       name="title"
                       value={formData.title}
                       onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow"
                       required
                     >
                       <option value="">Select Title</option>
@@ -293,7 +293,7 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                   </div>
 
                   <div>
-                    <div className="flex gap-1">
+                    <div className="flex gap-1 items-center justify-start">
                       <label
                         htmlFor="firstName"
                         className="text-[10px]"
@@ -308,13 +308,14 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                       name="firstName"
                       value={formData.firstName}
                       onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow"
                       required
+                      placeholder="First name"
                     />
                   </div>
 
                   <div>
-                    <div className="flex gap-1">
+                    <div className="flex gap-1 items-center justify-start">
                       <label
                         htmlFor="lastName"
                         className="text-[10px]"
@@ -329,8 +330,176 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                       name="lastName"
                       value={formData.lastName}
                       onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow"
                       required
+                      placeholder="Last name"
+                    />
+                  </div>
+
+                  <div>
+                    <div className="flex gap-1 items-center justify-start">
+                      <label
+                        htmlFor="email"
+                        className="text-[10px]"
+                      >
+                        Email <span className="text-red-600">*</span>
+                      </label>
+                    </div>
+
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      className={`mt-1 block w-full p-2 border border-[#42506666] rounded shadow ${validation.emailValid === null
+                        ? 'border-gray-300'
+                        : validation.emailValid
+                          ? 'border-green-700'
+                          : 'border-red-700'
+                        } focus:outline-none`}
+                      required
+                    />
+                    {validation.emailValid === false && (
+                      <p className="text-[8px] text-red-700">Invalid email format</p>
+                    )}
+                    {validation.emailValid === true && (
+                      <p className="text-[8px] text-green-700">Valid email format</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <div className="flex gap-1 items-center justify-start">
+                      <label
+                        htmlFor="tel1"
+                        className="text-[10px]"
+                      >
+                        Phone number <span className="text-red-600">*</span>
+                      </label>
+                    </div>
+
+                    <input
+                      type="number"
+                      id="tel1"
+                      name="tel1"
+                      value={formData.tel1}
+                      onChange={handleChange}
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <h2 className="font-bold mt-4">Address</h2>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+                  {/*  Building and Street (Line 1of 2) */}
+                  <div>
+                    <div className="flex gap-1 items-center justify-start">
+                      <label
+                        htmlFor="Building&Street"
+                        className="text-[10px]"
+                      >
+                        Building and Street (Line 1of 2)
+                      </label>
+                    </div>
+
+                    <input
+                      type="text"
+                      id="Building&Street"
+                      name="Building&Street"
+                      // value={formData.CompanyName}
+                      // onChange={handleChange}
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow focus:ring-blue-500 focus:border-blue-500"
+                      required placeholder="Building and street"
+                    />
+                  </div>
+
+                  {/*  Building and Street (Line 2of 2) */}
+                  <div>
+                    <div className="flex gap-1">
+                      <label
+                        htmlFor="Building&Street2"
+                        className="text-[10px] "
+                      >
+                        Building and Street (Line 2 of 2)
+                      </label>
+                    </div>
+
+                    <input
+                      type="text"
+                      id="Building&Street2"
+                      name="Building&Street2"
+                      // value={formData.CompanyName}
+                      // onChange={handleChange}
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow focus:ring-blue-500 focus:border-blue-500"
+                      required placeholder="Building and street"
+                    />
+                  </div>
+
+                  {/*  Town/City */}
+                  <div>
+                    <div className="flex gap-1">
+                      <label
+                        htmlFor="CompanyName"
+                        className="text-[10px] "
+                      >
+                        Town/City
+                      </label>
+                    </div>
+
+                    <input
+                      type="text"
+                      id="Building&Street"
+                      name="Building&Street"
+                      // value={formData.CompanyName}
+                      // onChange={handleChange}
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow focus:ring-blue-500 focus:border-blue-500"
+                      required placeholder="Town/City"
+                    />
+                  </div>
+
+                  {/* Country */}
+                  <div>
+                    <div className="flex gap-1">
+                      <label
+                        htmlFor="CompanyName"
+                        className="text-[10px] "
+                      >
+                        Country
+                      </label>
+                    </div>
+
+                    <input
+                      type="text"
+                      id="Building&Street"
+                      name="Building&Street"
+                      // value={formData.CompanyName}
+                      // onChange={handleChange}
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow focus:ring-blue-500 focus:border-blue-500"
+                      required placeholder="Country"
+                    />
+                  </div>
+
+                  {/* Postcode */}
+                  <div>
+                    <div className="flex gap-1">
+                      <label
+                        htmlFor="CompanyName"
+                        className="text-[10px]"
+                      >
+                        Postcode
+                      </label>
+                    </div>
+
+                    <input
+                      type="text"
+                      id="Building&Street"
+                      name="Building&Street"
+                      // value={formData.CompanyName}
+                      // onChange={handleChange}
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow focus:ring-blue-500 focus:border-blue-500"
+                      required placeholder="Postcode"
                     />
                   </div>
                 </div>
@@ -339,13 +508,13 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                   <button
                     type="button"
                     onClick={onClose}
-                    className="px-6 py-1 ml-2 text-custom-bg rounded-[4px] text-xs font-bold border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                    className="py-1 px-5 w-full sm:w-auto border-[1px] rounded-4 border-[#313342] bg-white text-[#313342] hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500"
                   >
                     Cancel
                   </button>
                   <button
                     onClick={nextStep}
-                    className={`px-6 py-2 rounded-[4px] text-xs font-bold ${formData.firstName && formData.lastName && formData.title
+                    className={`bg-[#313342] text-white rounded-4 hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500 py-1 px-8 ${formData.firstName && formData.lastName && formData.title
                       ? "bg-custom-bg text-white hover:bg-gray-600"
                       : "bg-gray-300 text-gray-500 cursor-not-allowed"
                       }`}
@@ -361,258 +530,8 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
           {step === 2 && (
             <>
               <div>
-                <h3 className="text-xl font-semibold mb-4">
-                  Contact Information
-                </h3>
-                <div className="grid grid-cols-2 sm:grid-cols-2 gap-3">
-                  <div>
-                    <div className="flex gap-1">
-                      {/* <label
-                        htmlFor="email"
-                        className="text-sm font-medium text-gray-700"
-                      >
-                        Email:
-                      </label>
-                      <span className="text-red-600">*</span> */}
-                      <label
-                        htmlFor="email"
-                        className="text-[10px]"
-                      >
-                        Email <span className="text-red-600">*</span>
-                      </label>
-                    </div>
-                    <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      className={`mt-1 block w-full p-2 border rounded-[4px] ${validation.emailValid === null
-                        ? 'border-[#42506666]'
-                        : validation.emailValid
-                          ? 'border-green-700'
-                          : 'border-red-700'
-                        } focus:outline-none`}
-                      required
-                    />
-                    {validation.emailValid === false && (
-                      <p className="text-[10px] text-red-700">Invalid email format</p>
-                    )}
-                    {validation.emailValid === true && (
-                      <p className="text-[10px] text-green-700">Valid email format</p>
-                    )}
-                  </div>
-
-                  <div>
-                    <div className="flex gap-1">
-                      {/* <label
-                        htmlFor="tel1"
-                        className="text-sm font-medium text-gray-700"
-                      >
-                        Tel 1:
-                      </label>
-                      <span className="text-red-600">*</span> */}
-                      <label
-                        htmlFor="tel1"
-                        className="text-[10px]"
-                      >
-                        Tel 1 <span className="text-red-600">*</span>
-                      </label>
-                    </div>
-                    <input
-                      type="number"
-                      id="tel1"
-                      name="tel1"
-                      value={formData.tel1}
-                      onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
-                      required
-                    />
-                  </div>
-
-                  <div className="">
-                    <label
-                      htmlFor="tel2"
-                      className="text-[10px]"
-                    >
-                      Tel 2
-                    </label>
-                    <input
-                      type="number"
-                      id="tel2"
-                      name="tel2"
-                      value={formData.tel2}
-                      onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
-                    />
-                  </div>
-
-                  <div className="mt-2">
-                    <div className="flex gap-1">
-                      {/* <label
-                        htmlFor="postcode"
-                        className="text-sm font-medium text-gray-700"
-                      >
-                        Postcode:
-                      </label>
-                      <span className="text-red-600">*</span> */}
-                      <label
-                        htmlFor="postcode"
-                        className="text-[10px]"
-                      >
-                        Postcode <span className="text-red-600">*</span>
-                      </label>
-                    </div>
-                    <input
-                      type="text"
-                      id="postcode"
-                      name="postcode"
-                      value={formData.postcode}
-                      onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <div className="flex gap-1">
-                      {/* <label
-                        htmlFor="postalAddress"
-                        className="text-sm font-medium text-gray-700"
-                      >
-                        Postal Address:
-                      </label>
-                      <span className="text-red-600">*</span> */}
-                      <label
-                        htmlFor="postalAddress"
-                        className="text-[10px]"
-                      >
-                        Postal Address <span className="text-red-600">*</span>
-                      </label>
-                    </div>
-                    <input
-                      type="text"
-                      id="postalAddress"
-                      name="postalAddress"
-                      value={formData.postalAddress}
-                      onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <label
-                      htmlFor="permanentAddress"
-                      className="text-[10px]"
-                    >
-                      Permanent Address
-                    </label>
-                    <input
-                      type="text"
-                      id="permanentAddress"
-                      name="permanentAddress"
-                      value={formData.permanentAddress}
-                      onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
-                    />
-                  </div>
-
-                  <div>
-                    <div className="flex gap-1">
-                      <label
-                        htmlFor="city"
-                        className="text-[10px]"
-                      >
-                        City
-                      </label>
-                      <span className="text-red-600">*</span>
-                    </div>
-                    <input
-                      type="text"
-                      id="city"
-                      name="city"
-                      value={formData.city}
-                      onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <div className="flex gap-1">
-                      {/* <label
-                        htmlFor="county"
-                        className="text-sm font-medium text-gray-700"
-                      >
-                        Country:
-                      </label>
-                      <span className="text-red-600">*</span> */}
-                      <label
-                        htmlFor="county"
-                        className="text-[10px]"
-                      >
-                        Country <span className="text-red-600">*</span>
-                      </label>
-
-                    </div>
-                    <input
-                      type="text"
-                      id="county"
-                      name="county"
-                      value={formData.county}
-                      onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div className="mt-6 flex gap-2 justify-between">
-                  <div>
-                    <button
-                      onClick={prevStep}
-                      className="px-6 py-2 ml-2 text-custom-bg rounded-[4px] text-xs font-bold border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
-                    >
-                      Back
-                    </button>
-                  </div>
-                  <div className="flex gap-2">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        onClose();
-                        resetform();
-                      }}
-                      className="px-6 py-2 ml-2 text-custom-bg rounded-[4px] text-xs font-bold border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
-                    >
-                      Close
-                    </button>
-
-                    <button
-                      onClick={nextStep}
-                      className={`px-6 py-2 rounded-[4px] text-xs ${formData.email && formData.tel1 && formData.postcode && formData.postalAddress && formData.city && formData.county
-                        ? "bg-custom-bg text-white hover:bg-gray-600"
-                        : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                        }`}
-                      disabled={!formData.email || !formData.tel1 || !formData.postcode || !formData.postalAddress || !formData.city || !formData.county}
-                    >
-                      Next
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </>
-          )}
-
-
-          {/* Security */}
-          {step === 3 && (
-            <>
-              <div>
-                <h3 className="text-xl font-semibold mb-4">Security</h3>
-                <div className="grid grid-cols-2 sm:grid-cols-2 gap-3">
-
+                <h3 className="font-bold mb-4">Security</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
 
                   <div>
                     <div className="flex gap-1">
@@ -630,25 +549,17 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                       name="dateOfBirth"
                       value={formData.dateOfBirth}
                       onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow-sm focus:ring-blue-500 focus:border-blue-500"
                     />
                     {!validation.dateOfBirthValid && (
-                      <span className="text-[9px] text-red-700">Date of Birth cannot be in the future.</span>
+                      <span className="text-sm text-red-500">Date of Birth cannot be in the future.</span>
                     )}
                   </div>
 
                   <div>
-                    <div className="flex gap-1">
-                      {/* <label
-                        htmlFor="position"
-                        className="text-sm font-medium text-gray-700"
-                      >
-                        Position
-                        :
-                      </label>
-                      <span className="text-red-600">*</span> */}
+                    <div className="flex gap-1 items-center justify-start">
                       <label
-                        htmlFor="position"
+                        htmlFor="taxiFirm"
                         className="text-[10px]"
                       >
                         Position <span className="text-red-600">*</span>
@@ -660,39 +571,35 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                       name="position"
                       value={formData.position}
                       onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
-                      required
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                      required placeholder="Building and street"
                     />
                   </div>
 
                   <div>
-                    <label
-                      htmlFor="reportsTo"
-                      className="text-[10px]"
-                    >
-                      Reports To
-                    </label>
+                    <div className="flex gap-1 items-center justify-start">
+                      <label
+                        htmlFor="reportsTo"
+                        className="text-[10px]"
+                      >
+                        Reports To
+                      </label>
+                    </div>
                     <input
                       type="text"
                       id="reportsTo"
                       name="reportsTo"
                       value={formData.reportsTo}
                       onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                      placeholder="Reports To"
                     />
                   </div>
 
                   <div>
-                    <div className="flex gap-1">
-                      {/* <label
-                        htmlFor="username"
-                        className="text-sm font-medium text-gray-700"
-                      >
-                        Username:
-                      </label>
-                      <span className="text-red-600">*</span> */}
+                    <div className="flex gap-1 items-center justify-start">
                       <label
-                        htmlFor="username"
+                        htmlFor="taxiFirm"
                         className="text-[10px]"
                       >
                         Username <span className="text-red-600">*</span>
@@ -704,21 +611,14 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                       name="username"
                       value={formData.username}
                       onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
-                      required
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                      required placeholder="Username"
                     />
                   </div>
 
-                  <div className="flex gap-2">
+                  <div>
                     <div className="relative">
-                      <div className="flex gap-1">
-                        {/* <label
-                          htmlFor="password"
-                          Username
-                        >
-                          Password
-                        </label>
-                        <span className="text-red-600">*</span> */}
+                      <div className="flex gap-1 items-center justify-start">
                         <label
                           htmlFor="password"
                           className="text-[10px]"
@@ -726,37 +626,35 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                           Password <span className="text-red-600">*</span>
                         </label>
                       </div>
+
+
                       <input
                         type={showPasswords ? "text" : "password"}
                         id="password"
                         name="password"
                         value={formData.password}
                         onChange={handleChange}
-                        className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                        className="mt-1 block w-full p-2 border border-[#42506666] rounded"
                         required
+                        placeholder="Password"
                       />
-                      <button
+                      {/* <button
                         type="button"
                         onClick={() => setShowPasswords((prev) => !prev)}
-                        className="absolute right-2 top-7"
+                        className="absolute right-2 top-1/2"
                       >
                         {showPasswords ? (
                           <AiOutlineEye size={20} />
                         ) : (
                           <AiOutlineEyeInvisible size={20} />
                         )}
-                      </button>
+                      </button> */}
                     </div>
+                  </div>
 
+                  <div>
                     <div className="relative">
-                      <div className="flex gap-1">
-                        {/* <label
-                          htmlFor="confirmpassword"
-                          className="text-sm font-medium text-gray-700"
-                        >
-                          Confirm Password:
-                        </label>
-                        <span className="text-red-600">*</span> */}
+                      <div className="flex gap-1 items-center justify-start">
                         <label
                           htmlFor="confirmpassword"
                           className="text-[10px]"
@@ -764,6 +662,7 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                           Confirm Password <span className="text-red-600">*</span>
                         </label>
                       </div>
+
                       <input
                         type={showPasswords ? "text" : "password"}
                         id="confirmpassword"
@@ -771,65 +670,48 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                         value={formData.confirmpassword}
                         onChange={handleChange}
                         // className="mt-1 block w-full p-2 border border-gray-300 rounded-lg"
-                        className={`mt-1 block w-full  p-2 ${validation.passwordMatch === null
-                          ? 'border-[#42506666] '
+                        className={`mt-1 block w-full p-2 ${validation.passwordMatch === null
+                          ? 'border-[#42506666]'
                           : validation.passwordMatch
                             ? 'border-green-500'
                             : 'border-red-500'
-                          } focus:outline-none border rounded-[4px]`}
-                        required
+                          } focus:outline-none border border-[#42506666] rounded`}
+                        required placeholder="Confirm Password"
                       />
-                      <button
+                      {/* <button
                         type="button"
                         onClick={() => setShowPasswords((prev) => !prev)}
-                        className="absolute right-2 top-7"
+                        className="absolute right-2 top-1/2"
                       >
                         {showPasswords ? (
                           <AiOutlineEye size={20} />
                         ) : (
                           <AiOutlineEyeInvisible size={20} />
                         )}
-                      </button>
+                      </button> */}
                       <span
-                        className={`text-[10px] ${validation.passwordMatch === null
+                        className={`text-[9px] ${validation.passwordMatch === null
                           ? "text-gray-500"
                           : validation.passwordMatch
                             ? passwordRegex.test(formData.password)
-                              ? "text-green-500"
-                              : "text-red-500"
-                            : "text-red-500"
+                              ? "text-green-700"
+                              : "text-red-700"
+                            : "text-red-700"
                           }`}
                       >
                         {validation.passwordMatch === null
-                          ? "Confirm Password must be entered "
+                          ? "Confirm Password must be entered i.e Shah@1anything 6 characters"
                           : !validation.passwordMatch
-                            ? "Confirm Password does not match "
+                            ? "Confirm Password does not match i.e Shah@1anything 6 characters"
                             : !passwordRegex.test(formData.password)
                               ? "Password is not strong i.e Shah@1anything 6 characters"
                               : "Confirm Password matched Pattern Match"}
                       </span>
                     </div>
-                    {/* <div className="mt-4">
-                                      <button
-                                        type="button"
-                                        onClick={() => setShowPasswords(!showPasswords)}
-                                        className="px-4 py-2"
-                                      >
-                                        {showPasswords ? "Hide" : "Show"}
-                                      </button>
-                                    </div> */}
                   </div>
 
-
                   <div>
-                    <div className="flex gap-1">
-                      {/* <label
-                        htmlFor="passwordExpires"
-                        className="text-sm font-medium text-gray-700"
-                      >
-                        Password Expires:
-                      </label>
-                      <span className="text-red-600">*</span> */}
+                    <div className="flex gap-1 items-center justify-start">
                       <label
                         htmlFor="passwordExpires"
                         className="text-[10px]"
@@ -844,18 +726,117 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                       name="passwordExpires"
                       value={formData.passwordExpires}
                       onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded"
                       required
                     />
+                    {!validation.passwordExpiresvalid && (
+                      <span className="text-[9px] text-red-700">Password Expires cannot be in the past.</span>
+                    )}
                   </div>
 
 
+
+                  <div>
+                    <label className="text-[10px]">Status</label>
+                    <div className="flex gap-4 p-2">
+                      <label className="flex items-center gap-2">
+                        <input
+                          type="radio"
+                          name="isActive"
+                          value="true"
+                          checked={formData.isActive === true}
+                          onChange={() =>
+                            handleChange({
+                              target: { name: "isActive", value: true },
+                            })
+                          }
+                          className="accent-green-500"
+                        />
+                        <span className="text-xs">Active</span>
+                      </label>
+
+                      <label className="flex items-center gap-2">
+                        <input
+                          type="radio"
+                          name="isActive"
+                          value="false"
+                          checked={formData.isActive === false}
+                          onChange={() =>
+                            handleChange({
+                              target: { name: "isActive", value: false },
+                            })
+                          }
+                          className="accent-red-500"
+                        />
+                        <span className="text-xs">Inactive</span>
+                      </label>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <label
+                      htmlFor="useravatar"
+                      className="text-[10px]"
+                    >
+                      Upload Image:
+                    </label>
+                    <input
+                      type="file"
+                      id="useravatar"
+                      name="useravatar"
+                      accept="image/*"
+                      onChange={handleFileChange}
+                      className="mt-1 block w-48 text-[8px] text-gray-400 file:mr-4 file:py-1 p-2 file:px-4 file:rounded-lg file:border file:text-[10px] file:font-semibold file:bg-white hover:file:bg-blue-100 border border-[#0885864D] rounded-[10px] border-dashed "
+                    />
+                  </div>
+                  <div>
+                    {imagePreview && (
+                      <div>
+                        <img
+                          src={imagePreview}
+                          alt="Avatar Preview"
+                          className="avatar-preview w-32 h-20"
+                        />
+                      </div>
+                    )}
+                  </div>
+
+                  <div>
+                    <label className="block text-[10px]">Role</label>
+                    <div className="flex gap-4">
+                      <label className="flex items-center gap-2">
+                        <input
+                          type="radio"
+                          name="role"
+                          value="admin"
+                          checked={formData.role === "admin"}
+                          onChange={handleChange}
+                          className="accent-blue-500"
+                        />
+                        <span className="text-xs">Admin</span>
+                      </label>
+
+                      <label className="flex items-center gap-2">
+                        <input
+                          type="radio"
+                          name="role"
+                          value="user"
+                          checked={formData.role === "user"}
+                          onChange={handleChange}
+                          className="accent-blue-500"
+                        />
+                        <span className="text-xs">User</span>
+                      </label>
+                    </div>
+                  </div>
+
                 </div>
+
                 <div className="mt-6 flex gap-2 justify-between">
                   <div>
                     <button
                       onClick={prevStep}
-                      className="px-6 py-2 ml-2 text-custom-bg rounded-[4px] text-xs font-bold border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                      className="py-1 px-5 w-full sm:w-auto border-[1px] rounded-4 border-[#313342] bg-white text-[#313342] hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500"
                     >
                       Back
                     </button>
@@ -867,20 +848,16 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                         onClose();
                         resetform();
                       }}
-                      className="px-6 py-2 ml-2 text-custom-bg rounded-[4px] text-xs font-bold border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                      className="py-1 px-5 w-full sm:w-auto border-[1px] rounded-4 border-[#313342] bg-white text-[#313342] hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500"
                     >
                       Close
                     </button>
 
                     <button
-                      onClick={nextStep}
-                      className={`px-6 py-2 rounded-[4px] text-xs ${formData.email && formData.tel1 && formData.postcode && formData.postalAddress && formData.city && formData.county
-                        ? "bg-custom-bg text-white hover:bg-gray-600"
-                        : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                        }`}
-                      disabled={!formData.email || !formData.tel1 || !formData.postcode || !formData.postalAddress || !formData.city || !formData.county}
+                      type="submit"
+                      className="bg-[#313342] text-white rounded-4 hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500 py-1 px-8"
                     >
-                      Next
+                      Submit
                     </button>
                   </div>
                 </div>
@@ -888,130 +865,10 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
             </>
           )}
 
-          {step === 4 && (
-            <>
-              <div className="flex gap-4">
-                <div className="border-2 border-dashed border-gray-300 rounded-lg p-2 mt-2">
-                  <input
-                    type="file"
-                    id="useravatar"
-                    name="useravatar"
-                    accept="image/*"
-                    onChange={handleFileChange}
-                    className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border file:border-gray-300 file:background-gray-100 hover:file:bg-gray-200 file:text-sm"
-                  />
-                </div>
-                <div>
-                  {imagePreview && (
-                    <div>
-                      <img
-                        src={imagePreview}
-                        alt="Avatar Preview"
-                        className="avatar-preview w-32 h-20"
-                      />
-                    </div>
-                  )}
-                </div>
-              </div>
 
-              <div>
-                <label className="block font-medium mb-2">Is Active:</label>
-                <div className="flex gap-4">
-                  {/* Yes Option */}
-                  <label className="flex items-center gap-2">
-                    <input
-                      type="radio"
-                      name="isActive"
-                      value="true"
-                      checked={formData.isActive === true}
-                      onChange={() =>
-                        handleChange({
-                          target: { name: "isActive", value: true },
-                        })
-                      }
-                      className="accent-green-500"
-                    />
-                    <span>Yes</span>
-                  </label>
 
-                  {/* No Option */}
-                  <label className="flex items-center gap-2">
-                    <input
-                      type="radio"
-                      name="isActive"
-                      value="false"
-                      checked={formData.isActive === false}
-                      onChange={() =>
-                        handleChange({
-                          target: { name: "isActive", value: false },
-                        })
-                      }
-                      className="accent-red-500"
-                    />
-                    <span>No</span>
-                  </label>
-                </div>
-              </div>
 
-              <div>
-                <label className="block font-medium mb-2">Role</label>
-                <div className="flex gap-4">
-                  <label className="flex items-center gap-2">
-                    <input
-                      type="radio"
-                      name="role"
-                      value="user"
-                      checked={formData.role === "user"}
-                      onChange={handleChange}
-                      className="accent-blue-500"
-                    />
-                    <span>User</span>
-                  </label>
 
-                  {/* Admin Role */}
-                  <label className="flex items-center gap-2">
-                    <input
-                      type="radio"
-                      name="role"
-                      value="admin"
-                      checked={formData.role === "admin"}
-                      onChange={handleChange}
-                      className="accent-blue-500"
-                    />
-                    <span>Admin</span>
-                  </label>
-                </div>
-              </div>
-              <div className="mt-6 flex gap-2 justify-between">
-                <div>
-                  <button
-                    onClick={prevStep}
-                   className="px-6 py-2 ml-2 text-custom-bg rounded-[4px] text-xs font-bold border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
-                  >
-                    Back
-                  </button>
-                </div>
-                <div className="flex gap-2">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      onClose();
-                      resetform();
-                    }}
-                     className="px-6 py-2 ml-2 text-custom-bg rounded-[4px] text-xs font-bold border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
-                  >
-                    Close
-                  </button>
-                  <button
-                    type="submit"
-                    className="px-6 py-2 bg-custom-bg text-white rounded-[4px] text-xs hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
-                  >
-                    Submit
-                  </button>
-                </div>
-              </div>
-            </>
-          )}
         </form>
       </div>
     </div>

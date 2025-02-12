@@ -37,7 +37,7 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
     image: null,
   });
 
-  const [autoFillAll, setAutoFillAll] = useState(false);
+  const autoFillAll=false
   const [step, setStep] = useState(1);
   const nextStep = () => setStep(step + 1);
   const prevStep = () => setStep(step - 1);
@@ -51,7 +51,7 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
     passwordValid: false,
   });
 
-  setAutoFillAll(false);
+  // setAutoFillAll(false);
 
   // const handleChange = (e) => {
   //   const { name, value, type, checked, files } = e.target;
@@ -174,7 +174,7 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-60 z-50">
-      <div className="bg-white p-6 rounded-xl shadow-lg w-full max-w-4xl overflow-y-auto ">
+      <div className="bg-white px-12 py-7 rounded-xl shadow-lg w-full max-w-4xl overflow-y-auto ">
 
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-2xl font-bold">
@@ -212,7 +212,7 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
                     name="CompanyName"
                     value={formData.CompanyName}
                     onChange={handleChange}
-                    className="block w-full p-2 mt-1 border border-[#42506666] rounded-[4px] shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                    className="block w-full p-2 mt-1 border border-[#42506666] rounded shadow-sm focus:ring-blue-500 focus:border-blue-500"
                     required placeholder="Company name"
                   />
                 </div>
@@ -235,7 +235,7 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
                     value={formData.CompanyRegistrationNumber}
                     onChange={handleChange}
                     placeholder="Company Registration Number"
-                    className=" block w-full p-2 border mt-1 border-[#42506666] rounded-[4px] shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                    className=" block w-full p-2 border mt-1 border-[#42506666] rounded shadow-sm focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
 
@@ -257,7 +257,7 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
                     value={formData.vatnumber}
                     placeholder="VAT number"
                     onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px] shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow-sm focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
 
@@ -280,7 +280,7 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
                     onChange={handleChange}
                     placeholder="Email"
                     // className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                    className={`mt-1 block w-full p-2 border rounded-[4px] ${validation.emailValid === null
+                    className={`mt-1 block w-full p-2 border rounded ${validation.emailValid === null
                       ? 'border-[#42506666]'
                       : validation.emailValid
                         ? 'border-green-700'
@@ -314,7 +314,7 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
                     name="password"
                     value={formData.password}
                     onChange={handleChange}
-                    className="mt-1 block w-full p-2 pr-10 border border-[#42506666] rounded-[4px] shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                    className="mt-1 block w-full p-2 pr-10 border border-[#42506666] rounded shadow-sm focus:ring-blue-500 focus:border-blue-500"
                     required
                     placeholder="Password"
                   />
@@ -354,7 +354,7 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
                         : validation.passwordMatch
                           ? "border-green-700"
                           : "border-red-700"
-                        } focus:outline-none border border-[#42506666] rounded-[4px]`}
+                        } focus:outline-none border border-[#42506666] rounded`}
                       required
                       placeholder="Confirm password"
                     />
@@ -408,8 +408,8 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
                     name="phoneNumber"
                     value={formData.phoneNumber}
                     onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px] shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                    required
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                    required placeholder="Phone Number"
                   />
                 </div>
                 {/* </div> */}
@@ -443,7 +443,7 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
                     name="Building&Street"
                     // value={formData.CompanyName}
                     // onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px] shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow-sm focus:ring-blue-500 focus:border-blue-500"
                     required placeholder="Building and street"
                   />
                 </div>
@@ -465,7 +465,7 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
                     name="Building&Street2"
                     // value={formData.CompanyName}
                     // onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px] shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow-sm focus:ring-blue-500 focus:border-blue-500"
                     required placeholder="Building and street"
                   />
                 </div>
@@ -487,7 +487,7 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
                     name="Building&Street"
                     // value={formData.CompanyName}
                     // onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px] shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow-sm focus:ring-blue-500 focus:border-blue-500"
                     required placeholder="Town/City"
                   />
                 </div>
@@ -509,7 +509,7 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
                     name="Building&Street"
                     // value={formData.CompanyName}
                     // onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px] shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow-sm focus:ring-blue-500 focus:border-blue-500"
                     required placeholder="Country"
                   />
                 </div>
@@ -531,7 +531,7 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
                     name="Building&Street"
                     // value={formData.CompanyName}
                     // onChange={handleChange}
-                    className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px] shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                    className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow-sm focus:ring-blue-500 focus:border-blue-500"
                     required placeholder="Postcode"
                   />
                 </div>
@@ -555,13 +555,14 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
                     onClose();
                     setStep(1);
                   }}
-                  className="px-6 py-2 ml-2 text-custom-bg rounded-[4px] text-xs font-bold border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                  className="py-1 px-5 w-full sm:w-auto border-[1px] rounded-4 border-[#313342] bg-white text-[#313342] hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500"
                 >
                   Cancel
                 </button>
+
                 <button
                   onClick={nextStep}
-                  className="px-6 py-2 bg-custom-bg text-white text-xs font-bold rounded-[4px] hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                  className="bg-[#313342] text-white rounded-4 hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500 py-1 px-8"
                 >
                   Next
                 </button>
@@ -741,10 +742,11 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
                       name="accountsPayableContactName"
                       value={formData.accountsPayableContactName}
                       onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px] shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow-sm focus:ring-blue-500 focus:border-blue-500"
                       placeholder="Name"
                     />
                   </div>
+
                   {/*     Phone Number and Email */}
                   <div>
                     <div className="flex gap-1">
@@ -761,7 +763,7 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
                       name="accountsPayableContactPhoneNumberandEmail"
                       value={formData.accountsPayableContactPhoneNumberandEmail}
                       onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px] shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow-sm focus:ring-blue-500 focus:border-blue-500"
                       placeholder="Phone number "
                     />
                   </div>
@@ -781,7 +783,7 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
                       name="accountsPayableContactPhoneNumberandEmail"
                       // value={formData.accountsPayableContactPhoneNumberandEmail}
                       onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px] shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow-sm focus:ring-blue-500 focus:border-blue-500"
                       placeholder="Email"
                     />
                   </div>
@@ -803,7 +805,7 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
                       name="billingAddress"
                       value={formData.billingAddress}
                       onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px] shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow-sm focus:ring-blue-500 focus:border-blue-500"
                       placeholder="Billing Address"
                     />
                   </div>
@@ -822,7 +824,7 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
                       name="paymentTermsAgreedPaymentSchedule"
                       value={formData.paymentTermsAgreedPaymentSchedule}
                       onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px] shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow-sm focus:ring-blue-500 focus:border-blue-500"
                     >
                       <option value="">Select</option>
                       <option value="30">30 days</option>
@@ -847,7 +849,7 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
                       name="paymentTermsPreferredPaymentMethod"
                       value={formData.paymentTermsPreferredPaymentMethod}
                       onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px] shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow-sm focus:ring-blue-500 focus:border-blue-500"
                     >
                       <option value="">Select</option>
                       <option value="Bank A">Bank A</option>
@@ -881,7 +883,7 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
                       name="bankingInformationBankName"
                       value={formData.bankingInformationBankName}
                       onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px] shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow-sm focus:ring-blue-500 focus:border-blue-500"
                       placeholder="Bank name"
                     />
                   </div>
@@ -901,7 +903,7 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
                       name="bankingInformationBankAccountNumber"
                       value={formData.bankingInformationBankAccountNumber}
                       onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px] shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow-sm focus:ring-blue-500 focus:border-blue-500"
                       placeholder="Bank account number"
                     />
                   </div>
@@ -922,7 +924,7 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
                       name="bankingInformationBankIBANSWIFTCode"
                       value={formData.bankingInformationBankIBANSWIFTCode}
                       onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px] shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow-sm focus:ring-blue-500 focus:border-blue-500"
                       placeholder="IBAN / SWIFT Code"
                     />
                   </div>
@@ -942,7 +944,7 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
                       name="bankingInformationBankAddress"
                       value={formData.bankingInformationBankAddress}
                       onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px] shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow-sm focus:ring-blue-500 focus:border-blue-500"
                       placeholder="Bank address"
                     />
                   </div>
@@ -969,7 +971,7 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
                         formData.specificDepartmentContactInformationBillingFinanceDepartment
                       }
                       onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px] shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow-sm focus:ring-blue-500 focus:border-blue-500"
                       placeholder="Billing / Finance Department"
                     />
                   </div>
@@ -991,7 +993,7 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
                         formData.specificDepartmentContactInformationProcurementPurchasingContact
                       }
                       onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px] shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow-sm focus:ring-blue-500 focus:border-blue-500"
                       placeholder="Procurement / Purchasing Contact"
                     />
                   </div>
@@ -1014,7 +1016,7 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
                         formData.specificDepartmentContactInformationPrimaryContactfortheProject
                       }
                       onChange={handleChange}
-                      className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px] shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                      className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow-sm focus:ring-blue-500 focus:border-blue-500"
                       placeholder="Primary Contact for the Project"
                     />
                   </div>
@@ -1075,10 +1077,6 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
                     />
                   </div>
                 </div>
-
-
-
-
               </div>
               {/* Banking Information */}
 
@@ -1086,7 +1084,7 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
                 <button
                   type="button"
                   onClick={prevStep}
-                  className="px-6 py-1 ml-2 text-custom-bg rounded-[4px] text-xs font-bold border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                  className="py-1 px-5 w-full sm:w-auto border-[1px] rounded-4 border-[#313342] bg-white text-[#313342] hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500"
                 >
                   Back
                 </button>
@@ -1098,15 +1096,14 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
                       onClose();
                       setStep(1);
                     }}
-                    className="px-6 py-2 ml-2 text-custom-bg rounded-[4px] text-xs font-bold border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                    className="py-1 px-5 w-full sm:w-auto border-[1px] rounded-4 border-[#313342] bg-white text-[#313342] hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500"
                   >
                     Close
                   </button>
 
-
                   <button
                     type="submit"
-                    className="px-6 py-2 bg-custom-bg text-white text-xs font-bold rounded-[4px] hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                    className="bg-[#313342] text-white rounded-4 hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500 py-1 px-8"
                   >
                     Submit
                   </button>

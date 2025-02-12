@@ -187,7 +187,7 @@ const AddCarModel = ({ isOpen, onClose, fetchData }) => {
               htmlFor="description"
               className="text-[10px]"
             >
-              Description:
+              Description
             </label>
             <textarea
               id="description"
@@ -243,13 +243,13 @@ const AddCarModel = ({ isOpen, onClose, fetchData }) => {
             <button
               type="button"
               onClick={onClose}
-              className="px-6 py-1 ml-2 text-custom-bg rounded-[4px] text-xs font-bold border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+              className="py-1 px-5 w-full sm:w-auto border-[1px] rounded-4 border-[#313342] bg-white text-[#313342] hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-6 py-2 bg-custom-bg text-white text-xs font-bold rounded-[4px] hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+              className="bg-[#313342] text-white rounded-4 hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500 py-1 px-8"
             >
               {loading ? "Submitting..." : "Submit"}
             </button>

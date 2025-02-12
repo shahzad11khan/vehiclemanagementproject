@@ -15,7 +15,7 @@ import {
 } from "../Components/ApiUrl/ApiUrls";
 import { getCompanyName, getUserName, getUserRole } from "@/utils/storageUtils";
 import axios from "axios";
-import Link from "next/link.js";
+// import Link from "next/link.js";
 // import { Doughnut } from "react-chartjs-2";
 
 import AdminDashBDoughnut from "../Components/AdminDashBDoughnut.jsx";
@@ -65,13 +65,15 @@ const Page = () => {
     setCurrentPage(1);
   };
 
+  console.log(filteredData, handleTabClick)
+
   const fetchMOT = async () => {
     try {
       const response = await axios.get(`${API_URL_VehicleMOT}`);
       console.log("MOT Data: ", response.data.Result);
       const filteredData = processData(response.data.Result, "motDueDate");
       setData(filteredData);
-      setFilteredData(filteredData);
+      // setFilteredData(filteredData);
     } catch (error) {
       console.error("Error fetching MOT data:", error);
     }
@@ -194,17 +196,17 @@ const Page = () => {
       fetchAllData();
     }
   }, [activeTab]);
-  const getPath = () => {
-    switch (activeTab) {
-      case "Service":
-        return `/Dashboard/Vehicle/AddServiceReport/`;
-      case "RoadTax":
-        return `/Dashboard/Vehicle/AddRoadTaxReport/`;
-      case "MOT":
-      default:
-        return `/Dashboard/Vehicle/AddMOTReport/`;
-    }
-  };
+  // const getPath = () => {
+  //   switch (activeTab) {
+  //     case "Service":
+  //       return `/Dashboard/Vehicle/AddServiceReport/`;
+  //     case "RoadTax":
+  //       return `/Dashboard/Vehicle/AddRoadTaxReport/`;
+  //     case "MOT":
+  //     default:
+  //       return `/Dashboard/Vehicle/AddMOTReport/`;
+  //   }
+  // };
   useEffect(() => {
     const companyName = getCompanyName();
     const companyuser = getUserName();

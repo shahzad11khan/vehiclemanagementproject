@@ -132,7 +132,7 @@ const Page = () => {
              <span className="opacity-65" >Vehicle Setting</span> 
              <div className="flex items-center gap-3 myborder2">
              <span><img src="/setting_arrow.svg" className="w-2 h-4 object-cover object-center  "></img></span>
-             <span>Body Type</span>
+             <span>Fuel Type</span>
              </div>
              </div>
             </h1>

@@ -415,7 +415,10 @@ const Sidebar = () => {
                         : "text-blue"
                     }`}
                   >
-                    <div className="flex  items-center gap-3 relative bg-transparent w-full">
+                    <div className="flex  items-center gap-3 relative bg-transparent w-full"
+                        onClick={toggleValue}
+                        >
+                    
                       <img
                         src="/setting.png"
                         alt="superadmin"
@@ -423,7 +426,8 @@ const Sidebar = () => {
                       />
                       
                       <p
-                        className="hidden sm:block text-sm bg-transparent text-white"
+                        className="hidden sm:block text-sm bg-transparent text-white w-full"
+                       
                         onClick={toggleValue}
                       >
                         Settings
@@ -600,7 +604,9 @@ const Sidebar = () => {
                         : "text-blue"
                     }`}
                   >
-                    <div className="flex items-center gap-3 relative bg-transparent w-full">
+                    <div className="flex items-center gap-3 relative bg-transparent w-full"
+                     onClick={toggleValue}
+                    >
                       <img
                         src="/setting.png"
                         alt="superadmin"
@@ -609,7 +615,7 @@ const Sidebar = () => {
 
                       <p
                         className="hidden sm:block text-sm bg-transparent text-white"
-                        onClick={toggleValue}
+                       
                       >
                         Settings
                       </p>

@@ -146,7 +146,7 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
   //   }));
   // };
 
-  console.log(handleCheckboxChange)
+  // console.log(handleCheckboxChange)
   const handleSubmit = async (e) => {
     e.preventDefault();
     const data = new FormData();

@@ -51,6 +51,8 @@ const Page = () => {
   const [inactiveUsers, setInActiveUsers] = useState(0);
   const [trigger, setTrigger] = useState(true);
   const [role, setRole] = useState("");
+  const [currentUsers,setCurrentUsers]=useState([])
+  const [totalPages,setTotalPages]=useState(0);
 
   useEffect(() => {
     const active = usersX.filter((user) => user.isActive === true).length;
@@ -224,15 +226,21 @@ const Page = () => {
     setIsOpenUserUpdate(!isOpenUserUpdate);
   };
 
-  const indexOfLastUser = currentPage * itemperpage;
-  const indexOfFirstUser = indexOfLastUser - itemperpage;
-  const currentUsers = filteredData.slice(indexOfFirstUser, indexOfLastUser);
-  const totalPages = Math.ceil(filteredData.length / itemperpage);
+  useEffect(() => {
+    const indexOfLastUser = currentPage * itemperpage;
+    const indexOfFirstUser = indexOfLastUser - itemperpage;
+    const currentUser = filteredData.slice(indexOfFirstUser, indexOfLastUser);
+    setCurrentUsers(currentUser);
+    const totalPage = Math.ceil(filteredData.length / itemperpage);
+    setTotalPages(totalPage);
+  }, [filteredData, currentPage, itemperpage]); // Add dependencies
 
   if (!isMounted) {
     return null;
   }
 
+  console.log("data",users)
+  console.log("dataX",usersX)
   console.log("hehe", filteredData);
 
   return (
@@ -411,7 +419,7 @@ const Page = () => {
                       <th className="py-3 px-4 min-w-[150px] w-[150px] md:w-[16.66%] text-center text-white bg-custom-bg whitespace-normal break-all overflow-hidden">
                         User Name
                       </th>
-                      <th className=" py-3 px-4 min-w-[150px] md:min-w-[16.66%] text-center text-white bg-custom-bg whitespace-normal break-all  overflow-hidden">Image</th>
+                      <th className=" py-3 px-4 min-w-[150px] w-[150px] md:w-[16.66%] text-center text-white bg-custom-bg whitespace-normal break-all  overflow-hidden">Image</th>
                       <th className=" py-3 px-4 min-w-[150px] w-[150px] md:w-[16.66%]  text-white bg-custom-bg whitespace-normal break-all overflow-hidden">Email</th>
                       <th className=" py-3 px-4 min-w-[150px] w-[150px] md:w-[16.66%]  text-white bg-custom-bg whitespace-normal break-all overflow-hidden">
                         Password

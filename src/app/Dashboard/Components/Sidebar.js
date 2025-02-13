@@ -22,19 +22,10 @@ const Sidebar = () => {
     }
   }, []);
 
-  // const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  // const [isOpenManagement, setIsOpenManagement] = useState(() => {
-  //   const savedValue = localStorage.getItem("isOpenManagement");
-  //   return savedValue ? JSON.parse(savedValue) : false;
-  // });
 
-  // useEffect(() => {
-  //   localStorage.setItem("isOpenManagement", JSON.stringify(isOpenManagement));
-  // }, [isOpenManagement]);
 
   const [isOpenManagement, setIsOpenManagement] = useState(false);
 
-// Load the saved value from localStorage on the client side
 useEffect(() => {
   if (typeof window !== "undefined") {
     const savedValue = localStorage.getItem("isOpenManagement");

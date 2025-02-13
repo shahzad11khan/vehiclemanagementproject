@@ -3,7 +3,11 @@ import { API_URL_LocalAuthority } from "@/app/Dashboard/Components/ApiUrl/ApiUrl
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-
+import {
+  getCompanyName,
+  getUserId ,
+  getUserName,getflag,getcompanyId
+} from "@/utils/storageUtils";
 const UpdateAuthorityModel = ({ isOpen, onClose, fetchData, authorityid }) => {
   const [formData, setFormData] = useState({
     name: "",
@@ -11,20 +15,34 @@ const UpdateAuthorityModel = ({ isOpen, onClose, fetchData, authorityid }) => {
     isActive: false,
     adminCreatedBy: "",
     adminCompanyName: "",
+    companyId: null,
+
   });
 
   const [loading, setLoading] = useState(false);
 
   // Retrieve company name from local storage
   useEffect(() => {
-    const storedCompanyName = localStorage.getItem("companyName");
-    if (storedCompanyName) {
-      setFormData((prevData) => ({
-        ...prevData,
-        adminCompanyName: storedCompanyName,
-      }));
-    }
-  }, []); // Update when the manufacturer changes
+     const storedcompanyName = getUserName() || getCompanyName(); 
+     const userId = getUserId(); 
+     const flag = getflag();
+     const compID = getcompanyId();
+     if (storedcompanyName && userId) {
+     if (storedcompanyName.toLowerCase() === "superadmin" && flag === "true") {
+       setFormData((prevData) => ({
+           ...prevData,
+           adminCompanyName: storedcompanyName,
+           companyId:  compID 
+         }));
+       }
+     } else {
+       setFormData((prevData) => ({
+         ...prevData,
+         adminCompanyName: storedcompanyName,
+         companyId: userId,
+       }));
+     }
+   }, []);  // Update when the manufacturer changes
   // Fetch manufacturer data when the modal opens
   useEffect(() => {
     // console.log(vehicleid);

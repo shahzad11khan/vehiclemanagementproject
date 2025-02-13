@@ -10,11 +10,9 @@ export const PUT = async (request, context) => {
     const id = context.params.ManufacturerID; // Extract ManufacturerID from params
     const data = await request.json(); // Get the form data
 
-    console.log(id);
-    console.log(data);
 
     // Destructure the necessary fields
-    const { name, description, isActive, carmodel } = data;
+    const { name, description, isActive, carmodel,companyId } = data;
 
     // Find the manufacturer by ID
     const manufacturer = await Manufecturer.findById({ _id: id });
@@ -28,6 +26,7 @@ export const PUT = async (request, context) => {
 
     // Update manufacturer properties with values from formDataObject or retain existing values
     manufacturer.name = name ? name.trim() : manufacturer.name; // Update name or retain existing
+    manufacturer.companyId = companyId ? companyId :manufacturer.companyId; // Update name or retain existing
     manufacturer.carmodel = carmodel ? carmodel.trim() : manufacturer.carmodel; // Update name or retain existing
     manufacturer.description = description
       ? description.trim()

@@ -2,7 +2,13 @@
 import mongoose from "mongoose";
 
 const EnquirySchema = new mongoose.Schema(
+
   {
+    companyId:{
+      type: mongoose.Schema.Types.ObjectId, 
+      ref: 'Company',
+      required:true
+    },
     firstName: {
       type: String,
       trim: true,

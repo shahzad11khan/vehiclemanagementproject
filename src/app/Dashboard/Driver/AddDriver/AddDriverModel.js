@@ -78,8 +78,18 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
   const prevStep = () => setStep(step - 1);
 
   useEffect(() => {
-    const storedCompanyName = localStorage.getItem("companyName");
-    const storedSuperadmin = localStorage.getItem("role");
+    let storedCompanyName = "";
+    let storedSuperadmin = "";
+    
+    if (typeof window !== "undefined") {
+      // Only access localStorage in the browser environment
+      storedCompanyName = localStorage.getItem("companyName") || "";
+      storedSuperadmin = localStorage.getItem("role") || "";
+    }
+    
+    console.log("Stored Company Name:", storedCompanyName);
+    console.log("Stored Superadmin Role:", storedSuperadmin);
+    
 
     if (storedSuperadmin) {
       setSuperadmin(storedSuperadmin);

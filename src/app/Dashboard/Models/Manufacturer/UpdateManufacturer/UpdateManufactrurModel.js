@@ -3,10 +3,11 @@ import { API_URL_Manufacturer } from "@/app/Dashboard/Components/ApiUrl/ApiUrls"
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+
 import {
   getCompanyName,
-  getsuperadmincompanyname,
-  // getUserRole,
+  getUserId ,
+  getUserName,getflag,getcompanyId
 } from "@/utils/storageUtils";
 // import { fetchCarModel } from "../../../Components/DropdownData/taxiFirm/taxiFirmService";
 
@@ -22,18 +23,33 @@ const UpdateManufacturerModel = ({
     carmodel: "",
     isActive: false,
     adminCompanyName: "",
+    companyId:null,
   });
 
   const [loading, setLoading] = useState(false);
   // const [data, setData] = useState([]);
 
-  useEffect(() => {
-    const storedCompanyName = getCompanyName() || getsuperadmincompanyname();
 
-    if (storedCompanyName) {
+
+  useEffect(() => {
+    const storedcompanyName = getUserName() || getCompanyName(); 
+    const userId = getUserId(); 
+    const flag = getflag();
+    const compID = getcompanyId();
+    console.log(compID)
+    if (storedcompanyName && userId) {
+    if (storedcompanyName.toLowerCase() === "superadmin" && flag === "true") {
+        setFormData((prevData) => ({
+          ...prevData,
+          adminCompanyName: storedcompanyName,
+          companyId:  compID 
+        }));
+      }
+    } else {
       setFormData((prevData) => ({
         ...prevData,
-        adminCompanyName: storedCompanyName,
+        adminCompanyName: storedcompanyName,
+        companyId: userId,
       }));
     }
   }, []);
@@ -91,6 +107,7 @@ const UpdateManufacturerModel = ({
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    console.log(formData)
     try {
       const response = await axios.put(
         `${API_URL_Manufacturer}/${manufacturerid}`,

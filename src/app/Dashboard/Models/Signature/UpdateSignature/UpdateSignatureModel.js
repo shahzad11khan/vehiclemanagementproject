@@ -3,7 +3,11 @@ import React, { useEffect, useState } from "react";
 import { API_URL_Signature } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import { toast } from "react-toastify";
 import axios from "axios";
-
+import {
+  getCompanyName,
+  getUserId ,
+  getUserName,getflag,getcompanyId
+} from "@/utils/storageUtils";
 const UpdateSignatureModel = ({
   isOpen,
   onClose,
@@ -20,8 +24,32 @@ const UpdateSignatureModel = ({
     imageFile: null,
     adminCreatedBy: "",
     adminCompanyName: "",
+    companyId: null,
+
   });
 
+
+    useEffect(() => {
+      const storedcompanyName = getUserName() || getCompanyName(); 
+      const userId = getUserId(); 
+      const flag = getflag();
+      const compID = getcompanyId();
+      if (storedcompanyName && userId) {
+      if (storedcompanyName.toLowerCase() === "superadmin" && flag === "true") {
+        setFormData((prevData) => ({
+            ...prevData,
+            adminCompanyName: storedcompanyName,
+            companyId:  compID 
+          }));
+        }
+      } else {
+        setFormData((prevData) => ({
+          ...prevData,
+          adminCompanyName: storedcompanyName,
+          companyId: userId,
+        }));
+      }
+    }, []);
   useEffect(() => {
     if (signatureData) {
       const fetchEnquiry = async () => {

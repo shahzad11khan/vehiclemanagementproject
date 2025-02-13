@@ -27,6 +27,7 @@ export const POST = catchAsyncErrors(async (request) => {
     isActive,
     adminCreatedBy,
     adminCompanyName,
+    companyId
   } = data; // Extract the new variables
 
   console.log(data);
@@ -62,6 +63,7 @@ export const POST = catchAsyncErrors(async (request) => {
     adminCreatedBy,
     adminCompanyName,
     adminCreatedBy,
+    companyId
   });
 
   const savedEnquiry = await newEnquiry.save();
@@ -80,7 +82,7 @@ export const POST = catchAsyncErrors(async (request) => {
 });
 export const GET = catchAsyncErrors(async () => {
   await connect();
-  const allEnquiry = await Enquiry.find().sort({ createdAt: -1 });
+  const allEnquiry = await Enquiry.find().sort({ createdAt: -1 }).paopulate("companyId");
   const EnquiryCount = await Enquiry.countDocuments();
   if (!allEnquiry || allEnquiry.length === 0) {
     return NextResponse.json({ Result: allEnquiry });

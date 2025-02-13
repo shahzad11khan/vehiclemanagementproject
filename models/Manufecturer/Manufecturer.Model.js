@@ -3,6 +3,11 @@ import mongoose from "mongoose";
 
 // Define the schema
 const ManufacturerSchema = new mongoose.Schema({
+  companyId: {
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'Company',
+    require:true
+},
   name: {
     type: String,
     trim: true, // Removes whitespace from the beginning and end

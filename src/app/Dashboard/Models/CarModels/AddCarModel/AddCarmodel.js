@@ -3,9 +3,12 @@ import { API_URL_CarModel } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { getCompanyName, getsuperadmincompanyname } from "@/utils/storageUtils";
 import { GetManufacturer } from "@/app/Dashboard/Components/ApiUrl/ShowApiDatas/ShowApiDatas";
-
+import {
+  getCompanyName,
+  getUserId ,
+  getUserName,getflag,getcompanyId,getsuperadmincompanyname
+} from "@/utils/storageUtils";
 const AddCarModel = ({ isOpen, onClose, fetchData }) => {
   const [formData, setFormData] = useState({
     name: "",
@@ -14,6 +17,8 @@ const AddCarModel = ({ isOpen, onClose, fetchData }) => {
     isActive: false,
     adminCreatedBy: "",
     adminCompanyName: "",
+    companyId:null,
+
   });
 
   const [Manufacturer, setManufacturer] = useState([])
@@ -40,19 +45,31 @@ const AddCarModel = ({ isOpen, onClose, fetchData }) => {
       setManufacturer([]);
     }
   };
-  console.log(Manufacturer);
 
+ 
   useEffect(() => {
-    const storedCompanyName = getCompanyName() || getsuperadmincompanyname();
-    if (storedCompanyName) {
+    const storedcompanyName = getUserName() || getCompanyName(); 
+    const userId = getUserId(); 
+    const flag = getflag();
+    const compID = getcompanyId();
+    if (storedcompanyName && userId) {
+    if (storedcompanyName.toLowerCase() === "superadmin" && flag === "true") {
+      setFormData((prevData) => ({
+          ...prevData,
+          adminCompanyName: storedcompanyName,
+          companyId:  compID 
+        }));
+      }
+    } else {
       setFormData((prevData) => ({
         ...prevData,
-        adminCompanyName: storedCompanyName,
+        adminCompanyName: storedcompanyName,
+        companyId: userId,
       }));
     }
     fetchDt();
-
   }, []);
+
 
   // const handleChange = (e) => {
   //   const { name, value, type, checked } = e.target;

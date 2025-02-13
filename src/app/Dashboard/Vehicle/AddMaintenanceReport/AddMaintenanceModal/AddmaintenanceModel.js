@@ -6,6 +6,11 @@ import {
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
+import {
+  getCompanyName,
+  getUserId ,
+  getUserName,getflag,getcompanyId
+} from "@/utils/storageUtils";
 
 const AddMaintenanceModal = ({ isOpen, onClose, fetchData, selectedid }) => {
   const [loading, setLoading] = useState(false);
@@ -13,6 +18,7 @@ const AddMaintenanceModal = ({ isOpen, onClose, fetchData, selectedid }) => {
     issues: "",
     vehicleName: "",
     registrationNumber: "",
+    companyId:null,
     repairHistory: [
       {
         images: [],
@@ -32,6 +38,29 @@ const AddMaintenanceModal = ({ isOpen, onClose, fetchData, selectedid }) => {
     adminCompanyId: "",
   });
 
+  useEffect(() => {
+    const storedcompanyName = getUserName() || getCompanyName(); 
+    const userId = getUserId(); 
+    const flag = getflag();
+    const compID = getcompanyId();
+    if (storedcompanyName && userId) {
+    if (storedcompanyName.toLowerCase() === "superadmin" && flag === "true") {
+      setrepaitformData((prevData) => ({
+          ...prevData,
+          adminCompanyName: storedcompanyName,
+          companyId:  compID 
+        }));
+      }
+    } else {
+      setrepaitformData((prevData) => ({
+        ...prevData,
+        adminCompanyName: storedcompanyName,
+        companyId: userId,
+      }));
+    }
+  }, []);
+
+  console.log(repaitformData)
   const fetchDat = async () => {
     if (selectedid) {
       console.log(selectedid);
@@ -120,6 +149,7 @@ const AddMaintenanceModal = ({ isOpen, onClose, fetchData, selectedid }) => {
       formData.append("registrationNumber", repaitformData.registrationNumber);
       formData.append("adminCompanyName", repaitformData.adminCompanyName);
       formData.append("adminCreatedBy", repaitformData.adminCreatedBy);
+      formData.append("companyId", repaitformData.companyId);
 
       // Append nested repairHistory array
       repaitformData.repairHistory.forEach((history, i) => {

@@ -4,10 +4,11 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 // import { fetchCarModel } from "../../../Components/DropdownData/taxiFirm/taxiFirmService";
 import { toast } from "react-toastify";
+
 import {
   getCompanyName,
-  getsuperadmincompanyname,
-  // getUserRole,
+  getUserId ,
+  getUserName,getflag,getcompanyId,
 } from "@/utils/storageUtils";
 
 const AddManufacturerModel = ({ isOpen, onClose, fetchData }) => {
@@ -18,20 +19,33 @@ const AddManufacturerModel = ({ isOpen, onClose, fetchData }) => {
     isActive: false,
     adminCreatedBy: "",
     adminCompanyName: "",
+    companyId:null,
+
   });
 
   const [loading, setLoading] = useState(false);
   // const [data, setData] = useState([]);
 
   useEffect(() => {
-    const storedCompanyName = getCompanyName() || getsuperadmincompanyname();
-    if (storedCompanyName) {
+    const storedcompanyName = getUserName() || getCompanyName(); 
+    const userId = getUserId(); 
+    const flag = getflag();
+    const compID = getcompanyId();
+    if (storedcompanyName && userId) {
+    if (storedcompanyName.toLowerCase() === "superadmin" && flag === "true") {
+      setFormData((prevData) => ({
+          ...prevData,
+          adminCompanyName: storedcompanyName,
+          companyId:  compID 
+        }));
+      }
+    } else {
       setFormData((prevData) => ({
         ...prevData,
-        adminCompanyName: storedCompanyName,
+        adminCompanyName: storedcompanyName,
+        companyId: userId,
       }));
     }
-    // fetchDataa();
   }, []);
 
   // const fetchDataa = async () => {

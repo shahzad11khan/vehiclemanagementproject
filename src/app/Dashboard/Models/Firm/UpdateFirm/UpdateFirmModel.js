@@ -4,7 +4,11 @@ import { API_URL_Firm } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { fetchSignature } from "../../../Components/DropdownData/taxiFirm/taxiFirmService";
-
+import {
+  getCompanyName,
+  getUserId ,
+  getUserName,getflag,getcompanyId
+} from "@/utils/storageUtils";
 const UpdateFirmModel = ({ isOpen, onClose, fetchData, firmId }) => {
   const [formData, setFormData] = useState({
     name: "",
@@ -28,6 +32,8 @@ const UpdateFirmModel = ({ isOpen, onClose, fetchData, firmId }) => {
     imageFile: null,
     adminCreatedBy: "",
     adminCompanyName: "",
+    companyId: null,
+
   });
 
   const [superadmin, setSuperadmin] = useState(null);
@@ -38,15 +44,28 @@ const UpdateFirmModel = ({ isOpen, onClose, fetchData, firmId }) => {
   const nextStep = () => setStep(step + 1);
   const prevStep = () => setStep(step - 1);
   useEffect(() => {
-    const storedCompanyName = localStorage.getItem("companyName");
+    const storedcompanyName = getUserName() || getCompanyName(); 
+    const userId = getUserId(); 
+    const flag = getflag();
+    const compID = getcompanyId();
     const storedSuperadmin = localStorage.getItem("role");
+
     if (storedSuperadmin) {
       setSuperadmin(storedSuperadmin);
     }
-    if (storedCompanyName) {
+    if (storedcompanyName && userId) {
+    if (storedcompanyName.toLowerCase() === "superadmin" && flag === "true") {
+      setFormData((prevData) => ({
+          ...prevData,
+          adminCompanyName: storedcompanyName,
+          companyId:  compID 
+        }));
+      }
+    } else {
       setFormData((prevData) => ({
         ...prevData,
-        adminCompanyName: storedCompanyName,
+        adminCompanyName: storedcompanyName,
+        companyId: userId,
       }));
     }
   }, []);

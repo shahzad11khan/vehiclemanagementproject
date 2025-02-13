@@ -14,7 +14,7 @@ export const PUT = async (request, context) => {
     console.log(data);
 
     // Destructure the necessary fields
-    const { name, description, isActive } = data;
+    const {name, description, isActive, adminCreatedBy, adminCompanyName ,companyId } = data;
 
     // Find the manufacturer by ID
     const transmission = await Transmission.findById({ _id: id });
@@ -28,6 +28,9 @@ export const PUT = async (request, context) => {
 
     // Update manufacturer properties with values from formDataObject or retain existing values
     transmission.name = name ? name.trim() : transmission.name; // Update name or retain existing
+    transmission.adminCreatedBy = adminCreatedBy ? adminCreatedBy.trim() : transmission.adminCreatedBy; // Update name or retain existing
+    transmission.adminCompanyName = adminCompanyName ? adminCompanyName.trim() : transmission.adminCompanyName; // Update name or retain existing
+    transmission.companyId = companyId ? companyId : transmission.companyId; // Update name or retain existing
     transmission.description = description
       ? description.trim()
       : transmission.description; // Update description or retain existing

@@ -3,6 +3,11 @@ import React, { useEffect, useState } from "react";
 import { API_URL_Signature } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import { toast } from "react-toastify";
 import axios from "axios";
+import {
+  getCompanyName,
+  getUserId ,
+  getUserName,getflag,getcompanyId
+} from "@/utils/storageUtils";
 
 const AddSignatureType = ({ isOpen, onClose, fetchData }) => {
   const [formData, setFormData] = useState({
@@ -14,16 +19,30 @@ const AddSignatureType = ({ isOpen, onClose, fetchData }) => {
     // imageNote: "",
     adminCreatedBy: "",
     adminCompanyName: "",
+    companyId: null,
+
   });
-  useEffect(() => {
-    const storedCompanyName = localStorage.getItem("companyName"); // Replace with the actual key used in localStorage
-    if (storedCompanyName) {
-      setFormData((prevData) => ({
-        ...prevData,
-        adminCompanyName: storedCompanyName,
-      }));
-    }
-  }, []); // Run only once when the component mounts
+   useEffect(() => {
+     const storedcompanyName = getUserName() || getCompanyName(); 
+     const userId = getUserId(); 
+     const flag = getflag();
+     const compID = getcompanyId();
+     if (storedcompanyName && userId) {
+     if (storedcompanyName.toLowerCase() === "superadmin" && flag === "true") {
+       setFormData((prevData) => ({
+           ...prevData,
+           adminCompanyName: storedcompanyName,
+           companyId:  compID 
+         }));
+       }
+     } else {
+       setFormData((prevData) => ({
+         ...prevData,
+         adminCompanyName: storedcompanyName,
+         companyId: userId,
+       }));
+     }
+   }, []); // Run only once when the component mounts
 
   const handleChange = (e) => {
     const { name, value, type, checked, files } = e.target;

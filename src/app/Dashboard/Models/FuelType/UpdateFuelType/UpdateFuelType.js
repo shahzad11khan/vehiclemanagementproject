@@ -4,6 +4,11 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
+import {
+  getCompanyName,
+  getUserId ,
+  getUserName,getflag,getcompanyId
+} from "@/utils/storageUtils";
 const UpdateFuelTypeModel = ({ isOpen, onClose, fetchData, fuelid }) => {
   const [formData, setFormData] = useState({
     name: "",
@@ -11,6 +16,8 @@ const UpdateFuelTypeModel = ({ isOpen, onClose, fetchData, fuelid }) => {
     isActive: false,
     adminCreatedBy: "",
     adminCompanyName: "",
+    companyId: null,
+
   });
 
   const [loading, setLoading] = useState(false);
@@ -19,16 +26,26 @@ const UpdateFuelTypeModel = ({ isOpen, onClose, fetchData, fuelid }) => {
 
   // Retrieve company name from local storage
   useEffect(() => {
-    const storedCompanyName =
-      localStorage.getItem("companyName") ||
-      localStorage.getItem("companyname");
-    if (storedCompanyName) {
+    const storedcompanyName = getUserName() || getCompanyName(); 
+    const userId = getUserId(); 
+    const flag = getflag();
+    const compID = getcompanyId();
+    if (storedcompanyName && userId) {
+    if (storedcompanyName.toLowerCase() === "superadmin" && flag === "true") {
+      setFormData((prevData) => ({
+          ...prevData,
+          adminCompanyName: storedcompanyName,
+          companyId:  compID 
+        }));
+      }
+    } else {
       setFormData((prevData) => ({
         ...prevData,
-        adminCompanyName: storedCompanyName,
+        adminCompanyName: storedcompanyName,
+        companyId: userId,
       }));
     }
-  }, []); // Update when the manufacturer changes
+  }, []);// Update when the manufacturer changes
   // Fetch manufacturer data when the modal opens
   useEffect(() => {
     // console.log(vehicleid);

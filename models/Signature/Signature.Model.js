@@ -2,6 +2,11 @@ import mongoose from "mongoose";
 
 const SignatureSchema = new mongoose.Schema(
   {
+    companyId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Company",
+      required: true,
+    },
     name: {
       type: String,
       trim: true,

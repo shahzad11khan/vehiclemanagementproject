@@ -14,7 +14,7 @@ export const PUT = async (request, context) => {
     console.log(data);
 
     // Destructure the necessary fields
-    const { name, description, isActive } = data;
+    const { name, description, isActive, adminCreatedBy, adminCompanyName,companyId } = data;
 
     // Find the manufacturer by ID
     const fueltype = await FuelType.findById({ _id: id });
@@ -28,6 +28,9 @@ export const PUT = async (request, context) => {
 
     // Update manufacturer properties with values from formDataObject or retain existing values
     fueltype.name = name ? name.trim() : fueltype.name; // Update name or retain existing
+    fueltype.adminCreatedBy = adminCreatedBy ? adminCreatedBy.trim() : fueltype.adminCreatedBy; // Update name or retain existing
+    fueltype.adminCompanyName = adminCompanyName ? adminCreatedBy.trim() : fueltype.adminCompanyName; // Update name or retain existing
+    fueltype.companyId = adminCompanyName ? companyId.trim() : fueltype.companyId; // Update name or retain existing
     fueltype.description = description
       ? description.trim()
       : fueltype.description; // Update description or retain existing

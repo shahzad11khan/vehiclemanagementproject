@@ -85,7 +85,7 @@ const Page = () => {
   };
 
   useEffect(() => {
-    const filtered = data.filter((item) => {
+    const filtered = data?.filter((item) => {
       const companyMatch =
         item.adminCompanyName &&
         selectedCompanyName &&
@@ -114,8 +114,8 @@ const Page = () => {
     return null;
   }
 
-  const totalPages = Math.ceil(filteredData.length / itemperpage);
-  const currentData = filteredData.slice(
+  const totalPages = Math.ceil(filteredData?.length / itemperpage);
+  const currentData = filteredData?.slice(
     (currentPage - 1) * itemperpage,
     currentPage * itemperpage
   );
@@ -189,7 +189,7 @@ const Page = () => {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200 text-center">
-                  {currentData.map((row) => (
+                  {currentData?.map((row) => (
                     <tr key={row._id}>
                       <td className="py-3 px-4 min-w-[150px] w-[150px] whitespace-normal break-all overflow-hidden">{row.name}</td>
                       <td className="py-3 px-4 min-w-[150px] w-[150px] whitespace-normal break-all overflow-hidden">{row.description}</td>

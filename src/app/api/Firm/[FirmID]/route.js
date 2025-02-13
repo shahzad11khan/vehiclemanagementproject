@@ -89,11 +89,12 @@ export const PUT = async (request, context) => {
       isActive,
       adminCreatedBy,
       adminCompanyName,
+      companyId,
       // imageNote,
     } = formDataObject;
 
     // Update the existing Firm
-    // existingFirm.imageNote = imageNote || existingFirm.imageNote;
+    existingFirm.companyId = companyId || existingFirm.companyId;
     existingFirm.name = name || existingFirm.name;
     existingFirm.description = description || existingFirm.description;
     existingFirm.imageName = imageName || existingFirm.imageName;

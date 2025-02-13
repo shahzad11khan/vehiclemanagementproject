@@ -7,7 +7,7 @@ export const POST = catchAsyncErrors(async (request) => {
   await connect();
   const data = await request.json();
 
-  const { name,makemodel, description, isActive, adminCreatedBy, adminCompanyName } =
+  const { name,makemodel, description, isActive, adminCreatedBy, adminCompanyName,companyId } =
     data; // Extract the new variables
 
   // Check for existing vehicle by name// Check for existing CarModel by name and adminCompanyName
@@ -29,6 +29,7 @@ export const POST = catchAsyncErrors(async (request) => {
     isActive,
     adminCreatedBy,
     adminCompanyName,
+    companyId
   });
 
   console.log(newCarModel);
@@ -46,7 +47,7 @@ export const POST = catchAsyncErrors(async (request) => {
 });
 export const GET = catchAsyncErrors(async () => {
   await connect();
-  const allCarModel = await CarModel.find();
+  const allCarModel = await CarModel.find().sort({ createdAt: -1 }).populate("companyId");
   const CarModelCount = await CarModel.countDocuments();
   if (!allCarModel || allCarModel.length === 0) {
     return NextResponse.json({ result: allCarModel });

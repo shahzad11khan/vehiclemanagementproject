@@ -72,9 +72,11 @@ export const PUT = async (request, context) => {
     isActive,
     adminCreatedBy,
     adminCompanyName,
+    companyId,
   } = formDataObject;
 
   // Update the existing signature
+  existingSignature.companyId = companyId || existingSignature.companyId;
   existingSignature.name = name || existingSignature.name;
   existingSignature.description = description || existingSignature.description;
   existingSignature.imageName = imageName || existingSignature.imageName;

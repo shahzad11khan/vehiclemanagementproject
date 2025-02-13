@@ -12,6 +12,11 @@ import {
   fetchFuelType,
 } from "../../Components/DropdownData/taxiFirm/taxiFirmService";
 
+import {
+  getCompanyName,
+  getUserId ,
+  getUserName,getflag,getcompanyId
+} from "@/utils/storageUtils";
 const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
   const [local, setLocal] = useState([]);
   const [manufacturer, setManufacturer] = useState([]);
@@ -106,14 +111,17 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
     defectstatus: "",
     defectdescription: "",
     defectaction: "",
+
     additionalInfo: "",
     RPCExpiryDate: "",
-    tailLiftExpirydate: "",
+    TailLiftExpirydate: "",
     forkLiftNumber: "",
     ForkLiftInspectionDate: "",
+    ForkLiftInspectionNumberNotes: "",
     cardocuments: [],
     isActive: false,
     imageFiles: [], // Store selected image files
+    companyId:null,
   });
 
   const pageonerequiredfeilds = [
@@ -155,6 +163,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
         adminCompanyName: storedCompanyName,
       }));
     }
+
 
     const fetchData = async () => {
       try {
@@ -221,6 +230,28 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
     fetchData();
   }, [vehicleData.adminCompanyName]);
 
+
+  useEffect(() => {
+    const storedcompanyName = getUserName() || getCompanyName(); 
+    const userId = getUserId(); 
+    const flag = getflag();
+    const compID = getcompanyId();
+    if (storedcompanyName && userId) {
+    if (storedcompanyName.toLowerCase() === "superadmin" && flag === "true") {
+      setVehicleData((prevData) => ({
+          ...prevData,
+          adminCompanyName: storedcompanyName,
+          companyId:  compID 
+        }));
+      }
+    } else {
+      setVehicleData((prevData) => ({
+        ...prevData,
+        adminCompanyName: storedcompanyName,
+        companyId: userId,
+      }));
+    }
+  }, []);
   const handleChange = (e) => {
     const { name, value, type, checked, files } = e.target;
 
@@ -524,98 +555,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
 
   const resetForm = () => {
     setStep(1);
-    setVehicleData({
-      manufacturer: "",
-      model: "",
-      year: "",
-      type: "",
-      engineType: "",
-      fuelType: "",
-      transmission: "",
-      drivetrain: "",
-      exteriorColor: "",
-      interiorColor: "",
-      height: "",
-      width: "",
-      length: "",
-      passengerCapacity: "",
-      LocalAuthority: "",
-      cargoCapacity: "",
-      horsepower: "",
-      torque: "",
-      topSpeed: "",
-      fuelEfficiency: "",
-      safetyFeatures: [],
-      techFeatures: [],
-      towingCapacity: "",
-      price: "",
-      registrationNumber: "",
-      vehicleStatus: "",
-      warrantyInfo: "",
-      adminCreatedBy: "",
-      adminCompanyName: "",
-      // new fields
-      enginesize: "",
-      chasisnumber: "",
-      vehicleSite: "",
-      fleetEntryDate: "",
-      milesOnFleetEntry: "",
-      plannedFleetExit: "",
-      milesOnFleetExit: "",
-      actualExitDate: "",
-      milesAtActualExit: "",
-      doors: "",
-      color: "",
-      editablecolor: "",
-      roadTaxDate: "",
-      roadTaxCycle: "",
-      motDueDate: "",
-      motCycle: "",
-      seats: "",
-      abiCode: "",
-      nextServiceDate: "",
-      nextServiceMiles: "",
-      roadTaxCost: "",
-
-      listPrice: "",
-      purchasePrice: "",
-      insuranceValue: "",
-      departmentCode: "",
-      maintenance: false,
-      issues_damage: "",
-      damage_image: [],
-      recovery: "",
-      organization: "",
-      repairStatus: "",
-      jobNumber: "",
-      memo: "",
-      partNumber: "",
-      partName: "",
-      partprice: "",
-      partsupplier: "",
-
-      TestDate: "",
-      PlateExpiryDate: "",
-      Insurance: "",
-      insurancePolicyNumber: "",
-      PDFofPolicy: "",
-      defect: "",
-      Defectdate: "",
-      defectstatus: "",
-      defectdescription: "",
-      defectaction: "",
-
-      additionalInfo: "",
-      RPCExpiryDate: "",
-      tailLiftExpirydate: "",
-      forkLiftNumber: "",
-      ForkLiftInspectionDate: "",
-      cardocuments: [],
-
-      adminCompanyName: vehicleData.adminCompanyName,
-      isActive: false,
-      imageFiles: [], // Reset to an empty array
-    });
+  
   };
 
   // const handlepassengerChange = (e) => {
@@ -2057,7 +1997,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                   <input
                     type="date"
                     name="TailLiftExpiryDate"
-                    value={vehicleData.tailLiftExpirydate}
+                    value={vehicleData.TailLiftExpiryDate}
                     onChange={handleChange}
                     className="w-full border border-[#42506666] rounded shadow p-2"
                   />
@@ -2083,7 +2023,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
                   <input
                     type="text"
                     name="ForkLiftInspectionNumberNotes"
-                    value={vehicleData.forkLiftNumber}
+                    value={vehicleData.ForkLiftInspectionNumberNotes}
                     onChange={handleChange}
                     placeholder="Inspection number or notes"
                     className="w-full border border-[#42506666] rounded shadow p-2"

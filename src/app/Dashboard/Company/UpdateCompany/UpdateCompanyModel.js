@@ -4,6 +4,7 @@ import { API_URL_Company } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+import {getUserId } from '@/utils/storageUtils';
 
 
 const UpdateCompanyModel = ({
@@ -21,7 +22,7 @@ const UpdateCompanyModel = ({
     CreatedBy: "",
     CompanyRegistrationNumber: "",
     vatnumber: "",
-
+    userId:getUserId(),
     mailingAddress: "",
     physical_Address: "",
     phoneNumber: "",
@@ -41,8 +42,12 @@ const UpdateCompanyModel = ({
     specificDepartmentContactInformationBillingFinanceDepartment: "",
     specificDepartmentContactInformationProcurementPurchasingContact: "",
     specificDepartmentContactInformationPrimaryContactfortheProject: "",
-
     image: null,
+    Postcode:"",
+    BuildingAndStreetOne:"",
+    BuildingAndStreetTwo:"",
+    Town_City:"",
+    Country:"",
   });
 
   // Fetch company details when the modal opens
@@ -114,6 +119,12 @@ const UpdateCompanyModel = ({
               company.specificDepartmentContactInformationPrimaryContactfortheProject ||
               "",
             image: company.image, // Image should be handled separately if required
+
+            Postcode:company.Postcode,
+            BuildingAndStreetOne:company.BuildingAndStreetOne,
+            BuildingAndStreetTwo:company.BuildingAndStreetTwo,
+            Town_City:company.Town_City,
+            Country:company.Country,
           });
           setImagePreview(company.image);
         } catch (error) {
@@ -128,21 +139,7 @@ const UpdateCompanyModel = ({
     }
   }, [existingCompanyId, isOpen]);
 
-  // const handleChange = (e) => {
-  //   const { name, value, type, checked, files } = e.target;
-  //   setFormData({
-  //     ...formData,
-  //     [name]:
-  //       type === "checkbox" ? checked : type === "file" ? files[0] : value,
-  //     ...(name === "mailingAddress" && autoFillAll
-  //       ? {
-  //           billingAddress: value,
-  //           bankingInformationBankAddress: value,
-  //           physical_Address: value,
-  //         }
-  //       : {}),
-  //   });
-  // };
+
   const handleChange = (e) => {
     const { name, value, type, checked, files } = e.target;
     const updatedValue = type === 'checkbox' ? checked : type === 'file' ? files[0] : value;
@@ -207,6 +204,11 @@ const UpdateCompanyModel = ({
     }
 
     const data = new FormData();
+    data.append("Postcode", formData.Postcode);
+    data.append("BuildingAndStreetOne", formData.BuildingAndStreetOne);
+    data.append("BuildingAndStreetTwo", formData.BuildingAndStreetTwo);
+    data.append("Town_City", formData.Town_City);
+    data.append("Country", formData.Country);
     data.append("CompanyName", formData.CompanyName);
     data.append("email", formData.email);
     if (formData.password) data.append("password", formData.password);
@@ -540,15 +542,7 @@ const UpdateCompanyModel = ({
                     required placeholder="Phone Number"
                   />
                 </div>
-                {/* </div> */}
-
-                {/* <button
-                         type="button"
-                         className="border-2 h-10 mt-6 p-2 rounded-lg"
-                         onClick={() => setShowPassword(!showPassword)}
-                       >
-                         {showPassword ? "Hide" : "Show"}
-                       </button> */}
+               
               </div>
 
               <h2 className="font-bold">Address</h2>
@@ -567,10 +561,10 @@ const UpdateCompanyModel = ({
 
                   <input
                     type="text"
-                    id="Building&Street"
-                    name="Building&Street"
-                    // value={formData.CompanyName}
-                    // onChange={handleChange}
+                    id="BuildingAndStreetOne"
+                    name="BuildingAndStreetOne"
+                    value={formData.BuildingAndStreetOne}
+                    onChange={handleChange}
                     className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow-sm focus:ring-blue-500 focus:border-blue-500"
                     required placeholder="Building and street"
                   />
@@ -590,9 +584,9 @@ const UpdateCompanyModel = ({
                   <input
                     type="text"
                     id="Building&Street2"
-                    name="Building&Street2"
-                    // value={formData.CompanyName}
-                    // onChange={handleChange}
+                    name="BuildingAndStreetTwo"
+                    value={formData.BuildingAndStreetTwo}
+                    onChange={handleChange}
                     className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow-sm focus:ring-blue-500 focus:border-blue-500"
                     required placeholder="Building and street"
                   />
@@ -612,9 +606,9 @@ const UpdateCompanyModel = ({
                   <input
                     type="text"
                     id="Building&Street"
-                    name="Building&Street"
-                    // value={formData.CompanyName}
-                    // onChange={handleChange}
+                    name="Town_City"
+                    value={formData.Town_City}
+                    onChange={handleChange}
                     className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow-sm focus:ring-blue-500 focus:border-blue-500"
                     required placeholder="Town/City"
                   />
@@ -634,9 +628,9 @@ const UpdateCompanyModel = ({
                   <input
                     type="text"
                     id="Building&Street"
-                    name="Building&Street"
-                    // value={formData.CompanyName}
-                    // onChange={handleChange}
+                    name="Country"
+                    value={formData.Country}
+                    onChange={handleChange}
                     className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow-sm focus:ring-blue-500 focus:border-blue-500"
                     required placeholder="Country"
                   />
@@ -656,9 +650,9 @@ const UpdateCompanyModel = ({
                   <input
                     type="text"
                     id="Building&Street"
-                    name="Building&Street"
-                    // value={formData.CompanyName}
-                    // onChange={handleChange}
+                    name="Postcode"
+                    value={formData.Postcode}
+                    onChange={handleChange}
                     className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow-sm focus:ring-blue-500 focus:border-blue-500"
                     required placeholder="Postcode"
                   />
@@ -894,7 +888,7 @@ const UpdateCompanyModel = ({
                     />
                   </div>
 
-                  <div>
+                  {/* <div>
                     <div className="flex gap-1">
                       <label
                         htmlFor="accountsPayableContactPhoneNumberandEmail"
@@ -912,7 +906,7 @@ const UpdateCompanyModel = ({
                       className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow-sm focus:ring-blue-500 focus:border-blue-500"
                       placeholder="Email"
                     />
-                  </div>
+                  </div> */}
                   {/* </div>
                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6"> */}
                   {/*     Billing Address: "", info */}

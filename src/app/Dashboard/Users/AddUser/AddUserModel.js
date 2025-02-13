@@ -5,8 +5,8 @@ import { API_URL_USER } from "../../Components/ApiUrl/ApiUrls";
 import { toast } from "react-toastify";
 import {
   getCompanyName,
-  getsuperadmincompanyname,
-  // getUserRole,
+  getUserId ,
+  getUserName,getflag,getcompanyId
 } from "@/utils/storageUtils";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 
@@ -37,6 +37,8 @@ const AddUserModel = ({ isOpen, onClose, fetchData,}) => {
     permanentAddress: "",
     city: "",
     county: "",
+    userId:"",
+    companyId:"",
     // accessLevel: "",
     dateOfBirth: "",
     position: "",
@@ -46,51 +48,94 @@ const AddUserModel = ({ isOpen, onClose, fetchData,}) => {
     passwordExpires: "",
     // passwordExpiresEvery: "",
     confirmpassword: "",
-    companyname: "",
+    companyName: "",
     CreatedBy: "",
     useravatar: null,
     isActive: false,
     role: "user", // Default role set to "user"
+    Postcode:"",
+    BuildingAndStreetOne:"",
+    BuildingAndStreetTwo:"",
+
   });
 
-  // Retrieve company name from local storage
-  useEffect(() => {
-    const storedCompanyName = getCompanyName() || getsuperadmincompanyname(); // Replace with the actual key used in localStorage
-    if (storedCompanyName) {
+// Retrieve company name from local storage
+const randomObjectId = () => {
+  return (
+    Math.floor(Date.now() / 1000).toString(16) + // Timestamp
+    'xxxxxxxxxxxxxxxx'.replace(/[x]/g, () =>
+      ((Math.random() * 16) | 0).toString(16)
+    )
+  );
+};
+// useEffect(() => {
+//   const storedcompanyName = getUserName() || getCompanyName(); 
+//   const userId = getUserId(); // Retrieve user ID once
+//   const flag = getflag(); // Retrieve user ID once
+//   const compID = getcompanyId(); // Retrieve user ID once
+//   const randomId = randomObjectId();
+  
+//   console.log(userId, storedcompanyName ,flag,compID);
+//   if (storedcompanyName && userId && flag === "false") { 
+//     setFormData((prevData) => ({
+//       ...prevData,
+//       companyName: storedcompanyName,
+//       userId: storedcompanyName.toLowerCase() === "superadmin" && flag === "false" ? userId : randomId,
+//       companyId:  randomId,
+//     }));
+//   }else  if (storedcompanyName && userId && flag === "true" ) { 
+//     setFormData((prevData) => ({
+//       ...prevData,
+//       companyName: storedcompanyName,
+//       userId:  randomId,
+//       companyId: storedcompanyName.toLowerCase() === "superadmin" && flag === "true" ?  compID : randomId,
+//     }));
+//   }else {
+//     setFormData((prevData) => ({
+//       ...prevData,
+//       companyName: storedcompanyName,
+//       userId:  randomId,
+//       companyId:  compID 
+//     }));
+//   }
+// }, []);
+
+// Run only once when the component mounts
+useEffect(() => {
+  const storedcompanyName = getUserName() || getCompanyName(); 
+  const userId = getUserId(); 
+  const flag = getflag();
+  const compID = getcompanyId();
+  const randomId = randomObjectId();
+
+  // console.log(userId, storedcompanyName, flag, compID);
+
+  if (storedcompanyName && userId) {
+    if (flag === "false") {
       setFormData((prevData) => ({
         ...prevData,
-        companyname: storedCompanyName,
+        companyName: storedcompanyName,
+        userId: storedcompanyName.toLowerCase() === "superadmin" ? userId : randomId,
+        companyId: randomId,
+      }));
+    } else if (flag === "true") {
+      setFormData((prevData) => ({
+        ...prevData,
+        companyName: storedcompanyName,
+        userId: randomId,
+        companyId: storedcompanyName.toLowerCase() === "superadmin" ? compID : randomId,
       }));
     }
+  } else {
+    setFormData((prevData) => ({
+      ...prevData,
+      companyName: storedcompanyName,
+      userId: randomId,
+      companyId: userId,
+    }));
+  }
+}, []);
 
-
-  }, []); // Run only once when the component mounts
-
-  // const handleChange = (e) => {
-  //   const { name, value, type, checked } = e.target;
-  //   const updatedValue = type === 'checkbox' ? checked : value;
-
-  //   setFormData((prevData) => ({
-  //     ...prevData,
-  //     [name]: updatedValue,
-  //   }));
-
-  //   if (name === 'email') {
-  //     setValidation((prevValidation) => ({
-  //       ...prevValidation,
-  //       emailValid: emailRegex.test(updatedValue),
-  //     }));
-  //   } else if (name === 'confirmpassword' || name === 'password') {
-  //     const password = name === 'password' ? updatedValue : formData.password;
-  //     const confirmPassword =
-  //       name === 'confirmpassword' ? updatedValue : formData.confirmpassword;
-
-  //     setValidation((prevValidation) => ({
-  //       ...prevValidation,
-  //       passwordMatch: password === confirmPassword,
-  //     }));
-  //   }
-  // };
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     const updatedValue = type === 'checkbox' ? checked : value;
@@ -163,28 +208,21 @@ const AddUserModel = ({ isOpen, onClose, fetchData,}) => {
     "email",
 
   ];
-  // const pagetworequiredfeilds = [
-  //   // "email",
-  //   // "tel1",
-  //   // "postcode",
-  //   // "postalAddress",
-  //   // "city",
-  //   "county",
+
+  // const pagethreerequiredfeilds = [
+  //   "position",
+  //   "username",
+  //   "password",
+  //   "confirmpassword",
+  //   "passwordExpires",
   // ];
-  const pagethreerequiredfeilds = [
-    "position",
-    "username",
-    "password",
-    "confirmpassword",
-    "passwordExpires",
-  ];
 
   const areFieldsFilled = (fields) =>
     fields.every((field) => formData[field] !== "");
 
   const isNextDisabled1st = !areFieldsFilled(pageonerequiredfeilds);
   // const isNextDisabled2nd = !validation.emailValid || !areFieldsFilled(pagetworequiredfeilds);
-  const isNextDisabled3rd = !validation.passwordMatch || !validation.dateOfBirthValid || !validation.passwordExpiresvalid || !areFieldsFilled(pagethreerequiredfeilds);
+  // const isNextDisabled3rd = !validation.passwordMatch || !validation.dateOfBirthValid || !validation.passwordExpiresvalid || !areFieldsFilled(pagethreerequiredfeilds);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -223,33 +261,33 @@ const AddUserModel = ({ isOpen, onClose, fetchData,}) => {
 
   const resetform = () => {
     setStep(1);
-    setFormData({
-      title: "",
-      firstName: "",
-      lastName: "",
-      email: "",
-      tel1: "",
-      tel2: 0,
-      postcode: "",
-      postalAddress: "",
-      permanentAddress: "",
-      city: "",
-      county: "",
-      // accessLevel: "",
-      dateOfBirth: "",
-      position: "",
-      reportsTo: "",
-      username: "",
-      password: "",
-      passwordExpires: "",
-      // passwordExpiresEvery: "",
-      confirmpassword: "",
-      companyname: formData.companyname,
-      CreatedBy: "",
-      useravatar: null,
-      isActive: false,
-      role: "user", // Default role set to "user"
-    });
+    // setFormData({
+    //   title: "",
+    //   firstName: "",
+    //   lastName: "",
+    //   email: "",
+    //   tel1: "",
+    //   tel2: 0,
+    //   postcode: "",
+    //   postalAddress: "",
+    //   permanentAddress: "",
+    //   city: "",
+    //   county: "",
+    //   // accessLevel: "",
+    //   dateOfBirth: "",
+    //   position: "",
+    //   reportsTo: "",
+    //   username: "",
+    //   password: "",
+    //   passwordExpires: "",
+    //   // passwordExpiresEvery: "",
+    //   confirmpassword: "",
+    //   companyName: formData.companyName,
+    //   CreatedBy: "",
+    //   useravatar: null,
+    //   isActive: false,
+    //   role: "user", // Default role set to "user"
+    // });
   };
   const [step, setStep] = useState(1);
   const nextStep = () => setStep(step + 1);
@@ -296,7 +334,6 @@ const AddUserModel = ({ isOpen, onClose, fetchData,}) => {
                     >
                       <option value="">Select Title</option>
                       <option value="Mr">Mr</option>
-                      <option value="Miss">Miss</option>
                       <option value="Miss">Miss</option>
                       <option value="Mrs">Mrs</option>
                     </select>
@@ -417,9 +454,9 @@ const AddUserModel = ({ isOpen, onClose, fetchData,}) => {
                     <input
                       type="text"
                       id="Building&Street"
-                      name="Building&Street"
-                      // value={formData.CompanyName}
-                      // onChange={handleChange}
+                      name="BuildingAndStreetOne"
+                      value={formData.BuildingAndStreetOne}
+                      onChange={handleChange}
                       className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow focus:ring-blue-500 focus:border-blue-500"
                       required placeholder="Building and street"
                     />
@@ -439,11 +476,11 @@ const AddUserModel = ({ isOpen, onClose, fetchData,}) => {
                     <input
                       type="text"
                       id="Building&Street2"
-                      name="Building&Street2"
-                      // value={formData.CompanyName}
-                      // onChange={handleChange}
+                      name="BuildingAndStreetTwo"
+                      value={formData.BuildingAndStreetTwo}
+                      onChange={handleChange}
                       className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow focus:ring-blue-500 focus:border-blue-500"
-                      required placeholder="Building and street"
+                      required placeholder="Building and street line 2/2"
                     />
                   </div>
 
@@ -451,7 +488,7 @@ const AddUserModel = ({ isOpen, onClose, fetchData,}) => {
                   <div>
                     <div className="flex gap-1">
                       <label
-                        htmlFor="CompanyName"
+                        htmlFor="companyName"
                         className="text-[10px] "
                       >
                         Town/City
@@ -461,9 +498,9 @@ const AddUserModel = ({ isOpen, onClose, fetchData,}) => {
                     <input
                       type="text"
                       id="Building&Street"
-                      name="Building&Street"
-                      // value={formData.CompanyName}
-                      // onChange={handleChange}
+                      name="Town_City"
+                      value={formData.Town_City}
+                      onChange={handleChange}
                       className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow focus:ring-blue-500 focus:border-blue-500"
                       required placeholder="Town/City"
                     />
@@ -473,7 +510,7 @@ const AddUserModel = ({ isOpen, onClose, fetchData,}) => {
                   <div>
                     <div className="flex gap-1">
                       <label
-                        htmlFor="CompanyName"
+                        htmlFor="companyName"
                         className="text-[10px] "
                       >
                         Country
@@ -483,9 +520,9 @@ const AddUserModel = ({ isOpen, onClose, fetchData,}) => {
                     <input
                       type="text"
                       id="Building&Street"
-                      name="Building&Street"
-                      // value={formData.CompanyName}
-                      // onChange={handleChange}
+                      name="Country"
+                      value={formData.Country}
+                      onChange={handleChange}
                       className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow focus:ring-blue-500 focus:border-blue-500"
                       required placeholder="Country"
                     />
@@ -495,7 +532,7 @@ const AddUserModel = ({ isOpen, onClose, fetchData,}) => {
                   <div>
                     <div className="flex gap-1">
                       <label
-                        htmlFor="CompanyName"
+                        htmlFor="companyName"
                         className="text-[10px]"
                       >
                         Postcode
@@ -505,21 +542,15 @@ const AddUserModel = ({ isOpen, onClose, fetchData,}) => {
                     <input
                       type="text"
                       id="Building&Street"
-                      name="Building&Street"
-                      // value={formData.CompanyName}
-                      // onChange={handleChange}
+                      name="Postcode"
+                    value={formData.Postcode}
+                    onChange={handleChange}
                       className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow focus:ring-blue-500 focus:border-blue-500"
                       required placeholder="Postcode"
                     />
                   </div>
 
-                  {/* <button
-                  type="button"
-                  className="border-2 h-10 mt-6 p-2 rounded-lg"
-                  onClick={() => setShowPassword(!showPassword)}
-                >
-                  {showPassword ? "Hide" : "Show"}
-                </button> */}
+                  
                 </div>
 
                 <div className="flex gap-[10px] justify-end">
@@ -1082,16 +1113,11 @@ const AddUserModel = ({ isOpen, onClose, fetchData,}) => {
                       Close
                     </button>
                     <button
-                      onClick={nextStep}
-                      className={`bg-[#313342] text-white rounded-4 hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500 py-1 px-8 ${isNextDisabled3rd
-                        ? "bg-gray-400 text-white cursor-not-allowed"
-                        : "bg-custom-bg text-white hover:bg-gray-600"
-                        }`}
-
-                      disabled={isNextDisabled3rd}
-                    >
-                      Next
-                    </button>
+                    type="submit"
+                    className="px-6 py-2 bg-custom-bg text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                  >
+                    Submit
+                  </button>
                   </div>
                 </div>
 

@@ -84,6 +84,7 @@ useEffect(() => {
     window.location.reload();
     localStorage.setItem("flag", "false");
     localStorage.setItem("Iscompanyselected", "No");
+    localStorage.removeItem("companyID");
     localStorage.removeItem("companyName");
   };
   return (

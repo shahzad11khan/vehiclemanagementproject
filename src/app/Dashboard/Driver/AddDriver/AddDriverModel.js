@@ -14,6 +14,11 @@ import {
   // API_URL_DriverMoreInfo,
 } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 
+import {
+  getCompanyName,
+  getUserId ,
+  getUserName,getflag,getcompanyId
+} from "@/utils/storageUtils";
 const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
   const initialFormData = {
     firstName: "",
@@ -39,12 +44,19 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
     rentPaymentCycle: "",
     isActive: false,
     imageFile: null,
+    
     // LocalAuth: "",
     vehicle: "",
     // pay: "",
     calculation: 0,
     adminCreatedBy: "",
     adminCompanyName: "",
+    companyId:null,
+    password:"",
+    confirmPassword:"",
+    BuildingAndStreetOne:"",
+    BuildingAndStreetTwo:"",
+
   };
 
 
@@ -77,9 +89,36 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
       setFormData((prevData) => ({
         ...prevData,
         adminCompanyName: storedCompanyName,
+        confirmPassword:prevData.password
       }));
     }
   }, []);
+
+
+  
+
+  useEffect(() => {
+    const storedcompanyName = getUserName() || getCompanyName(); 
+    const userId = getUserId(); 
+    const flag = getflag();
+    const compID = getcompanyId();
+    if (storedcompanyName && userId) {
+    if (storedcompanyName.toLowerCase() === "superadmin" && flag === "true") {
+        setFormData((prevData) => ({
+          ...prevData,
+          companyName: storedcompanyName,
+          companyId:  compID 
+        }));
+      }
+    } else {
+      setFormData((prevData) => ({
+        ...prevData,
+        companyName: storedcompanyName,
+        companyId: userId,
+      }));
+    }
+  }, []);
+
 
   useEffect(() => {
     const loadDropdownData = async () => {
@@ -169,15 +208,15 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
     "licenseNumber",
     "niNumber",
   ];
-  const pagetworequiredfeilds = [
-    "licenseExpiryDate",
-    "taxiBadgeDate",
-    "city",
-    "LocalAuth",
-    "county",
-    "postcode",
-    "postalAddress",
-  ];
+  // const pagetworequiredfeilds = [
+  //   "licenseExpiryDate",
+  //   "taxiBadgeDate",
+  //   "city",
+  //   "LocalAuth",
+  //   "county",
+  //   "postcode",
+  //   "postalAddress",
+  // ];
 
   const areFieldsFilled = (fields) =>
     fields.every((field) => formData[field]?.trim() !== "");
@@ -185,7 +224,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
   // Determine if the "Next" button should be disabled
   const isNextDisabled1st =
     !validation.emailValid || !areFieldsFilled(pageonerequiredfeilds);
-  const isNextDisabled2nd = !areFieldsFilled(pagetworequiredfeilds);
+  // const isNextDisabled2nd = !areFieldsFilled(pagetworequiredfeilds);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -283,6 +322,11 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
           // pay: 0,
           calculation: "",
           adminCreatedBy: "",
+          password:"",
+          confirmPassword:"",
+          Postcode:"",
+         BuildingAndStreetOne:"",
+         BuildingAndStreetTwo:"",
           adminCompanyName: formData.adminCompanyName,
         };
         toast.success(response.data.message);
@@ -479,10 +523,10 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
 
                   <input
                     type="password"
-                    // id="password"
-                    // name=""
-                    // value={formData.lastName}
-                    // onChange={handleChange}
+                    id="password"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
                     className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow"
                     required
                     placeholder="Password"
@@ -880,11 +924,11 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                     {/* <span className="text-red-600">*</span> */}
                   </div>
                   <input
-                    // type="text"
-                    // id="postalAddress"
-                    // name="postalAddress"
-                    // value={formData.postalAddress}
-                    // onChange={handleChange}
+                    type="text"
+                    id="Building&Street"
+                      name="BuildingAndStreetOne"
+                      value={formData.BuildingAndStreetOne}
+                      onChange={handleChange}
                     className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow"
                     required
                     placeholder="Building and Street"
@@ -903,11 +947,11 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                     {/* <span className="text-red-600">*</span> */}
                   </div>
                   <input
-                    // type="text"
-                    // id="postalAddress"
-                    // name="postalAddress"
-                    // value={formData.postalAddress}
-                    // onChange={handleChange}
+                    type="text"
+                    id="Building&Street2"
+                    name="BuildingAndStreetTwo"
+                    value={formData.BuildingAndStreetTwo}
+                    onChange={handleChange}
                     className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow"
                     required
                     placeholder="Building and Street"
@@ -1144,11 +1188,8 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                   </button>
                   <button
                     type="submit"
-                    className={`bg-[#313342] text-white rounded-4 hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500 py-1 px-8 ${isNextDisabled2nd
-                      ? "bg-gray-400 text-white cursor-not-allowed"
-                      : "bg-custom-bg text-white hover:bg-gray-600"
+                    className={`bg-[#313342] text-white rounded-4 hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500 py-1 px-8 "             
                       }`}
-                    disabled={isNextDisabled2nd}
                   >
                     {loading ? "Submitting..." : "Submit"}
                   </button>

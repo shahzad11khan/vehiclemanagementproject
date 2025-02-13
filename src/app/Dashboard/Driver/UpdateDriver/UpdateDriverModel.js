@@ -10,7 +10,8 @@ import {
   fetchLocalAuth,
   // fetchVehicle,
 } from "../../Components/DropdownData/taxiFirm/taxiFirmService";
-import { getCompanyName, getUserRole } from "@/utils/storageUtils";
+import { getCompanyName, getUserRole, getUserId ,
+  getUserName,getflag,getcompanyId } from "@/utils/storageUtils";
 
 const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, selectedUserId }) => {
   const [formData, setFormData] = useState({
@@ -46,6 +47,12 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, selectedUserId }) => {
     calculation: "",
     adminCreatedBy: "",
     adminCompanyName: "",
+    companyId:null,
+    password:"",
+    confirmPassword:"",
+
+    BuildingAndStreetOne:"",
+    BuildingAndStreetTwo:"",
   });
 
   const [imagePreview, setImagePreview] = useState(null);
@@ -77,17 +84,74 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, selectedUserId }) => {
     }
   }, []);
 
+    useEffect(() => {
+      const storedcompanyName = getUserName() || getCompanyName(); 
+      const userId = getUserId(); 
+      const flag = getflag();
+      const compID = getcompanyId();
+      if (storedcompanyName && userId) {
+      if (storedcompanyName.toLowerCase() === "superadmin" && flag === "true") {
+          setFormData((prevData) => ({
+            ...prevData,
+            companyName: storedcompanyName,
+            companyId:  compID 
+          }));
+        }
+      } else {
+        setFormData((prevData) => ({
+          ...prevData,
+          companyName: storedcompanyName,
+          companyId: userId,
+        }));
+      }
+    }, []);
+  
   const fetchData = async () => {
     // console.log(selectedUserId);
     try {
       const res = await axios.get(`${API_URL_Driver}/${selectedUserId}`);
       const adminData = res.data.result;
+      console.log(adminData)
 
       // console.log("Fetched admin data:", adminData);
 
       setFormData((prevData) => ({
         ...prevData,
-        ...adminData,
+        firstName: adminData.firstName || "",
+        lastName: adminData.lastName || "",
+        email: adminData.email || "",
+        tel1: adminData.tel1 || "",
+        tel2: adminData.tel2 || "",
+        postcode: adminData.postcode || "",
+        postalAddress: adminData.postalAddress || "",
+        permanentAddress: adminData.permanentAddress || "",
+        city: adminData.city || "",
+        county: adminData.county || "",
+        dateOfBirth: adminData.dateOfBirth || "",
+        reportsTo: adminData.reportsTo || "",
+        passwordExpires: adminData.passwordExpires || "",
+        passwordExpiresEvery: adminData.passwordExpiresEvery || "",
+        licenseNumber: adminData.licenseNumber || "",
+        niNumber: adminData.niNumber || "",
+        driverNumber: adminData.driverNumber || "",
+        taxiFirm: adminData.taxiFirm || "",
+        badgeType: adminData.badgeType || "",
+        insurance: adminData.insurance || "",
+        startDate: adminData.startDate || "",
+        driverRent: adminData.driverRent || 0,
+        licenseExpiryDate: adminData.licenseExpiryDate || "",
+        taxiBadgeDate: adminData.taxiBadgeDate || "",
+        rentPaymentCycle: adminData.rentPaymentCycle || "",
+        isActive: adminData.isActive || false,
+        imageName: adminData.imageName || "",
+        imageFile: adminData.imageFile || null,
+        calculation: adminData.calculation || "",
+        adminCreatedBy: adminData.adminCreatedBy || "",
+        adminCompanyName: adminData.adminCompanyName || "",
+        companyId: adminData.companyId || null,
+        password: adminData.confirmPassword,
+        BuildingAndStreetOne: adminData.BuildingAndStreetOne || "",
+        BuildingAndStreetTwo: adminData.BuildingAndStreetTwo || "",
       }));
 
       setImagePreview(adminData.imageFile);
@@ -916,10 +980,10 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, selectedUserId }) => {
 
                   <input
                     type="password"
-                    // id="password"
-                    // name=""
-                    // value={formData.lastName}
-                    // onChange={handleChange}
+                    id="password"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
                     className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow"
                     required
                     placeholder="Password"
@@ -1324,11 +1388,11 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, selectedUserId }) => {
                     {/* <span className="text-red-600">*</span> */}
                   </div>
                   <input
-                    // type="text"
-                    // id="postalAddress"
-                    // name="postalAddress"
-                    // value={formData.postalAddress}
-                    // onChange={handleChange}
+                    type="text"
+                    id="Building&Street"
+                    name="BuildingAndStreetOne"
+                    value={formData.BuildingAndStreetOne}
+                    onChange={handleChange}
                     className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow"
                     required
                     placeholder="Building and Street"
@@ -1347,11 +1411,11 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, selectedUserId }) => {
                     {/* <span className="text-red-600">*</span> */}
                   </div>
                   <input
-                    // type="text"
-                    // id="postalAddress"
-                    // name="postalAddress"
-                    // value={formData.postalAddress}
-                    // onChange={handleChange}
+                    type="text"
+                    id="Building&Street2"
+                    name="BuildingAndStreetTwo"
+                    value={formData.BuildingAndStreetTwo}
+                    onChange={handleChange}
                     className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow"
                     required
                     placeholder="Building and Street"

@@ -5,7 +5,11 @@ import { API_URL_USER } from "../../Components/ApiUrl/ApiUrls";
 // import { fetchTitle } from "../../Components/DropdownData/taxiFirm/taxiFirmService";
 import { toast } from "react-toastify";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-
+import {
+  getCompanyName,
+  getUserId ,
+  getUserName,getflag,getcompanyId
+} from "@/utils/storageUtils";
 
 const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
   const [step, setStep] = useState(1);
@@ -33,11 +37,18 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
     passwordExpires: "",
     passwordExpiresEvery: "",
     confirmpassword: "",
-    companyname: "",
+    companyName: "",
     CreatedBy: "",
     useravatar: null,
     isActive: false,
     role: "user", // Default role set to "user"
+    userId:"",
+    companyId:"",
+    Postcode:"",
+    BuildingAndStreetOne:"",
+    BuildingAndStreetTwo:"",
+    Town_City:"",
+    Country:"",
   });
   const passwordRegex = /^[A-Z][a-z]+[@#$%^&*!]\d[a-z]+$/;
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
@@ -54,18 +65,50 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
   const [imagePreview, setImagePreview] = useState(null); // Preview for the avatar image
 
   // Retrieve company name from local storage
-  useEffect(() => {
-    const storedCompanyName = localStorage.getItem("companyName");
-    if (storedCompanyName) {
-      setFormData((prevData) => ({
-        ...prevData,
-        companyname: storedCompanyName,
-      }));
-    }
-  }, []);
-  // const [title, settitle] = useState([]);
+  const randomObjectId = () => {
+    return (
+      Math.floor(Date.now() / 1000).toString(16) + // Timestamp
+      'xxxxxxxxxxxxxxxx'.replace(/[x]/g, () =>
+        ((Math.random() * 16) | 0).toString(16)
+      )
+    );
+  };
+ useEffect(() => {
+   const storedcompanyName = getUserName() || getCompanyName(); 
+   const userId = getUserId(); 
+   const flag = getflag();
+   const compID = getcompanyId();
+   const randomId = randomObjectId();
+ 
+   // console.log(userId, storedcompanyName, flag, compID);
+ 
+   if (storedcompanyName && userId) {
+     if (flag === "false") {
+       setFormData((prevData) => ({
+         ...prevData,
+         companyName: storedcompanyName,
+         userId: storedcompanyName.toLowerCase() === "superadmin" ? userId : randomId,
+         companyId: randomId,
+       }));
+     } else if (flag === "true") {
+       setFormData((prevData) => ({
+         ...prevData,
+         companyName: storedcompanyName,
+         userId: randomId,
+         companyId: storedcompanyName.toLowerCase() === "superadmin" ? compID : randomId,
+       }));
+     }
+   } else {
+     setFormData((prevData) => ({
+       ...prevData,
+       companyName: storedcompanyName,
+       userId: randomId,
+       companyId: userId,
+     }));
+   }
+ }, []);
+ 
 
-  // Fetch user data based on userId when the modal is open
   useEffect(() => {
     if (userId) {
       const fetchData = async () => {
@@ -91,7 +134,7 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
             reportsTo: adminData.reportsTo, // Assuming this should be initialized empty
             passwordExpires: adminData.passwordExpires, // Assuming this should be initialized empty
             passwordExpiresEvery: adminData.repopasswordExpiresEveryrtsTo, // Assuming this should be initialized empty
-            companyname: "", // Assuming this should be initialized empty
+            companyName: "", // Assuming this should be initialized empty
             username: adminData.username,
             email: adminData.email,
             password: adminData.confirmpassword, // Set password to confirmpassword
@@ -99,6 +142,11 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
             useravatar: adminData.useravatar,
             isActive: false, // Default value
             role: adminData.role, // Default role set to "user"
+            Postcode:adminData.Postcode,
+            BuildingAndStreetOne:adminData.BuildingAndStreetOne,
+            BuildingAndStreetTwo:adminData.BuildingAndStreetTwo,
+            Town_City:adminData.Town_City,
+            Country:adminData.Country,
             // ...adminData, // Ensure the rest of the data is updated
           });
 
@@ -381,9 +429,9 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                     <input
                       type="text"
                       id="Building&Street"
-                      name="Building&Street"
-                      // value={formData.CompanyName}
-                      // onChange={handleChange}
+                      name="BuildingAndStreetOne"
+                      value={formData.BuildingAndStreetOne}
+                      onChange={handleChange}
                       className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow focus:ring-blue-500 focus:border-blue-500"
                       required placeholder="Building and street"
                     />
@@ -403,9 +451,9 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                     <input
                       type="text"
                       id="Building&Street2"
-                      name="Building&Street2"
-                      // value={formData.CompanyName}
-                      // onChange={handleChange}
+                      name="BuildingAndStreetTwo"
+                      value={formData.BuildingAndStreetTwo}
+                      onChange={handleChange}
                       className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow focus:ring-blue-500 focus:border-blue-500"
                       required placeholder="Building and street"
                     />
@@ -415,7 +463,7 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                   <div>
                     <div className="flex gap-1">
                       <label
-                        htmlFor="CompanyName"
+                        htmlFor="companyName"
                         className="text-[10px] "
                       >
                         Town/City
@@ -425,9 +473,9 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                     <input
                       type="text"
                       id="Building&Street"
-                      name="Building&Street"
-                      // value={formData.CompanyName}
-                      // onChange={handleChange}
+                      name="Town_City"
+                      value={formData.Town_City}
+                      onChange={handleChange}
                       className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow focus:ring-blue-500 focus:border-blue-500"
                       required placeholder="Town/City"
                     />
@@ -437,7 +485,7 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                   <div>
                     <div className="flex gap-1">
                       <label
-                        htmlFor="CompanyName"
+                        htmlFor="companyName"
                         className="text-[10px] "
                       >
                         Country
@@ -447,9 +495,9 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                     <input
                       type="text"
                       id="Building&Street"
-                      name="Building&Street"
-                      // value={formData.CompanyName}
-                      // onChange={handleChange}
+                      name="Country"
+                      value={formData.Country}
+                      onChange={handleChange}
                       className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow focus:ring-blue-500 focus:border-blue-500"
                       required placeholder="Country"
                     />
@@ -459,7 +507,7 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                   <div>
                     <div className="flex gap-1">
                       <label
-                        htmlFor="CompanyName"
+                        htmlFor="companyName"
                         className="text-[10px]"
                       >
                         Postcode
@@ -469,9 +517,9 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
                     <input
                       type="text"
                       id="Building&Street"
-                      name="Building&Street"
-                      // value={formData.CompanyName}
-                      // onChange={handleChange}
+                      name="Postcode"
+                      value={formData.Postcode}
+                      onChange={handleChange}
                       className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow focus:ring-blue-500 focus:border-blue-500"
                       required placeholder="Postcode"
                     />

@@ -196,17 +196,17 @@ const Page = () => {
       fetchAllData();
     }
   }, [activeTab]);
-  // const getPath = () => {
-  //   switch (activeTab) {
-  //     case "Service":
-  //       return `/Dashboard/Vehicle/AddServiceReport/`;
-  //     case "RoadTax":
-  //       return `/Dashboard/Vehicle/AddRoadTaxReport/`;
-  //     case "MOT":
-  //     default:
-  //       return `/Dashboard/Vehicle/AddMOTReport/`;
-  //   }
-  // };
+  const getPath = () => {
+    switch (activeTab) {
+      case "Service":
+        return `/Dashboard/Vehicle/AddServiceReport/`;
+      case "RoadTax":
+        return `/Dashboard/Vehicle/AddRoadTaxReport/`;
+      case "MOT":
+      default:
+        return `/Dashboard/Vehicle/AddMOTReport/`;
+    }
+  };
   useEffect(() => {
     const companyName = getCompanyName();
     const companyuser = getUserName();

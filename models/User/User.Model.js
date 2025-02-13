@@ -25,7 +25,15 @@ const userSchema = new mongoose.Schema(
     userPublicId: { type: String, default: "" },
     passwordExpires: { type: String, default: "" }, // Use Date type for date fields
     // passwordExpiresEvery: { type: Number, default: null }, // Assuming this is a numeric value
-    companyname: { type: String, default: "", trim: true }, // Set a default or handle appropriately
+    companyName: { type: String, default: "", trim: true }, // Set a default or handle appropriately
+    userId: {
+      type: mongoose.Schema.Types.ObjectId, 
+      ref: 'User',
+    },
+    companyId: {
+          type: mongoose.Schema.Types.ObjectId, 
+          ref: 'Company',
+    },
     adminCompanyId: { type: String },
     CreatedBy: { type: String, default: "" },
     isActive: { type: Boolean, default: false },
@@ -34,6 +42,11 @@ const userSchema = new mongoose.Schema(
       enum: ["superadmin", "admin", "user"], // Restrict to specific roles
       default: "user", // Default role
     },
+    Postcode: { type: String },
+    BuildingAndStreetOne: { type: String },
+    BuildingAndStreetTwo: { type: String },
+    Town_City: { type: String },
+    Country: { type: String },
   },
   {
     timestamps: true, // Automatically manage createdAt and updatedAt fields

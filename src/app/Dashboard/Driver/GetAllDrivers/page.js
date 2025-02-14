@@ -107,6 +107,7 @@ const Page = () => {
           );
       return companyMatch && nameMatch;
     });
+    console.log(filtered)
     setFilteredDrivers(filtered);
   }, [searchTerm, drivers, selectedCompanyName]);
 

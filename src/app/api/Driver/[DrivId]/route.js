@@ -146,8 +146,10 @@ export async function PUT(request, context) {
     };  
 
     if (formDataObject.password) {
+      formDataObject.confirmPassword = formDataObject.password;
       formDataObject.password = await hashPassword(formDataObject.password);
     }
+
 
 
     // Fetch the driver document

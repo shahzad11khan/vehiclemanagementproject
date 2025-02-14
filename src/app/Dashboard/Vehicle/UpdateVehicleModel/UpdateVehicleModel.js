@@ -14,6 +14,11 @@ import {
   fetchType,
   fetchFuelType,
 } from "../../Components/DropdownData/taxiFirm/taxiFirmService";
+import {
+  getCompanyName,
+  getUserId ,
+  getUserName,getflag,getcompanyId
+} from "@/utils/storageUtils";
 const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
   const [vehicleData, setVehicleData] = useState({
     manufacturer: "",
@@ -100,10 +105,12 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
 
     additionalInfo: "",
     RPCExpiryDate: "",
-    tailLiftExpirydate: "",
+    TailLiftExpiryDate: "",
     forkLiftNumber: "",
     ForkLiftInspectionDate: "",
+    ForkLiftInspectionNumberNotes:"",
     cardocuments: [],
+    companyId:null,
   });
 
   const [superadmin, setSuperadmin] = useState(null);
@@ -381,6 +388,27 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
     }
   }, [vehicleId]);
 
+   useEffect(() => {
+      const storedcompanyName = getUserName() || getCompanyName(); 
+      const userId = getUserId(); 
+      const flag = getflag();
+      const compID = getcompanyId();
+      if (storedcompanyName && userId) {
+      if (storedcompanyName.toLowerCase() === "superadmin" && flag === "true") {
+        setVehicleData((prevData) => ({
+            ...prevData,
+            adminCompanyName: storedcompanyName,
+            companyId:  compID 
+          }));
+        }
+      } else {
+        setVehicleData((prevData) => ({
+          ...prevData,
+          adminCompanyName: storedcompanyName,
+          companyId: userId,
+        }));
+      }
+    }, []);
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData();
@@ -959,7 +987,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                   />
                 </div>
 
-                <div>
+                {/* <div>
                   <div className="flex gap-1">
                     <label className="text-[10px]">Torque</label>
                   </div>
@@ -970,9 +998,9 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                     onChange={handleChange}
                     className="w-full p-2 border border-[#42506666] rounded-[4px]"
                   />
-                </div>
+                </div> */}
 
-                <div>
+                {/* <div>
                   <div className="flex gap-1">
                     <label className="text-[10px]">
                       Top Speed (mph)
@@ -985,9 +1013,9 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                     onChange={handleChange}
                     className="w-full p-2 border border-[#42506666] rounded-[4px]"
                   />
-                </div>
+                </div> */}
 
-                <div>
+                {/* <div>
                   <div className="flex gap-1">
                     <label className="text-[10px]">
                       Towing Capacity (lbs)
@@ -1001,7 +1029,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                     onChange={handleChange}
                     className="w-full p-2 border border-[#42506666] rounded-[4px]"
                   />
-                </div>
+                </div> */}
 
                 <div>
                   <div className="flex gap-1">
@@ -1824,7 +1852,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                   <input
                     type="date"
                     name="TailLiftExpiryDate"
-                    value={vehicleData.tailLiftExpirydate}
+                    value={vehicleData.TailLiftExpiryDate}
                     onChange={handleChange}
                     className="w-full border border-[#42506666] rounded-[4px] p-2"
                   />
@@ -1850,7 +1878,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
                   <input
                     type="text"
                     name="ForkLiftInspectionNumberNotes"
-                    value={vehicleData.forkLiftNumber}
+                    value={vehicleData.ForkLiftInspectionNumberNotes}
                     onChange={handleChange}
                     placeholder="Enter inspection number or notes"
                     className="w-full border border-[#42506666] rounded-[4px] p-2"

@@ -38,6 +38,13 @@ const driverSchema = new mongoose.Schema(
     adminCreatedBy: { type: String },
     adminCompanyName: { type: String },
     adminCompanyId: { type: String },
+    companyId: {
+      type: mongoose.Schema.Types.ObjectId, 
+      ref: 'Company',
+      required: true,
+},
+BuildingAndStreetOne: { type: String },
+BuildingAndStreetTwo: { type: String },
   },
   { timestamps: true }
 );

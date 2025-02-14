@@ -261,14 +261,33 @@ const vehicleSchema = new mongoose.Schema(
         },
       },
     ],
-
     authority: {
       type: String,
     },
-
+    RPCExpiryDate: {
+      type: String,
+    },
+    TailLiftExpiryDate: {
+      type: String,
+    },
+    forkLiftNumber: {
+      type: String,
+    },
+    ForkLiftInspectionDate: {
+      type: String,
+    },
+    ForkLiftInspectionNumberNotes: {
+      type: String,
+    },
+ 
     adminCreatedBy: { type: String },
     adminCompanyName: { type: String },
     adminCompanyId: { type: String },
+    companyId: {
+          type: mongoose.Schema.Types.ObjectId, 
+          ref: 'Company',
+    },
+
   },
   { timestamps: true }
 );

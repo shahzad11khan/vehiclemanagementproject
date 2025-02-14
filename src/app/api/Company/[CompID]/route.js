@@ -77,6 +77,7 @@ export async function PUT(request, context) {
     const {
       CompanyName,
       email,
+      userId,
       password,
       confirmPassword,
       isActive,
@@ -102,9 +103,20 @@ export async function PUT(request, context) {
       specificDepartmentContactInformationBillingFinanceDepartment,
       specificDepartmentContactInformationProcurementPurchasingContact,
       specificDepartmentContactInformationPrimaryContactfortheProject,
+      Postcode,
+      BuildingAndStreetOne,
+      BuildingAndStreetTwo,
+      Town_City,
+      Country,
     } = formDataObject;
     //
+    company.Postcode = Postcode || company.Postcode;
+    company.BuildingAndStreetOne = BuildingAndStreetOne || company.BuildingAndStreetOne;
+    company.BuildingAndStreetTwo = BuildingAndStreetTwo || company.BuildingAndStreetTwo;
+    company.Town_City = Town_City || company.Town_City;
+    company.Country = Country || company.Country;
     company.mailingAddress = mailingAddress || company.mailingAddress;
+    company.userId = userId || company.userId;
     company.physical_Address = physical_Address || company.physical_Address;
     company.phoneNumber = phoneNumber || company.phoneNumber;
     company.fax_Number = fax_Number || company.fax_Number;

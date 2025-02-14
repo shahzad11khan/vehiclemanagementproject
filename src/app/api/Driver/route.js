@@ -74,7 +74,6 @@ export async function POST(request) {
       tel2,
       email,
       password,
-      confirmPassword,
       licenseNumber,
       niNumber,
       driverNumber,
@@ -98,10 +97,11 @@ export async function POST(request) {
       LocalAuth,
       imageName,
       vehicle,
-      calculation,
+      calculation,companyId,
+      BuildingAndStreetOne,
+      BuildingAndStreetTwo,
     } = formDataObject;
 
-    console.log(formDataObject);
 
 
     const existingDriver = await Driver.findOne({
@@ -125,7 +125,7 @@ export async function POST(request) {
       tel2,
       email,
       password:hashPassword,
-      confirmPassword,
+      confirmPassword:password,
       licenseNumber,
       niNumber,
       driverNumber,
@@ -151,6 +151,9 @@ export async function POST(request) {
       calculation,
       imageFile: Driveravatar,
       imagePublicId: DriveravatarId,
+      companyId,
+      BuildingAndStreetOne,
+      BuildingAndStreetTwo,
       isActive: isActive || false, // Default to "Driver" if no role is specified
     });
 
@@ -177,7 +180,7 @@ export async function POST(request) {
 
 export const GET = catchAsyncErrors(async () => {
   await connect();
-  const allDriver = await Driver.find().sort({ createdAt: -1 });
+  const allDriver = await Driver.find().sort({ createdAt: -1 }).populate("companyId");
   const DriverCount = await Driver.countDocuments();
   if (!allDriver || allDriver.length === 0) {
     return NextResponse.json({ result: allDriver });

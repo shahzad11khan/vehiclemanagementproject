@@ -292,6 +292,8 @@ export async function POST(request) {
       tailLiftExpirydate,
       forkLiftNumber,
       ForkLiftInspectionDate,
+      ForkLiftInspectionNumberNotes,
+      companyId,
     } = formDataObjectt;
 
     // Validate required fields
@@ -400,6 +402,8 @@ export async function POST(request) {
       PDFofPolicyUrl: PDFofPolicyUrl,
       PDFofPolicyPublicId: PDFofPolicyPublicId,
       cardocuments,
+      companyId,
+      ForkLiftInspectionNumberNotes,
     });
 
     await newVehicle.save();
@@ -421,7 +425,7 @@ export async function POST(request) {
 
 export const GET = catchAsyncErrors(async () => {
   await connect();
-  const allVehicle = await Vehicle.find().sort({ createdAt: -1 });
+  const allVehicle = await Vehicle.find().sort({ createdAt: -1 }).populate("companyId");
   const VehicleCount = await Vehicle.countDocuments();
   if (!allVehicle || allVehicle.length === 0) {
     return NextResponse.json({ result: allVehicle });

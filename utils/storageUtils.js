@@ -11,7 +11,7 @@ export const getUserId = () => {
   return localStorage.getItem("userId");
 };
 export const getcompanyId = () => {
-  return localStorage.getItem("companyId");
+  return localStorage.getItem("companyID");
 };
 export const getUserName = () => {
   return localStorage.getItem("Userusername");

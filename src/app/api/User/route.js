@@ -81,10 +81,17 @@ export async function POST(request) {
       passwordExpires,
       // passwordExpiresEvery,
       confirmpassword,
-      companyname,
+      companyName,
       CreatedBy,
       isActive,
       role,
+      userId,
+      companyId,
+      Postcode,
+    BuildingAndStreetOne,
+    BuildingAndStreetTwo,
+    Town_City,
+    Country,
     } = formDataObject;
     if (password !== confirmpassword) {
       return NextResponse.json({
@@ -111,17 +118,17 @@ export async function POST(request) {
 
 // Check if a user with the same email or company name already exists
 const existingUser = await User.findOne({
-  $or: [{ email: email }, { companyname: companyname }, {confirmpassword : password}],
+  $or: [{ email: email }, { companyName: companyName }, {confirmpassword : password}],
 });
 
 if (existingUser) {
   // Check if the email exists alone or the company name exists
-  if (existingUser.email === email && existingUser.companyname === companyname) {
+  if (existingUser.email === email && existingUser.companyName === companyName) {
     return NextResponse.json({
       error: "User with this email and company name already in use",
       status: 400,
     });
-  } else if (existingUser.email === email && existingUser.companyname === companyname && existingUser.confirmpassword === password) {
+  } else if (existingUser.email === email && existingUser.companyName === companyName && existingUser.confirmpassword === password) {
     return NextResponse.json({
       error: "User with this email And Password already in use",
       status: 400,
@@ -160,13 +167,20 @@ const hashedPassword = await bcrypt.hash(password, 10);
       passwordExpires,
       // passwordExpiresEvery,
       confirmpassword,
-      companyname,
+      companyName,
       CreatedBy, // Ensure this field matches your schema
       useravatar: useravatar, // Use the uploaded or dummy image
       userPublicId: useravatarId,
       isActive: isActive || false,
       adminCreatedBy: CreatedBy,
       role: role || "user", // Default to "user" if no role is specified
+      userId,
+      companyId,
+      Postcode,
+    BuildingAndStreetOne,
+    BuildingAndStreetTwo,
+    Town_City,
+    Country,
     });
 
     console.log(newUser);
@@ -354,7 +368,8 @@ const hashedPassword = await bcrypt.hash(password, 10);
 
 export const GET = catchAsyncErrors(async () => {
   await connect();
-  const allUsers = await User.find().sort({ createdAt: -1 });
+  const allUsers = await User.find().sort({ createdAt: -1 }).populate("userId").populate("companyId");
+  console.log(allUsers)
   const userCount = await User.countDocuments();
   if (!allUsers || allUsers.length === 0) {
     return NextResponse.json({ result: allUsers });

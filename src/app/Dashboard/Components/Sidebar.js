@@ -23,14 +23,34 @@ const Sidebar = () => {
   }, []);
 
   // const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [isOpenManagement, setIsOpenManagement] = useState(() => {
-    const savedValue = localStorage.getItem("isOpenManagement");
-    return savedValue ? JSON.parse(savedValue) : false;
-  });
+  // const [isOpenManagement, setIsOpenManagement] = useState(() => {
+  //   const savedValue = localStorage.getItem("isOpenManagement");
+  //   return savedValue ? JSON.parse(savedValue) : false;
+  // });
 
-  useEffect(() => {
+  // useEffect(() => {
+  //   localStorage.setItem("isOpenManagement", JSON.stringify(isOpenManagement));
+  // }, [isOpenManagement]);
+
+  const [isOpenManagement, setIsOpenManagement] = useState(false);
+
+// Load the saved value from localStorage on the client side
+useEffect(() => {
+  if (typeof window !== "undefined") {
+    const savedValue = localStorage.getItem("isOpenManagement");
+    if (savedValue) {
+      setIsOpenManagement(JSON.parse(savedValue));
+    }
+  }
+}, []);
+
+// Save the state to localStorage whenever it changes
+useEffect(() => {
+  if (typeof window !== "undefined") {
     localStorage.setItem("isOpenManagement", JSON.stringify(isOpenManagement));
-  }, [isOpenManagement]);
+  }
+}, [isOpenManagement]);
+
 
   const toggleValue = () => {
     setIsOpenManagement((prev) => !prev);
@@ -64,6 +84,7 @@ const Sidebar = () => {
     window.location.reload();
     localStorage.setItem("flag", "false");
     localStorage.setItem("Iscompanyselected", "No");
+    localStorage.removeItem("companyID");
     localStorage.removeItem("companyName");
   };
   return (

@@ -19,6 +19,7 @@ import {
   getCompanyName,
   getsuperadmincompanyname,
   getUserRole,
+  getUserName
 } from "@/utils/storageUtils";
 
 import DeleteModal from "../../Components/DeleteModal";
@@ -177,33 +178,46 @@ const Page = () => {
 
   useEffect(() => {
     const userRole = getUserRole(); // Get the current user's role
-    // console.log("role ",userRole); ??
+    console.log("role ",userRole); 
     setRole(userRole);
-    const companyName = getCompanyName() || getsuperadmincompanyname(); // Get the logged-in user's company name
+    const companyName = getCompanyName() || getsuperadmincompanyname() || getUserName()// Get the logged-in user's company name
+    console.log("Company Name",companyName)
+    const superadmin = getCompanyName() || getsuperadmincompanyname() || getUserName();
+    console.log("sadmin",superadmin)
     const authData = getAuthData();
     setflag(authData.flag);
     let filteredUsers = users;
-    let Xusers=users;
-
+    let Xusers = users;
     // Filter users based on role
-    if (userRole !== "superadmin") {
+    if (userRole === "superadmin" && authData.flag === "true" && companyName) {
       // If the user is not a superadmin, filter by company name
       filteredUsers = users.filter(
-        (item) => item.companyname.toLowerCase() === companyName.toLowerCase()
+        (item) => item?.companyId?.CompanyName.toLowerCase() === companyName.toLowerCase()
       );
       Xusers = users.filter(
-        (item) => item.companyname.toLowerCase() === companyName.toLowerCase()
+        (item) => item?.companyId?.CompanyName.toLowerCase() === companyName.toLowerCase()
       );
+      console.log("superadmin true")
     }
-
-    if (userRole === "superadmin" && flag === "true") {
+    else
+    if (userRole === "superadmin" && authData.flag=== "false" ) {
       filteredUsers = users.filter(
-        (item) => item.companyname.toLowerCase() === companyName.toLowerCase()
+        (item) => item?.companyName?.toLowerCase() === superadmin.toLowerCase()
       );
       Xusers = users.filter(
-        (item) => item.companyname.toLowerCase() === companyName.toLowerCase()
+        (item) => item?.companyName?.toLowerCase() === superadmin.toLowerCase()
       );
-    }
+      console.log("superadmin false")
+      }
+      else {
+        filteredUsers = users.filter(
+          (item) => item?.companyId?.CompanyName.toLowerCase() === companyName.toLowerCase()
+        );
+        Xusers = users.filter(
+          (item) => item?.companyId?.CompanyName.toLowerCase() === companyName.toLowerCase()
+        );
+        console.log("Hello company")
+      }
 
     // Apply search term filtering
     if (searchTerm) {
@@ -241,7 +255,8 @@ const Page = () => {
 
   console.log("data",users)
   console.log("dataX",usersX)
-  console.log("hehe", filteredData);
+  console.log("currentUsers",currentUsers)
+  console.log("filteredData",filteredData)
 
   return (
     <div className="h-[100vh] overflow-hidden">
@@ -445,29 +460,29 @@ const Page = () => {
                            <span className="bg-[#38384A33]  px-4 py-2 rounded-[22px] text-xs">
                               {item.isActive ? "Active" : "Inactive"}
                             </span>
-                        </td>
-                        <td className=" py-3 px-4 min-w-[180px] w-[180px] md:w-[16.66%] whitespace-normal break-all overflow-hidden text-center">
-                          <div className="flex gap-4 justify-center">
-                            <button
-                              onClick={() => handleEdit(item._id)}
+                          </td>
+                          <td className=" py-3 px-4 min-w-[180px] w-[180px] md:w-[16.66%] whitespace-normal break-all overflow-hidden text-center">
+                            <div className="flex gap-4 justify-center">
+                              <button
+                                onClick={() => handleEdit(item._id)}
                               // className="text-blue-500 hover:text-blue-700"
-                            >
-                              <img src="/edit.png" alt="edit"  className="w-6" />
-                            </button>
-                            <button
-                              onClick={() => isopendeletemodel(item._id)}
+                              >
+                                <img src="/edit.png" alt="edit" className="w-6" />
+                              </button>
+                              <button
+                                onClick={() => isopendeletemodel(item._id)}
                               // className="text-red-500 hover:text-red-700"
-                            >
-                              <img src="/trash.png" alt="delete" className="w-6" />
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-    
+                              >
+                                <img src="/trash.png" alt="delete" className="w-6" />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+
               ) : (
                 <div className="overflow-x-auto custom-scrollbar">
                   <table className="w-full bg-white border table-auto">
@@ -581,11 +596,10 @@ const Page = () => {
                           setCurrentPage((prev) => Math.max(prev - 1, 1))
                         }
                         disabled={currentPage === 1}
-                        className={`h-8 px-2 border rounded-lg ${
-                          currentPage === 1
+                        className={`h-8 px-2 border rounded-lg ${currentPage === 1
                             ? "opacity-50 cursor-not-allowed"
                             : "bg-white"
-                        }`}
+                          }`}
                       >
                         Previous
                       </button>
@@ -603,11 +617,10 @@ const Page = () => {
                             <li key={page}>
                               <button
                                 onClick={() => setCurrentPage(page)}
-                                className={`h-8 w-8 border rounded-lg ${
-                                  currentPage === page
+                                className={`h-8 w-8 border rounded-lg ${currentPage === page
                                     ? "bg-custom-bg text-white"
                                     : "bg-white"
-                                }`}
+                                  }`}
                               >
                                 {page}
                               </button>
@@ -677,11 +690,10 @@ const Page = () => {
                           )
                         }
                         disabled={currentPage === totalPages}
-                        className={`h-8 px-2 border rounded-lg ${
-                          currentPage === totalPages
+                        className={`h-8 px-2 border rounded-lg ${currentPage === totalPages
                             ? "opacity-50 cursor-not-allowed"
                             : "bg-white"
-                        }`}
+                          }`}
                       >
                         Next
                       </button>

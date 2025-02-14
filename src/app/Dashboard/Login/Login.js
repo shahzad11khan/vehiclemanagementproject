@@ -52,7 +52,7 @@ const Login = () => {
         password: userlogin.password,
       });
 
-      // console.log("Login successful", response);
+      console.log("Login successful", response);
       const isVerifiedtoken = response.data.token;
       const Userusername = response.data.username;
       const companyName = response.data.company;

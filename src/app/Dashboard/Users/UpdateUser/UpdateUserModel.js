@@ -65,49 +65,74 @@ const UpdateUserModel = ({ isOpen, onClose, fetchData, userId }) => {
   const [imagePreview, setImagePreview] = useState(null); // Preview for the avatar image
 
   // Retrieve company name from local storage
-  const randomObjectId = () => {
-    return (
-      Math.floor(Date.now() / 1000).toString(16) + // Timestamp
-      'xxxxxxxxxxxxxxxx'.replace(/[x]/g, () =>
-        ((Math.random() * 16) | 0).toString(16)
-      )
-    );
-  };
- useEffect(() => {
-   const storedcompanyName = getUserName() || getCompanyName(); 
-   const userId = getUserId(); 
-   const flag = getflag();
-   const compID = getcompanyId();
-   const randomId = randomObjectId();
- 
-   // console.log(userId, storedcompanyName, flag, compID);
- 
-   if (storedcompanyName && userId) {
-     if (flag === "false") {
-       setFormData((prevData) => ({
-         ...prevData,
-         companyName: storedcompanyName,
-         userId: storedcompanyName.toLowerCase() === "superadmin" ? userId : randomId,
-         companyId: randomId,
+  // const randomObjectId = () => {
+  //   return (
+  //     Math.floor(Date.now() / 1000).toString(16) + // Timestamp
+  //     'xxxxxxxxxxxxxxxx'.replace(/[x]/g, () =>
+  //       ((Math.random() * 16) | 0).toString(16)
+  //     )
+  //   );
+  // };
+useEffect(() => {
+  const storedcompanyName = (() => {  const name1 = getCompanyName();
+      if (name1) return name1;
+  
+      const name2 = getUserName();
+      if (name2) return name2;
+    
+    })();
+  const userId = getUserId()  
+  const flag = getflag();
+  const compID = getcompanyId();
+  // const randomId = randomObjectId();
+
+// console.log(userId, storedcompanyName ,flag,compID);
+  if (storedcompanyName && userId) {
+    // Check if the company is "superadmin" and the flag is true
+    if (storedcompanyName.toLowerCase() === "superadmin" && flag === "true" && compID) {
+      setFormData((prevData) => ({
+        ...prevData,
+        companyName: storedcompanyName,
+        companyId: compID, // Ensure compID is set
        }));
-     } else if (flag === "true") {
-       setFormData((prevData) => ({
-         ...prevData,
-         companyName: storedcompanyName,
-         userId: randomId,
-         companyId: storedcompanyName.toLowerCase() === "superadmin" ? compID : randomId,
-       }));
-     }
-   } else {
-     setFormData((prevData) => ({
-       ...prevData,
-       companyName: storedcompanyName,
-       userId: randomId,
-       companyId: userId,
-     }));
-   }
- }, []);
- 
+     } else {
+       // Use userId if not in "superadmin" mode
+       console.log(storedcompanyName, userId, flag, compID);
+      setFormData((prevData) => ({
+        ...prevData,
+        companyName: storedcompanyName,
+        companyId: userId,
+      }));
+    }
+  } else {
+    console.error("Missing required fields:", { storedcompanyName, userId, flag, compID });
+  }
+
+  // if (storedcompanyName) {
+  //   if (flag === "false") {
+  //     setFormData((prevData) => ({
+  //       ...prevData,
+  //       companyName: storedcompanyName,
+  //       userId: userId,
+  //       companyId: null,
+  //     }));
+  //   } else if (flag === "true") {
+  //     setFormData((prevData) => ({
+  //       ...prevData,
+  //       companyName: storedcompanyName,
+  //       userId: null,
+  //       companyId:  compID 
+  //     }));
+  //   }
+  // } else {
+  //   setFormData((prevData) => ({
+  //     ...prevData,
+  //     companyName: storedcompanyName,
+  //     userId: null,
+  //     companyId: userId,
+  //   }));
+  // }
+}, []);
 
   useEffect(() => {
     if (userId) {

@@ -15,7 +15,7 @@ import {
 import {
   getCompanyName,
   getUserId ,
-  getUserName,getflag,getcompanyId
+  getUserName,getflag,getcompanyId,getUserRole
 } from "@/utils/storageUtils";
 const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
   const [local, setLocal] = useState([]);
@@ -155,8 +155,8 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
 
 
   useEffect(() => {
-    const storedCompanyName = localStorage.getItem("companyName");
-    const storedSuperadmin = localStorage.getItem("role");
+    const storedCompanyName = getCompanyName();
+    const storedSuperadmin = getUserRole();
     if (storedCompanyName) {
       setVehicleData((prevData) => ({
         ...prevData,
@@ -167,7 +167,7 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
 
     const fetchData = async () => {
       try {
-        const storedCompanyName = localStorage.getItem("companyName");
+        const storedCompanyName = getCompanyName();
         const localAuthData = await fetchLocalAuth();
         const manufacturerData = await fetchManfacturer();
         const transmissionData = await fetchTransmission();
@@ -232,7 +232,13 @@ const AddVehicleModel = ({ isOpen, onClose, fetchData }) => {
 
 
   useEffect(() => {
-    const storedcompanyName = getUserName() || getCompanyName(); 
+    const storedcompanyName = (() => {
+      const name1 = getCompanyName();
+      if (name1) return name1;
+    
+      const name2 = getUserName();
+      if (name2) return name2;
+    })();
     const userId = getUserId(); 
     const flag = getflag();
     const compID = getcompanyId();

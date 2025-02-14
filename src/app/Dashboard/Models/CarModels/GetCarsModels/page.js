@@ -10,7 +10,7 @@ import UpdateCarModel from "../UpdateCarModel/UpdateCarModel";
 import axios from "axios";
 import { API_URL_CarModel } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import { GetCarModel } from "@/app/Dashboard/Components/ApiUrl/ShowApiDatas/ShowApiDatas";
-import { getCompanyName, getsuperadmincompanyname } from "@/utils/storageUtils";
+import { getCompanyName, getsuperadmincompanyname,getUserName } from "@/utils/storageUtils";
 import DeleteModal from "../../../Components/DeleteModal";
 
 
@@ -65,8 +65,16 @@ const Page = () => {
 
   useEffect(() => {
     setIsMounted(true);
-    const companyNameFromStorage =
-      getCompanyName() || getsuperadmincompanyname();
+    const companyNameFromStorage = (() => {
+      const name1 = getCompanyName();
+      if (name1) return name1;
+    
+      const name2 = getUserName();
+      if (name2) return name2;
+    
+      const name3 = getsuperadmincompanyname();
+      return name3;
+    })();
     if (companyNameFromStorage) {
       setSelectedCompanyName(companyNameFromStorage);
     }
@@ -77,9 +85,16 @@ const Page = () => {
       // const companyName = getCompanyName(); // Get the user's company name
       // const isSuperAdmin = getUserRole(); // Function to check if the user is superadmin
       const { result } = await GetCarModel(); // Fetch car models
-      const selectedCompanyName = getCompanyName() || getsuperadmincompanyname();
-
-      // // Filter the data based on user role
+      const selectedCompanyName =  (() => {
+                const name1 = getCompanyName();
+                if (name1) return name1;
+              
+                const name2 = getUserName();
+                if (name2) return name2;
+              
+                const name3 = getsuperadmincompanyname();
+                return name3;
+              })();
       
       const filtered = selectedCompanyName === 'superadmin' ? 
       result 
@@ -126,7 +141,16 @@ const Page = () => {
   };
 
   useEffect(() => {
-      const selectedCompanyName = getCompanyName() || getsuperadmincompanyname();
+      const selectedCompanyName = (() => {
+        const name1 = getCompanyName();
+        if (name1) return name1;
+      
+        const name2 = getUserName();
+        if (name2) return name2;
+      
+        const name3 = getsuperadmincompanyname();
+        return name3;
+      })();
       const filtered = data?.filter((item) => {
       const companyMatch = selectedCompanyName === 'superadmin' ? data : item?.adminCompanyName.toLowerCase() === selectedCompanyName.toLowerCase();
       const usernameMatch =

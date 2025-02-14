@@ -85,7 +85,6 @@ export async function POST(request) {
       CreatedBy,
       isActive,
       role,
-      userId,
       companyId,
       Postcode,
     BuildingAndStreetOne,
@@ -174,7 +173,6 @@ const hashedPassword = await bcrypt.hash(password, 10);
       isActive: isActive || false,
       adminCreatedBy: CreatedBy,
       role: role || "user", // Default to "user" if no role is specified
-      userId,
       companyId,
       Postcode,
     BuildingAndStreetOne,
@@ -368,8 +366,7 @@ const hashedPassword = await bcrypt.hash(password, 10);
 
 export const GET = catchAsyncErrors(async () => {
   await connect();
-  const allUsers = await User.find().sort({ createdAt: -1 }).populate("userId").populate("companyId");
-  console.log(allUsers)
+  const allUsers = await User.find().sort({ createdAt: -1 }).populate("companyId");
   const userCount = await User.countDocuments();
   if (!allUsers || allUsers.length === 0) {
     return NextResponse.json({ result: allUsers });

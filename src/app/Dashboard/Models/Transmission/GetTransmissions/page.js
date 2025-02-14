@@ -10,7 +10,7 @@ import UpdateTransmissionModel from "../UpdateTransmission/UpdateTransmissionMod
 import axios from "axios";
 import { API_URL_Transmission } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import { GetTransmissions } from "@/app/Dashboard/Components/ApiUrl/ShowApiDatas/ShowApiDatas";
-import { getCompanyName } from "@/utils/storageUtils";
+import { getCompanyName,getUserName,getsuperadmincompanyname } from "@/utils/storageUtils";
 import DeleteModal from "@/app/Dashboard/Components/DeleteModal";
 
 const Page = () => {
@@ -73,7 +73,16 @@ const Page = () => {
   };
 
   useEffect(() => {
-        const selectedCompanyName = getCompanyName() || getsuperadmincompanyname();
+        const selectedCompanyName = (() => {
+                  const name1 = getCompanyName();
+                  if (name1) return name1;
+                
+                  const name2 = getUserName();
+                  if (name2) return name2;
+                
+                  const name3 = getsuperadmincompanyname();
+                  return name3;
+                })();
   
     const filtered = data?.filter((item) => {
       const companyMatch =  selectedCompanyName === 'superadmin' ? data : item?.adminCompanyName.toLowerCase() === selectedCompanyName.toLowerCase();

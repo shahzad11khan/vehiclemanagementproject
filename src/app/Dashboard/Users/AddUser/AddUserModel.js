@@ -37,8 +37,7 @@ const AddUserModel = ({ isOpen, onClose, fetchData,}) => {
     permanentAddress: "",
     city: "",
     county: "",
-    userId:"",
-    companyId:"",
+    companyId:null,
     // accessLevel: "",
     dateOfBirth: "",
     position: "",
@@ -60,14 +59,14 @@ const AddUserModel = ({ isOpen, onClose, fetchData,}) => {
   });
 
 // Retrieve company name from local storage
-const randomObjectId = () => {
-  return (
-    Math.floor(Date.now() / 1000).toString(16) + // Timestamp
-    'xxxxxxxxxxxxxxxx'.replace(/[x]/g, () =>
-      ((Math.random() * 16) | 0).toString(16)
-    )
-  );
-};
+// const randomObjectId = () => {
+//   return (
+//     Math.floor(Date.now() / 1000).toString(16) + // Timestamp
+//     'xxxxxxxxxxxxxxxx'.replace(/[x]/g, () =>
+//       ((Math.random() * 16) | 0).toString(16)
+//     )
+//   );
+// };
 // useEffect(() => {
 //   const storedcompanyName = getUserName() || getCompanyName(); 
 //   const userId = getUserId(); // Retrieve user ID once
@@ -102,39 +101,66 @@ const randomObjectId = () => {
 
 // Run only once when the component mounts
 useEffect(() => {
-  const storedcompanyName = getUserName() || getCompanyName(); 
-  const userId = getUserId(); 
+  const storedcompanyName =(() => {  const name1 = getCompanyName();
+    if (name1) return name1;
+
+    const name2 = getUserName();
+    if (name2) return name2;
+  
+  })();
+  const userId = getUserId()  
   const flag = getflag();
   const compID = getcompanyId();
-  const randomId = randomObjectId();
+  // const randomId = randomObjectId();
 
-  // console.log(userId, storedcompanyName, flag, compID);
-
+console.log(userId, storedcompanyName ,flag,compID);
   if (storedcompanyName && userId) {
-    if (flag === "false") {
+    // Check if the company is "superadmin" and the flag is true
+    if (storedcompanyName.toLowerCase() === "superadmin" && flag === "true" && compID) {
       setFormData((prevData) => ({
         ...prevData,
         companyName: storedcompanyName,
-        userId: storedcompanyName.toLowerCase() === "superadmin" ? userId : randomId,
-        companyId: randomId,
-      }));
-    } else if (flag === "true") {
+        companyId: compID, // Ensure compID is set
+       }));
+     } else {
+       // Use userId if not in "superadmin" mode
+       console.log(storedcompanyName, userId, flag, compID);
       setFormData((prevData) => ({
         ...prevData,
         companyName: storedcompanyName,
-        userId: randomId,
-        companyId: storedcompanyName.toLowerCase() === "superadmin" ? compID : randomId,
+        companyId: userId,
       }));
     }
   } else {
-    setFormData((prevData) => ({
-      ...prevData,
-      companyName: storedcompanyName,
-      userId: randomId,
-      companyId: userId,
-    }));
+    console.error("Missing required fields:", { storedcompanyName, userId, flag, compID });
   }
+
+  // if (storedcompanyName) {
+  //   if (flag === "false") {
+  //     setFormData((prevData) => ({
+  //       ...prevData,
+  //       companyName: storedcompanyName,
+  //       userId: userId,
+  //       companyId: null,
+  //     }));
+  //   } else if (flag === "true") {
+  //     setFormData((prevData) => ({
+  //       ...prevData,
+  //       companyName: storedcompanyName,
+  //       userId: null,
+  //       companyId:  compID 
+  //     }));
+  //   }
+  // } else {
+  //   setFormData((prevData) => ({
+  //     ...prevData,
+  //     companyName: storedcompanyName,
+  //     userId: null,
+  //     companyId: userId,
+  //   }));
+  // }
 }, []);
+
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -226,9 +252,10 @@ useEffect(() => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log(formData)
     const formDataToSend = new FormData();
 
-    console.log(formDataToSend);
+    // console.log(formDataToSend);
 
     // Append all form fields to the FormData object
     for (const key in formData) {

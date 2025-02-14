@@ -72,7 +72,6 @@ export async function PUT(request, context) {
       CreatedBy,
       isActive,
       role,
-      userId,
       companyId,
       Postcode,
     BuildingAndStreetOne,
@@ -98,7 +97,6 @@ export async function PUT(request, context) {
       user.password = user.password;
     }
   
-    user.userId = userId || user.userId;
     user.companyId = companyId || user.companyId;
     user.Postcode = Postcode || user.Postcode;
     user.BuildingAndStreetOne = BuildingAndStreetOne || user.BuildingAndStreetOne;

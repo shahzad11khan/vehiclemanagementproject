@@ -10,7 +10,7 @@ import UpdateManufacturerModel from "../UpdateManufacturer/UpdateManufactrurMode
 import axios from "axios";
 import { API_URL_Manufacturer } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import { GetManufacturer } from "@/app/Dashboard/Components/ApiUrl/ShowApiDatas/ShowApiDatas";
-import { getCompanyName, getsuperadmincompanyname } from "@/utils/storageUtils";
+import { getCompanyName, getsuperadmincompanyname,getUserName } from "@/utils/storageUtils";
 import DeleteModal from "@/app/Dashboard/Components/DeleteModal";
 const Page = () => {
   const columns = [
@@ -76,7 +76,16 @@ const Page = () => {
   };
 
   useEffect(() => {
-    const selectedCompanyName = getCompanyName() || getsuperadmincompanyname();
+    const selectedCompanyName = (() => {
+          const name1 = getCompanyName();
+          if (name1) return name1;
+        
+          const name2 = getUserName();
+          if (name2) return name2;
+        
+          const name3 = getsuperadmincompanyname();
+          return name3;
+        })();
     const filtered = data?.filter((item) => {
       const companyMatch = selectedCompanyName === 'superadmin' ? item : item?.adminCompanyName.toLowerCase() === selectedCompanyName.toLowerCase();
       const usernameMatch =item.name && item.name.toLowerCase().includes(searchTerm.toLowerCase());

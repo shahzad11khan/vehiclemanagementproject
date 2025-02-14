@@ -4,7 +4,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import {
-  getCompanyName,
+  getCompanyName,getUserName,
   getUserId ,getflag,getcompanyId
 } from "@/utils/storageUtils";
 
@@ -21,7 +21,16 @@ const AddTransmissionModel = ({ isOpen, onClose, fetchData }) => {
 
   const [loading, setLoading] = useState(false);
   useEffect(() => {
-    const storedcompanyName = getCompanyName() || getsuperadmincompanyname();
+    const storedcompanyName = (() => {
+                      const name1 = getCompanyName();
+                      if (name1) return name1;
+                    
+                      const name2 = getUserName();
+                      if (name2) return name2;
+                    
+                      const name3 = getsuperadmincompanyname();
+                      return name3;
+                    })();
     const userId = getUserId();
     const flag = getflag();
     const compID = getcompanyId();

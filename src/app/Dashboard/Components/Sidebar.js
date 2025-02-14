@@ -427,7 +427,10 @@ useEffect(() => {
                         : "text-blue"
                     }`}
                   >
-                    <div className="flex  items-center gap-3 relative bg-transparent w-full">
+                    <div className="flex  items-center gap-3 relative bg-transparent w-full"
+                        onClick={toggleValue}
+                        >
+                    
                       <img
                         src="/setting.png"
                         alt="superadmin"
@@ -435,7 +438,8 @@ useEffect(() => {
                       />
                       
                       <p
-                        className="hidden sm:block text-sm bg-transparent text-white"
+                        className="hidden sm:block text-sm bg-transparent text-white w-full"
+                       
                         onClick={toggleValue}
                       >
                         Settings
@@ -612,7 +616,9 @@ useEffect(() => {
                         : "text-blue"
                     }`}
                   >
-                    <div className="flex items-center gap-3 relative bg-transparent w-full">
+                    <div className="flex items-center gap-3 relative bg-transparent w-full"
+                     onClick={toggleValue}
+                    >
                       <img
                         src="/setting.png"
                         alt="superadmin"
@@ -621,7 +627,7 @@ useEffect(() => {
 
                       <p
                         className="hidden sm:block text-sm bg-transparent text-white"
-                        onClick={toggleValue}
+                       
                       >
                         Settings
                       </p>

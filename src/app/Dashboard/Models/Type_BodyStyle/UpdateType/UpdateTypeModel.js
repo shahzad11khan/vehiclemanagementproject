@@ -3,10 +3,9 @@ import { API_URL_Type } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-
 import {
   getCompanyName,
-  getUserId ,getflag,getcompanyId
+  getUserId ,getflag,getcompanyId,getUserName,getsuperadmincompanyname
 } from "@/utils/storageUtils";
 
 const UpdateTypeModel = ({ isOpen, onClose, fetchData, typeid }) => {
@@ -26,7 +25,16 @@ const UpdateTypeModel = ({ isOpen, onClose, fetchData, typeid }) => {
 
   // Retrieve company name from local storage
   useEffect(() => {
-    const storedcompanyName = getCompanyName() || getsuperadmincompanyname();
+    const storedcompanyName = (() => {
+      const name1 = getCompanyName();
+      if (name1) return name1;
+    
+      const name2 = getUserName();
+      if (name2) return name2;
+    
+      const name3 = getsuperadmincompanyname();
+      return name3;
+    })();
     const userId = getUserId();
     const flag = getflag();
     const compID = getcompanyId();

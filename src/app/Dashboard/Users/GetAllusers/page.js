@@ -47,11 +47,13 @@ const Page = () => {
   const [isDeleteModalOpenId, setIsDeleteModalOpenId] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemperpage, setitemperpage] = useState(5);
-  const [flag, setflag] = useState("");
+  // const [flag, setflag] = useState("");
   const [activeUsers, setActiveUsers] = useState(0);
   const [inactiveUsers, setInActiveUsers] = useState(0);
   const [trigger, setTrigger] = useState(true);
   const [role, setRole] = useState("");
+  const [currentUsers,setCurrentUsers]=useState([])
+  const [totalPages,setTotalPages]=useState(0);
 
   useEffect(() => {
     const active = usersX.filter((user) => user.isActive === true).length;
@@ -174,56 +176,140 @@ const Page = () => {
   //   return <Loading width="6" height="6" className="w-full h-auto" />;
   // }
 
+  // useEffect(() => {
+  //   const userRole = getUserRole(); // Get the current user's role
+  //   setRole(userRole);
+  //   const companyName = (() => {
+  //     const name1 = getCompanyName();
+  //     if (name1) return name1;
+    
+  //     const name2 = getUserName();
+  //     if (name2) return name2;
+    
+  //     const name3 = getsuperadmincompanyname();
+  //     return name3;
+  //   })();
+    
+  //   const superadmin = (() => {
+  //     const name1 = getCompanyName();
+  //     if (name1) return name1;
+    
+  //     const name2 = getUserName();
+  //     if (name2) return name2;
+    
+  //     const name3 = getsuperadmincompanyname();
+  //     return name3;
+  //   })();
+  //   const authData = getAuthData();
+  //   setflag(authData.flag);
+  //   let filteredUsers = users;
+  //   let Xusers = users;
+  //   // Filter users based on role
+
+  //   console.log(companyName,superadmin,authData.flag)
+  //   if (userRole === "superadmin" && authData.flag === "true" && companyName) {
+  //     // If the user is not a superadmin, filter by company name
+  //     filteredUsers = users.filter(
+  //       (item) => item?.companyId?.CompanyName.toLowerCase() === companyName.toLowerCase()
+  //     );
+  //     Xusers = users.filter(
+  //       (item) => item?.companyId?.CompanyName.toLowerCase() === companyName.toLowerCase()
+  //     );
+  //     console.log("superadmin true")
+  //   }
+  //   else
+  //   if (userRole === "superadmin" && authData.flag=== "false" ) {
+  //     filteredUsers = users.filter(
+  //       (item) => item?.companyName?.toLowerCase() === superadmin.toLowerCase()
+  //     );
+  //     Xusers = users.filter(
+  //       (item) => item?.companyName?.toLowerCase() === superadmin.toLowerCase()
+  //     );
+  //     console.log("superadmin false")
+  //     }
+  //     else {
+  //       filteredUsers = users.filter(
+  //         (item) => item?.companyId?.CompanyName.toLowerCase() === companyName.toLowerCase()
+  //       );
+  //       Xusers = users.filter(
+  //         (item) => item?.companyId?.CompanyName.toLowerCase() === companyName.toLowerCase()
+  //       );
+  //       console.log("Hello company")
+  //     }
+
+  //   // Apply search term filtering
+  //   if (searchTerm) {
+  //     filteredUsers = filteredUsers.filter((item) =>
+  //       item?.email?.toLowerCase().includes(searchTerm.toLowerCase())
+  //     );
+  //   }
+
+  //   // Update the filtered data
+  //   setFilteredData(filteredUsers);
+  //   setUsersX(Xusers);
+  //   setCurrentPage(1); // Reset to the first page on new search or filter
+  // }, [searchTerm, users]);
+
+
   useEffect(() => {
     const userRole = getUserRole(); // Get the current user's role
-    // console.log("role ",userRole); ??
     setRole(userRole);
-    const companyName = getCompanyName() || getsuperadmincompanyname() || getUserName()// Get the logged-in user's company name
+  
+    // Determine companyName or fallback
+    const companyName = (() => {
+      const name1 = getCompanyName();
+      if (name1) return name1;
+    
+      const name2 = getUserName();
+      if (name2) return name2;
+    
+      const name3 = getsuperadmincompanyname();
+      return name3;
+    })();
+  
+    // Fetch auth data and set flag
     const authData = getAuthData();
-    setflag(authData.flag);
+    // setflag(authData.flag);
+  
     let filteredUsers = users;
     let Xusers = users;
-    // Filter users based on role
-    if (userRole === "superadmin" && flag === "true" && companyName) {
-      // If the user is not a superadmin, filter by company name
+  
+    console.log(companyName, authData.flag);
+  
+    // Filtering based on userRole and flag
+    if (userRole === "superadmin" && authData.flag === "true" && companyName) {
       filteredUsers = users.filter(
-        (item) => item?.companyId?.CompanyName.toLowerCase() === companyName.toLowerCase()
+        (item) => item?.companyId?.CompanyName?.toLowerCase() === companyName.toLowerCase()
       );
-      Xusers = users.filter(
-        (item) => item?.companyId?.CompanyName.toLowerCase() === companyName.toLowerCase()
+      Xusers = filteredUsers;
+      console.log("superadmin true");
+    } else if (userRole === "superadmin" && authData.flag === "false") {
+      filteredUsers = users.filter(
+        (item) => item?.companyName?.toLowerCase() === companyName.toLowerCase()
       );
+      Xusers = filteredUsers;
+      console.log("superadmin false");
+    } else {
+      filteredUsers = users.filter(
+        (item) => item?.companyId?.CompanyName?.toLowerCase() === companyName.toLowerCase()
+      );
+      Xusers = filteredUsers;
+      console.log("Hello company");
     }
-    else
-      if (userRole === "superadmin" && flag === "false") {
-        filteredUsers = users.filter(
-          (item) => item?.companyName?.toLowerCase() === companyName.toLowerCase()
-        );
-        Xusers = users.filter(
-          (item) => item?.companyName?.toLowerCase() === companyName.toLowerCase()
-        );
-      }
-      else {
-        filteredUsers = users.filter(
-          (item) => item?.companyId?.CompanyName.toLowerCase() === companyName.toLowerCase()
-        );
-        Xusers = users.filter(
-          (item) => item?.companyId?.CompanyName.toLowerCase() === companyName.toLowerCase()
-        );
-      }
-
+  
     // Apply search term filtering
     if (searchTerm) {
       filteredUsers = filteredUsers.filter((item) =>
         item?.email?.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
-
+  
     // Update the filtered data
     setFilteredData(filteredUsers);
     setUsersX(Xusers);
     setCurrentPage(1); // Reset to the first page on new search or filter
   }, [searchTerm, users]);
-
+  
   const OpenUserModle = () => {
     setIsOpenUser(!isOpenUser);
   };
@@ -232,16 +318,23 @@ const Page = () => {
     setIsOpenUserUpdate(!isOpenUserUpdate);
   };
 
-  const indexOfLastUser = currentPage * itemperpage;
-  const indexOfFirstUser = indexOfLastUser - itemperpage;
-  const currentUsers = filteredData.slice(indexOfFirstUser, indexOfLastUser);
-  const totalPages = Math.ceil(filteredData.length / itemperpage);
+  useEffect(() => {
+    const indexOfLastUser = currentPage * itemperpage;
+    const indexOfFirstUser = indexOfLastUser - itemperpage;
+    const currentUser = filteredData.slice(indexOfFirstUser, indexOfLastUser);
+    setCurrentUsers(currentUser);
+    const totalPage = Math.ceil(filteredData.length / itemperpage);
+    setTotalPages(totalPage);
+  }, [filteredData, currentPage, itemperpage]); // Add dependencies
 
   if (!isMounted) {
     return null;
   }
 
-  console.log("hehe", filteredData);
+  console.log("data",users)
+  console.log("dataX",usersX)
+  console.log("currentUsers",currentUsers)
+  console.log("filteredData",filteredData)
 
   return (
     <div className="h-[100vh] overflow-hidden">
@@ -413,36 +506,36 @@ const Page = () => {
             </div> */}
               {role !== "superadmin" ? (
                 <div className=" overflow-x-auto  custom-scrollbar">
-                  <table className="w-full bg-white border table-auto ">
-                    <thead className="font-sans font-bold text-sm text-left" >
-                      <tr className="   text-white bg-[#38384A]   ">
-                        <th className="py-3 px-4 min-w-[150px] w-[150px] md:w-[16.66%] text-center text-white bg-custom-bg whitespace-normal break-all overflow-hidden">
-                          User Name
-                        </th>
-                        <th className=" py-3 px-4 min-w-[150px] md:min-w-[16.66%] text-center text-white bg-custom-bg whitespace-normal break-all  overflow-hidden">Image</th>
-                        <th className=" py-3 px-4 min-w-[150px] w-[150px] md:w-[16.66%]  text-white bg-custom-bg whitespace-normal break-all overflow-hidden">Email</th>
-                        <th className=" py-3 px-4 min-w-[150px] w-[150px] md:w-[16.66%]  text-white bg-custom-bg whitespace-normal break-all overflow-hidden">
-                          Password
-                        </th>
-                        <th className=" py-3 px-4 min-w-[150px] w-[150px] md:w-[16.66%] text-center text-white bg-custom-bg whitespace-normal break-all overflow-hidden ">Status</th>
-                        <th className=" py-3 px-4 min-w-[180px] w-[180px] md:w-[16.66%] text-center text-white bg-custom-bg whitespace-normal break-all overflow-hidden ">Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody className=" font-sans font-medium text-sm" >
-                      {currentUsers.map((item) => (
-                        <tr key={item._id} className="border-b">
-                          <td className=" py-3 px-4 min-w-[150px] w-[150px] md:w-[16.66%] text-center whitespace-normal break-all overflow-hidden">{item.username}</td>
-                          <td className="py-3 px-4 min-w-[150px] w-[150px] md:w-[16.66%] text-centerr">
-                            <img
-                              src={item.useravatar}
-                              alt="Company"
-                              className="w-8 h-8 block mx-auto rounded-lg object-cover object-center"
-                            />
-                          </td>
-                          <td className="py-3 px-4 min-w-[150px] w-[150px] md:w-[16.66%] whitespace-normal break-all overflow-hidden">{item.email}</td>
-                          <td className="py-3 px-4 min-w-[150px] w-[150px] md:w-[16.66%] whitespace-normal break-all overflow-hidden">{item.confirmpassword}</td>
-                          <td className="py-3 px-4 min-w-[150px] w-[150px] md:w-[16.66%] whitespace-normal break-all overflow-hidden text-center">
-                            <span className="bg-[#38384A33]  px-4 py-2 rounded-[22px] text-xs">
+                <table className="w-full bg-white border table-auto ">
+                  <thead className="font-sans font-bold text-sm text-left" >
+                    <tr className="   text-white bg-[#38384A]   ">
+                      <th className="py-3 px-4 min-w-[150px] w-[150px] md:w-[16.66%] text-center text-white bg-custom-bg whitespace-normal break-all overflow-hidden">
+                        User Name
+                      </th>
+                      <th className=" py-3 px-4 min-w-[150px] w-[150px] md:w-[16.66%] text-center text-white bg-custom-bg whitespace-normal break-all  overflow-hidden">Image</th>
+                      <th className=" py-3 px-4 min-w-[150px] w-[150px] md:w-[16.66%]  text-white bg-custom-bg whitespace-normal break-all overflow-hidden">Email</th>
+                      <th className=" py-3 px-4 min-w-[150px] w-[150px] md:w-[16.66%]  text-white bg-custom-bg whitespace-normal break-all overflow-hidden">
+                        Password
+                      </th>
+                      <th className=" py-3 px-4 min-w-[150px] w-[150px] md:w-[16.66%] text-center text-white bg-custom-bg whitespace-normal break-all overflow-hidden ">Status</th>
+                      <th className=" py-3 px-4 min-w-[180px] w-[180px] md:w-[16.66%] text-center text-white bg-custom-bg whitespace-normal break-all overflow-hidden ">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className=" font-sans font-medium text-sm" >
+                    {currentUsers.map((item) => (
+                      <tr key={item._id} className="border-b">
+                        <td className=" py-3 px-4 min-w-[150px] w-[150px] md:w-[16.66%] text-center whitespace-normal break-all overflow-hidden">{item.username}</td>
+                        <td className="py-3 px-4 min-w-[150px] w-[150px] md:w-[16.66%] text-centerr">
+                          <img
+                            src={item.useravatar}
+                            alt="Company"
+                            className="w-8 h-8 block mx-auto rounded-lg object-cover object-center"
+                          />
+                        </td>
+                        <td className="py-3 px-4 min-w-[150px] w-[150px] md:w-[16.66%] whitespace-normal break-all overflow-hidden">{item.email}</td>
+                        <td className="py-3 px-4 min-w-[150px] w-[150px] md:w-[16.66%] whitespace-normal break-all overflow-hidden">{item.confirmpassword}</td>
+                        <td className="py-3 px-4 min-w-[150px] w-[150px] md:w-[16.66%] whitespace-normal break-all overflow-hidden text-center">
+                           <span className="bg-[#38384A33]  px-4 py-2 rounded-[22px] text-xs">
                               {item.isActive ? "Active" : "Inactive"}
                             </span>
                           </td>

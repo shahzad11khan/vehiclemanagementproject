@@ -719,7 +719,10 @@ const Page = () => {
                               : "N/A"}
                         </td>
                         <td className="py-2 px-4 border-b border-gray-200 text-center">
-                          {row.VehicleStatus ? "Active" : "Inactive"}
+                        <span className="bg-[#38384A33] px-4 py-2 rounded-[22px] text-xs ">
+                        {row.VehicleStatus ? "Active" : "Inactive"}
+                              </span>
+                         
                         </td>
                         <td className="py-2 px-4 border-b border-gray-200 text-center">
                           {row.asignto || "N/A"}

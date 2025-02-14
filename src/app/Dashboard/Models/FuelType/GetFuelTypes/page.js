@@ -10,7 +10,7 @@ import UpdateFuelTypeModel from "../UpdateFuelType/UpdateFuelType";
 import axios from "axios";
 import { API_URL_FuelType } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import { GetFueltype } from "@/app/Dashboard/Components/ApiUrl/ShowApiDatas/ShowApiDatas";
-import { getCompanyName } from "@/utils/storageUtils";
+import { getCompanyName,getUserName,getsuperadmincompanyname } from "@/utils/storageUtils";
 import DeleteModal from "@/app/Dashboard/Components/DeleteModal";
 
 const Page = () => {
@@ -29,8 +29,16 @@ const Page = () => {
 
   useEffect(() => {
     setIsMounted(true);
-    const companyNameFromStorage =
-      getCompanyName() || localStorage.getItem("companyname");
+    const companyNameFromStorage =(() => {
+          const name1 = getCompanyName();
+          if (name1) return name1;
+        
+          const name2 = getUserName();
+          if (name2) return name2;
+        
+          const name3 = getsuperadmincompanyname();
+          return name3;
+        })();
     if (companyNameFromStorage) {
       setSelectedCompanyName(companyNameFromStorage);
     }
@@ -81,7 +89,16 @@ const Page = () => {
   };
 
   useEffect(() => {
-        const selectedCompanyName = getCompanyName() || getsuperadmincompanyname();
+        const selectedCompanyName = (() => {
+              const name1 = getCompanyName();
+              if (name1) return name1;
+            
+              const name2 = getUserName();
+              if (name2) return name2;
+            
+              const name3 = getsuperadmincompanyname();
+              return name3;
+            })();
     const filtered = data?.filter((item) => {
       console.log(selectedCompanyName , item.adminCompanyName);
       const companyMatch =  selectedCompanyName === 'superadmin' ? data : item?.adminCompanyName.toLowerCase() === selectedCompanyName.toLowerCase();

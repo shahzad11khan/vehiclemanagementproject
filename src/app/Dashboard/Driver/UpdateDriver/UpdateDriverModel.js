@@ -84,27 +84,43 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, selectedUserId }) => {
     }
   }, []);
 
-    useEffect(() => {
-      const storedcompanyName = getUserName() || getCompanyName(); 
-      const userId = getUserId(); 
-      const flag = getflag();
-      const compID = getcompanyId();
-      if (storedcompanyName && userId) {
-      if (storedcompanyName.toLowerCase() === "superadmin" && flag === "true") {
-          setFormData((prevData) => ({
-            ...prevData,
-            companyName: storedcompanyName,
-            companyId:  compID 
-          }));
-        }
-      } else {
+  useEffect(() => {
+    const storedcompanyName =(() => {
+                              const name1 = getCompanyName();
+                              if (name1) return name1;
+                            
+                              const name2 = getUserName();
+                              if (name2) return name2;
+                            })();
+    const userId = getUserId()  
+    const flag = getflag();
+    const compID = getcompanyId();
+    // const randomId = randomObjectId();
+  
+  console.log(storedcompanyName,userId);
+    if (storedcompanyName && userId) {
+      // Check if the company is "superadmin" and the flag is true
+      if (storedcompanyName.toLowerCase() === "superadmin" && flag === "true" && compID) {
+        setFormData((prevData) => ({
+          ...prevData,
+          companyName: storedcompanyName,
+          companyId: compID, // Ensure compID is set
+         }));
+       } else {
+         // Use userId if not in "superadmin" mode
+         console.log(userId);
         setFormData((prevData) => ({
           ...prevData,
           companyName: storedcompanyName,
           companyId: userId,
         }));
       }
-    }, []);
+    } else {
+      console.error("Missing required fields:", { storedcompanyName, userId, flag, compID });
+    }
+  
+  }, [])
+  
   
   const fetchData = async () => {
     // console.log(selectedUserId);

@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import {
   getCompanyName,
-  getUserId ,getflag,getcompanyId
+  getUserId ,getflag,getcompanyId,getUserName,getsuperadmincompanyname
 } from "@/utils/storageUtils";
 
 const AddTypeModel = ({ isOpen, onClose, fetchData }) => {
@@ -22,7 +22,16 @@ const AddTypeModel = ({ isOpen, onClose, fetchData }) => {
   const [loading, setLoading] = useState(false);
 
  useEffect(() => {
-    const storedcompanyName = getCompanyName() || getsuperadmincompanyname();
+    const storedcompanyName = (() => {
+                const name1 = getCompanyName();
+                if (name1) return name1;
+              
+                const name2 = getUserName();
+                if (name2) return name2;
+              
+                const name3 = getsuperadmincompanyname();
+                return name3;
+              })();
     const userId = getUserId();
     const flag = getflag();
     const compID = getcompanyId();

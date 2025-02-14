@@ -17,7 +17,7 @@ import {
 import {
   getCompanyName,
   getUserId ,
-  getUserName,getflag,getcompanyId
+  getUserName,getflag,getcompanyId,getUserRole
 } from "@/utils/storageUtils";
 const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
   const [vehicleData, setVehicleData] = useState({
@@ -130,8 +130,8 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
   const [selfFitSetting, setSelfFitSetting] = useState(false);
   const fileInput = useRef(null);
   useEffect(() => {
-    const storedCompanyName = localStorage.getItem("companyName");
-    const storedSuperadmin = localStorage.getItem("role");
+    const storedCompanyName = getCompanyName();
+    const storedSuperadmin = getUserRole();
     if (storedSuperadmin) {
       setSuperadmin(storedSuperadmin);
     }
@@ -142,7 +142,33 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
       }));
     }
   }, []);
-
+  useEffect(() => {
+    const storedcompanyName = (() => {
+      const name1 = getCompanyName();
+      if (name1) return name1;
+    
+      const name2 = getUserName();
+      if (name2) return name2;
+    })();
+    const userId = getUserId(); 
+    const flag = getflag();
+    const compID = getcompanyId();
+    if (storedcompanyName && userId) {
+    if (storedcompanyName.toLowerCase() === "superadmin" && flag === "true") {
+      setVehicleData((prevData) => ({
+          ...prevData,
+          adminCompanyName: storedcompanyName,
+          companyId:  compID 
+        }));
+      }
+    } else {
+      setVehicleData((prevData) => ({
+        ...prevData,
+        adminCompanyName: storedcompanyName,
+        companyId: userId,
+      }));
+    }
+  }, []);
   // const defaultOptions = [
   //   { value: "airbags", label: "Airbags" },
   //   { value: "abs", label: "ABS" },
@@ -388,27 +414,7 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleId }) => {
     }
   }, [vehicleId]);
 
-   useEffect(() => {
-      const storedcompanyName = getUserName() || getCompanyName(); 
-      const userId = getUserId(); 
-      const flag = getflag();
-      const compID = getcompanyId();
-      if (storedcompanyName && userId) {
-      if (storedcompanyName.toLowerCase() === "superadmin" && flag === "true") {
-        setVehicleData((prevData) => ({
-            ...prevData,
-            adminCompanyName: storedcompanyName,
-            companyId:  compID 
-          }));
-        }
-      } else {
-        setVehicleData((prevData) => ({
-          ...prevData,
-          adminCompanyName: storedcompanyName,
-          companyId: userId,
-        }));
-      }
-    }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData();

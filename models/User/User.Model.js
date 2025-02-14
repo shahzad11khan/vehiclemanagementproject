@@ -26,10 +26,6 @@ const userSchema = new mongoose.Schema(
     passwordExpires: { type: String, default: "" }, // Use Date type for date fields
     // passwordExpiresEvery: { type: Number, default: null }, // Assuming this is a numeric value
     companyName: { type: String, default: "", trim: true }, // Set a default or handle appropriately
-    userId: {
-      type: mongoose.Schema.Types.ObjectId, 
-      ref: 'User',
-    },
     companyId: {
           type: mongoose.Schema.Types.ObjectId, 
           ref: 'Company',

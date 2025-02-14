@@ -10,8 +10,9 @@ import AddDriverModel from "../AddDriver/AddDriverModel";
 import UpdateDriverModel from "../UpdateDriver/UpdateDriverModel";
 import axios from "axios";
 import { API_URL_Driver } from "../../Components/ApiUrl/ApiUrls";
-import { getCompanyName } from "@/utils/storageUtils";
-import Link from "next/link";
+import {
+  getCompanyName,getUserName
+} from "@/utils/storageUtils";import Link from "next/link";
 import { isAuthenticated } from "@/utils/verifytoken";
 import { useRouter } from "next/navigation";
 import DeleteModal from "../../Components/DeleteModal";
@@ -42,7 +43,13 @@ const Page = () => {
 
   useEffect(() => {
     setIsMounted(true);
-    const companyNameFromStorage = getCompanyName();
+    const companyNameFromStorage = (() => {
+                          const name1 = getCompanyName();
+                          if (name1) return name1;
+                        
+                          const name2 = getUserName();
+                          if (name2) return name2;
+                        })();
     if (companyNameFromStorage) {
       setSelectedCompanyName(companyNameFromStorage);
     }

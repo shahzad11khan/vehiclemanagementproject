@@ -72,7 +72,7 @@ const Page = () => {
       console.error("Error deleting enquiry:", error);
       toast.error(
         error.response?.data?.message ||
-          "An error occurred while deleting the enquiry. Please try again."
+        "An error occurred while deleting the enquiry. Please try again."
       );
     }
   };
@@ -87,7 +87,7 @@ const Page = () => {
       return companyMatch && usernameMatch;
     });
     setFilteredData(filtered);
-  }, [searchTerm, data, selectedCompanyName]);
+  }, [searchTerm, data]);
 
   const handleEdit = (id) => {
     setSelectedUserId(id);
@@ -124,7 +124,7 @@ const Page = () => {
                 <div>
                   <select
                     value={itemperpage}
-                    onChange={(e) => {setitemperpage(e.target.value); setCurrentPage(1)}}
+                    onChange={(e) => { setitemperpage(e.target.value); setCurrentPage(1) }}
                     className="border rounded-md pl-2 py-2 w-16 border-custom-bg"
                   >
                     <option disabled>0</option>
@@ -186,7 +186,7 @@ const Page = () => {
                         {row.isActive ? "Active" : "Inactive"}
                       </td>
                       <td className=" py-3 px-4 min-w-[150px] w-[150px] whitespace-normal break-all overflow-hidden">
-                      <div className="flex gap-4 justify-center">
+                        <div className="flex gap-4 justify-center">
                           <div className="relative group">
                             <button
                               onClick={() => handleEdit(row._id)}
@@ -211,96 +211,93 @@ const Page = () => {
               </table>
             </div>
             <div className="flex justify-center py-5 font-montserrat font-medium text-[12px]">
-                  <nav>
-                    <ul className="flex items-center gap-3">
-                      {/* Previous Button */}
-                      <li>
-                        <button
-                          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                          disabled={currentPage === 1}
-                          className={`h-8 px-2 border rounded-lg ${
-                            currentPage === 1 ? "opacity-50 cursor-not-allowed" : "bg-white"
-                          }`}
-                        >
-                          Previous
-                        </button>
-                      </li>
+              <nav>
+                <ul className="flex items-center gap-3">
+                  {/* Previous Button */}
+                  <li>
+                    <button
+                      onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                      disabled={currentPage === 1}
+                      className={`h-8 px-2 border rounded-lg ${currentPage === 1 ? "opacity-50 cursor-not-allowed" : "bg-white"
+                        }`}
+                    >
+                      Previous
+                    </button>
+                  </li>
 
-                      {/* Pagination Logic */}
-                      {totalPages > 1 && (
+                  {/* Pagination Logic */}
+                  {totalPages > 1 && (
+                    <>
+                      {totalPages <= 3 ? (
+                        // Show all pages if total pages are 3 or fewer
+                        Array.from({ length: totalPages }, (_, index) => index + 1).map((page) => (
+                          <li key={page}>
+                            <button
+                              onClick={() => setCurrentPage(page)}
+                              className={`h-8 w-8 border rounded-lg ${currentPage === page ? "bg-custom-bg text-white" : "bg-white"
+                                }`}
+                            >
+                              {page}
+                            </button>
+                          </li>
+                        ))
+                      ) : (
+                        // Handle cases where total pages > 3
                         <>
-                          {totalPages <= 3 ? (
-                            // Show all pages if total pages are 3 or fewer
-                            Array.from({ length: totalPages }, (_, index) => index + 1).map((page) => (
-                              <li key={page}>
-                                <button
-                                  onClick={() => setCurrentPage(page)}
-                                  className={`h-8 w-8 border rounded-lg ${
-                                    currentPage === page ? "bg-custom-bg text-white" : "bg-white"
-                                  }`}
-                                >
-                                  {page}
+                          {currentPage === 1 && (
+                            <>
+                              <li>
+                                <button className="h-8 w-8 border rounded-lg bg-custom-bg text-white">1</button>
+                              </li>
+                              <li><span className="px-2">...</span></li>
+                              <li>
+                                <button onClick={() => setCurrentPage(totalPages)} className="h-8 w-8 border rounded-lg bg-white">
+                                  {totalPages}
                                 </button>
                               </li>
-                            ))
-                          ) : (
-                            // Handle cases where total pages > 3
-                            <>
-                              {currentPage === 1 && (
-                                <>
-                                  <li>
-                                    <button className="h-8 w-8 border rounded-lg bg-custom-bg text-white">1</button>
-                                  </li>
-                                  <li><span className="px-2">...</span></li>
-                                  <li>
-                                    <button onClick={() => setCurrentPage(totalPages)} className="h-8 w-8 border rounded-lg bg-white">
-                                      {totalPages}
-                                    </button>
-                                  </li>
-                                </>
-                              )}
-                              {currentPage > 1 && currentPage < totalPages && (
-                                <>
-                                  <li>
-                                    <button className="h-8 w-8 border rounded-lg bg-custom-bg text-white">
-                                      {currentPage}
-                                    </button>
-                                  </li>
-                                  <li><span className="px-2">...</span></li>
-                                  <li>
-                                    <button onClick={() => setCurrentPage(totalPages)} className="h-8 w-8 border rounded-lg bg-white">
-                                      {totalPages}
-                                    </button>
-                                  </li>
-                                </>
-                              )}
-                              {currentPage === totalPages && (
-                                <li>
-                                  <button className="h-8 w-8 border rounded-lg bg-custom-bg text-white">
-                                    {totalPages}
-                                  </button>
-                                </li>
-                              )}
                             </>
+                          )}
+                          {currentPage > 1 && currentPage < totalPages && (
+                            <>
+                              <li>
+                                <button className="h-8 w-8 border rounded-lg bg-custom-bg text-white">
+                                  {currentPage}
+                                </button>
+                              </li>
+                              <li><span className="px-2">...</span></li>
+                              <li>
+                                <button onClick={() => setCurrentPage(totalPages)} className="h-8 w-8 border rounded-lg bg-white">
+                                  {totalPages}
+                                </button>
+                              </li>
+                            </>
+                          )}
+                          {currentPage === totalPages && (
+                            <li>
+                              <button className="h-8 w-8 border rounded-lg bg-custom-bg text-white">
+                                {totalPages}
+                              </button>
+                            </li>
                           )}
                         </>
                       )}
+                    </>
+                  )}
 
-                      {/* Next Button */}
-                      <li>
-                        <button
-                          onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-                          disabled={currentPage === totalPages}
-                          className={`h-8 px-2 border rounded-lg ${
-                            currentPage === totalPages ? "opacity-50 cursor-not-allowed" : "bg-white"
-                          }`}
-                        >
-                          Next
-                        </button>
-                      </li>
-                    </ul>
-                  </nav>
-                </div>
+                  {/* Next Button */}
+                  <li>
+                    <button
+                      onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                      disabled={currentPage === totalPages}
+                      className={`h-8 px-2 border rounded-lg ${currentPage === totalPages ? "opacity-50 cursor-not-allowed" : "bg-white"
+                        }`}
+                    >
+                      Next
+                    </button>
+                  </li>
+                </ul>
+              </nav>
+            </div>
           </div>
         </div>
       </div>

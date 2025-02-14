@@ -5,13 +5,13 @@ import { API_URL_USER } from "../../Components/ApiUrl/ApiUrls";
 import { toast } from "react-toastify";
 import {
   getCompanyName,
-  getUserId ,
-  getUserName,getflag,getcompanyId
+  getUserId,
+  getUserName, getflag, getcompanyId
 } from "@/utils/storageUtils";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 
 
-const AddUserModel = ({ isOpen, onClose, fetchData,}) => {
+const AddUserModel = ({ isOpen, onClose, fetchData, }) => {
   const [showPasswords, setShowPasswords] = useState(false);
   // const [dobvalidation, setdobValidation] = useState({ dateOfBirthValid: true });
   // const passwordRegex = /^[A-Z][@#$%^&*!]\d[a-z]{6,}$/;
@@ -37,8 +37,8 @@ const AddUserModel = ({ isOpen, onClose, fetchData,}) => {
     permanentAddress: "",
     city: "",
     county: "",
-    userId:"",
-    companyId:"",
+    userId: "",
+    companyId: "",
     // accessLevel: "",
     dateOfBirth: "",
     position: "",
@@ -53,88 +53,88 @@ const AddUserModel = ({ isOpen, onClose, fetchData,}) => {
     useravatar: null,
     isActive: false,
     role: "user", // Default role set to "user"
-    Postcode:"",
-    BuildingAndStreetOne:"",
-    BuildingAndStreetTwo:"",
+    Postcode: "",
+    BuildingAndStreetOne: "",
+    BuildingAndStreetTwo: "",
 
   });
 
-// Retrieve company name from local storage
-const randomObjectId = () => {
-  return (
-    Math.floor(Date.now() / 1000).toString(16) + // Timestamp
-    'xxxxxxxxxxxxxxxx'.replace(/[x]/g, () =>
-      ((Math.random() * 16) | 0).toString(16)
-    )
-  );
-};
-// useEffect(() => {
-//   const storedcompanyName = getUserName() || getCompanyName(); 
-//   const userId = getUserId(); // Retrieve user ID once
-//   const flag = getflag(); // Retrieve user ID once
-//   const compID = getcompanyId(); // Retrieve user ID once
-//   const randomId = randomObjectId();
-  
-//   console.log(userId, storedcompanyName ,flag,compID);
-//   if (storedcompanyName && userId && flag === "false") { 
-//     setFormData((prevData) => ({
-//       ...prevData,
-//       companyName: storedcompanyName,
-//       userId: storedcompanyName.toLowerCase() === "superadmin" && flag === "false" ? userId : randomId,
-//       companyId:  randomId,
-//     }));
-//   }else  if (storedcompanyName && userId && flag === "true" ) { 
-//     setFormData((prevData) => ({
-//       ...prevData,
-//       companyName: storedcompanyName,
-//       userId:  randomId,
-//       companyId: storedcompanyName.toLowerCase() === "superadmin" && flag === "true" ?  compID : randomId,
-//     }));
-//   }else {
-//     setFormData((prevData) => ({
-//       ...prevData,
-//       companyName: storedcompanyName,
-//       userId:  randomId,
-//       companyId:  compID 
-//     }));
-//   }
-// }, []);
+  // Retrieve company name from local storage
+  const randomObjectId = () => {
+    return (
+      Math.floor(Date.now() / 1000).toString(16) + // Timestamp
+      'xxxxxxxxxxxxxxxx'.replace(/[x]/g, () =>
+        ((Math.random() * 16) | 0).toString(16)
+      )
+    );
+  };
+  // useEffect(() => {
+  //   const storedcompanyName = getUserName() || getCompanyName(); 
+  //   const userId = getUserId(); // Retrieve user ID once
+  //   const flag = getflag(); // Retrieve user ID once
+  //   const compID = getcompanyId(); // Retrieve user ID once
+  //   const randomId = randomObjectId();
 
-// Run only once when the component mounts
-useEffect(() => {
-  const storedcompanyName = getUserName() || getCompanyName(); 
-  const userId = getUserId(); 
-  const flag = getflag();
-  const compID = getcompanyId();
-  const randomId = randomObjectId();
+  //   console.log(userId, storedcompanyName ,flag,compID);
+  //   if (storedcompanyName && userId && flag === "false") { 
+  //     setFormData((prevData) => ({
+  //       ...prevData,
+  //       companyName: storedcompanyName,
+  //       userId: storedcompanyName.toLowerCase() === "superadmin" && flag === "false" ? userId : randomId,
+  //       companyId:  randomId,
+  //     }));
+  //   }else  if (storedcompanyName && userId && flag === "true" ) { 
+  //     setFormData((prevData) => ({
+  //       ...prevData,
+  //       companyName: storedcompanyName,
+  //       userId:  randomId,
+  //       companyId: storedcompanyName.toLowerCase() === "superadmin" && flag === "true" ?  compID : randomId,
+  //     }));
+  //   }else {
+  //     setFormData((prevData) => ({
+  //       ...prevData,
+  //       companyName: storedcompanyName,
+  //       userId:  randomId,
+  //       companyId:  compID 
+  //     }));
+  //   }
+  // }, []);
 
-  // console.log(userId, storedcompanyName, flag, compID);
+  // Run only once when the component mounts
+  useEffect(() => {
+    const storedcompanyName = getUserName() || getCompanyName();
+    const userId = getUserId();
+    const flag = getflag();
+    const compID = getcompanyId();
+    const randomId = randomObjectId();
 
-  if (storedcompanyName && userId) {
-    if (flag === "false") {
-      setFormData((prevData) => ({
-        ...prevData,
-        companyName: storedcompanyName,
-        userId: storedcompanyName.toLowerCase() === "superadmin" ? userId : randomId,
-        companyId: randomId,
-      }));
-    } else if (flag === "true") {
+    // console.log(userId, storedcompanyName, flag, compID);
+
+    if (storedcompanyName && userId) {
+      if (flag === "false") {
+        setFormData((prevData) => ({
+          ...prevData,
+          companyName: storedcompanyName,
+          userId: storedcompanyName.toLowerCase() === "superadmin" ? userId : randomId,
+          companyId: randomId,
+        }));
+      } else if (flag === "true") {
+        setFormData((prevData) => ({
+          ...prevData,
+          companyName: storedcompanyName,
+          userId: randomId,
+          companyId: storedcompanyName.toLowerCase() === "superadmin" ? compID : randomId,
+        }));
+      }
+    } else {
       setFormData((prevData) => ({
         ...prevData,
         companyName: storedcompanyName,
         userId: randomId,
-        companyId: storedcompanyName.toLowerCase() === "superadmin" ? compID : randomId,
+        companyId: userId,
       }));
     }
-  } else {
-    setFormData((prevData) => ({
-      ...prevData,
-      companyName: storedcompanyName,
-      userId: randomId,
-      companyId: userId,
-    }));
-  }
-}, []);
+  }, []);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -543,14 +543,14 @@ useEffect(() => {
                       type="text"
                       id="Building&Street"
                       name="Postcode"
-                    value={formData.Postcode}
-                    onChange={handleChange}
+                      value={formData.Postcode}
+                      onChange={handleChange}
                       className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow focus:ring-blue-500 focus:border-blue-500"
                       required placeholder="Postcode"
                     />
                   </div>
 
-                  
+
                 </div>
 
                 <div className="flex gap-[10px] justify-end">
@@ -1113,11 +1113,11 @@ useEffect(() => {
                       Close
                     </button>
                     <button
-                    type="submit"
-                    className="px-6 py-2 bg-custom-bg text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
-                  >
-                    Submit
-                  </button>
+                      type="submit"
+                      className="px-6 py-2 bg-custom-bg text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                    >
+                      Submit
+                    </button>
                   </div>
                 </div>
 

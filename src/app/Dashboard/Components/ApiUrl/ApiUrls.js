@@ -37,3 +37,8 @@ export const API_URL_VehicleService = `${url}/api/VehicleService`;
 export const API_URL_UpdateMostRecentPendingInServeice = `${url}/api/VehicleService/UpdateOnlyOneToZero`;
 export const API_URL_VehicleRoadTex = `${url}/api/VehicleRoadTax`;
 export const API_URL_UpdateMostRecentPendingInRoadTex = `${url}/api/VehicleRoadTax/UpdateOnlyOneToZero`;
+
+
+
+export const API_URL_DriverLogin = `${url}/api/Driver/login`;
+export const API_URL_Balance = `${url}/api/Driver/recordTransaction`;

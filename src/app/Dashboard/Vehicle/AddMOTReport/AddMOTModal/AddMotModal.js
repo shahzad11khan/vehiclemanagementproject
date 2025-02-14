@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 import {
   API_URL_Vehicle_getspecificvehicleid,
   API_URL_VehicleMOT,
-  API_URL_UpdateMostRecentPendingInMot,
   API_URL_USER,
 } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import axios from "axios";
@@ -117,23 +116,23 @@ const AddMotModal = ({ isOpen, onClose, fetchData, selectedid }) => {
       console.log("Data sent successfully:", response.data);
 
       if (response.data.success) {
-        // Check if the current record has motPending_Done set to "1"
-        if (response.data.motStatus === "done") {
-          // Step 2: Call the PUT request to update motPending_Done from 1 to 0
-          const updateResponse = await axios.put(
-            `${API_URL_UpdateMostRecentPendingInMot}`,
-            formData
-          );
-          console.log("Update Response:", updateResponse.data);
+        // // Check if the current record has motPending_Done set to "1"
+        // if (response.data.motStatus === "done") {
+        //   // Step 2: Call the PUT request to update motPending_Done from 1 to 0
+        //   const updateResponse = await axios.put(
+        //     `${API_URL_UpdateMostRecentPendingInMot}`,
+        //     formData
+        //   );
+        //   console.log("Update Response:", updateResponse.data);
 
-          if (updateResponse.data.success) {
-            console.log("MOT status updated successfully");
-          } else {
-            console.log(updateResponse.data.error);
-          }
-        } else {
+        //   if (updateResponse.data.success) {
+        //     console.log("MOT status updated successfully");
+        //   } else {
+        //     console.log(updateResponse.data.error);
+        //   }
+        // } else {
           console.log(response.data.message);
-        }
+        // }
 
         // Refresh the data and reset the form
         fetchData();

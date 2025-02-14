@@ -141,114 +141,6 @@ const Page = () => {
     }
   };
 
-  // useEffect(() => {
-
-  //   const userrole = getUserRole();
-  //   const filtered = users.filter((item) => {
-  //     // console.log(item.companyname)
-  //     // console.log(selectedCompanyName)
-  //     if (userrole === "superadmin") return users;
-  //     const companyMatch =
-  //       item &&
-  //       item.companyname &&
-  //       selectedCompanyName &&
-  //       item.companyname.toLowerCase() === selectedCompanyName.toLowerCase();
-  //     // const usernameMatch =
-  //     //   item &&
-  //     //   item.username &&
-  //     //   item.username.toLowerCase().includes(searchTerm.toLowerCase());
-  //     const usernameMatch =
-  //       item.username &&
-  //       searchTerm
-  //         .toLowerCase()
-  //         .split("")
-  //         .every(
-  //           (char) =>
-  //             item.username.toLowerCase().includes(char) || // Check in username
-  //             item.email.toLowerCase().includes(char)
-  //         );
-  //     return companyMatch && usernameMatch;
-  //   });
-  //   setFilteredData(filtered);
-  // }, [searchTerm, users, selectedCompanyName]);
-
-  //   if (loading) {
-  //   return <Loading width="6" height="6" className="w-full h-auto" />;
-  // }
-
-  // useEffect(() => {
-  //   const userRole = getUserRole(); // Get the current user's role
-  //   setRole(userRole);
-  //   const companyName = (() => {
-  //     const name1 = getCompanyName();
-  //     if (name1) return name1;
-    
-  //     const name2 = getUserName();
-  //     if (name2) return name2;
-    
-  //     const name3 = getsuperadmincompanyname();
-  //     return name3;
-  //   })();
-    
-  //   const superadmin = (() => {
-  //     const name1 = getCompanyName();
-  //     if (name1) return name1;
-    
-  //     const name2 = getUserName();
-  //     if (name2) return name2;
-    
-  //     const name3 = getsuperadmincompanyname();
-  //     return name3;
-  //   })();
-  //   const authData = getAuthData();
-  //   setflag(authData.flag);
-  //   let filteredUsers = users;
-  //   let Xusers = users;
-  //   // Filter users based on role
-
-  //   console.log(companyName,superadmin,authData.flag)
-  //   if (userRole === "superadmin" && authData.flag === "true" && companyName) {
-  //     // If the user is not a superadmin, filter by company name
-  //     filteredUsers = users.filter(
-  //       (item) => item?.companyId?.CompanyName.toLowerCase() === companyName.toLowerCase()
-  //     );
-  //     Xusers = users.filter(
-  //       (item) => item?.companyId?.CompanyName.toLowerCase() === companyName.toLowerCase()
-  //     );
-  //     console.log("superadmin true")
-  //   }
-  //   else
-  //   if (userRole === "superadmin" && authData.flag=== "false" ) {
-  //     filteredUsers = users.filter(
-  //       (item) => item?.companyName?.toLowerCase() === superadmin.toLowerCase()
-  //     );
-  //     Xusers = users.filter(
-  //       (item) => item?.companyName?.toLowerCase() === superadmin.toLowerCase()
-  //     );
-  //     console.log("superadmin false")
-  //     }
-  //     else {
-  //       filteredUsers = users.filter(
-  //         (item) => item?.companyId?.CompanyName.toLowerCase() === companyName.toLowerCase()
-  //       );
-  //       Xusers = users.filter(
-  //         (item) => item?.companyId?.CompanyName.toLowerCase() === companyName.toLowerCase()
-  //       );
-  //       console.log("Hello company")
-  //     }
-
-  //   // Apply search term filtering
-  //   if (searchTerm) {
-  //     filteredUsers = filteredUsers.filter((item) =>
-  //       item?.email?.toLowerCase().includes(searchTerm.toLowerCase())
-  //     );
-  //   }
-
-  //   // Update the filtered data
-  //   setFilteredData(filteredUsers);
-  //   setUsersX(Xusers);
-  //   setCurrentPage(1); // Reset to the first page on new search or filter
-  // }, [searchTerm, users]);
 
 
   useEffect(() => {
@@ -283,9 +175,9 @@ const Page = () => {
       );
       Xusers = filteredUsers;
       console.log("superadmin true");
-    } else if (userRole === "superadmin" && authData.flag === "false") {
+    } else if (userRole === "superadmin" && authData.flag === "false" ) {
       filteredUsers = users.filter(
-        (item) => item?.companyName?.toLowerCase() === companyName.toLowerCase()
+        (item) => userRole === "superadmin"? users : item?.companyName?.toLowerCase() === companyName.toLowerCase()
       );
       Xusers = filteredUsers;
       console.log("superadmin false");

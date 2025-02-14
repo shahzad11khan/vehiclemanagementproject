@@ -50,27 +50,7 @@ const AddManufacturerModel = ({ isOpen, onClose, fetchData }) => {
       }
     }
   }, []);
-  
-  // const fetchDataa = async () => {
-  //   try {
-  //     const stored = getCompanyName() || getsuperadmincompanyname();
-  //     const role = getUserRole();
-  //     // const title = await fetchCarModel();
-  //     // console.log(title);
-  //     // const filteredTaxiFirms =
-  //       // role === "superadmin"
-  //         // ? title.result
-  //         // : title.result.filter(
-  //             // (firm) =>
-  //               // firm.adminCompanyName === stored ||
-  //               // firm.adminCompanyName === "superadmin"
-  //           // );
 
-  //     // setData(filteredTaxiFirms);
-  //   } catch (error) {
-  //     console.error("Error fetching local auth data:", error);
-  //   }
-  // };
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -142,7 +122,7 @@ const AddManufacturerModel = ({ isOpen, onClose, fetchData }) => {
               name="name"
               value={formData.name}
               onChange={handleChange}
-              className="mt-1 block w-full p-1 border border-[#42506666]  rounded-[4px] shadow focus:ring-blue-500 focus:border-blue-500"
+              className="mt-1 block w-full p-1 border border-[#42506666]  rounded shadow focus:ring-blue-500 focus:border-blue-500"
               required
             />
           </div>
@@ -163,22 +143,7 @@ const AddManufacturerModel = ({ isOpen, onClose, fetchData }) => {
               rows="2"
             ></textarea>
           </div>
-          {/* <div className="col-span-2 flex items-center">
-            <input
-              type="checkbox"
-              id="isActive"
-              name="isActive"
-              checked={formData.isActive}
-              onChange={handleChange}
-              className="mr-2 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-            />
-            <label
-              htmlFor="isActive"
-              className="text-sm font-medium text-gray-700"
-            >
-              IsActive
-            </label>
-          </div> */}
+          
           <div>
             {/* <label className="block font-medium mb-2">Is Active:</label> */}
             <div className="flex gap-4">

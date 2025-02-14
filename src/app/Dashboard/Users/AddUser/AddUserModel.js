@@ -5,13 +5,13 @@ import { API_URL_USER } from "../../Components/ApiUrl/ApiUrls";
 import { toast } from "react-toastify";
 import {
   getCompanyName,
-  getUserId ,
-  getUserName,getflag,getcompanyId
+  getUserId,
+  getUserName, getflag, getcompanyId
 } from "@/utils/storageUtils";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 
 
-const AddUserModel = ({ isOpen, onClose, fetchData,}) => {
+const AddUserModel = ({ isOpen, onClose, fetchData, }) => {
   const [showPasswords, setShowPasswords] = useState(false);
   // const [dobvalidation, setdobValidation] = useState({ dateOfBirthValid: true });
   // const passwordRegex = /^[A-Z][@#$%^&*!]\d[a-z]{6,}$/;
@@ -52,9 +52,9 @@ const AddUserModel = ({ isOpen, onClose, fetchData,}) => {
     useravatar: null,
     isActive: false,
     role: "user", // Default role set to "user"
-    Postcode:"",
-    BuildingAndStreetOne:"",
-    BuildingAndStreetTwo:"",
+    Postcode: "",
+    BuildingAndStreetOne: "",
+    BuildingAndStreetTwo: "",
 
   });
 
@@ -570,14 +570,14 @@ console.log(userId, storedcompanyName ,flag,compID);
                       type="text"
                       id="Building&Street"
                       name="Postcode"
-                    value={formData.Postcode}
-                    onChange={handleChange}
+                      value={formData.Postcode}
+                      onChange={handleChange}
                       className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow focus:ring-blue-500 focus:border-blue-500"
                       required placeholder="Postcode"
                     />
                   </div>
 
-                  
+
                 </div>
 
                 <div className="flex gap-[10px] justify-end">
@@ -1140,11 +1140,11 @@ console.log(userId, storedcompanyName ,flag,compID);
                       Close
                     </button>
                     <button
-                    type="submit"
-                    className="px-6 py-2 bg-custom-bg text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
-                  >
-                    Submit
-                  </button>
+                      type="submit"
+                      className="px-6 py-2 bg-custom-bg text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+                    >
+                      Submit
+                    </button>
                   </div>
                 </div>
 

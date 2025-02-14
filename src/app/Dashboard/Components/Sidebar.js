@@ -26,21 +26,21 @@ const Sidebar = () => {
 
   const [isOpenManagement, setIsOpenManagement] = useState(false);
 
-useEffect(() => {
-  if (typeof window !== "undefined") {
-    const savedValue = localStorage.getItem("isOpenManagement");
-    if (savedValue) {
-      setIsOpenManagement(JSON.parse(savedValue));
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const savedValue = localStorage.getItem("isOpenManagement");
+      if (savedValue) {
+        setIsOpenManagement(JSON.parse(savedValue));
+      }
     }
-  }
-}, []);
+  }, []);
 
-// Save the state to localStorage whenever it changes
-useEffect(() => {
-  if (typeof window !== "undefined") {
-    localStorage.setItem("isOpenManagement", JSON.stringify(isOpenManagement));
-  }
-}, [isOpenManagement]);
+  // Save the state to localStorage whenever it changes
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("isOpenManagement", JSON.stringify(isOpenManagement));
+    }
+  }, [isOpenManagement]);
 
 
   const toggleValue = () => {
@@ -106,11 +106,10 @@ useEffect(() => {
             <Link passHref href="/Dashboard/Home">
               <li
                 onClick={() => handleLinkClick("/Dashboard/Home")}
-                className={`${
-                  activeLink === "/Dashboard/Home"
-                    ? " border-b-2 border-white"
-                    : "text-blue "
-                } flex items-center p-3 cursor-pointer hover:border-b-2 bg-transparent mx-2`}
+                className={`${activeLink === "/Dashboard/Home"
+                  ? " border-b-2 border-white"
+                  : "text-blue "
+                  } flex items-center p-3 cursor-pointer hover:border-b-2 bg-transparent mx-2`}
               >
                 <div className="flex items-center gap-3 hover:text-black  bg-transparent">
                   <img src="/dashboard.png" alt="dashboard" className="w-5" />
@@ -144,11 +143,10 @@ useEffect(() => {
                 <Link passHref href="/Dashboard/Superadmin">
                   <li
                     onClick={() => handleLinkClick("/Dashboard/Superadmin")}
-                    className={`${
-                      activeLink === "/Dashboard/Superadmin"
-                        ? "border-b-2"
-                        : " text-blue"
-                    } flex items-center p-3 cursor-pointer hover:border-b-2 bg-transparent mx-2`}
+                    className={`${activeLink === "/Dashboard/Superadmin"
+                      ? "border-b-2"
+                      : " text-blue"
+                      } flex items-center p-3 cursor-pointer hover:border-b-2 bg-transparent mx-2`}
                   >
                     <div className="flex items-center gap-3 bg-transparent">
                       <img
@@ -192,11 +190,10 @@ useEffect(() => {
                     onClick={() =>
                       handleLinkClick("/Dashboard/Users/GetAllusers")
                     }
-                    className={`${
-                      activeLink === "/Dashboard/Users/GetAllusers"
-                        ? "border-b-2"
-                        : " text-blue"
-                    } flex items-center p-3 cursor-pointer hover:border-b-2 bg-transparent mx-2`}
+                    className={`${activeLink === "/Dashboard/Users/GetAllusers"
+                      ? "border-b-2"
+                      : " text-blue"
+                      } flex items-center p-3 cursor-pointer hover:border-b-2 bg-transparent mx-2`}
                   >
                     <div className="flex items-center gap-3 bg-transparent">
                       <img
@@ -226,22 +223,20 @@ useEffect(() => {
                     //     ? "border-l-4 border-b-2 border-red-400"
                     //     : " text-blue"
                     // } flex items-center p-3 cursor-pointer hover:border-b-2 rounded-lg relative bg-transparent`}
-                    className={`flex items-center p-3 cursor-pointer hover:border-b-2  bg-transparent ${
-                      isOpenManagement ? "border-b-2" : "text-blue"
-                    } ${
-                      activeLink ===
+                    className={`flex items-center p-3 cursor-pointer hover:border-b-2  bg-transparent ${isOpenManagement ? "border-b-2" : "text-blue"
+                      } ${activeLink ===
                         "/Dashboard/Models/Manufacturer/GetManufacturers" ||
-                      activeLink ===
+                        activeLink ===
                         "/Dashboard/Models/CarModels/GetCarsModels" ||
-                      activeLink ===
+                        activeLink ===
                         "/Dashboard/Models/Type_BodyStyle/GetTypes" ||
-                      activeLink ===
+                        activeLink ===
                         "/Dashboard/Models/FuelType/GetFuelTypes" ||
-                      activeLink ===
+                        activeLink ===
                         "/Dashboard/Models/Transmission/GetTransmissions"
                         ? " border-b-2 "
                         : "text-blue"
-                    } flex items-center p-3 cursor-pointer hover:border-b-2 bg-transparent mx-2`}
+                      } flex items-center p-3 cursor-pointer hover:border-b-2 bg-transparent mx-2`}
                   >
                     <div className="flex items-center gap-3 relative bg-transparent w-full">
                       <div
@@ -290,11 +285,10 @@ useEffect(() => {
                               >
                                 <Link
                                   href={item.path}
-                                  className={`w-full block bg-transparent ${
-                                    pathname === item.path
-                                      ? "opacity-100"
-                                      : "opacity-65"
-                                  }`}
+                                  className={`w-full block bg-transparent ${pathname === item.path
+                                    ? "opacity-100"
+                                    : "opacity-65"
+                                    }`}
                                 >
                                   {item.label}
                                 </Link>
@@ -310,12 +304,11 @@ useEffect(() => {
             ) : role === "superadmin" && flag === "true" ? (
               <>
                 <Link passHref href="/Dashboard/Home">
-                  <li 
-                className={`${
-                  activeLink === "/Dashboard/Home"
-                    ? "border-b-2"
-                    : " text-blue"
-                } flex items-center p-3 cursor-pointer hover:border-b-2 bg-transparent mx-2`}
+                  <li
+                    className={`${activeLink === "/Dashboard/Home"
+                      ? "border-b-2"
+                      : " text-blue"
+                      } flex items-center p-3 cursor-pointer hover:border-b-2 bg-transparent mx-2`}
                   >
                     <div
                       className="flex items-center gap-3 bg-transparent"
@@ -334,11 +327,10 @@ useEffect(() => {
                     onClick={() =>
                       handleLinkClick("/Dashboard/Users/GetAllusers")
                     }
-                    className={`${
-                      activeLink === "/Dashboard/Users/GetAllusers"
-                        ? "border-b-2"
-                        : " text-blue"
-                    } flex items-center p-3 cursor-pointer hover:border-b-2 bg-transparent mx-2`}
+                    className={`${activeLink === "/Dashboard/Users/GetAllusers"
+                      ? "border-b-2"
+                      : " text-blue"
+                      } flex items-center p-3 cursor-pointer hover:border-b-2 bg-transparent mx-2`}
                   >
                     <div className="flex items-center gap-3 bg-transparent">
                       <img src="/user.png" alt="user" className="w-5" />
@@ -354,11 +346,10 @@ useEffect(() => {
                     onClick={() =>
                       handleLinkClick("/Dashboard/Driver/GetAllDrivers")
                     }
-                    className={`${
-                      activeLink === "/Dashboard/Driver/GetAllDrivers"
-                        ? "border-b-2"
-                        : " text-blue"
-                    } flex items-center p-3 cursor-pointer hover:border-b-2 bg-transparent mx-2`}
+                    className={`${activeLink === "/Dashboard/Driver/GetAllDrivers"
+                      ? "border-b-2"
+                      : " text-blue"
+                      } flex items-center p-3 cursor-pointer hover:border-b-2 bg-transparent mx-2`}
                   >
                     <div className="flex items-center gap-3 bg-transparent">
                       <img src="/driver.png" alt="user" className="w-5" />
@@ -374,11 +365,10 @@ useEffect(() => {
                     onClick={() =>
                       handleLinkClick("/Dashboard/Vehicle/GetAllVehicle")
                     }
-                    className={`${
-                      activeLink === "/Dashboard/Vehicle/GetAllVehicle"
-                        ? "border-b-2"
-                        : " text-blue"
-                    } flex items-center p-3 cursor-pointer hover:border-b-2 bg-transparent mx-2`}
+                    className={`${activeLink === "/Dashboard/Vehicle/GetAllVehicle"
+                      ? "border-b-2"
+                      : " text-blue"
+                      } flex items-center p-3 cursor-pointer hover:border-b-2 bg-transparent mx-2`}
                   >
                     <div className="flex items-center gap-3 bg-transparent">
                       <img src="/driver.png" alt="user" className="w-5" />
@@ -398,240 +388,50 @@ useEffect(() => {
                     //     ? "border-l-4 border-b-2 border-red-400"
                     //     : " text-blue"
                     // } flex items-center p-3 cursor-pointer hover:border-b-2 rounded-lg relative bg-transparent`}
-                    className={`flex items-center p-3 cursor-pointer hover:border-b-2  bg-transparent ${
-                      isOpenManagement
-                        ? " border-b-2 "
-                        : "text-blue"
-                    } ${
-                      activeLink ===
+                    className={`flex items-center p-3 cursor-pointer hover:border-b-2  bg-transparent ${isOpenManagement
+                      ? " border-b-2 "
+                      : "text-blue"
+                      } ${activeLink ===
                         "/Dashboard/Models/Manufacturer/GetManufacturers" ||
-                      activeLink ===
+                        activeLink ===
                         "/Dashboard/Models/CarModels/GetCarsModels" ||
-                      activeLink === "/Dashboard/Models/Enquiry/GetEnquiries" ||
-                      activeLink === "/Dashboard/Models/Firm/GetFirms" ||
-                      activeLink ===
+                        activeLink === "/Dashboard/Models/Enquiry/GetEnquiries" ||
+                        activeLink === "/Dashboard/Models/Firm/GetFirms" ||
+                        activeLink ===
                         "/Dashboard/Models/Signature/GetSignatures" ||
-                      activeLink ===
+                        activeLink ===
                         "/Dashboard/Models/LocalAuthority/GetLocalAuthority" ||
-                      activeLink ===
+                        activeLink ===
                         "/Dashboard/Models/Supplier/GetSuppliers" ||
-                      activeLink ===
+                        activeLink ===
                         "/Dashboard/Models/Insurance/GetInsurances" ||
-                      activeLink ===
+                        activeLink ===
                         "/Dashboard/Models/Type_BodyStyle/GetTypes" ||
-                      activeLink ===
+                        activeLink ===
                         "/Dashboard/Models/FuelType/GetFuelTypes" ||
-                      activeLink ===
+                        activeLink ===
                         "/Dashboard/Models/Transmission/GetTransmissions"
                         ? "border-l-4 border-b-2 border-red-400"
                         : "text-blue"
-                    }`}
+                      }`}
                   >
                     <div className="flex  items-center gap-3 relative bg-transparent w-full"
-                        onClick={toggleValue}
-                        >
-                    
+                      onClick={toggleValue}
+                    >
+
                       <img
                         src="/setting.png"
                         alt="superadmin"
                         className="w-5"
                       />
-                      
+
                       <p
                         className="hidden sm:block text-sm bg-transparent text-white w-full"
-                       
                         onClick={toggleValue}
                       >
                         Settings
                       </p>
                       <div />
-                      {isOpenManagement && (
-                        <div className="absolute h-[30vh] md:top-12 custom-scrollbar  rounded-4 py-2 top-9 md:py-0 bg-[#38384A] text-white md:bg-transparent w-40  md:w-full z-50">
-                        <ul className="space-y-2 pl-6 bg-transparent text-white w-full list-disc lg:marker:text-[#D9D9D9] marker:text-lg lg:marker:text-xl">
-                          {[
-                            {
-                              path: "/Dashboard/Models/Manufacturer/GetManufacturers",
-                              label: "Manufacturers",
-                            },
-                            {
-                              path: "/Dashboard/Models/CarModels/GetCarsModels",
-                              label: "Models",
-                            },
-                            {
-                              path: "/Dashboard/Models/Type_BodyStyle/GetTypes",
-                              label: "Body Type",
-                            },
-                            {
-                              path: "/Dashboard/Models/FuelType/GetFuelTypes",
-                              label: "Fuel Type",
-                            },
-                            {
-                              path: "/Dashboard/Models/Transmission/GetTransmissions",
-                              label: "Transmission Type",
-                            },
-                            {
-                              path: "/Dashboard/Models/VehicleType/GetVehicleTypes",
-                              label: "Vehicle Types",
-                            },
-                            {
-                              path: "/Dashboard/Models/Enquiry/GetEnquiries",
-                              label: "Enquiries",
-                            },
-                            {
-                              path: "/Dashboard/Models/Firm/GetFirms",
-                              label: "Firms",
-                            },
-                            {
-                              path: "/Dashboard/Models/Signature/GetSignatures",
-                              label: "Signatures",
-                            },
-                            {
-                              path: "/Dashboard/Models/LocalAuthority/GetLocalAuthority",
-                              label: "Local Authority",
-                            },
-                            {
-                              path: "/Dashboard/Models/Supplier/GetSuppliers",
-                              label: "Suppliers",
-                            },
-                            {
-                              path: "/Dashboard/Models/Insurance/GetInsurances",
-                              label: "Insurances",
-                            },
-                          ].map((item) => (
-                            <li
-                              key={item.path}
-                              className="font-medium text-xs lg:text-sm w-full bg-transparent text-white"
-                            >
-                              <Link
-                                href={item.path}
-                                className={`w-full block bg-transparent ${
-                                  pathname === item.path
-                                    ? "opacity-100"
-                                    : "opacity-65"
-                                }`}
-                              >
-                                {item.label}
-                              </Link>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                      )}
-                    </div>
-                  </li>
-                </div>
-              </>
-            ) : (
-              <>
-                <Link passHref href={"/Dashboard/Users/GetAllusers"}>
-                  <li
-                    onClick={() =>
-                      handleLinkClick("/Dashboard/Users/GetAllusers")
-                    }
-                    className={`${
-                      activeLink === "/Dashboard/Users/GetAllusers"
-                        ? " border-b-2 border-white"
-                        : " text-blue"
-                    } flex items-center p-3 cursor-pointer hover:border-b-2  mx-2 bg-transparent`}
-                  >
-                    <div className="flex items-center gap-3 bg-transparent">
-                      <img src="/user.png" alt="user" className="w-5" />
-                      <span className="hidden sm:block text-sm bg-transparent text-white">
-                        Users
-                      </span>
-                    </div>
-                  </li>
-                </Link>
-                <Link passHref href="/Dashboard/Driver/GetAllDrivers">
-                  <li
-                    onClick={() =>
-                      handleLinkClick("/Dashboard/Driver/GetAllDrivers")
-                    }
-                    className={`${
-                      activeLink === "/Dashboard/Driver/GetAllDrivers"
-                        ? "border-b-2 border-white"
-                        : "text-blue"
-                    } flex items-center p-3 cursor-pointer hover:border-b-2 mx-2 bg-transparent`}
-                  >
-                    <div className="flex items-center gap-3 bg-transparent">
-                      <img src="/driver.png" alt="user" className="w-5" />
-                      <span className="hidden sm:block text-sm bg-transparent text-white">
-                        Driver
-                      </span>
-                    </div>
-                  </li>
-                </Link>
-                <Link passHref href="/Dashboard/Vehicle/GetAllVehicle">
-                  <li
-                    onClick={() =>
-                      handleLinkClick("/Dashboard/Vehicle/GetAllVehicle")
-                    }
-                    className={`${
-                      activeLink === "/Dashboard/Vehicle/GetAllVehicle"
-                        ? " border-b-2 border-white"
-                        : "text-blue"
-                    } flex items-center p-3 cursor-pointer hover:border-b-2 mx-2 bg-transparent`}
-                  >
-                    <div className="flex items-center gap-3 bg-transparent">
-                      <img src="/vehicle.png" alt="user" className="w-5" />
-
-                      <span className="hidden sm:block text-sm text-white bg-transparent">
-                        Vehicle
-                      </span>
-                    </div>
-                  </li>
-                </Link>
-                <div className="bg-transparent">
-                  <li
-                    // onMouseLeave={() => setIsOpenManagement(false)}
-                    // className={`${
-                    //   isOpenManagement === true
-                    //     ? "border-l-4 border-b-2 border-red-400"
-                    //     : " text-blue"
-                    // } flex items-center p-3 cursor-pointer hover:border-b-2 rounded-lg relative bg-transparent`}
-                    className={`flex items-center p-3 cursor-pointer hover:border-b-2 mx-2 bg-transparent ${
-                      isOpenManagement ? "border-b-2 border-white" : "text-blue"
-                    } ${
-                      activeLink ===
-                        "/Dashboard/Models/Manufacturer/GetManufacturers" ||
-                      activeLink ===
-                        "/Dashboard/Models/CarModels/GetCarsModels" ||
-                      activeLink === "/Dashboard/Models/Enquiry/GetEnquiries" ||
-                      activeLink === "/Dashboard/Models/Firm/GetFirms" ||
-                      activeLink ===
-                        "/Dashboard/Models/Signature/GetSignatures" ||
-                      activeLink ===
-                        "/Dashboard/Models/LocalAuthority/GetLocalAuthority" ||
-                      activeLink ===
-                        "/Dashboard/Models/Supplier/GetSuppliers" ||
-                      activeLink ===
-                        "/Dashboard/Models/Insurance/GetInsurances" ||
-                      activeLink ===
-                        "/Dashboard/Models/Type_BodyStyle/GetTypes" ||
-                      activeLink ===
-                        "/Dashboard/Models/FuelType/GetFuelTypes" ||
-                      activeLink ===
-                        "/Dashboard/Models/Transmission/GetTransmissions"
-                        ? " border-b-2 border-white"
-                        : "text-blue"
-                    }`}
-                  >
-                    <div className="flex items-center gap-3 relative bg-transparent w-full"
-                     onClick={toggleValue}
-                    >
-                      <img
-                        src="/setting.png"
-                        alt="superadmin"
-                        className="w-5"
-                      />
-
-                      <p
-                        className="hidden sm:block text-sm bg-transparent text-white"
-                       
-                      >
-                        Settings
-                      </p>
-
                       {isOpenManagement && (
                         <div className="absolute h-[30vh] md:top-12 custom-scrollbar  rounded-4 py-2 top-9 md:py-0 bg-[#38384A] text-white md:bg-transparent w-40  md:w-full z-50">
                           <ul className="space-y-2 pl-6 bg-transparent text-white w-full list-disc lg:marker:text-[#D9D9D9] marker:text-lg lg:marker:text-xl">
@@ -691,11 +491,212 @@ useEffect(() => {
                               >
                                 <Link
                                   href={item.path}
-                                  className={`w-full block bg-transparent ${
-                                    pathname === item.path
-                                      ? "opacity-100"
-                                      : "opacity-65"
-                                  }`}
+                                  className={`w-full block bg-transparent ${pathname === item.path
+                                    ? "opacity-100"
+                                    : "opacity-65"
+                                    }`}
+                                >
+                                  {item.label}
+                                </Link>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                    </div>
+                  </li>
+                </div>
+              </>
+            ) : (
+              <>
+                <Link passHref href={"/Dashboard/Users/GetAllusers"}>
+                  <li
+                    onClick={() =>
+                      handleLinkClick("/Dashboard/Users/GetAllusers")
+                    }
+                    className={`${activeLink === "/Dashboard/Users/GetAllusers"
+                      ? " border-b-2 border-white"
+                      : " text-blue"
+                      } flex items-center p-3 cursor-pointer hover:border-b-2  mx-2 bg-transparent`}
+                  >
+                    <div className="flex items-center gap-3 bg-transparent">
+                      <img src="/user.png" alt="user" className="w-5" />
+                      <span className="hidden sm:block text-sm bg-transparent text-white">
+                        Users
+                      </span>
+                    </div>
+                  </li>
+                </Link>
+                <Link passHref href="/Dashboard/Driver/GetAllDrivers">
+                  <li
+                    onClick={() =>
+                      handleLinkClick("/Dashboard/Driver/GetAllDrivers")
+                    }
+                    className={`${activeLink === "/Dashboard/Driver/GetAllDrivers"
+                      ? "border-b-2 border-white"
+                      : "text-blue"
+                      } flex items-center p-3 cursor-pointer hover:border-b-2 mx-2 bg-transparent`}
+                  >
+                    <div className="flex items-center gap-3 bg-transparent">
+                      <img src="/driver.png" alt="user" className="w-5" />
+                      <span className="hidden sm:block text-sm bg-transparent text-white">
+                        Driver
+                      </span>
+                    </div>
+                  </li>
+                </Link>
+                <Link passHref href="/Dashboard/Vehicle/GetAllVehicle">
+                  <li
+                    onClick={() =>
+                      handleLinkClick("/Dashboard/Vehicle/GetAllVehicle")
+                    }
+                    className={`${activeLink === "/Dashboard/Vehicle/GetAllVehicle"
+                      ? " border-b-2 border-white"
+                      : "text-blue"
+                      } flex items-center p-3 cursor-pointer hover:border-b-2 mx-2 bg-transparent`}
+                  >
+                    <div className="flex items-center gap-3 bg-transparent">
+                      <img src="/vehicle.png" alt="user" className="w-5" />
+
+                      <span className="hidden sm:block text-sm text-white bg-transparent">
+                        Vehicle
+                      </span>
+                    </div>
+                  </li>
+                </Link>
+                <div className="bg-transparent">
+                  <li
+                    // onMouseLeave={() => setIsOpenManagement(false)}
+                    // className={`${
+                    //   isOpenManagement === true
+                    //     ? "border-l-4 border-b-2 border-red-400"
+                    //     : " text-blue"
+                    // } flex items-center p-3 cursor-pointer hover:border-b-2 rounded-lg relative bg-transparent`}
+                    className={`flex items-center p-3 cursor-pointer hover:border-b-2 mx-2 bg-transparent ${isOpenManagement ? "border-b-2 border-white" : "text-blue"
+                      } ${activeLink ===
+                        "/Dashboard/Models/Manufacturer/GetManufacturers" ||
+                        activeLink ===
+                        "/Dashboard/Models/CarModels/GetCarsModels" ||
+                        activeLink === "/Dashboard/Models/Enquiry/GetEnquiries" ||
+                        activeLink === "/Dashboard/Models/Firm/GetFirms" ||
+                        activeLink ===
+                        "/Dashboard/Models/Signature/GetSignatures" ||
+                        activeLink ===
+                        "/Dashboard/Models/LocalAuthority/GetLocalAuthority" ||
+                        activeLink ===
+                        "/Dashboard/Models/Supplier/GetSuppliers" ||
+                        activeLink ===
+                        "/Dashboard/Models/Insurance/GetInsurances" ||
+                        activeLink ===
+                        "/Dashboard/Models/Type_BodyStyle/GetTypes" ||
+                        activeLink ===
+                        "/Dashboard/Models/FuelType/GetFuelTypes" ||
+                        activeLink ===
+                        "/Dashboard/Models/Transmission/GetTransmissions" || activeLink === "/Dashboard/Models/DriverBalance/GetDriverBalance" ||
+                        activeLink === "/Dashboard/Models/DriverCars/GetDriverCars" ||
+                        activeLink === "/Dashboard/Models/DriverPayments/GetDriverPayments"
+
+                        ? " border-b-2 border-white"
+                        : "text-blue"
+                      }`}
+                  >
+                    <div className="flex items-center gap-3 relative bg-transparent w-full"
+                      onClick={toggleValue}
+                    >
+                      <img
+                        src="/setting.png"
+                        alt="superadmin"
+                        className="w-5"
+                      />
+
+                      <p
+                        className="hidden sm:block text-sm bg-transparent text-white"
+
+                      >
+                        Settings
+                      </p>
+
+                      {isOpenManagement && (
+                        <div className="absolute h-[30vh] md:top-12 custom-scrollbar  rounded-4 py-2 top-9 md:py-0 bg-[#38384A] text-white md:bg-transparent w-40  md:w-full z-50">
+                          <ul className="space-y-2 pl-6 bg-transparent text-white w-full list-disc lg:marker:text-[#D9D9D9] marker:text-lg lg:marker:text-xl">
+                            {[
+
+
+                              {
+                                path: "/Dashboard/Models/DriverBalance/GetDriverBalance",
+                                label: "Balance",
+                              },
+                              {
+                                path: "/Dashboard/Models/DriverCars/GetDriverCars",
+                                label: "Cars",
+                              },
+                              {
+                                path: "/Dashboard/Models/DriverPayments/GetDriverPayments",
+                                label: "Payments",
+                              },
+
+
+
+
+                              {
+                                path: "/Dashboard/Models/Manufacturer/GetManufacturers",
+                                label: "Manufacturers",
+                              },
+                              {
+                                path: "/Dashboard/Models/CarModels/GetCarsModels",
+                                label: "Models",
+                              },
+                              {
+                                path: "/Dashboard/Models/Type_BodyStyle/GetTypes",
+                                label: "Body Type",
+                              },
+                              {
+                                path: "/Dashboard/Models/FuelType/GetFuelTypes",
+                                label: "Fuel Type",
+                              },
+                              {
+                                path: "/Dashboard/Models/Transmission/GetTransmissions",
+                                label: "Transmission Type",
+                              },
+                              {
+                                path: "/Dashboard/Models/VehicleType/GetVehicleTypes",
+                                label: "Vehicle Types",
+                              },
+                              {
+                                path: "/Dashboard/Models/Enquiry/GetEnquiries",
+                                label: "Enquiries",
+                              },
+                              {
+                                path: "/Dashboard/Models/Firm/GetFirms",
+                                label: "Firms",
+                              },
+                              {
+                                path: "/Dashboard/Models/Signature/GetSignatures",
+                                label: "Signatures",
+                              },
+                              {
+                                path: "/Dashboard/Models/LocalAuthority/GetLocalAuthority",
+                                label: "Local Authority",
+                              },
+                              {
+                                path: "/Dashboard/Models/Supplier/GetSuppliers",
+                                label: "Suppliers",
+                              },
+                              {
+                                path: "/Dashboard/Models/Insurance/GetInsurances",
+                                label: "Insurances",
+                              },
+                            ].map((item) => (
+                              <li
+                                key={item.path}
+                                className="font-medium text-xs lg:text-sm w-full bg-transparent text-white"
+                              >
+                                <Link
+                                  href={item.path}
+                                  className={`w-full block bg-transparent ${pathname === item.path
+                                    ? "opacity-100"
+                                    : "opacity-65"
+                                    }`}
                                 >
                                   {item.label}
                                 </Link>

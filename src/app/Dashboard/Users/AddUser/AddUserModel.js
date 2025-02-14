@@ -916,7 +916,7 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                           } focus:outline-none border border-[#42506666] rounded`}
                         required placeholder="Confirm Password"
                       />
-                      {/* <button
+                      <button
                         type="button"
                         onClick={() => setShowPasswords((prev) => !prev)}
                         className="absolute right-2 top-1/2"
@@ -926,7 +926,7 @@ const AddUserModel = ({ isOpen, onClose, fetchData }) => {
                         ) : (
                           <AiOutlineEyeInvisible size={20} />
                         )}
-                      </button> */}
+                      </button>
                       <span
                         className={`text-[9px] ${validation.passwordMatch === null
                           ? "text-gray-500"

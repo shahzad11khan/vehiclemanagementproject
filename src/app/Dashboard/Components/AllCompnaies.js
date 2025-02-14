@@ -87,6 +87,7 @@ const AllCompanies = () => {
   );
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  console.log(paginate)
 
   const totalPages = Math.ceil(filteredData.length / itemperpage);
   // const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1); // Create an array of page numbers

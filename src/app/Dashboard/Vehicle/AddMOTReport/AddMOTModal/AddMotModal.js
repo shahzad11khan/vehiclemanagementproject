@@ -36,7 +36,6 @@ const AddMotModal = ({ isOpen, onClose, fetchData, selectedid }) => {
         const response = await axios.get(
           `${API_URL_Vehicle_getspecificvehicleid}/${selectedid}`
         );
-        console.log("get data: ", response.data);
         const data = response.data.result;
 
         if (data) {
@@ -73,13 +72,11 @@ const AddMotModal = ({ isOpen, onClose, fetchData, selectedid }) => {
   useEffect(() => {
     fetchDat(); // Fetch data whenever the component mounts or selectedid changes
     fetchCompanyuserData();
-  }, [selectedid]); // Include selectedid in the dependency array
+  }, []); // Include selectedid in the dependency array
 
   useEffect(() => {
     const companyNameFromStorage = getCompanyName();
-    const filtered = users.filter((item) => {
-      // console.log(item);
-      // Ensure both strings are defined before comparing
+    const filtered = users?.filter((item) => {
       return (
         item.companyname &&
         companyNameFromStorage &&

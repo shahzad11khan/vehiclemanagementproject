@@ -5,8 +5,7 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import {
   getCompanyName,
-  getUserId ,
-  getUserName,getflag,getcompanyId,getsuperadmincompanyname
+  getUserId ,getflag,getcompanyId,getsuperadmincompanyname
 } from "@/utils/storageUtils";import { GetManufacturer } from "@/app/Dashboard/Components/ApiUrl/ShowApiDatas/ShowApiDatas";
 
 const UpdateCarModel = ({ isOpen, onClose, fetchData, updateid }) => {
@@ -45,27 +44,33 @@ const UpdateCarModel = ({ isOpen, onClose, fetchData, updateid }) => {
   };
 
   useEffect(() => {
-    const storedcompanyName = getUserName() || getCompanyName(); 
-    const userId = getUserId(); 
+    const storedcompanyName = getCompanyName() || getsuperadmincompanyname();
+    const userId = getUserId();
     const flag = getflag();
     const compID = getcompanyId();
+  
     if (storedcompanyName && userId) {
-    if (storedcompanyName.toLowerCase() === "superadmin" && flag === "true") {
-      setFormData((prevData) => ({
+      // Check if the company is "superadmin" and the flag is "true"
+      if (storedcompanyName.toLowerCase() === "superadmin" && flag === "true") {
+        setFormData((prevData) => ({
           ...prevData,
           adminCompanyName: storedcompanyName,
-          companyId:  compID 
+          companyId: compID, // Use compID in this case
+        }));
+      } else {
+        // For other conditions, use the regular logic
+        setFormData((prevData) => ({
+          ...prevData,
+          adminCompanyName: storedcompanyName,
+          companyId: userId, // Use userId in this case
         }));
       }
-    } else {
-      setFormData((prevData) => ({
-        ...prevData,
-        adminCompanyName: storedcompanyName,
-        companyId: userId,
-      }));
     }
+  
+    // Always call fetchDt after the conditions
     fetchDt();
   }, []);
+  
 
   useEffect(() => {
     const fetchManufacturerData = async () => {
@@ -80,6 +85,9 @@ const UpdateCarModel = ({ isOpen, onClose, fetchData, updateid }) => {
               makemodel: data.makemodel,
               description: data.description,
               isActive: data.isActive,
+              adminCreatedBy: data.adminCreatedBy,
+              adminCompanyName: data.adminCompanyName,
+              companyId: data.companyId
             });
           } else {
             toast.warn("Failed to fetch CarModel data");

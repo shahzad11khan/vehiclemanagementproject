@@ -26,26 +26,34 @@ const UpdateSupplierModel = ({ isOpen, onClose, fetchData, supplierid }) => {
 
   // Retrieve company name from local storage
   useEffect(() => {
-    const storedcompanyName = getUserName() || getCompanyName(); 
-    const userId = getUserId(); 
+    const storedcompanyName = getCompanyName() || getUserName();
+    const userId = getUserId();
     const flag = getflag();
     const compID = getcompanyId();
+
+    
+    // Ensure that both storedcompanyName and userId are present before setting form data
     if (storedcompanyName && userId) {
-    if (storedcompanyName.toLowerCase() === "superadmin" && flag === "true") {
-      setFormData((prevData) => ({
+      // Check if the company is "superadmin" and the flag is true
+      if (storedcompanyName.toLowerCase() === "superadmin" && flag === "true" && compID) {
+        setFormData((prevData) => ({
           ...prevData,
           adminCompanyName: storedcompanyName,
-          companyId:  compID 
+          companyId: compID, // Ensure compID is set
+         }));
+       } else {
+         // Use userId if not in "superadmin" mode
+         console.log(storedcompanyName, userId, flag, compID);
+        setFormData((prevData) => ({
+          ...prevData,
+          adminCompanyName: storedcompanyName,
+          companyId: userId,
         }));
       }
     } else {
-      setFormData((prevData) => ({
-        ...prevData,
-        adminCompanyName: storedcompanyName,
-        companyId: userId,
-      }));
+      console.error("Missing required fields:", { storedcompanyName, userId, flag, compID });
     }
-  }, []);/// Update when the manufacturer changes
+  }, []);
   // Fetch manufacturer data when the modal opens
   useEffect(() => {
     // console.log(vehicleid);
@@ -62,6 +70,9 @@ const UpdateSupplierModel = ({ isOpen, onClose, fetchData, supplierid }) => {
               name: data.name,
               description: data.description,
               isActive: data.isActive,
+              adminCreatedBy: data.adminCreatedBy,
+              adminCompanyName: data.adminCompanyName,
+              companyId: data.companyId
             });
           } else {
             toast.warn("Failed to fetch manufacturer data");

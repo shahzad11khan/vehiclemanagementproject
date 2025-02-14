@@ -23,27 +23,35 @@ const AddSupplierModel = ({ isOpen, onClose, fetchData }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
-   useEffect(() => {
-     const storedcompanyName = getUserName() || getCompanyName(); 
-     const userId = getUserId(); 
-     const flag = getflag();
-     const compID = getcompanyId();
-     if (storedcompanyName && userId) {
-     if (storedcompanyName.toLowerCase() === "superadmin" && flag === "true") {
-       setFormData((prevData) => ({
-           ...prevData,
-           adminCompanyName: storedcompanyName,
-           companyId:  compID 
+  useEffect(() => {
+    const storedcompanyName = getCompanyName() || getUserName();
+    const userId = getUserId();
+    const flag = getflag();
+    const compID = getcompanyId();
+
+    
+    // Ensure that both storedcompanyName and userId are present before setting form data
+    if (storedcompanyName && userId) {
+      // Check if the company is "superadmin" and the flag is true
+      if (storedcompanyName.toLowerCase() === "superadmin" && flag === "true" && compID) {
+        setFormData((prevData) => ({
+          ...prevData,
+          adminCompanyName: storedcompanyName,
+          companyId: compID, // Ensure compID is set
          }));
-       }
-     } else {
-       setFormData((prevData) => ({
-         ...prevData,
-         adminCompanyName: storedcompanyName,
-         companyId: userId,
-       }));
-     }
-   }, []);// Run only once when the component mounts
+       } else {
+         // Use userId if not in "superadmin" mode
+         console.log(storedcompanyName, userId, flag, compID);
+        setFormData((prevData) => ({
+          ...prevData,
+          adminCompanyName: storedcompanyName,
+          companyId: userId,
+        }));
+      }
+    } else {
+      console.error("Missing required fields:", { storedcompanyName, userId, flag, compID });
+    }
+  }, []);// Run only once when the component mounts
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -54,6 +62,7 @@ const AddSupplierModel = ({ isOpen, onClose, fetchData }) => {
   };
 
   const handleSubmit = async (e) => {
+    console.log(formData)
     e.preventDefault();
     setLoading(true);
     setError(null);
@@ -67,6 +76,7 @@ const AddSupplierModel = ({ isOpen, onClose, fetchData }) => {
         isActive: false,
         adminCreatedBy: "",
         adminCompanyName: formData.adminCompanyName,
+        companyId: formData.companyId,
       });
       // console.log(response.data);
       if (response.data.success) {

@@ -3,27 +3,50 @@ import { API_URL_VehicleType } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import {
+  getCompanyName,
+  getUserId ,getflag,getcompanyId
+} from "@/utils/storageUtils";
 const AddVehicleType = ({ isOpen, onClose, fetchData }) => {
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     description: "",
     isActive: false,
     adminCreatedBy: "",
     adminCompanyName: "",
+    companyId: null,
   });
-
-  const [loading, setLoading] = useState(false);
-
+  
+  // Run only once when the component mounts
   useEffect(() => {
-    const storedCompanyName = localStorage.getItem("companyName"); // Replace with the actual key used in localStorage
-    if (storedCompanyName) {
-      setFormData((prevData) => ({
-        ...prevData,
-        adminCompanyName: storedCompanyName,
-      }));
+    const storedcompanyName = getCompanyName() || getsuperadmincompanyname();
+    const userId = getUserId();
+    const flag = getflag();
+    const compID = getcompanyId();
+    console.log(storedcompanyName, userId, flag, compID);
+  
+    if (storedcompanyName && userId) {
+      // Check if the company is "superadmin" and the flag is "true"
+      if (storedcompanyName.toLowerCase() === "superadmin" && flag === "true") {
+        setFormData((prevData) => ({
+          ...prevData,
+          adminCompanyName: storedcompanyName,
+          companyId: compID, // Use compID in this case
+        }));
+      } else {
+        // For other conditions, use the regular logic
+        setFormData((prevData) => ({
+          ...prevData,
+          adminCompanyName: storedcompanyName,
+          companyId: userId, // Use userId in this case
+        }));
+      }
     }
-  }, []); // Run only once when the component mounts
-
+  
+    // Always call fetchDt after the conditions
+  }, []);
+  
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData({
@@ -33,6 +56,7 @@ const AddVehicleType = ({ isOpen, onClose, fetchData }) => {
   };
 
   const handleSubmit = async (e) => {
+    console.log(formData)
     e.preventDefault();
     setLoading(true);
 
@@ -44,6 +68,7 @@ const AddVehicleType = ({ isOpen, onClose, fetchData }) => {
         description: "",
         isActive: false,
         adminCreatedBy: "",
+        companyId : formData.companyId,
         adminCompanyName: formData.adminCompanyName,
       });
       // console.log(response.data);

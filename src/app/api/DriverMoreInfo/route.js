@@ -119,13 +119,13 @@ export const POST = catchAsyncErrors(async (request) => {
   } = data;
 
   // Normalize the incoming startDate to remove the time portion
-  const normalizeDate = (date) => {
-    const normalizedDate = new Date(date);
-    normalizedDate.setHours(0, 0, 0, 0); // Set to 00:00:00
-    return normalizedDate;
-  };
+  // const normalizeDate = (date) => {
+  //   const normalizedDate = new Date(date);
+  //   normalizedDate.setHours(0, 0, 0, 0); // Set to 00:00:00
+  //   return normalizedDate;
+  // };
 
-  const normalizedStartDate = normalizeDate(startDate); // Normalize the incoming start date
+  // const normalizedStartDate = normalizeDate(startDate); // Normalize the incoming start date
 
   // Check if a record with the same driverId, vehicleId, and adminCompanyName exists
   const findStartDate = await DriverMoreInfo.findOne({
@@ -134,17 +134,21 @@ export const POST = catchAsyncErrors(async (request) => {
     adminCompanyName: adminCompanyName,
   });
 
-  if (findStartDate) {
+  if (!findStartDate) {
     // Normalize the stored startDate from the database
-    const storedStartDate = normalizeDate(findStartDate.startDate);
+    // const storedStartDate = normalizeDate(findStartDate.startDate);
 
-    // Check if the dates are the same (same day, month, and year)
-    if (normalizedStartDate.getTime() === storedStartDate.getTime()) {
-      return NextResponse.json({
-        error: "DriverMoreInfo with the same start date already exists",
-        status: 400,
-      });
-    }
+    // // Check if the dates are the same (same day, month, and year)
+    // if (normalizedStartDate.getTime() === storedStartDate.getTime()) {
+    //   return NextResponse.json({
+        // error: "DriverMoreInfo with the same start date already exists",
+      //   status: 400,
+      // });
+    // }
+    return NextResponse.json({
+      error: "DriverMoreInfo not found",
+      status: 400,
+    });
   }
 
   // Create and save the new DriverMoreInfo entry
@@ -153,7 +157,7 @@ export const POST = catchAsyncErrors(async (request) => {
     driverName,
     vehicle,
     vehicleId,
-    startDate: normalizedStartDate, // Ensure the date is normalized before saving
+    startDate, // Ensure the date is normalized before saving
     paymentcycle,
     payment,
     endDate,

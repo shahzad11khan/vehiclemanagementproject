@@ -29,27 +29,36 @@ const UpdateSignatureModel = ({
   });
 
 
-    useEffect(() => {
-      const storedcompanyName = getUserName() || getCompanyName(); 
-      const userId = getUserId(); 
-      const flag = getflag();
-      const compID = getcompanyId();
-      if (storedcompanyName && userId) {
-      if (storedcompanyName.toLowerCase() === "superadmin" && flag === "true") {
-        setFormData((prevData) => ({
-            ...prevData,
-            adminCompanyName: storedcompanyName,
-            companyId:  compID 
-          }));
+      useEffect(() => {
+        const storedcompanyName = getCompanyName() || getUserName();
+        const userId = getUserId();
+        const flag = getflag();
+        const compID = getcompanyId();
+   
+        
+        // Ensure that both storedcompanyName and userId are present before setting form data
+        if (storedcompanyName && userId) {
+          // Check if the company is "superadmin" and the flag is true
+          if (storedcompanyName.toLowerCase() === "superadmin" && flag === "true" && compID) {
+            setFormData((prevData) => ({
+              ...prevData,
+              adminCompanyName: storedcompanyName,
+              companyId: compID, // Ensure compID is set
+             }));
+           } else {
+             // Use userId if not in "superadmin" mode
+             console.log(storedcompanyName, userId, flag, compID);
+            setFormData((prevData) => ({
+              ...prevData,
+              adminCompanyName: storedcompanyName,
+              companyId: userId,
+            }));
+          }
+        } else {
+          console.error("Missing required fields:", { storedcompanyName, userId, flag, compID });
         }
-      } else {
-        setFormData((prevData) => ({
-          ...prevData,
-          adminCompanyName: storedcompanyName,
-          companyId: userId,
-        }));
-      }
-    }, []);
+      }, []);// Run only once when the component mounts
+   
   useEffect(() => {
     if (signatureData) {
       const fetchEnquiry = async () => {
@@ -66,13 +75,7 @@ const UpdateSignatureModel = ({
       };
       fetchEnquiry();
     }
-    const storedCompanyName = localStorage.getItem("companyName");
-    if (storedCompanyName) {
-      setFormData((prevData) => ({
-        ...prevData,
-        adminCompanyName: storedCompanyName,
-      }));
-    }
+  
   }, [signatureData]); // Run whenever signatureData changes
 
   const handleChange = (e) => {
@@ -115,6 +118,9 @@ const UpdateSignatureModel = ({
         isActive: false,
         imageName: "",
         imageFile: null,
+        adminCreatedBy: formData.adminCreatedBy,
+        adminCompanyName:formData.adminCompanyName,
+        companyId: formData.companyId
       });
     } catch (error) {
       console.error("Error submitting the form:", error);

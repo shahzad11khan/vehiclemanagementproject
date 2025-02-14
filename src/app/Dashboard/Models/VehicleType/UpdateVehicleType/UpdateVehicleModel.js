@@ -3,34 +3,55 @@ import { API_URL_VehicleType } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-
+import {
+  getCompanyName,
+  getUserId ,
+  getflag,getcompanyId
+} from "@/utils/storageUtils";
 const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleid }) => {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     description: "",
     isActive: false,
     adminCreatedBy: "",
     adminCompanyName: "",
+    companyId: null,
   });
-
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(false);
-
-  // Retrieve company name from local storage
+  
+  // Run only once when the component mounts
   useEffect(() => {
-    const storedCompanyName = localStorage.getItem("companyName");
-    if (storedCompanyName) {
-      setFormData((prevData) => ({
-        ...prevData,
-        adminCompanyName: storedCompanyName,
-      }));
+    const storedcompanyName = getCompanyName() || getsuperadmincompanyname();
+    const userId = getUserId();
+    const flag = getflag();
+    const compID = getcompanyId();
+    console.log(storedcompanyName, userId, flag, compID);
+  
+    if (storedcompanyName && userId) {
+      // Check if the company is "superadmin" and the flag is "true"
+      if (storedcompanyName.toLowerCase() === "superadmin" && flag === "true") {
+        setFormData((prevData) => ({
+          ...prevData,
+          adminCompanyName: storedcompanyName,
+          companyId: compID, // Use compID in this case
+        }));
+      } else {
+        // For other conditions, use the regular logic
+        setFormData((prevData) => ({
+          ...prevData,
+          adminCompanyName: storedcompanyName,
+          companyId: userId, // Use userId in this case
+        }));
+      }
     }
-  }, []); // Update when the manufacturer changes
+  
+    // Always call fetchDt after the conditions
+  }, []);
   // Fetch manufacturer data when the modal opens
   useEffect(() => {
-    // console.log(vehicleid);
-    // alert(vehicleid);
+ 
     const fetchManufacturerData = async () => {
       setLoading(true);
       if (vehicleid) {
@@ -38,13 +59,15 @@ const UpdateVehicleModel = ({ isOpen, onClose, fetchData, vehicleid }) => {
           const response = await axios.get(
             `${API_URL_VehicleType}/${vehicleid}`
           );
-          console.log(response.data.result);
           const data = response.data.result;
           if (data) {
             setFormData({
               name: data.name,
               description: data.description,
+              companyId:data.compayId,
               isActive: data.isActive,
+              adminCreatedBy: data.adminCreatedBy,
+              adminCompanyName: data.adminCompanyName,
             });
           } else {
             toast.warn("Failed to fetch manufacturer data");

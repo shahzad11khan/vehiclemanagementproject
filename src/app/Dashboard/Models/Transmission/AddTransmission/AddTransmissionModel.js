@@ -5,8 +5,7 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import {
   getCompanyName,
-  getUserId ,
-  getUserName,getflag,getcompanyId
+  getUserId ,getflag,getcompanyId
 } from "@/utils/storageUtils";
 
 const AddTransmissionModel = ({ isOpen, onClose, fetchData }) => {
@@ -22,26 +21,32 @@ const AddTransmissionModel = ({ isOpen, onClose, fetchData }) => {
 
   const [loading, setLoading] = useState(false);
   useEffect(() => {
-    const storedcompanyName = getUserName() || getCompanyName(); 
-    const userId = getUserId(); 
+    const storedcompanyName = getCompanyName() || getsuperadmincompanyname();
+    const userId = getUserId();
     const flag = getflag();
     const compID = getcompanyId();
+    console.log(storedcompanyName, userId, flag, compID);
+  
     if (storedcompanyName && userId) {
-    if (storedcompanyName.toLowerCase() === "superadmin" && flag === "true") {
-      setFormData((prevData) => ({
+      // Check if the company is "superadmin" and the flag is "true"
+      if (storedcompanyName.toLowerCase() === "superadmin" && flag === "true") {
+        setFormData((prevData) => ({
           ...prevData,
           adminCompanyName: storedcompanyName,
-          companyId:  compID 
+          companyId: compID, // Use compID in this case
+        }));
+      } else {
+        // For other conditions, use the regular logic
+        setFormData((prevData) => ({
+          ...prevData,
+          adminCompanyName: storedcompanyName,
+          companyId: userId, // Use userId in this case
         }));
       }
-    } else {
-      setFormData((prevData) => ({
-        ...prevData,
-        adminCompanyName: storedcompanyName,
-        companyId: userId,
-      }));
     }
-  }, []);// Run only once when the component mounts
+  
+    // Always call fetchDt after the conditions
+  }, []);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -64,6 +69,7 @@ const AddTransmissionModel = ({ isOpen, onClose, fetchData }) => {
         isActive: false,
         adminCreatedBy: "",
         adminCompanyName: formData.adminCompanyName,
+        companyId: formData.companyId
       });
       // console.log(response.data);
       if (response.data.success) {

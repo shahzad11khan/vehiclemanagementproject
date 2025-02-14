@@ -39,7 +39,6 @@ const Page = () => {
   const fetchData = async () => {
     try {
       GetFueltype().then(({ result }) => {
-        console.log(result);
         setData(result);
         setFilteredData(result);
       });
@@ -82,12 +81,10 @@ const Page = () => {
   };
 
   useEffect(() => {
+        const selectedCompanyName = getCompanyName() || getsuperadmincompanyname();
     const filtered = data?.filter((item) => {
-      const companyMatch =
-        item.adminCompanyName &&
-        selectedCompanyName &&
-        item.adminCompanyName.toLowerCase() ===
-          selectedCompanyName.toLowerCase();
+      console.log(selectedCompanyName , item.adminCompanyName);
+      const companyMatch =  selectedCompanyName === 'superadmin' ? data : item?.adminCompanyName.toLowerCase() === selectedCompanyName.toLowerCase();
       const usernameMatch =
         item.name && item.name.toLowerCase().includes(searchTerm.toLowerCase());
       return companyMatch && usernameMatch;

@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const FirmSchema = new mongoose.Schema({
-  companId:{
+  companyId:{
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'Company', 
     required: true

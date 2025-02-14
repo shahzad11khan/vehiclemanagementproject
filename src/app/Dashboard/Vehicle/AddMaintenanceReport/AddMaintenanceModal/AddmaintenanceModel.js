@@ -39,24 +39,32 @@ const AddMaintenanceModal = ({ isOpen, onClose, fetchData, selectedid }) => {
   });
 
   useEffect(() => {
-    const storedcompanyName = getUserName() || getCompanyName(); 
-    const userId = getUserId(); 
+    const storedcompanyName = getCompanyName() || getUserName();
+    const userId = getUserId();
     const flag = getflag();
     const compID = getcompanyId();
+
+    
+    // Ensure that both storedcompanyName and userId are present before setting form data
     if (storedcompanyName && userId) {
-    if (storedcompanyName.toLowerCase() === "superadmin" && flag === "true") {
-      setrepaitformData((prevData) => ({
+      // Check if the company is "superadmin" and the flag is true
+      if (storedcompanyName.toLowerCase() === "superadmin" && flag === "true" && compID) {
+        setFormData((prevData) => ({
           ...prevData,
           adminCompanyName: storedcompanyName,
-          companyId:  compID 
+          companyId: compID, // Ensure compID is set
+         }));
+       } else {
+         // Use userId if not in "superadmin" mode
+         console.log(storedcompanyName, userId, flag, compID);
+        setFormData((prevData) => ({
+          ...prevData,
+          adminCompanyName: storedcompanyName,
+          companyId: userId,
         }));
       }
     } else {
-      setrepaitformData((prevData) => ({
-        ...prevData,
-        adminCompanyName: storedcompanyName,
-        companyId: userId,
-      }));
+      console.error("Missing required fields:", { storedcompanyName, userId, flag, compID });
     }
   }, []);
 

@@ -26,7 +26,7 @@ const Page = () => {
   const [isMounted, setIsMounted] = useState(false);
   const [isOpenManufacturer, setIsOpenManufacturer] = useState(false);
   const [filteredData, setFilteredData] = useState([]);
-  const [selectedCompanyName, setSelectedCompanyName] = useState("");
+  // const [selectedCompanyName, setSelectedCompanyName] = useState("");
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [isOpenVehicleUpdate, setIsOpenVehcleUpdate] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -36,22 +36,13 @@ const Page = () => {
 
   useEffect(() => {
     setIsMounted(true);
-    const companyNameFromStorage =
-      getCompanyName() || getsuperadmincompanyname();
-    if (companyNameFromStorage) {
-      setSelectedCompanyName(companyNameFromStorage);
-    }
+    fetchData();
   }, []);
 
-  const isopendeletemodel = (id) => {
-    setIsDeleteModalOpenId(id); // Set the ID of the item to be deleted
-    setIsDeleteModalOpen(true); // Open the modal
-  };
-
+ 
   const fetchData = async () => {
     try {
       const { result } = await GetManufacturer();
-      console.log(result);
       setData(result);
       setFilteredData(result);
     } catch (error) {
@@ -60,9 +51,7 @@ const Page = () => {
     }
   };
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+
 
   const handleDelete = async (id) => {
     try {
@@ -87,19 +76,19 @@ const Page = () => {
   };
 
   useEffect(() => {
+    const selectedCompanyName = getCompanyName() || getsuperadmincompanyname();
     const filtered = data?.filter((item) => {
-      const companyMatch =
-        item?.adminCompanyName &&
-        selectedCompanyName &&
-        item?.adminCompanyName.toLowerCase() ===
-          selectedCompanyName.toLowerCase();
-      const usernameMatch =
-        item.name && item.name.toLowerCase().includes(searchTerm.toLowerCase());
-
+      const companyMatch = selectedCompanyName === 'superadmin' ? item : item?.adminCompanyName.toLowerCase() === selectedCompanyName.toLowerCase();
+      const usernameMatch =item.name && item.name.toLowerCase().includes(searchTerm.toLowerCase());
       return companyMatch && usernameMatch;
     });
     setFilteredData(filtered);
   }, [searchTerm, data, selectedCompanyName]);
+
+  const isopendeletemodel = (id) => {
+    setIsDeleteModalOpenId(id); // Set the ID of the item to be deleted
+    setIsDeleteModalOpen(true); // Open the modal
+  };
 
   const handleEdit = (id) => {
     setSelectedUserId(id);

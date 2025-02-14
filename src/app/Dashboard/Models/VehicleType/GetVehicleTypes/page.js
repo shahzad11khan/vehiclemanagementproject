@@ -10,16 +10,19 @@ import UpdateVehicleType from "../UpdateVehicleType/UpdateVehicleModel";
 import axios from "axios";
 import { API_URL_VehicleType } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import { GetVehicleType } from "@/app/Dashboard/Components/ApiUrl/ShowApiDatas/ShowApiDatas";
-import { getCompanyName } from "@/utils/storageUtils";
-import DeleteModal from "@/app/Dashboard/Components/DeleteModal";
 
+import DeleteModal from "@/app/Dashboard/Components/DeleteModal";
+import {
+  getCompanyName,
+  getUserName
+} from "@/utils/storageUtils";
 const Page = () => {
   const [data, setData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredData, setFilteredData] = useState([]);
   const [isMounted, setIsMounted] = useState(false);
   const [isOpenVehicleType, setIsOpenVehicleType] = useState(false);
-  const [selectedCompanyName, setSelectedCompanyName] = useState("");
+  // const [selectedCompanyName, setSelectedCompanyName] = useState("");
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [isOpenVehicleUpdate, setIsOpenVehcleUpdate] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -30,16 +33,11 @@ const Page = () => {
 
   useEffect(() => {
     setIsMounted(true);
-    const companyNameFromStorage = getCompanyName();
-    if (companyNameFromStorage) {
-      setSelectedCompanyName(companyNameFromStorage);
-    }
   }, []);
 
   const fetchData = async () => {
     try {
       const { result } = await GetVehicleType();
-      console.log(result);
       setData(result);
       setFilteredData(result);
     } catch (error) {
@@ -83,20 +81,18 @@ const Page = () => {
   };
 
   useEffect(() => {
-    const filtered = data.filter((item) => {
-      const companyMatch =
-        item.adminCompanyName &&
-        selectedCompanyName &&
-        item.adminCompanyName.toLowerCase() ===
-        selectedCompanyName.toLowerCase();
+    const storedcompanyName =  getCompanyName() || getUserName() 
+    const filtered = data?.filter((item) => {
+      console.log(storedcompanyName , item.adminCompanyName)
 
-      const usernameMatch =
-        item.name && item.name.toLowerCase().includes(searchTerm.toLowerCase());
+      const companyMatch =  storedcompanyName === 'superadmin' ? data : item?.adminCompanyName.toLowerCase() === storedcompanyName.toLowerCase();
+
+      const usernameMatch = item.name && item.name.toLowerCase().includes(searchTerm.toLowerCase());
 
       return companyMatch && usernameMatch;
     });
     setFilteredData(filtered);
-  }, [searchTerm, data, selectedCompanyName]);
+  }, [searchTerm, data]);
 
   const OpenVehicleTypeModle = () => {
     setIsOpenVehicleType(!isOpenVehicleType);
@@ -116,8 +112,8 @@ const Page = () => {
     return null;
   }
 
-  const totalPages = Math.ceil(filteredData.length / itemperpage);
-  const currentData = filteredData.slice(
+  const totalPages = Math.ceil(filteredData?.length / itemperpage);
+  const currentData = filteredData?.slice(
     (currentPage - 1) * itemperpage,
     currentPage * itemperpage
   );
@@ -190,7 +186,7 @@ const Page = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {currentData.map((item) => (
+                  {currentData?.map((item) => (
                     <tr key={item._id} className="border-b text-center">
                       <td className=" py-3 px-4 min-w-[150px] w-[150px] whitespace-normal break-all overflow-hidden">{item.name}</td>
                       <td className="py-3 px-4 min-w-[150px] w-[150px] whitespace-normal break-all overflow-hidden">{item.description}</td>

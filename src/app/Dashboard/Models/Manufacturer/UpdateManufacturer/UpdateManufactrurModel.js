@@ -32,25 +32,27 @@ const UpdateManufacturerModel = ({
 
 
   useEffect(() => {
-    const storedcompanyName = getUserName() || getCompanyName(); 
-    const userId = getUserId(); 
+    const storedcompanyName = getCompanyName() || getUserName();
+    const userId = getUserId();
     const flag = getflag();
     const compID = getcompanyId();
-    console.log(compID)
+  
+    console.log(storedcompanyName, userId, flag, compID);
+  
     if (storedcompanyName && userId) {
-    if (storedcompanyName.toLowerCase() === "superadmin" && flag === "true") {
+      if (storedcompanyName.toLowerCase() === "superadmin" && flag === "true") {
         setFormData((prevData) => ({
           ...prevData,
           adminCompanyName: storedcompanyName,
-          companyId:  compID 
+          companyId: compID,
+        }));
+      } else {
+        setFormData((prevData) => ({
+          ...prevData,
+          adminCompanyName: storedcompanyName,
+          companyId: userId,
         }));
       }
-    } else {
-      setFormData((prevData) => ({
-        ...prevData,
-        adminCompanyName: storedcompanyName,
-        companyId: userId,
-      }));
     }
   }, []);
 
@@ -68,6 +70,8 @@ const UpdateManufacturerModel = ({
           carmodel: data.carmodel,
           description: data.description,
           isActive: data.isActive,
+          adminCompanyName: data.adminCompanyName,
+          companyId: data.companyId
         });
       } else {
         toast.warn("Failed to fetch manufacturer data");

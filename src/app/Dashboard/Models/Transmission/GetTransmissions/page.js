@@ -19,7 +19,6 @@ const Page = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isMounted, setIsMounted] = useState(false);
   const [isOpenPayment, setIsOpenPayment] = useState(false);
-  const [selectedCompanyName, setSelectedCompanyName] = useState("");
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [isOpenVehicleUpdate, setIsOpenVehcleUpdate] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -29,11 +28,7 @@ const Page = () => {
 
   useEffect(() => {
     setIsMounted(true);
-    const companyNameFromStorage =
-      getCompanyName() || localStorage.getItem("companyname");
-    if (companyNameFromStorage) {
-      setSelectedCompanyName(companyNameFromStorage);
-    }
+
   }, []);
 
   const fetchData = async () => {
@@ -78,13 +73,10 @@ const Page = () => {
   };
 
   useEffect(() => {
+        const selectedCompanyName = getCompanyName() || getsuperadmincompanyname();
+  
     const filtered = data?.filter((item) => {
-      const companyMatch =
-        item.adminCompanyName &&
-        selectedCompanyName &&
-        item.adminCompanyName.toLowerCase() ===
-          selectedCompanyName.toLowerCase();
-
+      const companyMatch =  selectedCompanyName === 'superadmin' ? data : item?.adminCompanyName.toLowerCase() === selectedCompanyName.toLowerCase();
       const usernameMatch =
         item.name && item.name.toLowerCase().includes(searchTerm.toLowerCase());
 

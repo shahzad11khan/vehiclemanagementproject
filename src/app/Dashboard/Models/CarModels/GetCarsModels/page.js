@@ -10,7 +10,7 @@ import UpdateCarModel from "../UpdateCarModel/UpdateCarModel";
 import axios from "axios";
 import { API_URL_CarModel } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import { GetCarModel } from "@/app/Dashboard/Components/ApiUrl/ShowApiDatas/ShowApiDatas";
-import { getCompanyName, getsuperadmincompanyname, getUserRole } from "@/utils/storageUtils";
+import { getCompanyName, getsuperadmincompanyname } from "@/utils/storageUtils";
 import DeleteModal from "../../../Components/DeleteModal";
 
 
@@ -50,12 +50,9 @@ const Page = () => {
       const filtered = selectedModel
     ? data.filter(item => item.makemodel === selectedModel)
     : data;
-    console.log("model",selectedModel)
-    console.log("data",filtered);
      setDataToBeFetchedManufacturer(filtered);
       }
       else{
-        console.log("elsemodel",selectedModel)
         setDataToBeFetchedManufacturer([]);
       }
     },[selectedModel])
@@ -77,19 +74,23 @@ const Page = () => {
 
   const fetchData = async () => {
     try {
-      const companyName = getCompanyName(); // Get the user's company name
-      const isSuperAdmin = getUserRole(); // Function to check if the user is superadmin
+      // const companyName = getCompanyName(); // Get the user's company name
+      // const isSuperAdmin = getUserRole(); // Function to check if the user is superadmin
       const { result } = await GetCarModel(); // Fetch car models
+      const selectedCompanyName = getCompanyName() || getsuperadmincompanyname();
 
-      // Filter the data based on user role
-      const filtered = isSuperAdmin === "superadmin"
-        ? result // Superadmin sees all data
-        : result.filter((item) =>
-          item.adminCompanyName.toLowerCase() === companyName.toLowerCase()
+      // // Filter the data based on user role
+      
+      const filtered = selectedCompanyName === 'superadmin' ? 
+      result 
+      : result?.filter((item) =>{
+        console.log(item.adminCompanyName, selectedCompanyName, item.adminCompanyName === selectedCompanyName )
+        item?.adminCompanyName.toLowerCase() === selectedCompanyName.toLowerCase()
+      }
         ); // Regular user sees only their company's data
 
       // Update state with the filtered data
-      setData(filtered);
+      setData(result);
       setFilteredData(filtered);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -125,12 +126,9 @@ const Page = () => {
   };
 
   useEffect(() => {
-    const filtered = data.filter((item) => {
-      const companyMatch =
-        item.adminCompanyName &&
-        selectedCompanyName &&
-        item.adminCompanyName.toLowerCase() ===
-        selectedCompanyName.toLowerCase();
+      const selectedCompanyName = getCompanyName() || getsuperadmincompanyname();
+      const filtered = data?.filter((item) => {
+      const companyMatch = selectedCompanyName === 'superadmin' ? data : item?.adminCompanyName.toLowerCase() === selectedCompanyName.toLowerCase();
       const usernameMatch =
         item.name && item.name.toLowerCase().includes(searchTerm.toLowerCase());
       return companyMatch && usernameMatch;
@@ -162,7 +160,6 @@ const Page = () => {
     const dataToPaginate = dataToBeFetchedManufacturer.length > 0 ? dataToBeFetchedManufacturer : filteredData;
     const totalPage = Math.ceil(dataToPaginate.length / itemperpage);
     setTotalPages(totalPage);
-    console.log("page",totalPage);
   }, [itemperpage, selectedModel, filteredData, dataToBeFetchedManufacturer])
   
   useEffect(()=>{

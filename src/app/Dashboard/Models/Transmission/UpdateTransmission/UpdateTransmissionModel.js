@@ -5,8 +5,7 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import {
   getCompanyName,
-  getUserId ,
-  getUserName,getflag,getcompanyId
+  getUserId ,getflag,getcompanyId
 } from "@/utils/storageUtils";
 
 const UpdateTransmissionModel = ({
@@ -31,26 +30,32 @@ const UpdateTransmissionModel = ({
 
   // Retrieve company name from local storage
   useEffect(() => {
-    const storedcompanyName = getUserName() || getCompanyName(); 
-    const userId = getUserId(); 
+    const storedcompanyName = getCompanyName() || getsuperadmincompanyname();
+    const userId = getUserId();
     const flag = getflag();
     const compID = getcompanyId();
+    console.log(storedcompanyName, userId, flag, compID);
+  
     if (storedcompanyName && userId) {
-    if (storedcompanyName.toLowerCase() === "superadmin" && flag === "true") {
-      setFormData((prevData) => ({
+      // Check if the company is "superadmin" and the flag is "true"
+      if (storedcompanyName.toLowerCase() === "superadmin" && flag === "true") {
+        setFormData((prevData) => ({
           ...prevData,
           adminCompanyName: storedcompanyName,
-          companyId:  compID 
+          companyId: compID, // Use compID in this case
+        }));
+      } else {
+        // For other conditions, use the regular logic
+        setFormData((prevData) => ({
+          ...prevData,
+          adminCompanyName: storedcompanyName,
+          companyId: userId, // Use userId in this case
         }));
       }
-    } else {
-      setFormData((prevData) => ({
-        ...prevData,
-        adminCompanyName: storedcompanyName,
-        companyId: userId,
-      }));
     }
-  }, []); // Update when the manufacturer changes
+  
+    // Always call fetchDt after the conditions
+  }, []);
   // Fetch manufacturer data when the modal opens
   useEffect(() => {
     // console.log(vehicleid);
@@ -69,6 +74,9 @@ const UpdateTransmissionModel = ({
               name: data.name,
               description: data.description,
               isActive: data.isActive,
+              adminCreatedBy: data.adminCreatedBy,
+              adminCompanyName: data.adminCompanyName,
+              companyId: data.companyId
             });
           } else {
             toast.warn("Failed to fetch manufacturer data");

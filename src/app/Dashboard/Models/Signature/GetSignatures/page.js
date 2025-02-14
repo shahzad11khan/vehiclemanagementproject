@@ -93,7 +93,7 @@ const Page = () => {
       return companyMatch && usernameMatch;
     });
     setFilteredData(filtered);
-  }, [searchTerm, data, selectedCompanyName]);
+  }, [searchTerm, data]);
 
   const handleEdit = (id) => {
     // toast.info(`Edit item with ID: ${id}`);

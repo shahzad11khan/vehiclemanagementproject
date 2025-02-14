@@ -83,7 +83,7 @@ const Page = () => {
       return companyMatch && usernameMatch;
     });
     setFilteredData(filtered);
-  }, [searchTerm, data, selectedCompanyName]);
+  }, [searchTerm, data]);
 
   const isopendeletemodel = (id) => {
     setIsDeleteModalOpenId(id); // Set the ID of the item to be deleted

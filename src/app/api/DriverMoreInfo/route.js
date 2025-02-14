@@ -3,99 +3,7 @@ import DriverMoreInfo from "@models/DriverMoreInfo/DriverMoreInfo.model.js";
 import { catchAsyncErrors } from "@middlewares/catchAsyncErrors.js";
 import { NextResponse } from "next/server";
 
-// export const POST = catchAsyncErrors(async (request) => {
 
-//   await connect();
-//   const data = await request.json();
-
-//   // console.log(data);
-
-//   const {
-//     driverId,
-//     driverName,
-//     vehicle,
-//     vehicleId,
-//     startDate,
-//     paymentcycle,
-//     payment,
-//     endDate,
-//     totalamount,
-//     totalToremain,
-//     remaining,
-//     adminCreatedBy,
-//     adminCompanyName,
-//     adminCompanyId,
-//   } = data; // Extract the new variables
-
-//   console.log(data);
-//   const normalizeDate = (date) => {
-//     const normalizedDate = new Date(date);
-//     normalizedDate.setHours(0, 0, 0, 0); // Set time to 00:00:00 to ignore time
-//     return normalizedDate;
-//   };
-  
-//   const findStartDate = await DriverMoreInfo.findOne({
-//     driverId: driverId,
-//     vehicleId: vehicleId,
-//     adminCompanyName: adminCompanyName,
-//   });
-  
-//   if (findStartDate) {
-//     const isSameDayMonthYear = (date1, date2) => {
-//       const d1 = new Date(date1);
-//       const d2 = new Date(date2);
-  
-//       return (
-//         d1.getDate() === d2.getDate() &&
-//         d1.getMonth() === d2.getMonth() &&
-//         d1.getFullYear() === d2.getFullYear()
-//       );
-//     };
-  
-//     const currentDate = new Date(); // Get the current date
-  
-//     // Check if the stored date is the same as the current date
-//     if (isSameDayMonthYear(findStartDate.startDate, currentDate)) {
-//       return NextResponse.json({
-//         error: "DriverMoreInfo with today's date already exists",
-//         status: 400,
-//       });
-//     }
-//   }
-  
-//   // Create and save the new DriverMoreInfo entry
-//   const newDriverMoreInfo = new DriverMoreInfo({
-//     driverId,
-//     driverName,
-//     vehicle,
-//     vehicleId,
-//     startDate,
-//     paymentcycle,
-//     payment,
-//     endDate,
-//     totalamount,
-//     totalToremain,
-//     remaining,
-//     adminCreatedBy,
-//     adminCompanyName,
-//     adminCompanyId,
-//   });
-
-//   const savedDriverMoreInfo = await newDriverMoreInfo.save();
-//   if (!savedDriverMoreInfo) {
-//     return NextResponse.json({
-//       error: "DriverMoreInfo not added",
-//       status: 400,
-//     });
-//   } else {
-//     return NextResponse.json({
-//       message: "DriverMoreInfo created successfully",
-//       success: true,
-//       savedDriverMoreInfo,
-//       status: 200,
-//     });
-//   }
-// });
 
 export const POST = catchAsyncErrors(async (request) => {
   await connect();
@@ -110,7 +18,6 @@ export const POST = catchAsyncErrors(async (request) => {
     paymentcycle,
     payment,
     endDate,
-    totalamount,
     totalToremain,
     remaining,
     adminCreatedBy,
@@ -118,77 +25,93 @@ export const POST = catchAsyncErrors(async (request) => {
     adminCompanyId,
   } = data;
 
-  // Normalize the incoming startDate to remove the time portion
-  // const normalizeDate = (date) => {
-  //   const normalizedDate = new Date(date);
-  //   normalizedDate.setHours(0, 0, 0, 0); // Set to 00:00:00
-  //   return normalizedDate;
-  // };
+  // Normalize the startDate to remove the time component
+  const normalizeDate = (date) => {
+    const normalizedDate = new Date(date);
+    normalizedDate.setHours(0, 0, 0, 0); // Set the time to 00:00:00
+    return normalizedDate.toISOString(); // Convert to ISO string format
+  };
 
-  // const normalizedStartDate = normalizeDate(startDate); // Normalize the incoming start date
+  const normalizedStartDate = normalizeDate(startDate);
 
-  // Check if a record with the same driverId, vehicleId, and adminCompanyName exists
-  const findStartDate = await DriverMoreInfo.findOne({
-    driverId: driverId,
-    vehicleId: vehicleId,
-    adminCompanyName: adminCompanyName,
-  });
-
-  if (!findStartDate) {
-    // Normalize the stored startDate from the database
-    // const storedStartDate = normalizeDate(findStartDate.startDate);
-
-    // // Check if the dates are the same (same day, month, and year)
-    // if (normalizedStartDate.getTime() === storedStartDate.getTime()) {
-    //   return NextResponse.json({
-        // error: "DriverMoreInfo with the same start date already exists",
-      //   status: 400,
-      // });
-    // }
-    return NextResponse.json({
-      error: "DriverMoreInfo not found",
-      status: 400,
+  try {
+    // Check if a record exists with the same date
+    const existingRecord = await DriverMoreInfo.findOne({
+      driverId,
+      vehicleId,
+      adminCompanyName,
+      startDate: normalizedStartDate,
     });
-  }
 
-  // Create and save the new DriverMoreInfo entry
-  const newDriverMoreInfo = new DriverMoreInfo({
-    driverId,
-    driverName,
-    vehicle,
-    vehicleId,
-    startDate, // Ensure the date is normalized before saving
-    paymentcycle,
-    payment,
-    endDate,
-    totalamount,
-    totalToremain,
-    remaining,
-    adminCreatedBy,
-    adminCompanyName,
-    adminCompanyId,
-  });
+    if (existingRecord) {
+      return NextResponse.json({
+        error: "A record for this date already exists.",
+        status: 400,
+      });
+    }
 
-  const savedDriverMoreInfo = await newDriverMoreInfo.save();
-  if (!savedDriverMoreInfo) {
-    return NextResponse.json({
-      error: "DriverMoreInfo not added",
-      status: 400,
+    // Check for any previous record with the same driver and vehicle (across different dates)
+    const previousRecord = await DriverMoreInfo.findOne({
+      driverId,
+      vehicleId,
+      adminCompanyName,
     });
-  } else {
+
+    // Initialize totalamount with payment
+    let totalamount = payment;
+
+    // If a previous record exists, add its totalamount
+    if (previousRecord) {
+      totalamount += previousRecord.totalamount;
+    }
+
+    // Create and save the new record
+    const newDriverMoreInfo = new DriverMoreInfo({
+      driverId,
+      driverName,
+      vehicle,
+      vehicleId,
+      startDate: normalizedStartDate, // Save the normalized date
+      paymentcycle,
+      payment,
+      endDate,
+      totalamount,
+      totalToremain,
+      remaining,
+      adminCreatedBy,
+      adminCompanyName,
+      adminCompanyId,
+    });
+
+    const savedDriverMoreInfo = await newDriverMoreInfo.save();
+
+    if (!savedDriverMoreInfo) {
+      return NextResponse.json({
+        error: "DriverMoreInfo not added",
+        status: 400,
+      });
+    } else {
+      return NextResponse.json({
+        message: "DriverMoreInfo created successfully",
+        success: true,
+        savedDriverMoreInfo,
+        status: 200,
+      });
+    }
+  } catch (error) {
+    console.error("Error saving DriverMoreInfo:", error);
     return NextResponse.json({
-      message: "DriverMoreInfo created successfully",
-      success: true,
-      savedDriverMoreInfo,
-      status: 200,
+      error: "An error occurred while saving DriverMoreInfo.",
+      status: 500,
     });
   }
 });
 
 
+
 export const GET = catchAsyncErrors(async () => {
   await connect();
-  const allDriverMoreInfo = await DriverMoreInfo.find().sort({ createdAt: -1 });
+  const allDriverMoreInfo = await DriverMoreInfo.find().sort({startDate: -1});
   const DriverMoreInfoCount = await DriverMoreInfo.countDocuments();
   if (!allDriverMoreInfo || allDriverMoreInfo.length === 0) {
     return NextResponse.json({ Result: allDriverMoreInfo });

@@ -27,7 +27,14 @@ const AddManufacturerModel = ({ isOpen, onClose, fetchData }) => {
   // const [data, setData] = useState([]);
 
   useEffect(() => {
-    const storedcompanyName = getCompanyName() || getUserName();
+    const storedcompanyName = (() => {
+      const name1 = getCompanyName();
+      if (name1) return name1;
+    
+      const name2 = getUserName();
+      if (name2) return name2;
+  
+    })();
     const userId = getUserId();
     const flag = getflag();
     const compID = getcompanyId();

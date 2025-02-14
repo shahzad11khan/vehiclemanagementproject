@@ -3,14 +3,14 @@ import {
   API_URL_Driver,
   API_URL_Driver_Vehicle_Allotment,
   API_URL_DriverMoreInfo,
-  API_URL_Vehicle,
+  // API_URL_Vehicle,
 } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import {
   fetchTaxiFirms,
-  // fetchLocalAuth,
+  fetchLocalAuth,
   fetchVehicle,
 } from "../../../Components/DropdownData/taxiFirm/taxiFirmService";
 import {
@@ -34,7 +34,7 @@ const AddDriverMoreInfoModal = ({
     vehicle: "",
     vehicleId: "",
     paymentcycle: "",
-    payment: "",
+    payment: 0,
     adminCreatedBy: "",
     adminCompanyName: "",
     adminCompanyId: "",
@@ -42,15 +42,22 @@ const AddDriverMoreInfoModal = ({
 
   const [loading, setLoading] = useState(false);
   const [taxiFirms, setTaxiFirms] = useState([]);
-  // const [localAuth, setLocalAuth] = useState([]);
+  const [localAuth, setLocalAuth] = useState([]);
   const [vehicle, setVehicle] = useState([]);
   // const [filteredVehicles, setFilteredVehicles] = useState([]);
   const [superadmin, setSuperadmin] = useState(null);
   const [vehicleStatus, setVehicleStatus] = useState("");
-  const [compiterdrivervehicleautority, setcompiterdrivervehicleautority] = useState("");
+  // const [compiterdrivervehicleautority, setcompiterdrivervehicleautority] = useState("");
 
   useEffect(() => {
-    const storedCompanyName = getCompanyName() || getsuperadmincompanyname();
+    const storedCompanyName = (() => {
+      const name1 = getCompanyName();
+      if (name1) return name1;
+    
+      const name2 = getsuperadmincompanyname();
+      if (name2) return name2;
+  
+    })();
     const storedSuperadmin = getUserRole();
 
     if (storedSuperadmin) {
@@ -79,7 +86,7 @@ const AddDriverMoreInfoModal = ({
           driverName: `${data.result.firstName} ${data.result.lastName}`,
         }));
         // console.log("DriverLoaclAuth Is: ",data.result.LocalAuth);
-        setcompiterdrivervehicleautority(data.result.LocalAuth);
+        // setcompiterdrivervehicleautority(data.result.LocalAuth);
       } catch (err) {
         console.error(
           err.response?.data?.message || "Failed to fetch driver data"
@@ -95,39 +102,33 @@ const AddDriverMoreInfoModal = ({
   useEffect(() => {
     const loadDropdownData = async () => {
       try {
-        const [taxiFirmsData,
-          //  localAuthData,
-          vehicleData] = await Promise.all([
-            fetchTaxiFirms(),
-            // fetchLocalAuth(),
-            fetchVehicle(),
-          ]);
-
         const storedCompanyName = getCompanyName();
+
+          const localAuthData = await fetchLocalAuth();
+          const taxiFirmsData = await  fetchTaxiFirms();
+          const vehicleData = await fetchVehicle();
+
+          // console.log("car taxiFirmsData", taxiFirmsData)
 
         const filterByCompany = (data) =>
           superadmin === "superadmin"
             ? data
             : data.filter(
               (item) =>
-                item.adminCompanyName === storedCompanyName ||
-                item.adminCompanyName === "superadmin"
+                item.adminCompanyName === storedCompanyName 
+                
             );
 
         // Apply the filter to the fetched data
         const filteredTaxiFirms = filterByCompany(taxiFirmsData.result);
-        // const filteredLocalAuth = filterByCompany(localAuthData.Result);
+        const filteredLocalAuth = filterByCompany(localAuthData.Result);
         const filteredVehicle = filterByCompany(vehicleData.result);
 
         // Update state with filtered data
         setTaxiFirms(filteredTaxiFirms);
-        // setLocalAuth(filteredLocalAuth);
+        setLocalAuth(filteredLocalAuth);
         setVehicle(filteredVehicle);
 
-        // Optional: Debugging logs
-        // console.log("Stored Company Name:", storedCompanyName);
-        // console.log("Filtered Taxi Firms:", filteredTaxiFirms);
-        // console.log("Filtered Local Authorities:", filteredLocalAuth);
         console.log("Filtered Vehicles:", filteredVehicle);
       } catch (err) {
         console.error("Error loading dropdown data:", err);
@@ -178,7 +179,6 @@ const AddDriverMoreInfoModal = ({
     //   setFilteredVehicles(matchedVehicles);
     // }
   };
-  console.log(compiterdrivervehicleautority)
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -220,18 +220,18 @@ const AddDriverMoreInfoModal = ({
           newRecordData
         );
         console.log(newRecordResponse);
-        const formDataupdate = new FormData();
-        formDataupdate.append("vehicleStatus", "Rent");
-        const updateResponse = await axios.put(
-          `${API_URL_Vehicle}/${vehicleStatus}`,
-          formDataupdate, // Pass the FormData object as the request body
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        );
-        console.log(updateResponse);
+        // const formDataupdate = new FormData();
+        // formDataupdate.append("vehicleStatus", "Rent");
+        // const updateResponse = await axios.put(
+        //   `${API_URL_Vehicle}/${vehicleStatus}`,
+        //   formDataupdate, // Pass the FormData object as the request body
+        //   {
+        //     headers: {
+        //       "Content-Type": "multipart/form-data",
+        //     },
+        //   }
+        // );
+        // console.log(updateResponse);
       } else {
         toast.warn(data.error);
       }
@@ -354,14 +354,14 @@ const AddDriverMoreInfoModal = ({
                 Taxi Local Authourity
               </label>
               <select
-                // id="taxifirm"
-                // name="taxifirm"
-                // value={formData.taxifirm}
-                // onChange={handleChange}
+                id="taxifirm"
+                name="taxilocalauthority"
+                value={formData.taxilocalauthority}
+                onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
               >
-                <option value="null">Select Taxi Firm</option>
-                {taxiFirms.map((firm) => (
+                <option value="null">Taxi Local Authority</option>
+                {localAuth.map((firm) => (
                   <option key={firm._id} value={firm.name}>
                     {firm.name}
                   </option>
@@ -411,8 +411,7 @@ const AddDriverMoreInfoModal = ({
               >
 
                 <option value="">Select Vehicle</option>
-                {vehicle?.filter((v) => v.isActive && v.vehicleStatus === "Standby" &&
-                  compiterdrivervehicleautority.toLocaleLowerCase() === v.LocalAuthority.toLocaleLowerCase()
+                {vehicle?.filter((v) => v.isActive && v.vehicleStatus === "Standby" 
                 ).map((v) => (
                   <option key={v._id} value={v.model}>
                     {v.model}

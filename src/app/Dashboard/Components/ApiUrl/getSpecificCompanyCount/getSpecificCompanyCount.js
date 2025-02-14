@@ -4,8 +4,15 @@ import axios from "axios";
 import { API_URL_USER, API_URL_Driver } from "../ApiUrls.js";
 
 export const GetUserscount = () => {
-  const companyName = localStorage.getItem("companyName"); // Get the company name from local storage
+  let companyName = "";
 
+  if (typeof window !== "undefined") {
+    // Only access localStorage in the browser environment
+    companyName = localStorage.getItem("companyName") || ""; // Default to an empty string if not found
+  }
+  
+  console.log("Retrieved company name:", companyName);
+  
   return axios
     .get(`${API_URL_USER}`)
     .then((res) => {

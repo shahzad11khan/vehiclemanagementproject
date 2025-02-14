@@ -4,12 +4,14 @@ import { API_URL_Company } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+import {getUserId } from '@/utils/storageUtils';
 
 
 const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
   const [formData, setFormData] = useState({
     CompanyName: "",
     email: "",
+    userId:getUserId(),
     password: "",
     confirmPassword: "",
     isActive: false,
@@ -35,9 +37,15 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
     specificDepartmentContactInformationProcurementPurchasingContact: "",
     specificDepartmentContactInformationPrimaryContactfortheProject: "",
     image: null,
+    Postcode:"",
+    BuildingAndStreetOne:"",
+    BuildingAndStreetTwo:"",
+    Town_City:"",
+    Country:"",
+  
   });
 
-  const [autoFillAll, setAutoFillAll] = useState(false);
+  const autoFillAll=false
   const [step, setStep] = useState(1);
   const nextStep = () => setStep(step + 1);
   const prevStep = () => setStep(step - 1);
@@ -51,43 +59,8 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
     passwordValid: false,
   });
 
-  // const handleChange = (e) => {
-  //   const { name, value, type, checked, files } = e.target;
-  //   const updatedValue = type === 'checkbox' ? checked : value;
-
-  //   setFormData((prevData) => ({
-  //     ...prevData,
-  //     [name]: updatedValue,
-  //   }));
-  //   if (name === 'email') {
-  //     setValidation((prevValidation) => ({
-  //       ...prevValidation,
-  //       emailValid: emailRegex.test(updatedValue),
-  //     }));
-  //   }
-  //   if (name === 'password' || name === 'confirmPassword') {
-  //     const password = name === 'password' ? updatedValue : formData.password;
-  //     const confirmPassword =
-  //       name === 'confirmPassword' ? updatedValue : formData.confirmPassword;
-  //       setValidation((prevValidation) => ({
-  //       ...prevValidation,
-  //       passwordValid: strongPasswordRegex.test(password), // Validate password with regex
-  //       passwordMatch: password === confirmPassword, // Check if passwords match
-  //     }));
-  //   }
-  //   setFormData((prevData) => ({
-  //     ...prevData,
-  //     [name]:
-  //       type === "checkbox" ? checked : type === "file" ? files[0] : value,
-  //     ...(name === "mailingAddress" && autoFillAll
-  //       ? {
-  //           billingAddress: value,
-  //           bankingInformationBankAddress: value,
-  //           physical_Address: value,
-  //         }
-  //       : {}),
-  //   }));
-  // };
+ 
+ 
   const handleChange = (e) => {
     const { name, value, type, checked, files } = e.target;
     const updatedValue = type === 'checkbox' ? checked : type === 'file' ? files[0] : value;
@@ -125,26 +98,7 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
     }
   };
 
-  const handleCheckboxChange = (e) => {
-    const { checked } = e.target;
-    setAutoFillAll(checked);
-    setFormData((prevData) => ({
-      ...prevData,
-      ...(checked
-        ? {
-          billingAddress: prevData.mailingAddress,
-          bankingInformationBankAddress: prevData.mailingAddress,
-          physical_Address: prevData.mailingAddress,
-        }
-        : {
-          billingAddress: "",
-          bankingInformationBankAddress: "",
-          physical_Address: "",
-        }),
-    }));
-  };
-
-  console.log(handleCheckboxChange)
+ 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const data = new FormData();
@@ -180,7 +134,7 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
             Register Company
           </h2>
 
-          <img src="/crossIcon.svg" onClick={() => {
+          <img src="/crossIcon.svg" alt="crossIcon" onClick={() => {
             onClose();
             setStep(1);
           }} />
@@ -411,15 +365,7 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
                     required placeholder="Phone Number"
                   />
                 </div>
-                {/* </div> */}
-
-                {/* <button
-                  type="button"
-                  className="border-2 h-10 mt-6 p-2 rounded-lg"
-                  onClick={() => setShowPassword(!showPassword)}
-                >
-                  {showPassword ? "Hide" : "Show"}
-                </button> */}
+               
               </div>
 
               <h2 className="font-bold">Address</h2>
@@ -438,10 +384,10 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
 
                   <input
                     type="text"
-                    id="Building&Street"
-                    name="Building&Street"
-                    // value={formData.CompanyName}
-                    // onChange={handleChange}
+                    id="BuildingAndStreetOne"
+                    name="BuildingAndStreetOne"
+                    value={formData.BuildingAndStreetOne}
+                    onChange={handleChange}
                     className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow-sm focus:ring-blue-500 focus:border-blue-500"
                     required placeholder="Building and street"
                   />
@@ -460,10 +406,10 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
 
                   <input
                     type="text"
-                    id="Building&Street2"
-                    name="Building&Street2"
-                    // value={formData.CompanyName}
-                    // onChange={handleChange}
+                    id="BuildingAndStreetTwo"
+                    name="BuildingAndStreetTwo"
+                    value={formData.BuildingAndStreetTwo}
+                    onChange={handleChange}
                     className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow-sm focus:ring-blue-500 focus:border-blue-500"
                     required placeholder="Building and street"
                   />
@@ -482,10 +428,10 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
 
                   <input
                     type="text"
-                    id="Building&Street"
-                    name="Building&Street"
-                    // value={formData.CompanyName}
-                    // onChange={handleChange}
+                    id="Town_City"
+                    name="Town_City"
+                    value={formData.Town_City}
+                    onChange={handleChange}
                     className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow-sm focus:ring-blue-500 focus:border-blue-500"
                     required placeholder="Town/City"
                   />
@@ -504,10 +450,10 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
 
                   <input
                     type="text"
-                    id="Building&Street"
-                    name="Building&Street"
-                    // value={formData.CompanyName}
-                    // onChange={handleChange}
+                    id="Country"
+                    name="Country"
+                    value={formData.Country}
+                    onChange={handleChange}
                     className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow-sm focus:ring-blue-500 focus:border-blue-500"
                     required placeholder="Country"
                   />
@@ -526,22 +472,16 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
 
                   <input
                     type="text"
-                    id="Building&Street"
-                    name="Building&Street"
-                    // value={formData.CompanyName}
-                    // onChange={handleChange}
+                    id="Postcode"
+                    name="Postcode"
+                    value={formData.Postcode}
+                    onChange={handleChange}
                     className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow-sm focus:ring-blue-500 focus:border-blue-500"
                     required placeholder="Postcode"
                   />
                 </div>
 
-                {/* <button
-                  type="button"
-                  className="border-2 h-10 mt-6 p-2 rounded-lg"
-                  onClick={() => setShowPassword(!showPassword)}
-                >
-                  {showPassword ? "Hide" : "Show"}
-                </button> */}
+              
 
 
 
@@ -767,7 +707,7 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
                     />
                   </div>
 
-                  <div>
+                  {/* <div>
                     <div className="flex gap-1">
                       <label
                         htmlFor="accountsPayableContactPhoneNumberandEmail"
@@ -780,12 +720,12 @@ const AddCompanyModel = ({ isOpen, onClose, fetchData }) => {
                       type="email"
                       id="accountsPayableContactPhoneNumberandEmail"
                       name="accountsPayableContactPhoneNumberandEmail"
-                      // value={formData.accountsPayableContactPhoneNumberandEmail}
+                      value={formData.accountsPayableContactPhoneNumberandEmail}
                       onChange={handleChange}
                       className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow-sm focus:ring-blue-500 focus:border-blue-500"
                       placeholder="Email"
                     />
-                  </div>
+                  </div> */}
                   {/* </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6"> */}
                   {/*     Billing Address: "", info */}

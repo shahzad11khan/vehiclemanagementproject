@@ -14,7 +14,7 @@ export async function POST(request) {
 
     // Handling the uploaded files
     let file1 = data.get("image");
-    console.log("image:", file1);
+    // console.log("image:", file1);
 
     let image = "";
     let imagePublicId = "";
@@ -66,6 +66,7 @@ export async function POST(request) {
 
     const {
       CompanyName,
+      userId,
       email,
       password,
       confirmPassword,
@@ -92,6 +93,12 @@ export async function POST(request) {
       specificDepartmentContactInformationBillingFinanceDepartment,
       specificDepartmentContactInformationProcurementPurchasingContact,
       specificDepartmentContactInformationPrimaryContactfortheProject,
+      Postcode,
+      BuildingAndStreetOne,
+      BuildingAndStreetTwo,
+      Town_City,
+      Country,
+    
     } = formDataObject;
 
     // let hashedPassword = null;
@@ -113,6 +120,7 @@ export async function POST(request) {
     const newCompany = new Company({
       CompanyName,
       email,
+      userId,
       password: hashedPassword,
       confirmPassword,
       isActive: isActive || false,
@@ -140,6 +148,11 @@ export async function POST(request) {
       specificDepartmentContactInformationBillingFinanceDepartment,
       specificDepartmentContactInformationProcurementPurchasingContact,
       specificDepartmentContactInformationPrimaryContactfortheProject,
+      Postcode,
+      BuildingAndStreetOne,
+      BuildingAndStreetTwo,
+      Town_City,
+      Country,
     });
 
     console.log(newCompany);
@@ -164,7 +177,7 @@ export async function POST(request) {
 
 export const GET = catchAsyncErrors(async () => {
   await connect();
-  const allCompany = await Company.find();
+  const allCompany = await Company.find().populate('userId');
   const CompanyCount = await Company.countDocuments();
   if (!allCompany || allCompany.length === 0) {
     return NextResponse.json({ result: allCompany });

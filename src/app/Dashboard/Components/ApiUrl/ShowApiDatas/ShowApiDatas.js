@@ -26,9 +26,24 @@ import {
 } from "../ApiUrls.js";
 
 export const GetUsers = () => {
-  let companyName = localStorage.getItem("companyName"); // Get the company name from local storage
-  let flag = localStorage.getItem("flag");
-  let superadmin = localStorage.getItem("role");
+  // let companyName = localStorage.getItem("companyName"); // Get the company name from local storage
+  // let flag = localStorage.getItem("flag");
+  // let superadmin = localStorage.getItem("role");
+  let companyName = "";
+let flag = "";
+let superadmin = "";
+
+if (typeof window !== "undefined") {
+  // Only access localStorage in a browser environment
+  companyName = localStorage.getItem("companyName") || "";
+  flag = localStorage.getItem("flag") || "";
+  superadmin = localStorage.getItem("role") || "";
+}
+
+console.log("Company Name:", companyName);
+console.log("Flag:", flag);
+console.log("Superadmin Role:", superadmin);
+
   return axios
     .get(`${API_URL_USER}`)
     .then((res) => {

@@ -10,11 +10,9 @@ export const PUT = async (request, context) => {
     const id = context.params.BodyTypeID; // Extract ManufacturerID from params
     const data = await request.json(); // Get the form data
 
-    console.log(id);
-    console.log(data);
 
     // Destructure the necessary fields
-    const { name, description, isActive } = data;
+    const { name, description, isActive, adminCreatedBy, adminCompanyName,companyId } = data;
 
     // Find the manufacturer by ID
     const bodytype = await BodyType.findById({ _id: id });
@@ -28,6 +26,9 @@ export const PUT = async (request, context) => {
 
     // Update manufacturer properties with values from formDataObject or retain existing values
     bodytype.name = name ? name.trim() : bodytype.name; // Update name or retain existing
+    bodytype.adminCompanyName = adminCompanyName ? adminCompanyName.trim() : bodytype.adminCompanyName; // Update name or retain existing
+    bodytype.adminCreatedBy = namadminCreatedBye ? adminCreatedBy.trim() : bodytype.adminCreatedBy; // Update name or retain existing
+    bodytype.companyId = companyId ? companyId : bodytype.companyId; // Update name or retain existing
     bodytype.description = description
       ? description.trim()
       : bodytype.description; // Update description or retain existing

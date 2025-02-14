@@ -13,7 +13,7 @@ export const PUT = async (request, context) => {
     console.log(data);
 
     // Destructure the necessary fields
-    const { name, description, isActive } = data;
+    const { name, description, isActive,companyId } = data;
 
     // Find the manufacturer by ID
     const authority = await LocalAuthority.findById({ _id: id });
@@ -27,6 +27,7 @@ export const PUT = async (request, context) => {
 
     // Update manufacturer properties with values from formDataObject or retain existing values
     authority.name = name ? name.trim() : authority.name; // Update name or retain existing
+    authority.companyId = companyId ? companyId : authority.companyId; // Update name or retain existing
     authority.description = description
       ? description.trim()
       : authority.description; // Update description or retain existing

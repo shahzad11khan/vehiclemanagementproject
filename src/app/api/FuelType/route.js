@@ -7,7 +7,7 @@ export const POST = catchAsyncErrors(async (request) => {
   await connect();
   const data = await request.json();
 
-  const { name, description, isActive, adminCreatedBy, adminCompanyName } =
+  const { name, description, isActive, adminCreatedBy, adminCompanyName,companyId } =
     data; // Extract the new variables
 
   // Check for existing vehicle by name
@@ -28,9 +28,9 @@ export const POST = catchAsyncErrors(async (request) => {
     isActive,
     adminCreatedBy,
     adminCompanyName,
+    companyId
   });
 
-  console.log(newFuelType);
 
   const savedFuelType = await newFuelType.save();
   if (!savedFuelType) {
@@ -46,16 +46,23 @@ export const POST = catchAsyncErrors(async (request) => {
     });
   }
 });
-export const GET = catchAsyncErrors(async () => {
-  await connect();
-  const allFuelType = await FuelType.find().sort({ createdAt: -1 });
-  const FuelTypeCount = await FuelType.countDocuments();
-  if (!allFuelType || allFuelType.length === 0) {
-    return NextResponse.json({ Result: allFuelType });
-  } else {
+
+
+export const GET = async () => {
+  try {
+    await connect();
+    const allFuelType = await FuelType.find()
+      .populate("companyId")
+      .sort({ createdAt: -1 });
+
+    const FuelTypeCount = await FuelType.countDocuments();
+
     return NextResponse.json({
       Result: allFuelType,
       count: FuelTypeCount,
     });
+  } catch (error) {
+    console.error("Error fetching FuelType data:", error);
+    return NextResponse.json({ error: "Internal server error", status: 500 });
   }
-});
+};

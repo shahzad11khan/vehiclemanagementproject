@@ -4,10 +4,11 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 // import { fetchCarModel } from "../../../Components/DropdownData/taxiFirm/taxiFirmService";
 import { toast } from "react-toastify";
+
 import {
   getCompanyName,
-  getsuperadmincompanyname,
-  // getUserRole,
+  getUserId ,
+  getUserName,getflag,getcompanyId,
 } from "@/utils/storageUtils";
 
 const AddManufacturerModel = ({ isOpen, onClose, fetchData }) => {
@@ -18,22 +19,38 @@ const AddManufacturerModel = ({ isOpen, onClose, fetchData }) => {
     isActive: false,
     adminCreatedBy: "",
     adminCompanyName: "",
+    companyId:null,
+
   });
 
   const [loading, setLoading] = useState(false);
   // const [data, setData] = useState([]);
 
   useEffect(() => {
-    const storedCompanyName = getCompanyName() || getsuperadmincompanyname();
-    if (storedCompanyName) {
-      setFormData((prevData) => ({
-        ...prevData,
-        adminCompanyName: storedCompanyName,
-      }));
+    const storedcompanyName = getCompanyName() || getUserName();
+    const userId = getUserId();
+    const flag = getflag();
+    const compID = getcompanyId();
+  
+    console.log(storedcompanyName, userId, flag, compID);
+  
+    if (storedcompanyName && userId) {
+      if (storedcompanyName.toLowerCase() === "superadmin" && flag === "true") {
+        setFormData((prevData) => ({
+          ...prevData,
+          adminCompanyName: storedcompanyName,
+          companyId: compID,
+        }));
+      } else {
+        setFormData((prevData) => ({
+          ...prevData,
+          adminCompanyName: storedcompanyName,
+          companyId: userId,
+        }));
+      }
     }
-    // fetchDataa();
   }, []);
-
+  
   // const fetchDataa = async () => {
   //   try {
   //     const stored = getCompanyName() || getsuperadmincompanyname();
@@ -76,6 +93,8 @@ const AddManufacturerModel = ({ isOpen, onClose, fetchData }) => {
         isActive: false,
         adminCreatedBy: "",
         adminCompanyName: formData.adminCompanyName,
+        companyId: formData.companyId,
+        
       });
 
       if (response.data.success) {

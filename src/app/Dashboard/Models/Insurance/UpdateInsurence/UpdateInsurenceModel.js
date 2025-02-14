@@ -3,7 +3,11 @@ import { API_URL_Insurence } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-
+import {
+  getCompanyName,
+  getUserId ,
+  getUserName,getflag,getcompanyId
+} from "@/utils/storageUtils";
 const UpdateInsurenceModel = ({ isOpen, onClose, fetchData, insurenceid }) => {
   const [formData, setFormData] = useState({
     name: "",
@@ -11,22 +15,43 @@ const UpdateInsurenceModel = ({ isOpen, onClose, fetchData, insurenceid }) => {
     isActive: false,
     adminCreatedBy: "",
     adminCompanyName: "",
+    companyId: null,
+
   });
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
 
-  // Retrieve company name from local storage
   useEffect(() => {
-    const storedCompanyName = localStorage.getItem("companyName");
-    if (storedCompanyName) {
-      setFormData((prevData) => ({
-        ...prevData,
-        adminCompanyName: storedCompanyName,
-      }));
+    const storedcompanyName = getCompanyName() || getUserName();
+    const userId = getUserId();
+    const flag = getflag();
+    const compID = getcompanyId();
+
+    
+    // Ensure that both storedcompanyName and userId are present before setting form data
+    if (storedcompanyName && userId) {
+      // Check if the company is "superadmin" and the flag is true
+      if (storedcompanyName.toLowerCase() === "superadmin" && flag === "true" && compID) {
+        setFormData((prevData) => ({
+          ...prevData,
+          adminCompanyName: storedcompanyName,
+          companyId: compID, // Ensure compID is set
+         }));
+       } else {
+         // Use userId if not in "superadmin" mode
+         console.log(storedcompanyName, userId, flag, compID);
+        setFormData((prevData) => ({
+          ...prevData,
+          adminCompanyName: storedcompanyName,
+          companyId: userId,
+        }));
+      }
+    } else {
+      console.error("Missing required fields:", { storedcompanyName, userId, flag, compID });
     }
-  }, []); // Update when the manufacturer changes
+  }, []);
   // Fetch manufacturer data when the modal opens
   useEffect(() => {
     // console.log(vehicleid);
@@ -45,6 +70,9 @@ const UpdateInsurenceModel = ({ isOpen, onClose, fetchData, insurenceid }) => {
               name: data.name,
               description: data.description,
               isActive: data.isActive,
+              adminCreatedBy: data.adminCreatedBy,
+              adminCompanyName: data.adminCompanyName,
+              companyId: data.companyId
             });
           } else {
             toast.warn("Failed to fetch manufacturer data");

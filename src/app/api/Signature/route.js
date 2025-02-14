@@ -65,6 +65,7 @@ export async function POST(request) {
       isActive,
       adminCreatedBy,
       adminCompanyName,
+      companyId,
     } = formDataObject;
 
     console.log(formDataObject);
@@ -88,6 +89,7 @@ export async function POST(request) {
       imageFile,
       adminCreatedBy,
       adminCompanyName,
+      companyId,
       isActive: isActive || false,
     });
 
@@ -113,7 +115,7 @@ export async function POST(request) {
 
 export const GET = catchAsyncErrors(async () => {
   await connect();
-  const allSignature = await Signature.find().sort({ createdAt: -1 });
+  const allSignature = await Signature.find().populate("companyId").sort({ createdAt: -1 });
   const SignatureCount = await Signature.countDocuments();
   if (!allSignature || allSignature.length === 0) {
     return NextResponse.json({ Result: allSignature });

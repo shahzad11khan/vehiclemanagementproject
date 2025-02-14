@@ -39,7 +39,6 @@ const Page = () => {
   const fetchData = async () => {
     try {
       GetFueltype().then(({ result }) => {
-        console.log(result);
         setData(result);
         setFilteredData(result);
       });
@@ -82,12 +81,10 @@ const Page = () => {
   };
 
   useEffect(() => {
-    const filtered = data.filter((item) => {
-      const companyMatch =
-        item.adminCompanyName &&
-        selectedCompanyName &&
-        item.adminCompanyName.toLowerCase() ===
-          selectedCompanyName.toLowerCase();
+        const selectedCompanyName = getCompanyName() || getsuperadmincompanyname();
+    const filtered = data?.filter((item) => {
+      console.log(selectedCompanyName , item.adminCompanyName);
+      const companyMatch =  selectedCompanyName === 'superadmin' ? data : item?.adminCompanyName.toLowerCase() === selectedCompanyName.toLowerCase();
       const usernameMatch =
         item.name && item.name.toLowerCase().includes(searchTerm.toLowerCase());
       return companyMatch && usernameMatch;
@@ -112,8 +109,8 @@ const Page = () => {
     setIsOpenVehcleUpdate(!isOpenVehicleUpdate);
   };
 
-  const totalPages = Math.ceil(filteredData.length / itemperpage);
-  const currentData = filteredData.slice(
+  const totalPages = Math.ceil(filteredData?.length / itemperpage);
+  const currentData = filteredData?.slice(
     (currentPage - 1) * itemperpage,
     currentPage * itemperpage
   );
@@ -132,7 +129,7 @@ const Page = () => {
              <span className="opacity-65" >Vehicle Setting</span> 
              <div className="flex items-center gap-3 myborder2">
              <span><img src="/setting_arrow.svg" className="w-2 h-4 object-cover object-center  "></img></span>
-             <span>Body Type</span>
+             <span>Fuel Type</span>
              </div>
              </div>
             </h1>
@@ -305,8 +302,8 @@ const Page = () => {
                     </tr>
                   </thead>
                   <tbody className="font-sans font-medium text-sm">
-                    {currentData.length > 0 ? (
-                      currentData.map((row) => (
+                    {currentData?.length > 0 ? (
+                      currentData?.map((row) => (
                         <tr key={row._id} className="border-b text-center">
                           {/* Type Name */}
                           <td className="py-3 px-4 min-w-[150px] w-[150px] whitespace-normal break-all overflow-hidden">

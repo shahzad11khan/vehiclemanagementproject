@@ -4,6 +4,10 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
+import {
+  getCompanyName,
+  getUserId ,getflag,getcompanyId
+} from "@/utils/storageUtils";
 const UpdateFuelTypeModel = ({ isOpen, onClose, fetchData, fuelid }) => {
   const [formData, setFormData] = useState({
     name: "",
@@ -11,6 +15,8 @@ const UpdateFuelTypeModel = ({ isOpen, onClose, fetchData, fuelid }) => {
     isActive: false,
     adminCreatedBy: "",
     adminCompanyName: "",
+    companyId: null,
+
   });
 
   const [loading, setLoading] = useState(false);
@@ -19,16 +25,32 @@ const UpdateFuelTypeModel = ({ isOpen, onClose, fetchData, fuelid }) => {
 
   // Retrieve company name from local storage
   useEffect(() => {
-    const storedCompanyName =
-      localStorage.getItem("companyName") ||
-      localStorage.getItem("companyname");
-    if (storedCompanyName) {
-      setFormData((prevData) => ({
-        ...prevData,
-        adminCompanyName: storedCompanyName,
-      }));
+    const storedcompanyName = getCompanyName() || getsuperadmincompanyname();
+    const userId = getUserId();
+    const flag = getflag();
+    const compID = getcompanyId();
+    console.log(storedcompanyName, userId, flag, compID);
+  
+    if (storedcompanyName && userId) {
+      if (storedcompanyName.toLowerCase() === "superadmin" && flag === "true") {
+        setFormData((prevData) => ({
+          ...prevData,
+          adminCompanyName: storedcompanyName,
+          companyId: compID, // Use compID in this case
+        }));
+      } else {
+        // For other conditions, use the regular logic
+        setFormData((prevData) => ({
+          ...prevData,
+          adminCompanyName: storedcompanyName,
+          companyId: userId, // Use userId in this case
+        }));
+      }
     }
-  }, []); // Update when the manufacturer changes
+  
+    // Always call fetchDt after the conditions
+  }, []);
+  // Update when the manufacturer changes
   // Fetch manufacturer data when the modal opens
   useEffect(() => {
     // console.log(vehicleid);
@@ -86,7 +108,9 @@ const UpdateFuelTypeModel = ({ isOpen, onClose, fetchData, fuelid }) => {
         description: "",
         isActive: false,
         adminCreatedBy: "",
-        adminCompanyName: "",
+        adminCompanyName: formData.adminCompanyName,
+        companyId: formData.companyId,
+
       });
 
       toast.success("Data successfully updated");

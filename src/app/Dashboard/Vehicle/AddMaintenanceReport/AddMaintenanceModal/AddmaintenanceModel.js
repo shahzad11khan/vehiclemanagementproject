@@ -6,6 +6,11 @@ import {
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
+import {
+  getCompanyName,
+  getUserId ,
+  getUserName,getflag,getcompanyId
+} from "@/utils/storageUtils";
 
 const AddMaintenanceModal = ({ isOpen, onClose, fetchData, selectedid }) => {
   const [loading, setLoading] = useState(false);
@@ -13,6 +18,7 @@ const AddMaintenanceModal = ({ isOpen, onClose, fetchData, selectedid }) => {
     issues: "",
     vehicleName: "",
     registrationNumber: "",
+    companyId:null,
     repairHistory: [
       {
         images: [],
@@ -32,6 +38,37 @@ const AddMaintenanceModal = ({ isOpen, onClose, fetchData, selectedid }) => {
     adminCompanyId: "",
   });
 
+  useEffect(() => {
+    const storedcompanyName = getCompanyName() || getUserName();
+    const userId = getUserId();
+    const flag = getflag();
+    const compID = getcompanyId();
+
+    
+    // Ensure that both storedcompanyName and userId are present before setting form data
+    if (storedcompanyName && userId) {
+      // Check if the company is "superadmin" and the flag is true
+      if (storedcompanyName.toLowerCase() === "superadmin" && flag === "true" && compID) {
+        setFormData((prevData) => ({
+          ...prevData,
+          adminCompanyName: storedcompanyName,
+          companyId: compID, // Ensure compID is set
+         }));
+       } else {
+         // Use userId if not in "superadmin" mode
+         console.log(storedcompanyName, userId, flag, compID);
+        setFormData((prevData) => ({
+          ...prevData,
+          adminCompanyName: storedcompanyName,
+          companyId: userId,
+        }));
+      }
+    } else {
+      console.error("Missing required fields:", { storedcompanyName, userId, flag, compID });
+    }
+  }, []);
+
+  console.log(repaitformData)
   const fetchDat = async () => {
     if (selectedid) {
       console.log(selectedid);
@@ -120,6 +157,7 @@ const AddMaintenanceModal = ({ isOpen, onClose, fetchData, selectedid }) => {
       formData.append("registrationNumber", repaitformData.registrationNumber);
       formData.append("adminCompanyName", repaitformData.adminCompanyName);
       formData.append("adminCreatedBy", repaitformData.adminCreatedBy);
+      formData.append("companyId", repaitformData.companyId);
 
       // Append nested repairHistory array
       repaitformData.repairHistory.forEach((history, i) => {

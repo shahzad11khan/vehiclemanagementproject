@@ -1,7 +1,13 @@
 import mongoose from "mongoose";
 
+// Define the schema
 const SignatureSchema = new mongoose.Schema(
   {
+    companyId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Company", // Ensure "Company" is registered
+      required: true,
+    },
     name: {
       type: String,
       trim: true,
@@ -23,18 +29,26 @@ const SignatureSchema = new mongoose.Schema(
       default: "",
     },
     imagepublicId: {
-      type: String, // Store the path or URL of the image file
+      type: String,
       default: "",
     },
-    adminCreatedBy: { type: String },
-    adminCompanyName: { type: String },
-    adminCompanyId: { type: String },
+    adminCreatedBy: { 
+      type: String 
+    },
+    adminCompanyName: { 
+      type: String 
+    },
+    adminCompanyId: { 
+      type: String 
+    },
   },
   {
-    timestamps: true, // Automatically manage createdAt and updatedAt fields
+    timestamps: true, // Automatically add createdAt and updatedAt fields
   }
 );
 
-// Create a model from the schema
-export default FormData =
+// Ensure the model is only registered once (Next.js hot-reloading fix)
+const Signature =
   mongoose.models.Signature || mongoose.model("Signature", SignatureSchema);
+
+export default Signature;

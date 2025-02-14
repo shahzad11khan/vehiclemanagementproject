@@ -7,7 +7,11 @@ import {
   fetchBadge,
   fetchLocalAuth,
 } from "../../../Components/DropdownData/taxiFirm/taxiFirmService";
-
+import {
+  getCompanyName,
+  getUserId ,
+  getUserName,getflag,getcompanyId
+} from "@/utils/storageUtils";
 const UpdateEnquiryModal = ({ isOpen, onClose, fetchData, enquiryId }) => {
   const [formData, setFormData] = useState({
     firstName: "",
@@ -27,64 +31,84 @@ const UpdateEnquiryModal = ({ isOpen, onClose, fetchData, enquiryId }) => {
     isActive: false,
     adminCreatedBy: "",
     adminCompanyName: "",
+    companyId: null,
+
   });
 
   const [superadmin, setSuperadmin] = useState(null);
   const [badgeType, setBadgeTypeOptions] = useState([]);
   const [localAuthority, setLocalAuthorityOptions] = useState([]);
+ 
 
-  useEffect(() => {
-    const storedCompanyName = localStorage.getItem("companyName");
+ useEffect(() => {
+    const storedcompanyName = getCompanyName() || getUserName();
+    const userId = getUserId();
+    const flag = getflag();
+    const compID = getcompanyId();
     const storedSuperadmin = localStorage.getItem("role");
+  
+    // Ensure that storedSuperadmin is set correctly
     if (storedSuperadmin) {
       setSuperadmin(storedSuperadmin);
     }
-    if (storedCompanyName) {
-      setFormData((prevData) => ({
-        ...prevData,
-        adminCompanyName: storedCompanyName,
-      }));
+  
+    // Ensure that both storedcompanyName and userId are present before setting form data
+    if (storedcompanyName && userId) {
+      // Check if the company is "superadmin" and the flag is true
+      if (storedcompanyName.toLowerCase() === "superadmin" && flag === "true" && compID) {
+        setFormData((prevData) => ({
+          ...prevData,
+          adminCompanyName: storedcompanyName,
+          companyId: compID, // Ensure compID is set
+        }));
+      } else {
+        // Use userId if not in "superadmin" mode
+        setFormData((prevData) => ({
+          ...prevData,
+          adminCompanyName: storedcompanyName,
+          companyId: userId,
+        }));
+      }
+    } else {
+      console.error("Missing required fields:", { storedcompanyName, userId, flag, compID });
     }
+  
+    // Load dropdown data
+    loadDropdownData();
   }, []);
-
-  useEffect(() => {
-    const fetchDataForDropdowns = async () => {
+  
+  const loadDropdownData = async () => {
       try {
-        const storedCompanyName = formData.adminCompanyName;
 
-        const [badgesdata, authoritiesdata] = await Promise.all([
-          fetchBadge(),
-          fetchLocalAuth(),
-        ]);
+        const badgeData = await fetchBadge();
+        const localAuthData = await fetchLocalAuth();
 
-        const filteredbadges =
+        const storedCompanyName = getCompanyName();
+
+        const filteredBadges =
           superadmin === "superadmin"
-            ? badgesdata.result
-            : badgesdata.result.filter(
+            ? badgeData.result
+            : badgeData.result.filter(
               (badge) =>
                 badge.adminCompanyName === storedCompanyName ||
                 badge.adminCompanyName === "superadmin"
             );
 
-        const filteredAuthorities =
+        const filteredLocalAuth =
           superadmin === "superadmin"
-            ? authoritiesdata.Result
-            : authoritiesdata.Result.filter(
-              (authority) =>
-                authority.adminCompanyName === storedCompanyName ||
-                authority.adminCompanyName === "superadmin"
+            ? localAuthData.Result
+            : localAuthData.Result.filter(
+              (localAuth) =>
+                localAuth.adminCompanyName === storedCompanyName ||
+                localAuth.adminCompanyName === "superadmin"
             );
 
-        setBadgeTypeOptions(filteredbadges);
-        setLocalAuthorityOptions(filteredAuthorities);
-      } catch (error) {
-        console.error("Error fetching dropdown data:", error);
+            setBadgeTypeOptions(filteredBadges);
+            setLocalAuthorityOptions(filteredLocalAuth);
+      } catch (err) {
+        console.error("Error loading dropdown data:", err);
       }
     };
-
-    fetchDataForDropdowns();
-  }, [formData.adminCompanyName, superadmin]);
-
   useEffect(() => {
     const fetchEnquiry = async () => {
       if (enquiryId) {

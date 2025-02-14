@@ -4,6 +4,11 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
+import {
+  getCompanyName,
+  getUserId ,getflag,getcompanyId
+} from "@/utils/storageUtils";
+
 const AddFuelTypeModel = ({ isOpen, onClose, fetchData }) => {
   const [formData, setFormData] = useState({
     name: "",
@@ -11,21 +16,38 @@ const AddFuelTypeModel = ({ isOpen, onClose, fetchData }) => {
     isActive: false,
     adminCreatedBy: "",
     adminCompanyName: "",
+    companyId: null,
   });
 
   const [loading, setLoading] = useState(false);
-
   useEffect(() => {
-    const storedCompanyName =
-      localStorage.getItem("companyName") ||
-      localStorage.getItem("companyname"); // Replace with the actual key used in localStorage
-    if (storedCompanyName) {
-      setFormData((prevData) => ({
-        ...prevData,
-        adminCompanyName: storedCompanyName,
-      }));
+    const storedcompanyName = getCompanyName() || getsuperadmincompanyname();
+    const userId = getUserId();
+    const flag = getflag();
+    const compID = getcompanyId();
+    console.log(storedcompanyName, userId, flag, compID);
+  
+    if (storedcompanyName && userId) {
+      // Check if the company is "superadmin" and the flag is "true"
+      if (storedcompanyName.toLowerCase() === "superadmin" && flag === "true") {
+        setFormData((prevData) => ({
+          ...prevData,
+          adminCompanyName: storedcompanyName,
+          companyId: compID, // Use compID in this case
+        }));
+      } else {
+        // For other conditions, use the regular logic
+        setFormData((prevData) => ({
+          ...prevData,
+          adminCompanyName: storedcompanyName,
+          companyId: userId, // Use userId in this case
+        }));
+      }
     }
-  }, []); // Run only once when the component mounts
+  
+    // Always call fetchDt after the conditions
+  }, []);
+   // Run only once when the component mounts
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -48,6 +70,7 @@ const AddFuelTypeModel = ({ isOpen, onClose, fetchData }) => {
         isActive: false,
         adminCreatedBy: "",
         adminCompanyName: formData.adminCompanyName,
+        companyId: formData.companyId,
       });
       // console.log(response.data);
       if (response.data.success) {

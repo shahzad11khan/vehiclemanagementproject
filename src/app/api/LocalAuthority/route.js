@@ -7,7 +7,7 @@ export const POST = catchAsyncErrors(async (request) => {
   await connect();
   const data = await request.json();
 
-  const { name, description, isActive, adminCreatedBy, adminCompanyName } =
+  const { name, description, isActive, adminCreatedBy, adminCompanyName,companyId } =
     data; // Extract the new variables
 
   // Check for existing vehicle by name
@@ -28,6 +28,7 @@ export const POST = catchAsyncErrors(async (request) => {
     isActive,
     adminCreatedBy,
     adminCompanyName,
+    companyId
   });
 
   console.log(newLocalAuthority);
@@ -48,7 +49,7 @@ export const POST = catchAsyncErrors(async (request) => {
 });
 export const GET = catchAsyncErrors(async () => {
   await connect();
-  const allLocalAuthority = await LocalAuthority.find().sort({ createdAt: -1 });
+  const allLocalAuthority = await LocalAuthority.find().sort({ createdAt: -1 }).populate("companyId");
   const LocalAuthorityCount = await LocalAuthority.countDocuments();
   if (!allLocalAuthority || allLocalAuthority.length === 0) {
     return NextResponse.json({ Result: allLocalAuthority });

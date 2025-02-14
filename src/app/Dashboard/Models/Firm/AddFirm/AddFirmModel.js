@@ -4,8 +4,17 @@ import { API_URL_Firm } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { fetchSignature } from "../../../Components/DropdownData/taxiFirm/taxiFirmService";
-
+import {
+  getCompanyName,
+  getUserId ,
+  getUserName,getflag,getcompanyId
+} from "@/utils/storageUtils";
 const AddFirmModal = ({ isOpen, onClose, fetchData }) => {
+  const [superadmin, setSuperadmin] = useState(null);
+  const [signature, setSignatureOptions] = useState([]);
+  const [step, setStep] = useState(1);
+  const nextStep = () => setStep(step + 1);
+  const prevStep = () => setStep(step - 1);
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -28,49 +37,70 @@ const AddFirmModal = ({ isOpen, onClose, fetchData }) => {
     imageFile: null,
     adminCreatedBy: "",
     adminCompanyName: "",
+    companyId: null,
+
   });
-  const [superadmin, setSuperadmin] = useState(null);
-  const [signature, setSignatureOptions] = useState([]);
-  const [step, setStep] = useState(1);
-  const nextStep = () => setStep(step + 1);
-  const prevStep = () => setStep(step - 1);
+
 
   useEffect(() => {
-    const storedCompanyName = localStorage.getItem("companyName");
-    const storedSuperadmin = localStorage.getItem("role");
-    if (storedSuperadmin) {
-      setSuperadmin(storedSuperadmin);
+     const storedcompanyName = getCompanyName() || getUserName();
+     const userId = getUserId();
+     const flag = getflag();
+     const compID = getcompanyId();
+     const storedSuperadmin = localStorage.getItem("role");
+   
+     // Ensure that storedSuperadmin is set correctly
+     if (storedSuperadmin) {
+       setSuperadmin(storedSuperadmin);
+     }
+   
+     // Ensure that both storedcompanyName and userId are present before setting form data
+     if (storedcompanyName && userId) {
+       // Check if the company is "superadmin" and the flag is true
+       if (storedcompanyName.toLowerCase() === "superadmin" && flag === "true" && compID) {
+         setFormData((prevData) => ({
+           ...prevData,
+           adminCompanyName: storedcompanyName,
+           companyId: compID, // Ensure compID is set
+         }));
+       } else {
+         // Use userId if not in "superadmin" mode
+         setFormData((prevData) => ({
+           ...prevData,
+           adminCompanyName: storedcompanyName,
+           companyId: userId,
+         }));
+       }
+     } else {
+       console.error("Missing required fields:", { storedcompanyName, userId, flag, compID });
+     }
+   
+     // Load dropdown data
+     fetchDataForDropdowns();
+
+   }, []);
+  
+   const fetchDataForDropdowns = async () => {
+    try {
+      const comp = getCompanyName()
+
+
+      const signature = await fetchSignature();
+
+      const filteredsignature =
+        superadmin === "superadmin"
+          ? signature.Result
+          : signature.Result.filter(
+            (signature) =>
+              signature.adminCompanyName === comp ||
+              signature.adminCompanyName === "superadmin"
+          );
+      setSignatureOptions(filteredsignature);
+    } catch (error) {
+      console.error("Error fetching dropdown data:", error);
     }
-    if (storedCompanyName) {
-      setFormData((prevData) => ({
-        ...prevData,
-        adminCompanyName: storedCompanyName,
-      }));
-    }
-  }, []);
-  useEffect(() => {
-    const fetchDataForDropdowns = async () => {
-      try {
-        const comp = localStorage.getItem("companyName");
+  };
 
-        const signature = await fetchSignature();
-
-        const filteredsignature =
-          superadmin === "superadmin"
-            ? signature.Result
-            : signature.Result.filter(
-              (signature) =>
-                signature.adminCompanyName === comp ||
-                signature.adminCompanyName === "superadmin"
-            );
-        setSignatureOptions(filteredsignature);
-      } catch (error) {
-        console.error("Error fetching dropdown data:", error);
-      }
-    };
-
-    fetchDataForDropdowns();
-  }, []);
 
   const handleChange = (e) => {
     const { name, value, type, checked, files } = e.target;
@@ -82,6 +112,7 @@ const AddFirmModal = ({ isOpen, onClose, fetchData }) => {
   };
 
   const handleSubmit = async (e) => {
+    console.log(formData)
     e.preventDefault();
     try {
       const formDataToSend = new FormData();
@@ -125,6 +156,7 @@ const AddFirmModal = ({ isOpen, onClose, fetchData }) => {
           imageFile: null,
           adminCreatedBy: "",
           adminCompanyName: formData.adminCompanyName,
+          companyId: formData.companyId,
         });
       } else {
         toast.warn(response.data.error);

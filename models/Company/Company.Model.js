@@ -8,6 +8,11 @@ const CompanySchema = new mongoose.Schema(
       unique: true,
       trim: true,
     },
+    userId: {
+      type: mongoose.Schema.Types.ObjectId, 
+      ref: 'User', 
+      required: true,
+    },
     email: {
       type: String,
       //   required: true,
@@ -53,6 +58,12 @@ const CompanySchema = new mongoose.Schema(
     bankingInformationBankAccountNumber: { type: String },
     bankingInformationBankIBANSWIFTCode: { type: String },
     bankingInformationBankAddress: { type: String },
+    
+      Postcode: { type: String },
+      BuildingAndStreetOne: { type: String },
+      BuildingAndStreetTwo: { type: String },
+      Town_City: { type: String },
+      Country: { type: String },
     specificDepartmentContactInformationBillingFinanceDepartment: {
       type: String,
     },

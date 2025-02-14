@@ -3,6 +3,9 @@ import React
 from 'react'
 import { Doughnut } from 'react-chartjs-2'
 import Link from 'next/link';
+import { Chart, ArcElement, Tooltip, Legend } from "chart.js";
+
+Chart.register(ArcElement, Tooltip, Legend);
 
 export default function AdminDashBDoughnut({title,data,option,link,extra}) {
 

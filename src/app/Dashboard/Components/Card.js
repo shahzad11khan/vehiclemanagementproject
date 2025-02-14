@@ -4,11 +4,19 @@ import Link from "next/link";
 
 const Card = ({ image, company, companyId }) => {
   const handleCardClick = () => {
-    localStorage.setItem("companyName", company);
-    localStorage.setItem("companyID", companyId);
-    localStorage.setItem("flag", "true");
-    localStorage.setItem("Iscompanyselected", "Yes");
+    if (typeof window === "undefined") return;
+  
+    try {
+      localStorage.setItem("companyName", company || "");
+      localStorage.setItem("companyID", companyId || "");
+      localStorage.setItem("flag", "true");
+      localStorage.setItem("Iscompanyselected", "Yes");
+      console.log("Company details saved to localStorage.");
+    } catch (error) {
+      console.error("Error saving to localStorage:", error);
+    }
   };
+  
 
   return (
     <div className="bg-white shadow-lg rounded-lg overflow-hidden border-2 border-gray-400">

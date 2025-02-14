@@ -19,7 +19,6 @@ const Page = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isMounted, setIsMounted] = useState(false);
   const [isOpenPayment, setIsOpenPayment] = useState(false);
-  const [selectedCompanyName, setSelectedCompanyName] = useState("");
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [isOpenVehicleUpdate, setIsOpenVehcleUpdate] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -29,11 +28,7 @@ const Page = () => {
 
   useEffect(() => {
     setIsMounted(true);
-    const companyNameFromStorage =
-      getCompanyName() || localStorage.getItem("companyname");
-    if (companyNameFromStorage) {
-      setSelectedCompanyName(companyNameFromStorage);
-    }
+
   }, []);
 
   const fetchData = async () => {
@@ -78,13 +73,10 @@ const Page = () => {
   };
 
   useEffect(() => {
-    const filtered = data.filter((item) => {
-      const companyMatch =
-        item.adminCompanyName &&
-        selectedCompanyName &&
-        item.adminCompanyName.toLowerCase() ===
-          selectedCompanyName.toLowerCase();
-
+        const selectedCompanyName = getCompanyName() || getsuperadmincompanyname();
+  
+    const filtered = data?.filter((item) => {
+      const companyMatch =  selectedCompanyName === 'superadmin' ? data : item?.adminCompanyName.toLowerCase() === selectedCompanyName.toLowerCase();
       const usernameMatch =
         item.name && item.name.toLowerCase().includes(searchTerm.toLowerCase());
 
@@ -110,8 +102,8 @@ const Page = () => {
     setIsOpenVehcleUpdate(!isOpenVehicleUpdate);
   };
 
-  const totalPages = Math.ceil(filteredData.length / itemperpage);
-  const currentData = filteredData.slice(
+  const totalPages = Math.ceil(filteredData?.length / itemperpage);
+  const currentData = filteredData?.slice(
     (currentPage - 1) * itemperpage,
     currentPage * itemperpage
   );
@@ -307,8 +299,8 @@ const Page = () => {
                       </tr>
                     </thead>
                     <tbody className="font-sans font-medium text-sm">
-                      {currentData.length > 0 ? (
-                        currentData.map((row) => (
+                      {currentData?.length > 0 ? (
+                        currentData?.map((row) => (
                           <tr key={row._id} className="border-b text-center">
                             {/* Transmission Name */}
                             <td className="py-3 px-4 min-w-[150px] w-[150px] whitespace-normal break-all overflow-hidden">

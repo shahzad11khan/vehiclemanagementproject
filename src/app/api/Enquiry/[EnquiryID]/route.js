@@ -23,6 +23,7 @@ export const PUT = async (request, context) => {
 
     // Update enquiry properties with values from data or retain existing values
     enquiry.firstName = data.firstName || enquiry.firstName;
+    enquiry.companyId = data.companyId || enquiry.companyId;
     enquiry.lastName = data.lastName || enquiry.lastName;
     enquiry.email = data.email || enquiry.email;
     enquiry.tel1 = data.tel1 || enquiry.tel1;

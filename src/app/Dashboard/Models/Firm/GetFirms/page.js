@@ -14,12 +14,12 @@ import axios from "axios";
 import DeleteModal from "@/app/Dashboard/Components/DeleteModal";
 
 const Page = () => {
-  const [data, setData] = useState([]);
+  // const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [isMounted, setIsMounted] = useState(false);
   const [isOpenFirm, setIsOpenFirm] = useState(false);
-  const [selectedCompanyName, setSelectedCompanyName] = useState("");
+  // const [selectedCompanyName, setSelectedCompanyName] = useState("");
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [isOpenDriverUpdate, setIsOpenDriverUpdate] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -29,40 +29,41 @@ const Page = () => {
 
   useEffect(() => {
     setIsMounted(true);
-    const companyNameFromStorage = getCompanyName();
-    if (companyNameFromStorage) {
-      setSelectedCompanyName(companyNameFromStorage);
-    }
+ 
   }, []);
 
   const fetchData = async () => {
     try {
-      const companyNameFromStorage = getCompanyName(); // Get company name from storage
+      const storedcompanyName = getCompanyName(); // Ensure this is defined
       const { result } = await GetFirm(); // Fetch the data
       console.log(result);
   
       // Filter the data based on company name and username (if necessary)
-      const filtered = result.filter((item) => {
-        // Check if the company name matches (case-insensitive)
-        if (item.adminCompanyName.toLowerCase() === companyNameFromStorage.toLowerCase()) {
-          return true;
-        }
+      const filtered = result?.filter((item) => {
+        // If company name is "superadmin", include all data; otherwise, filter by adminCompanyName
+        console.log(storedcompanyName , item.adminCompanyName)
+
+      const companyMatch =  storedcompanyName === 'superadmin' ? result : item?.adminCompanyName.toLowerCase() === storedcompanyName.toLowerCase();
+
+      const usernameMatch = item.name && item.name.toLowerCase().includes(searchTerm.toLowerCase());
+
+      return companyMatch && usernameMatch;
       });
   
-      // Set the filtered data to both `data` and `filteredData`
-      setData(filtered);
+      // Set the filtered data
+      // setData(filtered);
       setFilteredData(filtered);
     } catch (error) {
       console.error("Error fetching data:", error);
-      setData([]);
-      setFilteredData([]); // Optionally clear filtered data in case of error
+      // setData([]); // Clear data on error
+      setFilteredData([]);
     }
   };
   
-
   useEffect(() => {
     fetchData();
   }, []);
+  
 
   const isopendeletemodel = (id) => {
     setIsDeleteModalOpenId(id); // Set the ID of the item to be deleted
@@ -74,16 +75,16 @@ const Page = () => {
       const response = await axios.delete(`${API_URL_Firm}/${id}`);
       const { data } = response;
       console.log("Response Data:", data);
-
-      if (data.status === 200) {
-        setData((prevData) => prevData.filter((item) => item._id !== id));
-        setFilteredData((prevFilteredData) =>
-          prevFilteredData.filter((item) => item._id !== id)
-        );
-        // toast.success(data.message || "Enquiry deleted successfully.");
-      } else {
-        toast.warn(data.message || "Failed to delete the Enquiry.");
-      }
+      fetchData();
+      // if (data.status === 200) {
+      //   setData((prevData) => prevData.filter((item) => item._id !== id));
+      //   setFilteredData((prevFilteredData) =>
+      //     prevFilteredData.filter((item) => item._id !== id)
+      //   );
+      //   // toast.success(data.message || "Enquiry deleted successfully.");
+      // } else {
+      //   toast.warn(data.message || "Failed to delete the Enquiry.");
+      // }
     } catch (error) {
       console.error("Error deleting Enquiry:", error);
       toast.error(
@@ -93,21 +94,16 @@ const Page = () => {
     }
   };
 
-  useEffect(() => {
-    const filtered = data.filter((item) => {
-      const companyMatch =
-        item.adminCompanyName &&
-        selectedCompanyName &&
-        item.adminCompanyName.toLowerCase() ===
-          selectedCompanyName.toLowerCase();
+  // useEffect(() => {
+  //   const filtered = data.filter((item) => {
+  //     const companyMatch =  storedcompanyName === 'superadmin' ? data : item?.adminCompanyName.toLowerCase() === storedcompanyName.toLowerCase();
+  //     const usernameMatch =
+  //       item.name && item.name.toLowerCase().includes(searchTerm.toLowerCase());
 
-      const usernameMatch =
-        item.name && item.name.toLowerCase().includes(searchTerm.toLowerCase());
-
-      return companyMatch && usernameMatch;
-    });
-    setFilteredData(filtered);
-  }, [searchTerm, data, selectedCompanyName]);
+  //     return companyMatch && usernameMatch;
+  //   });
+  //   setFilteredData(filtered);
+  // }, [searchTerm, data, selectedCompanyName]);
 
   const handleEdit = (id) => {
     setSelectedUserId(id);
@@ -127,8 +123,8 @@ const Page = () => {
     setIsOpenDriverUpdate(!isOpenDriverUpdate);
   };
 
-  const totalPages = Math.ceil(filteredData.length / itemperpage);
-  const currentData = filteredData.slice(
+  const totalPages = Math.ceil(filteredData?.length / itemperpage);
+  const currentData = filteredData?.slice(
     (currentPage - 1) * itemperpage,
     currentPage * itemperpage
   );
@@ -198,7 +194,7 @@ const Page = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {currentData.map((row) => (
+                  {currentData?.map((row) => (
                     <tr key={row._id} className="border-b text-center">
                       <td className="py-3 px-4 min-w-[150px] w-[150px] whitespace-normal break-all overflow-hidden">{row.name}</td>
                       <td className="py-3 px-4 min-w-[150px] w-[150px] whitespace-normal break-all overflow-hidden">{row.description}</td>

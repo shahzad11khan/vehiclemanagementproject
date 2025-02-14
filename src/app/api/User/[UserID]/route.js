@@ -72,6 +72,13 @@ export async function PUT(request, context) {
       CreatedBy,
       isActive,
       role,
+      userId,
+      companyId,
+      Postcode,
+    BuildingAndStreetOne,
+    BuildingAndStreetTwo,
+    Town_City,
+    Country,
     } = formDataObject;
 
     const user = await User.findById(id);
@@ -80,7 +87,6 @@ export async function PUT(request, context) {
       return NextResponse.json({ error: "User not found", status: 404 });
     }
 
-    console.log(user.password, user.confirmpassword);
 
     // Update user fields if provided
     if (password) {
@@ -91,6 +97,14 @@ export async function PUT(request, context) {
       // Keep the existing password if no new password is provided
       user.password = user.password;
     }
+  
+    user.userId = userId || user.userId;
+    user.companyId = companyId || user.companyId;
+    user.Postcode = Postcode || user.Postcode;
+    user.BuildingAndStreetOne = BuildingAndStreetOne || user.BuildingAndStreetOne;
+    user.BuildingAndStreetTwo = BuildingAndStreetTwo || user.BuildingAndStreetTwo;
+    user.Town_City = Town_City || user.Town_City;
+    user.Country = Country || user.Country;
     user.title = title || user.title;
     user.firstName = firstName || user.firstName;
     user.lastName = lastName || user.lastName;

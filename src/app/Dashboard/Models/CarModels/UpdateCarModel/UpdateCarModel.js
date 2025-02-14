@@ -3,8 +3,10 @@ import { API_URL_CarModel } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { getCompanyName, getsuperadmincompanyname } from "@/utils/storageUtils";
-import { GetManufacturer } from "@/app/Dashboard/Components/ApiUrl/ShowApiDatas/ShowApiDatas";
+import {
+  getCompanyName,
+  getUserId ,getflag,getcompanyId,getsuperadmincompanyname
+} from "@/utils/storageUtils";import { GetManufacturer } from "@/app/Dashboard/Components/ApiUrl/ShowApiDatas/ShowApiDatas";
 
 const UpdateCarModel = ({ isOpen, onClose, fetchData, updateid }) => {
   const [formData, setFormData] = useState({
@@ -14,6 +16,8 @@ const UpdateCarModel = ({ isOpen, onClose, fetchData, updateid }) => {
     isActive: false,
     adminCreatedBy: "",
     adminCompanyName: "",
+    companyId:null,
+
   });
 
   const [loading, setLoading] = useState(false);
@@ -38,16 +42,35 @@ const UpdateCarModel = ({ isOpen, onClose, fetchData, updateid }) => {
       setManufacturer([]);
     }
   };
+
   useEffect(() => {
-    const storedCompanyName = getCompanyName() || getsuperadmincompanyname();
-    if (storedCompanyName) {
-      setFormData((prevData) => ({
-        ...prevData,
-        adminCompanyName: storedCompanyName,
-      }));
+    const storedcompanyName = getCompanyName() || getsuperadmincompanyname();
+    const userId = getUserId();
+    const flag = getflag();
+    const compID = getcompanyId();
+  
+    if (storedcompanyName && userId) {
+      // Check if the company is "superadmin" and the flag is "true"
+      if (storedcompanyName.toLowerCase() === "superadmin" && flag === "true") {
+        setFormData((prevData) => ({
+          ...prevData,
+          adminCompanyName: storedcompanyName,
+          companyId: compID, // Use compID in this case
+        }));
+      } else {
+        // For other conditions, use the regular logic
+        setFormData((prevData) => ({
+          ...prevData,
+          adminCompanyName: storedcompanyName,
+          companyId: userId, // Use userId in this case
+        }));
+      }
     }
+  
+    // Always call fetchDt after the conditions
     fetchDt();
   }, []);
+  
 
   useEffect(() => {
     const fetchManufacturerData = async () => {
@@ -62,6 +85,9 @@ const UpdateCarModel = ({ isOpen, onClose, fetchData, updateid }) => {
               makemodel: data.makemodel,
               description: data.description,
               isActive: data.isActive,
+              adminCreatedBy: data.adminCreatedBy,
+              adminCompanyName: data.adminCompanyName,
+              companyId: data.companyId
             });
           } else {
             toast.warn("Failed to fetch CarModel data");

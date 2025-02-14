@@ -89,15 +89,11 @@ const Page = () => {
 
   // Filter data based on search term and selected company
   useEffect(() => {
-    const filtered = data.filter((item) => {
-      const companyMatch =
-        item.adminCompanyName &&
-        selectedCompanyName &&
-        item.adminCompanyName.toLowerCase() ===
-          selectedCompanyName.toLowerCase();
+    const selectedCompanyName = getCompanyName() || getsuperadmincompanyname();
+    const filtered = data?.filter((item) => {
+    const companyMatch =  selectedCompanyName === 'superadmin' ? data : item?.adminCompanyName.toLowerCase() === selectedCompanyName.toLowerCase();
 
-      const usernameMatch =
-        item.name && item.name.toLowerCase().includes(searchTerm.toLowerCase());
+    const usernameMatch =item.name && item.name.toLowerCase().includes(searchTerm.toLowerCase());
 
       return companyMatch && usernameMatch;
     });

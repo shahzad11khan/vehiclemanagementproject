@@ -25,25 +25,30 @@ const Page = () => {
   const router = useRouter();
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      if (!isAuthenticated()) {
-        router.push("/");
-        return;
-      }
-
-      const flag = localStorage.getItem("flag");
-      const userId = localStorage.getItem("userId");
-      const companyID = localStorage.getItem("companyID");
-
-      if (flag === "true" && companyID) {
-        showAllAdmins(companyID);
-      } else if (userId) {
-        showAllAdmins(userId);
-      } else {
-        console.warn("No valid user ID or company ID found in localStorage.");
-      }
+    // Ensure the window object is available
+    if (typeof window === "undefined") return;
+  
+    // Redirect to home if not authenticated
+    if (!isAuthenticated()) {
+      router.push("/");
+      return;
     }
-  }, []);
+  
+    // Retrieve values from localStorage
+    const flag = localStorage.getItem("flag");
+    const userId = localStorage.getItem("userId");
+    const companyID = localStorage.getItem("companyID");
+  
+    // Handle showing admins
+    if (flag === "true" && companyID) {
+      showAllAdmins(companyID);
+    } else if (userId) {
+      showAllAdmins(userId);
+    } else {
+      console.warn("No valid user ID or company ID found in localStorage.");
+    }
+  }, [router]);
+  
 
   const showAllAdmins = async (id) => {
     setLoading(true);

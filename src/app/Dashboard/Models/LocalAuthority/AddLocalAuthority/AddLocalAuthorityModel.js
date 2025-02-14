@@ -3,6 +3,11 @@ import { API_URL_LocalAuthority } from "@/app/Dashboard/Components/ApiUrl/ApiUrl
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import {
+  getCompanyName,
+  getUserId ,
+  getUserName,getflag,getcompanyId
+} from "@/utils/storageUtils";
 const AddLocalAuthorityModel = ({ isOpen, onClose, fetchData }) => {
   const [formData, setFormData] = useState({
     name: "",
@@ -10,18 +15,42 @@ const AddLocalAuthorityModel = ({ isOpen, onClose, fetchData }) => {
     isActive: false,
     adminCreatedBy: "",
     adminCompanyName: "",
+    companyId: null,
+
   });
 
   const [loading, setLoading] = useState(false);
-  useEffect(() => {
-    const storedCompanyName = localStorage.getItem("companyName"); // Replace with the actual key used in localStorage
-    if (storedCompanyName) {
-      setFormData((prevData) => ({
-        ...prevData,
-        adminCompanyName: storedCompanyName,
-      }));
-    }
-  }, []); // Run only once when the component mounts
+   useEffect(() => {
+     const storedcompanyName = getCompanyName() || getUserName();
+     const userId = getUserId();
+     const flag = getflag();
+     const compID = getcompanyId();
+
+     
+     // Ensure that both storedcompanyName and userId are present before setting form data
+     if (storedcompanyName && userId) {
+       // Check if the company is "superadmin" and the flag is true
+       if (storedcompanyName.toLowerCase() === "superadmin" && flag === "true" && compID) {
+         setFormData((prevData) => ({
+           ...prevData,
+           adminCompanyName: storedcompanyName,
+           companyId: compID, // Ensure compID is set
+          }));
+        } else {
+          // Use userId if not in "superadmin" mode
+          console.log(storedcompanyName, userId, flag, compID);
+         setFormData((prevData) => ({
+           ...prevData,
+           adminCompanyName: storedcompanyName,
+           companyId: userId,
+         }));
+       }
+     } else {
+       console.error("Missing required fields:", { storedcompanyName, userId, flag, compID });
+     }
+   }, []);// Run only once when the component mounts
+
+ // Run only once when the component mounts
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -45,6 +74,7 @@ const AddLocalAuthorityModel = ({ isOpen, onClose, fetchData }) => {
           isActive: false,
           adminCreatedBy: "",
           adminCompanyName: formData.adminCompanyName,
+          companyId: formData.companyId,
         });
         toast.success(response.data.message);
         fetchData();

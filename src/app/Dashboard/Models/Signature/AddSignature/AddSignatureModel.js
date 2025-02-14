@@ -3,6 +3,11 @@ import React, { useEffect, useState } from "react";
 import { API_URL_Signature } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import { toast } from "react-toastify";
 import axios from "axios";
+import {
+  getCompanyName,
+  getUserId ,
+  getUserName,getflag,getcompanyId
+} from "@/utils/storageUtils";
 
 const AddSignatureType = ({ isOpen, onClose, fetchData }) => {
   const [formData, setFormData] = useState({
@@ -14,16 +19,38 @@ const AddSignatureType = ({ isOpen, onClose, fetchData }) => {
     // imageNote: "",
     adminCreatedBy: "",
     adminCompanyName: "",
+    companyId: null,
+
   });
-  useEffect(() => {
-    const storedCompanyName = localStorage.getItem("companyName"); // Replace with the actual key used in localStorage
-    if (storedCompanyName) {
-      setFormData((prevData) => ({
-        ...prevData,
-        adminCompanyName: storedCompanyName,
-      }));
-    }
-  }, []); // Run only once when the component mounts
+   useEffect(() => {
+     const storedcompanyName = getCompanyName() || getUserName();
+     const userId = getUserId();
+     const flag = getflag();
+     const compID = getcompanyId();
+
+     
+     // Ensure that both storedcompanyName and userId are present before setting form data
+     if (storedcompanyName && userId) {
+       // Check if the company is "superadmin" and the flag is true
+       if (storedcompanyName.toLowerCase() === "superadmin" && flag === "true" && compID) {
+         setFormData((prevData) => ({
+           ...prevData,
+           adminCompanyName: storedcompanyName,
+           companyId: compID, // Ensure compID is set
+          }));
+        } else {
+          // Use userId if not in "superadmin" mode
+          console.log(storedcompanyName, userId, flag, compID);
+         setFormData((prevData) => ({
+           ...prevData,
+           adminCompanyName: storedcompanyName,
+           companyId: userId,
+         }));
+       }
+     } else {
+       console.error("Missing required fields:", { storedcompanyName, userId, flag, compID });
+     }
+   }, []);// Run only once when the component mounts
 
   const handleChange = (e) => {
     const { name, value, type, checked, files } = e.target;
@@ -35,6 +62,7 @@ const AddSignatureType = ({ isOpen, onClose, fetchData }) => {
   };
 
   const handleSubmit = async (e) => {
+    console.log(formData);
     e.preventDefault();
     try {
       const formDataToSend = new FormData();
@@ -70,6 +98,7 @@ const AddSignatureType = ({ isOpen, onClose, fetchData }) => {
         // imageNote: "",
         adminCreatedBy: "",
         adminCompanyName: formData.adminCompanyName,
+        companyId: formData.companyId,
       });
 
       // Close the modal after submission

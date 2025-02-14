@@ -34,12 +34,15 @@ const Page = () => {
   }, [router]);
 
   return (
-    <>
+    <div className="h-[100vh] overflow-hidden">
       <Header className="min-w-full" />
       <div className="flex gap-4">
         <Sidebar />
-        <div className="container mx-auto px-4 py-2">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        <div className=" w-[80%] xl:w-[85%] min-h-screen py-10  pr-2 overflow-auto"
+         style={{
+          height:"calc(100vh - 90px)"}}
+        >
+          <div className="grid grid-cols-1 sm:grid-cols-2 pb-10 lg:grid-cols-5 gap-4 px-2 ">
             {data.length > 0 ? (
               data.map((company) => (
                 <Card
@@ -57,7 +60,7 @@ const Page = () => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

@@ -8,6 +8,12 @@ import {
   fetchLocalAuth,
 } from "../../../Components/DropdownData/taxiFirm/taxiFirmService";
 
+
+import {
+  getCompanyName,
+  getUserId ,
+  getUserName,getflag,getcompanyId
+} from "@/utils/storageUtils";
 const AddEnquiryModal = ({ isOpen, onClose, fetchData }) => {
   const [formData, setFormData] = useState({
     firstName: "",
@@ -27,34 +33,56 @@ const AddEnquiryModal = ({ isOpen, onClose, fetchData }) => {
     isActive: false,
     adminCreatedBy: "",
     adminCompanyName: "",
+    companyId: null,
   });
   const [localAuthorityOptions, setLocalAuth] = useState([]);
   const [superadmin, setSuperadmin] = useState(null);
   const [badgeTypeOptions, setBadge] = useState([]);
-  useEffect(() => {
-    const storedCompanyName = localStorage.getItem("companyName");
-    const storedSuperadmin = localStorage.getItem("role");
 
+  useEffect(() => {
+    const storedcompanyName = getCompanyName() || getUserName();
+    const userId = getUserId();
+    const flag = getflag();
+    const compID = getcompanyId();
+    const storedSuperadmin = localStorage.getItem("role");
+  
+    // Ensure that storedSuperadmin is set correctly
     if (storedSuperadmin) {
       setSuperadmin(storedSuperadmin);
     }
-
-    if (storedCompanyName) {
-      setFormData((prevData) => ({
-        ...prevData,
-        adminCompanyName: storedCompanyName,
-      }));
+  
+    // Ensure that both storedcompanyName and userId are present before setting form data
+    if (storedcompanyName && userId) {
+      // Check if the company is "superadmin" and the flag is true
+      if (storedcompanyName.toLowerCase() === "superadmin" && flag === "true" && compID) {
+        setFormData((prevData) => ({
+          ...prevData,
+          adminCompanyName: storedcompanyName,
+          companyId: compID, // Ensure compID is set
+        }));
+      } else {
+        // Use userId if not in "superadmin" mode
+        setFormData((prevData) => ({
+          ...prevData,
+          adminCompanyName: storedcompanyName,
+          companyId: userId,
+        }));
+      }
+    } else {
+      console.error("Missing required fields:", { storedcompanyName, userId, flag, compID });
     }
+  
+    // Load dropdown data
+    loadDropdownData();
   }, []);
-  useEffect(() => {
-    const loadDropdownData = async () => {
+  
+     const loadDropdownData = async () => {
       try {
-        const [badgeData, localAuthData] = await Promise.all([
-          fetchBadge(),
-          fetchLocalAuth(),
-        ]);
 
-        const storedCompanyName = formData.adminCompanyName;
+        const badgeData = await fetchBadge();
+        const localAuthData = await fetchLocalAuth();
+
+        const storedCompanyName = getCompanyName();
 
         const filteredBadges =
           superadmin === "superadmin"
@@ -81,10 +109,6 @@ const AddEnquiryModal = ({ isOpen, onClose, fetchData }) => {
       }
     };
 
-    if (superadmin !== null && formData.adminCompanyName) {
-      loadDropdownData();
-    }
-  }, [superadmin, formData.adminCompanyName]); // Re-run when superadmin or companyName changes
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -95,6 +119,7 @@ const AddEnquiryModal = ({ isOpen, onClose, fetchData }) => {
   };
 
   const handleSubmit = async (e) => {
+    console.log(formData)
     e.preventDefault();
     try {
       const response = await axios.post(`${API_URL_Enquiry}`, formData);
@@ -119,6 +144,7 @@ const AddEnquiryModal = ({ isOpen, onClose, fetchData }) => {
           isActive: false,
           adminCreatedBy: "",
           adminCompanyName: formData.adminCompanyName,
+          companyId: formData.companyId,
         });
         toast.success(response.data.message);
         onClose();

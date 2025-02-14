@@ -80,6 +80,7 @@ export async function POST(request) {
       isActive,
       adminCreatedBy,
       adminCompanyName,
+      companyId,
       // imageNote,
     } = formDataObject;
 
@@ -118,6 +119,7 @@ export async function POST(request) {
       imagepublicId,
       adminCreatedBy,
       adminCompanyName,
+      companyId,
       // imageNote,
       isActive: isActive || false,
     });
@@ -144,7 +146,7 @@ export async function POST(request) {
 
 export const GET = catchAsyncErrors(async () => {
   await connect();
-  const allFirm = await Firm.find().sort({ createdAt: -1 });
+  const allFirm = await Firm.find().populate("companyId").sort({ createdAt: -1 });
   const FirmCount = await Firm.countDocuments();
   if (!allFirm || allFirm.length === 0) {
     return NextResponse.json({ result: allFirm });

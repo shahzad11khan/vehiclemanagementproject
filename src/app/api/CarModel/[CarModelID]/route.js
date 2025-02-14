@@ -13,7 +13,7 @@ export const PUT = async (request, context) => {
     console.log(data);
 
     // Destructure the necessary fields
-    const { name,makemodel, description, isActive } = data;
+    const { name,makemodel, description, isActive,companyId } = data;
 
     // Find the manufacturer by ID
     const carmodel = await CarModel.findById({ _id: id });
@@ -27,6 +27,7 @@ export const PUT = async (request, context) => {
 
     // Update manufacturer properties with values from formDataObject or retain existing values
     carmodel.name = name ? name.trim() : carmodel.name; // Update name or retain existing
+    carmodel.companyId = companyId ? companyId : carmodel.companyId; // Update name or retain existing
     carmodel.makemodel = makemodel ? makemodel.trim() : carmodel.makemodel; // Update name or retain existing
     carmodel.description = description
       ? description.trim()

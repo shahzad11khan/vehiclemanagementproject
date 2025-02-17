@@ -10,18 +10,18 @@ export async function POST(Request) {
     await connect();
 
     // Extract data from the request body
-    const { CompanyId, DriverId, password } = await Request.json();
+    const {  DriverUserName, password } = await Request.json();
 
     // Validate required fields
-    if (!CompanyId || !DriverId || !password) {
+    if (!DriverUserName || !password) {
       return NextResponse.json({ 
-        message: "CompanyId, DriverId, and Password are required", 
+        message: "DriverUserName and Password are required", 
         status: 400 
       });
     }
 
     // Find driver by DriverId and CompanyId
-    const user = await DriverModel.findOne({ _id: DriverId, companyId: CompanyId });
+    const user = await DriverModel.findOne({firstName: DriverUserName});
     if (!user) {
       return NextResponse.json({
         message: "Driver not found",
@@ -42,7 +42,7 @@ export async function POST(Request) {
     const token = jwt.sign(
       {
         userId: user._id,
-        name: user.name,
+        name: user.firstName + user.lastName,
         company: user.companyId,
         isActive: user.isActive,
       },
@@ -57,7 +57,7 @@ export async function POST(Request) {
       isSuccess: true,
       msg: "Login successfully",
       content: {
-        name: user.name,
+        name: user.firstName + user.lastName,
         balance: user.balance || 0,
         token: token,
       },

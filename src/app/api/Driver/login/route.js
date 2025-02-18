@@ -12,6 +12,8 @@ export async function POST(Request) {
     // Extract data from the request body
     const {  DriverUserName, password } = await Request.json();
 
+    console.log(DriverUserName, password)
+
     // Validate required fields
     if (!DriverUserName || !password) {
       return NextResponse.json({ 
@@ -22,6 +24,7 @@ export async function POST(Request) {
 
     // Find driver by DriverId and CompanyId
     const user = await DriverModel.findOne({firstName: DriverUserName});
+    console.log(user)
     if (!user) {
       return NextResponse.json({
         message: "Driver not found",

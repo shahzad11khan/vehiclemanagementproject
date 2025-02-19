@@ -47,7 +47,7 @@ export async function POST(Request) {
     // Return updated balance
     return NextResponse.json({
       isSuccess: true,
-      msg: "",
+      msg: "Payment recorded successfully",
       content: { newBalance },
     });
   } catch (error) {

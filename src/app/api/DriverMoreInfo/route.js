@@ -25,14 +25,17 @@ export const POST = catchAsyncErrors(async (request) => {
     adminCompanyId,
   } = data;
 
-  // Normalize the startDate to remove the time component
-  const normalizeDate = (date) => {
-    const normalizedDate = new Date(date);
-    normalizedDate.setHours(0, 0, 0, 0); // Set the time to 00:00:00
-    return normalizedDate.toISOString(); // Convert to ISO string format
+  // Format the startDate to MM-DD-YYYY
+  const formatDateToMMDDYYYY = (dateString) => {
+    const date = new Date(dateString); // Ensure it's a Date object
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    const year = date.getFullYear();
+    return `${month}-${day}-${year}`;
   };
 
-  const normalizedStartDate = normalizeDate(startDate);
+  const normalizedStartDate = formatDateToMMDDYYYY(startDate);
+  console.log("normalizedStartDate", normalizedStartDate);
 
   try {
     // Check if a record exists with the same date
@@ -50,7 +53,7 @@ export const POST = catchAsyncErrors(async (request) => {
       });
     }
 
-    // Check for any previous record with the same driver and vehicle (across different dates)
+    // Check for any previous record with the same driver and vehicle
     const previousRecord = await DriverMoreInfo.findOne({
       driverId,
       vehicleId,
@@ -90,14 +93,14 @@ export const POST = catchAsyncErrors(async (request) => {
         error: "DriverMoreInfo not added",
         status: 400,
       });
-    } else {
-      return NextResponse.json({
-        message: "DriverMoreInfo created successfully",
-        success: true,
-        savedDriverMoreInfo,
-        status: 200,
-      });
     }
+
+    return NextResponse.json({
+      message: "DriverMoreInfo created successfully",
+      success: true,
+      savedDriverMoreInfo,
+      status: 200,
+    });
   } catch (error) {
     console.error("Error saving DriverMoreInfo:", error);
     return NextResponse.json({
@@ -106,6 +109,7 @@ export const POST = catchAsyncErrors(async (request) => {
     });
   }
 });
+
 
 
 

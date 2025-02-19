@@ -50,6 +50,12 @@ const Page = ({ params }) => {
     }
   }, []);
 
+  const formatDatee = (date) => {
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    const year = date.getFullYear();
+    return `${month}-${day}-${year}`;
+  };
   const fetchData = async () => {
     try {
       // Fetch the driver information from the API
@@ -84,13 +90,7 @@ const Page = ({ params }) => {
     }
   };
 
-  const formatDatee = (date) => {
-    // Format the date to MM-DD-YYYY
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-    const year = date.getFullYear();
-    return `${month}-${day}-${year}`;
-  };
+ 
 
   const drivercal = async (
     driverId,
@@ -105,7 +105,7 @@ const Page = ({ params }) => {
     try {
       const passingDate = new Date(startDate); // Initialize passingDate to startDate
       const currentDate = new Date(); // Get the current date
-      console.log(passingDate, currentDate);
+      console.log(formatDatee(passingDate), formatDatee(currentDate));
 
       // Loop until passingDate is greater than or equal to currentDate
       while (formatDatee(passingDate) < formatDatee(currentDate)) {
@@ -220,6 +220,12 @@ const Page = ({ params }) => {
     }
   };
 
+  useEffect(() => {
+    const intervalId = setInterval(fetchData, 86400000); // Trigger fetchData every 5 seconds
+    // Cleanup on component unmount
+    return () => clearInterval(intervalId);
+  }, []);
+  
   // Handle deletion of a title
   const handleDelete = async (id) => {
     try {

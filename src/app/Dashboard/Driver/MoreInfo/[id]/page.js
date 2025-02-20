@@ -221,8 +221,7 @@ const Page = ({ params }) => {
   };
 
   useEffect(() => {
-    const intervalId = setInterval(fetchData, 86400000); // Trigger fetchData every 5 seconds
-    // Cleanup on component unmount
+    const intervalId = setInterval(fetchData, 3600000); 
     return () => clearInterval(intervalId);
   }, []);
   

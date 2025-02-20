@@ -9,7 +9,8 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { getCompanyName } from "@/utils/storageUtils";
 
-const AddMotModal = ({ isOpen, onClose, fetchData, selectedid }) => {
+const AddMotModal = ({ isOpen, onClose,  selectedid ,fetchData}) => {
+  // console.log("selectedid",selectedid)
   const [formData, setFormData] = useState({
     VehicleName: "",
     registrationNumber: "",
@@ -36,6 +37,7 @@ const AddMotModal = ({ isOpen, onClose, fetchData, selectedid }) => {
           `${API_URL_Vehicle_getspecificvehicleid}/${selectedid}`
         );
         const data = response.data.result;
+        console.log("data :", data);
 
         if (data) {
           // Assuming you want to store vehicle model and registration number
@@ -69,17 +71,18 @@ const AddMotModal = ({ isOpen, onClose, fetchData, selectedid }) => {
     }
   };
   useEffect(() => {
+  console.log("selectedid:", selectedid);
     fetchDat(); // Fetch data whenever the component mounts or selectedid changes
+  
     fetchCompanyuserData();
-  }, []); // Include selectedid in the dependency array
+  }, [selectedid]); // Include selectedid in the dependency array
 
   useEffect(() => {
     const companyNameFromStorage = getCompanyName();
     const filtered = users?.filter((item) => {
+      console.log(item?.companyId?.CompanyName, companyNameFromStorage);
       return (
-        item.companyname &&
-        companyNameFromStorage &&
-        item.companyname.toLowerCase() === companyNameFromStorage.toLowerCase()
+        item?.companyId?.CompanyName?.toLowerCase() === companyNameFromStorage.toLowerCase()
       );
     });
     // console.log(filtered);

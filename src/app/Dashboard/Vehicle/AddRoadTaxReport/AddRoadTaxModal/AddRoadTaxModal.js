@@ -77,13 +77,10 @@ const AddRoadTexModal = ({ isOpen, onClose, fetchData, selectedid }) => {
 
   useEffect(() => {
     const companyNameFromStorage = getCompanyName();
-    const filtered = users.filter((item) => {
-      // console.log(item);
-      // Ensure both strings are defined before comparing
+    const filtered = users?.filter((item) => {
+      console.log(item?.companyId?.CompanyName, companyNameFromStorage);
       return (
-        item.companyname &&
-        companyNameFromStorage &&
-        item.companyname.toLowerCase() === companyNameFromStorage.toLowerCase()
+        item?.companyId?.CompanyName?.toLowerCase() === companyNameFromStorage.toLowerCase()
       );
     });
     // console.log(filtered);

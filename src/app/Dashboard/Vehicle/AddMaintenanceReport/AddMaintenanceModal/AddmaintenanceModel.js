@@ -49,7 +49,7 @@ const AddMaintenanceModal = ({ isOpen, onClose, fetchData, selectedid }) => {
     if (storedcompanyName && userId) {
       // Check if the company is "superadmin" and the flag is true
       if (storedcompanyName.toLowerCase() === "superadmin" && flag === "true" && compID) {
-        setFormData((prevData) => ({
+        setrepaitformDatas((prevData) => ({
           ...prevData,
           adminCompanyName: storedcompanyName,
           companyId: compID, // Ensure compID is set
@@ -57,7 +57,7 @@ const AddMaintenanceModal = ({ isOpen, onClose, fetchData, selectedid }) => {
        } else {
          // Use userId if not in "superadmin" mode
          console.log(storedcompanyName, userId, flag, compID);
-        setFormData((prevData) => ({
+         setrepaitformData((prevData) => ({
           ...prevData,
           adminCompanyName: storedcompanyName,
           companyId: userId,

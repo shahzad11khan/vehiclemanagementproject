@@ -49,7 +49,7 @@ const Page = ({ params }) => {
       const response = await axios.get(
         `${API_URL_VehicleMOT}/${addAddMOTReporttId}`
       );
-      console.log("MOT Data: ", response.data.result);
+      // console.log("MOT Data: ", response.data.result);
       setData(response.data.result);
       setFilteredData(response.data.result);
     } catch (error) {
@@ -73,6 +73,7 @@ const Page = ({ params }) => {
   };
 
   useEffect(() => {
+    console.log("addAddMOTReporttId", addAddMOTReporttId);
     fetchData();
   }, []);
 

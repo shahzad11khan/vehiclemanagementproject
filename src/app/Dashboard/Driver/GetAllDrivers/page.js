@@ -77,11 +77,11 @@ const Page = () => {
     try {
       const response = await axios.delete(`${API_URL_Driver}/${id}`);
       const { data } = response;
-      if (data.success) {
-        setDrivers((prevData) => prevData.filter((item) => item._id !== id));
+      if (data?.success) {
+        setDrivers((prevData) => prevData?.filter((item) => item._id !== id));
         // toast.success(data.message);
       } else {
-        toast.warn(data.message || "Failed to delete the driver.");
+        toast.warn(data?.message || "Failed to delete the driver.");
       }
     } catch (error) {
       console.error("Error deleting driver:", error);
@@ -92,11 +92,11 @@ const Page = () => {
   };
 
   useEffect(() => {
-    const filtered = drivers.filter((driver) => {
+    const filtered = drivers?.filter((driver) => {
       const companyMatch =
-        driver.adminCompanyName &&
+        driver?.adminCompanyName &&
         selectedCompanyName &&
-        driver.adminCompanyName.toLowerCase() ===
+        driver?.adminCompanyName.toLowerCase() ===
           selectedCompanyName.toLowerCase();
 
       // const nameMatch =
@@ -149,7 +149,7 @@ const Page = () => {
 
   // const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  const totalPages = Math.ceil(filteredDrivers.length / itemperpage);
+  const totalPages = Math.ceil(filteredDrivers?.length / itemperpage);
   // const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1); // Create an array of page numbers
 
   return (
@@ -269,7 +269,7 @@ const Page = () => {
                     </tr>
                   </thead>
                   <tbody className="font-sans font-medium text-sm">
-                    {currentDrivers.map((driver) => (
+                    {currentDrivers?.map((driver) => (
                       <tr key={driver._id} className="border-b">
                         <td className="py-3 px-4 min-w-[150px] w-[150px] md:w-[16.66%] text-center whitespace-normal break-all overflow-hidden">
                           {driver.firstName} {driver.lastName}

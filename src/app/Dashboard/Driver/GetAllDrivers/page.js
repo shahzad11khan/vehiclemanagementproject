@@ -109,8 +109,8 @@ const Page = () => {
           .split("")
           .every(
             (char) =>
-              driver.firstName.toLowerCase().includes(char) || // Check in username
-              driver.email?.toLowerCase().includes(char)
+              driver?.firstName?.toLowerCase().includes(char) || // Check in username
+              driver?.email?.toLowerCase().includes(char)
           );
       return companyMatch && nameMatch;
     });
@@ -142,7 +142,7 @@ const Page = () => {
   // Pagination calculations
   const indexOfLastDriver = currentPage * itemperpage;
   const indexOfFirstDriver = indexOfLastDriver - itemperpage;
-  const currentDrivers = filteredDrivers.slice(
+  const currentDrivers = filteredDrivers?.slice(
     indexOfFirstDriver,
     indexOfLastDriver
   );

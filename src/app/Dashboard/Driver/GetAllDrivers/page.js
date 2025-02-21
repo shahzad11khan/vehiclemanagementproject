@@ -58,6 +58,7 @@ const Page = () => {
   const fetchData = useCallback(async () => {
     try {
       const response = await axios.get(`${API_URL_Driver}`);
+      console.log(response)
       setDrivers(response.data.result);
     } catch (error) {
       console.error("Error fetching data:", error);

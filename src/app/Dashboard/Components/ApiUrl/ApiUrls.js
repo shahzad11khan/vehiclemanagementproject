@@ -2,6 +2,10 @@
 // export const url = "http://localhost:4000";
 // export const url = "http://192.248.171.18:4000";
 export const url = "https://vmsp.netlify.app";
+
+
+
+export const API_URL_CRONJOB = `${url}/api/DriverMoreInfo/cronJob`;
 export const API_URL_Login = `${url}/api/User/Login`;
 export const API_URL_Company = `${url}/api/Company`;
 export const API_URL_USER = `${url}/api/User`;

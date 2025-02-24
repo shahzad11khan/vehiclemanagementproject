@@ -296,9 +296,9 @@ const AddDriverMoreInfoModal = ({
                 <option value="">Select Payment</option>
                 <option value="perday">Per Day</option>
                 <option value="perweek">Per Week</option>
-                <option value="permonth">Per Month</option>
+                {/* <option value="permonth">Per Month</option>
                 <option value="perquarter">Per Quarter</option>
-                <option value="peryear">Per Year</option>
+                <option value="peryear">Per Year</option> */}
               </select>
             </div>
 
@@ -411,8 +411,7 @@ const AddDriverMoreInfoModal = ({
               >
 
                 <option value="">Select Vehicle</option>
-                {vehicle?.filter((v) => v.isActive && v.vehicleStatus === "Standby" 
-                ).map((v) => (
+                {vehicle.map((v) => (
                   <option key={v._id} value={v.model}>
                     {v.model}
                   </option>

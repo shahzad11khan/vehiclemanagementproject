@@ -22,6 +22,7 @@
     "mongoose": "^8.6.3",
     "multer": "^1.4.5-lts.1",
     "next": "14.2.11",
+    "node-cron": "^3.0.3",
     "primeflex": "^3.3.1",
     "primeicons": "^7.0.0",
     "primereact": "^10.8.3",

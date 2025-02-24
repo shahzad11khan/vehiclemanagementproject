@@ -9,6 +9,7 @@ import Sidebar from "../../../Components/Sidebar";
 import {
   API_URL_DriverMoreInfo,
   // API_URL_DriverMoreupdate,
+  API_URL_CRONJOB
 } from "../../../Components/ApiUrl/ApiUrls";
 import { getCompanyName } from "@/utils/storageUtils";
 import axios from "axios";
@@ -50,40 +51,40 @@ const Page = ({ params }) => {
     }
   }, []);
 
-  const formatDatee = (date) => {
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-    const year = date.getFullYear();
-    return `${month}-${day}-${year}`;
-  };
+  // const formatDatee = (date) => {
+  //   const month = String(date.getMonth() + 1).padStart(2, "0");
+  //   const day = String(date.getDate()).padStart(2, "0");
+  //   const year = date.getFullYear();
+  //   return `${month}-${day}-${year}`;
+  // };
   const fetchData = async () => {
     try {
       // Fetch the driver information from the API
       const response = await axios.get(`${API_URL_DriverMoreInfo}/${id}`);
       const { data } = response;
 
+      console.log("Fetched records:", data.result);
+      setData(data.result);
       // Check if there are results to process
-      if (data.result && data.result.length > 0) {
-        console.log("Fetched records:", data.result);
-        setData(data.result);
+      // if (data.result && data.result.length > 0) {
 
-        // Iterate over each record in the result
-        for (const record of data.result) {
-          // Call drivercal for each record
-          await drivercal(
-            record.driverId, // Pass the driverId
-            record.driverName, // Pass the driverName
-            record.vehicle, // Pass the vehicle
-            record.vehicleId, // Pass the vehicleId
-            record.startDate, // Pass the original startDate
-            record.paymentcycle, // Pass the payment cycle
-            record.payment, // Pass the payment amount
-            record.adminCompanyName // Pass the admin company name
-          );
-        }
-      } else {
-        console.log("No data found for this driver");
-      }
+      //   // Iterate over each record in the result
+      //   for (const record of data.result) {
+      //     // Call drivercal for each record
+      //     await drivercal(
+      //       record.driverId, // Pass the driverId
+      //       record.driverName, // Pass the driverName
+      //       record.vehicle, // Pass the vehicle
+      //       record.vehicleId, // Pass the vehicleId
+      //       record.startDate, // Pass the original startDate
+      //       record.paymentcycle, // Pass the payment cycle
+      //       record.payment, // Pass the payment amount
+      //       record.adminCompanyName // Pass the admin company name
+      //     );
+      //   }
+      // } else {
+      //   console.log("No data found for this driver");
+      // }
     } catch (error) {
       console.error("Error fetching data:", error);
       toast.error("Failed to fetch data");
@@ -92,137 +93,151 @@ const Page = ({ params }) => {
 
  
 
-  const drivercal = async (
-    driverId,
-    driverName,
-    vehicle,
-    vehicleId,
-    startDate,
-    paymentcycle,
-    payment,
-    adminCompanyName
-  ) => {
-    try {
-      const passingDate = new Date(startDate); // Initialize passingDate to startDate
-      const currentDate = new Date(); // Get the current date
-      console.log(formatDatee(passingDate), formatDatee(currentDate));
+  // const drivercal = async (
+  //   driverId,
+  //   driverName,
+  //   vehicle,
+  //   vehicleId,
+  //   startDate,
+  //   paymentcycle,
+  //   payment,
+  //   adminCompanyName
+  // ) => {
+  //   try {
+  //     const passingDate = new Date(startDate); // Initialize passingDate to startDate
+  //     const currentDate = new Date(); // Get the current date
+  //     console.log(formatDatee(passingDate), formatDatee(currentDate));
 
-      // Loop until passingDate is greater than or equal to currentDate
-      while (formatDatee(passingDate) < formatDatee(currentDate)) {
-        let shouldPostNewRecord = false; // Flag to check if a new record should be posted
+  //     // Loop until passingDate is greater than or equal to currentDate
+  //     while (formatDatee(passingDate) < formatDatee(currentDate)) {
+  //       let shouldPostNewRecord = false; // Flag to check if a new record should be posted
 
-        const value = paymentcycle.toLowerCase(); // Normalize the payment cycle value
-        switch (value) {
-          case "perday":
-            shouldPostNewRecord = true; // Always post for daily cycle
-            passingDate.setDate(passingDate.getDate() + 1); // Increment by 1 day
-            break;
+  //       const value = paymentcycle.toLowerCase(); // Normalize the payment cycle value
+  //       switch (value) {
+  //         case "perday":
+  //           shouldPostNewRecord = true; // Always post for daily cycle
+  //           passingDate.setDate(passingDate.getDate() + 1); // Increment by 1 day
+  //           break;
 
-          case "perweek":
-            if (
-              Math.floor(
-                (currentDate - passingDate) / (1000 * 60 * 60 * 24 * 7)
-              ) > 0
-            ) {
-              shouldPostNewRecord = true; // Post if a week has passed
-            }
-            passingDate.setDate(passingDate.getDate() + 7); // Increment by 7 days
-            break;
+  //         case "perweek":
+  //           if (
+  //             Math.floor(
+  //               (currentDate - passingDate) / (1000 * 60 * 60 * 24 * 7)
+  //             ) > 0
+  //           ) {
+  //             shouldPostNewRecord = true; // Post if a week has passed
+  //           }
+  //           passingDate.setDate(passingDate.getDate() + 7); // Increment by 7 days
+  //           break;
 
-          case "permonth":
-            if (
-              passingDate.getMonth() !== currentDate.getMonth() ||
-              passingDate.getFullYear() !== currentDate.getFullYear()
-            ) {
-              shouldPostNewRecord = true; // Post if a month has passed
-            }
-            passingDate.setMonth(passingDate.getMonth() + 1); // Increment by 1 month
-            break;
+  //         case "permonth":
+  //           if (
+  //             passingDate.getMonth() !== currentDate.getMonth() ||
+  //             passingDate.getFullYear() !== currentDate.getFullYear()
+  //           ) {
+  //             shouldPostNewRecord = true; // Post if a month has passed
+  //           }
+  //           passingDate.setMonth(passingDate.getMonth() + 1); // Increment by 1 month
+  //           break;
 
-          case "perquarter":
-            const currentQuarter = Math.floor(currentDate.getMonth() / 3);
-            const lastQuarter = Math.floor(passingDate.getMonth() / 3);
-            if (
-              currentQuarter !== lastQuarter ||
-              passingDate.getFullYear() !== currentDate.getFullYear()
-            ) {
-              shouldPostNewRecord = true; // Post if a quarter has passed
-            }
-            passingDate.setMonth(passingDate.getMonth() + 3); // Increment by 3 months
-            break;
+  //         case "perquarter":
+  //           const currentQuarter = Math.floor(currentDate.getMonth() / 3);
+  //           const lastQuarter = Math.floor(passingDate.getMonth() / 3);
+  //           if (
+  //             currentQuarter !== lastQuarter ||
+  //             passingDate.getFullYear() !== currentDate.getFullYear()
+  //           ) {
+  //             shouldPostNewRecord = true; // Post if a quarter has passed
+  //           }
+  //           passingDate.setMonth(passingDate.getMonth() + 3); // Increment by 3 months
+  //           break;
 
-          case "peryear":
-            if (passingDate.getFullYear() !== currentDate.getFullYear()) {
-              shouldPostNewRecord = true; // Post if a year has passed
-            }
-            passingDate.setFullYear(passingDate.getFullYear() + 1); // Increment by 1 year
-            break;
+  //         case "peryear":
+  //           if (passingDate.getFullYear() !== currentDate.getFullYear()) {
+  //             shouldPostNewRecord = true; // Post if a year has passed
+  //           }
+  //           passingDate.setFullYear(passingDate.getFullYear() + 1); // Increment by 1 year
+  //           break;
 
-          default:
-            console.error("Invalid payment cycle value provided.");
-            return;
-        }
+  //         default:
+  //           console.error("Invalid payment cycle value provided.");
+  //           return;
+  //       }
 
-        // If a new record needs to be posted, update the database
-        if (shouldPostNewRecord) {
-          await updateDatabaseDate(
-            driverId,
-            driverName,
-            vehicle,
-            vehicleId,
-            passingDate, // Use the newly calculated date
-            paymentcycle,
-            payment,
-            adminCompanyName
-          );
-        }
-      }
-    } catch (error) {
-      console.error("Failed to calculate and post driver data:", error);
-      throw error;
-    }
-  };
+  //       // If a new record needs to be posted, update the database
+  //       if (shouldPostNewRecord) {
+  //         await updateDatabaseDate(
+  //           driverId,
+  //           driverName,
+  //           vehicle,
+  //           vehicleId,
+  //           passingDate, // Use the newly calculated date
+  //           paymentcycle,
+  //           payment,
+  //           adminCompanyName
+  //         );
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.error("Failed to calculate and post driver data:", error);
+  //     throw error;
+  //   }
+  // };
 
-  const updateDatabaseDate = async (
-    IDD,
-    driverName,
-    vehicle,
-    vehicleId,
-    newStartDate, // This will be the new calculated date
-    paymentCycle,
-    payment,
-    fetchedcompany
-  ) => {
-    try {
-      const payload = {
-        driverId: IDD,
-        driverName: driverName,
-        vehicle: vehicle,
-        vehicle: vehicleId,
-        startDate: newStartDate, // Update with the new date
-        paymentcycle: paymentCycle,
-        payment: payment,
-        endDate: "",
-        totalamount: 0,
-        totalToremain: 0,
-        remaining: 0,
-        adminCreatedBy: "",
-        adminCompanyName: fetchedcompany,
-      };
+  // const updateDatabaseDate = async (
+  //   IDD,
+  //   driverName,
+  //   vehicle,
+  //   vehicleId,
+  //   newStartDate, // This will be the new calculated date
+  //   paymentCycle,
+  //   payment,
+  //   fetchedcompany
+  // ) => {
+  //   try {
+  //     const payload = {
+  //       driverId: IDD,
+  //       driverName: driverName,
+  //       vehicle: vehicle,
+  //       vehicle: vehicleId,
+  //       startDate: newStartDate, // Update with the new date
+  //       paymentcycle: paymentCycle,
+  //       payment: payment,
+  //       endDate: "",
+  //       totalamount: 0,
+  //       totalToremain: 0,
+  //       remaining: 0,
+  //       adminCreatedBy: "",
+  //       adminCompanyName: fetchedcompany,
+  //     };
 
-      console.log(payload);
+  //     console.log(payload);
 
-      // Make the POST request to update the database
-      const response = await axios.post(`${API_URL_DriverMoreInfo}`, payload);
-      console.log("Record Added successfully:", response.data);
-    } catch (error) {
-      console.error("Error updating record:", error);
-    }
-  };
+  //     // Make the POST request to update the database
+  //     const response = await axios.post(`${API_URL_DriverMoreInfo}`, payload);
+  //     console.log("Record Added successfully:", response.data);
+  //   } catch (error) {
+  //     console.error("Error updating record:", error);
+  //   }
+  // };
 
   useEffect(() => {
-    const intervalId = setInterval(fetchData, 3600000); 
-    return () => clearInterval(intervalId);
+    const fetchData = async () => {
+      try {
+      const res=  await axios.get(`${API_URL_CRONJOB}`);
+        console.log("✅ Data updated successfully",res);
+      } catch (error) {
+        console.error("❌ Error updating data:", error);
+      }
+    };
+
+    // Run every hour (3600000 ms)
+    const interval = setInterval(fetchData, 3600000);
+    
+    // Run once on mount
+    fetchData();
+
+    return () => clearInterval(interval);
   }, []);
   
   // Handle deletion of a title

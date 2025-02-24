@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { connect } from "@config/db.js";
 import DriverMoreInfo from "@models/DriverMoreInfo/DriverMoreInfo.model.js";
-
+import Driver from "@models/Driver/Driver.Model.js";
 export const GET = async () => {
   await connect();
 
@@ -13,7 +13,7 @@ export const GET = async () => {
       adminCompanyName: driver.adminCompanyName,
     }).sort({ startDate: -1 });
 
-    console.log("latestRecord",latestRecord)
+    // console.log("latestRecord",latestRecord)
     if (latestRecord) {
       const lastDate = new Date(latestRecord.startDate);
       const currentDate = new Date();
@@ -21,17 +21,16 @@ export const GET = async () => {
       const daysDifference = Math.floor(
         (currentDate - lastDate) / (1000 * 60 * 60 * 24)
       );
-      console.log("dayDiff:", daysDifference)
+    //   console.log("dayDiff:", daysDifference)
       let shouldInsert = false;
       let totalamount = driver.payment;
 
       
       if (
-          driver.paymentcycle === "perday" && daysDifference >= 1         
+          (driver.paymentcycle === "perday" && daysDifference >= 1)||(driver.paymentcycle === "perweek" && daysDifference >= 7)         
         ) {
             shouldInsert = true;
-            totalamount += latestRecord.totalamount;
-            console.log(totalamount)
+            totalamount += latestRecord.payment;
       }
 
     //   console.log("should",shouldInsert)
@@ -49,6 +48,12 @@ export const GET = async () => {
           adminCompanyName: driver.adminCompanyName,
           adminCompanyId: driver.adminCompanyId,
         });
+
+        await Driver.findOneAndUpdate(
+            { _id: driver.driverId }, // Find the driver by ID
+            { $set: { totalamount: driver.payment } }, // Incase totalamount
+            { new: true } // Return the updated document
+        );
       }
     }
   }

@@ -26,24 +26,13 @@ export const POST = catchAsyncErrors(async (request) => {
   } = data;
 
   // Format the startDate to MM-DD-YYYY
-  const formatDateToMMDDYYYY = (dateString) => {
-    const date = new Date(dateString); // Ensure it's a Date object
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-    const year = date.getFullYear();
-    return `${month}-${day}-${year}`;
-  };
-
-  const normalizedStartDate = formatDateToMMDDYYYY(startDate);
-  console.log("normalizedStartDate", normalizedStartDate);
-
   try {
     // Check if a record exists with the same date
     const existingRecord = await DriverMoreInfo.findOne({
       driverId,
       vehicleId,
       adminCompanyName,
-      startDate: normalizedStartDate,
+      startDate
     });
 
     if (existingRecord) {
@@ -53,32 +42,16 @@ export const POST = catchAsyncErrors(async (request) => {
       });
     }
 
-    // Check for any previous record with the same driver and vehicle
-    const previousRecord = await DriverMoreInfo.findOne({
-      driverId,
-      vehicleId,
-      adminCompanyName,
-    });
-
-    // Initialize totalamount with payment
-    let totalamount = payment;
-
-    // If a previous record exists, add its totalamount
-    if (previousRecord) {
-      totalamount += previousRecord.totalamount;
-    }
-
     // Create and save the new record
     const newDriverMoreInfo = new DriverMoreInfo({
       driverId,
       driverName,
       vehicle,
       vehicleId,
-      startDate: normalizedStartDate, // Save the normalized date
+      startDate, // Save the normalized date
       paymentcycle,
       payment,
       endDate,
-      totalamount,
       totalToremain,
       remaining,
       adminCreatedBy,

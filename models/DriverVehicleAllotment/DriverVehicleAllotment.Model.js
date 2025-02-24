@@ -5,7 +5,7 @@ const DriverVehicleAllotmentInfoSchema = new mongoose.Schema(
   {
     driverId: { type: mongoose.Schema.Types.ObjectId, ref: "Driver" },
     driverName: { type: String },
-    startDate: { type: String },
+    startDate: { type: Date },
     taxifirm: { type: String },
     taxilocalauthority: { type: String },
     vehicle: { type: String },

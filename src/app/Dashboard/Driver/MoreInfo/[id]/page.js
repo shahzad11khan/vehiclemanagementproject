@@ -233,7 +233,6 @@ const Page = ({ params }) => {
 
     // Run every hour (3600000 ms)
     const interval = setInterval(fetchData, 3600000);
-    
     // Run once on mount
     fetchData();
 

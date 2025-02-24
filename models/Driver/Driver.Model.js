@@ -24,6 +24,7 @@ const driverSchema = new mongoose.Schema(
     licenseExpiryDate: { type: String },
     taxiBadgeDate: { type: String },
     rentPaymentCycle: { type: String, default: "" },
+    totalamount: { type: Number, default:0 },
     city: { type: String, default: "" },
     // pay: { type: Number, default: 0 },
     county: { type: String, default: "" },

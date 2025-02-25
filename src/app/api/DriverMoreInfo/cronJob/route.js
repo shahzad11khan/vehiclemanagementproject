@@ -17,23 +17,23 @@ export const GET = async () => {
     if (latestRecord) {
       const lastDate = new Date(latestRecord.startDate);
       const currentDate = new Date();
-      console.log(lastDate , currentDate)
+      console.log(lastDate, currentDate)
       const daysDifference = Math.floor(
         (currentDate - lastDate) / (1000 * 60 * 60 * 24)
       );
-    //   console.log("dayDiff:", daysDifference)
+      //   console.log("dayDiff:", daysDifference)
       let shouldInsert = false;
       let totalamount = driver.payment;
 
-      
+
       if (
-          (driver.paymentcycle === "perday" && daysDifference >= 1)||(driver.paymentcycle === "perweek" && daysDifference >= 7)         
-        ) {
-            shouldInsert = true;
-            totalamount += latestRecord.payment;
+        (driver.paymentcycle === "perday" && daysDifference >= 1) || (driver.paymentcycle === "perweek" && daysDifference >= 7)
+      ) {
+        shouldInsert = true;
+        totalamount += latestRecord.payment;
       }
 
-    //   console.log("should",shouldInsert)
+      //   console.log("should",shouldInsert)
       if (shouldInsert) {
         await DriverMoreInfo.create({
           driverId: driver.driverId,
@@ -49,10 +49,14 @@ export const GET = async () => {
           adminCompanyId: driver.adminCompanyId,
         });
 
+        // Ensure driver.payment is a valid number
+        // const paymentAmount = driver.payment ? driver.payment : 0;
+
         await Driver.findOneAndUpdate(
-            { _id: driver.driverId }, // Find the driver by ID
-            { $set: { totalamount: driver.payment } }, // Incase totalamount
-            { new: true } // Return the updated document
+          { _id: driver.driverId }, // Find the driver by ID
+          // { $set: { totalamount: totalamount } }, // Incase totalamount
+          { $inc: { totalamount: totalamount } },
+          { new: true } // Return the updated document
         );
       }
     }

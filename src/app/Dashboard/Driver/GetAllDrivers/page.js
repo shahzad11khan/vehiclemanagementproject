@@ -11,8 +11,8 @@ import UpdateDriverModel from "../UpdateDriver/UpdateDriverModel";
 import axios from "axios";
 import { API_URL_Driver } from "../../Components/ApiUrl/ApiUrls";
 import {
-  getCompanyName,getUserName
-} from "@/utils/storageUtils";import Link from "next/link";
+  getCompanyName, getUserName
+} from "@/utils/storageUtils"; import Link from "next/link";
 import { isAuthenticated } from "@/utils/verifytoken";
 import { useRouter } from "next/navigation";
 import DeleteModal from "../../Components/DeleteModal";
@@ -44,12 +44,12 @@ const Page = () => {
   useEffect(() => {
     setIsMounted(true);
     const companyNameFromStorage = (() => {
-                          const name1 = getCompanyName();
-                          if (name1) return name1;
-                        
-                          const name2 = getUserName();
-                          if (name2) return name2;
-                        })();
+      const name1 = getCompanyName();
+      if (name1) return name1;
+
+      const name2 = getUserName();
+      if (name2) return name2;
+    })();
     if (companyNameFromStorage) {
       setSelectedCompanyName(companyNameFromStorage);
     }
@@ -98,7 +98,7 @@ const Page = () => {
         driver?.adminCompanyName &&
         selectedCompanyName &&
         driver?.adminCompanyName.toLowerCase() ===
-          selectedCompanyName.toLowerCase();
+        selectedCompanyName.toLowerCase();
 
       // const nameMatch =
       //   driver.firstName &&
@@ -135,9 +135,9 @@ const Page = () => {
     return `${(dateObject.getMonth() + 1)
       .toString()
       .padStart(2, "0")}/${dateObject
-      .getDate()
-      .toString()
-      .padStart(2, "0")}/${dateObject.getFullYear()}`;
+        .getDate()
+        .toString()
+        .padStart(2, "0")}/${dateObject.getFullYear()}`;
   };
 
   // Pagination calculations
@@ -167,7 +167,7 @@ const Page = () => {
           <h1 className="text-[#313342] font-medium text-2xl py-5 underline decoration-[#AEADEB] underline-offset-8">
             All Drivers
           </h1>
-          
+
           <div className="py-5">
             <div className="drop-shadow-custom4">
               {/* top section */}
@@ -264,6 +264,9 @@ const Page = () => {
                       <th className="py-3 px-4 min-w-[150px] w-[150px] md:w-[16.66%] text-white bg-custom-bg whitespace-normal break-all overflow-hidden">
                         Date Of Birth
                       </th>
+                      <th className="py-3 px-4 min-w-[150px] w-[150px] md:w-[16.66%] text-white bg-custom-bg whitespace-normal break-all overflow-hidden">
+                        Balance
+                      </th>
                       <th className="py-3 px-4 min-w-[180px] w-[180px] md:w-[16.66%] text-center text-white bg-custom-bg whitespace-normal break-all overflow-hidden">
                         Actions
                       </th>
@@ -295,6 +298,9 @@ const Page = () => {
                         </td>
                         <td className="py-3 px-4 min-w-[150px] w-[150px] md:w-[16.66%] whitespace-normal break-all overflow-hidden">
                           {formatDate(driver.dateOfBirth)}
+                        </td>
+                        <td className="py-3 px-4 min-w-[150px] w-[150px] md:w-[16.66%] whitespace-normal break-all overflow-hidden">
+                          {driver.totalamount}
                         </td>
                         <td className="py-3 px-4 min-w-[180px] w-[180px] md:w-[16.66%] whitespace-normal break-all overflow-hidden text-center">
                           <div className="flex gap-4 justify-center">
@@ -340,11 +346,10 @@ const Page = () => {
                           setCurrentPage((prev) => Math.max(prev - 1, 1))
                         }
                         disabled={currentPage === 1}
-                        className={`h-8 px-2 border rounded-lg ${
-                          currentPage === 1
-                            ? "opacity-50 cursor-not-allowed"
-                            : "bg-white"
-                        }`}
+                        className={`h-8 px-2 border rounded-lg ${currentPage === 1
+                          ? "opacity-50 cursor-not-allowed"
+                          : "bg-white"
+                          }`}
                       >
                         Previous
                       </button>
@@ -362,11 +367,10 @@ const Page = () => {
                             <li key={page}>
                               <button
                                 onClick={() => setCurrentPage(page)}
-                                className={`h-8 w-8 border rounded-lg ${
-                                  currentPage === page
-                                    ? "bg-custom-bg text-white"
-                                    : "bg-white"
-                                }`}
+                                className={`h-8 w-8 border rounded-lg ${currentPage === page
+                                  ? "bg-custom-bg text-white"
+                                  : "bg-white"
+                                  }`}
                               >
                                 {page}
                               </button>
@@ -436,11 +440,10 @@ const Page = () => {
                           )
                         }
                         disabled={currentPage === totalPages}
-                        className={`h-8 px-2 border rounded-lg ${
-                          currentPage === totalPages
-                            ? "opacity-50 cursor-not-allowed"
-                            : "bg-white"
-                        }`}
+                        className={`h-8 px-2 border rounded-lg ${currentPage === totalPages
+                          ? "opacity-50 cursor-not-allowed"
+                          : "bg-white"
+                          }`}
                       >
                         Next
                       </button>

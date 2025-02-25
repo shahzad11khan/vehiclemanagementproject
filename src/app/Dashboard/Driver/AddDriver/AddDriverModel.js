@@ -16,8 +16,8 @@ import {
 
 import {
   getCompanyName,
-  getUserId ,
-  getUserName,getflag,getcompanyId
+  getUserId,
+  getUserName, getflag, getcompanyId
 } from "@/utils/storageUtils";
 const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
   const initialFormData = {
@@ -44,18 +44,18 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
     rentPaymentCycle: "",
     isActive: false,
     imageFile: null,
-    
+
     // LocalAuth: "",
     vehicle: "",
     // pay: "",
     calculation: 0,
     adminCreatedBy: "",
     adminCompanyName: "",
-    companyId:null,
-    password:"",
-    confirmPassword:"",
-    BuildingAndStreetOne:"",
-    BuildingAndStreetTwo:"",
+    companyId: null,
+    password: "",
+    confirmPassword: "",
+    BuildingAndStreetOne: "",
+    BuildingAndStreetTwo: "",
 
   };
 
@@ -80,16 +80,16 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
   useEffect(() => {
     let storedCompanyName = "";
     let storedSuperadmin = "";
-    
+
     if (typeof window !== "undefined") {
       // Only access localStorage in the browser environment
       storedCompanyName = localStorage.getItem("companyName") || "";
       storedSuperadmin = localStorage.getItem("role") || "";
     }
-    
+
     console.log("Stored Company Name:", storedCompanyName);
     console.log("Stored Superadmin Role:", storedSuperadmin);
-    
+
 
     if (storedSuperadmin) {
       setSuperadmin(storedSuperadmin);
@@ -99,50 +99,50 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
       setFormData((prevData) => ({
         ...prevData,
         adminCompanyName: storedCompanyName,
-        confirmPassword:prevData.password
+        confirmPassword: prevData.password
       }));
     }
   }, []);
 
 
-  
 
-useEffect(() => {
-  const storedcompanyName =(() => {
-                            const name1 = getCompanyName();
-                            if (name1) return name1;
-                          
-                            const name2 = getUserName();
-                            if (name2) return name2;
-                          })();
-  const userId = getUserId()  
-  const flag = getflag();
-  const compID = getcompanyId();
-  // const randomId = randomObjectId();
 
-console.log(storedcompanyName,userId);
-  if (storedcompanyName && userId) {
-    // Check if the company is "superadmin" and the flag is true
-    if (storedcompanyName.toLowerCase() === "superadmin" && flag === "true" && compID) {
-      setFormData((prevData) => ({
-        ...prevData,
-        companyName: storedcompanyName,
-        companyId: compID, // Ensure compID is set
-       }));
-     } else {
-       // Use userId if not in "superadmin" mode
-       console.log(userId);
-      setFormData((prevData) => ({
-        ...prevData,
-        companyName: storedcompanyName,
-        companyId: userId,
-      }));
+  useEffect(() => {
+    const storedcompanyName = (() => {
+      const name1 = getCompanyName();
+      if (name1) return name1;
+
+      const name2 = getUserName();
+      if (name2) return name2;
+    })();
+    const userId = getUserId()
+    const flag = getflag();
+    const compID = getcompanyId();
+    // const randomId = randomObjectId();
+
+    console.log(storedcompanyName, userId);
+    if (storedcompanyName && userId) {
+      // Check if the company is "superadmin" and the flag is true
+      if (storedcompanyName.toLowerCase() === "superadmin" && flag === "true" && compID) {
+        setFormData((prevData) => ({
+          ...prevData,
+          companyName: storedcompanyName,
+          companyId: compID, // Ensure compID is set
+        }));
+      } else {
+        // Use userId if not in "superadmin" mode
+        console.log(userId);
+        setFormData((prevData) => ({
+          ...prevData,
+          companyName: storedcompanyName,
+          companyId: userId,
+        }));
+      }
+    } else {
+      console.error("Missing required fields:", { storedcompanyName, userId, flag, compID });
     }
-  } else {
-    console.error("Missing required fields:", { storedcompanyName, userId, flag, compID });
-  }
 
-}, [])
+  }, [])
 
 
   useEffect(() => {
@@ -200,23 +200,46 @@ console.log(storedcompanyName,userId);
     loadDropdownData();
   }, [superadmin, formData.adminCompanyName]);
 
+  // const handleChange = (e) => {
+  //   const { name, value, type, checked, files } = e.target;
+
+  //   // Determine the updated value based on the input type
+  //   const updatedValue = type === "checkbox"
+  //     ? checked
+  //     : type === "file"
+  //       ? files[0]
+  //       : value;
+
+  //   // Update form data state
+  //   setFormData((prevData) => ({
+  //     ...prevData,
+  //     [name]: updatedValue,
+  //   }));
+
+  //   // Handle email validation if the field name is "email"
+  //   if (name === "email") {
+  //     setValidation((prevValidation) => ({
+  //       ...prevValidation,
+  //       emailValid: emailRegex.test(updatedValue),
+  //     }));
+  //   }
+  // };
+
   const handleChange = (e) => {
     const { name, value, type, checked, files } = e.target;
-
-    // Determine the updated value based on the input type
-    const updatedValue = type === "checkbox"
+    let updatedValue = type === "checkbox"
       ? checked
       : type === "file"
         ? files[0]
-        : value;
+        : name === "firstName"
+          ? value.replace(/\s+/g, '') // Remove spaces for firstName
+          : value;
 
-    // Update form data state
     setFormData((prevData) => ({
       ...prevData,
       [name]: updatedValue,
     }));
 
-    // Handle email validation if the field name is "email"
     if (name === "email") {
       setValidation((prevValidation) => ({
         ...prevValidation,
@@ -347,11 +370,11 @@ console.log(storedcompanyName,userId);
           // pay: 0,
           calculation: "",
           adminCreatedBy: "",
-          password:"",
-          confirmPassword:"",
-          Postcode:"",
-         BuildingAndStreetOne:"",
-         BuildingAndStreetTwo:"",
+          password: "",
+          confirmPassword: "",
+          Postcode: "",
+          BuildingAndStreetOne: "",
+          BuildingAndStreetTwo: "",
           adminCompanyName: formData.adminCompanyName,
         };
         toast.success(response.data.message);
@@ -406,7 +429,7 @@ console.log(storedcompanyName,userId);
                       htmlFor="firstName"
                       className="text-[10px]"
                     >
-                      First Name <span className="text-red-600">*</span>
+                      Username <span className="text-red-600">*</span>
                     </label>
                   </div>
 
@@ -951,9 +974,9 @@ console.log(storedcompanyName,userId);
                   <input
                     type="text"
                     id="Building&Street"
-                      name="BuildingAndStreetOne"
-                      value={formData.BuildingAndStreetOne}
-                      onChange={handleChange}
+                    name="BuildingAndStreetOne"
+                    value={formData.BuildingAndStreetOne}
+                    onChange={handleChange}
                     className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow"
                     required
                     placeholder="Building and Street"

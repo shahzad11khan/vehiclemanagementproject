@@ -10,8 +10,10 @@ import {
   fetchLocalAuth,
   // fetchVehicle,
 } from "../../Components/DropdownData/taxiFirm/taxiFirmService";
-import { getCompanyName, getUserRole, getUserId ,
-  getUserName,getflag,getcompanyId } from "@/utils/storageUtils";
+import {
+  getCompanyName, getUserRole, getUserId,
+  getUserName, getflag, getcompanyId
+} from "@/utils/storageUtils";
 
 const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, selectedUserId }) => {
   const [formData, setFormData] = useState({
@@ -47,12 +49,12 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, selectedUserId }) => {
     calculation: "",
     adminCreatedBy: "",
     adminCompanyName: "",
-    companyId:null,
-    password:"",
-    confirmPassword:"",
+    companyId: null,
+    password: "",
+    confirmPassword: "",
 
-    BuildingAndStreetOne:"",
-    BuildingAndStreetTwo:"",
+    BuildingAndStreetOne: "",
+    BuildingAndStreetTwo: "",
   });
 
   const [imagePreview, setImagePreview] = useState(null);
@@ -69,7 +71,7 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, selectedUserId }) => {
 
   console.log(localAuth);
   console.log(imagePreview);
-  
+
   useEffect(() => {
     const storedCompanyName = getCompanyName();
     const storedSuperadmin = getUserRole();
@@ -85,19 +87,19 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, selectedUserId }) => {
   }, []);
 
   useEffect(() => {
-    const storedcompanyName =(() => {
-                              const name1 = getCompanyName();
-                              if (name1) return name1;
-                            
-                              const name2 = getUserName();
-                              if (name2) return name2;
-                            })();
-    const userId = getUserId()  
+    const storedcompanyName = (() => {
+      const name1 = getCompanyName();
+      if (name1) return name1;
+
+      const name2 = getUserName();
+      if (name2) return name2;
+    })();
+    const userId = getUserId()
     const flag = getflag();
     const compID = getcompanyId();
     // const randomId = randomObjectId();
-  
-  console.log(storedcompanyName,userId);
+
+    console.log(storedcompanyName, userId);
     if (storedcompanyName && userId) {
       // Check if the company is "superadmin" and the flag is true
       if (storedcompanyName.toLowerCase() === "superadmin" && flag === "true" && compID) {
@@ -105,10 +107,10 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, selectedUserId }) => {
           ...prevData,
           companyName: storedcompanyName,
           companyId: compID, // Ensure compID is set
-         }));
-       } else {
-         // Use userId if not in "superadmin" mode
-         console.log(userId);
+        }));
+      } else {
+        // Use userId if not in "superadmin" mode
+        console.log(userId);
         setFormData((prevData) => ({
           ...prevData,
           companyName: storedcompanyName,
@@ -118,10 +120,10 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, selectedUserId }) => {
     } else {
       console.error("Missing required fields:", { storedcompanyName, userId, flag, compID });
     }
-  
+
   }, [])
-  
-  
+
+
   const fetchData = async () => {
     // console.log(selectedUserId);
     try {
@@ -260,24 +262,19 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, selectedUserId }) => {
 
   const handleChange = (e) => {
     const { name, value, type, checked, files } = e.target;
+    const cleanedValue = name === "firstName" ? value.replace(/\s+/g, '') : value; //cut spaces from username
+
     setFormData((prevData) => ({
       ...prevData,
-      [name]:
-        type === "checkbox" ? checked : type === "file" ? files[0] : value,
+      [name]: type === "checkbox" ? checked : type === "file" ? files[0] : cleanedValue,
     }));
 
     if (type === "file" && files.length) {
       const file = files[0];
       setImagePreview(URL.createObjectURL(file));
     }
-
-    // if (name === "LocalAuth") {
-    //   const matchedVehicles = vehicle.filter(
-    //     (vehicle) => vehicle.LocalAuthority === value
-    //   );
-    //   setFilteredVehicles(matchedVehicles);
-    // }
   };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -825,7 +822,7 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, selectedUserId }) => {
           )}
         </form> */}
 
-<form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-6">
           {/* <h3 className="text-xl font-semibold mb-2">Driver Details</h3> */}
 
           {/* <div className="flex items-center justify-between mb-4">
@@ -842,19 +839,12 @@ const UpdateDriverModel = ({ isOpen, onClose, fetchDataa, selectedUserId }) => {
             <>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
                 <div>
-                  {/* <label
-                      htmlFor="firstName"
-                      className="text-sm font-medium text-gray-700"
-                    >
-                      First Name:
-                    </label>
-                    <span className="text-red-600">*</span> */}
                   <div className="flex gap-1 items-center justify-start">
                     <label
                       htmlFor="firstName"
                       className="text-[10px]"
                     >
-                      First Name <span className="text-red-600">*</span>
+                      Username <span className="text-red-600">*</span>
                     </label>
                   </div>
 

@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AddDriverAndVehicleModel from "../AddDriverAndVehicleModel/AddDriverAndVehicleModel";
 import UpdateCombineDriverAndVehicle from "../UpdateCombineDriverAndVehicle/UpdateCombineDriverAndVehicle";
-import { API_URL_Driver_Vehicle_Allotment } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
+import { API_URL_Driver_Vehicle_Allotment,API_URL_Vehicle } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import { getCompanyName } from "@/utils/storageUtils";
 import Link from "next/link";
 import { isAuthenticated } from "@/utils/verifytoken";
@@ -31,6 +31,7 @@ const Page = ({ params }) => {
   const [itemperpage, setitemperpage] = useState(5);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isDeleteModalOpenId, setIsDeleteModalOpenId] = useState(null);
+  
 
   useEffect(() => {
     if (!isAuthenticated()) {
@@ -81,6 +82,21 @@ const Page = ({ params }) => {
           prevFilteredData.filter((item) => item._id !== id)
         );
         toast.success(data.message || "Allotment deleted successfully.");
+        // console.log("data",filteredData)
+        const carId = filteredData.find((records) => records._id == id);
+        // console.log("mydata",carId.vehicleId);
+        const formDataupdate = new FormData();
+        formDataupdate.append("vehicleStatus", "Standby");
+        const updateResponse = await axios.put(
+          `${API_URL_Vehicle}/${carId.vehicleId}`,
+          formDataupdate, // Pass the FormData object as the request body
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+        console.log(updateResponse);
       } else {
         toast.warn(data.message || "Failed to delete the allotment.");
       }
@@ -340,9 +356,9 @@ const Page = ({ params }) => {
                         <th className="py-3 px-4 min-w-[150px] w-[150px] md:w-[16.66%] text-center text-white bg-custom-bg whitespace-normal break-all overflow-hidden">
                           Payment
                         </th>
-                        <th className="py-3 px-4 min-w-[150px] w-[150px] md:w-[16.66%] text-center text-white bg-custom-bg whitespace-normal break-all overflow-hidden">
+                        {/* <th className="py-3 px-4 min-w-[150px] w-[150px] md:w-[16.66%] text-center text-white bg-custom-bg whitespace-normal break-all overflow-hidden">
                           Status
-                        </th>
+                        </th> */}
                         <th className="py-3 px-4 min-w-[180px] w-[180px] md:w-[16.66%] text-center text-white bg-custom-bg whitespace-normal break-all overflow-hidden">
                           Actions
                         </th>
@@ -369,9 +385,9 @@ const Page = ({ params }) => {
                           <td className="py-3 px-4 min-w-[150px] w-[150px] md:w-[16.66%] text-center whitespace-normal break-all overflow-hidden">
                             {driver.payment || 0}
                           </td>
-                          <td className="py-3 px-4 min-w-[150px] w-[150px] md:w-[16.66%] whitespace-normal break-all overflow-hidden">
+                          {/* <td className="py-3 px-4 min-w-[150px] w-[150px] md:w-[16.66%] whitespace-normal break-all overflow-hidden">
                             {driver.status}
-                          </td>
+                          </td> */}
 
                           <td className="py-3 px-4 min-w-[180px] w-[180px] md:w-[16.66%] whitespace-normal break-all overflow-hidden text-center">
                             <div className="flex gap-4 justify-center">

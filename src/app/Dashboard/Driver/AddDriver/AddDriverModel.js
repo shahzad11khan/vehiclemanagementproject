@@ -428,8 +428,9 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                     <label
                       htmlFor="firstName"
                       className="text-[10px]"
+                      
                     >
-                      Username <span className="text-red-600">*</span>
+                      Name <span className="text-red-600">*</span>
                     </label>
                   </div>
 
@@ -437,6 +438,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                     type="text"
                     id="firstName"
                     name="firstName"
+                    placeholder="Name"
                     value={formData.firstName}
                     onChange={handleChange}
                     className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow"
@@ -598,6 +600,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                     type="tel"
                     id="tel1"
                     name="tel1"
+                    placeholder="Phone Number"
                     value={formData.tel1}
                     onChange={handleChange}
                     className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow"
@@ -618,6 +621,7 @@ const AddDriverModal = ({ isOpen, onClose, fetchData }) => {
                     type="text"
                     id="driverNumber"
                     name="driverNumber"
+                    placeholder="Driver Number"
                     value={formData.driverNumber}
                     onChange={handleChange}
                     className="mt-1 block w-full p-2 border border-[#42506666] rounded shadow"

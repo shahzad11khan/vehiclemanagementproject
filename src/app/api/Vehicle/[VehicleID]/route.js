@@ -364,9 +364,7 @@ export async function PUT(request, context) {
     vehicle.warrantyInfo =
       formDataObject.get("warrantyInfo") || vehicle.warrantyInfo;
     vehicle.isActive =
-      formDataObject.get("isActive") !== undefined
-        ? formDataObject.get("isActive") === "true"
-        : vehicle.isActive;
+      formDataObject.get("isActive") || vehicle.isActive;
     vehicle.adminCreatedBy =
       formDataObject.get("adminCreatedBy") || vehicle.adminCreatedBy;
     vehicle.adminCompanyName =

@@ -221,8 +221,7 @@ const vehicleSchema = new mongoose.Schema(
     defectaction: { type: String },
 
     isActive: {
-      type: Boolean,
-      default: false,
+      type: Boolean
     },
     imageFile: { type: String, default: null },
     images: [

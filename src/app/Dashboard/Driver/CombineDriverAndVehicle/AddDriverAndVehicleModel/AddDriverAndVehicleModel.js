@@ -3,7 +3,7 @@ import {
   API_URL_Driver,
   API_URL_Driver_Vehicle_Allotment,
   API_URL_DriverMoreInfo,
-  // API_URL_Vehicle,
+  API_URL_Vehicle,
 } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -220,18 +220,18 @@ const AddDriverMoreInfoModal = ({
           newRecordData
         );
         console.log(newRecordResponse);
-        // const formDataupdate = new FormData();
-        // formDataupdate.append("vehicleStatus", "Rent");
-        // const updateResponse = await axios.put(
-        //   `${API_URL_Vehicle}/${vehicleStatus}`,
-        //   formDataupdate, // Pass the FormData object as the request body
-        //   {
-        //     headers: {
-        //       "Content-Type": "multipart/form-data",
-        //     },
-        //   }
-        // );
-        // console.log(updateResponse);
+        const formDataupdate = new FormData();
+        formDataupdate.append("vehicleStatus", "Rent");
+        const updateResponse = await axios.put(
+          `${API_URL_Vehicle}/${vehicleStatus}`,
+          formDataupdate, // Pass the FormData object as the request body
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+        console.log(updateResponse);
       } else {
         toast.warn(data.error);
       }
@@ -254,11 +254,10 @@ const AddDriverMoreInfoModal = ({
 
           <img src="/crossIcon.svg" className="cursor-pointer" onClick={() => {
             onClose();
-            setStep(1);
           }} />
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit}  className="space-y-6">
           <div className="flex flex-wrap -mx-2">
             <div className="w-full md:w-1/3 px-2 mb-4">
               <label
@@ -284,6 +283,7 @@ const AddDriverMoreInfoModal = ({
                 className="text-[10px]"
               >
                 Rent Payment Cycle
+                <span className="text-red-600">*</span>
               </label>
               <select
                 id="paymentcycle"
@@ -308,6 +308,7 @@ const AddDriverMoreInfoModal = ({
                 className="text-[10px]"
               >
                 Start Date
+                <span className="text-red-600">*</span>
               </label>
               <input
                 type="date"
@@ -327,15 +328,16 @@ const AddDriverMoreInfoModal = ({
                 className="text-[10px]"
               >
                 Taxi Firm
+                <span className="text-red-600">*</span>
               </label>
               <select
                 id="taxifirm"
                 name="taxifirm"
-                value={formData.taxifirm}
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                required
               >
-                <option value="null">Select Taxi Firm</option>
+                <option value="">Select Taxi Firm</option>
                 {taxiFirms.map((firm) => (
                   <option key={firm._id} value={firm.name}>
                     {firm.name}
@@ -352,15 +354,17 @@ const AddDriverMoreInfoModal = ({
                 className="text-[10px]"
               >
                 Taxi Local Authourity
+                <span className="text-red-600">*</span>
               </label>
               <select
                 id="taxifirm"
                 name="taxilocalauthority"
-                value={formData.taxilocalauthority}
+                // value={formData.taxilocalauthority}
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                required
               >
-                <option value="null">Taxi Local Authority</option>
+                <option value="">Taxi Local Authority</option>
                 {localAuth.map((firm) => (
                   <option key={firm._id} value={firm.name}>
                     {firm.name}
@@ -400,6 +404,7 @@ const AddDriverMoreInfoModal = ({
                 className="text-[10px]"
               >
                 Vehicles
+                <span className="text-red-600">*</span>
               </label>
               <select
                 id="vehicle"
@@ -428,14 +433,17 @@ const AddDriverMoreInfoModal = ({
                 className="text-[10px]"
               >
                 Rent Payment Amount
+                <span className="text-red-600">*</span>
               </label>
               <input
                 type="number"
                 id="payment"
                 name="payment"
+                min={1}
                 value={formData.payment}
                 onChange={handleChange}
                 className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px] shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                required
               />
             </div>
           </div>

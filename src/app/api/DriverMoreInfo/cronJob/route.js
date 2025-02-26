@@ -32,7 +32,14 @@ export const GET = async () => {
         totalamount = (latestRecord?.totalamount || 0) + driver.payment; // FIXED
       }
 
-
+      if(!shouldInsert){
+        await Driver.findOneAndUpdate(
+          { _id: driver.driverId },
+          { $set: { totalamount : driver.totalamount } },
+          { new: true }
+        );
+      }
+      
       if (shouldInsert) {
         let newStartDate = new Date(lastDate); // Start from last recorded date
 

@@ -1,7 +1,7 @@
 // apiUrls.js
-export const url = "http://localhost:4000";
+// export const url = "http://localhost:4000";
 // export const url = "http://192.248.171.18:4000";
-// export const url = "https://vmsp.netlify.app";
+export const url = "https://vmsp.netlify.app";
 
 
 

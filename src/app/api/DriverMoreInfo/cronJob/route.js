@@ -13,52 +13,60 @@ export const GET = async () => {
       adminCompanyName: driver.adminCompanyName,
     }).sort({ startDate: -1 });
 
-    // console.log("latestRecord",latestRecord)
+    console.log("latestRecord", latestRecord)
     if (latestRecord) {
       const lastDate = new Date(latestRecord.startDate);
       const currentDate = new Date();
-      console.log(lastDate, currentDate)
       const daysDifference = Math.floor(
         (currentDate - lastDate) / (1000 * 60 * 60 * 24)
       );
-      //   console.log("dayDiff:", daysDifference)
+      console.log("dayDiff:", daysDifference)
       let shouldInsert = false;
       let totalamount = driver.payment;
 
-
       if (
-        (driver.paymentcycle === "perday" && daysDifference >= 1) || (driver.paymentcycle === "perweek" && daysDifference >= 7)
+        (driver.paymentcycle === "perday" && daysDifference >= 1) ||
+        (driver.paymentcycle === "perweek" && daysDifference >= 7)
       ) {
         shouldInsert = true;
-        totalamount += latestRecord.payment;
+        totalamount = (latestRecord?.totalamount || 0) + driver.payment; // FIXED
       }
 
-      //   console.log("should",shouldInsert)
+
       if (shouldInsert) {
-        await DriverMoreInfo.create({
-          driverId: driver.driverId,
-          driverName: driver.driverName,
-          vehicle: driver.vehicle,
-          vehicleId: driver.vehicleId,
-          startDate: currentDate,
-          paymentcycle: driver.paymentcycle,
-          payment: driver.payment,
-          totalamount,
-          adminCreatedBy: driver.adminCreatedBy,
-          adminCompanyName: driver.adminCompanyName,
-          adminCompanyId: driver.adminCompanyId,
-        });
+        let newStartDate = new Date(lastDate); // Start from last recorded date
 
-        // Ensure driver.payment is a valid number
-        // const paymentAmount = driver.payment ? driver.payment : 0;
+        while (newStartDate < currentDate) {
+          // Move to the next day
+          newStartDate.setDate(newStartDate.getDate() + 1);
 
+          // Ensure total amount keeps increasing correctly
+          totalamount += driver.payment;
+
+          await DriverMoreInfo.create({
+            driverId: driver.driverId,
+            driverName: driver.driverName,
+            vehicle: driver.vehicle,
+            vehicleId: driver.vehicleId,
+            startDate: new Date(newStartDate), // Save each missing day step by step
+            paymentcycle: driver.paymentcycle,
+            payment: driver.payment,
+            totalamount, // Keep adding payment to total amount
+            adminCreatedBy: driver.adminCreatedBy,
+            adminCompanyName: driver.adminCompanyName,
+            adminCompanyId: driver.adminCompanyId,
+          });
+        }
+
+        // Update the total amount in the Driver collection
         await Driver.findOneAndUpdate(
-          { _id: driver.driverId }, // Find the driver by ID
-          // { $set: { totalamount: totalamount } }, // Incase totalamount
-          { $inc: { totalamount: totalamount } },
-          { new: true } // Return the updated document
+          { _id: driver.driverId },
+          { $set: { totalamount } },
+          { new: true }
         );
       }
+
+
     }
   }
 

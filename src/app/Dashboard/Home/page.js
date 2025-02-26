@@ -48,7 +48,7 @@ const Page = () => {
   const [activeTab, setActiveTab] = useState("ALL");
 
 
-  console.log("Total Cars",TotalCar)
+  console.log("Total Cars", TotalCar)
 
   useEffect(() => {
     const indexOfLastUser = currentPage * itemperpage;
@@ -56,8 +56,8 @@ const Page = () => {
     const users = filteredData.slice(indexOfFirstUser, indexOfLastUser);
     setCurrentData(users); // Update currentUsers state
     setTotalPages(Math.ceil(filteredData.length / itemperpage)); // Update totalPages state
-  }, [filteredData, currentPage, itemperpage,activeTab]);
-  
+  }, [filteredData, currentPage, itemperpage, activeTab]);
+
 
   // Click handler to change tabs
   const handleTabClick = (tab) => {
@@ -118,7 +118,7 @@ const Page = () => {
       // Calculate the difference in days
       const diffInDays = Math.floor(
         (new Date(dueDateParts) - new Date(currentDateParts)) /
-          (1000 * 60 * 60 * 24)
+        (1000 * 60 * 60 * 24)
       );
 
       let daysLeft;
@@ -176,9 +176,9 @@ const Page = () => {
         ...serviceResponse.data.Result,
         ...roadtaxResponse.data.Result,
       ];
-      console.log("All",combinedData)
+      console.log("All", combinedData)
       setData(combinedData);
-      
+
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -258,7 +258,7 @@ const Page = () => {
     try {
       const vehicleData = await GetVehicle();
       const { count, result } = vehicleData;
-      console.log("Cars",vehicleData);
+      console.log("Cars", vehicleData);
       //getting active cars
       const ActiveCars = result.filter((cars) => cars.isActive);
       setactiveCars(ActiveCars);
@@ -597,272 +597,269 @@ const Page = () => {
               </section>
 
               <section className="flex flex-col gap-4 min-w-full mt-4 ">
-              <div className="py-5">
-              <div className="drop-shadow-custom4">
-              {/* Dropdown to switch between tabs above the table */}
-              {/* Table to display data */}
-              <div className="flex justify-between w-full py-2 px-2">
-              <div className="flex flex-wrap justify-between flex-col sm:flex-row sm:items-center gap-3 w-full">
-                <div className="flex justify-between gap-7 items-center">
-                  <div className="md:flex gap-3 hidden items-center">
-                    {" "}
-                    {/* Key change: hidden md:flex */}
-                    <div className="font-sans font-medium text-sm">Show</div>
-                    <div>
-                      <select
-                        value={itemperpage}
-                        onChange={(e) => {
-                          setitemperpage(e.target.value);
-                          setCurrentPage(1);
-                        }}
-                        className="rounded-lg w-12 px-1 h-8 bg-[#E0E0E0] focus:outline-none"
-                      >
-                        <option disabled>0</option>
-                        {Array.from({ length: 10 }, (_, i = 1) => i + 1).map(
-                          (number) => (
-                            <option key={number} value={number}>
-                              {number}
-                            </option>
-                          )
-                        )}
-                      </select>
-                    </div>
-                    <div className="font-sans font-medium text-sm">Entries</div>
-                  </div>
+                <div className="py-5">
+                  <div className="drop-shadow-custom4">
+                    {/* Dropdown to switch between tabs above the table */}
+                    {/* Table to display data */}
+                    <div className="flex justify-between w-full py-2 px-2">
+                      <div className="flex flex-wrap justify-between flex-col sm:flex-row sm:items-center gap-3 w-full">
+                        <div className="flex justify-between gap-7 items-center">
+                          <div className="md:flex gap-3 hidden items-center">
+                            {" "}
+                            {/* Key change: hidden md:flex */}
+                            <div className="font-sans font-medium text-sm">Show</div>
+                            <div>
+                              <select
+                                value={itemperpage}
+                                onChange={(e) => {
+                                  setitemperpage(e.target.value);
+                                  setCurrentPage(1);
+                                }}
+                                className="rounded-lg w-12 px-1 h-8 bg-[#E0E0E0] focus:outline-none"
+                              >
+                                <option disabled>0</option>
+                                {Array.from({ length: 10 }, (_, i = 1) => i + 1).map(
+                                  (number) => (
+                                    <option key={number} value={number}>
+                                      {number}
+                                    </option>
+                                  )
+                                )}
+                              </select>
+                            </div>
+                            <div className="font-sans font-medium text-sm">Entries</div>
+                          </div>
 
-                  <div className="flex justify-center">
-                    <div className="relative">
-                      <img
-                        src="/search.svg"
-                        className="absolute left-3 top-2"
-                        alt="Search Icon"
-                      />
-                      <input
-                        type="text"
-                        placeholder="Search by Vehicle"
-                        // value={searchTerm}
-                        // onChange={(e) => setSearchTerm(e.target.value)}
-                        className="border rounded-lg pl-10 sm:px-10 py-1 border-[#9E9E9E] text-[#9E9E9E] focus:outline-none focus:ring focus:ring-indigo-200"
-                      />
+                          <div className="flex justify-center">
+                            <div className="relative">
+                              <img
+                                src="/search.svg"
+                                className="absolute left-3 top-2"
+                                alt="Search Icon"
+                              />
+                              <input
+                                type="text"
+                                placeholder="Search by Vehicle"
+                                // value={searchTerm}
+                                // onChange={(e) => setSearchTerm(e.target.value)}
+                                className="border rounded-lg pl-10 sm:px-10 py-1 border-[#9E9E9E] text-[#9E9E9E] focus:outline-none focus:ring focus:ring-indigo-200"
+                              />
+                            </div>
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+
+                    <div className="overflow-x-auto min-w-full">
+                      <table className="min-w-full  border border-gray-200">
+                        <thead>
+                          <tr className="">
+                            {/* Header with Select Dropdown */}
+                            <th className="py-2 px-4 border-b border-gray-300 text-white bg-custom-bg">
+                              <div className="flex items-center justify-center gap-2 text-white bg-custom-bg">
+                                <select
+                                  onChange={(e) => handleTabClick(e.target.value)}
+                                  value={activeTab}
+                                  className="px-4 py-2  border-2 border-gray-400 rounded-lg text-white bg-custom-bg"
+                                >
+                                  <option value="ALL">ALL</option>
+                                  <option value="MOT">MOT</option>
+                                  <option value="Service">Service</option>
+                                  <option value="RoadTax">Road Tax</option>
+                                </select>
+                                <span className="text-white bg-custom-bg">Vehicle</span>
+                              </div>
+                            </th>
+
+                            {/* Table Headers */}
+                            <th className="py-2 px-4 border-b border-gray-300 text-center text-white bg-custom-bg">
+                              R. Number
+                            </th>
+                            <th className="py-2 px-4 border-b border-gray-300 text-center text-white bg-custom-bg">
+                              Due Date
+                            </th>
+                            <th className="py-2 px-4 border-b border-gray-300 text-center text-white bg-custom-bg">
+                              Description
+                            </th>
+                            <th className="py-2 px-4 border-b border-gray-300 text-center text-white bg-custom-bg">
+                              Status
+                            </th>
+                            <th className="py-2 px-4 border-b border-gray-300 text-center text-white bg-custom-bg">
+                              Assigned
+                            </th>
+                            <th className="py-2 px-4 border-b border-gray-300 text-center text-white bg-custom-bg">
+                              Actions
+                            </th>
+                          </tr>
+                        </thead>
+
+                        {/* Table Body */}
+                        <tbody>
+                          {currentData.map((row, index) => (
+                            <tr
+                              key={row._id}
+                              className={`hover:bg-gray-100 ${index % 2 === 0 ? "bg-white" : "bg-gray-50"
+                                }`}
+                            >
+                              <td className="py-2 px-4 border-b border-gray-200 text-center">
+                                {row.VehicleName || "N/A"}
+                              </td>
+                              <td className="py-2 px-4 border-b border-gray-200 text-center">
+                                {row.registrationNumber || "N/A"}
+                              </td>
+                              <td className="py-2 px-4 border-b border-gray-200 text-center">
+                                {row.dueDate || "N/A"}
+                              </td>
+                              <td className="py-2 px-4 border-b border-gray-200 text-center">
+                                {row.daysLeft > 0
+                                  ? `${row.daysLeft} days left`
+                                  : row.daysExpired > 1
+                                    ? `${row.daysExpired} days expired`
+                                    : "N/A"}
+                              </td>
+                              <td className="py-2 px-4 border-b border-gray-200 text-center">
+                                <span className="bg-[#38384A33] px-4 py-2 rounded-[22px] text-xs ">
+                                  {row.VehicleStatus ? "Active" : "Inactive"}
+                                </span>
+
+                              </td>
+                              <td className="py-2 px-4 border-b border-gray-200 text-center">
+                                {row.asignto || "N/A"}
+                              </td>
+                              <td className="py-2 px-4 border-b border-gray-200 text-center">
+                                <Link
+                                  href={`${getPath()}${row.VehicleId}`}
+                                  className="bg-transparent"
+                                >
+                                  {/* <CiWarning className="text-red-500 text-lg cursor-pointer" /> */}
+                                  <img src="/warning.png" alt="linkgoto" />
+                                </Link>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                      {/* pagination */}
+                      <div className="flex justify-center py-5 font-montserrat font-medium text-[12px]">
+                        <nav>
+                          <ul className="flex items-center gap-3">
+                            {/* Previous Button */}
+                            <li>
+                              <button
+                                onClick={() =>
+                                  setCurrentPage((prev) => Math.max(prev - 1, 1))
+                                }
+                                disabled={currentPage === 1}
+                                className={`h-8 px-2 border rounded-lg ${currentPage === 1
+                                    ? "opacity-50 cursor-not-allowed"
+                                    : "bg-white"
+                                  }`}
+                              >
+                                Previous
+                              </button>
+                            </li>
+
+                            {/* Pagination Logic */}
+                            {totalPages > 1 && (
+                              <>
+                                {totalPages <= 3 ? (
+                                  // Show all pages if total pages are 3 or fewer
+                                  Array.from(
+                                    { length: totalPages },
+                                    (_, index) => index + 1
+                                  ).map((page) => (
+                                    <li key={page}>
+                                      <button
+                                        onClick={() => setCurrentPage(page)}
+                                        className={`h-8 w-8 border rounded-lg ${currentPage === page
+                                            ? "bg-custom-bg text-white"
+                                            : "bg-white"
+                                          }`}
+                                      >
+                                        {page}
+                                      </button>
+                                    </li>
+                                  ))
+                                ) : (
+                                  // Handle cases where total pages > 3
+                                  <>
+                                    {currentPage === 1 && (
+                                      <>
+                                        <li>
+                                          <button className="h-8 w-8 border rounded-lg bg-custom-bg text-white">
+                                            1
+                                          </button>
+                                        </li>
+                                        <li>
+                                          <span className="px-2">...</span>
+                                        </li>
+                                        <li>
+                                          <button
+                                            onClick={() => setCurrentPage(totalPages)}
+                                            className="h-8 w-8 border rounded-lg bg-white"
+                                          >
+                                            {totalPages}
+                                          </button>
+                                        </li>
+                                      </>
+                                    )}
+                                    {currentPage > 1 && currentPage < totalPages && (
+                                      <>
+                                        <li>
+                                          <button className="h-8 w-8 border rounded-lg bg-custom-bg text-white">
+                                            {currentPage}
+                                          </button>
+                                        </li>
+                                        <li>
+                                          <span className="px-2">...</span>
+                                        </li>
+                                        <li>
+                                          <button
+                                            onClick={() => setCurrentPage(totalPages)}
+                                            className="h-8 w-8 border rounded-lg bg-white"
+                                          >
+                                            {totalPages}
+                                          </button>
+                                        </li>
+                                      </>
+                                    )}
+                                    {currentPage === totalPages && (
+                                      <li>
+                                        <button className="h-8 w-8 border rounded-lg bg-custom-bg text-white">
+                                          {totalPages}
+                                        </button>
+                                      </li>
+                                    )}
+                                  </>
+                                )}
+                              </>
+                            )}
+
+                            {/* Next Button */}
+                            <li>
+                              <button
+                                onClick={() =>
+                                  setCurrentPage((prev) =>
+                                    Math.min(prev + 1, totalPages)
+                                  )
+                                }
+                                disabled={currentPage === totalPages}
+                                className={`h-8 px-2 border rounded-lg ${currentPage === totalPages
+                                    ? "opacity-50 cursor-not-allowed"
+                                    : "bg-white"
+                                  }`}
+                              >
+                                Next
+                              </button>
+                            </li>
+                          </ul>
+                        </nav>
+                      </div>
                     </div>
                   </div>
                 </div>
-               
-              </div>
-            </div>
-
-              <div className="overflow-x-auto min-w-full">
-                <table className="min-w-full  border border-gray-200">
-                  <thead>
-                    <tr className="">
-                      {/* Header with Select Dropdown */}
-                      <th className="py-2 px-4 border-b border-gray-300 text-white bg-custom-bg">
-                        <div className="flex items-center justify-center gap-2 text-white bg-custom-bg">
-                          <select
-                            onChange={(e) => handleTabClick(e.target.value)}
-                            value={activeTab}
-                            className="px-4 py-2  border-2 border-gray-400 rounded-lg text-white bg-custom-bg"
-                          >
-                            <option value="ALL">ALL</option>
-                            <option value="MOT">MOT</option>
-                            <option value="Service">Service</option>
-                            <option value="RoadTax">Road Tax</option>
-                          </select>
-                          <span className="text-white bg-custom-bg">Vehicle</span>
-                        </div>
-                      </th>
-  
-                      {/* Table Headers */}
-                      <th className="py-2 px-4 border-b border-gray-300 text-center text-white bg-custom-bg">
-                        R. Number
-                      </th>
-                      <th className="py-2 px-4 border-b border-gray-300 text-center text-white bg-custom-bg">
-                        Due Date
-                      </th>
-                      <th className="py-2 px-4 border-b border-gray-300 text-center text-white bg-custom-bg">
-                        Description
-                      </th>
-                      <th className="py-2 px-4 border-b border-gray-300 text-center text-white bg-custom-bg">
-                        Status
-                      </th>
-                      <th className="py-2 px-4 border-b border-gray-300 text-center text-white bg-custom-bg">
-                        Assigned
-                      </th>
-                      <th className="py-2 px-4 border-b border-gray-300 text-center text-white bg-custom-bg">
-                        Actions
-                      </th>
-                    </tr>
-                  </thead>
-  
-                  {/* Table Body */}
-                  <tbody>
-                    {currentData.map((row, index) => (
-                      <tr
-                        key={row._id}
-                        className={`hover:bg-gray-100 ${index % 2 === 0 ? "bg-white" : "bg-gray-50"
-                          }`}
-                      >
-                        <td className="py-2 px-4 border-b border-gray-200 text-center">
-                          {row.VehicleName || "N/A"}
-                        </td>
-                        <td className="py-2 px-4 border-b border-gray-200 text-center">
-                          {row.registrationNumber || "N/A"}
-                        </td>
-                        <td className="py-2 px-4 border-b border-gray-200 text-center">
-                          {row.dueDate || "N/A"}
-                        </td>
-                        <td className="py-2 px-4 border-b border-gray-200 text-center">
-                          {row.daysLeft > 0
-                            ? `${row.daysLeft} days left`
-                            : row.daysExpired > 1
-                              ? `${row.daysExpired} days expired`
-                              : "N/A"}
-                        </td>
-                        <td className="py-2 px-4 border-b border-gray-200 text-center">
-                        <span className="bg-[#38384A33] px-4 py-2 rounded-[22px] text-xs ">
-                        {row.VehicleStatus ? "Active" : "Inactive"}
-                              </span>
-                         
-                        </td>
-                        <td className="py-2 px-4 border-b border-gray-200 text-center">
-                          {row.asignto || "N/A"}
-                        </td>
-                        <td className="py-2 px-4 border-b border-gray-200 text-center">
-                          <Link
-                            href={`${getPath()}${row.VehicleId}`}
-                            className="bg-transparent"
-                          >
-                            {/* <CiWarning className="text-red-500 text-lg cursor-pointer" /> */}
-                            <img src="/warning.png" alt="linkgoto" />
-                          </Link>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-                {/* pagination */}
-                <div className="flex justify-center py-5 font-montserrat font-medium text-[12px]">
-                <nav>
-                  <ul className="flex items-center gap-3">
-                    {/* Previous Button */}
-                    <li>
-                      <button
-                        onClick={() =>
-                          setCurrentPage((prev) => Math.max(prev - 1, 1))
-                        }
-                        disabled={currentPage === 1}
-                        className={`h-8 px-2 border rounded-lg ${
-                          currentPage === 1
-                            ? "opacity-50 cursor-not-allowed"
-                            : "bg-white"
-                        }`}
-                      >
-                        Previous
-                      </button>
-                    </li>
-
-                    {/* Pagination Logic */}
-                    {totalPages > 1 && (
-                      <>
-                        {totalPages <= 3 ? (
-                          // Show all pages if total pages are 3 or fewer
-                          Array.from(
-                            { length: totalPages },
-                            (_, index) => index + 1
-                          ).map((page) => (
-                            <li key={page}>
-                              <button
-                                onClick={() => setCurrentPage(page)}
-                                className={`h-8 w-8 border rounded-lg ${
-                                  currentPage === page
-                                    ? "bg-custom-bg text-white"
-                                    : "bg-white"
-                                }`}
-                              >
-                                {page}
-                              </button>
-                            </li>
-                          ))
-                        ) : (
-                          // Handle cases where total pages > 3
-                          <>
-                            {currentPage === 1 && (
-                              <>
-                                <li>
-                                  <button className="h-8 w-8 border rounded-lg bg-custom-bg text-white">
-                                    1
-                                  </button>
-                                </li>
-                                <li>
-                                  <span className="px-2">...</span>
-                                </li>
-                                <li>
-                                  <button
-                                    onClick={() => setCurrentPage(totalPages)}
-                                    className="h-8 w-8 border rounded-lg bg-white"
-                                  >
-                                    {totalPages}
-                                  </button>
-                                </li>
-                              </>
-                            )}
-                            {currentPage > 1 && currentPage < totalPages && (
-                              <>
-                                <li>
-                                  <button className="h-8 w-8 border rounded-lg bg-custom-bg text-white">
-                                    {currentPage}
-                                  </button>
-                                </li>
-                                <li>
-                                  <span className="px-2">...</span>
-                                </li>
-                                <li>
-                                  <button
-                                    onClick={() => setCurrentPage(totalPages)}
-                                    className="h-8 w-8 border rounded-lg bg-white"
-                                  >
-                                    {totalPages}
-                                  </button>
-                                </li>
-                              </>
-                            )}
-                            {currentPage === totalPages && (
-                              <li>
-                                <button className="h-8 w-8 border rounded-lg bg-custom-bg text-white">
-                                  {totalPages}
-                                </button>
-                              </li>
-                            )}
-                          </>
-                        )}
-                      </>
-                    )}
-
-                    {/* Next Button */}
-                    <li>
-                      <button
-                        onClick={() =>
-                          setCurrentPage((prev) =>
-                            Math.min(prev + 1, totalPages)
-                          )
-                        }
-                        disabled={currentPage === totalPages}
-                        className={`h-8 px-2 border rounded-lg ${
-                          currentPage === totalPages
-                            ? "opacity-50 cursor-not-allowed"
-                            : "bg-white"
-                        }`}
-                      >
-                        Next
-                      </button>
-                    </li>
-                  </ul>
-                </nav>
-              </div>
-              </div>
-              </div>
-              </div>
-            </section>
+              </section>
             </div>
           </main>
         )}

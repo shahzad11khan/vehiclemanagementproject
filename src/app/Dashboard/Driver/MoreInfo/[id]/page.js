@@ -9,7 +9,7 @@ import Sidebar from "../../../Components/Sidebar";
 import {
   API_URL_DriverMoreInfo,
   // API_URL_DriverMoreupdate,
-  API_URL_CRONJOB
+  // API_URL_CRONJOB
 } from "../../../Components/ApiUrl/ApiUrls";
 import { getCompanyName } from "@/utils/storageUtils";
 import axios from "axios";
@@ -91,27 +91,27 @@ const Page = ({ params }) => {
     }
   };
 
- 
 
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-      const res=  await axios.get(`${API_URL_CRONJOB}`);
-        console.log("✅ Data updated successfully",res);
-      } catch (error) {
-        console.error("❌ Error updating data:", error);
-      }
-    };
 
-    // Run every hour (3600000 ms)
-    const interval = setInterval(fetchData, 3600000);
-    // Run once on mount
-    fetchData();
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //     const res=  await axios.get(`${API_URL_CRONJOB}`);
+  //       console.log("✅ Data updated successfully",res);
+  //     } catch (error) {
+  //       console.error("❌ Error updating data:", error);
+  //     }
+  //   };
 
-    return () => clearInterval(interval);
-  }, []);
-  
+  //   // Run every hour (3600000 ms)
+  //   const interval = setInterval(fetchData, 3600000);
+  //   // Run once on mount
+  //   fetchData();
+
+  //   return () => clearInterval(interval);
+  // }, []);
+
   // Handle deletion of a title
   const handleDelete = async (id) => {
     try {
@@ -168,15 +168,7 @@ const Page = ({ params }) => {
   // Ensure client-side rendering only
   if (!isMounted) return null;
 
-  // Calculate totals for calculation, subtractcalculation, and remaining
-  const totalToremain = data
-    .filter(
-      (row) =>
-        row.adminCompanyName &&
-        row.adminCompanyName.toLowerCase() === selectedCompanyName.toLowerCase()
-    )
-    .reduce((acc, row) => acc + row.totalamount, 0)
-    .toFixed(2);
+
 
 
 
@@ -285,9 +277,9 @@ const Page = ({ params }) => {
                       <th className="py-3 px-4 min-w-[150px] text-white  bg-custom-bg w-[150px] md:w-[16.66%] text-center whitespace-normal break-all overflow-hidden">
                         Payment
                       </th>
-                      <th className="py-3 px-4 min-w-[150px] text-white bg-custom-bg w-[150px] md:w-[16.66%] text-center whitespace-normal break-all overflow-hidden">
+                      {/* <th className="py-3 px-4 min-w-[150px] text-white bg-custom-bg w-[150px] md:w-[16.66%] text-center whitespace-normal break-all overflow-hidden">
                         Total Amount
-                      </th>
+                      </th> */}
 
 
                       <th className="py-3 px-4 min-w-[180px] text-white  bg-custom-bg w-[180px] md:w-[16.66%] text-center whitespace-normal break-all overflow-hidden">
@@ -309,19 +301,25 @@ const Page = ({ params }) => {
                             <td className="py-3 px-4 whitespace-normal break-all overflow-hidden">
                               {row.vehicle}
                             </td>
+
                             <td className="py-3 px-4 whitespace-normal break-all overflow-hidden">
                               {row.paymentcycle}
                             </td>
+
                             <td className="py-3 px-4 whitespace-normal break-all overflow-hidden">
                               {formatDate(row.startDate)}
                             </td>
+
                             <td className="py-3 px-4 whitespace-normal break-all overflow-hidden">
                               £ {row.payment}
                             </td>
+                            {/* <td className="py-3 px-4 whitespace-normal break-all overflow-hidden">
+                              £ {row.totalamount}
+                            </td> */}
 
-                            <td className="py-3 px-4 whitespace-normal break-all overflow-hidden">
-                              
-                            </td>
+                            {/* <td className="py-3 px-4 whitespace-normal break-all overflow-hidden">
+
+                            </td> */}
 
                             <td className="py-3 px-4 whitespace-normal break-all overflow-hidden text-center">
                               <button
@@ -346,7 +344,7 @@ const Page = ({ params }) => {
                         </td>
                       </tr>
                     )}
-                    {data.length > 0 && (
+                    {/* {data.length > 0 && (
                       <tr className="font-bold text-center">
                         <td className="py-3 px-4">Total</td>
                         <td className="py-3 px-4"></td>
@@ -365,7 +363,31 @@ const Page = ({ params }) => {
                         </td>
                         <td className="py-3 px-4"></td>
                       </tr>
+                    )} */}
+
+                    {data.length > 0 && (
+                      <tr className="font-bold text-center">
+                        <td className="py-3 px-4">Total</td>
+                        <td className="py-3 px-4"></td>
+                        {/* <td className="py-3 px-4"></td> */}
+
+                        <td className="py-3 px-4"> </td>
+
+                        <td className="py-3 px-4">
+                           £{" "}
+                          {currentData?.length > 0 ? (
+                            currentData
+                              .filter((row) =>
+                                row.adminCompanyName?.toLowerCase() === selectedCompanyName?.toLowerCase()
+                              )
+                              .slice(-1)[0]?.totalamount || 0
+                          ) : 0}
+                        </td>
+
+                        <td className="py-3 px-4"></td>
+                      </tr>
                     )}
+
 
                   </tbody>
                 </table>
@@ -383,8 +405,8 @@ const Page = ({ params }) => {
                         }
                         disabled={currentPage === 1}
                         className={`h-8 px-2 border rounded-lg ${currentPage === 1
-                            ? "opacity-50 cursor-not-allowed"
-                            : "bg-white"
+                          ? "opacity-50 cursor-not-allowed"
+                          : "bg-white"
                           }`}
                       >
                         Previous
@@ -404,8 +426,8 @@ const Page = ({ params }) => {
                               <button
                                 onClick={() => setCurrentPage(page)}
                                 className={`h-8 w-8 border rounded-lg ${currentPage === page
-                                    ? "bg-custom-bg text-white"
-                                    : "bg-white"
+                                  ? "bg-custom-bg text-white"
+                                  : "bg-white"
                                   }`}
                               >
                                 {page}
@@ -477,8 +499,8 @@ const Page = ({ params }) => {
                         }
                         disabled={currentPage === totalPages}
                         className={`h-8 px-2 border rounded-lg ${currentPage === totalPages
-                            ? "opacity-50 cursor-not-allowed"
-                            : "bg-white"
+                          ? "opacity-50 cursor-not-allowed"
+                          : "bg-white"
                           }`}
                       >
                         Next

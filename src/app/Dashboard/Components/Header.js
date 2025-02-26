@@ -19,7 +19,7 @@ import {
 import { useRouter } from "next/navigation";
 // import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { API_URL_Company, API_URL_USER } from "../Components/ApiUrl/ApiUrls";
+import { API_URL_Company, API_URL_USER, API_URL_CRONJOB } from "../Components/ApiUrl/ApiUrls";
 import { isAuthenticated, clearAuthData } from "@/utils/verifytoken";
 import {
   API_URL_VehicleMOT,
@@ -79,8 +79,29 @@ const Header = () => {
   }, [data, username]);
   // Fetch data on component mount
   useEffect(() => {
+    // --------------------------
+    const fetchData = async () => {
+      try {
+        const res = await axios.get(`${API_URL_CRONJOB}`);
+        console.log("✅ Data updated successfully", res);
+      } catch (error) {
+        console.error("❌ Error updating data:", error);
+      }
+    };
+
+    // Run every hour (3600000 ms)
+    const interval = setInterval(fetchData, 30000);
+    // Run once on mount
+    fetchData();
+
+    return () => clearInterval(interval);
+
+
+
+    // --------------------------
     fetchAllData();
   }, []);
+
   useEffect(() => {
     if (!isAuthenticated()) {
       router.push("/");
@@ -181,7 +202,7 @@ const Header = () => {
                 )}
               </>
             ) : (
-              
+
               // Default notification icon when no pending items
               <img
                 src="/bell.svg"
@@ -232,12 +253,12 @@ const Header = () => {
                     <li className="px-4 font-sans text-sm font-semibold py-2 rounded-tl-[9px] h-[50%]  cursor-pointer  flex gap-2 items-center  hover:bg-drop-custom-bg  hover:text-white group">
                       {/* <CgProfile className="mr-2 bg-transparent text-white" /> */}
                       <img src="/profile.svg" className="h-[17px] w-[17px]  group-hover:invert "></img>
-                      
+
                       {/* <span
                         className="hidden font-sans text-sm md:inlineh-full w-full text-black hover:text-white"
                         style={{ backgroundColor: "transparent" }}
                       > */}
-                       Profile 
+                      Profile
                       {/* </span> */}
                     </li>
                   </Link>
@@ -246,12 +267,12 @@ const Header = () => {
                     <li className="px-4 font-sans text-sm font-semibold py-2 rounded-tl-[9px] h-[50%]  cursor-pointer  flex gap-2 items-center  hover:bg-drop-custom-bg  hover:text-white group">
                       {/* <CgProfile className="mr-2 bg-transparent text-white" /> */}
                       <img src="/profile.svg" className="h-[17px] w-[17px]  group-hover:invert "></img>
-                      
+
                       {/* <span
                         className="hidden font-sans text-sm md:inlineh-full w-full text-black hover:text-white"
                         style={{ backgroundColor: "transparent" }}
                       > */}
-                       Profile 
+                      Profile
                       {/* </span> */}
                     </li>
                   </Link>
@@ -260,12 +281,12 @@ const Header = () => {
                     <li className="px-4 font-sans text-sm font-semibold py-2 rounded-tl-[9px] h-[50%]  cursor-pointer  flex gap-2 items-center  hover:bg-drop-custom-bg  hover:text-white group">
                       {/* <CgProfile className="mr-2 bg-transparent text-white" /> */}
                       <img src="/profile.svg" className="h-[17px] w-[17px]  group-hover:invert "></img>
-                      
+
                       {/* <span
                         className="hidden font-sans text-sm md:inlineh-full w-full text-black hover:text-white"
                         style={{ backgroundColor: "transparent" }}
                       > */}
-                       Profile 
+                      Profile
                       {/* </span> */}
                     </li>
                   </Link>
@@ -274,10 +295,10 @@ const Header = () => {
                 <li
                   className="px-4 py-2 rounded-bl-[9px] w-full h-[50%] font-semibold font-sans text-sm rounded-br-[9px] hover:bg-drop-custom-bg cursor-pointer items-center gap-2  flex hover:text-white group"
                   onClick={
-                    ()=>{
+                    () => {
                       setIsLogoutModalOpen(true)
+                    }
                   }
-                }
                 >
                   {/* <IoIosLogOut className="mr-2 bg-transparent text-white" /> */}
                   <img className="h-[17px] w-[17px] group-hover:invert" src="/signOut.svg"></img>
@@ -311,10 +332,10 @@ const Header = () => {
       </div> */}
 
       {/*  here it works as a logoutconfirmationmodal */}
-      <LogoutModal 
-        isOpen={isLogoutModalOpen} 
-        onClose={() => setIsLogoutModalOpen(false)} 
-        onLogout={handleLogout} 
+      <LogoutModal
+        isOpen={isLogoutModalOpen}
+        onClose={() => setIsLogoutModalOpen(false)}
+        onLogout={handleLogout}
       />
     </header>
   );

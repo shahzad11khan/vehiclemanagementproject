@@ -13,17 +13,17 @@ export const GET = async () => {
       adminCompanyName: driver.adminCompanyName,
     }).sort({ startDate: -1 });
 
-    console.log("latestRecord", latestRecord)
+    // console.log("latestRecord", latestRecord)
     if (latestRecord) {
       const lastDate = new Date(latestRecord.startDate);
       const currentDate = new Date();
       const daysDifference = Math.floor(
         (currentDate - lastDate) / (1000 * 60 * 60 * 24)
       );
-      console.log("dayDiff:", daysDifference)
+      // console.log("dayDiff:", daysDifference)
       let shouldInsert = false;
       let totalamount = driver.payment;
-
+      console.log("lastDate", lastDate, "currentDate", currentDate);
       if (
         (driver.paymentcycle === "perday" && daysDifference >= 1) ||
         (driver.paymentcycle === "perweek" && daysDifference >= 7)
@@ -39,17 +39,22 @@ export const GET = async () => {
           { new: true }
         );
       }
+
+      
       
       if (shouldInsert) {
-        let newStartDate = new Date(lastDate); // Start from last recorded date
 
+        let newStartDate = new Date(lastDate); // Start from last recorded date
         while (newStartDate < currentDate) {
           // Move to the next day
           newStartDate.setDate(newStartDate.getDate() + 1);
 
+          if(newStartDate > currentDate){
+            break;
+          }
+
           // Ensure total amount keeps increasing correctly
           totalamount += driver.payment;
-
           await DriverMoreInfo.create({
             driverId: driver.driverId,
             driverName: driver.driverName,

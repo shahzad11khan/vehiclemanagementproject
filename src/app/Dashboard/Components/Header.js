@@ -90,7 +90,7 @@ const Header = () => {
     };
 
     // Run every hour (3600000 ms)
-    const interval = setInterval(fetchData, 30000);
+    const interval = setInterval(fetchData, 3600000);
     // Run once on mount
     fetchData();
 

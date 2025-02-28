@@ -18,6 +18,9 @@ import { useRouter } from "next/navigation";
 import DeleteModal from "@/app/Dashboard/Components/DeleteModal";
 import BackButton from "@/app/Dashboard/Components/BackButton";
 
+import Addmakeapayment from "@/app/Dashboard/Driver/Addmakeapayment/Addmakeapayment"
+import AddCost from "@/app/Dashboard/Driver/AddCost/AddCost"
+
 const Page = ({ params }) => {
   const router = useRouter();
   const id = params.id;
@@ -27,10 +30,23 @@ const Page = ({ params }) => {
   const [selectedCompanyName, setSelectedCompanyName] = useState("");
   // const [isOpenDriver, setIsOpenDriver] = useState(false);
   // const [selectedUserId, setSelectedUserId] = useState(null);
+  const [selectedUserId, setSelectedUserId] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemperpage, setitemperpage] = useState(5);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isDeleteModalOpenId, setIsDeleteModalOpenId] = useState(null);
+  const [isOpenPayment, setIsOpenPayment] = useState(false);
+  const [isOpenAddCost, setIsOpenAddCost] = useState(false);
+
+
+  const OpenPaymentModle = () => {
+    setSelectedUserId(id);
+    setIsOpenPayment(!isOpenPayment);
+  };
+  const OpenAddCostModle = () => {
+    setSelectedUserId(id);
+    setIsOpenAddCost(!isOpenAddCost);
+  };
 
   const isopendeletemodel = (id) => {
     setIsDeleteModalOpenId(id); // Set the ID of the item to be deleted
@@ -252,7 +268,21 @@ const Page = ({ params }) => {
                         </div>
                       </div>
                     </div>
+                <div className="flex gap-2">
+                <button
+                      onClick={OpenAddCostModle}
+                      className="w-[156px] md:w-auto font-sans font-bold text-xs bg-[#313342] text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500 px-3 flex py-[10px] gap-2"
+                    >
+                    Cost 
+                    </button>
+                <button
+                      onClick={OpenPaymentModle}
+                      className="w-[156px] md:w-auto font-sans font-bold text-xs bg-[#313342] text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500 px-3 flex py-[10px] gap-2"
+                    >
+                     make a payment
+                    </button>
                     <BackButton />
+                </div>
                   </div>
                 </div>
               </div>
@@ -514,12 +544,18 @@ const Page = ({ params }) => {
           </div>
         </div>
       </div>
-      {/* <AddMoreInfoModal
-        isOpen={isOpenDriver}
-        selectedUserId={selectedUserId}
-        onClose={OpenDriverModel}
+      <Addmakeapayment
+        isOpen={isOpenPayment}
+        onClose={OpenPaymentModle}
+        // fetchData={fetchData}
+        Id= {selectedUserId}
+      />
+      <AddCost
+        isOpen={isOpenAddCost}
+        onClose={OpenAddCostModle}
         fetchData={fetchData}
-      /> */}
+        Id= {selectedUserId}
+      />
       <DeleteModal
         isOpen={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}

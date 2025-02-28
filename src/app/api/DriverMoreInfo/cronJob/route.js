@@ -43,16 +43,13 @@ export const GET = async () => {
       
       
       if (shouldInsert) {
-
         let newStartDate = new Date(lastDate); // Start from last recorded date
         while (newStartDate < currentDate) {
           // Move to the next day
           newStartDate.setDate(newStartDate.getDate() + 1);
-
-          if(newStartDate > currentDate){
+          if(newStartDate  >= currentDate){
             break;
           }
-
           // Ensure total amount keeps increasing correctly
           totalamount += driver.payment;
           await DriverMoreInfo.create({

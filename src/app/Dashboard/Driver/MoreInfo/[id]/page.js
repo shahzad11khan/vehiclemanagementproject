@@ -296,7 +296,7 @@ const Page = ({ params }) => {
                   <thead className="font-sans font-bold text-sm text-left bg-[#38384A]">
                     <tr className="text-white ">
                       <th className="py-3 px-4 min-w-[150px] text-white bg-custom-bg w-[150px] md:w-[16.66%] text-center whitespace-normal break-all overflow-hidden">
-                        Vehicle
+                        Driver Name
                       </th>
                       <th className="py-3 px-4 min-w-[150px] text-white bg-custom-bg w-[150px] md:w-[16.66%] text-center whitespace-normal break-all overflow-hidden">
                         Payment Cycle
@@ -306,6 +306,12 @@ const Page = ({ params }) => {
                       </th>
                       <th className="py-3 px-4 min-w-[150px] text-white  bg-custom-bg w-[150px] md:w-[16.66%] text-center whitespace-normal break-all overflow-hidden">
                         Payment
+                      </th>
+                      <th className="py-3 px-4 min-w-[150px] text-white  bg-custom-bg w-[150px] md:w-[16.66%] text-center whitespace-normal break-all overflow-hidden">
+                      cost
+                      </th>
+                      <th className="py-3 px-4 min-w-[150px] text-white  bg-custom-bg w-[150px] md:w-[16.66%] text-center whitespace-normal break-all overflow-hidden">
+                      pay
                       </th>
                       {/* <th className="py-3 px-4 min-w-[150px] text-white bg-custom-bg w-[150px] md:w-[16.66%] text-center whitespace-normal break-all overflow-hidden">
                         Total Amount
@@ -329,7 +335,7 @@ const Page = ({ params }) => {
                         .map((row) => (
                           <tr key={row._id} className="border-b text-center">
                             <td className="py-3 px-4 whitespace-normal break-all overflow-hidden">
-                              {row.vehicle}
+                              {row.driverName}
                             </td>
 
                             <td className="py-3 px-4 whitespace-normal break-all overflow-hidden">
@@ -343,9 +349,12 @@ const Page = ({ params }) => {
                             <td className="py-3 px-4 whitespace-normal break-all overflow-hidden">
                               £ {row.payment}
                             </td>
-                            {/* <td className="py-3 px-4 whitespace-normal break-all overflow-hidden">
-                              £ {row.totalamount}
-                            </td> */}
+                            <td className="py-3 px-4 whitespace-normal break-all overflow-hidden">
+                              £ {row.cost}
+                            </td>
+                            <td className="py-3 px-4 whitespace-normal break-all overflow-hidden">
+                              £ {row.pay}
+                            </td>
 
                             {/* <td className="py-3 px-4 whitespace-normal break-all overflow-hidden">
 
@@ -547,7 +556,7 @@ const Page = ({ params }) => {
       <Addmakeapayment
         isOpen={isOpenPayment}
         onClose={OpenPaymentModle}
-        // fetchData={fetchData}
+        fetchData={fetchData}
         Id= {selectedUserId}
       />
       <AddCost

@@ -208,6 +208,7 @@ export async function GET(request, context) {
 
     // Find the product by ID
     const Find_User = await Driver.findById(id);
+    console.log(Find_User)
 
     // Check if the product exists
     if (!Find_User) {

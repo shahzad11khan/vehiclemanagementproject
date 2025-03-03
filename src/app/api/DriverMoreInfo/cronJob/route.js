@@ -23,7 +23,7 @@ export const GET = async () => {
       // console.log("dayDiff:", daysDifference)
       let shouldInsert = false;
       let totalamount = driver.payment;
-      console.log("lastDate", lastDate, "currentDate", currentDate);
+      // console.log("lastDate", lastDate, "currentDate", currentDate);
       if (
         (driver.paymentcycle === "perday" && daysDifference >= 1) ||
         (driver.paymentcycle === "perweek" && daysDifference >= 7)

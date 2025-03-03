@@ -1,8 +1,8 @@
 "use client";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import {API_URL_Driver} from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
-  import { toast } from "react-toastify";
+import {API_URL_Driver,API_URL_DriverMoreInfo,API_URL_Driver_Vehicle_Allotment} from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
+  // import { toast } from "react-toastify";
 
 import {
   getCompanyName,
@@ -10,39 +10,50 @@ import {
   getUserName,getflag,getcompanyId,
 } from "@/utils/storageUtils";
 
-const AddCost = ({ isOpen, onClose,Id }) => {
+const AddCost = ({ isOpen, onClose,fetchData,Id }) => {
   // console.log("cost id",Id);
   const [formData, setFormData] = useState({
-    firstName: "",
-    cost: "",
-    date:"",
-    description: "",
-    // isActive: false,
-    adminCreatedBy: "",
-    adminCompanyName: "",
-    companyId:null,
-
+    driverId: "",
+    driverName: "",
+    vehicle:"",
+    vehicleId:"",
+    startDate: null,
+    cost:null,
+    pay:0,
+    discription:"",
   });
 
   const [loading, setLoading] = useState(false);
   // const [data, setData] = useState([]);
 
-  const fetchDt = async () => {
-    try {
-      // Fetch the driver information from the API
-      const response = await axios.get(`${API_URL_Driver}/${Id}`);
-      const { data } = response;
-
-      console.log("Fetched records Add Cost", data.result);
-      setFormData(data.result);
-     
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      toast.error("Failed to fetch data");
-    }
-  };
   useEffect(() => {
-    console.log("cost id",Id);
+    const fetchDriverData = async () => {
+      if (!Id) return; // Prevent API call if Id is empty or undefined
+  
+      try {
+        const { data } = await axios.get(`${API_URL_Driver}/${Id}`);
+        const response = await axios.get(`${API_URL_Driver_Vehicle_Allotment}/${Id}`
+        );
+        console.log("Fetched Data:", data);
+        console.log("Fetched vehicle:", response.data.result);
+  
+        setFormData((prevData) => ({
+          ...prevData,
+          driverId: data.result._id,
+          driverName: `${data.result.firstName} ${data.result.lastName}`,
+          vehicle: response.data.result[0].vehicle,
+          vehicleId:response.data.result[0].vehicleId
+        }));
+      } catch (err) {
+        console.error(err.response?.data?.message || "Failed to fetch driver data");
+      }
+    };
+  
+    fetchDriverData(); // Call API function
+  }, [Id]); // Re-run only when Id changes
+  
+  useEffect(() => {
+    // console.log("cost id",Id);
     const storedcompanyName = (() => {
       const name1 = getCompanyName();
       if (name1) return name1;
@@ -58,38 +69,57 @@ const AddCost = ({ isOpen, onClose,Id }) => {
     console.log(storedcompanyName, userId, flag, compID);
   
     if (storedcompanyName && userId) {
-      if (storedcompanyName.toLowerCase() === "superadmin" && flag === "true") {
-        setFormData((prevData) => ({
-          ...prevData,
-          adminCompanyName: storedcompanyName,
-          companyId: compID,
-        }));
-      } else {
         setFormData((prevData) => ({
           ...prevData,
           adminCompanyName: storedcompanyName,
           companyId: userId,
         }));
       }
-    }
-    fetchDt();
-  }, [Id]);
+ 
+  }, []);
 
 
-  // const handleChange = (e) => {
-  //   const { name, value, type, checked } = e.target;
-  //   setFormData({
-  //     ...formData,
-  //     [name]: type === "checkbox" ? checked : value,
-  //   });
-  // };
+  const handleChange = (e) => {
+    const { name, value, type } = e.target;
+  
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: type === "number" ? Number(value) : value, // Convert to number if input type is 'number'
+    }));
+  };
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-
+    console.log("formData:", formData);
   
+    if (!Id) {
+      console.error("Error: Missing ID");
+      setLoading(false);
+      return;
+    }
+  
+    try {
+      const response = await axios.put(`${API_URL_DriverMoreInfo}/${Id}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data", // Ensure the correct content type
+        },
+      });
+  
+      if (response.status === 200) {
+        console.log("Fetched records:", response.data);
+        fetchData();
+      } else {
+        console.error("Failed to update record:", response.data);
+      }
+    } catch (error) {
+      console.error("Error updating record:", error.response?.data || error.message);
+    } finally {
+      setLoading(false);
+    }
   };
+  
 
   if (!isOpen) return null;
 
@@ -118,10 +148,10 @@ const AddCost = ({ isOpen, onClose,Id }) => {
             </div>
             <input
               type="text"
-              id="firstName"
-              name="firstName"
-              value={formData.firstName}
-              // onChange={handleChange}
+              id="driverName"
+              name="driverName"
+              value={formData.driverName}
+              onChange={handleChange}
               className="mt-1 block w-full p-1 border border-[#42506666]  rounded shadow focus:ring-blue-500 focus:border-blue-500"
               required
               placeholder="Driver Name"
@@ -141,8 +171,8 @@ const AddCost = ({ isOpen, onClose,Id }) => {
               type="number"
               id="cost"
               name="cost"
-              // value={formData.cost}
-              // onChange={handleChange}
+              value={formData.cost}
+              onChange={handleChange}
               className="mt-1 block w-full p-1 border border-[#42506666]  rounded shadow focus:ring-blue-500 focus:border-blue-500"
               required
             />
@@ -158,10 +188,10 @@ const AddCost = ({ isOpen, onClose,Id }) => {
             </div>
             <input
               type="date"
-              id="date"
-              name="date"
-              // value={formData.date}
-              // onChange={handleChange}
+              id="startDate"
+              name="startDate"
+              value={formData.startDate}
+              onChange={handleChange}
               className="mt-1 block w-full p-1 border border-[#42506666]  rounded shadow focus:ring-blue-500 focus:border-blue-500"
               required
             />
@@ -175,10 +205,10 @@ const AddCost = ({ isOpen, onClose,Id }) => {
               Description
             </label>
             <textarea
-              id="description"
-              name="description"
-              // value={formData.description}
-              // onChange={handleChange}
+              id="discription"
+              name="discription"
+              value={formData.discription}
+              onChange={handleChange}
               className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px] shadow focus:ring-blue-500 focus:border-blue-500"
               rows="2"
             ></textarea>

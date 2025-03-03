@@ -10,6 +10,8 @@ const DriverMoreInfoSchema = new mongoose.Schema(
     startDate: { type: Date },
     paymentcycle: { type: String },
     payment: { type: Number },
+    cost: { type: Number , default:0},
+    pay: { type: Number,default:0 },
     endDate: { type: String },
     totalamount: { type: Number, default:0 },
     totalToremain: { type: Number },

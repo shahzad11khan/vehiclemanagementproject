@@ -11,15 +11,15 @@ export async function PUT(request, context) {
     const id = context.params.DriverMoreInfoIDD; // Use the correct parameter name
     const data = await request.formData(); // Retrieve form data
 
-    console.log("Received ID:", id);
+    // console.log("Received ID:", id);
 
     // Convert FormData to a plain object
     const formDataObject = Object.fromEntries(data.entries());
-    console.log("Form Data:", formDataObject); // Log incoming form data for debugging
+    // console.log("Form Data:", formDataObject); // Log incoming form data for debugging
 
     // Find the drivers by driverId
     const drivers = await DriverInfo.find({ driverId: id }); // Use find() to get an array of drivers
-    console.log(drivers);
+    // console.log(drivers);
 
     if (drivers.length === 0) {
       return NextResponse.json({ error: "Driver not found", status: 404 });
@@ -59,3 +59,5 @@ export async function PUT(request, context) {
     });
   }
 }
+
+

@@ -1,10 +1,10 @@
 // apiUrls.js
-// export const url = "http://localhost:4000";
+export const url = "http://localhost:4000";
 // export const url = "http://192.248.171.18:4000";
-export const url = "https://vmsp.netlify.app";
+// export const url = "https://vmsp.netlify.app";
 
 
-
+export const API_URL_DriverMoreInfonano = `${url}/api/DriverMoreInfo/addnanorecord`;
 export const API_URL_DRIVERTOTAL = `${url}/api/DriverMoreInfo/Driverstotal`;
 export const API_URL_CRONJOB = `${url}/api/DriverMoreInfo/cronJob`;
 export const API_URL_Login = `${url}/api/User/Login`;

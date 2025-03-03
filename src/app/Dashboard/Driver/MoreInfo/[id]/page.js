@@ -8,6 +8,7 @@ import Sidebar from "../../../Components/Sidebar";
 // import AddMoreInfoModal from "../AddMoreInfoModal/AddMoreInfoModal";
 import {
   API_URL_DriverMoreInfo,
+  API_URL_DRIVERTOTAL
   // API_URL_DriverMoreupdate,
   // API_URL_CRONJOB
 } from "../../../Components/ApiUrl/ApiUrls";
@@ -27,6 +28,7 @@ const Page = ({ params }) => {
   console.log(id);
   const [isMounted, setIsMounted] = useState(false);
   const [data, setData] = useState([]);
+  const [totalAmount, settotalamount] = useState("");
   const [selectedCompanyName, setSelectedCompanyName] = useState("");
   // const [isOpenDriver, setIsOpenDriver] = useState(false);
   // const [selectedUserId, setSelectedUserId] = useState(null);
@@ -77,9 +79,11 @@ const Page = ({ params }) => {
     try {
       // Fetch the driver information from the API
       const response = await axios.get(`${API_URL_DriverMoreInfo}/${id}`);
+      const drivertotal = await axios.get(`${API_URL_DRIVERTOTAL}`);
       const { data } = response;
 
-      console.log("Fetched records:", data.result);
+      console.log("drivertotal", drivertotal);
+      settotalamount(drivertotal.data)
       setData(data.result);
       // Check if there are results to process
       // if (data.result && data.result.length > 0) {
@@ -153,35 +157,6 @@ const Page = ({ params }) => {
     fetchData();
   }, []);
 
-  // useEffect(() => {
-  //   // console.log(data);
-  //   // console.log(selectedCompanyName);
-  //   const filtered = data.filter((item) => {
-  //     // console.log(item);
-  //     const companyMatch =
-  //       item.adminCompanyName &&
-  //       selectedCompanyName &&
-  //       item.adminCompanyName.toLowerCase() ===
-  //         selectedCompanyName.toLowerCase();
-
-  //     const usernameMatch =
-  //       item.vehicle &&
-  //       item.vehicle.toLowerCase().includes(searchTerm.toLowerCase());
-
-  //     return companyMatch && usernameMatch; // Return true if both match
-  //   });
-
-  //   console.log(filtered);
-  //   setFilteredData(filtered);
-  // }, [searchTerm, data, selectedCompanyName]);
-
-  // Toggle the title modal
-  // const OpenDriverModel = () => {
-  //   setSelectedUserId(id);
-  //   setIsOpenDriver(!isOpenDriver);
-  // };
-
-  // Ensure client-side rendering only
   if (!isMounted) return null;
 
 
@@ -268,21 +243,21 @@ const Page = ({ params }) => {
                         </div>
                       </div>
                     </div>
-                <div className="flex gap-2">
-                <button
-                      onClick={OpenAddCostModle}
-                      className="w-[156px] md:w-auto font-sans font-bold text-xs bg-[#313342] text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500 px-3 flex py-[10px] gap-2"
-                    >
-                    Cost 
-                    </button>
-                <button
-                      onClick={OpenPaymentModle}
-                      className="w-[156px] md:w-auto font-sans font-bold text-xs bg-[#313342] text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500 px-3 flex py-[10px] gap-2"
-                    >
-                     make a payment
-                    </button>
-                    <BackButton />
-                </div>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={OpenAddCostModle}
+                        className="w-[156px] md:w-auto font-sans font-bold text-xs bg-[#313342] text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500 px-3 flex py-[10px] gap-2"
+                      >
+                        Cost
+                      </button>
+                      <button
+                        onClick={OpenPaymentModle}
+                        className="w-[156px] md:w-auto font-sans font-bold text-xs bg-[#313342] text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500 px-3 flex py-[10px] gap-2"
+                      >
+                        make a payment
+                      </button>
+                      <BackButton />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -308,10 +283,10 @@ const Page = ({ params }) => {
                         Payment
                       </th>
                       <th className="py-3 px-4 min-w-[150px] text-white  bg-custom-bg w-[150px] md:w-[16.66%] text-center whitespace-normal break-all overflow-hidden">
-                      cost
+                        cost
                       </th>
                       <th className="py-3 px-4 min-w-[150px] text-white  bg-custom-bg w-[150px] md:w-[16.66%] text-center whitespace-normal break-all overflow-hidden">
-                      pay
+                        pay
                       </th>
                       {/* <th className="py-3 px-4 min-w-[150px] text-white bg-custom-bg w-[150px] md:w-[16.66%] text-center whitespace-normal break-all overflow-hidden">
                         Total Amount
@@ -383,32 +358,23 @@ const Page = ({ params }) => {
                         </td>
                       </tr>
                     )}
+                    {totalAmount && (
+                      <tr className="font-bold text-center">
+                        <td className="py-3 px-4">Total</td>
+                        <td className="py-3 px-4"></td>
+                        <td className="py-3 px-4"></td>
+                        <td className="py-3 px-4">£ {totalAmount.totalPayment}</td>
+                        <td className="py-3 px-4">£ {totalAmount.totalCost}</td>
+                        <td className="py-3 px-4">£ {totalAmount.totalPay}</td>
+                        <td className="py-3 px-4">£ {totalAmount.remainingAmount}</td>
+                      </tr>
+                    )}
+
+
                     {/* {data.length > 0 && (
                       <tr className="font-bold text-center">
                         <td className="py-3 px-4">Total</td>
                         <td className="py-3 px-4"></td>
-                        <td className="py-3 px-4"></td>
-                        <td className="py-3 px-4"> £ {totalToremain}</td>
-                        <td className="py-3 px-4">
-                        Total Amount £{" "}
-                          {currentData
-                            .filter(
-                              (row) =>
-                                row.adminCompanyName &&
-                                row.adminCompanyName.toLowerCase() ===
-                                selectedCompanyName.toLowerCase()
-                            )
-                            .reduce((sum, row) => sum + (row.totalamount || 0), 0)}
-                        </td>
-                        <td className="py-3 px-4"></td>
-                      </tr>
-                    )} */}
-
-                    {data.length > 0 && (
-                      <tr className="font-bold text-center">
-                        <td className="py-3 px-4">Total</td>
-                        <td className="py-3 px-4"></td>
-                        {/* <td className="py-3 px-4"></td> */}
 
                         <td className="py-3 px-4"> </td>
 
@@ -425,7 +391,7 @@ const Page = ({ params }) => {
 
                         <td className="py-3 px-4"></td>
                       </tr>
-                    )}
+                    )} */}
 
 
                   </tbody>
@@ -557,13 +523,13 @@ const Page = ({ params }) => {
         isOpen={isOpenPayment}
         onClose={OpenPaymentModle}
         fetchData={fetchData}
-        Id= {selectedUserId}
+        Id={selectedUserId}
       />
       <AddCost
         isOpen={isOpenAddCost}
         onClose={OpenAddCostModle}
         fetchData={fetchData}
-        Id= {selectedUserId}
+        Id={selectedUserId}
       />
       <DeleteModal
         isOpen={isDeleteModalOpen}

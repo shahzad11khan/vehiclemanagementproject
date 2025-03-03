@@ -5,6 +5,7 @@ export const url = "https://vmsp.netlify.app";
 
 
 
+export const API_URL_DRIVERTOTAL = `${url}/api/DriverMoreInfo/Driverstotal`;
 export const API_URL_CRONJOB = `${url}/api/DriverMoreInfo/cronJob`;
 export const API_URL_Login = `${url}/api/User/Login`;
 export const API_URL_Company = `${url}/api/Company`;

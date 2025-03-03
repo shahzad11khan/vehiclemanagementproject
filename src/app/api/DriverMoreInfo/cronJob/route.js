@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { connect } from "@config/db.js";
 import DriverMoreInfo from "@models/DriverMoreInfo/DriverMoreInfo.model.js";
-import Driver from "@models/Driver/Driver.Model.js";
+// import Driver from "@models/Driver/Driver.Model.js";
 export const GET = async () => {
   await connect();
 
@@ -68,11 +68,11 @@ export const GET = async () => {
         }
 
         // Update the total amount in the Driver collection
-        await Driver.findOneAndUpdate(
-          { _id: driver.driverId },
-          { $set: { totalamount } },
-          { new: true }
-        );
+        // await Driver.findOneAndUpdate(
+        //   { _id: driver.driverId },
+        //   { $set: { totalamount } },
+        //   { new: true }
+        // );
       }
 
 

@@ -77,9 +77,7 @@ export async function GET(request, context) {
     // console.log("driver payment id is:", id);
 
     // Find all records related to the driverId
-    const find_user_all = await DriverMoreInfo.find({ driverId: id }).sort({
-      createdAt: -1,
-    });
+    const find_user_all = await DriverMoreInfo.find({ driverId: id });
     // console.log(find_user_all);
 
     // If there are records associated with driverId
@@ -148,7 +146,6 @@ export async function PUT(request) {
     const data = await request.formData(); // ✅ Using formData since frontend is sending multipart form-data
     const formDataObject = Object.fromEntries(data.entries());
     const {driverId, vehicleId, startDate, cost, pay, discription } = formDataObject;
-    console.log("Received ID:", driverId, vehicleId, startDate, cost, pay, discription);
     if (!vehicleId) {
       return NextResponse.json({
         error: "vehicleId is required",

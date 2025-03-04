@@ -282,9 +282,9 @@ const Page = ({ params }) => {
                       <th className="py-3 px-4 min-w-[150px] text-white  bg-custom-bg w-[150px] md:w-[16.66%] text-center whitespace-normal break-all overflow-hidden">
                         Payment
                       </th>
-                      <th className="py-3 px-4 min-w-[150px] text-white  bg-custom-bg w-[150px] md:w-[16.66%] text-center whitespace-normal break-all overflow-hidden">
+                      {/* <th className="py-3 px-4 min-w-[150px] text-white  bg-custom-bg w-[150px] md:w-[16.66%] text-center whitespace-normal break-all overflow-hidden">
                         cost
-                      </th>
+                      </th> */}
                       <th className="py-3 px-4 min-w-[150px] text-white  bg-custom-bg w-[150px] md:w-[16.66%] text-center whitespace-normal break-all overflow-hidden">
                         pay
                       </th>
@@ -364,7 +364,7 @@ const Page = ({ params }) => {
                         <td className="py-3 px-4"></td>
                         <td className="py-3 px-4"></td>
                         <td className="py-3 px-4">£ {totalAmount.totalPayment}</td>
-                        <td className="py-3 px-4">£ {totalAmount.totalCost}</td>
+                        {/* <td className="py-3 px-4">£ {totalAmount.totalCost}</td> */}
                         <td className="py-3 px-4">£ {totalAmount.totalPay}</td>
                         <td className="py-3 px-4">£ {totalAmount.remainingAmount}</td>
                       </tr>

@@ -33,7 +33,7 @@ console.log(data)
         vehicle,
         vehicleId,
         startDate:date,
-        cost,
+        payment:cost,
         pay,
         discription,
         adminCompanyName,

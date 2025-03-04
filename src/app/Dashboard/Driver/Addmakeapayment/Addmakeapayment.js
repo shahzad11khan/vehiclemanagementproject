@@ -2,7 +2,7 @@
 // import { API_URL_Manufacturer } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import {API_URL_Driver,API_URL_DriverMoreInfo,API_URL_Driver_Vehicle_Allotment} from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
+import {API_URL_Driver,API_URL_DriverMoreInfonano,API_URL_Driver_Vehicle_Allotment} from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
   // import { toast } from "react-toastify";
 
 import {
@@ -107,11 +107,12 @@ const Addmakeapayment = ({ isOpen, onClose,
     }
   
     try {
-      const response = await axios.put(`${API_URL_DriverMoreInfo}/${Id}`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data", // Ensure the correct content type
-        },
-      });
+      const response = await axios.post(`${API_URL_DriverMoreInfonano}`, formData);
+      // const response = await axios.put(`${API_URL_DriverMoreInfo}/${Id}`, formData, {
+      //   headers: {
+      //     "Content-Type": "multipart/form-data", // Ensure the correct content type
+      //   },
+      // });
   
       if (response.status === 200) {
         console.log("Fetched records:", response.data);

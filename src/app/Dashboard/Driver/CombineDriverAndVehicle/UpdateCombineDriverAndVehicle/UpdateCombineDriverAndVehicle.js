@@ -1,4 +1,4 @@
-  "use client";
+"use client";
 import { API_URL_Driver_Vehicle_Allotment } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -237,7 +237,7 @@ const UpdateCombineDriverAndVehicle = ({
             <div className="w-full md:w-1/3 px-2 mb-4">
               <label
                 htmlFor="startDate"
-               className="text-[10px]"
+                className="text-[10px]"
               >
                 Start Date
               </label>
@@ -254,7 +254,7 @@ const UpdateCombineDriverAndVehicle = ({
             <div className="w-full md:w-1/3 px-2 mb-4">
               <label
                 htmlFor="taxifirm"
-             className="text-[10px]"
+                className="text-[10px]"
               >
                 Taxi Firm
               </label>
@@ -328,12 +328,11 @@ const UpdateCombineDriverAndVehicle = ({
               >
                 Vehicle
               </label>
-              <select
+              {/* <select
                 id="vehicle"
                 name="vehicle"
                 value={formData.vehicle}
                 onChange={(e) => {
-                  // Update the formData with the selected vehicle's model
                   handleChange(e);
                 }}
                 className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
@@ -344,7 +343,26 @@ const UpdateCombineDriverAndVehicle = ({
                     {vehicle.model}
                   </option>
                 ))}
+              </select> */}
+              <select
+                id="vehicle"
+                name="vehicle"
+                value={formData.vehicle}
+                onChange={handleChange}
+                className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                required
+              >
+                <option value="">Select Vehicle</option>
+
+                {vehicle
+                  .filter((v) => v.vehicleStatus === "Standby" && v.isActive === true) // Filter the vehicles
+                  .map((v) => (
+                    <option key={v._id} value={v.model}>
+                      {v.model}
+                    </option>
+                  ))}
               </select>
+
             </div>
 
             <div className="w-full md:w-1/3 px-2 mb-4">
@@ -353,7 +371,7 @@ const UpdateCombineDriverAndVehicle = ({
                 // className="text-sm font-medium text-gray-700"
                 className="text-[10px]"
               >
-               Rent Payment Amount
+                Rent Payment Amount
               </label>
               <input
                 type="text"
@@ -370,7 +388,7 @@ const UpdateCombineDriverAndVehicle = ({
             <button
               type="button"
               onClick={onClose}
-             className="px-6 py-2 ml-2 text-custom-bg rounded-[4px] text-xs font-bold border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+              className="px-6 py-2 ml-2 text-custom-bg rounded-[4px] text-xs font-bold border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
             >
               Cancel
             </button>

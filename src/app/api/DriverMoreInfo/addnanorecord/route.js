@@ -17,7 +17,7 @@ export const POST = catchAsyncErrors(async (request) => {
     startDate,
     cost,
     pay,
-    discription,
+    description, 
     adminCompanyName,
     adminCompanyId
   } = data;
@@ -35,7 +35,7 @@ console.log(data)
         startDate:date,
         payment:cost,
         pay,
-        discription,
+        description, 
         adminCompanyName,
         adminCompanyId
     });

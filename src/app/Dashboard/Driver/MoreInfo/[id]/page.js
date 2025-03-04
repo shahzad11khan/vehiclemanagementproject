@@ -34,7 +34,7 @@ const Page = ({ params }) => {
   // const [selectedUserId, setSelectedUserId] = useState(null);
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemperpage, setitemperpage] = useState(5);
+  const [itemperpage, setitemperpage] = useState(30);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isDeleteModalOpenId, setIsDeleteModalOpenId] = useState(null);
   const [isOpenPayment, setIsOpenPayment] = useState(false);
@@ -158,12 +158,18 @@ const Page = ({ params }) => {
   }, []);
 
   if (!isMounted) return null;
+  // function formatDate(dateString) {
+  //   const dateObject = new Date(dateString);
+  //   return `${(dateObject.getMonth() + 1)
+  //     .toString()
+  //     .padStart(2, "0")}/${dateObject
+  //       .getDate()
+  //       .toString()
+  //       .padStart(2, "0")}/${dateObject.getFullYear()}`;
+  // }
 
 
-
-
-
-
+  // Function to format date as MM/DD/YYYY
   function formatDate(dateString) {
     const dateObject = new Date(dateString);
     return `${(dateObject.getMonth() + 1)
@@ -173,12 +179,21 @@ const Page = ({ params }) => {
         .toString()
         .padStart(2, "0")}/${dateObject.getFullYear()}`;
   }
+
+  // Sorting function to arrange dates in ascending order
+  const sortedData = [...data].sort((a, b) => new Date(a.Dates) - new Date(b.Dates));
+
   const totalPages = Math.ceil(data.length / itemperpage);
   const currentData = data.slice(
     (currentPage - 1) * itemperpage,
     currentPage * itemperpage
   );
 
+  // const sortedData = data.sort((a, b) => new Date(a.startDate) - new Date(b.startDate));
+
+  // const sortedData = [...data].sort((a, b) => new Date(a.Dates) - new Date(b.Dates));
+
+  // console.log("sortedData", sortedData);
   return (
     <div className="h-[100vh] overflow-hidden">
       <Header className="min-w-full" />
@@ -212,7 +227,7 @@ const Page = ({ params }) => {
                             className="rounded-lg w-12 px-1 h-8 bg-[#E0E0E0] focus:outline-none"
                           >
                             <option disabled>0</option>
-                            {Array.from({ length: 10 }, (_, i) => i + 1).map(
+                            {Array.from({ length: 30 }, (_, i) => i + 1).map(
                               (number) => (
                                 <option key={number} value={number}>
                                   {number}
@@ -277,11 +292,16 @@ const Page = ({ params }) => {
                         Payment Cycle
                       </th>
                       <th className="py-3 px-4 min-w-[150px] text-white  bg-custom-bg w-[150px] md:w-[16.66%] text-center whitespace-normal break-all overflow-hidden">
+                        Description
+                      </th>
+                      <th className="py-3 px-4 min-w-[150px] text-white  bg-custom-bg w-[150px] md:w-[16.66%] text-center whitespace-normal break-all overflow-hidden">
                         Dates
                       </th>
                       <th className="py-3 px-4 min-w-[150px] text-white  bg-custom-bg w-[150px] md:w-[16.66%] text-center whitespace-normal break-all overflow-hidden">
                         Payment
                       </th>
+
+
                       {/* <th className="py-3 px-4 min-w-[150px] text-white  bg-custom-bg w-[150px] md:w-[16.66%] text-center whitespace-normal break-all overflow-hidden">
                         cost
                       </th> */}
@@ -298,7 +318,7 @@ const Page = ({ params }) => {
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="font-sans font-medium text-sm">
+                  {/* <tbody className="font-sans font-medium text-sm">
                     {currentData.length > 0 ? (
                       currentData
                         .filter(
@@ -316,24 +336,21 @@ const Page = ({ params }) => {
                             <td className="py-3 px-4 whitespace-normal break-all overflow-hidden">
                               {row.paymentcycle}
                             </td>
-
+                            <td className="py-3 px-4 whitespace-normal break-all overflow-hidden">
+                              {row.description}
+                            </td>
                             <td className="py-3 px-4 whitespace-normal break-all overflow-hidden">
                               {formatDate(row.startDate)}
+
                             </td>
 
                             <td className="py-3 px-4 whitespace-normal break-all overflow-hidden">
-                              £ {row.payment}
-                            </td>
-                            <td className="py-3 px-4 whitespace-normal break-all overflow-hidden">
-                              £ {row.cost}
-                            </td>
-                            <td className="py-3 px-4 whitespace-normal break-all overflow-hidden">
-                              £ {row.pay}
+                              {row.payment === 0 || row.payment === null || row.payment === undefined ? null : `£ ${row.payment}`}
                             </td>
 
-                            {/* <td className="py-3 px-4 whitespace-normal break-all overflow-hidden">
-
-                            </td> */}
+                            <td className="py-3 px-4 whitespace-normal break-all overflow-hidden">
+                              {row.pay === 0 || row.pay === null ? null : `£ ${row.pay}`}
+                            </td>
 
                             <td className="py-3 px-4 whitespace-normal break-all overflow-hidden text-center">
                               <button
@@ -364,37 +381,143 @@ const Page = ({ params }) => {
                         <td className="py-3 px-4"></td>
                         <td className="py-3 px-4"></td>
                         <td className="py-3 px-4">£ {totalAmount.totalPayment}</td>
-                        {/* <td className="py-3 px-4">£ {totalAmount.totalCost}</td> */}
                         <td className="py-3 px-4">£ {totalAmount.totalPay}</td>
                         <td className="py-3 px-4">£ {totalAmount.remainingAmount}</td>
                       </tr>
                     )}
+                  </tbody> */}
 
 
-                    {/* {data.length > 0 && (
+
+                  {/* <tbody className="font-sans font-medium text-sm">
+                    {currentData.length > 0 ? (
+                      [...currentData] // Create a copy to avoid mutating the original array
+                        .filter(
+                          (row) =>
+                            row.adminCompanyName &&
+                            row.adminCompanyName.toLowerCase() === selectedCompanyName.toLowerCase()
+                        )
+                        .sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) // Sort dates in ascending order
+                        .map((row) => (
+                          <tr key={row._id} className="border-b text-center">
+                            <td className="py-3 px-4 whitespace-normal break-all overflow-hidden">
+                              {row.driverName}
+                            </td>
+
+                            <td className="py-3 px-4 whitespace-normal break-all overflow-hidden">
+                              {row.paymentcycle}
+                            </td>
+
+                            <td className="py-3 px-4 whitespace-normal break-all overflow-hidden">
+                              {row.description}
+                            </td>
+
+                            <td className="py-3 px-4 whitespace-normal break-all overflow-hidden">
+                              {formatDate(row.startDate)}
+                            </td>
+
+                            <td className="py-3 px-4 whitespace-normal break-all overflow-hidden">
+                              {row.payment === 0 || row.payment === null || row.payment === undefined ? null : `£ ${row.payment}`}
+                            </td>
+
+                            <td className="py-3 px-4 whitespace-normal break-all overflow-hidden">
+                              {row.pay === 0 || row.pay === null ? null : `£ ${row.pay}`}
+                            </td>
+
+                            <td className="py-3 px-4 whitespace-normal break-all overflow-hidden text-center">
+                              <button onClick={() => isopendeletemodel(row._id)}>
+                                <img src="/trash.png" alt="delete" className="w-6" />
+                              </button>
+                            </td>
+                          </tr>
+                        ))
+                    ) : (
+                      <tr>
+                        <td colSpan="8" className="py-3 px-4 text-center text-gray-500">
+                          No data available
+                        </td>
+                      </tr>
+                    )}
+
+                    {totalAmount && (
                       <tr className="font-bold text-center">
                         <td className="py-3 px-4">Total</td>
                         <td className="py-3 px-4"></td>
-
-                        <td className="py-3 px-4"> </td>
-
-                        <td className="py-3 px-4">
-                           £{" "}
-                          {currentData?.length > 0 ? (
-                            currentData
-                              .filter((row) =>
-                                row.adminCompanyName?.toLowerCase() === selectedCompanyName?.toLowerCase()
-                              )
-                              .slice(-1)[0]?.totalamount || 0
-                          ) : 0}
-                        </td>
-
                         <td className="py-3 px-4"></td>
+                        <td className="py-3 px-4">£ {totalAmount.totalPayment}</td>
+                        <td className="py-3 px-4">£ {totalAmount.totalPay}</td>
+                        <td className="py-3 px-4">£ {totalAmount.remainingAmount}</td>
                       </tr>
-                    )} */}
+                    )}
+                  </tbody> */}
 
 
+
+
+                  <tbody className="font-sans font-medium text-sm">
+                    {currentData.length > 0 ? (
+                      [...currentData] // Create a copy to avoid modifying original array
+                        .filter(
+                          (row) =>
+                            row.adminCompanyName &&
+                            row.adminCompanyName.toLowerCase() === selectedCompanyName.toLowerCase()
+                        )
+                        .filter((row) => row.startDate) // Remove rows with missing startDate
+                        .sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) // Sort in ascending order
+                        .map((row) => (
+                          <tr key={row._id} className="border-b text-center">
+                            <td className="py-3 px-4 whitespace-normal break-all overflow-hidden">
+                              {row.driverName}
+                            </td>
+
+                            <td className="py-3 px-4 whitespace-normal break-all overflow-hidden">
+                              {row.paymentcycle}
+                            </td>
+
+                            <td className="py-3 px-4 whitespace-normal break-all overflow-hidden">
+                              {row.description}
+                            </td>
+
+                            <td className="py-3 px-4 whitespace-normal break-all overflow-hidden">
+                              {formatDate(row.startDate)}
+                            </td>
+
+                            <td className="py-3 px-4 whitespace-normal break-all overflow-hidden">
+                              {row.payment ? `£ ${row.payment}` : null}
+                            </td>
+
+                            <td className="py-3 px-4 whitespace-normal break-all overflow-hidden">
+                              {row.pay ? `£ ${row.pay}` : null}
+                            </td>
+
+                            <td className="py-3 px-4 whitespace-normal break-all overflow-hidden text-center">
+                              <button onClick={() => isopendeletemodel(row._id)}>
+                                <img src="/trash.png" alt="delete" className="w-6" />
+                              </button>
+                            </td>
+                          </tr>
+                        ))
+                    ) : (
+                      <tr>
+                        <td colSpan="8" className="py-3 px-4 text-center text-gray-500">
+                          No data available
+                        </td>
+                      </tr>
+                    )}
+
+                    {totalAmount && (
+                      <tr className="font-bold text-center">
+                        <td className="py-3 px-4">Total</td>
+                        <td className="py-3 px-4"></td>
+                        <td className="py-3 px-4"></td>
+                        <td className="py-3 px-4">£ {totalAmount.totalPayment}</td>
+                        <td className="py-3 px-4">£ {totalAmount.totalPay}</td>
+                        <td className="py-3 px-4">£ {totalAmount.remainingAmount}</td>
+                      </tr>
+                    )}
                   </tbody>
+
+
                 </table>
               </div>
 

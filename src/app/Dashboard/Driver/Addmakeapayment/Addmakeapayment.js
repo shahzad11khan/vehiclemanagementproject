@@ -2,72 +2,73 @@
 // import { API_URL_Manufacturer } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import {API_URL_Driver,API_URL_DriverMoreInfonano,API_URL_Driver_Vehicle_Allotment} from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
-  // import { toast } from "react-toastify";
+import { API_URL_Driver, API_URL_DriverMoreInfonano, API_URL_Driver_Vehicle_Allotment } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
+// import { toast } from "react-toastify";
 
 import {
   getCompanyName,
-  getUserId ,
-  getUserName,getflag,getcompanyId,
+  getUserId,
+  getUserName, getflag, getcompanyId,
 } from "@/utils/storageUtils";
+import { on } from "events";
 
 const Addmakeapayment = ({ isOpen, onClose,
-   fetchData,
+  fetchData,
   Id
-   }) => {
-    const [formData, setFormData] = useState({
-      driverId: "",
-      driverName: "",
-      vehicle:"",
-      vehicleId:"",
-      startDate: null,
-      cost:0,
-      pay:null,
-      discription:"",
-    });
+}) => {
+  const [formData, setFormData] = useState({
+    driverId: "",
+    driverName: "",
+    vehicle: "",
+    vehicleId: "",
+    startDate: null,
+    cost: 0,
+    pay: null,
+    description: "",
+  });
 
   const [loading, setLoading] = useState(false);
   useEffect(() => {
     const fetchDriverData = async () => {
       if (!Id) return; // Prevent API call if Id is empty or undefined
-  
+
       try {
         const { data } = await axios.get(`${API_URL_Driver}/${Id}`);
         const response = await axios.get(`${API_URL_Driver_Vehicle_Allotment}/${Id}`
         );
         console.log("Fetched Data:", data);
         console.log("Fetched vehicle:", response);
-  
+
         setFormData((prevData) => ({
           ...prevData,
           driverId: data.result._id,
           driverName: `${data.result.firstName} ${data.result.lastName}`,
           vehicle: response.data.result[0].vehicle,
-          vehicleId:response.data.result[0].vehicleId
+          vehicleId: response.data.result[0].vehicleId
         }));
       } catch (err) {
         console.error(err.response?.data?.message || "Failed to fetch driver data");
       }
     };
-  
+
     fetchDriverData(); // Call API function
   }, [Id]); // Re-run only when Id changes
-  
+
   useEffect(() => {
     const storedcompanyName = (() => {
       const name1 = getCompanyName();
       if (name1) return name1;
-    
+
       const name2 = getUserName();
       if (name2) return name2;
-  
+
     })();
     const userId = getUserId();
     const flag = getflag();
     const compID = getcompanyId();
-  
+
     console.log(storedcompanyName, userId, flag, compID);
-  
+
     if (storedcompanyName && userId) {
       if (storedcompanyName.toLowerCase() === "superadmin" && flag === "true") {
         setFormData((prevData) => ({
@@ -88,7 +89,7 @@ const Addmakeapayment = ({ isOpen, onClose,
 
   const handleChange = (e) => {
     const { name, value, type } = e.target;
-  
+
     setFormData((prevData) => ({
       ...prevData,
       [name]: type === "number" ? Number(value) : value, // Convert to number if input type is 'number'
@@ -99,24 +100,35 @@ const Addmakeapayment = ({ isOpen, onClose,
     e.preventDefault();
     setLoading(true);
     console.log("formData:", formData);
-  
+
     if (!Id) {
       console.error("Error: Missing ID");
       setLoading(false);
       return;
     }
-  
+
     try {
       const response = await axios.post(`${API_URL_DriverMoreInfonano}`, formData);
-      // const response = await axios.put(`${API_URL_DriverMoreInfo}/${Id}`, formData, {
-      //   headers: {
-      //     "Content-Type": "multipart/form-data", // Ensure the correct content type
-      //   },
-      // });
-  
+
+
       if (response.status === 200) {
         console.log("Fetched records:", response.data);
         fetchData();
+
+
+        // setFormData((prevData) => ({
+        //   ...prevData,
+        //   cost: "",        // Clear Driver Payment
+        //   startDate: "",   // Clear Date
+        //   description: ""  // Clear Description
+        // }));
+        setFormData((prevData) => ({
+          ...prevData,
+          pay: null,
+          startDate: null,
+          description: ""
+        }));
+        onClose();
       } else {
         console.error("Failed to update record:", response.data);
       }
@@ -177,7 +189,7 @@ const Addmakeapayment = ({ isOpen, onClose,
               type="number"
               id="pay"
               name="pay"
-              value={formData.pay}
+              value={formData.pay || ""} min={0}
               onChange={handleChange}
               className="mt-1 block w-full p-1 border border-[#42506666]  rounded shadow focus:ring-blue-500 focus:border-blue-500"
               required
@@ -211,15 +223,15 @@ const Addmakeapayment = ({ isOpen, onClose,
               Description
             </label>
             <textarea
-              id="discription"
-              name="discription"
-              value={formData.discription}
+              id="description"
+              name="description"
+              value={formData.description}
               onChange={handleChange}
               className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px] shadow focus:ring-blue-500 focus:border-blue-500"
               rows="2"
             ></textarea>
           </div>
-          
+
 
           <div className="flex gap-[10px] justify-start">
             <button

@@ -53,10 +53,10 @@ const AddDriverMoreInfoModal = ({
     const storedCompanyName = (() => {
       const name1 = getCompanyName();
       if (name1) return name1;
-    
+
       const name2 = getsuperadmincompanyname();
       if (name2) return name2;
-  
+
     })();
     const storedSuperadmin = getUserRole();
 
@@ -104,19 +104,19 @@ const AddDriverMoreInfoModal = ({
       try {
         const storedCompanyName = getCompanyName();
 
-          const localAuthData = await fetchLocalAuth();
-          const taxiFirmsData = await  fetchTaxiFirms();
-          const vehicleData = await fetchVehicle();
+        const localAuthData = await fetchLocalAuth();
+        const taxiFirmsData = await fetchTaxiFirms();
+        const vehicleData = await fetchVehicle();
 
-          // console.log("car taxiFirmsData", taxiFirmsData)
+        // console.log("car taxiFirmsData", taxiFirmsData)
 
         const filterByCompany = (data) =>
           superadmin === "superadmin"
             ? data
             : data.filter(
               (item) =>
-                item.adminCompanyName === storedCompanyName 
-                
+                item.adminCompanyName === storedCompanyName
+
             );
 
         // Apply the filter to the fetched data
@@ -126,6 +126,10 @@ const AddDriverMoreInfoModal = ({
 
         // Update state with filtered data
         setTaxiFirms(filteredTaxiFirms);
+        console.log(
+          "Filtered Taxi Firms:",
+          filteredTaxiFirms
+        )
         setLocalAuth(filteredLocalAuth);
         setVehicle(filteredVehicle);
 
@@ -257,7 +261,7 @@ const AddDriverMoreInfoModal = ({
           }} />
         </div>
 
-        <form onSubmit={handleSubmit}  className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div className="flex flex-wrap -mx-2">
             <div className="w-full md:w-1/3 px-2 mb-4">
               <label
@@ -339,8 +343,8 @@ const AddDriverMoreInfoModal = ({
               >
                 <option value="">Select Taxi Firm</option>
                 {taxiFirms.map((firm) => (
-                  <option key={firm._id} value={firm.name}>
-                    {firm.name}
+                  <option key={firm._id} value={firm?.name}>
+                    {firm?.name}
                   </option>
                 ))}
               </select>
@@ -406,7 +410,7 @@ const AddDriverMoreInfoModal = ({
                 Vehicles
                 <span className="text-red-600">*</span>
               </label>
-              <select
+              {/* <select
                 id="vehicle"
                 name="vehicle"
                 value={formData.vehicle}
@@ -421,8 +425,26 @@ const AddDriverMoreInfoModal = ({
                     {v.model}
                   </option>
                 ))}
+              </select> */}
+              <select
+                id="vehicle"
+                name="vehicle"
+                value={formData.vehicle}
+                onChange={handleChange}
+                className="mt-1 block w-full p-2 border border-[#42506666] rounded-[4px]"
+                required
+              >
+                <option value="">Select Vehicle</option>
 
+                {vehicle
+                  .filter((v) => v.vehicleStatus === "Standby" && v.isActive === true) // Filter the vehicles
+                  .map((v) => (
+                    <option key={v._id} value={v.model}>
+                      {v.model}
+                    </option>
+                  ))}
               </select>
+
             </div>
 
             <div className="w-full md:w-1/3 px-2 mb-4">
@@ -451,7 +473,7 @@ const AddDriverMoreInfoModal = ({
             <button
               type="button"
               onClick={onClose}
-             className="px-6 py-2 ml-2 text-custom-bg rounded-[4px] text-xs font-bold border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
+              className="px-6 py-2 ml-2 text-custom-bg rounded-[4px] text-xs font-bold border-2 border-custom-bg hover:bg-gray-600 hover:text-white focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50"
             >
               Cancel
             </button>

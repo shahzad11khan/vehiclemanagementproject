@@ -181,7 +181,7 @@ const Page = ({ params }) => {
   }
 
   // Sorting function to arrange dates in ascending order
-  const sortedData = [...data].sort((a, b) => new Date(a.Dates) - new Date(b.Dates));
+  // const sortedData = [...data].sort((a, b) => new Date(a.Dates) - new Date(b.Dates));
 
   const totalPages = Math.ceil(data.length / itemperpage);
   const currentData = data.slice(

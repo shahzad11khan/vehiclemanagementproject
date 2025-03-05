@@ -510,9 +510,10 @@ const Page = ({ params }) => {
                         <td className="py-3 px-4">Total</td>
                         <td className="py-3 px-4"></td>
                         <td className="py-3 px-4"></td>
+                        <td className="py-3 px-4"></td>
                         <td className="py-3 px-4">£ {totalAmount.totalPayment}</td>
                         <td className="py-3 px-4">£ {totalAmount.totalPay}</td>
-                        <td className="py-3 px-4">£ {totalAmount.remainingAmount}</td>
+                        <td className="py-3 px-4">{`Remainig Amount: £${totalAmount.remainingAmount}`}</td>
                       </tr>
                     )}
                   </tbody>

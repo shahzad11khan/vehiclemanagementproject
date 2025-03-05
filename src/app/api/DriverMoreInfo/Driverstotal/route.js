@@ -40,7 +40,7 @@ export const GET = async () => {
   }
 
   return NextResponse.json({
-    dirverId:drivers[0].driverId,
+    dirverId: drivers[0].driverId,
     message: "Totals calculated successfully",
     totalPayment,
     totalCost,

@@ -437,7 +437,7 @@ const AddDriverMoreInfoModal = ({
                 <option value="">Select Vehicle</option>
 
                 {vehicle
-                  .filter((v) => v.vehicleStatus === "Standby" && v.isActive === true) // Filter the vehicles
+                  // .filter((v) => v.vehicleStatus === "Standby" && v.isActive === true) // Filter the vehicles
                   .map((v) => (
                     <option key={v._id} value={v.model}>
                       {v.model}

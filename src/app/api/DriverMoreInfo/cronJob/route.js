@@ -13,6 +13,12 @@ export const GET = async () => {
       adminCompanyName: driver.adminCompanyName,
     }).sort({ startDate: -1 });
 
+
+    const latestRecordwithdate = await DriverMoreInfo.findOne({
+      driverId: driver.driverId,
+      vehicleId: driver.vehicleId,
+      adminCompanyName: driver.adminCompanyName,
+    }).sort({ createdAt: -1 });
     // console.log("latestRecord", latestRecord)
     if (latestRecord) {
       const lastDate = new Date(latestRecord.startDate);
@@ -29,7 +35,11 @@ export const GET = async () => {
         (driver.paymentcycle === "perweek" && daysDifference >= 7)
       ) {
         shouldInsert = true;
-        totalamount = (latestRecord?.totalamount || 0) + driver.payment; // FIXED
+        // totalamount = (latestRecord?.totalamount || 0) + driver.payment; // FIXED
+        totalamount = latestRecordwithdate
+          ? (latestRecordwithdate?.totalamount || 0) + (latestRecord?.payment || 0)
+          : (latestRecord?.totalamount || 0) + driver.payment;
+
       }
 
       // if(!shouldInsert){
@@ -40,14 +50,14 @@ export const GET = async () => {
       //   );
       // }
 
-      
-      
+
+
       if (shouldInsert) {
         let newStartDate = new Date(lastDate); // Start from last recorded date
         while (newStartDate < currentDate) {
           // Move to the next day
           newStartDate.setDate(newStartDate.getDate() + 1);
-          if(newStartDate  >= currentDate){
+          if (newStartDate >= currentDate) {
             break;
           }
           // Ensure total amount keeps increasing correctly

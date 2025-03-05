@@ -20,7 +20,7 @@ export const GET = async () => {
   }
 
   // 🔹 Calculate the remaining amount
-  const remainingAmount = totalPayment + totalCost - totalPay;
+  const remainingAmount = totalPayment - totalPay;
 
   console.log("✅ Total Calculated:", {
     totalPayment,
@@ -40,7 +40,7 @@ export const GET = async () => {
   }
 
   return NextResponse.json({
-    dirverId:drivers[0].driverId,
+    dirverId: drivers[0].driverId,
     message: "Totals calculated successfully",
     totalPayment,
     totalCost,

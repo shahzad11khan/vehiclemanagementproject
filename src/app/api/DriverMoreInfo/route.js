@@ -51,6 +51,7 @@ export const POST = catchAsyncErrors(async (request) => {
       startDate, // Save the normalized date
       paymentcycle,
       payment,
+      totalamount:payment,
       endDate,
       totalToremain,
       remaining,

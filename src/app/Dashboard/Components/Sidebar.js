@@ -623,7 +623,8 @@ const Sidebar = () => {
 
 
                               {
-                                path: "/Dashboard/Models/DriverBalance/GetDriverBalance",
+                                // path: "/Dashboard/Models/DriverBalance/GetDriverBalance",
+                                path: "/Dashboard/Models/DriverBalance/GetAllDrivers  ",
                                 label: "Balance",
                               },
                               {

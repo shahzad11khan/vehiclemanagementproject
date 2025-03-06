@@ -84,7 +84,7 @@ const Page = ({ params }) => {
         toast.success(data.message || "Allotment deleted successfully.");
         // console.log("data",filteredData)
         const carId = filteredData.find((records) => records._id == id);
-        // console.log("mydata",carId.vehicleId);
+        console.log("carid for update vehicle status:",carId.vehicleId);
         const formDataupdate = new FormData();
         formDataupdate.append("vehicleStatus", "Standby");
         const updateResponse = await axios.put(
@@ -96,7 +96,7 @@ const Page = ({ params }) => {
             },
           }
         );
-        console.log(updateResponse);
+        console.log("update vehicle status:",updateResponse);
       } else {
         toast.warn(data.message || "Failed to delete the allotment.");
       }

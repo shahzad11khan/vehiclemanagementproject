@@ -13,44 +13,39 @@ export const GET = async () => {
       adminCompanyName: driver.adminCompanyName,
     }).sort({ startDate: -1 });
 
+    // console.log("latest Record" + latestRecord);
 
     const latestRecordwithdate = await DriverMoreInfo.findOne({
       driverId: driver.driverId,
       vehicleId: driver.vehicleId,
       adminCompanyName: driver.adminCompanyName,
     }).sort({ createdAt: -1 });
-    // console.log("latestRecord", latestRecord)
+
     if (latestRecord) {
       const lastDate = new Date(latestRecord.startDate);
       const currentDate = new Date();
       const daysDifference = Math.floor(
         (currentDate - lastDate) / (1000 * 60 * 60 * 24)
       );
-      // console.log("dayDiff:", daysDifference)
+      
       let shouldInsert = false;
       let totalamount = driver.payment;
-      // console.log("lastDate", lastDate, "currentDate", currentDate);
+
+      console.log("1st total "+totalamount);
       if (
         (driver.paymentcycle === "perday" && daysDifference >= 1) ||
         (driver.paymentcycle === "perweek" && daysDifference >= 7)
       ) {
         shouldInsert = true;
-        // totalamount = (latestRecord?.totalamount || 0) + driver.payment; // FIXED
-        totalamount = latestRecordwithdate
-          ? (latestRecordwithdate?.totalamount || 0) + (latestRecord?.payment || 0)
-          : (latestRecord?.totalamount || 0) + driver.payment;
+        totalamount = latestRecordwithdate &&
+        (latestRecordwithdate?.cost > 0 || latestRecordwithdate?.pay > 0)
+        ? latestRecordwithdate.totalamount + (latestRecord?.payment || 0)
+        : (latestRecord?.totalamount || 0) + driver.payment;
 
+          // console.log("total amount is :"+totalamount)
       }
 
-      // if(!shouldInsert){
-      //   await Driver.findOneAndUpdate(
-      //     { _id: driver.driverId },
-      //     { $set: { totalamount : driver.totalamount } },
-      //     { new: true }
-      //   );
-      // }
-
-
+      console.log("total :"+totalamount)
 
       if (shouldInsert) {
         let newStartDate = new Date(lastDate); // Start from last recorded date
@@ -61,7 +56,8 @@ export const GET = async () => {
             break;
           }
           // Ensure total amount keeps increasing correctly
-          totalamount += driver.payment;
+          // totalamount += driver.totalamount;
+          console.log("total amount date check:", totalamount)
           await DriverMoreInfo.create({
             driverId: driver.driverId,
             driverName: driver.driverName,

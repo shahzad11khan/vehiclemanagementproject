@@ -310,9 +310,9 @@ const Page = ({ params }) => {
                                                 Balance
                                             </th>
 
-                                            <th className="py-3 px-4 min-w-[180px] text-white  bg-custom-bg w-[180px] md:w-[16.66%] text-center whitespace-normal break-all overflow-hidden">
+                                            {/* <th className="py-3 px-4 min-w-[180px] text-white  bg-custom-bg w-[180px] md:w-[16.66%] text-center whitespace-normal break-all overflow-hidden">
                                                 Actions
-                                            </th>
+                                            </th> */}
                                         </tr>
                                     </thead>
                                     <tbody className="font-sans font-medium text-sm">
@@ -356,11 +356,11 @@ const Page = ({ params }) => {
 
                                                         </td>
 
-                                                        <td className="py-3 px-4 whitespace-normal break-all overflow-hidden text-center">
+                                                        {/* <td className="py-3 px-4 whitespace-normal break-all overflow-hidden text-center">
                                                             <button onClick={() => isopendeletemodel(row._id)}>
                                                                 <img src="/trash.png" alt="delete" className="w-6" />
                                                             </button>
-                                                        </td>
+                                                        </td> */}
                                                     </tr>
                                                 ))
                                         ) : (

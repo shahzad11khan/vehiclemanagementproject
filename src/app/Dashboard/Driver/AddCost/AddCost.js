@@ -78,6 +78,15 @@ const AddCost = ({ isOpen, onClose, fetchData, Id }) => {
 
   }, []);
 
+  useEffect(() => {
+    const today = new Date().toISOString().split("T")[0]; // Get current date in YYYY-MM-DD format
+    setFormData((prevData) => ({
+      ...prevData,
+      startDate: today, // Set default startDate to today
+    }));
+  }, []);
+
+
 
   const handleChange = (e) => {
     const { name, value, type } = e.target;
@@ -230,7 +239,7 @@ const AddCost = ({ isOpen, onClose, fetchData, Id }) => {
                 Date <span className="text-red-600">*</span>
               </label>
             </div>
-            <input
+            {/* <input
               type="date"
               id="startDate"
               name="startDate"
@@ -238,7 +247,17 @@ const AddCost = ({ isOpen, onClose, fetchData, Id }) => {
               onChange={handleChange}
               className="mt-1 block w-full p-1 border border-[#42506666]  rounded shadow focus:ring-blue-500 focus:border-blue-500"
               required
+            /> */}
+            <input
+              type="date"
+              id="startDate"
+              name="startDate"
+              value={formData.startDate}
+              className="mt-1 block w-full p-1 border border-[#42506666] rounded shadow focus:ring-blue-500 focus:border-blue-500"
+              required
+              readOnly // This prevents editing but keeps the value in the form submission
             />
+
           </div>
 
           <div className="w-full">

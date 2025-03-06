@@ -54,6 +54,7 @@ const Page = ({ params }) => {
         setIsDeleteModalOpenId(id); // Set the ID of the item to be deleted
         setIsDeleteModalOpen(true); // Open the modal
     };
+    console.log(isopendeletemodel(id))
 
     useEffect(() => {
         if (!isAuthenticated()) {

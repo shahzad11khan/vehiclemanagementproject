@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useState, useEffect, useCallback } from "react";
 import Header from "../../../Components/Header";
 import Sidebar from "../../../Components/Sidebar";
@@ -306,7 +305,7 @@ const Page = () => {
                         </td>
                         <td className="py-3 px-4 min-w-[180px] w-[180px] md:w-[16.66%] whitespace-normal break-all overflow-hidden text-center">
                           <div className="flex gap-4 justify-center">
-                             <button onClick={() => handleEdit(driver._id)}>
+                            <button onClick={() => handleEdit(driver._id)}>
                               <img src="/edit.png" alt="edit" className="w-6" />
                             </button>
                             <button
@@ -317,7 +316,7 @@ const Page = () => {
                                 alt="delete"
                                 className="w-6"
                               />
-                            </button> 
+                            </button>
                             <button>
                               <Link
                                 passHref

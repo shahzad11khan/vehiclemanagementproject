@@ -209,7 +209,7 @@ const Addmakeapayment = ({ isOpen, onClose,
                 htmlFor="firstName"
                 className="text-[10px]"
               >
-                Date <span className="text-red-600">*</span>
+                Current Date <span className="text-red-600">*</span>
               </label>
             </div>
             {/* <input
@@ -259,13 +259,22 @@ const Addmakeapayment = ({ isOpen, onClose,
             >
               Cancel
             </button>
-            <button
+            {/* <button
               type="submit"
               className="bg-[#313342] text-white rounded-4 hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500 py-1 px-8"
               disabled={loading}
             >
               {loading ? "Submitting..." : "Submit"}
+            </button> */}
+            <button
+              type="submit"
+              className={`bg-[#313342] text-white rounded-4 hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500 py-1 px-8 ${loading || !formData.driverName ? "opacity-75 cursor-not-allowed" : ""
+                }`}
+              disabled={loading || !formData.driverName}
+            >
+              {loading ? "Submitting..." : "Submit"}
             </button>
+
           </div>
         </form>
       </div>

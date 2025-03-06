@@ -98,33 +98,6 @@ const AddCost = ({ isOpen, onClose, fetchData, Id }) => {
   };
 
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   setLoading(true);
-  //   console.log("formData:", formData);
-
-  //   if (!Id) {
-  //     console.error("Error: Missing ID");
-  //     setLoading(false);
-  //     return;
-  //   }
-
-  //   try {
-  //     const response = await axios.post(`${API_URL_DriverMoreInfonano}`, formData);
-  //     if (response.status === 200) {
-  //       console.log("Fetched records:", response.data);
-  //       fetchData();
-  //       onClose();
-  //     } else {
-  //       console.error("Failed to update record:", response.data);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error updating record:", error.response?.data || error.message);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -141,8 +114,6 @@ const AddCost = ({ isOpen, onClose, fetchData, Id }) => {
       if (response.status === 200) {
         console.log("Fetched records:", response.data);
         fetchData();
-
-        // Reset specific fields after successful submission
         setFormData((prevData) => ({
           ...prevData,
           cost: null,
@@ -160,8 +131,6 @@ const AddCost = ({ isOpen, onClose, fetchData, Id }) => {
       setLoading(false);
     }
   };
-
-
 
   if (!isOpen) return null;
 
@@ -209,15 +178,7 @@ const AddCost = ({ isOpen, onClose, fetchData, Id }) => {
                 Driver cost <span className="text-red-600">*</span>
               </label>
             </div>
-            {/* <input
-              type="number"
-              id="cost"
-              name="cost"
-              value={formData.cost}
-              onChange={handleChange}
-              className="mt-1 block w-full p-1 border border-[#42506666]  rounded shadow focus:ring-blue-500 focus:border-blue-500"
-              required
-            /> */}
+
             <input
               type="number"
               id="cost"
@@ -236,18 +197,9 @@ const AddCost = ({ isOpen, onClose, fetchData, Id }) => {
                 htmlFor="firstName"
                 className="text-[10px]"
               >
-                Date <span className="text-red-600">*</span>
+                Current   Date <span className="text-red-600">*</span>
               </label>
             </div>
-            {/* <input
-              type="date"
-              id="startDate"
-              name="startDate"
-              value={formData.startDate}
-              onChange={handleChange}
-              className="mt-1 block w-full p-1 border border-[#42506666]  rounded shadow focus:ring-blue-500 focus:border-blue-500"
-              required
-            /> */}
             <input
               type="date"
               id="startDate"
@@ -255,7 +207,7 @@ const AddCost = ({ isOpen, onClose, fetchData, Id }) => {
               value={formData.startDate}
               className="mt-1 block w-full p-1 border border-[#42506666] rounded shadow focus:ring-blue-500 focus:border-blue-500"
               required
-              readOnly // This prevents editing but keeps the value in the form submission
+              readOnly
             />
 
           </div>
@@ -277,8 +229,6 @@ const AddCost = ({ isOpen, onClose, fetchData, Id }) => {
             ></textarea>
           </div>
 
-
-
           <div className="flex gap-[10px] justify-start">
             <button
               type="button"
@@ -289,11 +239,13 @@ const AddCost = ({ isOpen, onClose, fetchData, Id }) => {
             </button>
             <button
               type="submit"
-              className="bg-[#313342] text-white rounded-4 hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500 py-1 px-8"
-              disabled={loading}
+              className={`bg-[#313342] text-white rounded-4 hover:bg-gray-600 focus:ring-4 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-500 py-1 px-8 ${loading || !formData.driverName ? "opacity-75 cursor-not-allowed" : ""
+                }`}
+              disabled={loading || !formData.driverName}
             >
               {loading ? "Submitting..." : "Submit"}
             </button>
+
           </div>
         </form>
       </div>

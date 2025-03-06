@@ -189,7 +189,7 @@ const AddDriverMoreInfoModal = ({
           `${API_URL_DriverMoreInfo}`,
           newRecordData
         );
-        // console.log(newRecordResponse);
+        console.log(newRecordResponse);
         const formDataupdate = new FormData();
         formDataupdate.append("vehicleStatus", "Rent");
         const updateResponse = await axios.put(
@@ -201,7 +201,7 @@ const AddDriverMoreInfoModal = ({
             },
           }
         );
-        // console.log(updateResponse);
+        console.log(updateResponse);
       } else {
         toast.warn(data.error);
       }

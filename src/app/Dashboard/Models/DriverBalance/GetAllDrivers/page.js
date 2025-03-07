@@ -73,7 +73,6 @@ const Page = () => {
     setIsDeleteModalOpenId(id); // Set the ID of the item to be deleted
     setIsDeleteModalOpen(true); // Open the modal
   };
-  console.log(isopendeletemodel(id))
   const handleDelete = async (id) => {
     try {
       const response = await axios.delete(`${API_URL_Driver}/${id}`);
@@ -99,10 +98,6 @@ const Page = () => {
         selectedCompanyName &&
         driver?.adminCompanyName.toLowerCase() ===
         selectedCompanyName.toLowerCase();
-
-      // const nameMatch =
-      //   driver.firstName &&
-      //   driver.firstName.toLowerCase().includes(searchTerm.toLowerCase());
       const nameMatch =
         driver?.firstName &&
         searchTerm

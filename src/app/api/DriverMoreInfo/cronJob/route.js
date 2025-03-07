@@ -11,6 +11,7 @@ export const GET = async () => {
       driverId: driver.driverId,
       vehicleId: driver.vehicleId,
       adminCompanyName: driver.adminCompanyName,
+      registrationNumber:driver.registrationNumber
     }).sort({ startDate: -1 });
 
     // console.log("latest Record" + latestRecord);
@@ -19,6 +20,7 @@ export const GET = async () => {
       driverId: driver.driverId,
       vehicleId: driver.vehicleId,
       adminCompanyName: driver.adminCompanyName,
+      registrationNumber:driver.registrationNumber
     }).sort({ createdAt: -1 });
 
     if (latestRecord) {
@@ -63,6 +65,7 @@ export const GET = async () => {
             driverName: driver.driverName,
             vehicle: driver.vehicle,
             vehicleId: driver.vehicleId,
+            registrationNumber:driver.registrationNumber,
             startDate: new Date(newStartDate), // Save each missing day step by step
             paymentcycle: driver.paymentcycle,
             payment: driver.payment,

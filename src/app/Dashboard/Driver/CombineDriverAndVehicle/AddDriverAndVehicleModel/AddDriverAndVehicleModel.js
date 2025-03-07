@@ -33,6 +33,7 @@ const AddDriverMoreInfoModal = ({
     taxilocalauthority: "",
     vehicle: "",
     vehicleId: "",
+    registrationNumber: "",
     paymentcycle: "",
     payment: 0,
     adminCreatedBy: "",
@@ -143,10 +144,12 @@ const AddDriverMoreInfoModal = ({
         (vehicle) => vehicle.model === value
       );
       if (selectedVehicle) {
+        console.log(selectedVehicle.registrationNumber)
         setVehicleStatus(selectedVehicle._id);
         setFormData((prevFormData) => ({
           ...prevFormData,
           vehicleId: selectedVehicle._id, // Store the vehicle ID
+          registrationNumber: selectedVehicle.registrationNumber, // Store the vehicle ID
         }));
       }
     }
@@ -173,6 +176,7 @@ const AddDriverMoreInfoModal = ({
           driverName: getdata.driverName, // Add your specific fields here
           vehicle: getdata.vehicle, // Add your specific fields here
           vehicleId: getdata.vehicleId, // Add your specific fields here
+          registrationNumber: getdata.registrationNumber, // Add your specific fields here
           startDate: getdata.startDate, // Add your specific fields here
           paymentcycle: getdata.paymentcycle, // Add your specific fields here
           payment: getdata.payment, // Add your specific fields here
@@ -358,7 +362,7 @@ const AddDriverMoreInfoModal = ({
                 <option value="">Select Vehicle</option>
 
                 {vehicle
-
+                    .filter((v)=>v.isActive && v.vehicleStatus === "Standby")
                   .map((v) => (
                     <option key={v._id} value={v.model}>
                       {v.model}

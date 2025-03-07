@@ -17,6 +17,7 @@ export const POST = catchAsyncErrors(async (request) => {
     taxilocalauthority,
     vehicle,
     vehicleId,
+    registrationNumber,
     paymentcycle,
     payment,
     adminCreatedBy,
@@ -28,7 +29,7 @@ export const POST = catchAsyncErrors(async (request) => {
 
   // Check for existing DriverVehicleAllotment by email
   const existingDriverVehicleAllotment = await DriverVehicleAllotment.findOne({
-     $and:[{startDate: startDate},{vehicleId: vehicleId}]
+     $and:[{startDate: startDate},{vehicleId: vehicleId},{registrationNumber:registrationNumber}]
   });
   if (existingDriverVehicleAllotment) {
     return NextResponse.json({
@@ -46,6 +47,7 @@ export const POST = catchAsyncErrors(async (request) => {
     taxilocalauthority,
     vehicle,
     vehicleId,
+    registrationNumber,
     paymentcycle,
     payment,
     adminCreatedBy,

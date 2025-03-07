@@ -14,6 +14,7 @@ export const POST = catchAsyncErrors(async (request) => {
     driverName,
     vehicle,
     vehicleId,
+    registrationNumber,
     startDate,
     paymentcycle,
     payment,
@@ -32,7 +33,8 @@ export const POST = catchAsyncErrors(async (request) => {
       driverId,
       vehicleId,
       adminCompanyName,
-      startDate
+      startDate,
+      registrationNumber
     });
 
     if (existingRecord) {
@@ -49,6 +51,7 @@ export const POST = catchAsyncErrors(async (request) => {
       vehicle,
       vehicleId,
       startDate, // Save the normalized date
+      registrationNumber,
       paymentcycle,
       payment,
       totalamount:payment,

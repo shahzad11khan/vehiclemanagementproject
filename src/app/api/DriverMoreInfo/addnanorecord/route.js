@@ -100,6 +100,7 @@ export const POST = catchAsyncErrors(async (request) => {
     startDate,
     cost,
     pay,
+    registrationNumber,
     description,
     adminCompanyName,
     adminCompanyId,
@@ -114,7 +115,8 @@ export const POST = catchAsyncErrors(async (request) => {
       driverId,
       vehicleId,
       adminCompanyName,
-      startDate:date
+      startDate:date,
+      registrationNumber,
     }).sort({ createdAt: -1 });
 
 
@@ -155,6 +157,7 @@ export const POST = catchAsyncErrors(async (request) => {
       cost,
       pay,
       totalamount: total,
+      registrationNumber,
       description,
       adminCompanyName,
       adminCompanyId,

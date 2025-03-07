@@ -21,6 +21,7 @@ const Addmakeapayment = ({ isOpen, onClose,
     driverName: "",
     vehicle: "",
     vehicleId: "",
+    registrationNumber: "",
     startDate: null,
     cost: 0,
     pay: null,
@@ -44,7 +45,8 @@ const Addmakeapayment = ({ isOpen, onClose,
           driverId: data.result._id,
           driverName: `${data.result.firstName} ${data.result.lastName}`,
           vehicle: response.data.result[0].vehicle,
-          vehicleId: response.data.result[0].vehicleId
+          vehicleId: response.data.result[0].vehicleId,
+          registrationNumber: response.data.result[0].registrationNumber
         }));
       } catch (err) {
         console.error(err.response?.data?.message || "Failed to fetch driver data");

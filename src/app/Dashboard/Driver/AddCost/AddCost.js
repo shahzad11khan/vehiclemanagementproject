@@ -2,7 +2,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { API_URL_Driver, API_URL_Driver_Vehicle_Allotment, API_URL_DriverMoreInfonano } from "@/app/Dashboard/Components/ApiUrl/ApiUrls";
-
 import {
   getCompanyName,
   getUserId,
@@ -16,6 +15,7 @@ const AddCost = ({ isOpen, onClose, fetchData, Id }) => {
     driverName: "",
     vehicle: "",
     vehicleId: "",
+    registrationNumber: "",
     startDate: null,
     cost: null,
     pay: 0,
@@ -42,7 +42,8 @@ const AddCost = ({ isOpen, onClose, fetchData, Id }) => {
           driverId: data.result._id,
           driverName: `${data.result.firstName} ${data.result.lastName}`,
           vehicle: response.data.result[0].vehicle,
-          vehicleId: response.data.result[0].vehicleId
+          vehicleId: response.data.result[0].vehicleId,
+          registrationNumber: response.data.result[0].registrationNumber
         }));
       } catch (err) {
         console.error(err.response?.data?.message || "Failed to fetch driver data");

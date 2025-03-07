@@ -1,4 +1,3 @@
-// models/EnquiryModel.js
 import mongoose from "mongoose";
 
 const DriverVehicleAllotmentInfoSchema = new mongoose.Schema(
@@ -10,6 +9,7 @@ const DriverVehicleAllotmentInfoSchema = new mongoose.Schema(
     taxilocalauthority: { type: String },
     vehicle: { type: String },
     vehicleId: { type: mongoose.Schema.Types.ObjectId, ref: "Vehicle" },
+    registrationNumber: { type:String},
     paymentcycle: { type: String },
     payment: { type: Number },
     adminCreatedBy: { type: String },

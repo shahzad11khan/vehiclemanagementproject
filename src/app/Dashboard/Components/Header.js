@@ -19,7 +19,7 @@ import {
 import { useRouter } from "next/navigation";
 // import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { API_URL_Company, API_URL_USER, API_URL_CRONJOB,API_URL_DRIVERTOTAL } from "../Components/ApiUrl/ApiUrls";
+import { API_URL_Company, API_URL_USER, API_URL_CRONJOB } from "../Components/ApiUrl/ApiUrls";
 import { isAuthenticated, clearAuthData } from "@/utils/verifytoken";
 import {
   API_URL_VehicleMOT,
@@ -83,9 +83,9 @@ const Header = () => {
     const fetchData = async () => {
       try {
         const res = await axios.get(`${API_URL_CRONJOB}`);
-        const drivertotal = await axios.get(`${API_URL_DRIVERTOTAL}`);
+        // const drivertotal = await axios.get(`${API_URL_DRIVERTOTAL}`);
         console.log("✅ Data updated successfully", res);
-        console.log("✅drivertotal", drivertotal);
+        // console.log("✅drivertotal", drivertotal);
       } catch (error) {
         console.error("❌ Error updating data:", error);
       }

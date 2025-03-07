@@ -79,7 +79,19 @@ const Page = ({ params }) => {
     try {
       // Fetch the driver information from the API
       const response = await axios.get(`${API_URL_DriverMoreInfo}/${id}`);
-      const drivertotal = await axios.get(`${API_URL_DRIVERTOTAL}`);
+      // console.log("response",response.data)
+      const driverId = response.data.result[0].driverId; // Extract driverId
+      const vehicleId = response.data.result[0].vehicleId; // Extract vehicleId
+
+      console.log("driverId",driverId,"vehicleId",vehicleId)
+
+      // const drivertotal = await axios.get(`${API_URL_DRIVERTOTAL}/${id}`);
+      const drivertotal = await axios.get(`${API_URL_DRIVERTOTAL}/${id}`, {
+        params: {
+          driverId,
+          vehicleId,
+        },
+      });
       const { data } = response;
 
       console.log("drivertotal", drivertotal);
@@ -93,6 +105,7 @@ const Page = ({ params }) => {
       //     // Call drivercal for each record
       //     await drivercal(
       //       record.driverId, // Pass the driverId
+      //       record.registrationNumber, // Pass the driverId
       //       record.driverName, // Pass the driverName
       //       record.vehicle, // Pass the vehicle
       //       record.vehicleId, // Pass the vehicleId
@@ -113,24 +126,7 @@ const Page = ({ params }) => {
 
 
 
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //     const res=  await axios.get(`${API_URL_CRONJOB}`);
-  //       console.log("✅ Data updated successfully",res);
-  //     } catch (error) {
-  //       console.error("❌ Error updating data:", error);
-  //     }
-  //   };
-
-  //   // Run every hour (3600000 ms)
-  //   const interval = setInterval(fetchData, 3600000);
-  //   // Run once on mount
-  //   fetchData();
-
-  //   return () => clearInterval(interval);
-  // }, []);
+ 
 
   // Handle deletion of a title
   const handleDelete = async (id) => {
